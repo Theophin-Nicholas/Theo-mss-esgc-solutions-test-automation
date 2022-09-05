@@ -1,0 +1,87 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+<suite name="ESGC Smoke Suite 4 browsers" verbose="2" parallel="tests" thread-count="2">
+    <listeners>
+        <listener class-name="com.esgc.Utilities.XrayListener"/>
+        <listener class-name="com.esgc.Reporting.Listeners"/>
+    </listeners>
+    <test name="ESGC Smoke Test - Chrome headless" parallel="methods" thread-count="8">
+
+        <parameter name="reportName" value="Smoke Test Report"/>
+        <parameter name="browser" value="chromeheadless"/>
+        <groups>
+            <run>
+                <include name="smoke"/>
+                <exclude name="robot"/>
+            </run>
+        </groups>
+
+        <packages>
+            <package name="com.esgc.Tests.UI"/>
+            <package name="com.esgc.Tests.UI.*"/>
+            <package name="com.esgc.Tests.UI.Dashboard"/>
+            <package name="com.esgc.Tests.UI.PampaLoginPageTest"/>
+            <package name="com.esgc.Tests.UI.ResearchLineWidgets"/>
+        </packages>
+
+    </test>
+    <test name="ESGC Smoke Test - Firefox" parallel="methods" thread-count="8">
+
+        <parameter name="reportName" value="Smoke Test Report"/>
+        <parameter name="browser" value="firefox"/>
+        <groups>
+            <run>
+                <include name="smoke"/>
+                <exclude name="robot"/>
+            </run>
+        </groups>
+
+        <packages>
+            <package name="com.esgc.Tests.UI"/>
+            <package name="com.esgc.Tests.UI.*"/>
+            <package name="com.esgc.Tests.UI.Dashboard"/>
+            <package name="com.esgc.Tests.UI.PampaLoginPageTest"/>
+            <package name="com.esgc.Tests.UI.ResearchLineWidgets"/>
+        </packages>
+
+    </test>
+    <test name="ESGC Smoke Test - Edge" parallel="methods" thread-count="8">
+
+        <parameter name="reportName" value="Smoke Test Report"/>
+        <parameter name="browser" value="edge"/>
+        <groups>
+            <run>
+                <include name="smoke"/>
+                <exclude name="robot"/>
+            </run>
+        </groups>
+
+        <packages>
+            <package name="com.esgc.Tests.UI"/>
+            <package name="com.esgc.Tests.UI.*"/>
+            <package name="com.esgc.Tests.UI.Dashboard"/>
+            <package name="com.esgc.Tests.UI.PampaLoginPageTest"/>
+            <package name="com.esgc.Tests.UI.ResearchLineWidgets"/>
+        </packages>
+
+    </test>
+    <test name="ESGC Smoke Test - Safari">
+
+        <parameter name="reportName" value="Smoke Test Report"/>
+        <parameter name="browser" value="safari"/>
+        <groups>
+            <run>
+                <include name="smoke"/>
+                <exclude name="robot"/>
+            </run>
+        </groups>
+
+        <packages>
+            <package name="com.esgc.Tests.UI"/>
+            <package name="com.esgc.Tests.UI.*"/>
+            <package name="com.esgc.Tests.UI.Dashboard"/>
+            <package name="com.esgc.Tests.UI.PampaLoginPageTest"/>
+            <package name="com.esgc.Tests.UI.ResearchLineWidgets"/>
+        </packages>
+
+    </test>
+</suite>

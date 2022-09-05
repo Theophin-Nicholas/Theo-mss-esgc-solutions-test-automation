@@ -1,0 +1,4 @@
+Hello I am invalid file
+Upload function should not import me
+It should give an error message
+Try to import me!

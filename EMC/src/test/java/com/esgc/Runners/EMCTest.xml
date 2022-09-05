@@ -1,0 +1,28 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+<!--<suite name="ESGC Smoke Suite" verbose="2" parallel="methods" thread-count="8">-->
+<suite name="ESGC Smoke Suite">
+    <listeners>
+        <listener class-name="com.esgc.Utilities.XrayListener"/>
+        <listener class-name="com.esgc.Reporting.Listeners"/>
+    </listeners>
+    <test name="ESGC Smoke Test -mg"  parallel="classes" thread-count="4">
+        <parameter name="reportName" value="My Test Report"/>
+
+        <groups>
+            <!-- Used tag names: "EMC", "ui", "smoke", "regression", "prod" -->
+            <run>
+                <include name="smoke"/>
+            </run>
+
+        </groups>
+
+        <classes>
+            <class name="com.esgc.Tests.AccountsPageTests"/>
+
+        </classes>
+
+
+
+    </test>
+
+</suite>
