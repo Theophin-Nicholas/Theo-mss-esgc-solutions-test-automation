@@ -1,0 +1,67 @@
+package com.esgc.Tests.API;
+
+import com.esgc.APIModels.APIFilterPayload;
+import com.esgc.APIModels.APIFilterPayloadWithImpactFilter;
+import com.esgc.Controllers.APIController;
+import com.esgc.Tests.TestBases.APITestBase;
+import com.esgc.Utulities.APIUtilities;
+import com.esgc.Utilities.Xray;
+import org.testng.annotations.Test;
+
+public class AuthorizationTest extends APITestBase {
+
+    @Test(groups = {"api", "regression"}, dataProvider = "API Research Lines")
+    public void APIAuthorization(String researchLine) {
+        APIController apiController = new APIController();
+        APIFilterPayload apiFilterPayload = new APIFilterPayload("all","all","03","2021","");
+        APIFilterPayloadWithImpactFilter apiImpactFilterPayload = new APIFilterPayloadWithImpactFilter("all", "all", "03", "2021", "top5");
+
+        String portfolio_id = APIUtilities.importScorePortfolio(APIUtilities.userID()).getBody().jsonPath().get("portfolio_id");;
+
+        apiController.getPortfolioScoreResponse(portfolio_id, researchLine, apiFilterPayload).then().assertThat().statusCode(200);
+        apiController.getPortfolioDistributionResponse(portfolio_id, researchLine, apiFilterPayload).then().assertThat().statusCode(200);
+        apiController.getPortfolioCoverageResponse(portfolio_id, researchLine, apiFilterPayload).then().assertThat().statusCode(200);
+        apiController.getPortfolioUpdatesResponse(portfolio_id,researchLine,apiFilterPayload).prettyPeek().then().assertThat().statusCode(200);
+        apiController.getPortfolioLeadersAndLaggardsResponse(portfolio_id, researchLine, apiFilterPayload).then().assertThat().statusCode(200);
+        apiController.getPortfolioRegionSummaryResponse(portfolio_id, researchLine, apiFilterPayload).then().assertThat().statusCode(200);
+        apiController.getPortfolioRegionDetailsResponse(portfolio_id, researchLine, apiFilterPayload).then().assertThat().statusCode(200);
+        apiController.getPortfolioRegionMapResponse(portfolio_id, researchLine, apiFilterPayload).then().assertThat().statusCode(200);
+        apiController.getPortfolioSectorSummaryResponse(portfolio_id, researchLine, apiFilterPayload).then().assertThat().statusCode(200);
+        apiController.getPortfolioSectorDetailsResponse(portfolio_id, researchLine, apiFilterPayload).then().assertThat().statusCode(200);
+        if (!researchLine.equals("physicalriskmgmt"))
+            apiController.getPortfolioUnderlyingDataMetricsResponse(portfolio_id, researchLine, apiFilterPayload).prettyPeek().then().assertThat().statusCode(200);
+        if (researchLine.equals("carbonfootprint"))
+            apiController.getPortfolioEmissionsResponse(portfolio_id, researchLine, apiFilterPayload).prettyPeek().then().assertThat().statusCode(200);
+
+        apiController.getImpactDistributionResponse(portfolio_id, researchLine, apiImpactFilterPayload).then().assertThat().statusCode(200);
+        apiController.getHistoryTablesResponse(portfolio_id, researchLine, apiFilterPayload).then().assertThat().statusCode(200);
+
+    }
+
+    @Xray(test={3333,3334,3335,3336,3337,3338,3339,3340,3341})
+    @Test(groups = {"api", "regression"}, dataProvider = "API Research Lines")
+    public void invalidPortfolioAuthorizationTest(String researchLine) {
+        APIController apiController = new APIController();
+        APIFilterPayload apiFilterPayload = new APIFilterPayload("all","all","03","2021","");
+
+        String portfolio_id = "002e85b1-4cdc-4bd9-8314-c51bd48ddf61";
+
+        apiController.getPortfolioScoreResponse(portfolio_id, researchLine, apiFilterPayload).then().assertThat().statusCode(403);
+        apiController.getPortfolioDistributionResponse(portfolio_id, researchLine, apiFilterPayload).then().assertThat().statusCode(403);
+        apiController.getPortfolioCoverageResponse(portfolio_id, researchLine, apiFilterPayload).then().assertThat().statusCode(403);
+        apiController.getPortfolioUpdatesResponse(portfolio_id,researchLine,apiFilterPayload).prettyPeek().then().assertThat().statusCode(403);
+        apiController.getPortfolioLeadersAndLaggardsResponse(portfolio_id, researchLine, apiFilterPayload).then().assertThat().statusCode(403);
+        apiController.getPortfolioRegionSummaryResponse(portfolio_id, researchLine, apiFilterPayload).then().assertThat().statusCode(403);
+        apiController.getPortfolioRegionDetailsResponse(portfolio_id, researchLine, apiFilterPayload).then().assertThat().statusCode(403);
+        apiController.getPortfolioRegionMapResponse(portfolio_id, researchLine, apiFilterPayload).then().assertThat().statusCode(403);
+        apiController.getPortfolioSectorSummaryResponse(portfolio_id, researchLine, apiFilterPayload).then().assertThat().statusCode(403);
+        apiController.getPortfolioSectorDetailsResponse(portfolio_id, researchLine, apiFilterPayload).then().assertThat().statusCode(403);
+        if (!researchLine.equals("physicalriskmgmt"))
+            apiController.getPortfolioUnderlyingDataMetricsResponse(portfolio_id, researchLine, apiFilterPayload).prettyPeek().then().assertThat().statusCode(403);
+        if (researchLine.equals("carbonfootprint"))
+            apiController.getPortfolioEmissionsResponse(portfolio_id, researchLine, apiFilterPayload).prettyPeek().then().assertThat().statusCode(403);
+        APIFilterPayloadWithImpactFilter apiImpactFilterPayload = new APIFilterPayloadWithImpactFilter("all", "all", "03", "2021", "top5");
+        apiController.getImpactDistributionResponse(portfolio_id, researchLine, apiImpactFilterPayload).then().assertThat().statusCode(403);
+        apiController.getHistoryTablesResponse(portfolio_id, researchLine, apiFilterPayload).then().assertThat().statusCode(403);
+    }
+}

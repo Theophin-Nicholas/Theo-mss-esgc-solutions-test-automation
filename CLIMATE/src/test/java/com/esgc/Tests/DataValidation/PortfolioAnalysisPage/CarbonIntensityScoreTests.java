@@ -1,0 +1,68 @@
+package com.esgc.Tests.DataValidation.PortfolioAnalysisPage;
+
+import com.esgc.APIModels.APIFilterPayload;
+import com.esgc.APIModels.PortfolioScoreWrapper;
+import com.esgc.DBModels.ResearchLineIdentifier;
+import com.esgc.Tests.TestBases.DataValidationTestBase;
+import com.esgc.Utulities.APIUtilities;
+import com.esgc.Utilities.Xray;
+import io.restassured.response.Response;
+import org.hamcrest.Matchers;
+import org.testng.annotations.DataProvider;
+import org.testng.annotations.Optional;
+import org.testng.annotations.Test;
+
+import java.util.Arrays;
+import java.util.List;
+
+
+public class CarbonIntensityScoreTests extends DataValidationTestBase {
+
+    @Test(groups = {"regression", "data_validation"}, dataProvider = "researchLines")
+    @Xray(test = {2988, 2991, 2992, 2993, 2994, 2996, 2997, 3203})
+    public void verifyCarbonIntensityScoreWithMixedIdentifiers(@Optional String sector, @Optional String region,
+                                                               @Optional String researchLine, @Optional String month, @Optional String year) {
+
+
+        List<ResearchLineIdentifier> portfolioToUpload = dataValidationUtilities.getPortfolioToUpload(researchLine, month, year);
+        double totalValues = portfolioUtilities.calculateTotalSumOfInvestment(portfolioToUpload);
+        String fileName = String.format("Portfolio Distribution %s - %s - %s - %s - %s", researchLine, sector, region, month, year);
+        String path = portfolioUtilities.createPortfolio(fileName, portfolioToUpload);
+        test.info("Portfolio saved to:");
+        test.info(path);
+        Response response = controller.importPortfolio(APIUtilities.userID(), fileName + ".csv", path);
+        response.then().assertThat().body("portfolio_name", Matchers.notNullValue());
+
+        portfolioToUpload = dataValidationUtilities.preparePortfolioForTesting(portfolioToUpload);
+
+        String portfolioId = response.getBody().jsonPath().get("portfolio_id");
+        System.out.println("Portfolio Created, id: " + portfolioId);
+        test.info("portfolio_id=" + portfolioId);
+
+
+        APIFilterPayload apiFilterPayload = new APIFilterPayload();
+        apiFilterPayload.setSector(sector);
+        apiFilterPayload.setRegion(region);
+        apiFilterPayload.setBenchmark("");
+        apiFilterPayload.setYear(year);
+        apiFilterPayload.setMonth(month);
+
+        List<PortfolioScoreWrapper> portfolioScore = Arrays.asList(controller.getPortfolioScoreResponse(portfolioId, researchLine, apiFilterPayload)
+                .as(PortfolioScoreWrapper[].class));
+
+        String score = portfolioScore.get(0).portfolioScore.stream().filter(c -> c.getName().equals("Carbon Intensity")).findFirst().get().getScore();
+        int scoreFromDB = portfolioQueries.getCarbonFootPrintIntensityScore(portfolioId, month, year);
+        assertTestCase.assertEquals(Integer.parseInt(score), scoreFromDB, "Intensity Score Validation");
+    }
+
+    @DataProvider(name = "researchLines")
+    public Object[][] provideFilterParameters() {
+
+        return new Object[][]
+                {
+                        {"all", "all", "Carbon Footprint", "03", "2021"},
+                        //{"all", "AMER", "Carbon Footprint", "03", "2021"}
+                };
+    }
+
+}

@@ -1,0 +1,28 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+<suite name="ESGC Regression Suite">   <!-- Parallel execution eg.: parallel="methods" thread-count="8" -->
+    <listeners>
+        <listener class-name="com.esgc.Utilities.XrayListener"/>
+    </listeners>
+    <test name="ESGC Regression Test">
+
+        <parameter name="reportName" value="Regression Test Report"/>
+
+        <groups>
+            <run>
+                <!-- Used tag names: "EMC", "ui", "smoke", "regression", "prod" -->
+                <include name="regression"/>
+            </run>
+
+        </groups>
+
+        <packages>
+
+            <package name="com.esgc.Tests.UI.*"/>
+            <package name="com.esgc.Tests.API.*"/>
+            <package name="com.esgc.Tests.DataValidation.*"/>
+
+        </packages>
+
+    </test>
+
+</suite>

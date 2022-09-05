@@ -1,0 +1,61 @@
+package com.esgc.Tests.UI.PortfolioAnalysisPage;
+
+import com.esgc.Pages.DashboardPage;
+import com.esgc.Pages.LoginPage;
+import com.esgc.TestBase.DataProviderClass;
+import com.esgc.Tests.TestBases.UITestBase;
+import com.esgc.Utilities.BrowserUtils;
+import com.esgc.Utilities.EntitlementsBundles;
+import com.esgc.Utilities.Xray;
+import org.testng.SkipException;
+import org.testng.annotations.Test;
+
+public class ExportEntitlementsTest extends UITestBase {
+    //TODO PDF export is not working in QA and not available in UAT
+    @Test(groups = {"regression", "ui", "entitlements"},
+            dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
+    @Xray(test = {7841})
+    public void verifyExportIsAvailableInPortfolioAnalysis_Bundle(String researchLine) {
+
+        if (!(researchLine.equals("Carbon Footprint")
+                || researchLine.equals("Brown Share Assessment")
+                || researchLine.equals("Green Share Assessment")
+        )) {
+            throw new SkipException("Export is not ready to test in " + researchLine);
+        }
+
+        LoginPage login = new LoginPage();
+        login.entitlementsLogin(EntitlementsBundles.USER_WITH_EXPORT_ENTITLEMENT);
+
+        DashboardPage dashboardPage = new DashboardPage();
+        dashboardPage.navigateToResearchLine(researchLine);
+        BrowserUtils.wait(5);
+
+        dashboardPage.clickExportCompaniesButtonInPortfolioAnalysis();
+        test.info("Exported All Companies and Investments Details in pdf format");
+
+        assertTestCase.assertTrue(dashboardPage.isCompaniesAndInvestmentsPdfDownloaded(), "Verify Download of Excel file with Companies and Investments details", 248);
+        dashboardPage.deleteDownloadFolder();
+
+    }
+
+    @Test(groups = {"regression", "ui", "entitlements"},
+            dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
+    @Xray(test = {7842})
+    public void verifyExportIsNotAvailableInPortfolioAnalysis_Bundle(String researchLine) {
+
+        if (!(researchLine.equals("Carbon Footprint")
+                || researchLine.equals("Brown Share Assessment")
+                || researchLine.equals("Green Share Assessment"))) {
+            throw new SkipException("Export is not ready to test in " + researchLine);
+        }
+
+        LoginPage login = new LoginPage();
+        login.entitlementsLogin(EntitlementsBundles.USER_WITH_OUT_EXPORT_ENTITLEMENT);
+
+        DashboardPage dashboardPage = new DashboardPage();
+        dashboardPage.navigateToResearchLine(researchLine);
+        BrowserUtils.wait(5);
+        assertTestCase.assertTrue(!dashboardPage.isExportButtonEnabled(), researchLine + "Verify Export button is not available");
+    }
+}

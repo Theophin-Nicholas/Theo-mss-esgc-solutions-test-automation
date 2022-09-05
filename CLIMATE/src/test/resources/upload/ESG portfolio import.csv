@@ -1,0 +1,25 @@
+"Currency: Please only enter in values of USD, GBP and EUR. Platform values will be converted into USD. Only one currency is allowed per portfolio"
+As of Date: Please enter date in yyyy-mm-dd format
+"Identifier type: Please specify the values as one of the following Identifiers: ISIN, BBG_TICKER"
+"Identifier: First column below !AsOfDate: Enter an ISIN or a full Bloomberg Ticker, example: T UN Equity or CMP UN Equity"
+Value: Second Column below !AsOfDate: Please enter total monetary value of investment; this must be in whole number format and in one single currency
+
+!Currency,USD
+!AsOfDate,9/30/2020
+
+Identifier type,Identifier,Value
+ISIN,US31409GFE17,"1,000,000"
+ISIN,US31410WEE49,"2,000,000"
+ISIN,US3140GSAQ54,"3,000,000"
+ISIN,US3138EGFT64,"4,000,000"
+ISIN,US3138WVAH47,"5,000,000"
+ISIN,US31416Y2R82,"1,000,000"
+ISIN,US3138LLEX97,"2,000,000"
+ISIN,US3138XYSJ41,"3,000,000"
+ISIN,US3138YRCB29,"4,000,000"
+ISIN,US31407EUL54,"5,000,000"
+ISIN,US3138M64J31,"6,000,000"
+ISIN,US31419FRE87,"7,000,000"
+ISIN,US31418CAJ36,"8,000,000"
+ISIN,US31400SLV96,"9,000,000"
+ISIN,US3138YNKY26,"1,000,000"
