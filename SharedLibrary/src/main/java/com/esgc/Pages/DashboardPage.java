@@ -5,10 +5,8 @@ import com.esgc.Utilities.*;
 import com.esgc.Utilities.Database.DashboardQueries;
 import com.esgc.Utilities.Database.DatabaseDriver;
 import com.esgc.Utilities.PortfolioUtilities;
-import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
+import org.openqa.selenium.*;
 import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.Color;
 import org.openqa.selenium.support.FindBy;
@@ -496,7 +494,6 @@ public class DashboardPage extends UploadPage {
 
     public List<String> getSummaryHeadersBundleNames() {
         wait.until(ExpectedConditions.visibilityOfAllElements(summaryHeaderBundleTitles));
-
         return summaryHeaderBundleTitles.stream().map(x -> {
             String title = x.getText();
             return title;

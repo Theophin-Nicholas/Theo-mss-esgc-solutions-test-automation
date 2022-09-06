@@ -12,6 +12,7 @@
         <groups>
             <run>
                 <include name="smoke"/>
+                <exclude name="robot_dependency"></exclude>
             </run>
         </groups>
 

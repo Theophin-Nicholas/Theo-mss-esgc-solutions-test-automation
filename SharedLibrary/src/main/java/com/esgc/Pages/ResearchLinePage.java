@@ -489,7 +489,7 @@ public class ResearchLinePage extends UploadPage {
 
     public boolean checkIfHistoryTableExists(String subtitle) {
         try {
-            BrowserUtils.wait(5);
+            BrowserUtils.wait(6);
             //wait.until(ExpectedConditions.visibilityOf(historyTable));
             return historyTable.isDisplayed();
         } catch (Exception e) {
@@ -618,12 +618,16 @@ public class ResearchLinePage extends UploadPage {
         String investmentPerc = "";
         double investment;
         List<WebElement> investments = Driver.getDriver().findElements(By.xpath(investmentsXpath));
-        for (WebElement element : investments) {
-            BrowserUtils.scrollTo(element);
-            investmentPerc = element.getText();
+        for (int i=0;i< investments.size();i++) {
+            System.out.println("i = " + i);
+            BrowserUtils.scrollTo(investments.get(i));
+            investmentPerc = investments.get(i).getText();
+            System.out.println("investments.size() = " + investments.size());
+            System.out.println("investmentPerc = " + investmentPerc);
             investment = Double.parseDouble(investmentPerc
                     .replace("%", "")
                     .replace("<", ""));
+            System.out.println("investment = " + investment);
             if (investment > 0 && investment < 1) {
                 if (!investmentPerc.equals("<1%")) {
                     return false;

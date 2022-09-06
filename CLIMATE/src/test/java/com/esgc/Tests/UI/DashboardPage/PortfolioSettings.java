@@ -16,13 +16,15 @@ public class PortfolioSettings extends UITestBase {
         researchLinePage.clickMenu();
         researchLinePage.portfolioSettings.click();
         String originalPortfolioName =researchLinePage.getPortfolioName();
+        System.out.println("originalPortfolioName = " + originalPortfolioName);
         researchLinePage.selectPortfolio(originalPortfolioName);
         BrowserUtils.wait(5);
 
         assertTestCase.assertTrue(researchLinePage.ValidatePortfolioNameFeildIsEditable(),
-                "Validate that portfolio name is editble");
+                "Validate that portfolio name is editable");
 
         researchLinePage.validatePortfolioNameNotChangedAfterUpdateAndClickOutside(originalPortfolioName);
+        researchLinePage.selectPortfolio(originalPortfolioName);
         researchLinePage.validatePortfolioNameChangedAfterUpdateAndClickInsideDrawer(originalPortfolioName);
         researchLinePage.validatePortfolioNameSavedAutomaticallyAfterTwoSecond(originalPortfolioName);
         researchLinePage.validatePortfolioNameRevertbyCtrlZ(originalPortfolioName);
