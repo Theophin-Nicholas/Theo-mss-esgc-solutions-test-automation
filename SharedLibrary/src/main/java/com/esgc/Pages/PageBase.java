@@ -2214,6 +2214,7 @@ public abstract class PageBase {
             DashboardPage dashboardPage = new DashboardPage();
             String portfolio = getSelectedPortfolioNameFromDropdown();
             BrowserUtils.scrollTo(dashboardPage.endOfPage);// scrolling to the heamap
+            BrowserUtils.wait(2);
             if (!dashboardPage.isStickyHeaderDisplayed()) {
                 return false;
             }
@@ -2363,24 +2364,24 @@ public abstract class PageBase {
     }
 
     public String getPortfolioName() {
-        String portfolioname = "";
+        String portfolioName = "";
         for (WebElement e : portfolioSettings_portfolioList) {
-            portfolioname = e.findElements(By.xpath("div/div/div/div/span")).get(0).getText();
-            if (!portfolioname.equals("Sample Portfolio")) {
-                if (portfolioname.contains("Automation")) {
+            portfolioName = e.findElements(By.xpath("div/div/div/div/span")).get(0).getText();
+            if (!portfolioName.equals("Sample Portfolio")) {
+                if (portfolioName.contains("Automation")) {
                     break;
                 }
             }
         }
-        return portfolioname;
+        return portfolioName;
     }
 
-    public void selectPortfolio(String Portfolioname) {
+    public void selectPortfolio(String portfolioName) {
         try {
-
-            Driver.getDriver().findElement(By.xpath("//span[@title='" + Portfolioname + "']")).click();
+            Driver.getDriver().findElement(By.xpath("//span[@title='" + portfolioName + "']")).click();
+            System.out.println("Portfolio found : "+portfolioName);
         } catch (Exception e) {
-            System.out.println("Could not find the POrtfolio");
+            System.out.println("Could not find the Portfolio");
             return;
         }
     }
@@ -2402,6 +2403,7 @@ public abstract class PageBase {
 
     public void validatePortfolioNameNotChangedAfterUpdateAndClickOutside(String OriginalPortFolioName) {
         updatePortfolio(OriginalPortFolioName + "111");
+       // BrowserUtils.wait(10);
         closeMenuByClickingOutSide();
         clickMenu();
         portfolioSettings.click();
@@ -2484,6 +2486,7 @@ public abstract class PageBase {
 
     public void undoPortfolioNameChange(String OriginalPortFolioName) {
         updatePortfolio(OriginalPortFolioName);
+        BrowserUtils.wait(4);
         clickInSidePortfolioDrawer();
     }
 }
