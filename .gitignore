@@ -4,7 +4,6 @@ target
 test-output
 .DS_Store
 *.png
-configuration.properties
 /src/test/java/com/esgc/api_demo/
 *.prefs
 .classpath

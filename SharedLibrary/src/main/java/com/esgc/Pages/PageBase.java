@@ -1686,7 +1686,21 @@ public abstract class PageBase {
                 case "MAJOR":
                     return "#39A885";
             }
-        } else {
+        }
+
+        else if (researchLine.toUpperCase().equals("ESG")) {
+            switch (scoreCategory.toUpperCase()) {
+                case "WEAK":
+                    return "#DD581D";
+                case "LIMITED":
+                    return "#E8951C";
+                case "ROBUST":
+                    return "#EAC550";
+                case "ADVANCED":
+                    return "#DBE5A3";
+            }
+        }
+        else {
             switch (scoreCategory) {
                 case "WEAK":
                     return "#DFA124";
