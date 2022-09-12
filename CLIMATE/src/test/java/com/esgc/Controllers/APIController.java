@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static io.restassured.RestAssured.given;
+import static io.restassured.RestAssured.port;
 import static java.util.stream.Collectors.groupingBy;
 
 
@@ -34,6 +35,11 @@ public class APIController {
     boolean isInvalidTest = false;
 
     RequestSpecification configSpec() {
+        if(System.getProperty("token")==null){
+            String getAccessTokenScript = "return JSON.parse(localStorage.getItem('okta-token-storage')).accessToken.accessToken";
+            String accessToken = ((JavascriptExecutor) Driver.getDriver()).executeScript(getAccessTokenScript).toString();
+            System.setProperty("token", accessToken);
+        }
         if (isInvalidTest) {
             return given().accept(ContentType.JSON)
                     .baseUri(Environment.URL)
@@ -122,8 +128,6 @@ public class APIController {
                     .body(apiFilterPayload)
                     .when()
                     .post(Endpoints.POST_PORTFOLIO_SCORE);
-
-
         } catch (Exception e) {
             System.out.println("Inside exception " + e.getMessage());
         }
@@ -705,7 +709,9 @@ public class APIController {
             case "Temperature Alignment":
             case "temperaturealgmt":
                 return "temperaturealgmt";
-
+            case "ESG Assessments":
+            case "esgasmt":
+                return "corpesgdata/esgasmt";
         }
         return "";
     }

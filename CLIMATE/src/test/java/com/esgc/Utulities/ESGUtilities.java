@@ -5,7 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class ESGUtilities {
-    public String getESGPillarsCategory(String researchLine, int score){
+    public static String getESGPillarsCategory(String researchLine, int score){
         score = (int) Math.floor(score);
         if(researchLine.equals("1008")){
             if (score >= 0 && score <= 29) return "Weak";
