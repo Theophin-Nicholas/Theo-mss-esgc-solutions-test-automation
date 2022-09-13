@@ -4,7 +4,7 @@ import com.esgc.APIModels.APIFilterPayload;
 import com.esgc.APIModels.PortfolioScoreWrapper;
 import com.esgc.DBModels.ResearchLineIdentifier;
 import com.esgc.Tests.TestBases.DataValidationTestBase;
-import com.esgc.Utulities.APIUtilities;
+import com.esgc.Utilities.APIUtilities;
 import com.esgc.Utilities.Xray;
 import io.restassured.response.Response;
 import org.hamcrest.Matchers;

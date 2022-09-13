@@ -3,7 +3,7 @@ package com.esgc.Tests.DataValidation.PortfolioAnalysisPage;
 import com.esgc.APIModels.*;
 import com.esgc.DBModels.ResearchLineIdentifier;
 import com.esgc.Tests.TestBases.DataValidationTestBase;
-import com.esgc.Utulities.APIUtilities;
+import com.esgc.Utilities.APIUtilities;
 import com.esgc.Utilities.Xray;
 import io.restassured.response.Response;
 import org.hamcrest.Matchers;
@@ -123,7 +123,7 @@ public class HistoryTableTests extends DataValidationTestBase {
                 System.out.println("Actual:" + actualPercentage);
                 System.out.println("Expected:" + expectedPercentage);
                 assertTestCase.assertEquals(actualPercentage, expectedPercentage, "Validating investment pct for: " + category.getName() + " in " + years.get(j));
-                totalInvestmentPct += category.getData().get(j);
+                totalInvestmentPct += category.getData().get(j).getInv_pct();
             }
 
             assertTestCase.assertEquals(coverageInvestmentPercentage, (int) Math.round(totalInvestmentPct), "portfolio_id" + portfolioId + " Validating total sum of investment percentage"); // "Total % investment in Distribution has summed up to 100%");

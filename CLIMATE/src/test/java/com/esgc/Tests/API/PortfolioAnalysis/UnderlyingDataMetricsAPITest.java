@@ -6,7 +6,7 @@ import com.esgc.APIModels.UnderlyingDataMetricsWrapper;
 import com.esgc.APIModels.UnderlyingDataMetricsWrapperNew;
 import com.esgc.Controllers.APIController;
 import com.esgc.Tests.TestBases.APITestBase;
-import com.esgc.Utulities.APIUtilities;
+import com.esgc.Utilities.APIUtilities;
 import com.esgc.Utilities.Xray;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;

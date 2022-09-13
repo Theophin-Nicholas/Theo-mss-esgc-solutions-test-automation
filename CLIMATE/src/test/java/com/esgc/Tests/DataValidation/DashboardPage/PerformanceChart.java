@@ -9,7 +9,7 @@ import com.esgc.DBModels.ResearchLineIdentifier;
 import com.esgc.Tests.TestBases.DataValidationTestBase;
 import com.esgc.Utilities.PortfolioUtilities;
 import com.esgc.Utilities.Xray;
-import com.esgc.Utulities.APIUtilities;
+import com.esgc.Utilities.APIUtilities;
 import io.restassured.response.Response;
 import org.hamcrest.Matchers;
 import org.testng.annotations.DataProvider;

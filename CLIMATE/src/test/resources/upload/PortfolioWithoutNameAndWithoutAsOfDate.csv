@@ -5,6 +5,7 @@ As of Date: Please enter date in yyyy-mm-dd format
 Value: Second Column below !AsOfDate: Please enter total monetary value of investment; this must be in whole number format and in one single currency
 
 !Currency,USD
+!AsOfDate
 
 Identifier type,Identifier,Value
 ISIN,US31409GFE17,"1,000,000"
@@ -22,4 +23,3 @@ ISIN,US31419FRE87,"7,000,000"
 ISIN,US31418CAJ36,"8,000,000"
 ISIN,US31400SLV96,"9,000,000"
 ISIN,US3138YNKY26,"1,000,000"
-

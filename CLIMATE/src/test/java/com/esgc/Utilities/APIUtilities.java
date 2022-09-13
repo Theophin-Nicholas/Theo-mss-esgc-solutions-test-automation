@@ -1,10 +1,8 @@
-package com.esgc.Utulities;
+package com.esgc.Utilities;
 
 import com.esgc.APIModels.Portfolio;
 import com.esgc.Controllers.APIController;
 import com.esgc.Utilities.API.Endpoints;
-import com.esgc.Utilities.Environment;
-import com.esgc.Utilities.PortfolioFilePaths;
 import io.restassured.response.Response;
 import org.hamcrest.Matchers;
 
