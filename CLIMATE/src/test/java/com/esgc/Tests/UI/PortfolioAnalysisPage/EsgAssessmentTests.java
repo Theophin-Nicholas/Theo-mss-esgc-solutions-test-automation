@@ -4,6 +4,7 @@ import com.esgc.APIModels.APIFilterPayload;
 import com.esgc.APIModels.ESGScore;
 import com.esgc.Controllers.APIController;
 import com.esgc.Controllers.EntityPage.EntityProfileClimatePageAPIController;
+import com.esgc.Pages.DashboardPage;
 import com.esgc.Pages.ResearchLinePage;
 import com.esgc.Tests.TestBases.DataValidationTestBase;
 import com.esgc.Tests.TestBases.UITestBase;
@@ -20,6 +21,8 @@ import org.openqa.selenium.support.Color;
 import org.testng.annotations.Test;
 
 import java.awt.*;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -60,6 +63,9 @@ public class EsgAssessmentTests extends UITestBase {
             description = "Verify displayed data for ESG is matching with SF data")
     @Xray(test = {8178})
     public void verifyESGDisplayedDataIsMatchingWithSFDataTest() {
+        DashboardPage dashboardPage = new DashboardPage();
+        dashboardPage.selectSamplePortfolioFromPortfolioSelectionModal();
+
         ResearchLinePage researchLinePage = new ResearchLinePage();
 
         researchLinePage.navigateToResearchLine("ESG Assessments");
@@ -72,12 +78,14 @@ public class EsgAssessmentTests extends UITestBase {
         assertTestCase.assertTrue(researchLinePage.esgCardEntitiyLink.isDisplayed(), "Verify ESG Score link is displayed");
         List<String> scores = new ArrayList<>(Arrays.asList(researchLinePage.esgCardEntitiyLink.getText().split("\\D+")));
         System.out.println("scores = " + scores);
-        //Verify ESG score UI vs API
+
+        //Verify ESG portfolio score category comparison UI vs API
         APIController apiController = new APIController();
         APIFilterPayload apiFilterPayload = new APIFilterPayload();
         apiFilterPayload.setYear(DateTimeUtilities.getCurrentYear());
         apiFilterPayload.setMonth(DateTimeUtilities.getCurrentMonthNumeric());
         Response response =  apiController.getPortfolioScoreResponse("00000000-0000-0000-0000-000000000000", "ESG Assessments", apiFilterPayload);
+        response.prettyPrint();
         assertTestCase.assertEquals(response.getStatusCode(), 200, "Verify ESG API Response Status Code");
         //response.as(ESGScore.class);
         String apiScoreCategory = response.jsonPath().getString("portfolio_score[0].category").replaceAll("\\W", "");
@@ -85,35 +93,60 @@ public class EsgAssessmentTests extends UITestBase {
         assertTestCase.assertEquals(researchLinePage.esgCardInfoBoxScore.getText(), apiScoreCategory, "Verify ESG Score Category UI vs API");
 
         //Verify ESG score Category API vs SF
-
-        String query="with p as (\n" +
-                "     select * from df_portfolio df where portfolio_id='00000000-0000-0000-0000-000000000000'\n" +
-                " ),\n" +
-                "  esg as (\n" +
-                "    select eos.* from entity_coverage_tracking ect  \n" +
-                "join ESG_OVERALL_SCORES eos on ect.orbis_id=eos.orbis_id and data_type = 'esg_pillar_score'  and sub_category = 'ESG' and eos.year || eos.month <= '202208' //and eos.RESEARCH_LINE_ID=1015\n" +
-                " where  coverage_status = 'Published' and publish = 'yes'\n" +
-                " qualify row_number() OVER (PARTITION BY eos.orbis_id ORDER BY eos.year DESC, eos.month DESC, eos.scored_date DESC) =1\n" +
-                "    )\n" +
-                "     select * from p\n" +
-                "    join esg on p.bvd9_number=esg.orbis_id; ";
+        String query="WITH p AS\n" +
+                "(\n" +
+                "       SELECT *\n" +
+                "       FROM   df_portfolio df\n" +
+                "       WHERE  portfolio_id='00000000-0000-0000-0000-000000000000' ), \n" +
+                "esg AS\n" +
+                "(\n" +
+                "         SELECT   eos.*\n" +
+                "         FROM     entity_coverage_tracking ect\n" +
+                "         JOIN     esg_overall_scores eos\n" +
+                "         ON       ect.orbis_id=eos.orbis_id\n" +
+                "         AND      data_type = 'esg_pillar_score'\n" +
+                "         AND      sub_category = 'ESG'\n" +
+                "         AND      eos.year\n" +
+                "                           || eos.month <= '"+DateTimeUtilities.getCurrentYear()+DateTimeUtilities.getCurrentMonthNumeric()+"'\n" +
+                "         WHERE    coverage_status = 'Published'\n" +
+                "         AND      publish = 'yes' qualify row_number() OVER (partition BY eos.orbis_id ORDER BY eos.year DESC, eos.month DESC, eos.scored_date DESC) =1 )\n" +
+                "SELECT *, p.value as esg_value, esg.value as esg_score_value\n" +
+                "FROM   p\n" +
+                "left JOIN   esg\n" +
+                "ON     p.bvd9_number=esg.orbis_id where esg.value>=0";
         DatabaseDriver.createDBConnection();
         List<Map<String,Object>> resultMap = DatabaseDriver.getQueryResultMap(query);
-        int numberOfEntities = resultMap.size();
-        int totalScore = resultMap.stream().mapToInt(map -> Integer.parseInt(map.get("VALUE").toString())).sum();
+
+        int totalScore = 0;//resultMap.stream().mapToInt(map -> Integer.parseInt(map.get("esg_value").toString())).sum();
+
+        for(Map<String,Object> map : resultMap){
+            if(map.get("ESG_VALUE")!=null){
+                totalScore += Integer.parseInt(map.get("ESG_VALUE").toString());
+            }
+        }
         System.out.println("totalScore = " + totalScore);
-        System.out.println("numberOfEntities = " + numberOfEntities);
-        int avgEsgScore = Math.round((float) totalScore/numberOfEntities);
-        System.out.println("avgEsgScore = " + avgEsgScore);
-        String sfScoreCategory = ESGUtilities.getESGPillarsCategory(resultMap.get(0).get("RESEARCH_LINE_ID").toString(), avgEsgScore);
-        System.out.println("esgScoreCategory = " + sfScoreCategory);
-        assertTestCase.assertEquals(apiScoreCategory, sfScoreCategory, "Verify ESG Score Category API vs SF");
-        assertTestCase.assertEquals(scores.get(1), numberOfEntities, "Verify ESG Score Number of Entities UI vs SF");
+        
+        double inv_percentage = 0;
+        double weighted_avg_total = 0;
 
-        //send quesry to serializeResearchLines and get list of ResearchLineIdentifier
-        //send listof ResearchLineIdentifier to
+        for(Map<String,Object> map : resultMap){
+            if(map.get("ESG_SCORE_VALUE")!=null){
+                double singleEntityPercentage =  Double.parseDouble(map.get("ESG_VALUE").toString())/totalScore;
+                inv_percentage += singleEntityPercentage;
+                weighted_avg_total+=singleEntityPercentage*ESGUtilities.getESGPillarsScale(map.get("RESEARCH_LINE_ID").toString(), Integer.parseInt(map.get("ESG_SCORE_VALUE").toString()));
+            }
+        }
+        System.out.println("weighted_avg_total = " + weighted_avg_total);
+        System.out.println("inv_percentage = " + inv_percentage);
+        //Verify ESG weighted_avg value API vs SF
+        DecimalFormat df = new DecimalFormat("#.###");
+        df.setRoundingMode(RoundingMode.HALF_UP);
 
 
+        String apiWeightedAvgScore =  response.jsonPath().getString("portfolio_score[0].weighted_avg");
+        System.out.println("apiWeightedAvgScore = " + apiWeightedAvgScore);
+        System.out.println("df.format(weighted_avg_total) = " + df.format(weighted_avg_total));
+        assertTestCase.assertTrue(apiWeightedAvgScore.contains(df.format(weighted_avg_total)),"ESG weighted_avg value is verified based on API vs SF");
     }
 
     @Test(groups = {"regression", "ui", "esg"},
