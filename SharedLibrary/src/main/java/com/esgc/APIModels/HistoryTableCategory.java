@@ -7,5 +7,5 @@ import java.util.List;
 @Data
 public class HistoryTableCategory {
     public String name;
-    public List<Double> data ;
+    public List<HistoryTableData> data ;
 }

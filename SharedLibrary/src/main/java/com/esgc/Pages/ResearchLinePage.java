@@ -105,7 +105,7 @@ public class ResearchLinePage extends UploadPage {
     @FindBy(xpath = "//a[@id='link-link-test-id-3']")
     public WebElement methodologyLink;
 
-    @FindBy(xpath = "//span[@title]")
+    @FindBy(xpath = "//*[@title and text()]")
     public WebElement portfolioNameInSubTitle;
 
     @FindBy(xpath = "//span[@title]")

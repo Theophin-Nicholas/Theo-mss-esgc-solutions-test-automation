@@ -9,7 +9,7 @@ import com.esgc.Utilities.Database.PortfolioQueries;
 import com.esgc.Utilities.Database.UnderlyingDataMetricsQueries;
 import com.esgc.Utilities.PortfolioUtilities;
 import com.esgc.Utilities.Xray;
-import com.esgc.Utulities.APIUtilities;
+import com.esgc.Utilities.APIUtilities;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import org.hamcrest.Matchers;
