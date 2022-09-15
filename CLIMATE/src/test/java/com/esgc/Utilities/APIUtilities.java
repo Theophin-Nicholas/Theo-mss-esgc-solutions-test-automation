@@ -96,14 +96,14 @@ public class APIUtilities {
 
         APIController controller = new APIController();
 
-        Response response = controller.importPortfolio(user_id, fileName ,
+        Response response = controller.importPortfolio(user_id, fileName,
                 filePath);
         response.then().log().all();
 
         String errorType = response.jsonPath().getString("errorType");
 
         if (errorType.contains("Exception")) {
-            response.then().assertThat().statusCode(is(500));
+            response.then().assertThat().statusCode(is(oneOf(500, 400)));
         } else {
             response.then().assertThat().statusCode(is(oneOf(400, 403, 404, 415)));
         }
