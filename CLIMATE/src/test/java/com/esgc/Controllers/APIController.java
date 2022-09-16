@@ -993,4 +993,16 @@ public class APIController {
 
         return response;
     }
+
+    public Response getEntitlementHandlerResponse() {
+        Response response = null;
+        try {
+            response = configSpec()
+                    .get(Endpoints.GET_ENTITLEMENT_HANDLER);
+        } catch (Exception e) {
+            System.out.println("Inside exception " + e.getMessage());
+        }
+
+        return response;
+    }
 }
