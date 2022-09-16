@@ -397,6 +397,18 @@ public class DashboardPage extends UploadPage {
         }
     }
 
+
+
+    public void downloadDashboardExportFile(){
+        navigateToPageFromMenu("Dashboard");
+        clickViewCompaniesAndInvestments();
+        selectViewBySector();
+        deleteDownloadFolder();
+        clickExportCompaniesButton();
+        closePortfolioExportDrawer();
+        assertTestCase.assertEquals(filesCountInDownloadsFolder(),1,"Verify download of export file");
+    }
+
     public void clickHideLink(){
         hideLink.click();
     }

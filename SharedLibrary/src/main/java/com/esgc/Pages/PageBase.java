@@ -1057,6 +1057,12 @@ public abstract class PageBase {
         return Arrays.asList(dir_contents).stream().filter(e -> e.getName().contains(date)).findAny().isPresent();
     }
 
+    public int filesCountInDownloadsFolder() {
+        File dir = new File(BrowserUtils.downloadPath());
+        File[] dir_contents = dir.listFiles();
+        return dir_contents.length;
+    }
+
     public String getDownloadedCompaniesExcelFilePath() {
         File dir = new File(BrowserUtils.downloadPath());
         File[] listOfFiles = dir.listFiles();
