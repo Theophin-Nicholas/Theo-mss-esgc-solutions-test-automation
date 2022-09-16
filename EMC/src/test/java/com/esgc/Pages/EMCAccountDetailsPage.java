@@ -243,9 +243,7 @@ public class EMCAccountDetailsPage extends EMCBasePage {
 
     public void searchUser(String test) {
 
-        if (!searchInput.getAttribute("value").isEmpty())
-            while (searchInput.getAttribute("value").length() > 0)
-                searchInput.sendKeys(Keys.BACK_SPACE);
+        clear(searchInput);
         System.out.println("Searching for the user : "+test);
         searchInput.sendKeys(test);
         if(userNamesList.size()==0) {

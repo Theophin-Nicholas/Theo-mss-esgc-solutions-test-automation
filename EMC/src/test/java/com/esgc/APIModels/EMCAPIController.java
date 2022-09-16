@@ -120,6 +120,11 @@ public class EMCAPIController extends TestBase {
         return response;
     }
 
+    public Response postEMCNewUserResponse(String provider, String firstName, String lastName, String userName, String email, boolean isActive, String accountId, boolean isInvalid) {
+        isInvalidTest = isInvalid;
+        return postEMCNewUserResponse(provider, firstName, lastName, userName, email, isActive, accountId);
+    }
+
     public Response putEMCUserResponse(String email, User user) {
         System.out.println("Updating user with email = " + email);
         Response response = null;
