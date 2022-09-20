@@ -67,6 +67,7 @@ public class ApplicationPageTests extends EMCUITestBase {
         emcMainPage.clickApplicationsButton();
         //Navigate to the Application Name on table.
         EMCApplicationsPage emcApplicationsPage = new EMCApplicationsPage();
+        emcApplicationsPage.searchInput.sendKeys("TestQA");
         String expApplicationName = emcApplicationsPage.getApplicationNames().get(0);
         String expApplicationURL = emcApplicationsPage.applicationLinks.get(0).getText();
         //Click on Application Name

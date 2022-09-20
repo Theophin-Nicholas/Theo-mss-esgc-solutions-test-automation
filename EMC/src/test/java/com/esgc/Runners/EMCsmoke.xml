@@ -4,11 +4,11 @@
         <listener class-name="com.esgc.Utilities.XrayListener"/>
     </listeners>
     <test name="ESGC Smoke Test via Module">
-        <parameter name="reportName" value=" EMC Test Automation Report"/>
+        <parameter name="reportName" value=" EMC Smoke Test Automation Report"/>
         <groups>
             <run>
                 <!-- Used tag names: "EMC", "ui", "smoke", "regression", "prod" -->
-                <include name="smoke"/>
+                <include name="prod"/>
             </run>
         </groups>
 

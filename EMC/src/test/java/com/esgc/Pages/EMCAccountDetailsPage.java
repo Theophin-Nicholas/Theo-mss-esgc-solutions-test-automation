@@ -254,7 +254,7 @@ public class EMCAccountDetailsPage extends EMCBasePage {
     }
 
     public boolean isSortedByName() {
-        List<String> names = userNamesList.stream().map(name -> name.getText()).collect(Collectors.toList());
+        List<String> names = userNamesList.stream().map(name -> name.getText().toLowerCase()).collect(Collectors.toList());
         System.out.println("names are: "+names);
         return names.stream().sorted().collect(Collectors.toList()).equals(names);
     }

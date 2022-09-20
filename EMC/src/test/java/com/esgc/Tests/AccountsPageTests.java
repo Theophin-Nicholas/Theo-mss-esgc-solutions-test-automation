@@ -21,7 +21,7 @@ public class AccountsPageTests extends EMCUITestBase {
 
     String accountName = "INTERNAL QATest - PROD123";
     String applicationName = "TestQA";
-    String activeUserName = "Ferhat Test";
+    String activeUserName = "Efrain June2022";
 
     String fname = "Test";
     String lname = "user";
