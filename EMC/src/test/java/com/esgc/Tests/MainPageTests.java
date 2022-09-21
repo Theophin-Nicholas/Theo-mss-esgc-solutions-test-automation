@@ -31,7 +31,7 @@ public class MainPageTests extends EMCUITestBase {
 
     }
 
-    @Test(groups = {"EMC", "ui", "smoke","regression"})
+    @Test(groups = {"EMC", "ui", "smoke","regression", "prod"})
     @Xray(test = {3520})
     public void wrongUsernameLoginTest() {
         Driver.closeDriver();
