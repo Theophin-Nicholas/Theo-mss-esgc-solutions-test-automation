@@ -48,27 +48,29 @@ public class EntityHyperlinksTests extends UITestBase {
         assertTestCase.assertTrue(dashboardPage.verifyDashboardHyperlinks("Performance: Largest Holdings, Leaders, Laggards", 1),
                 "Portfolio Monitoring - Verify Performance Laggards Company Hyperlink");
 
-        ArrayList<String> GeographicRisks = new ArrayList<>();
-        GeographicRisks.add("Market Risk");
-        GeographicRisks.add("Operations Risk");
-        GeographicRisks.add("Supply Chain Risk");
-        GeographicRisks.add("Temperature Alignment");
-        GeographicRisks.add("Carbon Footprint");
-        GeographicRisks.add("Green Share Assessment");
-        GeographicRisks.add("Brown Share Assessment");
-
-        for (String risk : GeographicRisks) {
-            dashboardPage.selectResearchLineFromGeographicRiskMapDropDown(risk);
-            System.out.println("Geographic Risk = " + risk);
-            assertTestCase.assertTrue(dashboardPage.verifyGeographicRiskHyperlink(),
-                    "Geographic Risk Distribution - " + risk + ": Verify Entity Hyperlink");
-        }
+        //TODO Geomap is de-scoped until an update from business
+//        ArrayList<String> GeographicRisks = new ArrayList<>();
+//        GeographicRisks.add("Market Risk");
+//        GeographicRisks.add("Operations Risk");
+//        GeographicRisks.add("Supply Chain Risk");
+//        GeographicRisks.add("Temperature Alignment");
+//        GeographicRisks.add("Carbon Footprint");
+//        GeographicRisks.add("Green Share Assessment");
+//        GeographicRisks.add("Brown Share Assessment");
+//
+//        for (String risk : GeographicRisks) {
+//            dashboardPage.selectResearchLineFromGeographicRiskMapDropDown(risk);
+//            System.out.println("Geographic Risk = " + risk);
+//            assertTestCase.assertTrue(dashboardPage.verifyGeographicRiskHyperlink(),
+//                    "Geographic Risk Distribution - " + risk + ": Verify Entity Hyperlink");
+//        }
 
         assertTestCase.assertTrue(dashboardPage.verifyHeatMapHyperlink(),
                 "Heatmap: Verify Entity Hyperlink");
 
     }
 
+    //TODO all researchline data provider
     @Test(groups = {"regression", "dashboard", "ui"})
     @Xray(test = {6566, 6865})
     public void verifyPortfolioAnalysisHyperlinks() {

@@ -18,6 +18,7 @@ import java.util.List;
 
 public class CarbonIntensityScoreTests extends DataValidationTestBase {
 
+    //TODO update flow instead of getting results from DB with query
     @Test(groups = {"regression", "data_validation"}, dataProvider = "researchLines")
     @Xray(test = {2988, 2991, 2992, 2993, 2994, 2996, 2997, 3203})
     public void verifyCarbonIntensityScoreWithMixedIdentifiers(@Optional String sector, @Optional String region,

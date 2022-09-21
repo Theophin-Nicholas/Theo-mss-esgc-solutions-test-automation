@@ -3,6 +3,7 @@ package com.esgc.Tests.UI.PampaLoginPageTest;
 import com.esgc.Pages.LoginPage;
 import com.esgc.Tests.TestBases.DashboardUITestBase;
 import com.esgc.Utilities.BrowserUtils;
+import com.esgc.Utilities.Driver;
 import com.esgc.Utilities.Environment;
 import com.esgc.Utilities.Xray;
 import org.testng.Assert;
@@ -157,11 +158,13 @@ public class LoginPageTest extends DashboardUITestBase {
 
             test.info("Providing valid username at Login page and then click Next button.");
             login.EnterUserNameAsBlank();
-
+            BrowserUtils.wait(5);
             test.info("Click on Next button...");
             Assert.assertTrue(login.checkIfCorrectValidationErrorMsgForBlankUserNameDisplayed(), "No Error message was displayed for the blank UserName.");
 
             login.EnterUserName();
+            BrowserUtils.wait(5);
+            login.checkTermsAndConditions();
             login.EnterPasswordAsBlank();
             Assert.assertTrue(login.checkIfCorrectValidationErrorMsgForBlankPasswordDisplayed(), "No Error message was displayed for the blank Password.");
 
@@ -183,16 +186,31 @@ public class LoginPageTest extends DashboardUITestBase {
             test.info("Checking if Next button is present on Login page.");
             LoginPage login = new LoginPage();
 
+            String OKTAURL = Driver.getDriver().getCurrentUrl();
+
             Assert.assertTrue(login.checkIfNextButtonIsPresent(), "Next Button was not present.");
 
             test.info("Checking if Next button is clickable.");
             Assert.assertTrue(login.checkIfNextButtonIsClickable(), "User was not able to click on the Next button.");
 
             test.info("Providing valid username at Login page and then click Next button.");
-            login.loginWithParams(Environment.DATA_USERNAME, Environment.DATA_PASSWORD);
+            login.loginWithParamsToOktaPage(Environment.DATA_USERNAME, Environment.DATA_PASSWORD);
 
             assertTestCase.assertTrue(login.checkIfUserLoggedInOKTASuccessfully(),"User is on Okta Page");
 
+            login.navigateToESGPlatform();
+            BrowserUtils.wait(5);
+
+            Assert.assertFalse(login.checkIfUserLoggedInSuccessfully(), "User was able to access the MESGC application with already provided credentials.");
+
+            //Since Terms & Conditions checkbox is not marked, user should be re-login
+            test.info("Providing valid username at Login page and then click Next button.");
+            login.loginWithParams(Environment.DATA_USERNAME, Environment.DATA_PASSWORD);
+            BrowserUtils.wait(5);
+            Assert.assertTrue(login.checkIfUserLoggedInSuccessfully(), "User was able to access the MESGC application with already provided credentials.");
+            BrowserUtils.wait(5);
+            Driver.getDriver().navigate().to(OKTAURL);
+            BrowserUtils.wait(5);
             login.navigateToESGPlatform();
             BrowserUtils.wait(5);
 
