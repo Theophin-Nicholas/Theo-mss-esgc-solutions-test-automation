@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 
 public class HistoryTableTests extends DataValidationTestBase {
 
+    //TODO count of companies validation and N/A category validation should be added
     @Test(groups = {"regression", "data_validation"}, dataProvider = "researchLines")
     @Xray(test = {5060, 5063, 5934, 5917})
     public void verifyHistoryTableWithMixedIdentifiers(@Optional String sector, @Optional String region,
@@ -25,7 +26,7 @@ public class HistoryTableTests extends DataValidationTestBase {
 
         List<ResearchLineIdentifier> portfolioToUpload = dataValidationUtilities.getPortfolioToUpload(researchLine, month, year);
         double totalValues = portfolioUtilities.calculateTotalSumOfInvestment(portfolioToUpload);
-        String fileName = String.format("Portfolio Distribution %s - %s - %s - %s - %s", researchLine, sector, region, month, year);
+        String fileName = String.format("History Table %s - %s - %s - %s - %s", researchLine, sector, region, month, year);
         String path = portfolioUtilities.createPortfolio(fileName, portfolioToUpload);
         test.info("Portfolio saved to:");
         test.info(path);
@@ -93,6 +94,7 @@ public class HistoryTableTests extends DataValidationTestBase {
             for (int i = 0; i < historyTableCategories.size() - 1; i++) {
 
                 RangeAndScoreCategory rangeAndCategory = rangeAndCategoryList.get(i);
+                System.out.println("Validating = " + rangeAndCategory);
                 HistoryTableCategory category = historyTableCategories.stream()
                         .filter(e -> e.getName().equals(rangeAndCategory.getCategory())).findFirst().get();
                 assertTestCase.assertEquals(category.getName(), rangeAndCategory.getCategory(), "Validating score category1");
@@ -118,7 +120,7 @@ public class HistoryTableTests extends DataValidationTestBase {
                 Double investmentPct = categoryDistribution.getInvestment_pct();
 
                 String expectedPercentage = String.format("%.2f", investmentPct);
-                String actualPercentage = String.format("%.2f", category.getData().get(j));
+                String actualPercentage = String.format("%.2f", category.getData().get(j).getInv_pct());
 
                 System.out.println("Actual:" + actualPercentage);
                 System.out.println("Expected:" + expectedPercentage);
@@ -136,7 +138,7 @@ public class HistoryTableTests extends DataValidationTestBase {
 
         List<PortfolioDistribution> portfolioDistributionList = Arrays.asList(
                 controller.getPortfolioDistributionResponse(portfolioId, researchLine, apiFilterPayload)
-                        .as(PortfolioDistribution[].class));
+                        .as(PortfolioDistributionWrapper[].class)).get(0).getPortfolio_distribution();
 
         int countOfCompanies = portfolioDistributionList.stream().mapToInt(PortfolioDistribution::getCompanies).sum();
 
