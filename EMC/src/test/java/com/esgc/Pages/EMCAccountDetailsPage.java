@@ -26,6 +26,12 @@ public class EMCAccountDetailsPage extends EMCBasePage {
     @FindBy (tagName = "label")
     public WebElement statusLabel;
 
+    @FindBy (xpath = "//label//input")
+    public WebElement statusCheckBox;
+
+    @FindBy (xpath = "//div[@name='subscriberType']")
+    public WebElement subscriberInput;
+
     @FindBy (name="contractStartDate")
     public WebElement startDateInput;
 
@@ -60,6 +66,9 @@ public class EMCAccountDetailsPage extends EMCBasePage {
 
     @FindBy (xpath = "//button[.='Assign applications']")
     public WebElement assignApplicationsButton;
+
+    @FindBy (xpath = "//h6[.='No Apps assigned to this account']")
+    public WebElement noApplicationMessage;
 
     @FindBy (xpath = "//li/div[1]//span")
     public List<WebElement> applicationsNamesList;
@@ -103,6 +112,9 @@ public class EMCAccountDetailsPage extends EMCBasePage {
 
     @FindBy (xpath = "//button[.='Products']")
     public WebElement productsTab;
+
+    @FindBy (xpath = "//h6[.='No Products assigned to this account']")
+    public WebElement noProductsMessage;
 
     @FindBy (xpath = "//h6[.='Products']")
     public WebElement productsTabTitle;

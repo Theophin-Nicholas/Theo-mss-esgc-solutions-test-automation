@@ -27,9 +27,9 @@ public class AccountsPageTests extends EMCUITestBase {
     String lname = "user";
     String email = "testuser@mail.com";
 
-    @Test(groups = {"EMC", "ui", "regression"})//no smoke
-    @Xray(test = {3377, 3476, 4174, 4222, 3374, 4175})
-    public void accountCreationTests() {
+    @Test(groups = {"EMC", "ui", "regression", "smoke", "prod"})
+    @Xray(test = {3377, 3476})
+    public void accountDetailsVerificationTest() {
         EMCMainPage homePage = new EMCMainPage();
 
         //Select Account in the left menu
@@ -52,19 +52,9 @@ public class AccountsPageTests extends EMCUITestBase {
         //User should be redirected to Account View page
         assertTestCase.assertEquals(accountsPage.pageTitle.getText(), "Accounts", "Accounts page is displayed");
 
-        //Click on 'Create Account' and enter all the required information to create the new Account
-        accountsPage.createAccountButton.click();
 
-        //Todays date and time in the format of dd/MM/yyyy hh:mm:ss
-        String now = "QATest" + java.time.LocalDateTime.now().format(java.time.format.DateTimeFormatter.ofPattern("dd-hhmmss"));
-        createAccountPage.createAccount(now, true);
-        System.out.println(createAccountPage.accountCreatedMessage.getText());
-        assertTestCase.assertEquals(createAccountPage.accountCreatedMessage.getText(), "Account created successfully",
-                "Account created successfully message is displayed");
-
-        //Go back to the Accounts section and search for the Account created in the previous step
-        accountsPage.search(now);
-        assertTestCase.assertEquals(accountsPage.findAccount(now), true,
+        accountsPage.search(accountName);
+        assertTestCase.assertEquals(accountsPage.findAccount(accountName), true,
                 "Account is displayed in the list");
 
         //Check that Fullfillment User will be able to view An Account By Clicking on its Name from Accounts View Screen
@@ -79,12 +69,61 @@ public class AccountsPageTests extends EMCUITestBase {
         assertTestCase.assertEquals(detailsPage.statusLabel.getText(), accountStatus, "Account Status is displayed");
         assertTestCase.assertTrue(detailsPage.creationInfo.getText().endsWith(creationDate), "Account creation info is verified");
         assertTestCase.assertTrue(detailsPage.editButton.isDisplayed(), "Edit button is displayed");
+
+        //Click Edit Hyperlink is visible on the Top Right Corner
+        //Account is editable mode
         detailsPage.editButton.click();
-        assertTestCase.assertTrue(detailsPage.cancelButton.isDisplayed(), "Edit button works");
+        assertTestCase.assertTrue(detailsPage.cancelButton.isEnabled(), "Accounts Page - Users Details - Cancel button is enabled for editing");
+        assertTestCase.assertTrue(detailsPage.saveButton.isDisplayed(), "Accounts Page - Users Details - Save button is enabled for editing");
+        assertTestCase.assertTrue(detailsPage.accountNameInput.isEnabled(), "Accounts Page - Users Details - Account Name input is enabled for editing");
+        assertTestCase.assertTrue(detailsPage.statusCheckBox.isEnabled(), "Accounts Page - Users Details - Account status checkbox is enabled for editing");
+        assertTestCase.assertTrue(detailsPage.subscriberInput.isEnabled(), "Accounts Page - Users Details - Account Subscriber Input is enabled for editing");
+        assertTestCase.assertTrue(detailsPage.startDateInput.isEnabled(), "Accounts Page - Users Details - Account start date input is enabled for editing");
+        assertTestCase.assertTrue(detailsPage.endDateInput.isEnabled(), "Accounts Page - Users Details - Account end date input is enabled for editing");
+
+
         detailsPage.cancelButton.click();
+    }
+
+    @Test(groups = {"EMC", "ui", "regression", "smoke"})
+    @Xray(test = {3374, 4174, 4175, 4222})
+    public void accountCreationTests2() {
+        EMCMainPage homePage = new EMCMainPage();
+
+        //Select Account in the left menu
+        homePage.openSidePanel();
+        homePage.clickAccountsButton();
+
+        //User is able to see New Account Page
+        EMCAccountsPage accountsPage = new EMCAccountsPage();
+        assertTestCase.assertEquals(accountsPage.pageTitle.getText(), "Accounts", "Accounts page is displayed");
+
+        //Click Create Account button
+        accountsPage.clickOnCreateAccountButton();
+        EMCCreateAccountPage createAccountPage = new EMCCreateAccountPage();
+        assertTestCase.assertEquals(createAccountPage.pageTitle.getText(), "Create a new Account",
+                "Create Account page is displayed");
+
+        //Todays date and time in the format of dd/MM/yyyy hh:mm:ss
+        String newAccountName = "QATest" + java.time.LocalDateTime.now().format(java.time.format.DateTimeFormatter.ofPattern("dd-hhmmss"));
+        createAccountPage.createAccount(newAccountName, true);
+        System.out.println(createAccountPage.accountCreatedMessage.getText());
+        assertTestCase.assertEquals(createAccountPage.accountCreatedMessage.getText(), "Account created successfully",
+                "Account created successfully message is displayed");
+
+        //Go back to the Accounts section and search for the Account created in the previous step
+        accountsPage.search(newAccountName);
+        assertTestCase.assertTrue(accountsPage.findAccount(newAccountName), "Account is displayed in the list");
+
+
+        accountsPage.clickOnAccount(newAccountName);
+        EMCAccountDetailsPage detailsPage = new EMCAccountDetailsPage();
+
         //Select Applications Tab
         detailsPage.clickOnApplicationsTab();
         assertTestCase.assertTrue(detailsPage.applicationsTabTitle.isDisplayed(), "Applications Tab is displayed");
+        assertTestCase.assertEquals(detailsPage.applicationsNamesList.size(),0, "Add Application button is displayed");
+        assertTestCase.assertTrue(detailsPage.noApplicationMessage.isDisplayed(), "No Applications assigned message is displayed");
 
         //Click Assign Applications button on the top right of the section.
         detailsPage.assignApplicationsButton.click();
@@ -106,8 +145,9 @@ public class AccountsPageTests extends EMCUITestBase {
         assertTestCase.assertTrue(detailsPage.verifyApplication(applicationName + "2"), "Application is displayed in the list");
 
         detailsPage.productsTab.click();
-        assertTestCase.assertEquals(detailsPage.productsTabTitle.getText(), "Products",
-                "Products Tab is displayed");
+        assertTestCase.assertEquals(detailsPage.productsTabTitle.getText(), "Products", "Products Tab is displayed");
+        assertTestCase.assertEquals(detailsPage.currentProductsList.size(),0, "Add Product button is displayed");
+        assertTestCase.assertTrue(detailsPage.noProductsMessage.isDisplayed(), "No Products assigned message is displayed");
 
         detailsPage.addAllProducts(applicationName);
         assertTestCase.assertTrue(detailsPage.verifyProduct(applicationName),
@@ -659,8 +699,11 @@ public class AccountsPageTests extends EMCUITestBase {
 
         EMCAccountDetailsPage detailsPage = new EMCAccountDetailsPage();
         assertTestCase.assertTrue(detailsPage.assignApplicationsButton.isDisplayed(), "Applications Tab is displayed");
-        assertTestCase.assertTrue(detailsPage.addTestApplications(applicationName), "MESG Platform Applications is assigned");
-        //assertTestCase.assertTrue(detailsPage.addTestApplications("TestQA"), "TestQA Application is assigned");
+        if(detailsPage.verifyApplication(applicationName)) detailsPage.deleteApplication(applicationName);
+        if (detailsPage.verifyApplication(applicationName+2)) detailsPage.deleteApplication(applicationName+2);
+
+        assertTestCase.assertTrue(detailsPage.addTestApplications(applicationName), applicationName+" Applications is assigned");
+        assertTestCase.assertTrue(detailsPage.addTestApplications(applicationName+2), applicationName+2+" Applications is assigned");
 
         //We can choose a different test account
         String accountName2 = "Test Account";
@@ -676,8 +719,10 @@ public class AccountsPageTests extends EMCUITestBase {
         detailsPage.clickOnApplicationsTab();
 
         assertTestCase.assertTrue(detailsPage.assignApplicationsButton.isDisplayed(), "Applications Tab is displayed");
+        if(detailsPage.verifyApplication(applicationName)) detailsPage.deleteApplication(applicationName);
+        if (detailsPage.verifyApplication(applicationName+2)) detailsPage.deleteApplication(applicationName+2);
         assertTestCase.assertTrue(detailsPage.addTestApplications(applicationName), "Test Applications is assigned");
-        //assertTestCase.assertTrue(detailsPage.addTestApplications("TestQA"), "TestQA Application is assigned");
+        assertTestCase.assertTrue(detailsPage.addTestApplications(applicationName+2), "TestQA Application is assigned");
     }
 
     @Test(groups = {"EMC", "ui", "regression"})
