@@ -115,13 +115,12 @@ public abstract class TestBase {
         }
     }
 
-    //TODO Not in use as of now
     public void getExistingUsersAccessTokenFromUI() {
         System.out.println("getting token");
-        String getAccessTokenScript = "return JSON.parse(localStorage.getItem('okta-token-storage')).accessToken.accessToken";
-        accessToken = ((JavascriptExecutor) Driver.getDriver()).executeScript(getAccessTokenScript).toString();
-        System.setProperty("token", accessToken);
-        System.out.println("token = " + accessToken);
+            String getAccessTokenScript = "return JSON.parse(localStorage.getItem('okta-token-storage')).accessToken.accessToken";
+            String accessToken = ((JavascriptExecutor) Driver.getDriver()).executeScript(getAccessTokenScript).toString();
+            System.setProperty("token", accessToken);
+            System.out.println("token = " + accessToken);
     }
 
 }

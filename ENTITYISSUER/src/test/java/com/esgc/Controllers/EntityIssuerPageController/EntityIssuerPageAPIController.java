@@ -2,7 +2,6 @@ package com.esgc.Controllers.EntityIssuerPageController;
 
 import com.esgc.APIModels.EntityIssuerPage.DriverDetailPayload;
 import com.esgc.Utilities.API.EntityPageEndpoints;
-import com.esgc.Utilities.APIUtulities.EntityIssuerPageEndPoints;
 import com.esgc.Utilities.Environment;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
