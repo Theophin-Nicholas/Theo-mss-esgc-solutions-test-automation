@@ -61,4 +61,22 @@ public class EsgAssessmentTests extends DataValidationTestBase {
         researchLinePage.clickHideButtonInDrillDownPanel();
 
     }
+
+    @Test(groups = {"regression", "ui", "smoke", "esg"})
+    @Xray(test = {8704})
+    public void verifyESGGradeDistributionIsDisplayed() {
+        ResearchLinePage researchLinePage = new ResearchLinePage();
+        researchLinePage.navigateToResearchLine("ESG Assessments");
+        test.info("Navigated to ESG Assessments Page");
+        researchLinePage.validateEsgGradeDistribution();
+    }
+
+    @Test(groups = {"regression", "ui", "smoke", "esg"})
+    @Xray(test = {9133})
+    public void verifyESGGRegionMapAndCountryTableDrawer() {
+        ResearchLinePage researchLinePage = new ResearchLinePage();
+        researchLinePage.navigateToResearchLine("ESG Assessments");
+        test.info("Navigated to ESG Assessments Page");
+        researchLinePage.validateCountry();
+    }
 }

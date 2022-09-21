@@ -74,7 +74,7 @@ public class TestBaseClimate  extends TestBase {
         System.out.println("getting token");
         String URL = Environment.URL;
         BrowserUtils.wait(1);
-        Driver.getDriver("chromeheadless").get(URL);
+        Driver.getDriver("chrome").get(URL);
         //Driver.getDriver().get(URL);
         Driver.getDriver().manage().window().maximize();
         Driver.getDriver().manage().timeouts().implicitlyWait(Duration.ofSeconds(30));
