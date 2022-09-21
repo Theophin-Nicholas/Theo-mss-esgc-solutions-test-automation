@@ -29,7 +29,7 @@ public class ESGClimateSummaryDBTest extends EntityClimateProfileDataValidationT
                 controller.getClimateSummaryAPIResponse(orbisID, "Green Share")
                         .as(BrownShareAndGreenShareClimateSummary[].class));
         assertTestCase.assertEquals(
-                Integer.parseInt(data.get("SCORE")),
+                data.get("SCORE") == null ? "" : Integer.parseInt(data.get("SCORE")),
                 climateSummaryGreenShareAPIResponse.get(0).getClimate().getScore(),
                 "Green Share Score Validation for " + orbisID);
 
@@ -43,7 +43,7 @@ public class ESGClimateSummaryDBTest extends EntityClimateProfileDataValidationT
                 controller.getClimateSummaryAPIResponse(orbisID, "Brown Share")
                         .as(BrownShareAndGreenShareClimateSummary[].class));
         assertTestCase.assertEquals(
-                Integer.parseInt(data.get("SCORE")),
+                data.get("SCORE") == null ? "" : Integer.parseInt(data.get("SCORE")),
                 climateSummaryBrownShareAPIResponse.get(0).getClimate().getScore(),
                 "Brown Share Score Validation for " + orbisID);
 
@@ -63,7 +63,7 @@ public class ESGClimateSummaryDBTest extends EntityClimateProfileDataValidationT
                 climateSummaryTempertureAlignmentAPIResponse.getClimate().getEmissions_reduction_target_year(),
                 "Temperature Alignment Validation for EMISSIONS_REDUCTION_TARGET_YEAR");
         assertTestCase.assertEquals(data.get("IMPLIED_TEMPERATURE_RISE").equals("No Info") ?
-                -1d: Double.parseDouble(data.get("IMPLIED_TEMPERATURE_RISE")),
+                        -1d : Double.parseDouble(data.get("IMPLIED_TEMPERATURE_RISE")),
                 climateSummaryTempertureAlignmentAPIResponse.getClimate().getImplied_temperature_rise(),
                 "Temperature Alignment Validation for IMPLIED_TEMPERATURE_RISE");
         assertTestCase.assertEquals(data.get("UPDATED_DATE"),
@@ -105,7 +105,7 @@ public class ESGClimateSummaryDBTest extends EntityClimateProfileDataValidationT
                         {"000002959"},
                         {"000411117"},
                         {"000411117"},
-                        {"492557665"}, {"001812590"},{"048977121"}
+                        {"492557665"}, {"001812590"}, {"048977121"}
                 };
     }
 
@@ -188,7 +188,7 @@ public class ESGClimateSummaryDBTest extends EntityClimateProfileDataValidationT
     @Xray(test = {8988, 8989})
     public void validatePhysicalRiskManagement(@Optional String orbisID) {
         Map<String, String> data = entityClimateProfilepagequeries.getPhysicalRiskData(orbisID);
-        if (data.size()>0) {
+        if (data.size() > 0) {
             PhysicalRiskHazardsWrapper climateSummaryGreenShareAPIResponse = controller.getEntityUnderLyingPhysicalHazardAPIResponse(orbisID)
                     .as(PhysicalRiskHazardsWrapper.class);
 
@@ -220,8 +220,7 @@ public class ESGClimateSummaryDBTest extends EntityClimateProfileDataValidationT
                 }
 
             }
-        }
-        else{
+        } else {
             System.out.println("Entity does not have data to test");
         }
     }

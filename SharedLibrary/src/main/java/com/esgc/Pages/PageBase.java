@@ -71,8 +71,8 @@ public abstract class PageBase {
     @FindBy(xpath = "//div[text()='Portfolio Management']/following-sibling::div/a[@id='link-upload']")
     public WebElement link_UploadNew;
 
-    @FindBy(xpath = "//div[text()='Portfolio Management']/../../..//span//*[name()='path']")
-    public List<WebElement> svgpath_images;
+    @FindBy(css = "svg > path[fill-rule='evenodd'][fill='#b8b8b8']")
+    public WebElement backArrow;
 
     @FindBy(xpath = "//span[text()='Portfolio Name']")
     public WebElement span_POrtfolioName;
@@ -1436,7 +1436,7 @@ public abstract class PageBase {
     }
 
     public boolean isRegionsFilterPresent() {
-        return regionsFilter.isDisplayed();
+        return wait.until(ExpectedConditions.visibilityOf(regionsFilter)).isDisplayed();
     }
 
     public boolean isSectorFilterPresent() {
@@ -2213,7 +2213,7 @@ public abstract class PageBase {
         try {
             DashboardPage dashboardPage = new DashboardPage();
             String portfolio = getSelectedPortfolioNameFromDropdown();
-            BrowserUtils.scrollTo(dashboardPage.endOfPage);// scrolling to the heamap
+            BrowserUtils.scrollTo(dashboardPage.endOfPage);// scrolling to the last widget on the page
             if (!dashboardPage.isStickyHeaderDisplayed()) {
                 return false;
             }
@@ -2310,7 +2310,7 @@ public abstract class PageBase {
     }
 
     public boolean validateSideArrowIsAvailable() {
-        return svgpath_images.get(0).isDisplayed();
+        return wait.until(ExpectedConditions.visibilityOf(backArrow)).isDisplayed();
     }
 
     public boolean validatespanPortfolioNameColumnIsAvailable() {

@@ -145,7 +145,7 @@ public class ResearchLinePage extends UploadPage {
     public WebElement updatesNoDataMessage;
 
     //=========Updates=========
-    @FindBy(xpath = "(//tr[@class='MuiTableRow-root MuiTableRow-head'])[2]/th")
+    @FindBy(xpath = "//h6[text()='Updates']/following-sibling::div//thead//th")
     public List<WebElement> brownAndGreenShareHeaders;
 
     @FindBy(xpath = "(//tr[@class='MuiTableRow-root MuiTableRow-head'])[5]/th")
