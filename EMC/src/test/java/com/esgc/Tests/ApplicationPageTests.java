@@ -67,6 +67,7 @@ public class ApplicationPageTests extends EMCUITestBase {
         emcMainPage.clickApplicationsButton();
         //Navigate to the Application Name on table.
         EMCApplicationsPage emcApplicationsPage = new EMCApplicationsPage();
+        emcApplicationsPage.searchInput.sendKeys("TestQA");
         String expApplicationName = emcApplicationsPage.getApplicationNames().get(0);
         String expApplicationURL = emcApplicationsPage.applicationLinks.get(0).getText();
         //Click on Application Name
@@ -266,17 +267,38 @@ public class ApplicationPageTests extends EMCUITestBase {
         assertTestCase.assertTrue(detailsPage.notification.isDisplayed(), "Success Confirmation message is displayed on the Screen");
     }
 
-    @Test(groups = {"EMC", "ui", "regression"})
-    @Xray(test = {3537,7656})
+    @Test(groups = {"EMC", "ui", "regression", "smoke", "prod"})
+    @Xray(test = {3537})
     public void verifyProductDetailsTest() {
         navigateToApplicationsPage(applicationName, "products");
         EMCApplicationDetailsPage detailsPage = new EMCApplicationDetailsPage();
         BrowserUtils.waitForVisibility(detailsPage.addProductButton, 10);
         assertTestCase.assertTrue(detailsPage.addProductButton.isDisplayed(), "Add Product Button is displayed");
+
+        assertTestCase.assertTrue(detailsPage.productsList.size()>0, "There are products assigned to the application");
+
+        String productName = detailsPage.productsList.get(0).getText();
+        System.out.println("productName = " + productName);
+        BrowserUtils.waitForClickablility(detailsPage.productsList.get(0), 10).click();
+        EMCProductDetailsPage productDetailsPage = new EMCProductDetailsPage();
+        assertTestCase.assertTrue(productDetailsPage.verifyDetails(productName), "Product Details Page is verified");
+        assertTestCase.assertTrue(productDetailsPage.editedButton.isEnabled(), "Edit Button is enabled");
+    }
+
+    @Test(groups = {"EMC", "ui", "regression"})
+    @Xray(test = {7656})
+    public void editProductDetailsTest() {
+        navigateToApplicationsPage(applicationName, "products");
+        EMCApplicationDetailsPage detailsPage = new EMCApplicationDetailsPage();
+        BrowserUtils.waitForVisibility(detailsPage.addProductButton, 10);
+        assertTestCase.assertTrue(detailsPage.addProductButton.isDisplayed(), "Add Product Button is displayed");
+
+        //if application doesn't have any products, add one
         if(detailsPage.productsList.size()==0){
-           String name = new Faker().name().username().toLowerCase();
-           detailsPage.addProduct("QATest Product_"+name,"testqa"+name,"123","123","Option","DH","License");
+            String name = new Faker().name().username().toLowerCase();
+            detailsPage.addProduct("QATest Product_"+name,"testqa"+name,"123","123","Option","DH","License");
         }
+
         String productName = detailsPage.productsList.get(0).getText();
         System.out.println("productName = " + productName);
         BrowserUtils.waitForClickablility(detailsPage.productsList.get(0), 10).click();
