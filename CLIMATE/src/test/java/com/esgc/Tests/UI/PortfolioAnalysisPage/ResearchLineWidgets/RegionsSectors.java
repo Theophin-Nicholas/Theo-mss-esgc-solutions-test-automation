@@ -35,7 +35,7 @@ public class RegionsSectors extends UITestBase {
     @Test(groups = {"regression", "ui", "smoke"},
             description = "Verify if Region and Sector Drill Downs are Displayed as Expected",
             dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
-    @Xray(test = {467, 822, 823, 1208, 1265, 1279, 1281, 1704, 1705, 1748, 1920, 2145, 2149, 2212, 2488, 6763, 6762, 6761, 6760, 6759, 6757})
+    @Xray(test = {467, 822, 823, 1208, 1265, 1279, 1281, 1704, 1705, 1748, 1920, 2145, 2149, 2212, 2488, 6763, 6762, 6761, 6760, 6759, 6757,2665})
     public void verifyRegionSectorDrillDowns(String page) {
         ResearchLinePage researchLinePage = new ResearchLinePage();
 

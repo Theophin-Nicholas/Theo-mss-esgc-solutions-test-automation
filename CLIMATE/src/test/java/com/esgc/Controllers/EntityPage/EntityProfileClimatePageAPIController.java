@@ -1,6 +1,7 @@
 package com.esgc.Controllers.EntityPage;
 
 import com.esgc.Utilities.API.EntityClimateProfilePageEndpoints;
+import com.esgc.Utilities.API.EntityPageEndpoints;
 import com.esgc.Utilities.Environment;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
@@ -58,14 +59,11 @@ public class EntityProfileClimatePageAPIController {
         try {
             response = configSpec()
                     .pathParam("orbis_id", orbis_id)
-                    //.pathParam("research_line", apiResourceMapper(research_line))
-
                     .when().post(EntityClimateProfilePageEndpoints.POST_ESGClimateSummary);
 
         } catch (Exception e) {
             System.out.println("Inside exception " + e.getMessage());
         }
-
         return response;
     }
     public Response getClimateSummaryAPIResponseWithTemperedToken(String orbis_id, String research_line) {
@@ -205,5 +203,19 @@ public class EntityProfileClimatePageAPIController {
         }
         return response;
     }
+    public Response getHeaderDetailsWithPayload(String payload) {
+        Response response = null;
+        try {
+            response = configSpec()
+                    .body(payload)
+                    .when()
+                    .post(EntityPageEndpoints.POST_HEADER);
 
+        } catch (Exception e) {
+            System.out.println("Inside exception " + e.getMessage());
+        }
+        assert response != null;
+        response.prettyPrint();
+        return response;
+    }
 }

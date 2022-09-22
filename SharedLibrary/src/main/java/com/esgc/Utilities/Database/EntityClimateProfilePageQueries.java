@@ -4,8 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.esgc.Utilities.Database.DatabaseDriver.getQueryResultMap;
-
+import static com.esgc.Utilities.Database.DatabaseDriver.*;
 
 
 public class EntityClimateProfilePageQueries {
@@ -168,5 +167,45 @@ public class EntityClimateProfilePageQueries {
         }
 
         return data;
+    }
+
+    public static List<String> getCoverage(String orbisId) {
+        String query = " select Related_Domain\n" +
+                " from Controversy_details\n" +
+                " where Orbis_id = '"+orbisId+"' and CONTROVERSY_STATUS = 'Active' and controversy_steps = 'last'\n" +
+                "order by CONTROVERSY_EVENTS desc";
+
+        List<String> result =  getQueryResultListMap(query);
+        System.out.println("result = " + result);
+        return result;
+    }
+
+    public static List<String> getHeaderDB(String orbisId) {
+        String query = "SELECT esg.value Disclosure_Rate\n" +
+                "FROM DF_TARGET.ESG_OVERALL_SCORES ESG  \n" +
+                "JOIN DF_TARGET.ENTITY_COVERAGE_TRACKING CT ON ESG.ORBIS_ID = CT.ORBIS_ID \n" +
+                "AND CT.COVERAGE_STATUS = 'Published' AND PUBLISH = 'yes'\n" +
+                "WHERE ESG.ORBIS_ID in ('"+orbisId+"')\n" +
+                "AND ESG.DATA_TYPE IN('information_rate_global')\n" +
+                "QUALIFY ROW_NUMBER() OVER(PARTITION BY ESG.ORBIS_ID,DATA_TYPE ORDER BY SCORED_DATE DESC) = 1;";
+        System.out.println("query = " + query);
+        List<String> result =  getQueryResultLisDisclosure(query);
+        return result;
+    }
+
+
+    public static List<String> getESGDbScores(String orbisId){
+        String query=" select value from esg_overall_scores \n" +
+                " where orbis_id="+orbisId+" \n" +
+                " AND (\n" +
+                "        sub_category='Environmental' \n" +
+                "        or sub_category='Governance'\n" +
+                "        or sub_category='Social' \n" +
+                "        or sub_category='ESG'\n" +
+                "    ) \n" +
+                "   and data_type='esg_pillar_score' ";
+
+        List<String> result =  getQueryResultListESGScores(query);
+        return result;
     }
 }
