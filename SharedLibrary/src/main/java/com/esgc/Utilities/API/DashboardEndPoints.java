@@ -25,4 +25,6 @@ public class DashboardEndPoints {
     public static String POST_PORTFOLIO_SUMMARY_COMPANIES = "api/portfolios/{portfolio_id}/portfolio-summary-companies";
     public static String POST_ESG_SCORES = "api/portfolios/{portfolio_id}/corpesgdata/esgasmt/score";
 
+
+
 }

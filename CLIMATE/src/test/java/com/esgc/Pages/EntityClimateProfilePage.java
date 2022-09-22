@@ -32,7 +32,6 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import static com.esgc.Utilities.Database.DatabaseDriver.getQueryResultMap;
-import static com.esgc.Utilities.DateTimeUtilities.isValidFormat;
 
 
 public class EntityClimateProfilePage extends PageBase {
@@ -391,9 +390,12 @@ public class EntityClimateProfilePage extends PageBase {
     public WebElement controversies;
     @FindBy(xpath = "//p[normalize-space()='Materiality: Very High']")
     public WebElement esgSubCategory;
-
     @FindBy(xpath = "//span[normalize-space()='ESG Materiality']")
     public WebElement esgMateriality;
+
+    @FindBy(xpath = " //span[contains(text(),'Overall Disclosure Score')]")
+    public WebElement entityDisclosureScore;
+
 
 
     ///============= Methods
@@ -2004,7 +2006,7 @@ public class EntityClimateProfilePage extends PageBase {
         return true;//End of code
     }
 
-    public boolean verifyESGScoreAlphanumericValue() {
+    public boolean verifyESGScoreValue() {
         for (WebElement score : esgScores) {
             System.out.println("score " + score.getText().split("\n")[1]);
             if (score.getText().split("/")[1].equals("100")) {
