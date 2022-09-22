@@ -611,8 +611,8 @@ public class EntityClimateProfileSummaryTests extends UITestBase {
     }
 
     @Test(groups = {"regression", "ui"}, dataProviderClass = DataProviderClass.class, dataProvider = "orbisID")
-    @Xray(test = {8227, 8228})
-    public void verify_ESG_Score_Alphanumeric_Grade_Value(String Entity) {
+    @Xray(test = {8227, 8228, 9840})
+    public void verify_ESG_Score_Value(String Entity) {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio Analysis page");
         researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
@@ -623,7 +623,7 @@ public class EntityClimateProfileSummaryTests extends UITestBase {
         profilePage.navigateToPhysicalRisk();
         //BrowserUtils.wait(5);
         assertTestCase.assertTrue(profilePage.esgTitle.isDisplayed(), "ESG Score title is displayed");
-        assertTestCase.assertTrue(profilePage.verifyESGScoreAlphanumericValue(), "ESG Score is verified");
+        assertTestCase.assertTrue(profilePage.verifyESGScoreValue(), "ESG Score is verified");
     }
 
     @Test(groups = {"regression", "ui"}, dataProviderClass = DataProviderClass.class, dataProvider = "orbisID")
@@ -925,7 +925,7 @@ public class EntityClimateProfileSummaryTests extends UITestBase {
     }
 
     @Test(groups = {"regression", "ui", "smoke"}, dataProviderClass = DataProviderClass.class, dataProvider = "entitlementCheck")
-    @Xray(test = {8448, 8449, 8875, 8881, 8884,})
+    @Xray(test = {8448, 8449, 8875,8878,8879,8880, 8881, 8884,8224,8225,8226})
     public void verifyEntitlementBaseWidgets(String username, String password, String entitlement) {
         //Trying to log in with only Entitlement User
         LoginPage loginPage = new LoginPage();
@@ -1110,5 +1110,19 @@ public class EntityClimateProfileSummaryTests extends UITestBase {
             assertTestCase.assertEquals(profilePage.comparisonChartRiskSelectionDropdown.getText(), rl, "Selected RL is verified");
             //assertTestCase.assertTrue(profilePage.noSectorComparisonChartAvailable.isDisplayed(), "No data message is displayed for " + rl);
         }
+    }
+
+
+    @Test(groups = {"regression", "ui"},
+            dataProviderClass = DataProviderClass.class, dataProvider = "orbisIDWithDisclosureScore")
+    @Xray(test = {8750})
+    public void verifyDisclosureScore(String entity) {
+        ResearchLinePage researchLinePage = new ResearchLinePage();
+        test.info("Navigate to Portfolio Analysis page");
+        researchLinePage.navigateToFirstEntity(entity);
+
+        EntityClimateProfilePage profilePage = new EntityClimateProfilePage();
+        assertTestCase.assertTrue(profilePage.entityDisclosureScore.isDisplayed());
+        researchLinePage.pressESCKey();
     }
 }
