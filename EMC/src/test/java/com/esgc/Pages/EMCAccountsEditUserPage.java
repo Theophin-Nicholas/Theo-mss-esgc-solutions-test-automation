@@ -65,6 +65,17 @@ public class EMCAccountsEditUserPage extends EMCBasePage {
     @FindBy (xpath = "(//div[@id='notistack-snackbar'])[1]")
     public WebElement deleteMessage;
 
+    @FindBy (xpath = "//p[.='First Name is a required field']")
+    public WebElement firstNameInputWarning;
+
+    @FindBy (xpath = "//p[.='Last Name is a required field']")
+    public WebElement lastNameInputWarning;
+    @FindBy (xpath = "//p[.='User Name is a required field']")
+    public WebElement userNameInputWarning;
+    @FindBy (xpath = "//p[.='Must be a valid email Address']")
+    public WebElement validEmailWarning;
+    @FindBy (xpath = "//p[.='Email is a required field']")
+    public WebElement emailInputWarning;
 
 
 
@@ -74,20 +85,16 @@ public class EMCAccountsEditUserPage extends EMCBasePage {
         System.out.println("emailInput = " + emailInput.getAttribute("value"));
         System.out.println("emailAddress = " + emailAddress);
         editButton.click();
-        while (!firstNameInput.getAttribute("value").isEmpty()) {
-            firstNameInput.sendKeys(Keys.BACK_SPACE);
-        }
+
+        clear(firstNameInput);
         firstNameInput.sendKeys(firstName);
-        while (!lastNameInput.getAttribute("value").isEmpty()) {
-            lastNameInput.sendKeys(Keys.BACK_SPACE);
-        }
+        clear(lastNameInput);
         lastNameInput.sendKeys(lastName);
-        while (!emailInput.getAttribute("value").isEmpty()) {
-            emailInput.sendKeys(Keys.BACK_SPACE);
-        }
+        clear(emailInput);
         emailInput.sendKeys(emailAddress);
         BrowserUtils.waitForClickablility(saveButton, 5).click();
     }
+
     public boolean deleteUser(){
         deleteButton.click();
         System.out.println("delete button clicked");

@@ -95,6 +95,9 @@ public class ResearchLinePage extends UploadPage {
     @FindBy(xpath = "(//div[contains(@id,'phy-risk-mgm-test-id-from-overview-')])/div/div/div/following-sibling::div")
     public List<WebElement> greenSharePortfolioScoreTexts;
 
+    @FindBy(xpath = "(//div[contains(@id,'crbn-rsk-test-id-from-overview-')])/div/div/div/following-sibling::div")
+    public List<WebElement> greenSharePortfolioScoreText;
+
     //Returns Investment value like 7%
     @FindBy(xpath = "//div[contains(@id,'test-id-from-overview-')]//h6[contains(text(),'%')]/following-sibling::div/preceding-sibling::h6")
     public WebElement greenShareInvestmentValue;
@@ -420,6 +423,12 @@ public class ResearchLinePage extends UploadPage {
     @FindBy(xpath = "//div[@id='cardInfo_box']")
     public WebElement esgCardInfoBox;
 
+    @FindBy(xpath = "//div[@id='cardInfo_box']//span/..")
+    public WebElement esgCardInfoBoxScore;
+
+    @FindBy(xpath = "//div[@id='cardInfo_box']//a")
+    public WebElement esgCardEntitiyLink;
+
     @FindBy(xpath = "//div[@id='legend_summary_link_box']")
     public WebElement EsgSummaryBox;
 
@@ -435,6 +444,29 @@ public class ResearchLinePage extends UploadPage {
 
     @FindBy(xpath = "//table[@id='table-id-2']")
     public WebElement physicalRiskHazardInvestmentTable;
+
+    //Sector and Geographic Distribution Section Elements
+    @FindBy(xpath = "(//div[.='Sector and Geographic Distribution'])")
+    public WebElement geoSectionTitle;
+
+    @FindBy(xpath = "//table[@id='ESGTable']//th")
+    public List<WebElement> geoTableHeaders;
+
+    @FindBy(xpath = "//table[@id='ESGTable']//td[1]")
+    public List<WebElement> geoTableCountryList;
+
+    @FindBy(xpath = "//table[@id='ESGTable']//td[2]")
+    public List<WebElement> geoTableInvPercentagesList;
+
+    @FindBy(xpath = "//table[@id='ESGTable']//td[3]")
+    public List<WebElement> geoTableIESGScoreList;
+
+    @FindBy(xpath = "//a[.='hide']/../../div")
+    public WebElement geoSectionDrawerTitle;
+
+    @FindBy(xpath = "//a[.='hide']")
+    public WebElement geoSectionHideButton;
+
 
 
     //=============== Methods
@@ -618,7 +650,7 @@ public class ResearchLinePage extends UploadPage {
         String investmentPerc = "";
         double investment;
         List<WebElement> investments = Driver.getDriver().findElements(By.xpath(investmentsXpath));
-        for (int i=0;i< investments.size();i++) {
+        for (int i = 0; i < investments.size(); i++) {
             System.out.println("i = " + i);
             BrowserUtils.scrollTo(investments.get(i));
             investmentPerc = investments.get(i).getText();
@@ -1344,6 +1376,7 @@ public class ResearchLinePage extends UploadPage {
             List<String> dataRows = new ArrayList<String>();
             List<String> dataHeaders = new ArrayList<String>();
             String followingXpath = "div/div/div/span";
+            String followingXpath1 = "";
 
             switch (page) {
                 case "Physical Risk Hazards":
@@ -1388,10 +1421,12 @@ public class ResearchLinePage extends UploadPage {
                     dataRows.add("Scope 1 (t CO2 eq)");
                     dataRows.add("Scope 2 (t CO2 eq)");
                     dataRows.add("Scope 3 (t CO2 eq)");
-                   /* dataHeaders.add("Company Distribution");
-                    dataHeaders.add("Min");
-                    dataHeaders.add("Max");*/
+                    dataHeaders.add("Total Scope 1 Emissions");
+                    dataHeaders.add("624,063,885 (t CO2 eq)");
+                    dataHeaders.add("Total Scope");
+                    dataHeaders.add("(t CO2 eq)");
                     followingXpath = "div/div/div/div/span";
+                    followingXpath1 = "div/div[2]/span";
                     break;
                 case "Brown Share Assessment":
                     headerDivId = "//div[@id='fossil_fuel_disclosures']/div//parent::div/parent::header";
@@ -1416,8 +1451,8 @@ public class ResearchLinePage extends UploadPage {
                     dataRows.add("Total Coal Potential Emissions");
                     dataRows.add("Total Natural Gas Potential Emissions");
                     dataRows.add("Total Oil Potential Emissions");
-      /*              dataHeaders.add("Investment in Category");
-                    dataHeaders.add("Companies in Category");*/
+                    dataHeaders.add("Investment in Category");
+                    dataHeaders.add("Companies in Category");
                     followingXpath = "div/div/div/span";
                     break;
                 case "Energy Transition Management":
@@ -1471,24 +1506,31 @@ public class ResearchLinePage extends UploadPage {
             }
             WebElement underlyingDataMetricsHeader = Driver.getDriver().findElement(By.xpath(headerDivId));
             BrowserUtils.scrollTo(underlyingDataMetricsHeader);
-            System.out.println("underlyingDataMetricsHeader " + underlyingDataMetricsHeader.getText());
-            System.out.println("headerName = " + headerName);
             if (underlyingDataMetricsHeader.getText().equals(headerName)) {
                 List<WebElement> spanForDataRows = underlyingDataMetricsHeader.findElements(By.xpath("following-sibling::" + followingXpath));
                 if (spanForDataRows.size() == dataRows.size()) {
                     for (int i = 0; i < dataRows.size(); i++) {
                         String[] spanData = spanForDataRows.get(i).getText().split("\n");
                         if (i == 0 && !headerDivId.equals("Physical Risk Hazards")) {
-                            for (String headerValue : dataHeaders) {
-                                if (Arrays.stream(spanData).filter(p -> p.equals(headerValue)).count() == 1)
-                                    matched = true;
-                                else
-                                    return false;
+                            if (page.equals("Carbon Footprint")) {
+                                for (String headerValue : dataHeaders) {
+                                    if (spanForDataRows.get(i).getText().contains(headerValue)) {
+                                        System.out.println("MATCHED " + headerValue);
+                                        matched = true;
+                                    } else {
+                                        return false;
+                                    }
+                                }
+                            }else {
+                                for (String headerValue : dataHeaders) {
+                                    if (Arrays.stream(spanData).anyMatch(p -> p.contains(headerValue))) {
+                                        matched = true;
+                                    } else {
+                                        return false;
+                                    }
+                                }
                             }
                         }
-                        System.out.println("dataRows = " + dataRows);
-                        System.out.println("spanData[0].toString() = " + spanData[0].toString());
-                        System.out.println("----------------------------------------------------");
                         if (dataRows.contains(spanData[0].toString()))
                             matched = true;
                         else

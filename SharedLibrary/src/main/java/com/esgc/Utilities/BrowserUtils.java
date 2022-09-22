@@ -436,4 +436,7 @@ public class BrowserUtils {
     }
 
 
+    public static void waitFor(int seconds) {
+        wait(seconds);
+    }
 }
