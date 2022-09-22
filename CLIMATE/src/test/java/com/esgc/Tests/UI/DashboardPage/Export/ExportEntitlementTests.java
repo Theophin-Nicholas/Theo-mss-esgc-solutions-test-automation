@@ -1,4 +1,4 @@
-package com.esgc.Tests.UI.DashboardPage;
+package com.esgc.Tests.UI.DashboardPage.Export;
 
 import com.esgc.Pages.DashboardPage;
 import com.esgc.Pages.LoginPage;
