@@ -26,7 +26,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static io.restassured.RestAssured.given;
-import static io.restassured.RestAssured.port;
 import static java.util.stream.Collectors.groupingBy;
 
 
@@ -52,7 +51,7 @@ public class APIController {
                     .baseUri(Environment.URL)
                     .relaxedHTTPSValidation()
                     .header("Authorization", "Bearer " + System.getProperty("token"))
-                    .header("Accept", "application/json")
+                   // .header("Accept", "application/json")
                     .header("Content-Type", "application/json")
                     .log().ifValidationFails();
         }
@@ -1009,6 +1008,21 @@ public class APIController {
             System.out.println("Inside exception " + e.getMessage());
         }
 
+        return response;
+    }
+
+
+    public Response getPortfolioSettingsAPIResponse(String portfolio_id) {
+        Response response = null;
+        try {
+
+            response = configSpec()
+                    .pathParam("portfolio_id", portfolio_id)
+                    .when()
+                    .post(Endpoints.POST_PORTFOLIO_SETTINGS);
+        } catch (Exception e) {
+            System.out.println("Inside exception " + e.getMessage());
+        }
         return response;
     }
 }
