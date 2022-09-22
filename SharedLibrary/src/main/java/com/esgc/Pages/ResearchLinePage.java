@@ -423,6 +423,12 @@ public class ResearchLinePage extends UploadPage {
     @FindBy(xpath = "//div[@id='cardInfo_box']")
     public WebElement esgCardInfoBox;
 
+    @FindBy(xpath = "//div[@id='cardInfo_box']//span/..")
+    public WebElement esgCardInfoBoxScore;
+
+    @FindBy(xpath = "//div[@id='cardInfo_box']//a")
+    public WebElement esgCardEntitiyLink;
+
     @FindBy(xpath = "//div[@id='legend_summary_link_box']")
     public WebElement EsgSummaryBox;
 
@@ -438,6 +444,29 @@ public class ResearchLinePage extends UploadPage {
 
     @FindBy(xpath = "//table[@id='table-id-2']")
     public WebElement physicalRiskHazardInvestmentTable;
+
+    //Sector and Geographic Distribution Section Elements
+    @FindBy(xpath = "(//div[.='Sector and Geographic Distribution'])")
+    public WebElement geoSectionTitle;
+
+    @FindBy(xpath = "//table[@id='ESGTable']//th")
+    public List<WebElement> geoTableHeaders;
+
+    @FindBy(xpath = "//table[@id='ESGTable']//td[1]")
+    public List<WebElement> geoTableCountryList;
+
+    @FindBy(xpath = "//table[@id='ESGTable']//td[2]")
+    public List<WebElement> geoTableInvPercentagesList;
+
+    @FindBy(xpath = "//table[@id='ESGTable']//td[3]")
+    public List<WebElement> geoTableIESGScoreList;
+
+    @FindBy(xpath = "//a[.='hide']/../../div")
+    public WebElement geoSectionDrawerTitle;
+
+    @FindBy(xpath = "//a[.='hide']")
+    public WebElement geoSectionHideButton;
+
 
 
     //=============== Methods
