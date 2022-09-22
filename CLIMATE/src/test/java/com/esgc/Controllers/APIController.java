@@ -25,7 +25,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static io.restassured.RestAssured.*;
+import static io.restassured.RestAssured.given;
 import static java.util.stream.Collectors.groupingBy;
 
 
@@ -34,9 +34,12 @@ public class APIController {
     boolean isInvalidTest = false;
 
     RequestSpecification configSpec() {
+        if(System.getProperty("token")==null){
+            String getAccessTokenScript = "return JSON.parse(localStorage.getItem('okta-token-storage')).accessToken.accessToken";
+            String accessToken = ((JavascriptExecutor) Driver.getDriver()).executeScript(getAccessTokenScript).toString();
+            System.setProperty("token", accessToken);
+        }
         if (isInvalidTest) {
-            System.out.println("isInvalidTest = " + isInvalidTest);
-            System.out.println("Environment.URL = " + Environment.URL);
             return given().accept(ContentType.JSON)
                     .baseUri(Environment.URL)
                     .relaxedHTTPSValidation()
@@ -44,7 +47,6 @@ public class APIController {
                     .header("Content-Type", "application/json")
                     .log().ifValidationFails();
         } else {
-            System.out.println("Environment.URL = " + Environment.URL);
             return given().accept(ContentType.JSON)
                     .baseUri(Environment.URL)
                     .relaxedHTTPSValidation()
@@ -125,8 +127,6 @@ public class APIController {
                     .body(apiFilterPayload)
                     .when()
                     .post(Endpoints.POST_PORTFOLIO_SCORE);
-
-
         } catch (Exception e) {
             System.out.println("Inside exception " + e.getMessage());
         }
@@ -708,7 +708,9 @@ public class APIController {
             case "Temperature Alignment":
             case "temperaturealgmt":
                 return "temperaturealgmt";
-
+            case "ESG Assessments":
+            case "esgasmt":
+                return "corpesgdata/esgasmt";
         }
         return "";
     }
@@ -990,6 +992,18 @@ public class APIController {
                     .put(Endpoints.PUT_PORTFOLIO_NAME_UPDATE);
 
 
+        } catch (Exception e) {
+            System.out.println("Inside exception " + e.getMessage());
+        }
+
+        return response;
+    }
+
+    public Response getEntitlementHandlerResponse() {
+        Response response = null;
+        try {
+            response = configSpec()
+                    .get(Endpoints.GET_ENTITLEMENT_HANDLER);
         } catch (Exception e) {
             System.out.println("Inside exception " + e.getMessage());
         }

@@ -1144,6 +1144,12 @@ public abstract class PageBase {
         return Arrays.asList(dir_contents).stream().filter(e -> e.getName().contains(date)).findAny().isPresent();
     }
 
+    public int filesCountInDownloadsFolder() {
+        File dir = new File(BrowserUtils.downloadPath());
+        File[] dir_contents = dir.listFiles();
+        return dir_contents.length;
+    }
+
     public String getDownloadedCompaniesExcelFilePath() {
         File dir = new File(BrowserUtils.downloadPath());
         File[] listOfFiles = dir.listFiles();
@@ -1773,7 +1779,21 @@ public abstract class PageBase {
                 case "MAJOR":
                     return "#39A885";
             }
-        } else {
+        }
+
+        else if (researchLine.toUpperCase().equals("ESG")) {
+            switch (scoreCategory.toUpperCase()) {
+                case "WEAK":
+                    return "#DD581D";
+                case "LIMITED":
+                    return "#E8951C";
+                case "ROBUST":
+                    return "#EAC550";
+                case "ADVANCED":
+                    return "#DBE5A3";
+            }
+        }
+        else {
             switch (scoreCategory) {
                 case "WEAK":
                     return "#DFA124";
