@@ -317,7 +317,7 @@ public class DashboardHeatMapEntityListTests extends UITestBase {
             APIHeatMapSinglePayload apiHeatMapSinglePayload = new APIHeatMapSinglePayload("all", "all", "06", "2022", apiController.apiResourceMapperWithoutphysicalriskinit(researchLine.trim()));
             String portfolio_id = "00000000-0000-0000-0000-000000000000";
             Response response = apiController.getHeatMapResponse(portfolio_id, researchLine, apiHeatMapSinglePayload);
-            List<APIHeatMapResponse> list = List.of(response.getBody().as(APIHeatMapResponse[].class));
+            List<APIHeatMapResponse> list = Arrays.asList(response.getBody().as(APIHeatMapResponse[].class));
             System.out.println("dashboardPage.heatMapYAxisIndicatorsAPI.size() = " + dashboardPage.heatMapYAxisIndicatorsAPI.size());
             switch (researchLine) {
                 case "Operations Risk":
