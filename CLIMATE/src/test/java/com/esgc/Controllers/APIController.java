@@ -274,7 +274,9 @@ public class APIController {
                     .pathParam("research_line", apiResourceMapper(research_line))
                     .body(apiFilterPayload)
                     .when()
+                    .log().all()
                     .post(Endpoints.POST_LEADERS_AND_LAGGARDS);
+
 
         } catch (Exception e) {
             System.out.println("Inside exception " + e.getMessage());
@@ -706,6 +708,9 @@ public class APIController {
             case "temperaturealgmt":
                 return "temperaturealgmt";
 
+            case "ESG Assessments":
+                return "corpesgdata/esgasmt";
+
         }
         return "";
     }
@@ -819,6 +824,7 @@ public class APIController {
                     .pathParam("research_line", apiResourceMapperWithoutphysicalriskinit(research_line))
                     .body(apiFilterPayloadWithImpactFilter)
                     .when()
+                    .log().all()
                     .post(Endpoints.POST_IMPACT_DISTRIBUTION);
             System.out.println(response.prettyPrint());
 
