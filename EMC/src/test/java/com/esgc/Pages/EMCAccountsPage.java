@@ -88,4 +88,9 @@ public class EMCAccountsPage extends EMCBasePage {
         //return accountnames as String list
         return accountNames.stream().map(WebElement::getText).collect(java.util.stream.Collectors.toList());
     }
+
+    public void clickOnCreateAccountButton() {
+        System.out.println("Clicking on create account button");
+        BrowserUtils.waitForClickablility(createAccountButton, 25).click();
+    }
 }
