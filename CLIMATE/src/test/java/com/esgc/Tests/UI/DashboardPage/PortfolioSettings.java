@@ -59,7 +59,8 @@ public class PortfolioSettings extends UITestBase {
 
     @Test(groups = {"regression", "ui", "smoke", "robot_dependency"})
     @Xray(test = {9627, 9628, 9629})
-    public void validatePortfolioDeletionViaPortfolioSettings() {
+    public void
+    validatePortfolioDeletionViaPortfolioSettings() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         researchLinePage.clickPortfolioSelectionButton();
         researchLinePage.selectPortfolio("Sample Portfolio");
@@ -160,7 +161,9 @@ public class PortfolioSettings extends UITestBase {
         assertTestCase.assertTrue(researchLinePage.portfolioDropDownMenu.isDisplayed());
         //-On the bottom, there should be a button says "Delete Portfolio"
         assertTestCase.assertTrue(researchLinePage.deleteButton.isDisplayed());
+        BrowserUtils.wait(2);
         //Should be a box shadow saying "We've matched <X>/<Y> INVESTMENTS<Z> ENTITIES" and"Accounting for<N>%of your uploaded portfolio "
+        System.out.println("researchLinePage.portfolioDescription.getText() = " + researchLinePage.portfolioDescription.getText());
         assertTestCase.assertTrue(researchLinePage.portfolioDescription.getText().contains("We've matched"));
         //There should be a list of "Company" and "% Investment" which shows detailed company name and investment percentage.
         assertTestCase.assertTrue(researchLinePage.portfolioCompanyColumnNames.getText().contains("Company"));
@@ -171,9 +174,11 @@ public class PortfolioSettings extends UITestBase {
         for (int i = 0; i < 5; i++) {// Only verifying first 5 entities.
             String entityName = researchLinePage.portfolioEntityList.get(i).getText();
             System.out.println("entityName = " + entityName);
+            System.out.println("researchLinePage.portfolioEntityList.get(i) = " + researchLinePage.portfolioEntityList.get(i).getText());
             System.out.println("researchLinePage.portfolioEntityList.size() = " + researchLinePage.portfolioEntityList.size());
             researchLinePage.portfolioEntityList.get(i).click();
             BrowserUtils.wait(5);
+            System.out.println("portfolioEntityName.getText() = " + researchLinePage.portfolioEntityName.getText());
             assertTestCase.assertTrue(researchLinePage.portfolioEntityName.getText().contains(entityName));
             researchLinePage.pressESCKey();
             BrowserUtils.wait(1);
@@ -259,15 +264,17 @@ public class PortfolioSettings extends UITestBase {
 
         test.info("Clicked on the Browse File button");
         dashboardPage.clickBrowseFile();
-        BrowserUtils.wait(2);
+        BrowserUtils.wait(3);
 
         String inputFile = System.getProperty("user.dir") + ConfigurationReader.getProperty("PortfolioToDelete");
         RobotRunner.selectFileToUpload(inputFile);
 
-        BrowserUtils.wait(4);
+        BrowserUtils.wait(5);
 
         String expectedFileName = "\"" + inputFile.substring(inputFile.lastIndexOf(File.separator) + 1) + "\"";
+        System.out.println("expectedFileName = " + expectedFileName);
         String actualFileName = dashboardPage.selectedFileName.getText().substring(0, dashboardPage.selectedFileName.getText().indexOf("Remove") - 1);
+        System.out.println("actualFileName = " + actualFileName);
 
         dashboardPage.clickUploadButton();
         test.info("Clicked on the Upload button");
@@ -277,6 +284,7 @@ public class PortfolioSettings extends UITestBase {
         test.info("Waited for the Successful popup's visibility");
 
         dashboardPage.waitForDataLoadCompletion();
+        dashboardPage.refreshCurrentWindow();
 
         dashboardPage.getSelectedPortfolioNameFromDropdown();
         BrowserUtils.wait(10);
