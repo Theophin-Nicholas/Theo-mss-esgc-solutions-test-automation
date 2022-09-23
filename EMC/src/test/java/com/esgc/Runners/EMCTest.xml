@@ -11,7 +11,7 @@
         <groups>
             <!-- Used tag names: "EMC", "ui", "smoke", "regression", "prod" -->
             <run>
-                <include name="smoke"/>
+                <include name="prod"/>
             </run>
 
         </groups>

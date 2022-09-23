@@ -28,11 +28,27 @@ public class EMCCreateAccountPage extends EMCBasePage {
     @FindBy (xpath = "//div[@id='notistack-snackbar']")
     public WebElement accountCreatedMessage;
 
+    @FindBy (xpath = "//button[.='Clear']")
+    public WebElement dateClearButton;
+
+    @FindBy (xpath = "//button[.='Cancel']")
+    public WebElement dateCancelButton;
+
+    @FindBy (xpath = "//button[.='OK']")
+    public WebElement dateOkButton;
+
+    @FindBy (xpath = "//p[.='Required']")
+    public WebElement requiredTag;
+
+
+
+
+
+    //METHODS
     public void createAccount(String accountName, boolean status) {
         if (accountName.length()<5) accountName+="Test";
         accountNameInput.sendKeys(accountName);
         if (!status) statusCheckbox.click();
         saveButton.click();
     }
-
 }
