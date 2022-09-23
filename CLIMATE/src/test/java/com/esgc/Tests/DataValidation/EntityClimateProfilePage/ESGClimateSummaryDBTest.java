@@ -34,7 +34,7 @@ public class ESGClimateSummaryDBTest extends EntityClimateProfileDataValidationT
                 controller.getClimateSummaryAPIResponse(orbisID, "Green Share")
                         .as(BrownShareAndGreenShareClimateSummary[].class));
         assertTestCase.assertEquals(
-                Integer.parseInt(data.get("SCORE")),
+                data.get("SCORE") == null ? "" : Integer.parseInt(data.get("SCORE")),
                 climateSummaryGreenShareAPIResponse.get(0).getClimate().getScore(),
                 "Green Share Score Validation for " + orbisID);
 
@@ -48,7 +48,7 @@ public class ESGClimateSummaryDBTest extends EntityClimateProfileDataValidationT
                 controller.getClimateSummaryAPIResponse(orbisID, "Brown Share")
                         .as(BrownShareAndGreenShareClimateSummary[].class));
         assertTestCase.assertEquals(
-                Integer.parseInt(data.get("SCORE")),
+                data.get("SCORE") == null ? "" : Integer.parseInt(data.get("SCORE")),
                 climateSummaryBrownShareAPIResponse.get(0).getClimate().getScore(),
                 "Brown Share Score Validation for " + orbisID);
 

@@ -14,9 +14,10 @@ public class PortfolioFilePaths {
      * @return path of portfolio repository directory path
      */
     public static String portfolioRepositoryPath(){
-        return System.getProperty("user.dir")+ File.separator+"src"+
+        String path = System.getProperty("user.dir")+ File.separator+"src"+
                 File.separator+"test"+File.separator+"resources"+
                 File.separator+"upload"+File.separator+"portfolio_repository";
+        return path;
     }
 
     /**

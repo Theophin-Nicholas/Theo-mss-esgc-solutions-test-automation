@@ -2,7 +2,7 @@ package com.esgc.Tests.DataValidation.DashboardPage;
 
 import com.esgc.APIModels.EntityPage.EntityControversy;
 import com.esgc.Tests.TestBases.DataValidationTestBase;
-import com.esgc.Utulities.APIUtilities;
+import com.esgc.Utilities.APIUtilities;
 import com.esgc.Utilities.Xray;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
