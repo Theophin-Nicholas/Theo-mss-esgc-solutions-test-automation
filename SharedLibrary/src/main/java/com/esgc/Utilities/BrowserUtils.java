@@ -316,6 +316,9 @@ public class BrowserUtils {
         ((JavascriptExecutor) Driver.getDriver()).executeScript("arguments[0].scrollIntoView({block: \"center\"});", element);
     }
 
+    public static void scrollToByPixel() {
+        ((JavascriptExecutor) Driver.getDriver()).executeScript("window.scrollBy(0,5)");
+    }
     /**
      * Moves the mouse to given element
      *
@@ -433,4 +436,7 @@ public class BrowserUtils {
     }
 
 
+    public static void waitFor(int seconds) {
+        wait(seconds);
+    }
 }
