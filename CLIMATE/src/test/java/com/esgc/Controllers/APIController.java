@@ -722,8 +722,6 @@ public class APIController {
             case "esgasmt":
                 return "corpesgdata/esgasmt";
 
-            case "ESG Assessments":
-                return "corpesgdata/esgasmt";
             case "ESG":
             case "esg":
             case "Esg":
