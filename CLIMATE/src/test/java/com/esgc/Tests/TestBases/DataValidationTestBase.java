@@ -8,6 +8,7 @@ import com.esgc.Utilities.Database.DatabaseDriver;
 import com.esgc.Utilities.Database.EntityPageQueries;
 import com.esgc.Utilities.Database.PortfolioQueries;
 import com.esgc.Utilities.PortfolioUtilities;
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
 
 
@@ -27,6 +28,9 @@ public abstract class DataValidationTestBase extends TestBaseClimate {
         DatabaseDriver.createDBConnection();
     }
 
-
+    @AfterMethod(alwaysRun = true)
+    public synchronized void refreshTokenForPlatformDataValidation(){
+        refreshToken();
+    }
 
 }

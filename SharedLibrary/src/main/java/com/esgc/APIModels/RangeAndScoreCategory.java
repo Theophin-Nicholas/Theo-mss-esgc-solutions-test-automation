@@ -12,4 +12,13 @@ public class RangeAndScoreCategory {
     private Double min;
     private Double max;
     private String impact;
+    private Double min2;
+    private Double max2;
+
+    public RangeAndScoreCategory(String category, Double min, Double max, String impact) {
+        this.category = category;
+        this.min = min;
+        this.max = max;
+        this.impact = impact;
+    }
 }

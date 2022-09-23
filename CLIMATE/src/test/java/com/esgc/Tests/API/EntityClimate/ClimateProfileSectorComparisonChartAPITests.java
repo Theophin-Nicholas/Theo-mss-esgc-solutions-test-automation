@@ -17,7 +17,10 @@ public class ClimateProfileSectorComparisonChartAPITests extends EntityClimatePr
         test.info("Climate Profile Transition " + researchLine + " widget API validation");
         Response response = entityClimateProfileApiController
                 .getComparisonChartContentResponse(orbis_id, researchLine);
-        response.as(SectorComparison[].class);
+        if(researchLine.equals("carbonfootprint"))
+            response.as(SectorComparison.class);
+        else
+            response.as(SectorComparison[].class);
         response.then().log().all();
         response.then().assertThat()
                 .statusCode(200)
