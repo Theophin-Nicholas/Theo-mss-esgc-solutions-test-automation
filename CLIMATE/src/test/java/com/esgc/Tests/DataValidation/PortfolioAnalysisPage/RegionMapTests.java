@@ -5,7 +5,7 @@ import com.esgc.APIModels.RangeAndScoreCategory;
 import com.esgc.APIModels.RegionMap;
 import com.esgc.DBModels.ResearchLineIdentifier;
 import com.esgc.Tests.TestBases.DataValidationTestBase;
-import com.esgc.Utulities.APIUtilities;
+import com.esgc.Utilities.APIUtilities;
 import com.esgc.Utilities.PortfolioUtilities;
 import com.esgc.Utilities.Xray;
 import io.restassured.response.Response;

@@ -30,7 +30,8 @@ public class ExportTests extends UITestBase {
 
         ResearchLinePage researchLinePage = new ResearchLinePage();
 
-        if (researchLine.equals("Physical Risk Hazards") || researchLine.equals("Temperature Alignment")) {
+        if (researchLine.equals("Physical Risk Hazards") || researchLine.equals("Temperature Alignment")
+            || researchLine.equals("Physical Risk Management")) {
             throw new SkipException("Physical Risk Hazards - Export is not ready to test in " + researchLine);
         }
 
