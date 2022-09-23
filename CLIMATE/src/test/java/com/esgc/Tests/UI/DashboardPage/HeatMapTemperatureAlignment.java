@@ -55,14 +55,17 @@ public class HeatMapTemperatureAlignment extends DashboardUITestBase {
         assertTestCase.assertTrue(dashboardPage.verifyHeatMapTableData(), "Verify Heat Map table data format");
     }
 
-    @Test(groups = {"regression", "ui", "smoke"})
+    @Test(enabled = false,groups = {"regression", "ui", "smoke"})
     @Xray(test = 7468)
     public void VerifyTemperatureAlignmentRLPresentationAndInteraction () {
         DashboardPage dashboardPage = new DashboardPage();
         ArrayList<String> researchLines = new ArrayList<String>();
+        researchLines.add("Overall ESG Score");
         researchLines.add("Physical Risk: Operations Risk");
         researchLines.add("Physical Risk: Market Risk");
         researchLines.add("Physical Risk: Supply Chain Risk");
+        researchLines.add("Physical Risk Management");
+        researchLines.add("Temperature Alignment");
         researchLines.add("Carbon Footprint");
         researchLines.add("Green Share Assessment");
         researchLines.add("Brown Share Assessment");
@@ -70,6 +73,7 @@ public class HeatMapTemperatureAlignment extends DashboardUITestBase {
         BrowserUtils.wait(10);
 
         for(String rl: researchLines) {
+            System.out.println("rl "+rl);
             dashboardPage.selectOrDeselectHeatMapSection("Temperature Alignment");
             BrowserUtils.wait(10);
             dashboardPage.selectOrDeselectHeatMapSection(rl);

@@ -113,6 +113,14 @@ public class DateTimeUtilities {
         return finalDateFormat.format(date);
 
     }
+
+    public static String getCurrentYear() {
+        return LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy"));
+    }
+
+    public static String getCurrentMonthNumeric() {
+        return LocalDate.now().format(DateTimeFormatter.ofPattern("MM"));
+    }
 }
 
 
