@@ -2,16 +2,20 @@ package com.esgc.Tests.DataValidation.PortfolioAnalysisPage;
 
 import com.esgc.APIModels.*;
 import com.esgc.DBModels.ResearchLineIdentifier;
+import com.esgc.Pages.ResearchLinePage;
 import com.esgc.Tests.TestBases.DataValidationTestBase;
+import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utulities.APIUtilities;
 import com.esgc.Utilities.PortfolioUtilities;
 import com.esgc.Utilities.Xray;
 import io.restassured.response.Response;
+import org.apache.commons.text.CaseUtils;
 import org.hamcrest.Matchers;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Test;
 
+import java.time.Month;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
@@ -218,83 +222,170 @@ public class ImpactDistributionDataValidation extends DataValidationTestBase {
 
     }
 
+    @Test(groups = {"regression", "data_validation"}, dataProvider = "researchLines")
+    @Xray(test = {6781})
+    public void ImpactDistributionDataTableSum(@Optional String sector, @Optional String region,
+                                               @Optional String researchLine, @Optional String month, @Optional String year, @Optional String filter) {
+        String portfolioId = "00000000-0000-0000-0000-000000000000";
+        String Regions = "";
+        switch (region){
+            case "AMER":
+                Regions = "Americas";
+                break;
+            case "EMEA":
+                Regions = "Europe, Middle East & Africa";
+                break;
+            case "APAC":
+                Regions = "Asia Pacific";
+                break;
+            default:
+                Regions = "All Regions";
+        }
+
+        ResearchLinePage researchLinePage = new ResearchLinePage();
+        researchLinePage.selectSamplePortfolioFromPortfolioSelectionModal();
+
+       String dateFilter = CaseUtils.toCamelCase(Month.of(Integer.valueOf(month)).name(),true,' ') + " " + year;
+
+        researchLinePage.navigateToResearchLine(researchLine);
+        researchLinePage.clickFiltersDropdown();
+        researchLinePage.selectOptionFromFiltersDropdown("regions", Regions);
+        researchLinePage.clickFiltersDropdown();
+        researchLinePage.selectOptionFromFiltersDropdown("as_of_date", dateFilter);
+        BrowserUtils.wait(5);
+
+        String UifilterOptions = "";
+
+        switch (filter){
+            case "top5":
+                UifilterOptions = "Top 5" ;
+                break;
+            case "top10":
+                UifilterOptions = "Top 10" ;
+                break;
+            case "bottom5":
+                UifilterOptions = "Bottom 5" ;
+                break;
+            case "bottom10":
+                UifilterOptions = "Bottom 10" ;
+                break;
+        }
+        researchLinePage.selectImpactFilterOption(UifilterOptions);
+
+        Double UI_postitiveSideSum = researchLinePage.getInvestmentPercentSum("Positive");
+        Double UI_negativeSideSum = researchLinePage.getInvestmentPercentSum("Negative");
+
+
+        List<String> UI_positiveCompanyList = researchLinePage.getInvestmentCompanies("Positive");
+        List<String> UI_negativeCompanyList = researchLinePage.getInvestmentCompanies("Negative");
+
+        test.info(String.format("Research Line=%s Filter= %s %s %s %s", researchLine, region, sector, month, year));
+
+        APIFilterPayloadWithImpactFilter apiFilterPayloadWithImpactFilter = new APIFilterPayloadWithImpactFilter();
+        apiFilterPayloadWithImpactFilter.setSector(sector);
+        apiFilterPayloadWithImpactFilter.setRegion(region);
+        apiFilterPayloadWithImpactFilter.setFilter(filter);
+        apiFilterPayloadWithImpactFilter.setYear(year);
+        apiFilterPayloadWithImpactFilter.setMonth(month);
+
+        List<ImpactDistributionWrappers> impactDistribution = Arrays.asList(
+                controller.getImpactDistributionResponse(portfolioId, researchLine, apiFilterPayloadWithImpactFilter)
+                        .as(ImpactDistributionWrappers[].class));
+
+
+     Double positiveSideSum =    impactDistribution.get(0).getPositive_impact().getInvestment_and_score().stream().
+                filter(f->UI_positiveCompanyList.contains(f.getCompany_name())).collect(Collectors.toList())
+             .stream().mapToDouble(InvestmentAndScore::getInvestment_pct).sum();
+
+     Double negativeSideSum =    impactDistribution.get(0).getNegative_impact().getInvestment_and_score().stream().
+                filter(f->UI_negativeCompanyList.contains(f.getCompany_name())).collect(Collectors.toList())
+                .stream().mapToDouble(InvestmentAndScore::getInvestment_pct).sum();
+
+     if (UI_postitiveSideSum != 0.00)
+     assertTestCase.assertTrue(Math.round(positiveSideSum *100.0)/100.0==UI_postitiveSideSum);
+
+     if (UI_negativeSideSum != 0.00)
+     assertTestCase.assertTrue(Math.round(negativeSideSum *100.0)/100.0==UI_negativeSideSum);
+
+
+    }
+
+    @Test(groups = {"regression", "data_validation"}, dataProvider = "researchLines")
+    @Xray(test = {6782})
+    public void VerifyXAxisImpactDistribution(@Optional String sector, @Optional String region,
+                                                 @Optional String researchLine, @Optional String month, @Optional String year, @Optional String filter) {
+
+        String portfolioId = "00000000-0000-0000-0000-000000000000";
+        test.info("portfolio_id=" + portfolioId);
+
+        APIFilterPayloadWithImpactFilter apiFilterPayloadWithImpactFilter = new APIFilterPayloadWithImpactFilter();
+        apiFilterPayloadWithImpactFilter.setSector(sector);
+        apiFilterPayloadWithImpactFilter.setRegion(region);
+        apiFilterPayloadWithImpactFilter.setFilter(filter);
+        apiFilterPayloadWithImpactFilter.setYear(year);
+        apiFilterPayloadWithImpactFilter.setMonth(month);
+
+
+        //get Impact distribution API data
+        List<ImpactDistributionWrappers> impactDistribution = Arrays.asList(
+                controller.getImpactDistributionResponse(portfolioId, researchLine, apiFilterPayloadWithImpactFilter)
+                        .as(ImpactDistributionWrappers[].class));
+
+
+        List<RangeAndScoreCategory> rangeAndCategoryList = controller.getResearchLineRangesAndScoreCategories(researchLine);
+        if (impactDistribution.get(0).getPositive_impact().getDistribution().size() != 0) {
+            double max_PositiveNumber = impactDistribution.get(0).getPositive_impact().getDistribution().stream()
+                    .max(Comparator.comparing(p -> p.getTotal())).get().getTotal();
+            int x_axisOfPositiveImpact;
+            if (max_PositiveNumber % 10 != 0)
+                x_axisOfPositiveImpact = (int) (Math.round((max_PositiveNumber + 5) / 10.0) * 10);
+            else x_axisOfPositiveImpact = (int) max_PositiveNumber;
+
+            assertTestCase.assertTrue(x_axisOfPositiveImpact == impactDistribution.get(0).getPositive_impact().getX_axis_investment(),
+                    "Positive impact x axis did not match");
+        }
+
+        if (impactDistribution.get(0).getNegative_impact().getDistribution().size() != 0) {
+            double max_NegativeNumber = impactDistribution.get(0).getNegative_impact().getDistribution()
+                    .stream().max(Comparator.comparing(p -> p.getTotal())).get().getTotal();
+            int x_axisOfNegativeImpact;
+            if (max_NegativeNumber % 10 != 0)
+                x_axisOfNegativeImpact = (int) (Math.round((max_NegativeNumber + 5) / 10.0) * 10);
+            else x_axisOfNegativeImpact = (int) max_NegativeNumber;
+
+
+            assertTestCase.assertTrue(x_axisOfNegativeImpact == impactDistribution.get(0).getNegative_impact().getX_axis_investment(),
+                    "Negaitive impact x axis did not match");
+
+        }
+    }
+
 
     @DataProvider(name = "researchLines")
     public Object[][] provideFilterParameters() {
 
         return new Object[][]
                 {
-
                         {"all", "all", "Temperature Alignment", "03", "2022", "top5"},
                         {"all", "APAC", "Temperature Alignment", "03", "2022", "top10"},
                         {"all", "EMEA", "Temperature Alignment", "03", "2022", "bottom5"},
                         {"all", "AMER", "Temperature Alignment", "03", "2022", "bottom10"},
-
-                        {"all", "all", "operationsrisk", "12", "2020", "top5"},
-                        {"all", "all", "operationsrisk", "12", "2020", "top10"},
-                        {"all", "all", "operationsrisk", "12", "2020", "bottom5"},
-                        {"all", "all", "operationsrisk", "12", "2020", "bottom10"},
-//                        {"all", "all", "operationsrisk", "12", "2020", "top10pct"},
-//                        {"all", "all", "operationsrisk", "12", "2020", "bottom10pct"},
-
-//                        {"all", "all", "marketrisk", "12", "2020", "top5"},
-//                        {"all", "all", "marketrisk", "12", "2020", "top10"},
-//                        {"all", "all", "marketrisk", "12", "2020", "bottom5"},
-//                        {"all", "all", "marketrisk", "12", "2020", "bottom10"},
-//                        {"all", "all", "marketrisk", "12", "2020", "top10pct"},
-//                        {"all", "all", "marketrisk", "12", "2020", "bottom10pct"},
-//
-//                        {"all", "all", "supplychainrisk", "12", "2020", "top5"},
-//                        {"all", "all", "supplychainrisk", "12", "2020", "top10"},
-//                        {"all", "all", "supplychainrisk", "12", "2020", "bottom5"},
-//                        {"all", "all", "supplychainrisk", "12", "2020", "bottom10"},
-//                        {"all", "all", "supplychainrisk", "12", "2020", "top10pct"},
-//                        {"all", "all", "supplychainrisk", "12", "2020", "bottom10pct"},
-//
                         {"all", "all", "Physical Risk Management", "04", "2021", "top5"},
                         {"all", "all", "Physical Risk Management", "12", "2020", "top10"},
                         {"all", "all", "Physical Risk Management", "12", "2020", "bottom5"},
                         {"all", "all", "Physical Risk Management", "12", "2020", "bottom10"},
-//                        {"all", "all", "Physical Risk Management", "12", "2020", "top10pct"},
-//                        {"all", "all", "Physical Risk Management", "12", "2020", "bottom10pct"},
-
-//                        {"all", "all", "Energy Transition Management", "04", "2021", "top5"},
-//                        {"all", "all", "Energy Transition Management", "12", "2020", "top10"},
-//                        {"all", "all", "Energy Transition Management", "12", "2020", "bottom5"},
-//                        {"all", "all", "Energy Transition Management", "12", "2020", "bottom10"},
-//                        {"all", "all", "Energy Transition Management", "12", "2020", "top10pct"},
-//                        {"all", "all", "Energy Transition Management", "12", "2020", "bottom10pct"},
-//
-//                        {"all", "all", "TCFD", "04", "2021", "top5"},
-//                        {"all", "all", "TCFD", "12", "2020", "top10"},
-//                        {"all", "all", "TCFD", "12", "2020", "bottom5"},
-//                        {"all", "all", "TCFD", "12", "2020", "bottom10"},
-//                        {"all", "all", "TCFD", "12", "2020", "top10pct"},
-//                        {"all", "all", "TCFD", "12", "2020", "bottom10pct"},
-
-
                         {"all", "all", "Brown Share", "04", "2021", "top5"},
                         {"all", "all", "Brown Share", "12", "2020", "top10"},
                         {"all", "all", "Brown Share", "12", "2020", "bottom5"},
                         {"all", "all", "Brown Share", "12", "2020", "bottom10"},
-//                        {"all", "all", "Brown Share", "12", "2020", "top10pct"},
-//                        {"all", "all", "Brown Share", "12", "2020", "bottom10pct"},
-//
                         {"all", "all", "Carbon Footprint", "04", "2021", "top5"},
                         {"all", "all", "Carbon Footprint", "12", "2020", "top10"},
                         {"all", "all", "Carbon Footprint", "12", "2020", "bottom5"},
                         {"all", "all", "Carbon Footprint", "12", "2020", "bottom10"},
-//                        {"all", "all", "Carbon Footprint", "12", "2020", "top10pct"},
-//                        {"all", "all", "Carbon Footprint", "12", "2020", "bottom10pct"},
-
-
                         {"all", "all", "Green Share", "04", "2021", "top5"},
                         {"all", "all", "Green Share", "12", "2020", "top10"},
                         {"all", "all", "Green Share", "12", "2020", "bottom5"},
                         {"all", "all", "Green Share", "12", "2020", "bottom10"},
-//                        {"all", "all", "Green Share", "12", "2020", "top10pct"},
-//                        {"all", "all", "Green Share", "12", "2020", "bottom10pct"}
-
                 };
     }
 

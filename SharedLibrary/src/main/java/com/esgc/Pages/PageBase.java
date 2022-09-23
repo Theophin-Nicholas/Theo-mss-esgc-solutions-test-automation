@@ -24,6 +24,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.time.LocalDate;
@@ -65,11 +66,79 @@ public abstract class PageBase {
     @FindBy(xpath = "//li[text()='Portfolio Settings']")
     public WebElement portfolioSettings;
 
+    @FindBy(xpath = "(//table[@id='table-id'])[1]/tbody/tr/td[1]")
+    public List<WebElement> portfolioSettingsCompanies;
+
+    @FindBy(xpath = "(//table[@id='table-id'])[1]/tbody/tr/td[2]")
+    public List<WebElement> portfolioSettingsInvestmentPercentage;
+
+    @FindBy(xpath = "//div[@id='entity-filter'] ")
+    public WebElement portfolioSettingsDropDown;
+    @FindBy(xpath = "//li[@id='entity-filter_Show_20_largest_investments_id']")
+    public WebElement portfolioSettingsLargest20Investment;
+
+    @FindBy(xpath = "//li[@id='entity-filter_Show_10_largest_investments_id']")
+    public WebElement portfolioSettingsLargest10Investment;
+
+    @FindBy(xpath = " //div[@id='portfolio-drawer-test-id']/div[3]/div/div/div/div/span[3]")
+    public WebElement portfolioSettingsMoreCompanies;
+
+
+    @FindBy(xpath = "//span[@title='Sample Portfolio']")
+    public WebElement samplePortfolio;
+
+    @FindBy(xpath = "//span[@title='SamplePortfolioToDelete']")
+    public WebElement samplePortfolioToDelete;
+
+    @FindBy(xpath = "(//button[@id='button-button-test-id-1'])[2]")
+    public WebElement deleteButton;
+
+    @FindBy(xpath = "//div[@role='dialog']/div[2]/div/div")
+    public WebElement confirmPortfolioDeletePopupHeader;
+
+    @FindBy(xpath = "//div[contains(text(),'Yes, Delete')]")
+    public WebElement confirmPortfolioDeleteYesButton;
+
+    @FindBy(xpath = "//div[contains(text(),'No, Cancel')]")
+    public WebElement confirmPortfolioDeleteCancelButton;
     @FindBy(xpath = "//div[text()='Portfolio Management']")
     public WebElement header_portfolioManagement;
 
+    @FindBy(xpath = " (//button[@id='button-holdings'])[1]/span/div")
+    public WebElement getPortfolioNameFromDashboard;
+
+    @FindBy(xpath = "//span[@title='Sample Portfolio']")
+    public WebElement samplePortfolioTitle;
+
+    @FindBy(xpath = "//a[@id='link-upload']")
+    public WebElement portfolioReUpload;
+
+    @FindBy(xpath = "//body/div[@role='presentation']/div/div/div/header/div[2]/div[2]")
+    public WebElement portfolioNameWithStar;
+
+    @FindBy(xpath = "  //input[@value='Sample Portfolio']")
+    public WebElement portfolioTextBoxGetValue;
+
+    @FindBy(xpath = "  //div[contains(text(),'Show 10 largest investments')]")
+    public WebElement portfolioDropDownMenu;
+
     @FindBy(xpath = "//div[text()='Portfolio Management']/following-sibling::div/a[@id='link-upload']")
     public WebElement link_UploadNew;
+
+    @FindBy(xpath = "//div[@role='presentation']//div//div//div//header/div[2]/div[1]")
+    public WebElement portfolioDescription;
+
+    @FindBy(xpath = "//table[@id='table-id']/thead/tr")
+    public WebElement portfolioCompanyColumnNames;
+
+    @FindBy(xpath = " //table[@id='table-id-1']/tbody/tr")
+    public WebElement portfolioFooterText;
+
+    @FindBy(xpath = "(//tbody)[6]/tr/td[1]")
+    public List<WebElement> portfolioEntityList;
+
+    @FindBy(xpath = "//div[@role='dialog']/div/div/li")
+    public WebElement portfolioEntityName;
 
     @FindBy(xpath = "//div[text()='Portfolio Management']/../../..//span//*[name()='path']")
     public List<WebElement> svgpath_images;
@@ -345,6 +414,24 @@ public abstract class PageBase {
             return false;
         }
     }
+
+    /*
+    This is to verify the date format is correct
+     */
+    public boolean isValidFormat(String format, String value) {
+        Date date = null;
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat(format);
+            date = sdf.parse(value);
+            if (!value.equals(sdf.format(date))) {
+                date = null;
+            }
+        } catch (ParseException ex) {
+            ex.printStackTrace();
+        }
+        return date != null;
+    }
+
 
     /*
      * This method will verify if Regions Sections and As Of Date drop down
@@ -624,11 +711,17 @@ public abstract class PageBase {
      */
     public void selectResearchLineFromDropdown(String page) {
         // if(!BrowserUtils.isElementVisible(researchLineOptions,3))
-        clickResearchLineDropdown();
-        // Dynamic xpath - Helps us to pass page names "Operations Risk", "Market Risk"
-        String pageXpath = "//ul[@id='portfolioanalysis-reportnavigation-test-id']//span[contains(text(),'" + page + "')]";
-        WebElement pageElement = Driver.getDriver().findElement(By.xpath(pageXpath));
-        wait.until(ExpectedConditions.elementToBeClickable(pageElement)).click();
+        try {
+            clickResearchLineDropdown();
+            // Dynamic xpath - Helps us to pass page names "Operations Risk", "Market Risk"
+            String pageXpath = "//ul[@id='portfolioanalysis-reportnavigation-test-id']//span[contains(text(),'" + page + "')]";
+            WebElement pageElement = Driver.getDriver().findElement(By.xpath(pageXpath));
+            wait.until(ExpectedConditions.elementToBeClickable(pageElement)).click();
+        } catch (Exception e){
+            System.out.println("Couldn't find " + page);
+            Actions a = new Actions(Driver.getDriver());
+            a.sendKeys(Keys.ESCAPE).build().perform();
+        }
     }
 
 
@@ -1055,6 +1148,12 @@ public abstract class PageBase {
         LocalDateTime ldt = LocalDateTime.now();
         String date = DateTimeFormatter.ofPattern("MM_dd_yyyy", Locale.ENGLISH).format(ldt);
         return Arrays.asList(dir_contents).stream().filter(e -> e.getName().contains(date)).findAny().isPresent();
+    }
+
+    public int filesCountInDownloadsFolder() {
+        File dir = new File(BrowserUtils.downloadPath());
+        File[] dir_contents = dir.listFiles();
+        return dir_contents.length;
     }
 
     public String getDownloadedCompaniesExcelFilePath() {
@@ -1686,7 +1785,21 @@ public abstract class PageBase {
                 case "MAJOR":
                     return "#39A885";
             }
-        } else {
+        }
+
+        else if (researchLine.toUpperCase().equals("ESG")) {
+            switch (scoreCategory.toUpperCase()) {
+                case "WEAK":
+                    return "#DD581D";
+                case "LIMITED":
+                    return "#E8951C";
+                case "ROBUST":
+                    return "#EAC550";
+                case "ADVANCED":
+                    return "#DBE5A3";
+            }
+        }
+        else {
             switch (scoreCategory) {
                 case "WEAK":
                     return "#DFA124";
@@ -2214,6 +2327,7 @@ public abstract class PageBase {
             DashboardPage dashboardPage = new DashboardPage();
             String portfolio = getSelectedPortfolioNameFromDropdown();
             BrowserUtils.scrollTo(dashboardPage.endOfPage);// scrolling to the heamap
+            BrowserUtils.wait(2);
             if (!dashboardPage.isStickyHeaderDisplayed()) {
                 return false;
             }
@@ -2363,24 +2477,24 @@ public abstract class PageBase {
     }
 
     public String getPortfolioName() {
-        String portfolioname = "";
+        String portfolioName = "";
         for (WebElement e : portfolioSettings_portfolioList) {
-            portfolioname = e.findElements(By.xpath("div/div/div/div/span")).get(0).getText();
-            if (!portfolioname.equals("Sample Portfolio")) {
-                if (portfolioname.contains("Automation")) {
+            portfolioName = e.findElements(By.xpath("div/div/div/div/span")).get(0).getText();
+            if (!portfolioName.equals("Sample Portfolio")) {
+                if (portfolioName.contains("Automation")) {
                     break;
                 }
             }
         }
-        return portfolioname;
+        return portfolioName;
     }
 
-    public void selectPortfolio(String Portfolioname) {
+    public void selectPortfolio(String portfolioName) {
         try {
-
-            Driver.getDriver().findElement(By.xpath("//span[@title='" + Portfolioname + "']")).click();
+            Driver.getDriver().findElement(By.xpath("//span[@title='" + portfolioName + "']")).click();
+            System.out.println("Portfolio found : "+portfolioName);
         } catch (Exception e) {
-            System.out.println("Could not find the POrtfolio");
+            System.out.println("Could not find the Portfolio");
             return;
         }
     }
@@ -2402,6 +2516,7 @@ public abstract class PageBase {
 
     public void validatePortfolioNameNotChangedAfterUpdateAndClickOutside(String OriginalPortFolioName) {
         updatePortfolio(OriginalPortFolioName + "111");
+       // BrowserUtils.wait(10);
         closeMenuByClickingOutSide();
         clickMenu();
         portfolioSettings.click();
@@ -2484,6 +2599,7 @@ public abstract class PageBase {
 
     public void undoPortfolioNameChange(String OriginalPortFolioName) {
         updatePortfolio(OriginalPortFolioName);
+        BrowserUtils.wait(4);
         clickInSidePortfolioDrawer();
     }
 }

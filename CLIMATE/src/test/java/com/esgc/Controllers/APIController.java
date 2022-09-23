@@ -34,6 +34,11 @@ public class APIController {
     boolean isInvalidTest = false;
 
     RequestSpecification configSpec() {
+        if(System.getProperty("token")==null){
+            String getAccessTokenScript = "return JSON.parse(localStorage.getItem('okta-token-storage')).accessToken.accessToken";
+            String accessToken = ((JavascriptExecutor) Driver.getDriver()).executeScript(getAccessTokenScript).toString();
+            System.setProperty("token", accessToken);
+        }
         if (isInvalidTest) {
             return given().accept(ContentType.JSON)
                     .baseUri(Environment.URL)
@@ -46,7 +51,7 @@ public class APIController {
                     .baseUri(Environment.URL)
                     .relaxedHTTPSValidation()
                     .header("Authorization", "Bearer " + System.getProperty("token"))
-                    .header("Accept", "application/json")
+                   // .header("Accept", "application/json")
                     .header("Content-Type", "application/json")
                     .log().ifValidationFails();
         }
@@ -122,8 +127,6 @@ public class APIController {
                     .body(apiFilterPayload)
                     .when()
                     .post(Endpoints.POST_PORTFOLIO_SCORE);
-
-
         } catch (Exception e) {
             System.out.println("Inside exception " + e.getMessage());
         }
@@ -274,7 +277,9 @@ public class APIController {
                     .pathParam("research_line", apiResourceMapper(research_line))
                     .body(apiFilterPayload)
                     .when()
+                    .log().all()
                     .post(Endpoints.POST_LEADERS_AND_LAGGARDS);
+
 
         } catch (Exception e) {
             System.out.println("Inside exception " + e.getMessage());
@@ -705,7 +710,12 @@ public class APIController {
             case "Temperature Alignment":
             case "temperaturealgmt":
                 return "temperaturealgmt";
+            case "ESG Assessments":
+            case "esgasmt":
+                return "corpesgdata/esgasmt";
 
+            case "ESG Assessments":
+                return "corpesgdata/esgasmt";
         }
         return "";
     }
@@ -819,6 +829,7 @@ public class APIController {
                     .pathParam("research_line", apiResourceMapperWithoutphysicalriskinit(research_line))
                     .body(apiFilterPayloadWithImpactFilter)
                     .when()
+                    .log().all()
                     .post(Endpoints.POST_IMPACT_DISTRIBUTION);
             System.out.println(response.prettyPrint());
 
@@ -991,6 +1002,33 @@ public class APIController {
             System.out.println("Inside exception " + e.getMessage());
         }
 
+        return response;
+    }
+
+    public Response getEntitlementHandlerResponse() {
+        Response response = null;
+        try {
+            response = configSpec()
+                    .get(Endpoints.GET_ENTITLEMENT_HANDLER);
+        } catch (Exception e) {
+            System.out.println("Inside exception " + e.getMessage());
+        }
+
+        return response;
+    }
+
+
+    public Response getPortfolioSettingsAPIResponse(String portfolio_id) {
+        Response response = null;
+        try {
+
+            response = configSpec()
+                    .pathParam("portfolio_id", portfolio_id)
+                    .when()
+                    .post(Endpoints.POST_PORTFOLIO_SETTINGS);
+        } catch (Exception e) {
+            System.out.println("Inside exception " + e.getMessage());
+        }
         return response;
     }
 }
