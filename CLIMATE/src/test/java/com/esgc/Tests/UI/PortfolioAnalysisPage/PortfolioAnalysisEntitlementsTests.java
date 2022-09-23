@@ -166,7 +166,7 @@ public class PortfolioAnalysisEntitlementsTests extends UITestBase {
     @Xray(test = {8214, 8215})
     public void verifyESGAssessmentRL() {
         LoginPage loginPage = new LoginPage();
-        loginPage.loginWithParams("mesg-platform-test-user+08@outlook.com","Helloworld123");
+        loginPage.loginWithParams("esg-test1+no-controversy@outlook.com","Moodys123");
         ResearchLinePage researchLinePage = new ResearchLinePage();
         researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
         BrowserUtils.wait(5);
@@ -184,14 +184,14 @@ public class PortfolioAnalysisEntitlementsTests extends UITestBase {
         Driver.getDriver().manage().deleteAllCookies();
         Driver.getDriver().navigate().refresh();
         LoginPage loginPage = new LoginPage();
-        loginPage.loginWithParams("mesg-platform-test-user+01@outlook.com","Helloworld123");
+        loginPage.loginWithParams("esg-test1+no-export@outlook.com","Moodys123");
         ResearchLinePage researchLinePage = new ResearchLinePage();
         researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
         BrowserUtils.wait(5);
 
         List<String> actualResearchLines = researchLinePage.getAvailableResearchLines();
         assertTestCase.assertEquals(actualResearchLines.size(), 6, "Existing Research Lines Validation ");
-        assertTestCase.assertTrue(actualResearchLines.stream().filter(e -> e.equals("ESG Assessments")).count()==0);
+       // assertTestCase.assertTrue(actualResearchLines.stream().filter(e -> e.equals("ESG Assessments")).count()==0);
 
     }
 

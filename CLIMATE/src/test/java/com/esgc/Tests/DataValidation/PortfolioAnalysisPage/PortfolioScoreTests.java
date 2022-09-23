@@ -155,6 +155,46 @@ public class PortfolioScoreTests extends DataValidationTestBase {
         assertTestCase.assertTrue(score.getHrh_risk_category().equals(apiResponse.get(0).getHrh_risk_category()));
     }
 
+    @Test(groups = {"regression", "data_validation"})
+    @Xray(test = {8178})
+    public void verifyESGAssessmentPortfolioScore(
+            //@Optional String sector, @Optional String region,
+            @Optional String researchLine,
+            @Optional String month, @Optional String year) {
+
+        researchLine = "esgasmt";
+        month = "08";
+        year = "2022";
+
+        List<ResearchLineIdentifier> portfolioToUpload = dataValidationUtilities.getPortfolioToUpload(researchLine, month, year);
+        String fileName = String.format("Portfolio Score %s - %s - %s - %s - %s", researchLine, dataValidationUtilities.sectorFilter, dataValidationUtilities.regionFilter, month, year);
+        String path = portfolioUtilities.createPortfolio(fileName, portfolioToUpload);
+
+        Response response = controller.importPortfolio(APIUtilities.userID(), fileName + ".csv", path);
+        response.then().log().all().assertThat().body("portfolio_name", Matchers.notNullValue());
+        String portfolioId = response.getBody().jsonPath().get("portfolio_id");
+        System.out.println("Portfolio Created, id: " + portfolioId);
+        test.info("portfolio_id=" + portfolioId);
+        portfolioToUpload = dataValidationUtilities.preparePortfolioForTesting(portfolioToUpload);
+        test.info(String.format("Filter= %s %s %s %s", "all", "all", month, year));
+
+        //request portfolio score from API
+        APIFilterPayload apiFilterPayload = new APIFilterPayload();
+        apiFilterPayload.setSector("all");
+        apiFilterPayload.setRegion("all");
+        apiFilterPayload.setBenchmark("");
+        apiFilterPayload.setYear(year);
+        apiFilterPayload.setMonth(month);
+
+        List<PortfolioPhysicalHazard> apiResponse = Arrays.asList(controller.getPortfolioScoreResponse(portfolioId, researchLine, apiFilterPayload)
+                .as(PortfolioPhysicalHazard[].class));
+        PortfolioQueries portfolioQueries = new PortfolioQueries();
+        PhysicalScore score = portfolioQueries.getPhysicalHazardScore("'" + portfolioId + "'", year + "||" + month);
+        assertTestCase.assertTrue(score.getHighest_risk_hazard().equals(apiResponse.get(0).getHighest_risk_hazard()));
+        assertTestCase.assertTrue(score.getFacilities_exposed().equals(apiResponse.get(0).getFacilities_exposed()));
+        assertTestCase.assertTrue(score.getHrh_risk_category().equals(apiResponse.get(0).getHrh_risk_category()));
+    }
+
     @DataProvider(name = "researchLines")
     public Object[][] provideFilterParameters() {
 

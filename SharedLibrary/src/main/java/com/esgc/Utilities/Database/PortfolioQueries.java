@@ -690,6 +690,19 @@ public class PortfolioQueries {
         return getQueryResultList(query2);
     }
 
+    public List<List<Object>> getPortfolioCompaniesFromDB() {
+        String query1 = "select company_name, value from df_portfolio\n" +
+                "where portfolio_id='00000000-0000-0000-0000-000000000000'\n" +
+                "and company_name is not null order by value desc";
+        return getQueryResultList(query1);
+    }
+    public List<List<Object>>  getPortfolioCompaniesTotalValuesFromDB() {
+        String query1 = "select  sum(value)\n" +
+                "from df_portfolio df\n" +
+                "where portfolio_id='00000000-0000-0000-0000-000000000000'";
+        return getQueryResultList(query1);
+    }
+    
     public List<ESGLeaderANDLaggers> getESGLeadersAndLaggersData(String portfolioid, String yearmonth) {
        /* String query = " with p as (SELECT bvd9_number,region, sector, SUM(value) as invvalue, COUNT(*) OVER() total_companies, " +
                 "SUM(SUM(value)) OVER() AS total_value FROM df_target.df_portfolio WHERE 1=1 " +
@@ -768,5 +781,4 @@ public class PortfolioQueries {
 
         return score;
     }
-
 }
