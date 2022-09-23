@@ -31,7 +31,7 @@ public class ClimateProfileSummaryAPITests extends EntityClimateProfileTestBase 
                 .getClimateSummaryAPIResponse(orbis_id, researchLine);
 
         response.then().log().all();
-        switch (researchLine){
+        switch (researchLine) {
             case "greenshareasmt":
             case "brownshareasmt":
                 response.as(BrownShareAndGreenShareClimateSummary[].class);
@@ -58,7 +58,6 @@ public class ClimateProfileSummaryAPITests extends EntityClimateProfileTestBase 
     }
 
 
-
     @Test(groups = {"api", "regression", "entity_climate_profile"}, dataProvider = "API Research Lines")
     @Xray(test = {5996, 6037, 6043, 7813})
     public void ValidateClimateSummaryAPIWithInvalidToken(String researchLine, String orbis_id) {
@@ -83,10 +82,11 @@ public class ClimateProfileSummaryAPITests extends EntityClimateProfileTestBase 
         Response response = entityClimateProfileApiController
                 .getClimateTempProjection(orbis_id);
 
-        assertTestCase.assertEquals(response.getStatusCode(), 200,"Climate Temperature Projection API Response status is verified");
-        assertTestCase.assertFalse(response.body().asString().isEmpty(),  "Climate Temperature Projection API Response body is verified");
+        assertTestCase.assertEquals(response.getStatusCode(), 200, "Climate Temperature Projection API Response status is verified");
+        assertTestCase.assertFalse(response.body().asString().isEmpty(), "Climate Temperature Projection API Response body is verified");
 
     }
+
     @Test(groups = {"api", "regression", "entity_climate_profile"}, dataProvider = "orbis_id")
     @Xray(test = {8232})
     public void verifyAPIForOverallESGScoreWidget(String orbis_id) {
@@ -94,47 +94,54 @@ public class ClimateProfileSummaryAPITests extends EntityClimateProfileTestBase 
         test.info("ESG Score widget API validation for " + orbis_id);
         Response response = entityClimateProfileApiController
                 .getESGClimateSummary(orbis_id);
+        response.prettyPeek();
 
-        assertTestCase.assertEquals(response.getStatusCode(), 200,"ESG Climate Summary Projection API Response status is verified");
+        assertTestCase.assertEquals(response.getStatusCode(), 200, "ESG Climate Summary Projection API Response status is verified");
         JsonPath jsonPath = response.jsonPath();
         //verify sub category score is one of Environment, Social, Governance, ESG Score
-        List<String> apiCategoryList = jsonPath.getList("esg_assessment[0].categories.sub_category");//esg_assessment.categories.sub_category
+        List<String> apiCategoryList = jsonPath.getList("esg_assessment[0].score_categories.sub_category");//esg_assessment.categories.sub_category
         String researchLine = jsonPath.getString("esg_assessment[0].research_line_id");//esg_assessment.categories.research_line
         System.out.println("apiCategoryList = " + apiCategoryList);
         System.out.println("researchLine = " + researchLine);
-        List<String> expCategoryList = Arrays.asList("Environment", "Social", "Governance","ESG Score");
-        for(String category : apiCategoryList){
-            if(!expCategoryList.contains(category)) System.out.println("category is not present in the api response = "+category);
-            assertTestCase.assertTrue(apiCategoryList.contains(category), "ESG Climate Summary Projection API Category type is verified for "+category);
+        List<String> expCategoryList = Arrays.asList("Environment", "Social", "Governance", "ESG Score");
+        for (String category : apiCategoryList) {
+            if (!expCategoryList.contains(category))
+                System.out.println("category is not present in the api response = " + category);
+            assertTestCase.assertTrue(apiCategoryList.contains(category), "ESG Climate Summary Projection API Category type is verified for " + category);
         }
 
         //verify Score vs Score Category is as expected
-        List<Map<String,Object>> apiCategories = jsonPath.get("esg_assessment[0].categories");
+        List<Map<String, Object>> apiCategories = jsonPath.get("esg_assessment[0].score_categories");
         System.out.println("apiCategories.size() = " + apiCategories.size());
-        for (Map<String,Object> category:apiCategories){
+        for (Map<String, Object> category : apiCategories) {
             //Verify ESg Score Category
-            if(category.get("score").toString().endsWith(".esg")) {
+            if (category.get("score").toString().endsWith(".esg")) {
                 String expESGScore = new ESGUtilities().getESGAlphanumericScoreCategory(category.get("score").toString());
-                if(!expESGScore.equals(category.get("qualifier").toString())) {
-                    System.out.println("ESG Score vs Score Category is not verified = "+category.get("qualifier")+" :"+expESGScore);
+                if (!expESGScore.equals(category.get("qualifier").toString())) {
+                    System.out.println("ESG Score vs Score Category is not verified = " + category.get("qualifier") + " :" + expESGScore);
                 }
                 assertTestCase.assertEquals(category.get("qualifier").toString(), expESGScore,
                         "ESG Climate Summary Projection API ESG Alphanumeric Score is verified.");
                 continue;
             }
             //Verify Pillar Categories
-            String expCategory = new ESGUtilities().getESGPillarsCategory(researchLine,(int)Double.parseDouble(category.get("score").toString()));
-            System.out.println("expCategory = " + expCategory);
-            List<String> expCategoryScoreRanges = new ESGUtilities().getESGPillarScoreRangeCategory(researchLine);
-            System.out.println("expCategoryScoreRange = " + expCategoryScoreRanges);
-            if(!category.get("score_category").equals(expCategory)){
-                System.out.println("Category Score vs. Category Name mismatch = " + category.get("score_category") + " vs " + expCategory);
+            String expCategory = "";
+            if (!category.get("score").toString().contains("ESG")) {
+                expCategory = new ESGUtilities().getESGPillarsCategory(researchLine, (int) Double.parseDouble(category.get("score").toString()));
+                System.out.println("expCategory = " + expCategory);
+                List<String> expCategoryScoreRanges = new ESGUtilities().getESGPillarScoreRangeCategory(researchLine);
+                System.out.println("expCategoryScoreRange = " + expCategoryScoreRanges);
+                if (!category.get("score_category").equals(expCategory)) {
+                    System.out.println("Category Score vs. Category Name mismatch = " + category.get("score_category") + " vs " + expCategory);
+                }
+                assertTestCase.assertEquals(category.get("score_category"), expCategory, "ESG Climate Summary Projection API Response body for score vs score category is verified");
+                if (!expCategoryScoreRanges.contains(category.get("score_range").toString()))
+                    System.out.println("Score Range in API is not a valid range = " + category.get("score_range"));
+                assertTestCase.assertTrue(expCategoryScoreRanges.contains(category.get("score_range").toString()), "ESG Climate Summary Projection API Response body for Score Range is verified");
             }
-            assertTestCase.assertEquals(category.get("score_category"), expCategory, "ESG Climate Summary Projection API Response body for score vs score category is verified");
-            if(!expCategoryScoreRanges.contains(category.get("score_range").toString())) System.out.println("Score Range in API is not a valid range = "+category.get("score_range"));
-            assertTestCase.assertTrue(expCategoryScoreRanges.contains(category.get("score_range").toString()), "ESG Climate Summary Projection API Response body for Score Range is verified");
         }
     }
+
     @Test(groups = {"api", "regression", "entity_climate_profile"})
     @Xray(test = {6710})
     public void verifyPostAPIRequestForTemperatureAlignmentGraphWithInvalidTokenTest() {
@@ -144,7 +151,7 @@ public class ClimateProfileSummaryAPITests extends EntityClimateProfileTestBase 
         response.prettyPrint();
         assertTestCase.assertEquals(response.getStatusCode(), 403,
                 "Temperature Alignment Graph Post request with invalid token  API Response status is verified");
-        assertTestCase.assertEquals(response.path("message"),  "Forbidden",
+        assertTestCase.assertEquals(response.path("message"), "Forbidden",
                 "Temperature Alignment Graph Post request with invalid token  API Response message is verified");
 
     }

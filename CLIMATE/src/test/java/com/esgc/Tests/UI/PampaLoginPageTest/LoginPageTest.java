@@ -177,7 +177,7 @@ public class LoginPageTest extends DashboardUITestBase {
         }
     }
 
-    @Test(groups = {"regression", "ui", "smoke"},
+    @Test(enabled = false,groups = {"regression", "ui", "smoke"},
             description = "ESGCA -1648 : User is able to access the MESGC application without providing credentials if already logged in other moodys application.")
     @Xray(test = 1648)
     public void verifyUserCanUseLoginCredentialsFromOtherMoodysToMESGCPampa() {

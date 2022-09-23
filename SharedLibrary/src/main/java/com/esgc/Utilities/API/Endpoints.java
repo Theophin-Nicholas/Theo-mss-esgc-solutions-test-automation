@@ -32,5 +32,9 @@ public class Endpoints {
     public static String POST_HEATMAP = "api/portfolios/{portfolio_id}/heat-map";
     public static String PUT_PORTFOLIO_NAME_UPDATE = "api/portfolios/{portfolio_id}";
     public static String SEARCH = "api/os/search";
+    public static String GET_ENTITLEMENT_HANDLER = "api/entitlement-handler";
+    //=========== Portfolio Settings ===================
+
+    public static String POST_PORTFOLIO_SETTINGS = "/api/portfolios/{portfolio_id}/portfolio-details";
 
 }

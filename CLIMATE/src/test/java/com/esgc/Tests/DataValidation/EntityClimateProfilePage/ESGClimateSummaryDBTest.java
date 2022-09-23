@@ -1,12 +1,16 @@
 package com.esgc.Tests.DataValidation.EntityClimateProfilePage;
 
 
+import com.esgc.APIModels.EntityHeader;
 import com.esgc.APIModels.EntityProfileClimatePage.SummarySection.BrownShareAndGreenShareClimateSummary;
 import com.esgc.APIModels.EntityProfileClimatePage.SummarySection.CarbonFootprintSummary;
 import com.esgc.APIModels.EntityProfileClimatePage.SummarySection.PhysicalRiskHazardsSummary;
 import com.esgc.APIModels.EntityProfileClimatePage.SummarySection.TemperatureAlignmentSummary;
 import com.esgc.APIModels.EntityProfileClimatePage.UnderlyingDataMetrics.PhysicalRiskHazardsDetails;
 import com.esgc.APIModels.EntityProfileClimatePage.UnderlyingDataMetrics.PhysicalRiskHazardsWrapper;
+import com.esgc.APIModels.EntityScoreCategory.ESGScores;
+import com.esgc.Controllers.EntityPage.EntityProfileClimatePageAPIController;
+import com.esgc.TestBase.DataProviderClass;
 import com.esgc.Tests.TestBases.EntityClimateProfileDataValidationTestBase;
 import com.esgc.Utilities.Xray;
 import io.restassured.path.json.JsonPath;
@@ -15,9 +19,10 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Test;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+
+import static com.esgc.Utilities.Database.EntityClimateProfilePageQueries.getESGDbScores;
+import static com.esgc.Utilities.Database.EntityClimateProfilePageQueries.getHeaderDB;
 
 public class ESGClimateSummaryDBTest extends EntityClimateProfileDataValidationTestBase {
 
@@ -225,5 +230,53 @@ public class ESGClimateSummaryDBTest extends EntityClimateProfileDataValidationT
         }
     }
 
+    @Test(groups = {"regression","smoke", "data_validation"},
+            dataProviderClass = DataProviderClass.class, dataProvider = "orbisIDWithDisclosureScore")
+    @Xray(test = {8750})
+    public void validateDisclosureRatio(@Optional String orbisID) {
+        //Get the header details via API
+        List<EntityHeader> entityHeader = Arrays.asList(controller.getHeaderDetailsWithPayload("{\"orbis_id\":\"" + orbisID + "\"}").getBody().as(EntityHeader[].class));
+        int disclosureRate = entityHeader.get(0).getOverall_disclosure_score();
+        System.out.println("list = " + entityHeader.get(0).getOverall_disclosure_score());
 
+        //Get the entity details which has Overall Disclosure rate from DB
+        List<String> dbResults = getHeaderDB(orbisID);
+
+        //Verify API and DB values
+        int disclosureDBRRate = (int) (Double.parseDouble(dbResults.get(0)) * 100);
+        assertTestCase.assertEquals(disclosureRate, disclosureDBRRate);
+
+    }
+
+    @Test(groups = {"regression", "smoke","data_validation"},
+            dataProviderClass = DataProviderClass.class, dataProvider = "orbisIDWithDisclosureScore")
+    @Xray(test = {9841})
+    public void verifyAPIForOverallESGScoreWidget(String orbis_id) {
+        EntityProfileClimatePageAPIController entityClimateProfileApiController = new EntityProfileClimatePageAPIController();
+        test.info("ESG Score widget API validation for " + orbis_id);
+        // Get the API response as ArrayList
+        Response response = entityClimateProfileApiController.getESGClimateSummary(orbis_id);
+        assertTestCase.assertEquals(response.getStatusCode(), 200, "ESG Climate Summary Projection API Response status is verified");
+        List<ESGScores> esgList = Arrays.asList(response.as(ESGScores[].class));
+        int size = esgList.get(0).getEsg_assessment().getScore_categories().size();
+        List<String> allScores = new ArrayList<>();
+        for (int i = 0; i < size; i++) {
+            if (!esgList.get(0).getEsg_assessment().getScore_categories().get(i).getScore().toString().contains("ESG")) {
+                Double value= (Double) esgList.get(0).getEsg_assessment().getScore_categories().get(i).getScore();
+                allScores.add(String.valueOf(Math.round(value*10000.0)/10000.0));
+            }
+        }
+        System.out.println("allScores = " + allScores);
+
+        List<String> dbResults = getESGDbScores(orbis_id);
+        List<String> dbScores=new ArrayList<>();
+        for(String dbScore: dbResults){
+            dbScores.add(String.valueOf(Math.round(Double.parseDouble(dbScore)*10000.0)/10000.0));
+        }
+        System.out.println("dbScores = " + dbScores);
+        //Compare both values
+        Collections.sort(allScores);
+        Collections.sort(dbScores);
+        assertTestCase.assertSame(allScores,dbScores);
+    }
 }

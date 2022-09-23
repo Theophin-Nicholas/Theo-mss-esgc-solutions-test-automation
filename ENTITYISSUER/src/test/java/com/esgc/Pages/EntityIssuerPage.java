@@ -25,7 +25,6 @@ import java.time.Duration;
 import java.util.List;
 import java.util.*;
 
-import static com.esgc.Utilities.DateTimeUtilities.isValidFormat;
 import static org.openqa.selenium.By.xpath;
 
 
@@ -256,7 +255,7 @@ public class EntityIssuerPage extends PageBase {
     @FindBy(xpath = "(//div[@class='MuiGrid-root MuiGrid-item'])[2]//div[text()='ESG Score']")
     public WebElement ESGScore;
 
-    @FindBy(xpath = "(//div[@class='MuiGrid-root MuiGrid-item'])[2]/div/div/div/div/div/div[2]/div[2]")
+    @FindBy(xpath = "(//div[@class='MuiGrid-root MuiGrid-item'])[2]/div/div/div[2]/div")
     public WebElement EsgScoreRange;
 
 
@@ -945,8 +944,8 @@ public class EntityIssuerPage extends PageBase {
                         assertTestCase.assertEquals(IdentifierSpans.get(i).getText().split(":")[0], "Region");
                         break;
                     case 8:
-                        System.out.println("IdentifierSpans.get(i).getText().split(\":\")[0] " + IdentifierSpans.get(i).getText().split(":")[0]);
-                        assertTestCase.assertEquals(IdentifierSpans.get(i).getText().split(":")[0], "Industry");
+                        System.out.println("IdentifierSpans.get(i).getText().split(\":\")[0] " + IdentifierSpans.get(i).getText());
+                        assertTestCase.assertEquals(IdentifierSpans.get(i).getText().split(":")[1], "Industry");
                         validateLinksOpenedInNewTab(IdentifierSpans.get(i), "sector");
                         break;
                 }
@@ -979,7 +978,7 @@ public class EntityIssuerPage extends PageBase {
     public void validateMissingDocument() {
         WebDriverWait wait = new WebDriverWait(Driver.getDriver(), Duration.ofSeconds(20));
         assertTestCase.assertTrue(missingDocumentButton.isDisplayed());
-        assertTestCase.assertTrue(missingDocumentButton.getText().equals("Add Information"), "Validate button text as Add Information");
+        assertTestCase.assertTrue(missingDocumentButton.getText().equals("Add Missing Documents"), "Validate button text as Add Information");
         missingDocumentButton.click();
         assertTestCase.assertTrue(SelectDisclosureLabel.isDisplayed());
         SelectDisclosureDiv.click();
