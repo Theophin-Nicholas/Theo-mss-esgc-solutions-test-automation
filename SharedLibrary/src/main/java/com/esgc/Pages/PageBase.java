@@ -1639,7 +1639,7 @@ public abstract class PageBase {
             // menuList.get(0).findElement(By.xpath("span")).click();
             //Validating that menu list is closed and background page is still on
             waitForDataLoadCompletion();
-            Assert.assertTrue(menuList.isEmpty() && Driver.getDriver().getCurrentUrl().equals(url), "Menu is still displayed and is not focused on main page");
+            Assert.assertTrue(menuList.size()==1 && Driver.getDriver().getCurrentUrl().equals(url), "Menu is still displayed and is not focused on main page");
 
         } catch (Exception e) {
             e.printStackTrace();

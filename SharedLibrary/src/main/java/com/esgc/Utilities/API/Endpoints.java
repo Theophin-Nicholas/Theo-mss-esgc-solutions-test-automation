@@ -31,5 +31,6 @@ public class Endpoints {
     public static String POST_CARBONFOOTPRINT_EMMISSION = "api/portfolios/{portfolio_id}/carbonfootprint/emissions";
     public static String POST_HEATMAP = "api/portfolios/{portfolio_id}/heat-map";
     public static String PUT_PORTFOLIO_NAME_UPDATE = "api/portfolios/{portfolio_id}";
+    public static String SEARCH = "api/os/search";
 
 }

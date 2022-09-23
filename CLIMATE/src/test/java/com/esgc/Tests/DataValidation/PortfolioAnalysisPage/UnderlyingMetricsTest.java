@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 import static org.hamcrest.Matchers.*;
 
 public class UnderlyingMetricsTest extends DataValidationTestBase {
-
+//TODO fails should be handled
     @Test(groups = {"regression", "data_validation"}, dataProvider = "researchLines")
     @Xray(test = {1404, 2410, 2411, 2413, 2414, 2953, 3677, 3842, 3843})
     public void verifyUnderlyingDataMetricsWithMixedIdentifiers(@Optional String sector, @Optional String region,

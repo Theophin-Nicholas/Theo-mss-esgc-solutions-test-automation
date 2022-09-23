@@ -54,7 +54,7 @@ public class DashboardPage extends UploadPage {
     @FindBy(xpath = "//a[text()='hide']")
     public WebElement hideLink;
 
-    @FindBy(xpath = "//div[@id='heatmapentity-test-id']")
+    @FindBy(xpath = "//*[text()='Largest Holdings']")
     public WebElement endOfPage;
 
     @FindBy(id = "button-holdings")
@@ -384,8 +384,7 @@ public class DashboardPage extends UploadPage {
     }
 
     public void selectViewMethodologies(){
-        BrowserUtils.waitForInvisibility(btnViewMethodologies, 50);
-        btnViewMethodologies.click();
+        wait.until(ExpectedConditions.visibilityOf(btnViewMethodologies)).click();
     }
 
     public boolean verifyMethodologiesPopup(){
@@ -838,13 +837,13 @@ public class DashboardPage extends UploadPage {
         switch (bundles) {
             case PHYSICAL_RISK:
                 return Arrays.asList("Operations Risk", "Market Risk", "Supply Chain Risk","Physical Risk Management");
-            //JULY, "Physical Risk Management");
+
             case TRANSITION_RISK:
                 return Arrays.asList("Temperature Alignment",
                         "Carbon Footprint", "Green Share Assessment", "Brown Share Assessment");
             case PHYSICAL_RISK_TRANSITION_RISK:
             case ALL:
-                return Arrays.asList("Operations Risk", "Market Risk", "Supply Chain Risk",
+                return Arrays.asList("Controversies", "Operations Risk", "Market Risk", "Supply Chain Risk",
                         "Physical Risk Management", "Temperature Alignment",
                         "Carbon Footprint", "Green Share Assessment", "Brown Share Assessment");
             default:

@@ -21,6 +21,21 @@ public class GlobalHeaderSidePanel extends UITestBase {
 
     }
 
+    @Test(groups = {"regression", "ui", "smoke"})
+    public void validatePortfolioSettings() {
+        ResearchLinePage researchLinePage = new ResearchLinePage();
+        BrowserUtils.wait(10);
+        researchLinePage.clickMenu();
+        researchLinePage.portfolioSettings.click();
+        assertTestCase.assertTrue(researchLinePage.validatePOrtfolioManagementHeaderIsAvailable(), "Validate Portfolio Management header is available");
+        assertTestCase.assertTrue(researchLinePage.validateUploadNewLinkIsAvailable(), "Validate Upload new link is available");
+        assertTestCase.assertTrue(researchLinePage.validateSideArrowIsAvailable(), "Validate  Arrow  is available ");
+        assertTestCase.assertTrue(researchLinePage.validatespanPortfolioNameColumnIsAvailable(), "Validate Portfolio Name Column  is available");
+        assertTestCase.assertTrue(researchLinePage.validatespanUploadDateColumnIsAvailable(), "Validate Upload Date column header is available");
+
+
+    }
+
     @Test(groups = {"regression", "ui"})
     @Xray(test = 1905)
     public void validateGlobalHeaderActions() {
@@ -89,21 +104,6 @@ public class GlobalHeaderSidePanel extends UITestBase {
         LoginPage login = new LoginPage();
 
         assertTestCase.assertTrue(login.usernameBox.isDisplayed(), "Logout successfully");
-
-    }
-
-    @Test(groups = {"regression", "ui", "smoke"})
-    public void validatePortfolioSettings() {
-        ResearchLinePage researchLinePage = new ResearchLinePage();
-        BrowserUtils.wait(10);
-        researchLinePage.clickMenu();
-        researchLinePage.portfolioSettings.click();
-        assertTestCase.assertTrue(researchLinePage.validatePOrtfolioManagementHeaderIsAvailable(), "Validate Portfolio Management header is available");
-        assertTestCase.assertTrue(researchLinePage.validateUploadNewLinkIsAvailable(), "Validate Upload new link is available");
-        assertTestCase.assertTrue(researchLinePage.validateSideArrowIsAvailable(), "Validate  Arrow  is available ");
-        assertTestCase.assertTrue(researchLinePage.validatespanPortfolioNameColumnIsAvailable(), "Validate Portfolio Name Column  is available");
-        assertTestCase.assertTrue(researchLinePage.validatespanUploadDateColumnIsAvailable(), "Validate Upload Date column header is available");
-
 
     }
 }

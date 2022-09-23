@@ -33,7 +33,7 @@ public class XrayFileImporter {
 
         try {
             String current = new java.io.File(".").getCanonicalPath();
-
+            current = current.substring(0,current.indexOf("CLIMATE"));
             //provides access to the file
             FileInputStream fileInputStream = new FileInputStream(current + "/personal-access-auth.properties");
 

@@ -518,6 +518,13 @@ public class APIController {
                 rangesAndCategories.add(new RangeAndScoreCategory("Robust", 45d, 59d, "positive"));
                 rangesAndCategories.add(new RangeAndScoreCategory("Advanced", 60d, 100d, "positive"));
                 return rangesAndCategories;
+
+            case "ESG":
+                rangesAndCategories.add(new RangeAndScoreCategory("Weak", 0d, 29.99999999d, "negative", 0d, 24.999999d));
+                rangesAndCategories.add(new RangeAndScoreCategory("Limited", 30d, 49.9999999d, "negative", 25d, 44.9999999d));
+                rangesAndCategories.add(new RangeAndScoreCategory("Robust", 50d, 59.99999d, "positive", 45d, 64.9999999d));
+                rangesAndCategories.add(new RangeAndScoreCategory("Advanced", 60d, 100d, "positive", 65d, 100d));
+                return rangesAndCategories;
         }
         return null;
     }
@@ -621,6 +628,7 @@ public class APIController {
         }
         return response;
     }
+
     public Response getPerformanceChartList(String portfolio_id, String research_line, APIFilterPayload apiFilterPayload, String performanceChart, String size) {
         Response response = null;
         try {
@@ -705,6 +713,12 @@ public class APIController {
             case "Temperature Alignment":
             case "temperaturealgmt":
                 return "temperaturealgmt";
+
+            case "ESG":
+            case "esg":
+            case "Esg":
+            case "ESG Assessment":
+                return "esgasmt";
 
         }
         return "";
@@ -797,6 +811,12 @@ public class APIController {
             case "Temperature Alignment":
             case "temperaturealgmt":
                 return "temperaturealgmt";
+
+            case "ESG":
+            case "esg":
+            case "Esg":
+            case "ESG Assessment":
+                return "esgasmt";
 
         }
         return "";
@@ -903,7 +923,8 @@ public class APIController {
                                         i1.getCOUNTRY_CODE(),
                                         i1.getWORLD_REGION(),
                                         i1.getInvestmentPercentage() + i2.getInvestmentPercentage(),
-                                        i1.getValue() + i2.getValue())))
+                                        i1.getValue() + i2.getValue(),
+                                        i1.getResearchLineIdForESGModel())))
                 .map(java.util.Optional::get)
                 .collect(Collectors.toList()).stream()
                 .sorted(compareByValueThenName)
@@ -963,7 +984,7 @@ public class APIController {
         try {
             //apiResourceMapperWithoutphysicalriskinit(research_line)
             response = configSpec()
-                   // .header("Authorization", "Bearer " + System.getProperty("token"))
+                    // .header("Authorization", "Bearer " + System.getProperty("token"))
                     .pathParam("portfolio_id", portfolio_id)
                     .body(apiHeatMapPayload)
                     .when()
@@ -982,7 +1003,7 @@ public class APIController {
 
             response = configSpec()
                     .pathParam("portfolio_id", portfolio_id)
-                    .body("{\"portfolio_name\":\""+ portfolio_name +"\"}")
+                    .body("{\"portfolio_name\":\"" + portfolio_name + "\"}")
                     .when()
                     .put(Endpoints.PUT_PORTFOLIO_NAME_UPDATE);
 
@@ -993,4 +1014,23 @@ public class APIController {
 
         return response;
     }
+
+    public Response getSearchResults(String searchItem) {
+        Response response = null;
+        try {
+
+            response = configSpec()
+
+                    .body("{search_term: " + searchItem + "}")
+                    .when()
+                    .post(Endpoints.SEARCH);
+
+
+        } catch (Exception e) {
+            System.out.println("Inside exception " + e.getMessage());
+        }
+
+        return response;
+    }
+
 }
