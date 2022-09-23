@@ -26,6 +26,12 @@ public class EMCAccountDetailsPage extends EMCBasePage {
     @FindBy (tagName = "label")
     public WebElement statusLabel;
 
+    @FindBy (xpath = "//label//input")
+    public WebElement statusCheckBox;
+
+    @FindBy (xpath = "//div[@name='subscriberType']")
+    public WebElement subscriberInput;
+
     @FindBy (name="contractStartDate")
     public WebElement startDateInput;
 
@@ -60,6 +66,9 @@ public class EMCAccountDetailsPage extends EMCBasePage {
 
     @FindBy (xpath = "//button[.='Assign applications']")
     public WebElement assignApplicationsButton;
+
+    @FindBy (xpath = "//h6[.='No Apps assigned to this account']")
+    public WebElement noApplicationMessage;
 
     @FindBy (xpath = "//li/div[1]//span")
     public List<WebElement> applicationsNamesList;
@@ -103,6 +112,9 @@ public class EMCAccountDetailsPage extends EMCBasePage {
 
     @FindBy (xpath = "//button[.='Products']")
     public WebElement productsTab;
+
+    @FindBy (xpath = "//h6[.='No Products assigned to this account']")
+    public WebElement noProductsMessage;
 
     @FindBy (xpath = "//h6[.='Products']")
     public WebElement productsTabTitle;
@@ -243,9 +255,7 @@ public class EMCAccountDetailsPage extends EMCBasePage {
 
     public void searchUser(String test) {
 
-        if (!searchInput.getAttribute("value").isEmpty())
-            while (searchInput.getAttribute("value").length() > 0)
-                searchInput.sendKeys(Keys.BACK_SPACE);
+        clear(searchInput);
         System.out.println("Searching for the user : "+test);
         searchInput.sendKeys(test);
         if(userNamesList.size()==0) {
@@ -256,7 +266,7 @@ public class EMCAccountDetailsPage extends EMCBasePage {
     }
 
     public boolean isSortedByName() {
-        List<String> names = userNamesList.stream().map(name -> name.getText()).collect(Collectors.toList());
+        List<String> names = userNamesList.stream().map(name -> name.getText().toLowerCase()).collect(Collectors.toList());
         System.out.println("names are: "+names);
         return names.stream().sorted().collect(Collectors.toList()).equals(names);
     }

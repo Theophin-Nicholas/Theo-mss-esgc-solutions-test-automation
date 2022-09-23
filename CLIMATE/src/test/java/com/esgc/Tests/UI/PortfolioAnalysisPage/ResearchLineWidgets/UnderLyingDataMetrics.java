@@ -20,7 +20,7 @@ public class UnderLyingDataMetrics extends UITestBase {
     @Test(groups = {"regression", "ui", "smoke"},
             description = "Verify if underlying data metrics is available",
             dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
-    @Xray(test = {416, 417, 1323, 1324, 3413, 2934, 2939})
+    @Xray(test = {416, 417, 1323, 1324, 3413, 2934, 2939,8943,8950,5662})
     public void verifyIfUnderlyingDataMetricsIsAvailable(String page) {
         if (page.equals("Physical Risk Management") || page.equals("Temperature Alignment")) {
             throw new SkipException(page+" doesn't have Underlying Data Metrics");
@@ -33,7 +33,7 @@ public class UnderLyingDataMetrics extends UITestBase {
 
 
             test.info("Navigated to " + page + " Page");
-
+           // researchLinePage.checkIfUnderLyingDataMetricsIsAvailable(page);
             assertTestCase.assertTrue(researchLinePage.checkIfUnderLyingDataMetricsIsAvailable(page), "Underlying Data Metrics Verified");
             test.pass("User is on " + page + " Page");
         }
@@ -75,7 +75,7 @@ public class UnderLyingDataMetrics extends UITestBase {
 
     @Test(groups = {"regression", "ui"},
             description = "Verify if underlying data metrics is available for Brown Share Assessment")
-    @Xray(test = {2761,5688})
+    @Xray(test = {2761,5688,2939})
     public void verifyTooltipIsDisplayedOnHoverForUnderlyingDataMetrics_BrownShare() {
         DashboardPage dashboardPage = new DashboardPage();
         dashboardPage.selectSamplePortfolioFromPortfolioSelectionModal();
@@ -84,6 +84,7 @@ public class UnderLyingDataMetrics extends UITestBase {
         researchLinePage.selectSamplePortfolioFromPortfolioSelectionModal();
         researchLinePage.waitForDataLoadCompletion();
         assertTestCase.assertTrue(researchLinePage.checkIfUnderLyingDataMetricsIsAvailable("Brown Share Assessment"), "Underlying Data Metrics Verified");
+        researchLinePage.checkIfTooltipSIsDisplayedForBrownShareDataMetrics();
         assertTestCase.assertTrue(researchLinePage.checkIfTooltipSIsDisplayedForBrownShareDataMetrics(), "Tool tip was displayed on hovering");
 
     }
