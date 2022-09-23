@@ -351,13 +351,13 @@ public class HeatMap extends DataValidationTestBase {
                     double max2 = rangeAndCategory2.getMax();
                     List<ResearchLineIdentifier> companiesInCategory2 = null;
                     if (researchLine2.equals("ESG")) {
-                        companiesInCategory2 = portfolioToUpload.stream()
+                        companiesInCategory2 = portfolioForResearchLine2.stream()
                                 .filter(e -> e.getResearchLineIdForESGModel()!=null
                                         && e.getResearchLineIdForESGModel().equals("1008"))
                                 .filter(e -> e.getSCORE() >= min2 && e.getSCORE() <= max2)
                                 .collect(Collectors.toList());
 
-                        companiesInCategory2.addAll(portfolioToUpload.stream()
+                        companiesInCategory2.addAll(portfolioForResearchLine2.stream()
                                 .filter(e -> e.getResearchLineIdForESGModel()!=null
                                         && e.getResearchLineIdForESGModel().equals("1015"))
                                 .filter(e -> e.getSCORE() >= rangeAndCategory2.getMin2() && e.getSCORE() <= rangeAndCategory2.getMax2())
