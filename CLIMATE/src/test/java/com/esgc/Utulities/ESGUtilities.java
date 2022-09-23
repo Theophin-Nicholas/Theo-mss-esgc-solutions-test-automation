@@ -5,7 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class ESGUtilities {
-    public String getESGPillarsCategory(String researchLine, int score){
+    public static String getESGPillarsCategory(String researchLine, int score){
         score = (int) Math.floor(score);
         if(researchLine.equals("1008")){
             if (score >= 0 && score <= 29) return "Weak";
@@ -19,6 +19,21 @@ public class ESGUtilities {
             else if (score >= 65 && score <= 100) return "Advanced";
         }
         return "";
+    }
+    public static int getESGPillarsScale(String researchLine, int score){
+        score = (int) Math.floor(score);
+        if(researchLine.equals("1008")){
+            if (score >= 0 && score <= 29) return 1;
+            else if (score >= 30 && score <= 49) return 2;
+            else if (score >= 50 && score <= 59) return 3;
+            else if (score >= 60 && score <= 100) return 4;
+        } else if (researchLine.equals("1015")){
+            if (score >= 0 && score <= 24) return 1;
+            else if (score >= 25 && score <= 44) return 2;
+            else if (score >= 45 && score <= 64) return 3;
+            else if (score >= 65 && score <= 100) return 4;
+        }
+        return 0;
     }
     public String getESGScoreCategory(String researchLine, int score){
         score = (int) Math.floor(score);

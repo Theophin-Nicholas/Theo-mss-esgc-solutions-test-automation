@@ -29,6 +29,7 @@ public class DashboardHeatMapEntityListTests extends UITestBase {
             dashboardPage.selectPortfolioByNameFromPortfolioSelectionModal("Sample Portfolio");
         //Navigate to the heatmap section
         BrowserUtils.scrollTo(dashboardPage.heatMapResearchLines.get(0));
+        BrowserUtils.wait(2);
         //Verify the entity list - Entity list should be displaying no records
         assertTestCase.assertTrue(dashboardPage.heatMapNoEntityWidget.isDisplayed(),
                 "Verified the widget doesn't show anything before a cell is selected.");
@@ -247,26 +248,31 @@ public class DashboardHeatMapEntityListTests extends UITestBase {
                         assertTestCase.assertEquals(dashboardPage.supplyChainRiskDescription.getText(), Descriptions.SUPPLY_CHAIN_RISK_DESCRIPTION_HEATMAP);
                     break;
                 case "Physical Risk Management":
+                    BrowserUtils.wait(5);
                     assertTestCase.assertEquals(dashboardPage.heatMapYAxisIndicators.get(0).getText(), "Weak", "Physical Risk Management verified");
                     assertTestCase.assertEquals(dashboardPage.heatMapYAxisIndicators.get(3).getText(), "Advanced", "Physical Risk Management verified");
                     assertTestCase.assertEquals(dashboardPage.physicalRiskManagementDescription.getText(), Descriptions.PHYSICAL_RISK_MANAGEMENT_DESCRIPTION_HEATMAP);
                     break;
                 case "Temperature Alignment":
+                    BrowserUtils.wait(5);
                     assertTestCase.assertEquals(dashboardPage.heatMapYAxisIndicators.get(0).getText(), "Above 2°C", "Temperature Alignment verified");
                     assertTestCase.assertEquals(dashboardPage.heatMapYAxisIndicators.get(4).getText(), "No Info", "Temperature Alignment verfied");
                     assertTestCase.assertEquals(dashboardPage.temperatureAlignmentDescription.getText(), Descriptions.TEMPERATURE_ALIGNMENTS_DESCRIPTION_HEATMAP);
                     break;
                 case "Carbon Footprint":
+                    BrowserUtils.wait(8);
                     assertTestCase.assertEquals(dashboardPage.heatMapYAxisIndicators.get(0).getText(), "Intense", "Carbon Footprint verified");
                     assertTestCase.assertEquals(dashboardPage.heatMapYAxisIndicators.get(3).getText(), "Moderate", "Carbon Footprint verified");
                     assertTestCase.assertEquals(dashboardPage.carbonFootprintDescription.getText(), Descriptions.CARBON_FOOTPRINT_DESCRIPTION_HEATMAP);
                     break;
                 case "Green Share Assessment":
+                    BrowserUtils.wait(8);
                     assertTestCase.assertEquals(dashboardPage.heatMapYAxisIndicators.get(0).getText(), "None", "Green Share Assessment verified");
                     assertTestCase.assertEquals(dashboardPage.heatMapYAxisIndicators.get(3).getText(), "Major", "Green Share Assessment verified");
                     assertTestCase.assertEquals(dashboardPage.greenShareAssessmentDescription.getText(), Descriptions.GREEN_SHARE_ASSESSMENT_DESCRIPTION_HEATMAP);
                     break;
                 case "Brown Share Assessment":
+                    BrowserUtils.wait(8);
                     assertTestCase.assertEquals(dashboardPage.heatMapYAxisIndicators.get(0).getText(), "20-100%", "Brown Share Assessment verified");
                     assertTestCase.assertEquals(dashboardPage.heatMapYAxisIndicators.get(2).getText(), "0%", "Brown Share Assessment verified");
                     assertTestCase.assertEquals(dashboardPage.brownShareAssessmentDescription.getText(), Descriptions.BROWN_SHARE_ASSESSMENT_DESCRIPTION_HEATMAP);
@@ -307,7 +313,7 @@ public class DashboardHeatMapEntityListTests extends UITestBase {
         BrowserUtils.scrollTo(dashboardPage.heatMapResearchLines.get(0));
         for (int i = 0; i < dashboardPage.heatMapResearchLines.size(); i++) {
             dashboardPage.selectOneResearchLine(i);
-            BrowserUtils.wait(1);
+            BrowserUtils.wait(5);
             String color = Color.fromString(dashboardPage.heatMapResearchLines.get(i).getCssValue("background-color")).asHex();
             String researchLine = dashboardPage.heatMapResearchLines.get(i).getText();
             researchLine = researchLine.substring(researchLine.indexOf(":") + 1).trim();
@@ -317,7 +323,7 @@ public class DashboardHeatMapEntityListTests extends UITestBase {
             APIHeatMapSinglePayload apiHeatMapSinglePayload = new APIHeatMapSinglePayload("all", "all", "06", "2022", apiController.apiResourceMapperWithoutphysicalriskinit(researchLine.trim()));
             String portfolio_id = "00000000-0000-0000-0000-000000000000";
             Response response = apiController.getHeatMapResponse(portfolio_id, researchLine, apiHeatMapSinglePayload);
-            List<APIHeatMapResponse> list = List.of(response.getBody().as(APIHeatMapResponse[].class));
+            List<APIHeatMapResponse> list = Arrays.asList(response.getBody().as(APIHeatMapResponse[].class));
             System.out.println("dashboardPage.heatMapYAxisIndicatorsAPI.size() = " + dashboardPage.heatMapYAxisIndicatorsAPI.size());
             switch (researchLine) {
                 case "Operations Risk":
