@@ -5,7 +5,7 @@ import com.esgc.APIModels.UpdatesModel;
 import com.esgc.Controllers.APIController;
 import com.esgc.Tests.TestBases.APITestBase;
 import com.esgc.Utilities.Xray;
-import com.esgc.Utulities.APIUtilities;
+import com.esgc.Utilities.APIUtilities;
 import io.restassured.response.Response;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Test;
