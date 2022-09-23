@@ -320,6 +320,9 @@ public abstract class PageBase {
     @FindBy(xpath = "//div[@style = 'display: flex; cursor: pointer; margin-right: 14px; margin-top: 8px;']")
     public WebElement searchIconPortfolioPage;
 
+    @FindBy(xpath = "//div[@style = 'display: flex; cursor: pointer; margin-right: 14px; margin-top: 8px;']")
+    List<WebElement> searchIconPortfolioPages;
+
     @FindBy(id = "platform-search-test-id")
     public WebElement searchBarOfPortfolio;
 
@@ -717,7 +720,7 @@ public abstract class PageBase {
             String pageXpath = "//ul[@id='portfolioanalysis-reportnavigation-test-id']//span[contains(text(),'" + page + "')]";
             WebElement pageElement = Driver.getDriver().findElement(By.xpath(pageXpath));
             wait.until(ExpectedConditions.elementToBeClickable(pageElement)).click();
-        } catch (Exception e){
+        } catch (Exception e) {
             System.out.println("Couldn't find " + page);
             Actions a = new Actions(Driver.getDriver());
             a.sendKeys(Keys.ESCAPE).build().perform();
@@ -935,7 +938,7 @@ public abstract class PageBase {
         //select random option from picked dropdown
         try {
             actions.moveToElement(options.get(randomIndex)).pause(1000).click(options.get(randomIndex)).pause(3000).build().perform();
-           // return options.get(randomIndex).getText();
+            // return options.get(randomIndex).getText();
             return "Success";
         } catch (Exception e) {
             System.out.println("Could not click option under dropdown");
@@ -1672,7 +1675,7 @@ public abstract class PageBase {
     }
 
     public void waitForDataLoadCompletion() {
-        BrowserUtils.waitForInvisibility(allLoadMasks, 3);
+        BrowserUtils.waitForInvisibility(allLoadMasks, 30);
         // wait.until(ExpectedConditions.invisibilityOfAllElements(allLoadMasks));
     }
 
@@ -1785,9 +1788,7 @@ public abstract class PageBase {
                 case "MAJOR":
                     return "#39A885";
             }
-        }
-
-        else if (researchLine.toUpperCase().equals("ESG")) {
+        } else if (researchLine.toUpperCase().equals("ESG")) {
             switch (scoreCategory.toUpperCase()) {
                 case "WEAK":
                     return "#DD581D";
@@ -1798,8 +1799,7 @@ public abstract class PageBase {
                 case "ADVANCED":
                     return "#DBE5A3";
             }
-        }
-        else {
+        } else {
             switch (scoreCategory) {
                 case "WEAK":
                     return "#DFA124";
@@ -2060,9 +2060,13 @@ public abstract class PageBase {
             System.out.println(text);
             Driver.getDriver().findElement(By.xpath("//header[@id='prop-search']/following-sibling::*/DIV/div/div/div[3]")).click();
             //BrowserUtils.isElementVisible(Driver.getDriver().findElement(By.xpath("//header[@id='prop-search']/following-sibling::*/DIV/div/div/div[3]")),3);
-            searchIconPortfolioPage.click();
+            //searchIconPortfolioPages.get(0).click();
             //return isSearchBoxAppearonDashboardPage();
-            return isSearchIconDisplayed();
+            List<WebElement> check = Driver.getDriver().findElements(By.xpath("//input[@id='platform-search-test-id']"));
+            if (check.size() == 0)
+                return false;
+            else
+                return true;
         } catch (Exception e) {
             e.printStackTrace();
             return false;
@@ -2492,7 +2496,7 @@ public abstract class PageBase {
     public void selectPortfolio(String portfolioName) {
         try {
             Driver.getDriver().findElement(By.xpath("//span[@title='" + portfolioName + "']")).click();
-            System.out.println("Portfolio found : "+portfolioName);
+            System.out.println("Portfolio found : " + portfolioName);
         } catch (Exception e) {
             System.out.println("Could not find the Portfolio");
             return;
@@ -2516,7 +2520,7 @@ public abstract class PageBase {
 
     public void validatePortfolioNameNotChangedAfterUpdateAndClickOutside(String OriginalPortFolioName) {
         updatePortfolio(OriginalPortFolioName + "111");
-       // BrowserUtils.wait(10);
+        // BrowserUtils.wait(10);
         closeMenuByClickingOutSide();
         clickMenu();
         portfolioSettings.click();
