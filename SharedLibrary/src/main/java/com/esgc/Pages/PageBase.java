@@ -711,11 +711,17 @@ public abstract class PageBase {
      */
     public void selectResearchLineFromDropdown(String page) {
         // if(!BrowserUtils.isElementVisible(researchLineOptions,3))
-        clickResearchLineDropdown();
-        // Dynamic xpath - Helps us to pass page names "Operations Risk", "Market Risk"
-        String pageXpath = "//ul[@id='portfolioanalysis-reportnavigation-test-id']//span[contains(text(),'" + page + "')]";
-        WebElement pageElement = Driver.getDriver().findElement(By.xpath(pageXpath));
-        wait.until(ExpectedConditions.elementToBeClickable(pageElement)).click();
+        try {
+            clickResearchLineDropdown();
+            // Dynamic xpath - Helps us to pass page names "Operations Risk", "Market Risk"
+            String pageXpath = "//ul[@id='portfolioanalysis-reportnavigation-test-id']//span[contains(text(),'" + page + "')]";
+            WebElement pageElement = Driver.getDriver().findElement(By.xpath(pageXpath));
+            wait.until(ExpectedConditions.elementToBeClickable(pageElement)).click();
+        } catch (Exception e){
+            System.out.println("Couldn't find " + page);
+            Actions a = new Actions(Driver.getDriver());
+            a.sendKeys(Keys.ESCAPE).build().perform();
+        }
     }
 
 
