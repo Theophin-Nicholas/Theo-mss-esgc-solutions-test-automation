@@ -331,6 +331,27 @@ public class DashboardQueries {
         return getQueryResultMap(query);
     }
 
+    public List<Map<String, Object>> getPhysicalRiskManagementInfo(String portfolioId) {
+        String queryForLatestMonthAndYear = "select * from physical_risk_management order by year desc, month desc limit 1;";
+        Map<String,Object> monthAndYear = getQueryResultMap(queryForLatestMonthAndYear).get(0);
+        String query = "select * from DF_TARGET.DF_PORTFOLIO df\n" +
+                "left JOIN DF_TARGET.physical_risk_management prm on df.BVD9_NUMBER = prm.bvd9_number " +
+                "AND prm.year='"+monthAndYear.get("YEAR").toString()+"' and prm.month='"+monthAndYear.get("MONTH").toString()+"' \n" +
+                "where df.portfolio_id='"+portfolioId+"' and prm.SCORE_CATEGORY is not null";
+        System.out.println("query = " + query);
+        return getQueryResultMap(query);
+    }
+
+    public List<Map<String, Object>> getEsgScoresInfo(String portfolioId) {
+        String queryForLatestMonthAndYear = "select * from VW_DASHBOARD_CLIMATE_ENTITY_DATA_EXPORT order by year desc, month desc limit 1;";
+        Map<String,Object> monthAndYear = getQueryResultMap(queryForLatestMonthAndYear).get(0);
+        String query = "SELECT * FROM VW_DASHBOARD_CLIMATE_ENTITY_DATA_EXPORT\n" +
+                "WHERE PORTFOLIO_ID = '"+portfolioId+"'\n" +
+                "and YEAR = '"+monthAndYear.get("YEAR").toString()+"' AND MONTH = '"+monthAndYear.get("MONTH").toString()+"'";
+        System.out.println("query = " + query);
+        return getQueryResultMap(query);
+    }
+
     public List<Map<String, Object>> getPhysicalRiskHazardForPortfolio(String portfolioId) {
         LocalDate localDate = LocalDate.now();
         String query = " WITH p AS (SELECT DF_1.PORTFOLIO_ID,DF_1.COMPANY_NAME, DF_1.BVD9_NUMBER,SUM(DF_1.VALUE) AS VALUE, DF_1.SECTOR,DF_1.REGION, DF_1.AS_OF_DATE,listagg(SEC_ID,',') WITHIN GROUP (order by BVD9_NUMBER desc) AS ISIN_LIST FROM \"DF_TARGET\".\"DF_PORTFOLIO\" DF_1 WHERE\n" +

@@ -16,7 +16,7 @@ import static org.hamcrest.Matchers.*;
 public class LeadersAndLaggards extends APITestBase {
 
     @Test(groups = {"api", "regression"}, dataProvider = "API Research Lines")
-    @Xray(test = {645, 646})
+    @Xray(test = {645, 646,9875})
     public void leadersAndLaggards_Success(@Optional String researchLine) {
         APIController apiController = new APIController();
 

@@ -1,6 +1,7 @@
 package com.esgc.Pages;
 
 import com.esgc.Utilities.BrowserUtils;
+import com.esgc.Utilities.Driver;
 import com.esgc.Utilities.Environment;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
@@ -31,7 +32,7 @@ public class LoginPageEMC extends PageBase {
     @FindBy(id = "okta-signin-password")
     public WebElement PTpasswordBox;
 
-    @FindBy(xpath = "//*[@name=\"remember\"]")
+    @FindBy(xpath = "//*[@name='remember']")
     public WebElement rememberMeCheckBox;
 
     @FindBy(xpath = "//*[text()='Remember me']")
@@ -62,24 +63,27 @@ public class LoginPageEMC extends PageBase {
     @FindBy(xpath = "//p[text()='Please enter a password']")
     public WebElement BlankPasswordErrorMsg;
 
+    @FindBy(xpath = "//p[text()='User is not assigned to the client application.']")
+    public WebElement UserNotAssignedApplicationErrorMsg;
+
 
     // =================== Failed Login Attempt - Error Message =======================
 
-    @FindBy(xpath = "//div[@data-se='o-form-error-container']")
+    @FindBy(xpath = "//p[starts-with(.,'We found some errors.')]")
     public WebElement warningMsg;//We found some errors. Please review the form and make corrections.
 
     /*
     If you try to log in with blank username this message appears:
     This field cannot be left blank error message
      */
-    @FindBy(id = "input-container-error9")
+    @FindBy(xpath = "//p[.='This field cannot be left blank']")
     public WebElement blankUsernameErrorMessage;
 
     /*
    If you try to log in with blank password this message appears:
     Please enter a password
     */
-    @FindBy(id = "input-container-error13")
+    @FindBy(xpath = "//p[.='Please enter a password']")
     public WebElement blankPasswordErrorMessage;
 
 
@@ -128,7 +132,7 @@ public class LoginPageEMC extends PageBase {
         if (!termsAndConditionsCheckBox.isSelected())
             wait.until(ExpectedConditions.visibilityOf(termsAndConditionsLabel)).click();
         wait.until(ExpectedConditions.visibilityOf(loginButton)).click();
-
+        System.out.println("Login with params");
     }
 
     /**
@@ -145,9 +149,8 @@ public class LoginPageEMC extends PageBase {
 
     public void loginEMCInternal() {
         wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.INTERNAL_USER_USERNAME, Keys.ENTER);
-        wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.INTERNAL_USER_PASSWORD, Keys.ENTER);
-
-        System.out.println("Logged in as Internal User");
+        //wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.INTERNAL_USER_PASSWORD, Keys.ENTER);
+        System.out.println("Logged in to Prod with Authorized User");
     }
     public void loginWithWrongPass() {
         wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.INTERNAL_USER_USERNAME, Keys.ENTER);
@@ -164,6 +167,14 @@ public class LoginPageEMC extends PageBase {
         wait.until(ExpectedConditions.visibilityOf(menu));
         BrowserUtils.clickWithJS(menu);
         logout.click();
+    }
+
+    public void loginEMCWithParams(String userName, String password) {
+        wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(userName, Keys.ENTER);
+        BrowserUtils.wait(2);
+        wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(password);
+        wait.until(ExpectedConditions.visibilityOf(loginButton)).click();
+
     }
 }
 
