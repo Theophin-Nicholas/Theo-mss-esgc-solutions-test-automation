@@ -12,7 +12,7 @@ import java.util.List;
 
 public class GeographicRiskMap extends DashboardUITestBase {
    //Todo there is random fails due to clicking on the country."Holdings Title Verification"
-    @Test(groups = {"ui", "dashboard", "smoke", "regression"},
+    @Test(enabled = false, groups = {"ui", "dashboard", "smoke", "regression"},
             dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
     @Xray(test = {1932, 4548, 7565, })
     public void verifyGeographicRiskMapIsDisplayed(String researchLine) {
@@ -46,7 +46,7 @@ public class GeographicRiskMap extends DashboardUITestBase {
 
     }
 
-    @Test(groups = {"ui", "dashboard", "smoke", "regression"},
+    @Test(enabled = false, groups = {"ui", "dashboard", "smoke", "regression"},
             dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
     @Xray(test = {4559, 6309, 6310, 6311})
     public void verifyGeographicRiskMapRedirectLink(String researchLine) {
