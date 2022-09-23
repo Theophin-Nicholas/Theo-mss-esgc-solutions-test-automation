@@ -730,4 +730,96 @@ public class PortfolioQueries {
         return getQueryResultMap(query);
 
     }
+
+    public List<List<Object>> getPortfolioCompaniesFromDB() {
+        String query1 = "select company_name, value from df_portfolio\n" +
+                "where portfolio_id='00000000-0000-0000-0000-000000000000'\n" +
+                "and company_name is not null order by value desc";
+        return getQueryResultList(query1);
+    }
+    public List<List<Object>>  getPortfolioCompaniesTotalValuesFromDB() {
+        String query1 = "select  sum(value)\n" +
+                "from df_portfolio df\n" +
+                "where portfolio_id='00000000-0000-0000-0000-000000000000'";
+        return getQueryResultList(query1);
+    }
+
+    public List<ESGLeaderANDLaggers> getESGLeadersAndLaggersData(String portfolioid, String yearmonth) {
+       /* String query = " with p as (SELECT bvd9_number,region, sector, SUM(value) as invvalue, COUNT(*) OVER() total_companies, " +
+                "SUM(SUM(value)) OVER() AS total_value FROM df_target.df_portfolio WHERE 1=1 " +
+                "AND portfolio_id = '" + portfolioid +"'" +
+                "GROUP BY bvd9_number, region, sector ) ,esg as (select eos.*,ect.research_line_id as rl from entity_coverage_tracking ect  " +
+                "join ESG_OVERALL_SCORES eos on ect.orbis_id=eos.orbis_id and data_type = 'esg_pillar_score'  and sub_category = 'ESG'" +
+                "and eos.year || eos.month <= '" + yearmonth +"'" +
+                "where  coverage_status = 'Published' and publish = 'yes' " +
+                "qualify row_number() OVER (PARTITION BY eos.orbis_id ORDER BY eos.year DESC, eos.month DESC, eos.scored_date DESC) =1),q " +
+                "as(select p.bvd9_number,eem.entity_proper_name AS company_name, round(esg.VALUE,0) as score," +
+                "round((100*(p.invvalue/p.total_value)),2) AS investment_pct, esg.rl from p    " +
+                "left join esg on p.bvd9_number=esg.orbis_id " +
+                "LEFT JOIN DF_TARGET.ESG_ENTITY_MASTER eem ON (p.bvd9_number = eem.orbis_id AND eem.ENTITY_STATUS = 'Active')" +
+                "where 1=1 and SUB_CATEGORY = 'ESG' QUALIFY row_number() over(partition by company_name ORDER BY esg.VALUE desc) = 1 " +
+                "ORDER BY esg.VALUE desc, investment_pct desc,company_name) " +
+                "select q.bvd9_number,q.company_name, RANK() OVER(ORDER BY q.score desc) AS Rank, q.investment_pct, q.score, q.rl as Scoring_RLID," +
+                "case when q.rl=1008 then case when (score >= 0 and score <= 29) then 1 " +
+                "when (score >= 30 and score <= 49) then 2" +
+                "when (score >= 50 and score <= 59) then 3 " +
+                "when (score >= 60 and score <= 100) then 4 end " +
+                "when q.rl=1015 then " +
+                "case when (score >= 0 and score <= 24) then 1 " +
+                "when (score >= 25 and score <= 44) then 2 " +
+                "when (score >= 45 and score <= 64) then 3 " +
+                "when (score >= 65 and score <= 100) then 4 " +
+                "end  end as scale " +
+                "from q ORDER BY scale desc, q.score desc, q.investment_pct desc,q.company_name ";*/
+
+        String query = "with p as (SELECT bvd9_number, COMPANY_NAME " +
+                ",region, sector, SUM(value) as invvalue, COUNT(*) OVER() total_companies, SUM(SUM(value)) OVER() AS total_value " +
+                "FROM df_target.df_portfolio WHERE 1=1 AND portfolio_id = '" + portfolioid +"' " +
+                "  GROUP BY bvd9_number, COMPANY_NAME, region, sector), " +
+                "e as (select p.*,ect.RESEARCH_LINE_ID, floor(eos.VALUE) as score, METHODOLOGY_VERSION " +
+                ",case " +
+                "when ect.RESEARCH_LINE_ID=1008 then " +
+                "case " +
+                "when (score < 30) then 1 " +
+                "when (score < 50) then 2 " +
+                "when (score < 60) then 3 " +
+                "when (score >= 60) then 4 " +
+                "end " +
+                "when ect.RESEARCH_LINE_ID=1015 then " +
+                "case " +
+                "when (score < 25) then 1 " +
+                "when (score < 45 ) then 2 " +
+                "when (score < 65) then 3 " +
+                "when (score >= 65) then 4 " +
+                "end " +
+                "end as scale " +
+                "from p " +
+                "join entity_coverage_tracking ect on ect.orbis_id=p.bvd9_number and coverage_status = 'Published' and publish = 'yes' " +
+                "left join ESG_OVERALL_SCORES eos on ect.orbis_id=eos.orbis_id and data_type in ('esg_pillar_score' ) and sub_category = 'ESG' " +
+                "where ect.RESEARCH_LINE_ID in (1008,1015) and score and eos.year || eos.month <= '" + yearmonth +"' " +
+                "qualify row_number() OVER (PARTITION BY eos.orbis_id ORDER BY eos.year DESC, eos.month DESC, eos.scored_date DESC) =1) " +
+                "select BVD9_Number, Company_name, RANK() OVER(ORDER BY Score desc NULLS LAST) AS Rank, " +
+                "round((100*(e.invvalue/e.total_value)),6) AS investment_pct, SCORE,RESEARCH_LINE_ID as SCORING_RLID, Scale, METHODOLOGY_VERSION from e " +
+                "order by scale desc, Score desc, INVESTMENT_PCT desc, Company_name";
+
+        List<ESGLeaderANDLaggers> score = new ArrayList<>();
+        try{
+        for (Map<String, Object> rs : getQueryResultMap(query)) {
+            ESGLeaderANDLaggers entity= new ESGLeaderANDLaggers();
+            entity.setBVD9_NUMBER(rs.get("BVD9_NUMBER").toString());
+            if (rs.get("COMPANY_NAME")!=null) entity.setCOMPANY_NAME(rs.get("COMPANY_NAME").toString()); else entity.setCOMPANY_NAME("");
+            entity.setRANK(Integer.valueOf(rs.get("RANK").toString()));
+            entity.setInvestmentPercentage(Double.valueOf(rs.get("INVESTMENT_PCT").toString()));
+            entity.setSCORE((int) Math.round(Double.valueOf(rs.get("SCORE").toString())));
+            entity.setSCORING_RLID(Integer.valueOf(rs.get("SCORING_RLID").toString()));
+            entity.setScale(Integer.valueOf(rs.get("SCALE").toString()));
+            entity.setMETHODOLOGY_VERSION((rs.get("METHODOLOGY_VERSION").toString()));
+            score.add(entity);
+        }}catch(Exception e){
+            System.out.println(e.toString());
+            System.out.println("Failed at recored Number " +  score.size());
+        }
+
+        return score;
+    }
 }

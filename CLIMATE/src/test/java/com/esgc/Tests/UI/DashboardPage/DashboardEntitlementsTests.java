@@ -4,6 +4,7 @@ import com.esgc.Pages.DashboardPage;
 import com.esgc.Pages.LoginPage;
 import com.esgc.TestBase.DataProviderClass;
 import com.esgc.Tests.TestBases.DashboardUITestBase;
+import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.EntitlementsBundles;
 import com.esgc.Utilities.Xray;
 import org.testng.annotations.Optional;
@@ -36,7 +37,7 @@ public class DashboardEntitlementsTests extends DashboardUITestBase {
 
         List<String> expectedSummaryHeaderBundleTitles = dashboardPage.getExpectedListOfSummaryHeaderBundleNames(bundleName);
         List<String> actualSummaryHeaderBundleTitles = dashboardPage.getSummaryHeadersBundleNames();
-
+        BrowserUtils.wait(3);
         assertTestCase.assertEquals(actualSummaryHeaderBundleTitles,
                 expectedSummaryHeaderBundleTitles, "Validating Summary Header Bundle Titles", testCase);
 
@@ -80,7 +81,6 @@ public class DashboardEntitlementsTests extends DashboardUITestBase {
                 dashboardPage.getExpectedListOfHeatMapResearchLines(bundleName),
                 "Validating Heat Map Research Lines", testCase);
     }
-
 
 
 }
