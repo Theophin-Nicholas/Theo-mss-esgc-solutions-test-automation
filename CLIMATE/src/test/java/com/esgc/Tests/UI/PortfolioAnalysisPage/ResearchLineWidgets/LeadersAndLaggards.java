@@ -20,7 +20,7 @@ public class LeadersAndLaggards extends UITestBase {
     @Test(groups = {"regression", "ui", "smoke"},
             description = "Verify if Leaders and Laggards Table is Displayed as Expected",
             dataProviderClass = DataProviderClass.class,dataProvider = "Research Lines")
-    @Xray(test = {389})
+    @Xray(test = {389, 8433,9868})
     public void verifyLeadersAndLaggardsTableUI(String page) {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         if ( page.equals("Temperature Alignment")) {
@@ -35,8 +35,9 @@ public class LeadersAndLaggards extends UITestBase {
 
         Assert.assertTrue(researchLinePage.checkIfPageTitleIsDisplayed(page), "check if page title is displayed");
         test.pass("User is on " + page + " Page");
+        if (!page.equals("ESG Assessments"))
+            assertTestCase.assertTrue(researchLinePage.checkifWidgetTitleIsDisplayedWithID(title, commonWidgetsID));
 
-        Assert.assertTrue(researchLinePage.checkifWidgetTitleIsDisplayedWithID(title, commonWidgetsID));
         assertTestCase.assertTrue(researchLinePage.checkIfLeadersAndLaggardsTableDisplayed(commonWidgetsID), "Leaders & Laggards verified", 381, 550, 1256);
 
         test.pass(title + " Table/Chart displayed");
@@ -52,7 +53,7 @@ public class LeadersAndLaggards extends UITestBase {
     @Test(groups = {"regression", "ui", "smoke"},
             description = "Verify if More companies ranked in link present",
             dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
-    @Xray(test = {442, 543, 537, 1275, 2133, 2444, 2880, 3096, 3846, 1263, 1275, 6654 })
+    @Xray(test = {442, 543, 537, 1275, 2133, 2444, 2880, 3096, 3846, 1263, 1275, 6654, 8435 })
     public void verifyMoreRankedCompaniesLink(String page) {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         if ( page.equals("Temperature Alignment")) {
@@ -97,4 +98,40 @@ public class LeadersAndLaggards extends UITestBase {
         assertTestCase.assertTrue(researchLinePage.VerifyIfScoreLogicIsCorrectForLaggards(page), "Entities were not ordered in correct order for Laggards");
 
     }
+
+
+    @Test(groups = {"regression", "ui", "smoke"},
+            description = "Verify if More companies ranked in link present",
+            dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
+    @Xray(test = {8434})
+    public void verifyClickOnEntitesandVerifyEntityPage(String page) {
+        ResearchLinePage researchLinePage = new ResearchLinePage();
+        if ( page.equals("Temperature Alignment")) {
+            throw new SkipException("Leaders & Laggards is not ready to test in " + page);
+        }
+        researchLinePage.navigateToResearchLine(page);
+        test.info("Navigated to Research Line page");
+
+        researchLinePage.selectSamplePortfolioFromPortfolioSelectionModal();
+        test.info("Selected Sample Portfolio");
+
+        //researchLinePage.selectAnAsOfDateWhereUpdatesAreAvailable("April 2021");
+        if (!page.equals("Carbon Footprint")) {
+            Assert.assertTrue(researchLinePage.checkLLeadersAndLaggardsEntityLinks(page));
+
+        }
+        test.info("Verified that the More companies ranked in link is working as expected");
+    }
+    @Test(groups = {"regression", "ui", "smoke"})
+    @Xray(test = {9871})
+    public void VerifyESGLeadersAndLaggersTable() {
+        ResearchLinePage researchLinePage = new ResearchLinePage();
+        researchLinePage.navigateToResearchLine("ESG Assessments");
+        researchLinePage.selectSamplePortfolioFromPortfolioSelectionModal();
+        test.info("Selected Sample Portfolio");
+        BrowserUtils.scrollTo(researchLinePage.LeadersAndLaggardsTable);
+        researchLinePage.validateEsgLeadersANDlaggersScorValuese();
+        researchLinePage.validateEsgLeadersANDlaggersModelvalues();
+    }
+
 }

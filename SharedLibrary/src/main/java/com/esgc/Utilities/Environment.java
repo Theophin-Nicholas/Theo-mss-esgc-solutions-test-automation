@@ -60,6 +60,7 @@ public class Environment {
     public static final String USER_WITH_OUT_EXPORT_ENTITLEMENT_PASSWORD;
     public static final String USER_WITH_EXPORT_ENTITLEMENT_USERNAME;
     public static final String USER_WITH_EXPORT_ENTITLEMENT_PASSWORD;
+    public static final String QA_TEST_ACCOUNT_ID;
 
 
     static String getPropertiesPath() {
@@ -130,5 +131,6 @@ public class Environment {
         USER_WITH_OUT_EXPORT_ENTITLEMENT_PASSWORD = properties.getProperty("no_export_bundle_password");
         OrbisId = properties.getProperty("orbis_id");
         p3OrbisId = properties.getProperty("p3Orbisid");
+        QA_TEST_ACCOUNT_ID = properties.getProperty("account_id");
     }
 }

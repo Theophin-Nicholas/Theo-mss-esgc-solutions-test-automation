@@ -1,10 +1,10 @@
 package com.esgc.Tests.DataValidation.PortfolioAnalysisPage;
 
-import com.esgc.APIModels.APIFilterPayload;
-import com.esgc.APIModels.PortfolioDistribution;
-import com.esgc.APIModels.RangeAndScoreCategory;
+import com.esgc.APIModels.*;
+import com.esgc.DBModels.ESGLeaderANDLaggers;
 import com.esgc.DBModels.ResearchLineIdentifier;
 import com.esgc.Tests.TestBases.DataValidationTestBase;
+import com.esgc.Utilities.PortfolioUtilities;
 import com.esgc.Utulities.APIUtilities;
 import com.esgc.Utilities.Xray;
 import io.restassured.response.Response;
@@ -13,8 +13,7 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Test;
 
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -134,6 +133,58 @@ public class PortfolioDistributionTests extends DataValidationTestBase {
         assertTestCase.assertEquals(total, countOfDistinctCompaniesInPortfolio, "Validation total count of companies"); // "Total count in Distribution is matched with expectation");
         assertTestCase.assertEquals(coverageInvestmentPercentage, (int) Math.round(totalInvestmentPct), "portfolio_id" + portfolioId + " Validating total sum of investment percentage"); // "Total % investment in Distribution has summed up to 100%");
 
+    }
+
+    @Test(groups = {"regression", "data_validation"})
+    @Xray(test = {8727})
+    public void verifyESGDistribution(){
+        String sector = "all";
+        String region = "all";
+        String researchLine = "ESG Assessments";
+        String month = "08";
+        String year = "2022";
+
+
+        String portfolioId = "00000000-0000-0000-0000-000000000000";
+        List<ESGLeaderANDLaggers> dbData = portfolioQueries.getESGLeadersAndLaggersData(portfolioId, year + month);
+        Map<Integer, DoubleSummaryStatistics> groupedData = dbData.stream().collect(
+                Collectors.groupingBy(ESGLeaderANDLaggers::getScale,
+                Collectors.summarizingDouble(ESGLeaderANDLaggers::getInvestmentPercentage))
+        );
+        APIFilterPayload apiFilterPayload = new APIFilterPayload();
+        apiFilterPayload.setSector(sector);
+        apiFilterPayload.setRegion(region);
+        apiFilterPayload.setBenchmark("");
+        apiFilterPayload.setYear(year);
+        apiFilterPayload.setMonth(month);
+
+        List<PortfolioDistributionWrapper> esgDistributionList = Arrays.asList(
+                controller.getPortfolioDistributionResponse(portfolioId, researchLine, apiFilterPayload)
+                        .as(PortfolioDistributionWrapper[].class));
+
+        for(int i=1; i<=4;i++){
+            String tempcat = "";
+            switch (i){
+                case 1 :
+                    tempcat = "Weak";
+                    break;
+                case 2 :
+                    tempcat = "Limited";
+                    break;
+                case 3 :
+                    tempcat = "Robust";
+                    break;
+                case 4 :
+                    tempcat = "Advanced";
+                    break;
+            };
+            String category = tempcat;
+            PortfolioDistribution entity =  esgDistributionList.get(0).getPortfolio_distribution().stream().filter(f -> f.getCategory().equals(category)).findFirst().get();
+            assertTestCase.assertTrue(PortfolioUtilities.round(entity.getInvestment_pct(),0)==
+                    PortfolioUtilities.round(groupedData.get(i).getSum(),0));
+            assertTestCase.assertTrue(entity.getCompanies()==
+                    groupedData.get(i).getCount());
+        }
     }
 
 
