@@ -284,7 +284,7 @@ public class ConfigurationPageTests extends EMCUITestBase {
         assertTestCase.assertFalse(rolesPage.verifyRole(roleName),"New role creation is not verified");
     }
 
-    @Test(groups = {"EMC", "ui","regression","smoke", "prod"})
+    @Test(groups = {"EMC", "ui","regression","smoke", "prod", "test"})
     @Xray(test = {6671})
     public void verifyAdminUserCreateRoleKeyInputMustBeAValidCharTest() {
         navigateToConfigPage("permission roles");

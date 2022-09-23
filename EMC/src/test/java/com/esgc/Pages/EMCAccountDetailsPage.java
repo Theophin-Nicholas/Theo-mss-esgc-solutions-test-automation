@@ -330,7 +330,7 @@ public class EMCAccountDetailsPage extends EMCBasePage {
     }
 
     public boolean verifyApplication(String applicationName) {
-        System.out.println("Number of current applications = " + applicationsNamesList.size());
+        //System.out.println("Number of current applications = " + applicationsNamesList.size());
         for(WebElement application : applicationsNamesList) {
             if(application.getText().equals(applicationName)) {
                 System.out.println(applicationName + " application found");

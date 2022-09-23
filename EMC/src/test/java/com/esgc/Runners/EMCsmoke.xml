@@ -8,7 +8,7 @@
         <groups>
             <run>
                 <!-- Used tag names: "EMC", "ui", "smoke", "regression", "prod" -->
-                <include name="prod"/>
+                <include name="test1`86890-="/>
             </run>
         </groups>
 
