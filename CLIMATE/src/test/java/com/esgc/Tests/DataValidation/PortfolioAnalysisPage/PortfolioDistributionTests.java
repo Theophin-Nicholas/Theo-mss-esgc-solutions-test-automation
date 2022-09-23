@@ -2,10 +2,14 @@ package com.esgc.Tests.DataValidation.PortfolioAnalysisPage;
 
 import com.esgc.APIModels.*;
 import com.esgc.DBModels.ESGLeaderANDLaggers;
+import com.esgc.APIModels.APIFilterPayload;
+import com.esgc.APIModels.PortfolioDistribution;
+import com.esgc.APIModels.PortfolioDistributionWrapper;
+import com.esgc.APIModels.RangeAndScoreCategory;
 import com.esgc.DBModels.ResearchLineIdentifier;
 import com.esgc.Tests.TestBases.DataValidationTestBase;
 import com.esgc.Utilities.PortfolioUtilities;
-import com.esgc.Utulities.APIUtilities;
+import com.esgc.Utilities.APIUtilities;
 import com.esgc.Utilities.Xray;
 import io.restassured.response.Response;
 import org.hamcrest.Matchers;
@@ -84,7 +88,7 @@ public class PortfolioDistributionTests extends DataValidationTestBase {
         //get all distribution table
         List<PortfolioDistribution> portfolioDistributionList = Arrays.asList(
                 controller.getPortfolioDistributionResponse(portfolioId, researchLine, apiFilterPayload)
-                        .as(PortfolioDistribution[].class));
+                        .as(PortfolioDistributionWrapper[].class)).get(0).getPortfolio_distribution();
 
         List<RangeAndScoreCategory> rangeAndCategoryList = controller.getResearchLineRangesAndScoreCategories(researchLine);
 

@@ -5,7 +5,7 @@ import com.esgc.APIModels.carbonFootprintEmissionWrapper;
 import com.esgc.DBModels.ResearchLineIdentifier;
 import com.esgc.DBModels.carbonFootPrintEmissionDBModel;
 import com.esgc.Tests.TestBases.DataValidationTestBase;
-import com.esgc.Utulities.APIUtilities;
+import com.esgc.Utilities.APIUtilities;
 import com.esgc.Utilities.Xray;
 import io.restassured.response.Response;
 import org.hamcrest.Matchers;
