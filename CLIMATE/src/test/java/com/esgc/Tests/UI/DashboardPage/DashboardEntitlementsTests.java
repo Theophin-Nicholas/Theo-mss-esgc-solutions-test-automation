@@ -32,7 +32,7 @@ public class DashboardEntitlementsTests extends DashboardUITestBase {
 
         dashboardPage.clickFiltersDropdown();
         dashboardPage.selectOptionFromFiltersDropdown("as_of_date", "March 2022");
-        dashboardPage.closeFilterByKeyboard();
+
 
         List<String> expectedSummaryHeaderBundleTitles = dashboardPage.getExpectedListOfSummaryHeaderBundleNames(bundleName);
         List<String> actualSummaryHeaderBundleTitles = dashboardPage.getSummaryHeadersBundleNames();
@@ -63,15 +63,15 @@ public class DashboardEntitlementsTests extends DashboardUITestBase {
                     "Validating list of accessible research lines in performance charts", testCase);
         }
 
-
-        List<String> getAvailableResearchLinesFromMap =
-                dashboardPage.getAvailableResearchLinesFromGeographicRiskDistribution();
-        List<String> expectedGeoMapResearchLines = dashboardPage.getExpectedListOfGeoMapResearchLines(bundleName);
-        System.out.println("dashboardPage.getExpectedListOfPerformanceChartColumnNames(bundleName) = " + dashboardPage.getExpectedListOfPerformanceChartColumnNames(bundleName));
-        System.out.println("expectedGeoMapResearchLines = " + expectedGeoMapResearchLines);
-        System.out.println("ActualResearchLinesFromMap = " + getAvailableResearchLinesFromMap);
-        assertTestCase.assertEquals(getAvailableResearchLinesFromMap,
-                expectedGeoMapResearchLines, "Validating Geographic Map Research Lines", 4549);
+        //TODO Geomap is de-scoped until an update from business
+//        List<String> getAvailableResearchLinesFromMap =
+//                dashboardPage.getAvailableResearchLinesFromGeographicRiskDistribution();
+//        List<String> expectedGeoMapResearchLines = dashboardPage.getExpectedListOfGeoMapResearchLines(bundleName);
+//        System.out.println("dashboardPage.getExpectedListOfPerformanceChartColumnNames(bundleName) = " + dashboardPage.getExpectedListOfPerformanceChartColumnNames(bundleName));
+//        System.out.println("expectedGeoMapResearchLines = " + expectedGeoMapResearchLines);
+//        System.out.println("ActualResearchLinesFromMap = " + getAvailableResearchLinesFromMap);
+//        assertTestCase.assertEquals(getAvailableResearchLinesFromMap,
+//                expectedGeoMapResearchLines, "Validating Geographic Map Research Lines", 4549);
 
         List<String> actualHeatMapResearchLines = dashboardPage.getAvailableResearchLinesFromHeatMapResearchLineSelection();
         System.out.println("actualHeatMapResearchLines = " + actualHeatMapResearchLines);

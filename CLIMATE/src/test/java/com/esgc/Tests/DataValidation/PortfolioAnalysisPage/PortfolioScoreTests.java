@@ -115,6 +115,8 @@ public class PortfolioScoreTests extends DataValidationTestBase {
         }
     }
 
+
+    //TODO needs to be updated
     @Test(groups = {"regression", "data_validation"})
     @Xray(test = {6370, 6371})
     public void verifyPhysicalHazardPortfolioScore(
