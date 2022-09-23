@@ -6,6 +6,7 @@ import com.esgc.Utilities.EntitlementsBundles;
 import com.esgc.Utilities.ScoreCategories;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
@@ -13,6 +14,7 @@ import org.openqa.selenium.support.Color;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
+
 
 import java.text.Collator;
 import java.util.*;
@@ -409,6 +411,14 @@ public class ResearchLinePage extends UploadPage {
     @FindBy(xpath = "//div[@heap_impacts_id='Positive']//tr/td[2]")
     public List<WebElement> impactTableIndicators;
 
+
+    @FindBy(xpath = "//div[@heap_impacts_id='Negative']//tr/td[1]")
+    public List<WebElement> impactTableCompanyNameNegativeSide;
+
+
+    @FindBy(xpath = "//div[@heap_impacts_id='Negative']//tr/td[2]")
+    public List<WebElement> impactTableInvestmentPercentagesNegativeSide;
+
     //===========Portfolio Analysis (Entity Page Automation (Hyperlink))
 
     @FindBy(xpath = "(((//div[@class='MuiGrid-root MuiGrid-container MuiGrid-item'])[2]//table)[1]//tr[1]//td)[1]")
@@ -440,6 +450,24 @@ public class ResearchLinePage extends UploadPage {
 
     @FindBy(xpath = "//div[contains(@class,'MuiDrawer-paper')]//div[contains(text(), 'ESG in ')]")
     public WebElement esgCompaniesPopup;
+
+    @FindBy(xpath = "//*[@id='distribution_box']")
+    public WebElement esgScoreDistribution;
+
+    @FindBy(xpath = "//*[@id='distribution_box']/div")
+    public WebElement esgScoreDistributionHeader;
+
+    @FindBy(xpath = "//*[@id='distribution_box']//table//th")
+    public List<WebElement> esgScoreDistributionTableHeader;
+
+    @FindBy(xpath = "//*[@id='distribution_box']//table/tbody/tr/td[1]")
+    public List<WebElement> esgScoreDistributionTableCategoryList;
+
+    @FindBy(xpath = "//table[@id='ESGTable']/tbody/tr/td[1]")
+    public List<WebElement> esgAssessmentsCountryTableList;
+
+    @FindBy(xpath = "//div[contains(@class,'MuiDrawer-paperAnchorRight')]/header/div/div/div[1]")
+    public WebElement esgAssessmentsCountryDrwaerPopup;
 
 
     @FindBy(xpath = "//table[@id='table-id-2']")
@@ -1073,6 +1101,13 @@ public class ResearchLinePage extends UploadPage {
                     ExpectedColumnList.add("Score (tCO2eq)");
                     ExpectedColumnList.add("");
                     // ExpectedColumnList.add("Updated");
+                    break;
+                case "ESG Assessments":
+                    ExpectedColumnList.add("Rank");
+                    ExpectedColumnList.add("Company");
+                    ExpectedColumnList.add("% Investment");
+                    ExpectedColumnList.add("ESG Score");
+                    ExpectedColumnList.add("Model Version");
                     break;
 
                 default:
@@ -2001,6 +2036,9 @@ public class ResearchLinePage extends UploadPage {
                 expectedHeader = "Rank Company % Investment Score (tCO2eq)";
                 break;
 
+            case "ESG Assessments":
+                expectedHeader = "Rank Company % Investment ESG Score Model Version";
+                break;
             default:
                 expectedHeader = "Rank Company % Investment Score";
                 break;
@@ -2678,6 +2716,150 @@ public class ResearchLinePage extends UploadPage {
         } else {
             System.out.println("Invalid option");
             return false;
+        }
+
+
+    }
+
+    public boolean checkLLeadersAndLaggardsEntityLinks(String page) {
+
+        wait.until(ExpectedConditions.visibilityOfAllElements(leadersCompaniesList));
+        wait.until(ExpectedConditions.visibilityOfAllElements(laggardsCompaniesList));
+
+        WebElement WebElementleadersCompaniesList = leadersCompaniesList.get(0);
+        String entityName = WebElementleadersCompaniesList.getText().split("\n")[1];
+        WebElementleadersCompaniesList.click();
+        BrowserUtils.wait(10);
+
+             /*EntityClimateProfilePage entityProfilePage = new EntityClimateProfilePage();
+            assertTestCase.assertTrue(entityProfilePage.validateGlobalHeader(entityName), "Validate entity Page has opened");*/
+
+        Actions action = new Actions(Driver.getDriver());
+        action.sendKeys(Keys.ESCAPE).build().perform();
+
+
+        WebElement WebElementladdersCompaniesList = laggardsCompaniesList.get(0);
+        entityName = WebElementladdersCompaniesList.getText().split("\n")[1];
+        WebElementladdersCompaniesList.click();
+        BrowserUtils.wait(10);
+
+             /*EntityClimateProfilePage entityProfilePage = new EntityClimateProfilePage();
+            assertTestCase.assertTrue(entityProfilePage.validateGlobalHeader(entityName), "Validate entity Page has opened");*/
+        action.sendKeys(Keys.ESCAPE).build().perform();
+
+        return true;
+    }
+
+    public boolean leaderAndlaggardSortingOrder(String option) {
+        /**
+         * Sorting logic should be
+         * -Top 5, Top 10 and Top 10% of Investment = Sort by %investment Descending
+         * -Bottom 5, Bottom 10 and Bottom 10% of Investment = Sort by %Investment Ascending
+         * -If Percentages are same sorting should be in alphabetical order
+         */
+        selectImpactFilterOption(option);
+        System.out.println("Verifying for " + option);
+        if (option.contains("Top")) {
+            for (int i = 0; i < impactTableCompanies.size() - 2; i++) {
+                //Top 5, Top 10 and Top 10% of Investment = Sort by %investment Descending
+                if (impactTableInvestmentPercentages.get(i).getText().compareTo(impactTableInvestmentPercentages.get(i + 1).getText()) > 0) {
+                    System.out.println("Investment Percentage is not in descending order");
+                    return false;
+                }
+                //If Percentages are same sorting should be in alphabetical order
+                else if (impactTableInvestmentPercentages.get(i).getText().equals(impactTableInvestmentPercentages.get(i + 1).getText())) {
+                    if (impactTableCompanyNames.get(i).getText().compareTo(impactTableCompanyNames.get(i + 1).getText()) > 0) {
+                        System.out.println("Company Name is not in ascending order for same investment percentage");
+                        System.out.println(impactTableCompanyNames.get(i).getText() + " | " + impactTableCompanyNames.get(i + 1).getText());
+                        return false;
+                    }
+                }
+            }
+            return true;
+        } else if (option.contains("Bottom")) {
+            for (int i = 0; i < impactTableCompanies.size() - 2; i++) {
+                //Bottom 5, Bottom 10 and Bottom 10% of Investment = Sort by %Investment Ascending
+                if (impactTableInvestmentPercentages.get(i).getText().compareTo(impactTableInvestmentPercentages.get(i + 1).getText()) < 0) {
+                    System.out.println("Investment Percentage is not in descending order");
+
+                    return false;
+                }
+                //If Percentages are same sorting should be in alphabetical order
+                else if (impactTableInvestmentPercentages.get(i).getText().equals(impactTableInvestmentPercentages.get(i + 1).getText())) {
+                    if (impactTableCompanyNames.get(i).getText().compareTo(impactTableCompanyNames.get(i + 2).getText()) > 0) {
+                        System.out.println("Company Name is not in ascending order for same investment percentage");
+                        System.out.println(impactTableCompanyNames.get(i).getText() + " | " + impactTableCompanyNames.get(i + 1).getText());
+                        return false;
+                    }
+                }
+            }
+            return true;
+        } else {
+            System.out.println("Invalid option");
+            return false;
+        }
+
+    }
+
+    public void validateEsgGradeDistribution() {
+        assertTestCase.assertTrue(esgScoreDistribution.isDisplayed(), "Validate Grade Distribution Widget is available");
+        assertTestCase.assertTrue(esgScoreDistributionHeader.getText().equals("ESG Score Distribution"), "Validate Grade Distribution Widget Header");
+        assertTestCase.assertTrue(esgScoreDistributionTableHeader.get(0).getText().equals(""), "Validate Category coloumn");
+        assertTestCase.assertTrue(esgScoreDistributionTableHeader.get(1).getText().equals("% Investment"), "Validate Category coloumn");
+
+        List<String> Categories = Arrays.asList(new String[]{"Advanced", "Robust", "Limited", "Weak"});
+        for (int i = 0; i < esgScoreDistributionTableCategoryList.size(); i++) {
+            assertTestCase.assertTrue(esgScoreDistributionTableCategoryList.get(i).getText().equals(Categories.get(i)), "Validate " + Categories.get(i) + "Category");
+        }
+
+
+    }
+
+    public void validateCountry() {
+        String countryName = esgAssessmentsCountryTableList.get(0).getText();
+        esgAssessmentsCountryTableList.get(0).click();
+        BrowserUtils.wait(5);
+        List<String> drawerHeading = Arrays.asList(esgAssessmentsCountryDrwaerPopup.getText().split("\n"));
+        assertTestCase.assertTrue(drawerHeading.get(0).equals("All Sectors, " + countryName));
+
+        assertTestCase.assertTrue(drawerHeading.get(1).contains("companies"), "Validate companies in header");
+        assertTestCase.assertTrue(drawerHeading.get(1).contains("% Investment"), "Validate % Investment in header");
+    }
+
+    public double getInvestmentPercentSum(String impactType) {
+        try {
+            if (impactType.equals("Positive"))
+                return Double.valueOf(impactTableInvestmentPercentages.get(impactTableInvestmentPercentages.size() - 1).getText().split("%")[0]);
+            else if (impactType.equals("Negative"))
+                return Double.valueOf(impactTableInvestmentPercentagesNegativeSide.get(impactTableInvestmentPercentagesNegativeSide.size() - 1).getText().split("%")[0]);
+        } catch (Exception e) {
+            return 0.00;
+        }
+        return 0.00;
+    }
+
+    public List<String> getInvestmentCompanies(String impactType) {
+        List<String> companyNames = new ArrayList<>();
+        if (impactType.equals("Positive"))
+            impactTableCompanyNames.stream().forEach(f -> companyNames.add(f.getText()));
+        else if (impactType.equals("Negative"))
+            impactTableCompanyNameNegativeSide.stream().forEach(f -> companyNames.add(f.getText()));
+        return companyNames;
+    }
+
+    public void validateEsgLeadersANDlaggersScorValuese() {
+        List<String> Categories = Arrays.asList(new String[]{"Advanced", "Robust", "Limited", "Weak"});
+        List<WebElement> e = LeadersAndLaggardsTable.findElements(By.xpath("//tbody/tr/td[4]"));
+        for (int i = 0; i < e.size(); i++) {
+            assertTestCase.assertTrue(Categories.contains(e.get(i).getText()), "Validate score categories");
+        }
+    }
+
+    public void validateEsgLeadersANDlaggersModelvalues() {
+        List<String> Categories = Arrays.asList(new String[]{"1.0", "2.0"});
+        List<WebElement> e = LeadersAndLaggardsTable.findElements(By.xpath("//tbody/tr/td[5]"));
+        for (int i = 0; i < e.size(); i++) {
+            assertTestCase.assertTrue(Categories.contains(e.get(i).getText()), "Validate model values");
         }
     }
 }
