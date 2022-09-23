@@ -8,12 +8,8 @@ import com.esgc.Pages.DashboardPage;
 import com.esgc.Pages.ResearchLinePage;
 import com.esgc.Tests.TestBases.DataValidationTestBase;
 import com.esgc.Tests.TestBases.UITestBase;
-import com.esgc.Utilities.BrowserUtils;
+import com.esgc.Utilities.*;
 import com.esgc.Utilities.Database.DatabaseDriver;
-import com.esgc.Utilities.DateTimeUtilities;
-import com.esgc.Utilities.Driver;
-import com.esgc.Utilities.Xray;
-import com.esgc.Utulities.ESGUtilities;
 import io.restassured.response.Response;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
@@ -133,7 +129,7 @@ public class EsgAssessmentTests extends UITestBase {
             if(map.get("ESG_SCORE_VALUE")!=null){
                 double singleEntityPercentage =  Double.parseDouble(map.get("ESG_VALUE").toString())/totalScore;
                 inv_percentage += singleEntityPercentage;
-                weighted_avg_total+=singleEntityPercentage*ESGUtilities.getESGPillarsScale(map.get("RESEARCH_LINE_ID").toString(), Integer.parseInt(map.get("ESG_SCORE_VALUE").toString()));
+                weighted_avg_total+=singleEntityPercentage* ESGUtilities.getESGPillarsScale(map.get("RESEARCH_LINE_ID").toString(), Integer.parseInt(map.get("ESG_SCORE_VALUE").toString()));
             }
         }
         System.out.println("weighted_avg_total = " + weighted_avg_total);

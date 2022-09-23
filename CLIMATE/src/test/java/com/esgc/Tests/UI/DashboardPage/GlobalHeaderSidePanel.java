@@ -25,6 +25,43 @@ public class GlobalHeaderSidePanel extends UITestBase {
 
     }
 
+    @Test(groups = {"regression", "ui", "smoke"})
+    @Xray(test = 8968)
+    public void validatePortfolioSettings() {
+        ResearchLinePage researchLinePage = new ResearchLinePage();
+        BrowserUtils.wait(10);
+        researchLinePage.clickMenu();
+        BrowserUtils.wait(2);
+        researchLinePage.portfolioSettings.click();
+        assertTestCase.assertTrue(researchLinePage.validatePOrtfolioManagementHeaderIsAvailable(), "Validate Portfolio Management header is available");
+        assertTestCase.assertTrue(researchLinePage.validateUploadNewLinkIsAvailable(), "Validate Upload new link is available");
+        assertTestCase.assertTrue(researchLinePage.validateSideArrowIsAvailable(), "Validate  Arrow  is available ");
+        assertTestCase.assertTrue(researchLinePage.validatespanPortfolioNameColumnIsAvailable(), "Validate Portfolio Name Column  is available");
+        assertTestCase.assertTrue(researchLinePage.validatespanUploadDateColumnIsAvailable(), "Validate Upload Date column header is available");
+        //Verify the sorting logic under portfolio settings portfolio list.
+        List<WebElement> portfolioName = Driver.getDriver().findElements(By.xpath("(//div[@heap_id='portfolio-selection'])/div[1]/span"));
+        List<String> actualList = new ArrayList<>();
+        List<String> expectedList = new ArrayList<>();
+        for (WebElement names : portfolioName) {
+            actualList.add(names.getText());
+            expectedList.add(names.getText());
+        }
+        actualList.remove(0);
+        actualList.remove(0);
+        expectedList.remove(0);
+        expectedList.remove(0);
+        Collections.sort(expectedList);
+        System.out.println("expectedList = " + expectedList);
+        System.out.println("actualList = " + actualList);
+        assertTestCase.assertEquals(actualList, expectedList);
+
+        //Multiple portfolio with the same name is allowed for now
+        Set<String> checkDuplicates = new HashSet<>(actualList);
+        int beforeRemovingTheDuplicatesSize=actualList.size();
+        int afterRemovingDuplicateSize=checkDuplicates.size();
+        assertTestCase.assertFalse(beforeRemovingTheDuplicatesSize==afterRemovingDuplicateSize);
+    }
+
     @Test(groups = {"regression", "ui"})
     @Xray(test = 1905)
     public void validateGlobalHeaderActions() {
@@ -96,42 +133,7 @@ public class GlobalHeaderSidePanel extends UITestBase {
 
     }
 
-    @Test(groups = {"regression", "ui", "smoke"})
-    @Xray(test = 8968)
-    public void validatePortfolioSettings() {
-        ResearchLinePage researchLinePage = new ResearchLinePage();
-        BrowserUtils.wait(10);
-        researchLinePage.clickMenu();
-        BrowserUtils.wait(2);
-        researchLinePage.portfolioSettings.click();
-        assertTestCase.assertTrue(researchLinePage.validatePOrtfolioManagementHeaderIsAvailable(), "Validate Portfolio Management header is available");
-        assertTestCase.assertTrue(researchLinePage.validateUploadNewLinkIsAvailable(), "Validate Upload new link is available");
-        assertTestCase.assertTrue(researchLinePage.validateSideArrowIsAvailable(), "Validate  Arrow  is available ");
-        assertTestCase.assertTrue(researchLinePage.validatespanPortfolioNameColumnIsAvailable(), "Validate Portfolio Name Column  is available");
-        assertTestCase.assertTrue(researchLinePage.validatespanUploadDateColumnIsAvailable(), "Validate Upload Date column header is available");
-        //Verify the sorting logic under portfolio settings portfolio list.
-        List<WebElement> portfolioName = Driver.getDriver().findElements(By.xpath("(//div[@heap_id='portfolio-selection'])/div[1]/span"));
-        List<String> actualList = new ArrayList<>();
-        List<String> expectedList = new ArrayList<>();
-        for (WebElement names : portfolioName) {
-            actualList.add(names.getText());
-            expectedList.add(names.getText());
-        }
-        actualList.remove(0);
-        actualList.remove(0);
-        expectedList.remove(0);
-        expectedList.remove(0);
-        Collections.sort(expectedList);
-        System.out.println("expectedList = " + expectedList);
-        System.out.println("actualList = " + actualList);
-        assertTestCase.assertEquals(actualList, expectedList);
 
-        //Multiple portfolio with the same name is allowed for now
-        Set<String> checkDuplicates = new HashSet<>(actualList);
-        int beforeRemovingTheDuplicatesSize=actualList.size();
-        int afterRemovingDuplicateSize=checkDuplicates.size();
-        assertTestCase.assertFalse(beforeRemovingTheDuplicatesSize==afterRemovingDuplicateSize);
-    }
 
 
 }
