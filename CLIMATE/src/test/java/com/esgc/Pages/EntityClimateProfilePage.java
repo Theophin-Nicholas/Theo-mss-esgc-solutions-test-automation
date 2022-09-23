@@ -32,7 +32,6 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import static com.esgc.Utilities.Database.DatabaseDriver.getQueryResultMap;
-import static com.esgc.Utilities.DateTimeUtilities.isValidFormat;
 
 
 public class EntityClimateProfilePage extends PageBase {
@@ -147,6 +146,12 @@ public class EntityClimateProfilePage extends PageBase {
     @FindBy(xpath = "//div[@id='tempAlignclimate-test-id']/div[1]/div/div")
     public List<WebElement> temperatureAlignmentWidgetHeader;
 
+    @FindBy(xpath = "//p[text()='Materiality: Low']/../..//ul/li")
+    public List<WebElement> lowMaterialityElements;
+
+    @FindBy(xpath = "//p/../..//ul/li")
+    public List<WebElement> materialityElements;
+
     @FindBy(xpath = "//div[@id='tempAlignclimate-test-id']/div[2]/div/div")
     public List<WebElement> temperatureAlignmentDetailDivs;
 
@@ -159,17 +164,20 @@ public class EntityClimateProfilePage extends PageBase {
     @FindBy(xpath = "///*[@fill='#b6d1d1']")
     public List<WebElement> loadingIcons;
 
-    @FindBy(xpath = "//span[text()='Physical Risk']")
+    @FindBy(xpath = "//span[text()='Physical Risk']/..")
     public WebElement physicalRiskTab;
 
-    @FindBy(xpath = "//span[text()='Transition Risk']")
+    @FindBy(xpath = "//span[text()='Transition Risk']/..")
     public WebElement transitionRiskTab;
 
-    @FindBy(xpath = "//button[@heap_perfchart_id='Materiality']/span[1]")
+    @FindBy(xpath = "//button[@heap_perfchart_id='Materiality']")
     public WebElement esgMaterialityTab;
 
-    @FindBy(xpath = "//section//li/section/span[1]/span[1]")
+    @FindBy(xpath = "//section//li/section/span[1]")
     public List<WebElement> esgSections;
+
+    @FindBy(xpath = "//section//div/p")
+    public List<WebElement> esgMaterialityColumns;
 
     @FindBy(xpath = "//div[@role='dialog'][not(@aria-describedby)]//h2//div[contains(@class,'MuiGrid-item')][1]")
     public WebElement materialityPopupTitle;
@@ -382,9 +390,12 @@ public class EntityClimateProfilePage extends PageBase {
     public WebElement controversies;
     @FindBy(xpath = "//p[normalize-space()='Materiality: Very High']")
     public WebElement esgSubCategory;
-
     @FindBy(xpath = "//span[normalize-space()='ESG Materiality']")
     public WebElement esgMateriality;
+
+    @FindBy(xpath = " //span[contains(text(),'Overall Disclosure Score')]")
+    public WebElement entityDisclosureScore;
+
 
 
     ///============= Methods
@@ -901,12 +912,14 @@ public class EntityClimateProfilePage extends PageBase {
     }
 
     public void selectTransitionRiskTab() {
-        BrowserUtils.clickWithJS(transitionRiskTab);
+        transitionRiskTab.click();
+    }
+
+    public void selectPhysicalRiskTab() {
+        physicalRiskTab.click();
     }
 
     public void selectEsgMaterialityTab() {
-        wait.until(ExpectedConditions.visibilityOf(esgMaterialityTab));
-        BrowserUtils.scrollTo(esgMaterialityTab);
         esgMaterialityTab.click();
     }
 
@@ -919,6 +932,94 @@ public class EntityClimateProfilePage extends PageBase {
                 categories.add(section.getText());
         }
         return categories;
+    }
+
+    public void validateSubCategoriesButtonProperties() {
+        List<WebElement> SubCategoriesPercentageLabels = Driver.getDriver().findElements(By.xpath("//section//li/section/span[2]"));
+        List<WebElement> SubCategoriesProgressBars = Driver.getDriver().findElements(By.xpath("//section//li/section/span/aside//span[@role='progressbar']"));
+        assertTestCase.assertEquals(SubCategoriesPercentageLabels.size(), SubCategoriesProgressBars.size(), "Verify progress bars for all sub categories ");
+
+        //Verify Disclosure ratio text under all subcategories
+        for (WebElement section : SubCategoriesPercentageLabels) {
+            assertTestCase.assertTrue(section.getText().startsWith("Disclosure Ratio "));
+        }
+    }
+
+
+//    public void validateSubCategoriesButtonColorProperties() {
+//        List<WebElement> SubCategoriesPercentageLabels = Driver.getDriver().findElements(By.xpath("//section//li/section/span[2]"));
+//
+//        //Verify Disclosure ratio text under all subcategories
+//        int i=0;
+//        for (WebElement section : materialityElements) {
+//            String colorCode = Color.fromString(section.getCssValue("background-color")).asHex();
+//            String score = Driver.getDriver().findElement(By.xpath("(//section//li/section/span[2])["+(++i)+"]")).getText();
+//            score = score.substring(score.lastIndexOf(' '), score.length()-1);
+//            if(Integer.parseInt(score)>=60){
+//                assertTestCase.assertEquals(colorCode, "");
+//            } else if(Integer.parseInt(score)>=40){
+//                assertTestCase.assertEquals(colorCode, "");
+//            } else if(Integer.parseInt(score)>=20){
+//                assertTestCase.assertEquals(colorCode, "");
+//            }
+//        }
+//    }
+
+    public void validateNoneForTheSectorButton(){
+        // Based on the xpath - can say element is not clickable
+        List <WebElement> sectors = Driver.getDriver().findElements(By.xpath("//ul/li/section/span[text()='None for the sector']"));
+        Assert.assertTrue(sectors.size()!=0, "Check 'None for the Sector' button");
+    }
+
+    public void validateEsgMaterialityLegends(){
+
+        String labelXpath = "//button[@heap_perfchart_id='Materiality']/../../..//div[contains(@class,'MuiPaper-elevation1')]//span";
+
+        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("("+labelXpath+")[1]")).getText(),"Weak");
+        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("("+labelXpath+"/div)[1]")).getAttribute("style"),"background: rgb(221, 88, 29);");
+
+        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("("+labelXpath+")[2]")).getText(),"Limited");
+        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("("+labelXpath+"/div)[2]")).getAttribute("style"),"background: rgb(232, 149, 28);");
+
+        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("("+labelXpath+")[3]")).getText(),"Robust");
+        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("("+labelXpath+"/div)[3]")).getAttribute("style"),"background: rgb(234, 197, 80);");
+
+        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("("+labelXpath+")[4]")).getText(),"Advanced");
+        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("("+labelXpath+"/div)[4]")).getAttribute("style"),"background: rgb(219, 229, 163);");
+
+        String criticalControversiesXpath = "//button[@heap_perfchart_id='Materiality']/../../..//div[text()='Critical controversies']";
+        assertTestCase.assertTrue(Driver.getDriver().findElement(By.xpath(criticalControversiesXpath)).isDisplayed());
+
+    }
+
+    public boolean validateNoPopupIsDisplayedWhenClickedOnSubCategories(){
+        Driver.getDriver().findElement(By.xpath("(//ul/li/section)[1]")).click();
+        try{
+            return !Driver.getDriver().findElement(By.xpath("//h2[@class='MuiTypography-root MuiTypography-h6']")).isDisplayed();
+        }catch(Exception e){
+            return true;
+        }
+    }
+
+    public boolean verifyMaterialityMatrixYaxisLabels() {
+        boolean highScore = Driver.getDriver().findElement(By.xpath("//section/div[text()='Higher Score']")).isDisplayed();
+        boolean lowScore = Driver.getDriver().findElement(By.xpath("//section/div[text()='Lower Score']")).isDisplayed();
+
+        return highScore && lowScore;
+    }
+
+    public void verifyLowMaterialityMatrixColumnProperties(){
+        for(WebElement element: lowMaterialityElements) {
+            Assert.assertTrue(Color.fromString(element.getCssValue("background-color")).asHex().equals("#ffffff"));
+        }
+    }
+
+    public List<String> readEsgMaterialityColumns() {
+        List<String> columns = new ArrayList<String>();
+        for (WebElement column : esgMaterialityColumns) {
+            columns.add(column.getText());
+        }
+        return columns;
     }
 
     public void selectMaterialityMatrixFilter(String filterName) {
@@ -1905,7 +2006,7 @@ public class EntityClimateProfilePage extends PageBase {
         return true;//End of code
     }
 
-    public boolean verifyESGScoreAlphanumericValue() {
+    public boolean verifyESGScoreValue() {
         for (WebElement score : esgScores) {
             System.out.println("score " + score.getText().split("\n")[1]);
             if (score.getText().split("/")[1].equals("100")) {
