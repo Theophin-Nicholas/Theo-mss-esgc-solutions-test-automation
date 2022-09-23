@@ -4,6 +4,7 @@ import com.esgc.Pages.DashboardPage;
 import com.esgc.Pages.LoginPage;
 import com.esgc.TestBase.DataProviderClass;
 import com.esgc.Tests.TestBases.DashboardUITestBase;
+import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.EntitlementsBundles;
 import com.esgc.Utilities.Xray;
 import org.testng.annotations.Optional;
@@ -32,11 +33,11 @@ public class DashboardEntitlementsTests extends DashboardUITestBase {
 
         dashboardPage.clickFiltersDropdown();
         dashboardPage.selectOptionFromFiltersDropdown("as_of_date", "March 2022");
-        dashboardPage.closeFilterByKeyboard();
+      //  dashboardPage.closeFilterByKeyboard();
 
         List<String> expectedSummaryHeaderBundleTitles = dashboardPage.getExpectedListOfSummaryHeaderBundleNames(bundleName);
         List<String> actualSummaryHeaderBundleTitles = dashboardPage.getSummaryHeadersBundleNames();
-
+        BrowserUtils.wait(3);
         assertTestCase.assertEquals(actualSummaryHeaderBundleTitles,
                 expectedSummaryHeaderBundleTitles, "Validating Summary Header Bundle Titles", testCase);
 
@@ -63,15 +64,14 @@ public class DashboardEntitlementsTests extends DashboardUITestBase {
                     "Validating list of accessible research lines in performance charts", testCase);
         }
 
-
-        List<String> getAvailableResearchLinesFromMap =
-                dashboardPage.getAvailableResearchLinesFromGeographicRiskDistribution();
+        //TODO disabled part is not in september release
+        // List<String> getAvailableResearchLinesFromMap = dashboardPage.getAvailableResearchLinesFromGeographicRiskDistribution();
         List<String> expectedGeoMapResearchLines = dashboardPage.getExpectedListOfGeoMapResearchLines(bundleName);
         System.out.println("dashboardPage.getExpectedListOfPerformanceChartColumnNames(bundleName) = " + dashboardPage.getExpectedListOfPerformanceChartColumnNames(bundleName));
         System.out.println("expectedGeoMapResearchLines = " + expectedGeoMapResearchLines);
-        System.out.println("ActualResearchLinesFromMap = " + getAvailableResearchLinesFromMap);
-        assertTestCase.assertEquals(getAvailableResearchLinesFromMap,
-                expectedGeoMapResearchLines, "Validating Geographic Map Research Lines", 4549);
+        //   System.out.println("ActualResearchLinesFromMap = " + getAvailableResearchLinesFromMap);
+        //   assertTestCase.assertEquals(getAvailableResearchLinesFromMap,
+        //          expectedGeoMapResearchLines, "Validating Geographic Map Research Lines", 4549);
 
         List<String> actualHeatMapResearchLines = dashboardPage.getAvailableResearchLinesFromHeatMapResearchLineSelection();
         System.out.println("actualHeatMapResearchLines = " + actualHeatMapResearchLines);
@@ -80,7 +80,6 @@ public class DashboardEntitlementsTests extends DashboardUITestBase {
                 dashboardPage.getExpectedListOfHeatMapResearchLines(bundleName),
                 "Validating Heat Map Research Lines", testCase);
     }
-
 
 
 }

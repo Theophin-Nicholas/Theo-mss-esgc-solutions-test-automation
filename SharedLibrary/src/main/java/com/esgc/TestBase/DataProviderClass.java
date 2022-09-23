@@ -247,6 +247,7 @@ public class DataProviderClass {
     public Object[][] availableResearchLines() {
 
         return new Object[][]{
+                {"ESG Assessments"},
                 {"Carbon Footprint"},
                 {"Physical Risk Management"},
                 {"Temperature Alignment"},
@@ -326,8 +327,26 @@ public class DataProviderClass {
         return new Object[][]
                 {{"Apple, Inc."}, {"Black Hills Corp."}, {"SEEK Ltd."}
                 };
-
-
     }
-
+    @DataProvider(name = "orbisIDWithDisclosureScore")
+    public Object[][] orbisIDWithDisclosureScore() {
+        return new Object[][]
+                {
+                        {"002878599"},
+                        {"300411633"},
+                        {"051057030"},
+                        {"138501539"},
+                        {"481390423"},
+                        {"233773078"},
+                        {"105961081"},
+                        {"387796123"},
+                        {"380582526"},
+                        {"172031911"},
+                        {"377084526"},
+                        {"133050503"},
+                        {"482794570"},
+                        {"480796820"},
+                        {"486521987"},
+                };
+    }
 }
