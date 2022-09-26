@@ -16,12 +16,16 @@ public class LeadersAndLaggards {
         "score_category": "High",
         "updated": "2021-01-19"
     },
+
  */
     @JsonProperty("company_name")
     private String companyName;
 
     @JsonProperty("investment_pct")
     private Double investmentPct;
+
+    @JsonProperty("methodology_version")
+    private Double methodologyversion;
 
     @JsonProperty("rank")
     private int rank;
