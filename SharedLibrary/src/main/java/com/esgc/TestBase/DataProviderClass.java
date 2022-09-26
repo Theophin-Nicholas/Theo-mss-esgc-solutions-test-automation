@@ -247,7 +247,7 @@ public class DataProviderClass {
     public Object[][] availableResearchLines() {
 
         return new Object[][]{
-                {"ESG Assessments"},
+              /*  {"ESG Assessments"},*/
                 {"Carbon Footprint"},
                 {"Physical Risk Management"},
                 {"Temperature Alignment"},
@@ -298,7 +298,6 @@ public class DataProviderClass {
                 {"InvalidCurrencyInPortfolio.csv", INVALID_CURRENCY_ERROR_MESSAGE, 498},//498
                 {"InvalidCurrencyCodeInPortfolio.csv", INVALID_CURRENCY_ERROR_MESSAGE, 498},//498
                 {"InvalidCurrencyCodeInPortfolio2.csv", INVALID_CURRENCY_ERROR_MESSAGE, 3047},
-                {"EmptyCurrencyInPortfolio.csv", EMPTY_CURRENCY_ERROR_MESSAGE, 499, 518, 834},//499-518 //834
                 {"NoIdentifierInPortfolio.csv", NO_IDENTIFIER_ERROR_MESSAGE, 504, 839},//504//839
                 {"EmptyIdentifier.csv", EMPTY_IDENTIFIER_ERROR_MESSAGE, 504, 839},//504//839
                 {"InvalidIdentifierValue.csv", INVALID_IDENTIFIER_VALUE_ERROR_MESSAGE, 506, 837},//506//837
@@ -339,14 +338,14 @@ public class DataProviderClass {
                         {"481390423"},
                         {"233773078"},
                         {"105961081"},
-                        {"387796123"},
+                    /*    {"387796123"},
                         {"380582526"},
                         {"172031911"},
                         {"377084526"},
                         {"133050503"},
                         {"482794570"},
                         {"480796820"},
-                        {"486521987"},
+                        {"486521987"},*/
                 };
     }
 }

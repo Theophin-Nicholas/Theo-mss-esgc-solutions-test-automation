@@ -98,7 +98,7 @@ public class PortfolioQueries {
     }
 
     public List<Map<String, Object>> getIdentifiersWithBVD9(String bvd9_number) {
-        String query = "SELECT ISIN, BBG_TICKER, SEDOL_CODE_PRIMARY, SEDOL_CODE_PRIMARY_GBR, SEDOL_2_CODE, SEDOL_2_CODE_GBR, SEDOL_3_CODE, SEDOL_3_CODE_GBR " +
+        String query = "SELECT ISIN, BBG_TICKER, SEDOL_CODE_PRIMARY, SEDOL_CODE_PRIMARY_GBR, SEDOL_2_CODE, SEDOL_2_CODE_GBR, SEDOL_3_CODE, SEDOL_3_CODE_GBR \n" +
                 "FROM ENTITY_SECURITY_IDENTIFIERS WHERE ENTITY_ID_BVD9 = %s ORDER BY random();";
 
         return getQueryResultMap(String.format(query, bvd9_number));
@@ -204,6 +204,12 @@ public class PortfolioQueries {
             researchLineIdentifier.setPREVIOUS_SCORE(Double.valueOf(Optional.ofNullable(each.get("PREVIOUS_SCORE")).orElse("0").toString()));
             researchLineIdentifier.setValue(randomBetween(1000, 10000000));
 
+            try {
+                researchLineIdentifier.setResearchLineIdForESGModel(each.get("RESEARCH_LINE_ID").toString());
+            } catch (Exception e) {
+
+            }
+
             list.add(researchLineIdentifier);
         }
 
@@ -242,207 +248,200 @@ public class PortfolioQueries {
 
     //return queries that can get the right table names with a given value
     private String getQueryForResearchline(IdentifierQueryModel queryModel, String scoreModifier) {
-        return /*"WITH rl AS" +
-                "(" +
-                "       SELECT " + queryModel.getEntityIdColumnName() + " AS bvd9_number," +
-                "              " + queryModel.getPreviousScoreColumnName() + "             AS previous_score," +
-                "              " + queryModel.getPreviusProducedDateColumnName() + "             AS previous_produced_date," +
-                "              " + queryModel.getScoreColumnName() + "             AS score" +
-                "       FROM   " + queryModel.getTableName() + " )" +
-                "SELECT    rl.bvd9_number," +
-                "          nvl2(score,score, -999) AS score," +
-                "          country_code          AS country_iso_code," +
-                "          entity_proper_name    AS company_name," +
-                "          l1_sector             AS sector_name," +
-                "          world_region," +
-                "          isin," +
-                "          bbg_ticker," +
-                "          previous_score," +
-                "          previous_produced_date" +
-                "FROM      esg_entity_master e" +
-                "LEFT JOIN      rl" +
-                "ON        e.orbis_id = rl.bvd9_number" +
-                "LEFT JOIN factset_moodys_ds.sym_v1.sym_sec_entity sse" +
-                "ON        e.factset_entity_id = sse.factset_entity_id" +
-                "LEFT JOIN sector_hierarchy s" +
-                "ON        e.mesg_sector_id = s.mesg_sector_id" +
-                "JOIN" +
-                "          (" +
-                "                 SELECT *" +
-                "                 FROM   (" +
-                "                                 SELECT   dfi.*," +
-                "                                          row_number() OVER (partition BY dfi.bvd9_number ORDER BY random()) rownum" +
-                "                                 FROM     df_derived.isin_sorted dfi" +
-                "                                 JOIN     rl" +
-                "                                 ON       dfi.bvd9_number=rl.bvd9_number) shuffled" +
-                "                 WHERE  rownum <=10 ) i" +
-                "ON        i.fsym_id = sse.fsym_id" +
-                "AND       i.bvd9_number=rl.bvd9_number" +
-                "JOIN" +
-                "          (" +
-                "                 SELECT *" +
-                "                 FROM   (" +
-                "                                 SELECT   dfi.*," +
-                "                                          row_number() OVER (partition BY dfi.bvd9_number ORDER BY random()) rownum" +
-                "                                 FROM     df_derived.bbg_sorted dfi" +
-                "                                 JOIN     rl" +
-                "                                 ON       dfi.bvd9_number=rl.bvd9_number) shuffled" +
-                "                 WHERE  rownum <=10 ) bbg" +
-                "ON        bbg.fsym_id = sse.fsym_id" +
-                "AND       bbg.bvd9_number=rl.bvd9_number" +
-                "LEFT JOIN factset_moodys_ds.sym_v1.sym_coverage sc" +
-                "ON        sc.fsym_id = sse.fsym_id" +
-                "WHERE     " + scoreModifier + "" +
-                "AND       isin IS NOT NULL" +
-                "AND       e.ENTITY_STATUS='Active'" +
-                "AND       bbg_ticker IS NOT NULL" +
-                "AND       rl.bvd9_number IS NOT NULL" +
-                "AND       world_region IS NOT NULL" +
-                "AND       world_region != 'UNKN'" +
-                "AND       world_region != 'GLBL'" +
-                "AND       sc.active_flag = 'True'" +
-                "AND       isin NOT LIKE '%#%'" +
-                "AND       isin NOT LIKE '%*%'" +
-                "AND       isin NOT LIKE '%@%'" +
-                "AND       bbg_ticker NOT LIKE '%/%'" +
-                "AND       bbg_ticker NOT LIKE '%#%'" +
-                "AND       bbg_ticker NOT LIKE '%*%'" +
-                "AND       bbg_ticker NOT LIKE '%@%'" +
-                "AND       bbg_ticker NOT LIKE '%-%'" +
-                "ORDER BY  random() limit 100;";*/
-
-
-        "WITH rl AS(SELECT " +
-                 queryModel.getEntityIdColumnName() + " AS bvd9_number," +
-                 queryModel.getPreviousScoreColumnName() + " AS previous_score," +
-                 queryModel.getPreviusProducedDateColumnName() + " AS previous_produced_date," +
-                queryModel.getScoreColumnName() + " AS score" +
-                " FROM   " + queryModel.getTableName() + " )" +
-                "SELECT    rl.bvd9_number, nvl2(score,score, -999) AS score, country_code  AS country_iso_code,\n" +
-                "entity_proper_name    AS company_name, l1_sector AS sector_name,world_region, isin,  bbg_ticker, previous_score, previous_produced_date FROM esg_entity_master e LEFT JOIN rl ON\n" +
-                "e.orbis_id = rl.bvd9_number LEFT JOIN factset_moodys_ds.sym_v1.sym_sec_entity sse ON e.factset_entity_id = sse.factset_entity_id LEFT JOIN sector_hierarchy s ON \n" +
-                "e.mesg_sector_id = s.mesg_sector_id JOIN  ( SELECT * FROM ( SELECT   dfi.*, row_number() OVER (partition BY dfi.bvd9_number ORDER BY random()) rownum  FROM df_derived.isin_sorted dfi JOIN rl \n" +
-                "ON dfi.bvd9_number=rl.bvd9_number) shuffled WHERE  rownum <=10 ) i ON i.fsym_id = sse.fsym_id AND i.bvd9_number=rl.bvd9_number JOIN \n" +
-                "(SELECT * FROM  (SELECT   dfi.*,row_number() OVER (partition BY dfi.bvd9_number ORDER BY random()) rownum FROM df_derived.bbg_sorted dfi JOIN rl ON dfi.bvd9_number=rl.bvd9_number)shuffled \n" +
-                " WHERE rownum <=10 ) bbg ON bbg.fsym_id = sse.fsym_id AND bbg.bvd9_number=rl.bvd9_number LEFT JOIN factset_moodys_ds.sym_v1.sym_coverage sc ON sc.fsym_id = sse.fsym_id WHERE " +
-                scoreModifier +
-                " AND isin IS NOT NULL AND e.ENTITY_STATUS='Active'AND bbg_ticker IS NOT NULL AND rl.bvd9_number IS NOT NULL AND world_region IS NOT NULL AND world_region != 'UNKN'AND world_region != 'GLBL'AND \n" +
-                "sc.active_flag = 'True'AND isin NOT LIKE '%#%'AND isin NOT LIKE '%*%'AND isin NOT LIKE '%@%'AND bbg_ticker NOT LIKE '%/%'AND  bbg_ticker NOT LIKE '%#%'AND bbg_ticker NOT LIKE '%*%'\n" +
-                "AND  bbg_ticker NOT LIKE '%@%'AND bbg_ticker NOT LIKE '%-%'ORDER BY  random() limit 100;";
+        String model = "";
+        if(queryModel.getTableName().contains("ESG")){
+            model = "          rl.Research_line_id,";
+        }
+        return "WITH rl AS\n" +
+                "(\n" +
+                "       SELECT " + queryModel.getEntityIdColumnName() + " AS bvd9_number,\n" +
+                "              " + queryModel.getPreviousScoreColumnName() + "             AS previous_score,\n" +
+                "              " + queryModel.getPreviusProducedDateColumnName() + "             AS previous_produced_date,\n" +
+                "              " + queryModel.getScoreColumnName() + "             AS score\n" +
+                "       FROM   " + queryModel.getTableName() + " )\n" +
+                "SELECT    rl.bvd9_number,\n" +
+                "          nvl2(score,score, -999) AS score,\n" +
+                "          country_code          AS country_iso_code,\n" +
+                "          entity_proper_name    AS company_name,\n" +
+                "          l1_sector             AS sector_name,\n" +
+                model +
+                "          world_region,\n" +
+                "          isin,\n" +
+                "          bbg_ticker,\n" +
+                "          previous_score,\n" +
+                "          previous_produced_date\n" +
+                "FROM      esg_entity_master e\n" +
+                "LEFT JOIN      rl\n" +
+                "ON        e.orbis_id = rl.bvd9_number\n" +
+                "LEFT JOIN factset_moodys_ds.sym_v1.sym_sec_entity sse\n" +
+                "ON        e.factset_entity_id = sse.factset_entity_id\n" +
+                "LEFT JOIN sector_hierarchy s\n" +
+                "ON        e.mesg_sector_id = s.mesg_sector_id\n" +
+                "JOIN\n" +
+                "          (\n" +
+                "                 SELECT *\n" +
+                "                 FROM   (\n" +
+                "                                 SELECT   dfi.*,\n" +
+                "                                          row_number() OVER (partition BY dfi.bvd9_number ORDER BY random()) rownum\n" +
+                "                                 FROM     df_derived.isin_sorted dfi\n" +
+                "                                 JOIN     rl\n" +
+                "                                 ON       dfi.bvd9_number=rl.bvd9_number) shuffled\n" +
+                "                 WHERE  rownum <=10 ) i\n" +
+                "ON        i.fsym_id = sse.fsym_id\n" +
+                "AND       i.bvd9_number=rl.bvd9_number\n" +
+                "JOIN\n" +
+                "          (\n" +
+                "                 SELECT *\n" +
+                "                 FROM   (\n" +
+                "                                 SELECT   dfi.*,\n" +
+                "                                          row_number() OVER (partition BY dfi.bvd9_number ORDER BY random()) rownum\n" +
+                "                                 FROM     df_derived.bbg_sorted dfi\n" +
+                "                                 JOIN     rl\n" +
+                "                                 ON       dfi.bvd9_number=rl.bvd9_number) shuffled\n" +
+                "                 WHERE  rownum <=10 ) bbg\n" +
+                "ON        bbg.fsym_id = sse.fsym_id\n" +
+                "AND       bbg.bvd9_number=rl.bvd9_number\n" +
+                "LEFT JOIN factset_moodys_ds.sym_v1.sym_coverage sc\n" +
+                "ON        sc.fsym_id = sse.fsym_id\n" +
+                "WHERE     " + scoreModifier + "\n" +
+                "AND       isin IS NOT NULL\n" +
+                "AND       e.ENTITY_STATUS='Active'\n" +
+                "AND       bbg_ticker IS NOT NULL\n" +
+                "AND       rl.bvd9_number IS NOT NULL\n" +
+                "AND       world_region IS NOT NULL\n" +
+                "AND       world_region != 'UNKN'\n" +
+                "AND       world_region != 'GLBL'\n" +
+                "AND       sc.active_flag = 'True'\n" +
+                "AND       isin NOT LIKE '%#%'\n" +
+                "AND       isin NOT LIKE '%*%'\n" +
+                "AND       isin NOT LIKE '%@%'\n" +
+                "AND       bbg_ticker NOT LIKE '%/%'\n" +
+                "AND       bbg_ticker NOT LIKE '%#%'\n" +
+                "AND       bbg_ticker NOT LIKE '%*%'\n" +
+                "AND       bbg_ticker NOT LIKE '%@%'\n" +
+                "AND       bbg_ticker NOT LIKE '%-%'\n" +
+                "ORDER BY  random() limit 100;";
     }
 
     private String getQueryForIdentifiersNotInResearchline(IdentifierQueryModel queryModel) {
+        String table;
+
+        if (queryModel.getTableName().contains("ESG")) {
+            table = "ESG_OVERALL_SCORES EOS";
+        } else {
+            table = queryModel.getTableName().substring(0, queryModel.getTableName().indexOf("WHERE"));
+        }
         return "    SELECT i.BVD9_NUMBER, -1111 as SCORE, country_code as COUNTRY_ISO_CODE, " +
                 "               ENTITY_PROPER_NAME as COMPANY_NAME, L1_SECTOR as SECTOR_NAME, WORLD_REGION  , ISIN , BBG_TICKER" +
                 "    FROM ESG_ENTITY_MASTER e " +
-                "    left join FACTSET_MOODYS_DS.SYM_V1.SYM_SEC_ENTITY sse on e.factset_entity_id = sse.factset_entity_id  " +
+                "    left join FACTSET_MOODYS_DS.SYM_V1.SYM_SEC_ENTITY sse on e.factset_entity_id = sse.factset_entity_id \n " +
                 "    left join SECTOR_HIERARCHY s on e.mesg_sector_id = s.mesg_sector_id " +
-                " LEFT JOIN factset_moodys_ds.sym_v1.sym_coverage sc" +
-                " ON        sc.fsym_id = sse.fsym_id" +
-                //  "    left join FACTSET_MOODYS_DS.SYM_V1.SYM_BBG bbg on bbg.fsym_id = sse.fsym_id " +
+                " LEFT JOIN factset_moodys_ds.sym_v1.sym_coverage sc\n" +
+                " ON        sc.fsym_id = sse.fsym_id\n" +
+                //  "    left join FACTSET_MOODYS_DS.SYM_V1.SYM_BBG bbg on bbg.fsym_id = sse.fsym_id\n " +
                 //  "    left join FACTSET_MOODYS_DS.SYM_V1.SYM_SEDOL sedol on sedol.fsym_id = sse.fsym_id " +
                 "    left join (SELECT * FROM   (SELECT   *,Row_number() OVER (partition BY BVD9_number ORDER BY Random()) rownum FROM     DF_DERIVED.ISIN_SORTED ) shuffled WHERE  rownum = 10 ) i on i.fsym_id = sse.fsym_id" +
                 "    left join (SELECT * FROM   (SELECT   *,Row_number() OVER (partition BY BVD9_number ORDER BY Random()) rownum FROM     DF_DERIVED.BBG_SORTED ) shuffled WHERE  rownum = 10 ) bbg on bbg.fsym_id = sse.fsym_id" +
                 "    WHERE i.bvd9_number NOT IN " +
-                "(SELECT " + queryModel.getEntityIdColumnName() + " FROM " + queryModel.getTableName().substring(0,queryModel.getTableName().indexOf("WHERE")) + ") " +
+                "(SELECT " + queryModel.getEntityIdColumnName() + " FROM " + table + ") " +
                 "    AND bbg.bvd9_number NOT IN " +
-                "(SELECT " + queryModel.getEntityIdColumnName() + " FROM " + queryModel.getTableName().substring(0,queryModel.getTableName().indexOf("WHERE")) + ") " +
+                "(SELECT " + queryModel.getEntityIdColumnName() + " FROM " + table + ") " +
                 "AND ISIN is not null AND WORLD_REGION is not null   " +
-                "AND       world_region != 'UNKN'" +
-                "AND       world_region != 'GLBL'" +
+                "AND       world_region != 'UNKN'\n" +
+                "AND       world_region != 'GLBL'\n" +
                 "  AND BBG_TICKER is not null  " +
                 "    AND ISIN NOT LIKE '%#%' AND ISIN NOT LIKE '%*%' AND ISIN NOT LIKE '%@%'" +
                 "    AND BBG_TICKER NOT LIKE '%/%' AND BBG_TICKER NOT LIKE '%-%' AND BBG_TICKER NOT LIKE '%#%' AND BBG_TICKER NOT LIKE '%*%' AND BBG_TICKER NOT LIKE '%@%'" +
-                "    AND       e.ENTITY_STATUS='Active'" +
-                "    AND       sc.active_flag = 'True'" +
+                "    AND       e.ENTITY_STATUS='Active'\n" +
+                "    AND       sc.active_flag = 'True'\n" +
                 "    LIMIT 50;";
 
     }
 
     public int getCarbonFootPrintIntensityScore(String portfolioId, String month, String year) {
-        String query = "WITH t AS" +
-                "(" +
-                "       SELECT Sum(value) total_inv" +
-                "       FROM   df_target.df_portfolio df" +
+        String query = "WITH t AS\n" +
+                "(\n" +
+                "       SELECT Sum(value) total_inv\n" +
+                "       FROM   df_target.df_portfolio df\n" +
                 "       JOIN   df_target.CARBON_FOOTPRINT c on c.bvd9_number=df.bvd9_number " +
-                "       AND CARBON_FOOTPRINT_VALUE_TOTAL IS NOT NULL AND MONTH='" + month + "' AND YEAR='" + year + "'" +
-                "       WHERE  portfolio_id = '%p'), p AS" +
-                "(" +
-                "         SELECT   p.bvd9_number," +
-                "                  p.region," +
-                "                  p.region_name," +
-                "                  p.sector," +
-                "                  p.company_name," +
-                "                  p.as_of_date," +
-                "                  p.portfolio_id," +
-                "                  Sum(p.value) OVER(partition BY p.bvd9_number) value," +
-                "                  t.total_inv                                   total_value" +
-                "         FROM     df_target.df_portfolio p" +
-                "         JOIN     t" +
-                "         ON       1=1" +
-                "         JOIN" +
-                "                  (" +
-                "                           SELECT   cf.bvd9_number," +
-                "                                    cf.carbon_footprint_value_total," +
-                "                                    fi.sales," +
-                "                                    cf.year," +
-                "                                    cf.month," +
-                "                                    fi.fiscal_month_end_date," +
-                "                                    fi.local_currency" +
-                "                           FROM     df_target.carbon_footprint cf" +
-                "                           JOIN     df_lookup.financial_info fi" +
-                "                           ON       cf.bvd9_number = fi.bvd9_number" +
-                "                           AND      fi.sales IS NOT NULL" +
-                "                           AND      cf.year" +
-                "                                             || cf.month >= To_char(fi.fiscal_month_end_date, 'YYYYMM')" +
-                "                           AND      cf.year = '%y'" +
-                "                           AND      cf.month ='%m' qualify row_number() OVER(partition BY cf.bvd9_number ORDER BY cf.carbon_footprint_value_total DESC nulls last)=1 ) q" +
-                "         ON       q.bvd9_number=p.bvd9_number" +
-                "         AND      p.bvd9_number IS NOT NULL" +
-                "         WHERE    p.portfolio_id ='%p'" +
-                "         AND      p.bvd9_number IS NOT NULL qualify row_number() OVER(partition BY p.bvd9_number ORDER BY p.region_name nulls last)=1 ) , ex_rate AS" +
-                "(" +
-                "         SELECT   rt.fromcurrcode," +
-                "                  rt.tocurrcode," +
-                "                  rt.exratedate," +
-                "                  rt.midrate" +
-                "         FROM     df_lookup.fx_rate rt" +
-                "         WHERE    rt.tocurrcode = 'USD'" +
-                "         AND      rt.exratedate <=" +
-                "                  (" +
-                "                         SELECT max(as_of_date)" +
-                "                         FROM   p) qualify row_number() OVER(partition BY rt.fromcurrcode,rt.tocurrcode ORDER BY rt.exratedate DESC nulls last) = 1 )" +
-                "SELECT    cf.bvd9_number," +
-                "          p.value," +
-                "          total_inv," +
-                "          fi.sales," +
-                "          fi.local_currency," +
-                "          fi.fiscal_month_end_date financial_info_date ," +
-                "          carbon_footprint_value_total ," +
-                "          CASE" +
-                "                    WHEN fi.local_currency != 'USD' THEN div0(fi.sales, ex_rate.midrate)" +
-                "                    ELSE fi.sales" +
-                "          END sales_usd," +
-                "          IFNULL((p.value/total_inv)*(carbon_footprint_value_total/NULLIF(sales_usd,0)),0) as caluculatedValue" +
-                "          " +
-                "FROM      df_target.carbon_footprint cf" +
-                "JOIN      t" +
-                "ON        1=1" +
-                "JOIN      p" +
-                "ON        cf.bvd9_number=p.bvd9_number" +
-                "AND       p.bvd9_number IS NOT NULL" +
-                "JOIN      df_lookup.financial_info fi" +
-                "ON        cf.bvd9_number = fi.bvd9_number" +
-                "AND       cf.year" +
-                "                    || cf.month >= to_char(fi.fiscal_month_end_date, 'YYYYMM')" +
-                "AND       cf.year = '%y'" +
-                "AND       cf.month = '%m'" +
-                "LEFT JOIN ex_rate" +
-                "ON        fi.local_currency = ex_rate.fromcurrcode" +
-                "AND       ex_rate.tocurrcode = 'USD'" +
-                "WHERE     cf.carbon_footprint_value_total IS NOT NULL" +
-                "AND       fi.sales IS NOT NULL" +
-                "AND       cf.year = '%y'" +
+                "       AND CARBON_FOOTPRINT_VALUE_TOTAL IS NOT NULL AND MONTH='" + month + "' AND YEAR='" + year + "'\n" +
+                "       WHERE  portfolio_id = '%p'), p AS\n" +
+                "(\n" +
+                "         SELECT   p.bvd9_number,\n" +
+                "                  p.region,\n" +
+                "                  p.region_name,\n" +
+                "                  p.sector,\n" +
+                "                  p.company_name,\n" +
+                "                  p.as_of_date,\n" +
+                "                  p.portfolio_id,\n" +
+                "                  Sum(p.value) OVER(partition BY p.bvd9_number) value,\n" +
+                "                  t.total_inv                                   total_value\n" +
+                "         FROM     df_target.df_portfolio p\n" +
+                "         JOIN     t\n" +
+                "         ON       1=1\n" +
+                "         JOIN\n" +
+                "                  (\n" +
+                "                           SELECT   cf.bvd9_number,\n" +
+                "                                    cf.carbon_footprint_value_total,\n" +
+                "                                    fi.sales,\n" +
+                "                                    cf.year,\n" +
+                "                                    cf.month,\n" +
+                "                                    fi.fiscal_month_end_date,\n" +
+                "                                    fi.local_currency\n" +
+                "                           FROM     df_target.carbon_footprint cf\n" +
+                "                           JOIN     df_lookup.financial_info fi\n" +
+                "                           ON       cf.bvd9_number = fi.bvd9_number\n" +
+                "                           AND      fi.sales IS NOT NULL\n" +
+                "                           AND      cf.year\n" +
+                "                                             || cf.month >= To_char(fi.fiscal_month_end_date, 'YYYYMM')\n" +
+                "                           AND      cf.year = '%y'\n" +
+                "                           AND      cf.month ='%m' qualify row_number() OVER(partition BY cf.bvd9_number ORDER BY cf.carbon_footprint_value_total DESC nulls last)=1 ) q\n" +
+                "         ON       q.bvd9_number=p.bvd9_number\n" +
+                "         AND      p.bvd9_number IS NOT NULL\n" +
+                "         WHERE    p.portfolio_id ='%p'\n" +
+                "         AND      p.bvd9_number IS NOT NULL qualify row_number() OVER(partition BY p.bvd9_number ORDER BY p.region_name nulls last)=1 ) , ex_rate AS\n" +
+                "(\n" +
+                "         SELECT   rt.fromcurrcode,\n" +
+                "                  rt.tocurrcode,\n" +
+                "                  rt.exratedate,\n" +
+                "                  rt.midrate\n" +
+                "         FROM     df_lookup.fx_rate rt\n" +
+                "         WHERE    rt.tocurrcode = 'USD'\n" +
+                "         AND      rt.exratedate <=\n" +
+                "                  (\n" +
+                "                         SELECT max(as_of_date)\n" +
+                "                         FROM   p) qualify row_number() OVER(partition BY rt.fromcurrcode,rt.tocurrcode ORDER BY rt.exratedate DESC nulls last) = 1 )\n" +
+                "SELECT    cf.bvd9_number,\n" +
+                "          p.value,\n" +
+                "          total_inv,\n" +
+                "          fi.sales,\n" +
+                "          fi.local_currency,\n" +
+                "          fi.fiscal_month_end_date financial_info_date ,\n" +
+                "          carbon_footprint_value_total ,\n" +
+                "          CASE\n" +
+                "                    WHEN fi.local_currency != 'USD' THEN div0(fi.sales, ex_rate.midrate)\n" +
+                "                    ELSE fi.sales\n" +
+                "          END sales_usd,\n" +
+                "          IFNULL((p.value/total_inv)*(carbon_footprint_value_total/NULLIF(sales_usd,0)),0) as caluculatedValue\n" +
+                "          \n" +
+                "FROM      df_target.carbon_footprint cf\n" +
+                "JOIN      t\n" +
+                "ON        1=1\n" +
+                "JOIN      p\n" +
+                "ON        cf.bvd9_number=p.bvd9_number\n" +
+                "AND       p.bvd9_number IS NOT NULL\n" +
+                "JOIN      df_lookup.financial_info fi\n" +
+                "ON        cf.bvd9_number = fi.bvd9_number\n" +
+                "AND       cf.year\n" +
+                "                    || cf.month >= to_char(fi.fiscal_month_end_date, 'YYYYMM')\n" +
+                "AND       cf.year = '%y'\n" +
+                "AND       cf.month = '%m'\n" +
+                "LEFT JOIN ex_rate\n" +
+                "ON        fi.local_currency = ex_rate.fromcurrcode\n" +
+                "AND       ex_rate.tocurrcode = 'USD'\n" +
+                "WHERE     cf.carbon_footprint_value_total IS NOT NULL\n" +
+                "AND       fi.sales IS NOT NULL\n" +
+                "AND       cf.year = '%y'\n" +
                 "AND       cf.month ='%m' qualify row_number() OVER(partition BY cf.bvd9_number ORDER BY fi.fiscal_month_end_date DESC) = 1 ;";
 
         query = query.replaceAll("%y", year);
@@ -466,16 +465,43 @@ public class PortfolioQueries {
 
         IdentifierQueryModel queryModel = IdentifierQueryModelFactory.getIdentifierQueryModel(researchLine, month, year);
         assert queryModel != null;
+        if(researchLine.equals("ESG")){
+            String query = " with p as (\n" +
+                    "     select * from df_portfolio df where portfolio_id='00000000-0000-0000-0000-000000000000'\n" +
+                    " ),\n" +
+                    "  esg as (\n" +
+                    "    select eos.* from entity_coverage_tracking ect  \n" +
+                    "join ESG_OVERALL_SCORES eos on ect.orbis_id=eos.orbis_id and data_type = 'esg_pillar_score'  and sub_category = 'ESG' and eos.year || eos.month <= '202209' and eos.value>70//and eos.RESEARCH_LINE_ID=1015\n" +
+                    " where  coverage_status = 'Published' and publish = 'yes'\n" +
+                    " qualify row_number() OVER (PARTITION BY eos.orbis_id ORDER BY eos.year DESC, eos.month DESC, eos.scored_date DESC) =1\n" +
+                    "    )\n" +
+                    "     select esg.orbis_id as BVD9_NUMBER, esg.value as SCORE from p\n" +
+                    "    join esg on p.bvd9_number=esg.orbis_id; ";
 
+            System.out.println(query);
+
+            return getQueryResultMap(query);
+        }
         String tableName = queryModel.getTableName().substring(0, queryModel.getTableName().indexOf("WHERE"));
-        String dateFilter = queryModel.getTableName().substring(queryModel.getTableName().indexOf("WHERE"));
+        String dateFilter = queryModel.getTableName().substring(queryModel.getTableName().indexOf("WHERE") + 5);
+        String qualifier = "";
 
-        String query = "SELECT rl." + queryModel.getEntityIdColumnName() + " AS bvd9_number," +
-                "              rl." + queryModel.getScoreColumnName() + "             AS score" +
-                "       FROM   df_portfolio df " +
-                "  LEFT JOIN   " + tableName + " rl   on  rl." + queryModel.getEntityIdColumnName() + " = df.bvd9_number  " +
+        if (dateFilter.contains("PARTITION BY")) {
+            qualifier = dateFilter.substring(dateFilter.indexOf("QUALIFY"));
+            dateFilter = dateFilter.substring(0, dateFilter.indexOf("QUALIFY"));
+        }
+
+        String bvd9Column = queryModel.getEntityIdColumnName();
+        String scoreColumn = queryModel.getScoreColumnName();
+
+
+        String query = "SELECT rl." + bvd9Column + " AS bvd9_number,\n" +
+                "              rl." + scoreColumn + "             AS score\n" +
+                "       FROM   df_portfolio df \n" +
+                "   JOIN   " + tableName + " rl   on  rl." + bvd9Column + " = df.bvd9_number  AND \n" +
                 dateFilter +
-                "        AND  PORTFOLIO_ID='" + portfolioId + "';";
+                "        WHERE PORTFOLIO_ID='" + portfolioId + "'\n" +
+                qualifier + ";";
 
         System.out.println(query);
 
@@ -485,26 +511,26 @@ public class PortfolioQueries {
 
     public List<EntityWithScores> getCompanyScoresInAllResearchLinesWithPortfolioID(String month, String year, String portfolioId) {
 
-        String query = "select distinct df.company_name, df.value," +
-                "world_region," +
-                "sector," +
-                "portfolio_id," +
-                "df.bvd9_number," +
-                "OPERATIONS_RISK_SCORE," +
-                "MARKET_RISK_SCORE, " +
-                "SUPPLY_CHAIN_RISK_SCORE," +
-                "TEMPERATURE_SCORE_ACTUAL AS TEMPERATURE_ALIGNMENT_SCORE," +
-                "CARBON_FOOTPRINT_VALUE_TOTAL AS CARBON_SCORE," +
-                "BS_FOSF_INDUSTRY_REVENUES_ACCURATE AS BROWN_SHARE_SCORE," +
-                "GS_OVERALL_ASSESSMENT_ESTIMATE_OF_INCORPORATION AS GREEN_SHARE_SCORE" +
-                "from df_portfolio df " +
-                "left join carbon_footprint cf on cf.bvd9_number=df.bvd9_number and cf.month='" + month + "' and cf.year = '" + year + "'" +
-                "left join temperature_alignment ta on ta.bvd9_number=df.bvd9_number and ta.month=cf.month and ta.year=cf.year" +
-                "left join brown_share bs on bs.bvd9_number=df.bvd9_number and bs.month=cf.month and bs.year=cf.year" +
-                "left join green_share gs on gs.bvd9_number=df.bvd9_number and gs.month=cf.month and cf.year=gs.year" +
-                "left join entity_score es on es.ENTITY_ID_BVD9=df.bvd9_number and es.release_year || es.release_month <= '" + year + "" + month + "'   and es.release_year || es.release_month >= '" + (Integer.parseInt(year)-1) + "" + month + "'" +
-                "left join esg_entity_master eem on cf.bvd9_number=eem.orbis_id " +
-                "left join FACTSET_MOODYS_DS.SYM_V1.SYM_SEC_ENTITY sse on eem.factset_entity_id = sse.factset_entity_id" +
+        String query = "select distinct df.company_name, df.value,\n" +
+                "world_region,\n" +
+                "sector,\n" +
+                "portfolio_id,\n" +
+                "df.bvd9_number,\n" +
+                "OPERATIONS_RISK_SCORE,\n" +
+                "MARKET_RISK_SCORE, \n" +
+                "SUPPLY_CHAIN_RISK_SCORE,\n" +
+                "TEMPERATURE_SCORE_ACTUAL AS TEMPERATURE_ALIGNMENT_SCORE,\n" +
+                "CARBON_FOOTPRINT_VALUE_TOTAL AS CARBON_SCORE,\n" +
+                "BS_FOSF_INDUSTRY_REVENUES_ACCURATE AS BROWN_SHARE_SCORE,\n" +
+                "GS_OVERALL_ASSESSMENT_ESTIMATE_OF_INCORPORATION AS GREEN_SHARE_SCORE\n" +
+                "from df_portfolio df \n" +
+                "left join carbon_footprint cf on cf.bvd9_number=df.bvd9_number and cf.month='" + month + "' and cf.year = '" + year + "'\n" +
+                "left join temperature_alignment ta on ta.bvd9_number=df.bvd9_number and ta.month=cf.month and ta.year=cf.year\n" +
+                "left join brown_share bs on bs.bvd9_number=df.bvd9_number and bs.month=cf.month and bs.year=cf.year\n" +
+                "left join green_share gs on gs.bvd9_number=df.bvd9_number and gs.month=cf.month and cf.year=gs.year\n" +
+                "left join entity_score es on es.ENTITY_ID_BVD9=df.bvd9_number and es.release_year || es.release_month <= '" + year + "" + month + "'   and es.release_year || es.release_month >= '" + (Integer.parseInt(year) - 1) + "" + month + "'\n" +
+                "left join esg_entity_master eem on cf.bvd9_number=eem.orbis_id \n" +
+                "left join FACTSET_MOODYS_DS.SYM_V1.SYM_SEC_ENTITY sse on eem.factset_entity_id = sse.factset_entity_id\n" +
                 "where PORTFOLIO_ID='" + portfolioId + "'" +
                 "and world_region is not null";
 
@@ -515,83 +541,83 @@ public class PortfolioQueries {
     }
 
     public List<carbonFootPrintEmissionDBModel> getCarbonFootPrintEmimmisionTest(String portfolioId, String month, String year) {
-        String query = "WITH p AS ( --calculate total value and filter out duplicates by bvd9_number" +
-                "        SELECT portfolio_id,bvd9_number, region, region_name, sector, company_name,currency,as_of_date," +
-                "               SUM(value) OVER(PARTITION BY bvd9_number) value," +
-                "               SUM(value) OVER() total_value" +
-                "        FROM df_target.df_portfolio" +
-                "        WHERE portfolio_id = '%p'" +
-                "        AND bvd9_number IS NOT NULL" +
-                "        QUALIFY ROW_NUMBER() OVER(partition by BVD9_NUMBER ORDER BY REGION_NAME NULLS LAST)=1" +
-                "              ), r AS (" +
-                "                select bvd9_number" +
-                "                ,year, month" +
-                "                , ((value_usd/1000000)/assets_usd)   * CARBON_FOOTPRINT_VALUE_TOTAL           Total_Financed_Emissions_TotalAssets" +
-                "                , ((value_usd/1000000)/market_value_usd)   * CARBON_FOOTPRINT_VALUE_TOTAL     Total_Financed_Emissions_MarketCap" +
-                "                , (value_usd/1000000)                                                         denominator_for_Financed_Emissions" +
-                "                , ((value_usd/1000000)/assets_usd)   * sales_usd                              Pre_Agg_for_Carbon_Intensity_per_Volume_of_Sales" +
-                "                , ((value_usd/1000000)/market_value_usd)   * sales_usd                        Pre_Agg_for_Carbon_Intensity_per_Volume_of_Sales2" +
-                "                from (" +
-                "                SELECT distinct cf.bvd9_number, cf.year, cf.month, fi.assets, fi.sales, fi.mkt_val market_value" +
-                "                        ,fi.local_currency, fi.Fiscal_Month_End_Date financial_info_date, p.as_of_date,rt.exratedate,rt.midrate,rt.exratedate,rt1.midrate,p.currency" +
-                "                        ,cf.CARBON_FOOTPRINT_VALUE_TOTAL" +
-                "                        ,case when p.currency != 'USD' THEN div0(p.value, to_decimal(rt.midrate,20,8)) ELSE p.value END value_usd" +
-                "                        ,case when fi.local_currency != 'USD' THEN div0(fi.assets, to_decimal(rt1.midrate,20,8)) ELSE fi.assets END assets_usd" +
-                "                        ,case when fi.local_currency != 'USD' THEN div0(fi.mkt_val, to_decimal(rt1.midrate,20,8)) ELSE fi.mkt_val END market_value_usd" +
-                "                        ,case when fi.local_currency != 'USD' THEN div0(fi.sales, to_decimal(rt1.midrate,20,8)) ELSE fi.sales END sales_usd" +
-                "                 FROM p" +
-                "                 JOIN df_target.CARBON_FOOTPRINT cf ON p.bvd9_number      = cf.bvd9_number" +
-                "                 JOIN df_lookup.financial_info fi ON cf.bvd9_number       = fi.bvd9_number" +
-                "                                                    AND cf.year || cf.month >= TO_CHAR(fi.Fiscal_Month_End_Date, 'YYYYMM')" +
-                "                                                    and cf.year = '%y'" +
-                "                                                        and cf.month = '%m'" +
-                "                  and portfolio_id='%p'" +
-                "                 LEFT JOIN (-- Get most recent Exchange Rate for portfolio value conversion to USD" +
-                " select distinct p.portfolio_id,p.as_of_date,p.bvd9_number,rt.fromcurrcode,rt.tocurrcode,rt.exratedate,rt.MIDRATE" +
-                " FROM p" +
-                "                            JOIN df_lookup.fx_rate rt" +
-                "ON p.currency = rt.fromcurrcode AND rt.tocurrcode = 'USD'" +
-                "AND p.as_of_date >= rt.exratedate" +
-                "QUALIFY ROW_NUMBER() OVER(PARTITION BY rt.fromcurrcode,rt.tocurrcode ORDER BY rt.exratedate DESC) = 1" +
-                ") rt" +
-                "ON p.currency = rt.fromcurrcode AND rt.tocurrcode = 'USD'" +
-                "" +
-                "                 LEFT JOIN (-- Get most recent Exchange Rate for Sales, Assets & Mktg_Value conversion to USD" +
-                "select distinct p.portfolio_id,p.as_of_date,p.bvd9_number,rt.fromcurrcode,rt.tocurrcode,rt.exratedate,rt.MIDRATE" +
-                "FROM p" +
-                "                            JOIN df_lookup.fx_rate rt" +
-                "ON rt.tocurrcode = 'USD'" +
-                "AND p.as_of_date >= rt.exratedate" +
-                "QUALIFY ROW_NUMBER() OVER(PARTITION BY rt.fromcurrcode,rt.tocurrcode ORDER BY rt.exratedate DESC) = 1" +
-                ") rt1" +
-                "ON fi.local_currency = rt1.fromcurrcode AND rt1.tocurrcode = 'USD'" +
-                " WHERE cf.CARBON_FOOTPRINT_VALUE_TOTAL IS NOT NULL" +
-                "AND fi.assets is not null and fi.sales is not null and fi.mkt_val is not null" +
-                "AND cf.year              = '%y'" +
-                "                    AND cf.month             = '%m'" +
-                "                  QUALIFY ROW_NUMBER() OVER(PARTITION BY cf.bvd9_number ORDER BY fi.Fiscal_Month_End_Date DESC) = 1" +
-                "              )" +
-                "              ), s as (" +
-                "                select sum(r.Total_Financed_Emissions_TotalAssets) as Total_Financed_Emissions_TotalAssets" +
-                "                    ,sum(r.Total_Financed_Emissions_MarketCap) as Total_Financed_Emissions_MarketCap" +
-                "                    ,sum(r.denominator_for_Financed_Emissions) as denominator_for_Financed_Emissions" +
-                "                    ,sum(r.Pre_Agg_for_Carbon_Intensity_per_Volume_of_Sales) as Pre_Agg_for_Carbon_Intensity_per_Volume_of_Sales" +
-                "                    ,sum(r.Pre_Agg_for_Carbon_Intensity_per_Volume_of_Sales2) as Pre_Agg_for_Carbon_Intensity_per_Volume_of_Sales2" +
-                "                    from r" +
-                "              ), t as (" +
-                "                select s.Total_Financed_Emissions_TotalAssets          as Total_Financed_Emissions_TotalAssets" +
-                "                    ,s.Total_Financed_Emissions_MarketCap              as Total_Financed_Emissions_MarketCap" +
-                "                    ,div0(s.Total_Financed_Emissions_TotalAssets, s.denominator_for_Financed_Emissions)  as Financed_Emissions_per_Millions_Invested_TotalAssets" +
-                "                    ,div0(s.Total_Financed_Emissions_MarketCap, s.denominator_for_Financed_Emissions)  as Financed_Emissions_per_Millions_Invested_MarketCap" +
-                "                    ,div0(s.Total_Financed_Emissions_TotalAssets, s.Pre_Agg_for_Carbon_Intensity_per_Volume_of_Sales)  as carbon_intensity_per_volume_of_sales_Total_Assets" +
-                "                    ,div0(s.Total_Financed_Emissions_MarketCap, s.Pre_Agg_for_Carbon_Intensity_per_Volume_of_Sales2)  as carbon_intensity_per_volume_of_sales_Market_Cap" +
-                "                    from s" +
-                "                )  " +
-                "                  select 'Total Financed Emissions' as category, t.Total_Financed_Emissions_TotalAssets as totalAssets, t.Total_Financed_Emissions_MarketCap as marketCapitalization from t" +
-                "                    union" +
-                "                  select 'Financed Emissions per million Invested' as category, t.Financed_Emissions_per_Millions_Invested_TotalAssets as totalAssets, t.Financed_Emissions_per_Millions_Invested_MarketCap as marketCapitalization from t" +
-                "                    union" +
-                "                  select 'Carbon Intensity per Sales' as category, t.carbon_intensity_per_volume_of_sales_Total_Assets as totalAssets, t.carbon_intensity_per_volume_of_sales_Market_Cap as marketCapitalization from t";
+        String query = "WITH p AS ( --calculate total value and filter out duplicates by bvd9_number\n" +
+                "        SELECT portfolio_id,bvd9_number, region, region_name, sector, company_name,currency,as_of_date,\n" +
+                "               SUM(value) OVER(PARTITION BY bvd9_number) value,\n" +
+                "               SUM(value) OVER() total_value\n" +
+                "        FROM df_target.df_portfolio\n" +
+                "        WHERE portfolio_id = '%p'\n" +
+                "        AND bvd9_number IS NOT NULL\n" +
+                "        QUALIFY ROW_NUMBER() OVER(partition by BVD9_NUMBER ORDER BY REGION_NAME NULLS LAST)=1\n" +
+                "              ), r AS (\n" +
+                "                select bvd9_number\n" +
+                "                ,year, month\n" +
+                "                , ((value_usd/1000000)/assets_usd)   * CARBON_FOOTPRINT_VALUE_TOTAL           Total_Financed_Emissions_TotalAssets\n" +
+                "                , ((value_usd/1000000)/market_value_usd)   * CARBON_FOOTPRINT_VALUE_TOTAL     Total_Financed_Emissions_MarketCap\n" +
+                "                , (value_usd/1000000)                                                         denominator_for_Financed_Emissions\n" +
+                "                , ((value_usd/1000000)/assets_usd)   * sales_usd                              Pre_Agg_for_Carbon_Intensity_per_Volume_of_Sales\n" +
+                "                , ((value_usd/1000000)/market_value_usd)   * sales_usd                        Pre_Agg_for_Carbon_Intensity_per_Volume_of_Sales2\n" +
+                "                from (\n" +
+                "                SELECT distinct cf.bvd9_number, cf.year, cf.month, fi.assets, fi.sales, fi.mkt_val market_value\n" +
+                "                        ,fi.local_currency, fi.Fiscal_Month_End_Date financial_info_date, p.as_of_date,rt.exratedate,rt.midrate,rt.exratedate,rt1.midrate,p.currency\n" +
+                "                        ,cf.CARBON_FOOTPRINT_VALUE_TOTAL\n" +
+                "                        ,case when p.currency != 'USD' THEN div0(p.value, to_decimal(rt.midrate,20,8)) ELSE p.value END value_usd\n" +
+                "                        ,case when fi.local_currency != 'USD' THEN div0(fi.assets, to_decimal(rt1.midrate,20,8)) ELSE fi.assets END assets_usd\n" +
+                "                        ,case when fi.local_currency != 'USD' THEN div0(fi.mkt_val, to_decimal(rt1.midrate,20,8)) ELSE fi.mkt_val END market_value_usd\n" +
+                "                        ,case when fi.local_currency != 'USD' THEN div0(fi.sales, to_decimal(rt1.midrate,20,8)) ELSE fi.sales END sales_usd\n" +
+                "                 FROM p\n" +
+                "                 JOIN df_target.CARBON_FOOTPRINT cf ON p.bvd9_number      = cf.bvd9_number\n" +
+                "                 JOIN df_lookup.financial_info fi ON cf.bvd9_number       = fi.bvd9_number\n" +
+                "                                                    AND cf.year || cf.month >= TO_CHAR(fi.Fiscal_Month_End_Date, 'YYYYMM')\n" +
+                "                                                    and cf.year = '%y'\n" +
+                "                                                        and cf.month = '%m'\n" +
+                "                  and portfolio_id='%p'\n" +
+                "                 LEFT JOIN (-- Get most recent Exchange Rate for portfolio value conversion to USD\n" +
+                " select distinct p.portfolio_id,p.as_of_date,p.bvd9_number,rt.fromcurrcode,rt.tocurrcode,rt.exratedate,rt.MIDRATE\n" +
+                " FROM p\n" +
+                "                            JOIN df_lookup.fx_rate rt\n" +
+                "ON p.currency = rt.fromcurrcode AND rt.tocurrcode = 'USD'\n" +
+                "AND p.as_of_date >= rt.exratedate\n" +
+                "QUALIFY ROW_NUMBER() OVER(PARTITION BY rt.fromcurrcode,rt.tocurrcode ORDER BY rt.exratedate DESC) = 1\n" +
+                ") rt\n" +
+                "ON p.currency = rt.fromcurrcode AND rt.tocurrcode = 'USD'\n" +
+                "\n" +
+                "                 LEFT JOIN (-- Get most recent Exchange Rate for Sales, Assets & Mktg_Value conversion to USD\n" +
+                "select distinct p.portfolio_id,p.as_of_date,p.bvd9_number,rt.fromcurrcode,rt.tocurrcode,rt.exratedate,rt.MIDRATE\n" +
+                "FROM p\n" +
+                "                            JOIN df_lookup.fx_rate rt\n" +
+                "ON rt.tocurrcode = 'USD'\n" +
+                "AND p.as_of_date >= rt.exratedate\n" +
+                "QUALIFY ROW_NUMBER() OVER(PARTITION BY rt.fromcurrcode,rt.tocurrcode ORDER BY rt.exratedate DESC) = 1\n" +
+                ") rt1\n" +
+                "ON fi.local_currency = rt1.fromcurrcode AND rt1.tocurrcode = 'USD'\n" +
+                " WHERE cf.CARBON_FOOTPRINT_VALUE_TOTAL IS NOT NULL\n" +
+                "AND fi.assets is not null and fi.sales is not null and fi.mkt_val is not null\n" +
+                "AND cf.year              = '%y'\n" +
+                "                    AND cf.month             = '%m'\n" +
+                "                  QUALIFY ROW_NUMBER() OVER(PARTITION BY cf.bvd9_number ORDER BY fi.Fiscal_Month_End_Date DESC) = 1\n" +
+                "              )\n" +
+                "              ), s as (\n" +
+                "                select sum(r.Total_Financed_Emissions_TotalAssets) as Total_Financed_Emissions_TotalAssets\n" +
+                "                    ,sum(r.Total_Financed_Emissions_MarketCap) as Total_Financed_Emissions_MarketCap\n" +
+                "                    ,sum(r.denominator_for_Financed_Emissions) as denominator_for_Financed_Emissions\n" +
+                "                    ,sum(r.Pre_Agg_for_Carbon_Intensity_per_Volume_of_Sales) as Pre_Agg_for_Carbon_Intensity_per_Volume_of_Sales\n" +
+                "                    ,sum(r.Pre_Agg_for_Carbon_Intensity_per_Volume_of_Sales2) as Pre_Agg_for_Carbon_Intensity_per_Volume_of_Sales2\n" +
+                "                    from r\n" +
+                "              ), t as (\n" +
+                "                select s.Total_Financed_Emissions_TotalAssets          as Total_Financed_Emissions_TotalAssets\n" +
+                "                    ,s.Total_Financed_Emissions_MarketCap              as Total_Financed_Emissions_MarketCap\n" +
+                "                    ,div0(s.Total_Financed_Emissions_TotalAssets, s.denominator_for_Financed_Emissions)  as Financed_Emissions_per_Millions_Invested_TotalAssets\n" +
+                "                    ,div0(s.Total_Financed_Emissions_MarketCap, s.denominator_for_Financed_Emissions)  as Financed_Emissions_per_Millions_Invested_MarketCap\n" +
+                "                    ,div0(s.Total_Financed_Emissions_TotalAssets, s.Pre_Agg_for_Carbon_Intensity_per_Volume_of_Sales)  as carbon_intensity_per_volume_of_sales_Total_Assets\n" +
+                "                    ,div0(s.Total_Financed_Emissions_MarketCap, s.Pre_Agg_for_Carbon_Intensity_per_Volume_of_Sales2)  as carbon_intensity_per_volume_of_sales_Market_Cap\n" +
+                "                    from s\n" +
+                "                )  \n" +
+                "                  select 'Total Financed Emissions' as category, t.Total_Financed_Emissions_TotalAssets as totalAssets, t.Total_Financed_Emissions_MarketCap as marketCapitalization from t\n" +
+                "                    union\n" +
+                "                  select 'Financed Emissions per million Invested' as category, t.Financed_Emissions_per_Millions_Invested_TotalAssets as totalAssets, t.Financed_Emissions_per_Millions_Invested_MarketCap as marketCapitalization from t\n" +
+                "                    union\n" +
+                "                  select 'Carbon Intensity per Sales' as category, t.carbon_intensity_per_volume_of_sales_Total_Assets as totalAssets, t.carbon_intensity_per_volume_of_sales_Market_Cap as marketCapitalization from t\n";
 
         query = query.replaceAll("%y", year);
         query = query.replaceAll("%m", month);
@@ -612,59 +638,59 @@ public class PortfolioQueries {
     }
 
     public PhysicalScore getPhysicalHazardScore(String portfolioid, String yearmonth) {
-        String query = "with p as (select bvd9_number," +
-                "   sum(value) as \"value\" ," +
-                "   sum(sum(value)) over()   as \"total_inv\"," +
-                "                \"value\"/\"total_inv\" as weighted_avg" +
-                "   from df_target.df_portfolio where portfolio_id = %s" +
-                "   group by bvd9_number" +
-                "   ) ," +
-                "   category as (select risk_category_id , sum(\"value\" * entity_category_score)/\"total_inv\" risk_category_value," +
-                "MAX(sc.release_year || sc.release_month) as RELEASE_DT" +
-                "from df_target.entity_score_category sc, p" +
-                "where sc.release_year || sc.release_month=" +
-                "( select  max(CONCAT(release_year,release_month)) as MaxDate  from  df_target.entity_score_category s where " +
-                "                                        s.release_year || s.release_month <= %s)" +
-                "and sc.entity_id_bvd9 = p.bvd9_number" +
-                "and risk_category_id in (14,1,12,4,2,16)" +
-                "    and sc.entity_category_score is not null" +
-                "and sc.entity_category_score >= 0" +
-                "group by 1, \"total_inv\"" +
-                "   qualify row_number() over(order by risk_category_value desc)=1" +
-                "  ) " +
-                "  ," +
-                "  fac as (            " +
-                "select entity_id_bvd9,th.risk_category_id, risk_threshold_id ,number_facilities_exposed as number_facilities_exposed,  " +
-                "sum(number_facilities_exposed) over(partition by entity_id_bvd9 ) as total_number_facilities_exposed," +
-                "weighted_avg, category.risk_category_value" +
-                "from  df_target.entity_score_thresholds th,p,category" +
-                "where th.release_year || th.release_month=category.RELEASE_DT" +
-                "and th.risk_category_id=category.risk_category_id  " +
-                "and th.entity_id_bvd9= p.bvd9_number" +
-                "order by entity_id_bvd9,th.risk_category_id" +
-                "  )," +
-                "  fac_avg as (" +
-                "select risk_category_id,risk_threshold_id ," +
-                "sum(number_facilities_exposed*weighted_avg) /sum(total_number_facilities_exposed*weighted_avg) as avg_val," +
-                "                        max(risk_category_value) as risk_category_value" +
-                "from fac where risk_threshold_id in (3,4) group  by risk_category_id,risk_threshold_id" +
-                " )," +
-                "  y as(" +
-                "  select  risk_category_name \"highest_risk_hazard\", to_char(round(sum(avg_val)*100,2))  facilities_exposed  ," +
-                "                df_target.physical_risk_score_category(max(risk_category_value)) as hrh_risk_category" +
-                "from fac_avg" +
-                "  join df_target.risk_category rc on fac_avg.risk_category_id=rc.risk_category_id group by fac_avg.risk_category_id,risk_category_name" +
-                "  )," +
-                "  z AS (" +
-                "SELECT" +
-                "score \"highest_risk_hazard\"," +
-                "facilities_exposed \"facilities_exposed\"," +
-                "hrh_risk_category \"hrh_risk_category\"" +
-                "FROM" +
-                "y unpivot (score FOR NAME IN (\"highest_risk_hazard\"))" +
-                ")" +
-                "SELECT * " +
-                "FROM" +
+        String query = "with p as (select bvd9_number,\n" +
+                "   sum(value) as \"value\" ,\n" +
+                "   sum(sum(value)) over()   as \"total_inv\",\n" +
+                "                \"value\"/\"total_inv\" as weighted_avg\n" +
+                "   from df_target.df_portfolio where portfolio_id = %s\n" +
+                "   group by bvd9_number\n" +
+                "   ) ,\n" +
+                "   category as (select risk_category_id , sum(\"value\" * entity_category_score)/\"total_inv\" risk_category_value,\n" +
+                "MAX(sc.release_year || sc.release_month) as RELEASE_DT\n" +
+                "from df_target.entity_score_category sc, p\n" +
+                "where sc.release_year || sc.release_month=\n" +
+                "( select  max(CONCAT(release_year,release_month)) as MaxDate  from  df_target.entity_score_category s where \n" +
+                "                                        s.release_year || s.release_month <= %s)\n" +
+                "and sc.entity_id_bvd9 = p.bvd9_number\n" +
+                "and risk_category_id in (14,1,12,4,2,16)\n" +
+                "    and sc.entity_category_score is not null\n" +
+                "and sc.entity_category_score >= 0\n" +
+                "group by 1, \"total_inv\"\n" +
+                "   qualify row_number() over(order by risk_category_value desc)=1\n" +
+                "  ) \n" +
+                "  ,\n" +
+                "  fac as (            \n" +
+                "select entity_id_bvd9,th.risk_category_id, risk_threshold_id ,number_facilities_exposed as number_facilities_exposed,  \n" +
+                "sum(number_facilities_exposed) over(partition by entity_id_bvd9 ) as total_number_facilities_exposed,\n" +
+                "weighted_avg, category.risk_category_value\n" +
+                "from  df_target.entity_score_thresholds th,p,category\n" +
+                "where th.release_year || th.release_month=category.RELEASE_DT\n" +
+                "and th.risk_category_id=category.risk_category_id  \n" +
+                "and th.entity_id_bvd9= p.bvd9_number\n" +
+                "order by entity_id_bvd9,th.risk_category_id\n" +
+                "  ),\n" +
+                "  fac_avg as (\n" +
+                "select risk_category_id,risk_threshold_id ,\n" +
+                "sum(number_facilities_exposed*weighted_avg) /sum(total_number_facilities_exposed*weighted_avg) as avg_val,\n" +
+                "                        max(risk_category_value) as risk_category_value\n" +
+                "from fac where risk_threshold_id in (3,4) group  by risk_category_id,risk_threshold_id\n" +
+                " ),\n" +
+                "  y as(\n" +
+                "  select  risk_category_name \"highest_risk_hazard\", to_char(round(sum(avg_val)*100,2))  facilities_exposed  ,\n" +
+                "                df_target.physical_risk_score_category(max(risk_category_value)) as hrh_risk_category\n" +
+                "from fac_avg\n" +
+                "  join df_target.risk_category rc on fac_avg.risk_category_id=rc.risk_category_id group by fac_avg.risk_category_id,risk_category_name\n" +
+                "  ),\n" +
+                "  z AS (\n" +
+                "SELECT\n" +
+                "score \"highest_risk_hazard\",\n" +
+                "facilities_exposed \"facilities_exposed\",\n" +
+                "hrh_risk_category \"hrh_risk_category\"\n" +
+                "FROM\n" +
+                "y unpivot (score FOR NAME IN (\"highest_risk_hazard\"))\n" +
+                ")\n" +
+                "SELECT * \n" +
+                "FROM\n" +
                 "z";
         query = String.format(query, portfolioid, yearmonth);
         PhysicalScore score = new PhysicalScore();
@@ -676,18 +702,33 @@ public class PortfolioQueries {
         }
         return score;
     }
+
     public List<List<Object>> getEsgInfoFromDB() {
         String query1 = "select sum(value) from df_portfolio where portfolio_id='00000000-0000-0000-0000-000000000000'";
         String total = getQueryResultList(query1).get(0).get(0).toString();
 
-        String query2 = "select df.COMPANY_NAME,round((df.value/"+total+")*100,2) as investment,eos.value, ect.METHODOLOGY_VERSION from df_portfolio df" +
-                "join entity_coverage_tracking ect on ect.orbis_id=df.bvd9_number and coverage_status = 'Published' and publish = 'yes'" +
-                "join ESG_OVERALL_SCORES eos on ect.orbis_id=eos.orbis_id and data_type = 'overall_alphanumeric_score' and sub_category = 'ESG'" +
-                "where portfolio_id='00000000-0000-0000-0000-000000000000'" +
-                " and eos.year || eos.month <= '202208'" +
+        String query2 = "select df.COMPANY_NAME,round((df.value/" + total + ")*100,2) as investment,eos.value, ect.METHODOLOGY_VERSION from df_portfolio df\n" +
+                "join entity_coverage_tracking ect on ect.orbis_id=df.bvd9_number and coverage_status = 'Published' and publish = 'yes'\n" +
+                "join ESG_OVERALL_SCORES eos on ect.orbis_id=eos.orbis_id and data_type = 'overall_alphanumeric_score' and sub_category = 'ESG'\n" +
+                "where portfolio_id='00000000-0000-0000-0000-000000000000'\n" +
+                " and eos.year || eos.month <= '202208'\n" +
                 " qualify row_number() OVER (PARTITION BY eos.orbis_id ORDER BY eos.year DESC, eos.month DESC, eos.scored_date DESC) =1";
 
         return getQueryResultList(query2);
+    }
+
+    public List<Map<String, Object>> getESGModelWithPortfolioID(String month, String year, String portfolioId) {
+        String query = "select DISTINCT eos.ORBIS_ID, eos.RESEARCH_LINE_ID from df_portfolio  df\n" +
+                "join ESG_OVERALL_SCORES eos on eos.orbis_id=df.bvd9_number\n" +
+                "join entity_coverage_tracking ect  on ect.orbis_id=eos.orbis_id \n" +
+                "and data_type = 'esg_pillar_score'  and sub_category = 'ESG' \n" +
+                "and eos.year || eos.month <= '" + year + month + "' and coverage_status = 'Published' and publish = 'yes'\n" +
+                "where portfolio_id='" + portfolioId + "' ;";
+
+        System.out.println(query);
+
+        return getQueryResultMap(query);
+
     }
 
     public List<List<Object>> getPortfolioCompaniesFromDB() {
@@ -702,7 +743,7 @@ public class PortfolioQueries {
                 "where portfolio_id='00000000-0000-0000-0000-000000000000'";
         return getQueryResultList(query1);
     }
-    
+
     public List<ESGLeaderANDLaggers> getESGLeadersAndLaggersData(String portfolioid, String yearmonth) {
        /* String query = " with p as (SELECT bvd9_number,region, sector, SUM(value) as invvalue, COUNT(*) OVER() total_companies, " +
                 "SUM(SUM(value)) OVER() AS total_value FROM df_target.df_portfolio WHERE 1=1 " +
@@ -730,7 +771,7 @@ public class PortfolioQueries {
                 "when (score >= 65 and score <= 100) then 4 " +
                 "end  end as scale " +
                 "from q ORDER BY scale desc, q.score desc, q.investment_pct desc,q.company_name ";*/
-        
+
         String query = "with p as (SELECT bvd9_number, COMPANY_NAME " +
                 ",region, sector, SUM(value) as invvalue, COUNT(*) OVER() total_companies, SUM(SUM(value)) OVER() AS total_value " +
                 "FROM df_target.df_portfolio WHERE 1=1 AND portfolio_id = '" + portfolioid +"' " +

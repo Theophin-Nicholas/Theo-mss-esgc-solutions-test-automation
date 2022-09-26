@@ -163,31 +163,6 @@ public class ExcelUtil {
         }
     }
 
-    public static String getPortfolioNameFromCSVFile(String csvFilename) {
-
-        CSVReader reader = null;
-        try {
-            reader = new CSVReader(new FileReader(csvFilename));
-        } catch (FileNotFoundException e) {
-            System.out.println("File is not found");
-            e.printStackTrace();
-        }
-        String[] nextLine;
-        String searchWord = "!Name";
-        try {
-            while ((nextLine = reader.readNext()) != null) {
-                for (int i = 0; i < nextLine.length; i++) {
-                    if (nextLine[i].matches(searchWord)) {
-                        return nextLine[i + 1];
-                    }
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return null;
-    }
 
     public static boolean checkIf2CSVFilesAreSame(String csvFilePath1, String csvFilePath2) {
 
