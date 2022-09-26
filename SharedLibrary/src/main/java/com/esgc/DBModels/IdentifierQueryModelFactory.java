@@ -38,30 +38,24 @@ public class IdentifierQueryModelFactory {
                 return identifierQueryModel;
 
             case "operationsrisk":
-                if (!month.equals("12")) {
-                    year = (Integer.parseInt(year) - 1) + "";
-                }
                 identifierQueryModel.setEntityIdColumnName("ENTITY_ID_BVD9");
                 identifierQueryModel.setScoreColumnName("OPERATIONS_RISK_SCORE");
-                identifierQueryModel.setTableName("ENTITY_SCORE WHERE RELEASE_MONTH='12' AND RELEASE_YEAR='" + year + "'");
+                identifierQueryModel.setTableName("ENTITY_SCORE WHERE RELEASE_YEAR||RELEASE_MONTH<='" + year + month + "' \n" +
+                        "       QUALIFY ROW_NUMBER() OVER (PARTITION BY ENTITY_ID_BVD9 ORDER BY RELEASE_YEAR DESC, RELEASE_MONTH DESC) =1");
                 return identifierQueryModel;
 
             case "marketrisk":
-                if (!month.equals("12")) {
-                    year = (Integer.parseInt(year) - 1) + "";
-                }
                 identifierQueryModel.setEntityIdColumnName("ENTITY_ID_BVD9");
                 identifierQueryModel.setScoreColumnName("MARKET_RISK_SCORE");
-                identifierQueryModel.setTableName("ENTITY_SCORE WHERE RELEASE_MONTH='12' AND RELEASE_YEAR='" + year + "'");
+                identifierQueryModel.setTableName("ENTITY_SCORE WHERE RELEASE_YEAR||RELEASE_MONTH<='" + year + month + "' \n" +
+                        "       QUALIFY ROW_NUMBER() OVER (PARTITION BY ENTITY_ID_BVD9 ORDER BY RELEASE_YEAR DESC, RELEASE_MONTH DESC) =1");
                 return identifierQueryModel;
 
             case "supplychainrisk":
-                if (!month.equals("12")) {
-                    year = (Integer.parseInt(year) - 1) + "";
-                }
                 identifierQueryModel.setEntityIdColumnName("ENTITY_ID_BVD9");
                 identifierQueryModel.setScoreColumnName("SUPPLY_CHAIN_RISK_SCORE");
-                identifierQueryModel.setTableName("ENTITY_SCORE WHERE RELEASE_MONTH='12' AND RELEASE_YEAR='" + year + "'");
+                identifierQueryModel.setTableName("ENTITY_SCORE WHERE RELEASE_YEAR||RELEASE_MONTH<='" + year + month + "' \n" +
+                        "       QUALIFY ROW_NUMBER() OVER (PARTITION BY ENTITY_ID_BVD9 ORDER BY RELEASE_YEAR DESC, RELEASE_MONTH DESC) =1");
                 return identifierQueryModel;
 
             case "Carbon Footprint":
@@ -93,6 +87,16 @@ public class IdentifierQueryModelFactory {
                 identifierQueryModel.setPreviousScoreColumnName("PREV_TEMPERATURE_SCORE_ACTUAL");
                 identifierQueryModel.setPreviusProducedDateColumnName("PREVIOUS_PRODUCED_DATE");
                 identifierQueryModel.setTableName("TEMPERATURE_ALIGNMENT WHERE MONTH='" + month + "' AND YEAR='" + year + "'");
+                return identifierQueryModel;
+            case "ESG":
+                identifierQueryModel.setEntityIdColumnName("eos.ORBIS_ID");
+                identifierQueryModel.setPreviousScoreColumnName("EOS.RESEARCH_LINE_ID, NULL");
+                identifierQueryModel.setScoreColumnName("eos.VALUE");
+                identifierQueryModel.setTableName(" entity_coverage_tracking ect  \n" +
+                        "join ESG_OVERALL_SCORES eos on ect.orbis_id=eos.orbis_id and data_type = 'esg_pillar_score'  " +
+                        "and sub_category = 'ESG' and eos.year || eos.month <= '" + year + month + "' \n" +
+                        " where  coverage_status = 'Published' and publish = 'yes'\n" +
+                        " qualify row_number() OVER (PARTITION BY eos.orbis_id ORDER BY eos.year DESC, eos.month DESC, eos.scored_date DESC) =1");
                 return identifierQueryModel;
         }
         throw new IndexOutOfBoundsException("Research line not found");
