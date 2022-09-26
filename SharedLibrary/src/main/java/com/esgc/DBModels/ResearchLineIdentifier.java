@@ -25,6 +25,7 @@ public class ResearchLineIdentifier {
     private String WORLD_REGION;
     private Double investmentPercentage;
     private Integer value;
+    private String ResearchLineIdForESGModel;
 
     public String getRandomIdentifier(int randomNum) {
         if (randomNum == 1 & getBBG_Ticker() != null) {
@@ -49,6 +50,7 @@ public class ResearchLineIdentifier {
         this.COUNTRY_CODE = identifier.getCOUNTRY_CODE();
         this.WORLD_REGION = identifier.getWORLD_REGION();
         this.investmentPercentage = identifier.getInvestmentPercentage();
+        this.ResearchLineIdForESGModel = identifier.getResearchLineIdForESGModel();
     }
 
     public ResearchLineIdentifier(String ISIN, Integer value) {
@@ -66,6 +68,7 @@ public class ResearchLineIdentifier {
         this.COUNTRY_CODE = null;
         this.WORLD_REGION = null;
         this.investmentPercentage = null;
+        this.ResearchLineIdForESGModel = null;
     }
 
     @Override
