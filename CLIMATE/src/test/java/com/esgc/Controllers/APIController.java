@@ -710,7 +710,7 @@ public class APIController {
             case "Temperature Alignment":
             case "temperaturealgmt":
                 return "temperaturealgmt";
-            case "ESG Assessments":
+            //case "ESG Assessments":
             case "esgasmt":
                 return "corpesgdata/esgasmt";
 
