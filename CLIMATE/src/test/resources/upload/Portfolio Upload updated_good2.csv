@@ -4,7 +4,6 @@ As of Date: Please enter date in yyyy-mm-dd format
 "Identifier: First column below !AsOfDate: Enter an ISIN or a full Bloomberg Ticker, example: T UN Equity or CMP UN Equity"
 Value: Second Column below !AsOfDate: Please enter total monetary value of investment; this must be in whole number format and in one single currency
 
-!Name,My Number ONE Portfolio
 !Currency,EUR
 !AsOfDate,9/30/2020
 
