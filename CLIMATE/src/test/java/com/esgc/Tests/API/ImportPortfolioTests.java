@@ -4,7 +4,7 @@ import com.aventstack.extentreports.markuputils.CodeLanguage;
 import com.aventstack.extentreports.markuputils.MarkupHelper;
 import com.esgc.Controllers.APIController;
 import com.esgc.Tests.TestBases.APITestBase;
-import com.esgc.Utulities.APIUtilities;
+import com.esgc.Utilities.APIUtilities;
 import com.esgc.Utilities.PortfolioFilePaths;
 import com.esgc.Utilities.Xray;
 import io.restassured.http.ContentType;
@@ -104,7 +104,7 @@ public class ImportPortfolioTests extends APITestBase {
 
         test.info("Get portfolio to check if it is stored as of date:" + todaysDate);
 
-        Assert.assertEquals(portfolioName, "portfolio-" + todaysDate);
+        Assert.assertEquals(portfolioName, fileName.substring(0, fileName.indexOf(".csv")));
         test.pass("Portfolio Name:" + portfolioName);
         test.pass("Portfolio imported with today's date successfully");
 
@@ -154,7 +154,7 @@ public class ImportPortfolioTests extends APITestBase {
 
         String date = "2021-01-22";//This date provided in portfolio
 
-        Assert.assertEquals(portfolioName, "portfolio-" + date);
+        Assert.assertEquals(portfolioName, fileName.substring(0, fileName.indexOf(".csv")));
         test.pass("Portfolio Name:" + portfolioName);
         test.pass("Portfolio imported with name as portfolio-yyy-mm-dd format successfully");
     }
@@ -192,7 +192,7 @@ public class ImportPortfolioTests extends APITestBase {
         Date date = new Date();
         String todaysDate = new SimpleDateFormat("yyyy-MM-dd").format(date);
 
-        Assert.assertEquals(portfolioName, "portfolio-" + todaysDate);
+        Assert.assertEquals(portfolioName, fileName.substring(0, fileName.indexOf(".csv")));
         test.pass("Portfolio Name:" + portfolioName);
         test.pass("Portfolio imported with today's date and name as portfolio-yyy-mm-dd format successfully");
 
@@ -227,7 +227,7 @@ public class ImportPortfolioTests extends APITestBase {
                 .body("errorType", notNullValue())
                 .body("errorMessage", notNullValue());
         String actualErrorMessage = response.jsonPath().getString("errorMessage").trim();
-        actualErrorMessage = actualErrorMessage.replaceAll(" "," ");
+        actualErrorMessage = actualErrorMessage.replaceAll(" ", " ");
         String expectedErrorMessage = errorMessage.trim();
         assertTestCase.assertEquals(actualErrorMessage, expectedErrorMessage, "Error Message Verification", testCaseNumber);
         test.pass("Error shown in response as expected");
@@ -239,10 +239,9 @@ public class ImportPortfolioTests extends APITestBase {
     public Object[][] dpMethod() {
 
         return new Object[][]{
-                {"InvalidCurrencyInPortfolio.csv", INVALID_CURRENCY_ERROR_MESSAGE, 498},//498
-                {"InvalidCurrencyCodeInPortfolio.csv", INVALID_CURRENCY_ERROR_MESSAGE, 498},//498
-                {"InvalidCurrencyCodeInPortfolio2.csv", INVALID_CURRENCY_ERROR_MESSAGE, 3047},
-                {"EmptyCurrencyInPortfolio.csv", EMPTY_CURRENCY_ERROR_MESSAGE, 499, 518, 834},//499-518 //834
+                {"InvalidCurrencyInPortfolio.csv", INVALID_CURRENCY_ERROR_MESSAGE, 498, 9914},//498
+                {"InvalidCurrencyCodeInPortfolio.csv", INVALID_CURRENCY_ERROR_MESSAGE, 498, 9914},//498
+                {"InvalidCurrencyCodeInPortfolio2.csv", INVALID_CURRENCY_ERROR_MESSAGE, 3047, 9914},
                 {"NoIdentifierInPortfolio.csv", NO_IDENTIFIER_ERROR_MESSAGE, 504, 839},//504//839
                 {"EmptyIdentifier.csv", EMPTY_IDENTIFIER_ERROR_MESSAGE, 504, 839},//504//839
                 {"InvalidIdentifierValue.csv", INVALID_IDENTIFIER_VALUE_ERROR_MESSAGE, 506, 837},//506//837
@@ -250,7 +249,7 @@ public class ImportPortfolioTests extends APITestBase {
                 //{"InvalidDate.csv", INVALID_DATE_ERROR_MESSAGE, 512, 836},//512/836
                 //{"InvalidDate2.csv", INVALID_DATE_ERROR_MESSAGE, 512, 836},//512/836
                 //{"InvalidDate3.csv", INVALID_DATE_ERROR_MESSAGE, 512, 836},//512/836
-                {"NoHeader.csv", INVALID_COLUMN_ERROR_MESSAGE, 520, 831},//520//831
+                {"NoHeader.csv", NO_HEADER_ERROR_MESSAGE, 520, 831},//520//831
                 {"InvalidHeader.csv", INVALID_HEADER_ERROR_MESSAGE, 520},//520
                 {"ValueMissingHeader.csv", INVALID_COLUMN_ERROR_MESSAGE2, 520},//520
                 {"ValueMissingHeader2.csv", VALUE_MISSING_HEADER_ERROR_MESSAGE, 520},//520

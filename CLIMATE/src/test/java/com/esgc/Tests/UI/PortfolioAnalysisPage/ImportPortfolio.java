@@ -107,7 +107,7 @@ public class ImportPortfolio extends UITestBase {
         assertTestCase.assertTrue(researchLinePage.CheckifClosebuttonIsDisplayed(), "Close button verified");
         test.pass("Verified:'X' button was displayed on the successful message popup");
 
-        String expectedPortfolioName = ExcelUtil.getPortfolioNameFromCSVFile(inputFile);
+        String expectedPortfolioName = "Portfolio Upload updated_good";
         assertTestCase.assertEquals(researchLinePage.getPlaceholderInSuccessPopUp(), expectedPortfolioName, "Portfolio name in pop up");
 
         researchLinePage.waitForDataLoadCompletion();
@@ -356,7 +356,7 @@ public class ImportPortfolio extends UITestBase {
         BrowserUtils.wait(2);
 
         String popUpMessage = researchLinePage.getUnknownIdentifierPopUpMessage();
-        String expectedErrorMessage = "124/126 unique identifiers matched; the system was unable to match 2 identifiers for: Invalid Identifier Included Portfolio";
+        String expectedErrorMessage = "124/126 unique identifiers matched; the system was unable to match 2 identifiers for: Invalid Identifier Included Portfolio  Included Portfolio";
 
         Assert.assertTrue(researchLinePage.checkIfUnknownIdentifierPopUpDisplayed());
         Assert.assertEquals(popUpMessage, expectedErrorMessage);
@@ -380,7 +380,6 @@ public class ImportPortfolio extends UITestBase {
                 {"InvalidCurrencyInPortfolio.csv", INVALID_CURRENCY_ERROR_MESSAGE, 498},//498
                 {"InvalidCurrencyCodeInPortfolio.csv", INVALID_CURRENCY_ERROR_MESSAGE, 498},//498
                 {"InvalidCurrencyCodeInPortfolio2.csv", INVALID_CURRENCY_ERROR_MESSAGE, 3047},
-                {"EmptyCurrencyInPortfolio.csv", EMPTY_CURRENCY_ERROR_MESSAGE, 499, 518, 834},//499-518 //834
                 {"NoIdentifierInPortfolio.csv", NO_IDENTIFIER_ERROR_MESSAGE, 504, 839},//504//839
                 {"EmptyIdentifier.csv", EMPTY_IDENTIFIER_ERROR_MESSAGE, 504, 839},//504//839
                 {"InvalidIdentifierValue.csv", INVALID_IDENTIFIER_VALUE_ERROR_MESSAGE, 506, 837},//506//837

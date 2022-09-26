@@ -102,7 +102,7 @@ public class LoginPage extends PageBase {
     @FindBy(xpath = "//body")
     public WebElement body;
 
-    @FindBy(xpath = "//li[text()='Moody's ESG360: Dashboard']")
+    @FindBy(xpath = "//li[text()=\"Moody's ESG360: Dashboard\"]")
     public WebElement MESGCLeftMenuHeader;
 
     @FindBy(xpath = "//a[text()='Terms of Use']")
@@ -129,6 +129,13 @@ public class LoginPage extends PageBase {
         wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(password);
         if (!termsAndConditionsCheckBox.isSelected())
             wait.until(ExpectedConditions.visibilityOf(termsAndConditionsLabel)).click();
+        wait.until(ExpectedConditions.visibilityOf(loginButton)).click();
+
+    }
+
+    public void loginWithParamsToOktaPage(String userName, String password) {
+        wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(userName, Keys.ENTER);
+        wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(password);
         wait.until(ExpectedConditions.visibilityOf(loginButton)).click();
 
     }
@@ -385,7 +392,7 @@ public class LoginPage extends PageBase {
         try {
             return BlankUserNameErrorMsg.isDisplayed();
         } catch (Exception e) {
-            return true;
+            return false;
         }
     }
 
@@ -397,9 +404,9 @@ public class LoginPage extends PageBase {
 
     public boolean checkIfCorrectValidationErrorMsgForBlankPasswordDisplayed() {
         try {
-            return BlankPasswordErrorMsg.isDisplayed();
+            return wait.until(ExpectedConditions.visibilityOf(BlankPasswordErrorMsg)).isDisplayed();
         } catch (Exception e) {
-            return true;
+            return false;
         }
     }
 
@@ -409,9 +416,9 @@ public class LoginPage extends PageBase {
 
     public boolean checkIfUserLoggedInSuccessfully() {
         try {
-            return MESGCLeftMenuHeader.isDisplayed();
+            return wait.until(ExpectedConditions.visibilityOf(MESGCLeftMenuHeader)).isDisplayed();
         } catch (Exception e) {
-            return true;
+            return false;
         }
     }
 
@@ -449,6 +456,10 @@ public class LoginPage extends PageBase {
         wait.until(ExpectedConditions.visibilityOf(menu));
         BrowserUtils.clickWithJS(menu);
         logout.click();
+    }
+
+    public void checkTermsAndConditions(){
+        wait.until(ExpectedConditions.visibilityOf(termsAndConditionsLabel)).click();
     }
 }
 
