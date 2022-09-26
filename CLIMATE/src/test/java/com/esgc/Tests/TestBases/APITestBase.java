@@ -1,7 +1,7 @@
 package com.esgc.Tests.TestBases;
 
 
-import com.esgc.Utulities.APIUtilities;
+import com.esgc.Utilities.APIUtilities;
 import io.restassured.response.Response;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
@@ -35,14 +35,13 @@ public abstract class APITestBase extends TestBaseClimate {
     public Object[][] availableResearchLinesForAPITests() {
 
         return new Object[][]{
+                {"ESG Assessments"},
                 {"operationsrisk"},
                 {"marketrisk"},
                 {"supplychainrisk"},
-                //{"physicalriskmgmt"},
+                {"physicalriskmgmt"},
                 {"carbonfootprint"},
                 {"brownshareasmt"},
-                //{"energytransmgmt"},
-                //{"tcfdstrategy"},
                 {"greenshareasmt"},
         };
     }
