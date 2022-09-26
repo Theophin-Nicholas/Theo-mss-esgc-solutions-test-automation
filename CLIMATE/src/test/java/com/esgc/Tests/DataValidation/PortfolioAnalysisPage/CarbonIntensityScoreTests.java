@@ -4,7 +4,7 @@ import com.esgc.APIModels.APIFilterPayload;
 import com.esgc.APIModels.PortfolioScoreWrapper;
 import com.esgc.DBModels.ResearchLineIdentifier;
 import com.esgc.Tests.TestBases.DataValidationTestBase;
-import com.esgc.Utulities.APIUtilities;
+import com.esgc.Utilities.APIUtilities;
 import com.esgc.Utilities.Xray;
 import io.restassured.response.Response;
 import org.hamcrest.Matchers;
@@ -18,6 +18,7 @@ import java.util.List;
 
 public class CarbonIntensityScoreTests extends DataValidationTestBase {
 
+    //TODO update flow instead of getting results from DB with query
     @Test(groups = {"regression", "data_validation"}, dataProvider = "researchLines")
     @Xray(test = {2988, 2991, 2992, 2993, 2994, 2996, 2997, 3203})
     public void verifyCarbonIntensityScoreWithMixedIdentifiers(@Optional String sector, @Optional String region,

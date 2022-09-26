@@ -8,4 +8,5 @@ public class PhysicalRiskHazardsSummaryDetails {
     public String highest_risk_hazard_category;
     public double highest_risk_hazard_fac_exp;
     public String hrh_risk_category;
+    public String last_updated_date;
 }
