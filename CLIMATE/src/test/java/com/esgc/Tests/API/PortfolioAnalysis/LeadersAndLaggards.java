@@ -5,7 +5,7 @@ import com.esgc.APIModels.LeadersAndLaggardsWrapper;
 import com.esgc.Controllers.APIController;
 import com.esgc.Tests.TestBases.APITestBase;
 import com.esgc.Utilities.Xray;
-import com.esgc.Utulities.APIUtilities;
+import com.esgc.Utilities.APIUtilities;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import org.testng.annotations.Optional;
@@ -16,7 +16,7 @@ import static org.hamcrest.Matchers.*;
 public class LeadersAndLaggards extends APITestBase {
 
     @Test(groups = {"api", "regression"}, dataProvider = "API Research Lines")
-    @Xray(test = {645, 646})
+    @Xray(test = {645, 646,9875})
     public void leadersAndLaggards_Success(@Optional String researchLine) {
         APIController apiController = new APIController();
 
