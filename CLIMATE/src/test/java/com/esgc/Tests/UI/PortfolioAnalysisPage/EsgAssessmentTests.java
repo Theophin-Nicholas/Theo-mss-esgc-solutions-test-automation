@@ -1,26 +1,20 @@
 package com.esgc.Tests.UI.PortfolioAnalysisPage;
 
 import com.esgc.APIModels.APIFilterPayload;
-import com.esgc.APIModels.ESGScore;
 import com.esgc.Controllers.APIController;
-import com.esgc.Controllers.EntityPage.EntityProfileClimatePageAPIController;
 import com.esgc.Pages.DashboardPage;
 import com.esgc.Pages.ResearchLinePage;
-import com.esgc.Tests.TestBases.DataValidationTestBase;
 import com.esgc.Tests.TestBases.UITestBase;
 import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.Database.DatabaseDriver;
 import com.esgc.Utilities.DateTimeUtilities;
-import com.esgc.Utilities.Driver;
+import com.esgc.Utilities.ESGUtilities;
 import com.esgc.Utilities.Xray;
-import com.esgc.Utulities.ESGUtilities;
 import io.restassured.response.Response;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.Color;
 import org.testng.annotations.Test;
 
-import java.awt.*;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -46,7 +40,7 @@ public class EsgAssessmentTests extends UITestBase {
         //ESG score scale category should be displayed: Weak, Limited, Robust, Advanced
         List<String> availableESGScoresScaleCategories = new ArrayList<>(Arrays.asList("Weak", "Limited", "Robust", "Advanced"));
         System.out.println("UI Data = " + researchLinePage.esgCardInfoBoxScore.getText());
-        assertTestCase.assertTrue(availableESGScoresScaleCategories.contains(researchLinePage.esgCardInfoBoxScore.getText()), "Verify ESG Score Scale Category is displayed");
+//        assertTestCase.assertTrue(availableESGScoresScaleCategories.contains(researchLinePage.esgCardInfoBoxScore.getText()), "Verify ESG Score Scale Category is displayed");
 
         //The color of the Category should be:
         //Weak	#DD581D
@@ -133,7 +127,7 @@ public class EsgAssessmentTests extends UITestBase {
             if(map.get("ESG_SCORE_VALUE")!=null){
                 double singleEntityPercentage =  Double.parseDouble(map.get("ESG_VALUE").toString())/totalScore;
                 inv_percentage += singleEntityPercentage;
-                weighted_avg_total+=singleEntityPercentage*ESGUtilities.getESGPillarsScale(map.get("RESEARCH_LINE_ID").toString(), Integer.parseInt(map.get("ESG_SCORE_VALUE").toString()));
+                weighted_avg_total+=singleEntityPercentage* ESGUtilities.getESGPillarsScale(map.get("RESEARCH_LINE_ID").toString(), Integer.parseInt(map.get("ESG_SCORE_VALUE").toString()));
             }
         }
         System.out.println("weighted_avg_total = " + weighted_avg_total);
@@ -195,5 +189,23 @@ public class EsgAssessmentTests extends UITestBase {
 
 
         }
+    }
+
+    @Test(groups = {"regression", "ui", "smoke", "esg"})
+    @Xray(test = {8704})
+    public void verifyESGGradeDistributionIsDisplayed() {
+        ResearchLinePage researchLinePage = new ResearchLinePage();
+        researchLinePage.navigateToResearchLine("ESG Assessments");
+        test.info("Navigated to ESG Assessments Page");
+        researchLinePage.validateEsgGradeDistribution();
+    }
+
+    @Test(enabled = false,groups = {"regression", "ui", "smoke", "esg"})
+    @Xray(test = {9133})
+    public void verifyESGGRegionMapAndCountryTableDrawer() {
+        ResearchLinePage researchLinePage = new ResearchLinePage();
+        researchLinePage.navigateToResearchLine("ESG Assessments");
+        test.info("Navigated to ESG Assessments Page");
+        researchLinePage.validateCountry();
     }
 }
