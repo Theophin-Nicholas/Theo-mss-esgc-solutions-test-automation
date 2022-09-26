@@ -67,6 +67,8 @@ public class DashboardSummaryHeader extends DashboardUITestBase {
         dashboardPage.clickViewCompaniesAndInvestments();
         dashboardPage.selectViewByRegion();
 
+        dashboardPage.closePortfolioExportDrawer();
+
     }
 
     @Test(groups = {"dashboard", "regression", "ui", "smoke"})
@@ -74,6 +76,7 @@ public class DashboardSummaryHeader extends DashboardUITestBase {
     public void verifyViewMethodologies(){
         // ESGCA-8334: General UI Checks for Methodology Drawer
         DashboardPage dashboardPage = new DashboardPage();
+        dashboardPage.navigateToPageFromMenu("Dashboard");
 
         dashboardPage.selectViewMethodologies();
         assertTestCase.assertTrue(dashboardPage.verifyMethodologiesPopup(),"Verify Methodologies popup");

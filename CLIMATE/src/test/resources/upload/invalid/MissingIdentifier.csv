@@ -1,11 +1,9 @@
-Name: This is the name of the portfolio that will appear as a selection on the Platform,,
-"Currency: Please only enter in values of USD, GBP and EUR. Platform values will be converted into USD. Only one currency is allowed per portfolio",,
-As of Date: Please enter date in yyyy-mm-dd format,,
-"Identifier type: Please specify the values as one of the following Identifiers: ISIN, BBG_TICKER",,
-"Identifier: First column below !AsOfDate: Enter an ISIN or a full Bloomberg Ticker, example: T UN Equity or CMP UN Equity",,
-Value: Second Column below !AsOfDate: Please enter total monetary value of investment; this must be in whole number format and in one single currency,,
+"Currency: Please only enter in values of USD or GBP or EUR. Platform values will be converted into USD. Only one currency is allowed per portfolio"
+As of Date: Please enter date in yyyy-mm-dd format
+"Identifier type: Please specify the values as one of the following Identifiers: ISIN or BBG_TICKER"
+"Identifier: First column below !AsOfDate: Enter an ISIN or a Bloomberg Ticker. For example: T UN or CMP UN"
+Value: Second Column below !AsOfDate: Please enter total monetary value of investment. This must be in one single currency
 ,,
-!Name,Missing Identifier,
 !Currency,USD,
 !AsOfDate,2021-03-12,
 ,,

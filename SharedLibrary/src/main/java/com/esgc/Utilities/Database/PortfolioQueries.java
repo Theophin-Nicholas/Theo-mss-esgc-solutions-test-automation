@@ -204,6 +204,12 @@ public class PortfolioQueries {
             researchLineIdentifier.setPREVIOUS_SCORE(Double.valueOf(Optional.ofNullable(each.get("PREVIOUS_SCORE")).orElse("0").toString()));
             researchLineIdentifier.setValue(randomBetween(1000, 10000000));
 
+            try {
+                researchLineIdentifier.setResearchLineIdForESGModel(each.get("RESEARCH_LINE_ID").toString());
+            } catch (Exception e) {
+
+            }
+
             list.add(researchLineIdentifier);
         }
 
@@ -242,6 +248,10 @@ public class PortfolioQueries {
 
     //return queries that can get the right table names with a given value
     private String getQueryForResearchline(IdentifierQueryModel queryModel, String scoreModifier) {
+        String model = "";
+        if(queryModel.getTableName().contains("ESG")){
+            model = "          rl.Research_line_id,";
+        }
         return "WITH rl AS\n" +
                 "(\n" +
                 "       SELECT " + queryModel.getEntityIdColumnName() + " AS bvd9_number,\n" +
@@ -254,6 +264,7 @@ public class PortfolioQueries {
                 "          country_code          AS country_iso_code,\n" +
                 "          entity_proper_name    AS company_name,\n" +
                 "          l1_sector             AS sector_name,\n" +
+                model +
                 "          world_region,\n" +
                 "          isin,\n" +
                 "          bbg_ticker,\n" +
@@ -313,6 +324,13 @@ public class PortfolioQueries {
     }
 
     private String getQueryForIdentifiersNotInResearchline(IdentifierQueryModel queryModel) {
+        String table;
+
+        if (queryModel.getTableName().contains("ESG")) {
+            table = "ESG_OVERALL_SCORES EOS";
+        } else {
+            table = queryModel.getTableName().substring(0, queryModel.getTableName().indexOf("WHERE"));
+        }
         return "    SELECT i.BVD9_NUMBER, -1111 as SCORE, country_code as COUNTRY_ISO_CODE, " +
                 "               ENTITY_PROPER_NAME as COMPANY_NAME, L1_SECTOR as SECTOR_NAME, WORLD_REGION  , ISIN , BBG_TICKER" +
                 "    FROM ESG_ENTITY_MASTER e " +
@@ -325,9 +343,9 @@ public class PortfolioQueries {
                 "    left join (SELECT * FROM   (SELECT   *,Row_number() OVER (partition BY BVD9_number ORDER BY Random()) rownum FROM     DF_DERIVED.ISIN_SORTED ) shuffled WHERE  rownum = 10 ) i on i.fsym_id = sse.fsym_id" +
                 "    left join (SELECT * FROM   (SELECT   *,Row_number() OVER (partition BY BVD9_number ORDER BY Random()) rownum FROM     DF_DERIVED.BBG_SORTED ) shuffled WHERE  rownum = 10 ) bbg on bbg.fsym_id = sse.fsym_id" +
                 "    WHERE i.bvd9_number NOT IN " +
-                "(SELECT " + queryModel.getEntityIdColumnName() + " FROM " + queryModel.getTableName().substring(0,queryModel.getTableName().indexOf("WHERE")) + ") " +
+                "(SELECT " + queryModel.getEntityIdColumnName() + " FROM " + table + ") " +
                 "    AND bbg.bvd9_number NOT IN " +
-                "(SELECT " + queryModel.getEntityIdColumnName() + " FROM " + queryModel.getTableName().substring(0,queryModel.getTableName().indexOf("WHERE")) + ") " +
+                "(SELECT " + queryModel.getEntityIdColumnName() + " FROM " + table + ") " +
                 "AND ISIN is not null AND WORLD_REGION is not null   " +
                 "AND       world_region != 'UNKN'\n" +
                 "AND       world_region != 'GLBL'\n" +
@@ -447,16 +465,43 @@ public class PortfolioQueries {
 
         IdentifierQueryModel queryModel = IdentifierQueryModelFactory.getIdentifierQueryModel(researchLine, month, year);
         assert queryModel != null;
+        if(researchLine.equals("ESG")){
+            String query = " with p as (\n" +
+                    "     select * from df_portfolio df where portfolio_id='00000000-0000-0000-0000-000000000000'\n" +
+                    " ),\n" +
+                    "  esg as (\n" +
+                    "    select eos.* from entity_coverage_tracking ect  \n" +
+                    "join ESG_OVERALL_SCORES eos on ect.orbis_id=eos.orbis_id and data_type = 'esg_pillar_score'  and sub_category = 'ESG' and eos.year || eos.month <= '202209' and eos.value>70//and eos.RESEARCH_LINE_ID=1015\n" +
+                    " where  coverage_status = 'Published' and publish = 'yes'\n" +
+                    " qualify row_number() OVER (PARTITION BY eos.orbis_id ORDER BY eos.year DESC, eos.month DESC, eos.scored_date DESC) =1\n" +
+                    "    )\n" +
+                    "     select esg.orbis_id as BVD9_NUMBER, esg.value as SCORE from p\n" +
+                    "    join esg on p.bvd9_number=esg.orbis_id; ";
 
+            System.out.println(query);
+
+            return getQueryResultMap(query);
+        }
         String tableName = queryModel.getTableName().substring(0, queryModel.getTableName().indexOf("WHERE"));
-        String dateFilter = queryModel.getTableName().substring(queryModel.getTableName().indexOf("WHERE"));
+        String dateFilter = queryModel.getTableName().substring(queryModel.getTableName().indexOf("WHERE") + 5);
+        String qualifier = "";
 
-        String query = "SELECT rl." + queryModel.getEntityIdColumnName() + " AS bvd9_number,\n" +
-                "              rl." + queryModel.getScoreColumnName() + "             AS score\n" +
+        if (dateFilter.contains("PARTITION BY")) {
+            qualifier = dateFilter.substring(dateFilter.indexOf("QUALIFY"));
+            dateFilter = dateFilter.substring(0, dateFilter.indexOf("QUALIFY"));
+        }
+
+        String bvd9Column = queryModel.getEntityIdColumnName();
+        String scoreColumn = queryModel.getScoreColumnName();
+
+
+        String query = "SELECT rl." + bvd9Column + " AS bvd9_number,\n" +
+                "              rl." + scoreColumn + "             AS score\n" +
                 "       FROM   df_portfolio df \n" +
-                "  LEFT JOIN   " + tableName + " rl   on  rl." + queryModel.getEntityIdColumnName() + " = df.bvd9_number  \n" +
+                "   JOIN   " + tableName + " rl   on  rl." + bvd9Column + " = df.bvd9_number  AND \n" +
                 dateFilter +
-                "        AND  PORTFOLIO_ID='" + portfolioId + "';";
+                "        WHERE PORTFOLIO_ID='" + portfolioId + "'\n" +
+                qualifier + ";";
 
         System.out.println(query);
 
@@ -483,7 +528,7 @@ public class PortfolioQueries {
                 "left join temperature_alignment ta on ta.bvd9_number=df.bvd9_number and ta.month=cf.month and ta.year=cf.year\n" +
                 "left join brown_share bs on bs.bvd9_number=df.bvd9_number and bs.month=cf.month and bs.year=cf.year\n" +
                 "left join green_share gs on gs.bvd9_number=df.bvd9_number and gs.month=cf.month and cf.year=gs.year\n" +
-                "left join entity_score es on es.ENTITY_ID_BVD9=df.bvd9_number and es.release_year || es.release_month <= '" + year + "" + month + "'   and es.release_year || es.release_month >= '" + (Integer.parseInt(year)-1) + "" + month + "'\n" +
+                "left join entity_score es on es.ENTITY_ID_BVD9=df.bvd9_number and es.release_year || es.release_month <= '" + year + "" + month + "'   and es.release_year || es.release_month >= '" + (Integer.parseInt(year) - 1) + "" + month + "'\n" +
                 "left join esg_entity_master eem on cf.bvd9_number=eem.orbis_id \n" +
                 "left join FACTSET_MOODYS_DS.SYM_V1.SYM_SEC_ENTITY sse on eem.factset_entity_id = sse.factset_entity_id\n" +
                 "where PORTFOLIO_ID='" + portfolioId + "'" +
@@ -657,11 +702,12 @@ public class PortfolioQueries {
         }
         return score;
     }
+
     public List<List<Object>> getEsgInfoFromDB() {
         String query1 = "select sum(value) from df_portfolio where portfolio_id='00000000-0000-0000-0000-000000000000'";
         String total = getQueryResultList(query1).get(0).get(0).toString();
 
-        String query2 = "select df.COMPANY_NAME,round((df.value/"+total+")*100,2) as investment,eos.value, ect.METHODOLOGY_VERSION from df_portfolio df\n" +
+        String query2 = "select df.COMPANY_NAME,round((df.value/" + total + ")*100,2) as investment,eos.value, ect.METHODOLOGY_VERSION from df_portfolio df\n" +
                 "join entity_coverage_tracking ect on ect.orbis_id=df.bvd9_number and coverage_status = 'Published' and publish = 'yes'\n" +
                 "join ESG_OVERALL_SCORES eos on ect.orbis_id=eos.orbis_id and data_type = 'overall_alphanumeric_score' and sub_category = 'ESG'\n" +
                 "where portfolio_id='00000000-0000-0000-0000-000000000000'\n" +
@@ -669,6 +715,20 @@ public class PortfolioQueries {
                 " qualify row_number() OVER (PARTITION BY eos.orbis_id ORDER BY eos.year DESC, eos.month DESC, eos.scored_date DESC) =1";
 
         return getQueryResultList(query2);
+    }
+
+    public List<Map<String, Object>> getESGModelWithPortfolioID(String month, String year, String portfolioId) {
+        String query = "select DISTINCT eos.ORBIS_ID, eos.RESEARCH_LINE_ID from df_portfolio  df\n" +
+                "join ESG_OVERALL_SCORES eos on eos.orbis_id=df.bvd9_number\n" +
+                "join entity_coverage_tracking ect  on ect.orbis_id=eos.orbis_id \n" +
+                "and data_type = 'esg_pillar_score'  and sub_category = 'ESG' \n" +
+                "and eos.year || eos.month <= '" + year + month + "' and coverage_status = 'Published' and publish = 'yes'\n" +
+                "where portfolio_id='" + portfolioId + "' ;";
+
+        System.out.println(query);
+
+        return getQueryResultMap(query);
+
     }
 
     public List<List<Object>> getPortfolioCompaniesFromDB() {
@@ -682,5 +742,84 @@ public class PortfolioQueries {
                 "from df_portfolio df\n" +
                 "where portfolio_id='00000000-0000-0000-0000-000000000000'";
         return getQueryResultList(query1);
+    }
+
+    public List<ESGLeaderANDLaggers> getESGLeadersAndLaggersData(String portfolioid, String yearmonth) {
+       /* String query = " with p as (SELECT bvd9_number,region, sector, SUM(value) as invvalue, COUNT(*) OVER() total_companies, " +
+                "SUM(SUM(value)) OVER() AS total_value FROM df_target.df_portfolio WHERE 1=1 " +
+                "AND portfolio_id = '" + portfolioid +"'" +
+                "GROUP BY bvd9_number, region, sector ) ,esg as (select eos.*,ect.research_line_id as rl from entity_coverage_tracking ect  " +
+                "join ESG_OVERALL_SCORES eos on ect.orbis_id=eos.orbis_id and data_type = 'esg_pillar_score'  and sub_category = 'ESG'" +
+                "and eos.year || eos.month <= '" + yearmonth +"'" +
+                "where  coverage_status = 'Published' and publish = 'yes' " +
+                "qualify row_number() OVER (PARTITION BY eos.orbis_id ORDER BY eos.year DESC, eos.month DESC, eos.scored_date DESC) =1),q " +
+                "as(select p.bvd9_number,eem.entity_proper_name AS company_name, round(esg.VALUE,0) as score," +
+                "round((100*(p.invvalue/p.total_value)),2) AS investment_pct, esg.rl from p    " +
+                "left join esg on p.bvd9_number=esg.orbis_id " +
+                "LEFT JOIN DF_TARGET.ESG_ENTITY_MASTER eem ON (p.bvd9_number = eem.orbis_id AND eem.ENTITY_STATUS = 'Active')" +
+                "where 1=1 and SUB_CATEGORY = 'ESG' QUALIFY row_number() over(partition by company_name ORDER BY esg.VALUE desc) = 1 " +
+                "ORDER BY esg.VALUE desc, investment_pct desc,company_name) " +
+                "select q.bvd9_number,q.company_name, RANK() OVER(ORDER BY q.score desc) AS Rank, q.investment_pct, q.score, q.rl as Scoring_RLID," +
+                "case when q.rl=1008 then case when (score >= 0 and score <= 29) then 1 " +
+                "when (score >= 30 and score <= 49) then 2" +
+                "when (score >= 50 and score <= 59) then 3 " +
+                "when (score >= 60 and score <= 100) then 4 end " +
+                "when q.rl=1015 then " +
+                "case when (score >= 0 and score <= 24) then 1 " +
+                "when (score >= 25 and score <= 44) then 2 " +
+                "when (score >= 45 and score <= 64) then 3 " +
+                "when (score >= 65 and score <= 100) then 4 " +
+                "end  end as scale " +
+                "from q ORDER BY scale desc, q.score desc, q.investment_pct desc,q.company_name ";*/
+
+        String query = "with p as (SELECT bvd9_number, COMPANY_NAME " +
+                ",region, sector, SUM(value) as invvalue, COUNT(*) OVER() total_companies, SUM(SUM(value)) OVER() AS total_value " +
+                "FROM df_target.df_portfolio WHERE 1=1 AND portfolio_id = '" + portfolioid +"' " +
+                "  GROUP BY bvd9_number, COMPANY_NAME, region, sector), " +
+                "e as (select p.*,ect.RESEARCH_LINE_ID, floor(eos.VALUE) as score, METHODOLOGY_VERSION " +
+                ",case " +
+                "when ect.RESEARCH_LINE_ID=1008 then " +
+                "case " +
+                "when (score < 30) then 1 " +
+                "when (score < 50) then 2 " +
+                "when (score < 60) then 3 " +
+                "when (score >= 60) then 4 " +
+                "end " +
+                "when ect.RESEARCH_LINE_ID=1015 then " +
+                "case " +
+                "when (score < 25) then 1 " +
+                "when (score < 45 ) then 2 " +
+                "when (score < 65) then 3 " +
+                "when (score >= 65) then 4 " +
+                "end " +
+                "end as scale " +
+                "from p " +
+                "join entity_coverage_tracking ect on ect.orbis_id=p.bvd9_number and coverage_status = 'Published' and publish = 'yes' " +
+                "left join ESG_OVERALL_SCORES eos on ect.orbis_id=eos.orbis_id and data_type in ('esg_pillar_score' ) and sub_category = 'ESG' " +
+                "where ect.RESEARCH_LINE_ID in (1008,1015) and score and eos.year || eos.month <= '" + yearmonth +"' " +
+                "qualify row_number() OVER (PARTITION BY eos.orbis_id ORDER BY eos.year DESC, eos.month DESC, eos.scored_date DESC) =1) " +
+                "select BVD9_Number, Company_name, RANK() OVER(ORDER BY Score desc NULLS LAST) AS Rank, " +
+                "round((100*(e.invvalue/e.total_value)),6) AS investment_pct, SCORE,RESEARCH_LINE_ID as SCORING_RLID, Scale, METHODOLOGY_VERSION from e " +
+                "order by scale desc, Score desc, INVESTMENT_PCT desc, Company_name";
+
+        List<ESGLeaderANDLaggers> score = new ArrayList<>();
+        try{
+        for (Map<String, Object> rs : getQueryResultMap(query)) {
+            ESGLeaderANDLaggers entity= new ESGLeaderANDLaggers();
+            entity.setBVD9_NUMBER(rs.get("BVD9_NUMBER").toString());
+            if (rs.get("COMPANY_NAME")!=null) entity.setCOMPANY_NAME(rs.get("COMPANY_NAME").toString()); else entity.setCOMPANY_NAME("");
+            entity.setRANK(Integer.valueOf(rs.get("RANK").toString()));
+            entity.setInvestmentPercentage(Double.valueOf(rs.get("INVESTMENT_PCT").toString()));
+            entity.setSCORE((int) Math.round(Double.valueOf(rs.get("SCORE").toString())));
+            entity.setSCORING_RLID(Integer.valueOf(rs.get("SCORING_RLID").toString()));
+            entity.setScale(Integer.valueOf(rs.get("SCALE").toString()));
+            entity.setMETHODOLOGY_VERSION((rs.get("METHODOLOGY_VERSION").toString()));
+            score.add(entity);
+        }}catch(Exception e){
+            System.out.println(e.toString());
+            System.out.println("Failed at recored Number " +  score.size());
+        }
+
+        return score;
     }
 }

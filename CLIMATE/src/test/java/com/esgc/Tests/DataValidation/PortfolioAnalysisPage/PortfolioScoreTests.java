@@ -6,7 +6,7 @@ import com.esgc.APIModels.RangeAndScoreCategory;
 import com.esgc.DBModels.EntityPage.PhysicalScore;
 import com.esgc.DBModels.ResearchLineIdentifier;
 import com.esgc.Tests.TestBases.DataValidationTestBase;
-import com.esgc.Utulities.APIUtilities;
+import com.esgc.Utilities.APIUtilities;
 import com.esgc.Utilities.Database.PortfolioQueries;
 import com.esgc.Utilities.PortfolioUtilities;
 import com.esgc.Utilities.Xray;
@@ -115,6 +115,8 @@ public class PortfolioScoreTests extends DataValidationTestBase {
         }
     }
 
+
+    //TODO needs to be updated
     @Test(groups = {"regression", "data_validation"})
     @Xray(test = {6370, 6371})
     public void verifyPhysicalHazardPortfolioScore(
