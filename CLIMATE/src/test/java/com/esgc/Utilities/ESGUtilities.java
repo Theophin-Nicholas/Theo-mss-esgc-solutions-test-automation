@@ -1,4 +1,4 @@
-package com.esgc.Utulities;
+package com.esgc.Utilities;
 
 import java.util.ArrayList;
 import java.util.Arrays;
