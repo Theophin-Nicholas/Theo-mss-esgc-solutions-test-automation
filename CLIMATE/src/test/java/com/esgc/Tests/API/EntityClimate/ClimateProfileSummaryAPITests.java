@@ -3,7 +3,7 @@ package com.esgc.Tests.API.EntityClimate;
 import com.esgc.APIModels.EntityProfileClimatePage.SummarySection.*;
 import com.esgc.Controllers.EntityPage.EntityProfileClimatePageAPIController;
 import com.esgc.Tests.TestBases.EntityClimateProfileTestBase;
-import com.esgc.Utulities.ESGUtilities;
+import com.esgc.Utilities.ESGUtilities;
 import com.esgc.Utilities.Xray;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;

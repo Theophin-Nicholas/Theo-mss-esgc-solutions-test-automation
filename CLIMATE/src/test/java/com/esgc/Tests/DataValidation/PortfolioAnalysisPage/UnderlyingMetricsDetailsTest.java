@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 public class UnderlyingMetricsDetailsTest extends DataValidationTestBase {
-
+//TODO null companies should be removed and we need to extend the coverage with other portfolios
     public static String portfolioId = "00000000-0000-0000-0000-000000000000";
 
     @Test(groups = {"regression", "data_validation"})
