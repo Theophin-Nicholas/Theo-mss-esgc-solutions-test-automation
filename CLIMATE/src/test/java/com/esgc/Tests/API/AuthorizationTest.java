@@ -4,7 +4,7 @@ import com.esgc.APIModels.APIFilterPayload;
 import com.esgc.APIModels.APIFilterPayloadWithImpactFilter;
 import com.esgc.Controllers.APIController;
 import com.esgc.Tests.TestBases.APITestBase;
-import com.esgc.Utulities.APIUtilities;
+import com.esgc.Utilities.APIUtilities;
 import com.esgc.Utilities.Xray;
 import org.testng.annotations.Test;
 

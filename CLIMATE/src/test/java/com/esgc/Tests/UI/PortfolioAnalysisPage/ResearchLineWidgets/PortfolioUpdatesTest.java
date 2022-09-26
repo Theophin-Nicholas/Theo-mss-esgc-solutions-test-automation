@@ -22,6 +22,9 @@ public class PortfolioUpdatesTest extends UITestBase {
         if (page.equals("Temperature Alignment") ) {
             throw new SkipException(page +" - has no updates");
         }
+        if ( page.equals("ESG Assessments")) {
+            throw new SkipException("not ready to test in " + page);
+        }
         researchLinePage.navigateToResearchLine(page);
         test.info("Navigated to " + page + " Page");
 
