@@ -66,7 +66,7 @@ public class ImportPortfolio extends DashboardUITestBase {
         assertTestCase.assertTrue(dashboardPage.CheckifClosebuttonIsDisplayed(), "Close button displayed");
         test.pass("Verified:'X' button was displayed on the successful message popup");
 
-        String expectedPortfolioName = ExcelUtil.getPortfolioNameFromCSVFile(inputFile);
+        String expectedPortfolioName = "Portfolio Upload updated_good";
         assertTestCase.assertEquals(dashboardPage.getPlaceholderInSuccessPopUp(), expectedPortfolioName, "Portfolio name displayed in pop up");
 
         dashboardPage.waitForDataLoadCompletion();

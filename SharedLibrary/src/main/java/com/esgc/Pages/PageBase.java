@@ -140,8 +140,8 @@ public abstract class PageBase {
     @FindBy(xpath = "//div[@role='dialog']/div/div/li")
     public WebElement portfolioEntityName;
 
-    @FindBy(xpath = "//div[text()='Portfolio Management']/../../..//span//*[name()='path']")
-    public List<WebElement> svgpath_images;
+    @FindBy(css = "svg > path[fill-rule='evenodd'][fill='#b8b8b8']")
+    public WebElement backArrow;
 
     @FindBy(xpath = "//span[text()='Portfolio Name']")
     public WebElement span_POrtfolioName;
@@ -1535,7 +1535,7 @@ public abstract class PageBase {
     }
 
     public boolean isRegionsFilterPresent() {
-        return regionsFilter.isDisplayed();
+        return wait.until(ExpectedConditions.visibilityOf(regionsFilter)).isDisplayed();
     }
 
     public boolean isSectorFilterPresent() {
@@ -1738,7 +1738,7 @@ public abstract class PageBase {
             // menuList.get(0).findElement(By.xpath("span")).click();
             //Validating that menu list is closed and background page is still on
             waitForDataLoadCompletion();
-            Assert.assertTrue(menuList.isEmpty() && Driver.getDriver().getCurrentUrl().equals(url), "Menu is still displayed and is not focused on main page");
+            Assert.assertTrue(menuList.size()==1 && Driver.getDriver().getCurrentUrl().equals(url), "Menu is still displayed and is not focused on main page");
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -2326,8 +2326,7 @@ public abstract class PageBase {
         try {
             DashboardPage dashboardPage = new DashboardPage();
             String portfolio = getSelectedPortfolioNameFromDropdown();
-            BrowserUtils.scrollTo(dashboardPage.endOfPage);// scrolling to the heamap
-            BrowserUtils.wait(2);
+            BrowserUtils.scrollTo(dashboardPage.endOfPage);// scrolling to the last widget on the page
             if (!dashboardPage.isStickyHeaderDisplayed()) {
                 return false;
             }
@@ -2424,7 +2423,7 @@ public abstract class PageBase {
     }
 
     public boolean validateSideArrowIsAvailable() {
-        return svgpath_images.get(0).isDisplayed();
+        return wait.until(ExpectedConditions.visibilityOf(backArrow)).isDisplayed();
     }
 
     public boolean validatespanPortfolioNameColumnIsAvailable() {
@@ -2516,7 +2515,6 @@ public abstract class PageBase {
 
     public void validatePortfolioNameNotChangedAfterUpdateAndClickOutside(String OriginalPortFolioName) {
         updatePortfolio(OriginalPortFolioName + "111");
-       // BrowserUtils.wait(10);
         closeMenuByClickingOutSide();
         clickMenu();
         portfolioSettings.click();

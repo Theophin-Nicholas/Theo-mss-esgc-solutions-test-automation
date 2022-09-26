@@ -9,6 +9,7 @@ import com.aventstack.extentreports.reporter.ExtentSparkReporter;
 import com.esgc.APIModels.TestCase;
 import com.esgc.Reporting.CustomAssertion;
 import com.esgc.Utilities.*;
+import org.apache.commons.lang.time.StopWatch;
 import org.openqa.selenium.JavascriptExecutor;
 import org.testng.ITestResult;
 import org.testng.Reporter;
@@ -33,6 +34,8 @@ public abstract class TestBase {
     public static boolean isAPITest = false;
     public static boolean isDataValidationTest = false;
     public static boolean isBrowserOpen = false;
+    public static StopWatch stopWatch = new StopWatch();
+
 
 
     @BeforeTest(alwaysRun = true)

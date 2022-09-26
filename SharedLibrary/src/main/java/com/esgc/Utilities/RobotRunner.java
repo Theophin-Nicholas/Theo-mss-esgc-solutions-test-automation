@@ -20,7 +20,7 @@ public class RobotRunner {
         System.out.println(hostSystem);
         hostSystem = hostSystem.toLowerCase();
         if (hostSystem.contains("windows")) {
-            String script = System.getProperty("user.dir") + "\\src\\test\\java\\com\\esgc\\Utilities\\script.vbs";
+            String script = System.getProperty("user.dir").substring(0,System.getProperty("user.dir").indexOf("CLIMATE")) + "\\SharedLibrary\\src\\main\\java\\com\\esgc\\Utilities\\script.vbs";
 // search for real path:
 //            String executable = "C:\\windows\\...\\vbs.exe";
 //            String cmdArr [] = {executable, script};

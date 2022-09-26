@@ -7,6 +7,6 @@ test-output
 /src/test/java/com/esgc/api_demo/
 *.prefs
 .classpath
-/src/test/resources/upload/portfolio_repository/*
+/CLIMATE/src/test/resources/upload/portfolio_repository/*
 /personal-access-auth.properties
 /src/test/resorces/environments/prod.properties
