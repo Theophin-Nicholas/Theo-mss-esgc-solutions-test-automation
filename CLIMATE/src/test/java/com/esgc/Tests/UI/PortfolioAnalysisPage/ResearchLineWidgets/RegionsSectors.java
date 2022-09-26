@@ -6,6 +6,7 @@ import com.esgc.TestBase.DataProviderClass;
 import com.esgc.Tests.TestBases.UITestBase;
 import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.Xray;
+import org.testng.SkipException;
 import org.testng.annotations.Test;
 
 public class RegionsSectors extends UITestBase {
@@ -38,7 +39,9 @@ public class RegionsSectors extends UITestBase {
     @Xray(test = {467, 822, 823, 1208, 1265, 1279, 1281, 1704, 1705, 1748, 1920, 2145, 2149, 2212, 2488, 6763, 6762, 6761, 6760, 6759, 6757,2665})
     public void verifyRegionSectorDrillDowns(String page) {
         ResearchLinePage researchLinePage = new ResearchLinePage();
-
+        if ( page.equals("ESG Assessments")) {
+            throw new SkipException("not ready to test in " + page);
+        }
         researchLinePage.navigateToResearchLine(page);
         BrowserUtils.wait(5);
         test.info("Navigated to " + page + " Page");

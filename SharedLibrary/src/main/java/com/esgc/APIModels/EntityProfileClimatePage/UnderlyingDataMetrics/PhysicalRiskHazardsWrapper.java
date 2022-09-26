@@ -10,6 +10,7 @@ import java.util.ArrayList;
 @Data
 public class PhysicalRiskHazardsWrapper {
     private String bvd9_number;
+    private String last_updated_date;
     private String research_line;
     private String score_category;
     private ArrayList<PhysicalRiskHazardsDetails> underlying_metrics;

@@ -184,12 +184,13 @@ public class PortfolioAnalysisEntitlementsTests extends UITestBase {
         Driver.getDriver().manage().deleteAllCookies();
         Driver.getDriver().navigate().refresh();
         LoginPage loginPage = new LoginPage();
-        loginPage.loginWithParams("esg-test1+no-export@outlook.com","Moodys123");
+        loginPage.loginWithParams("esg-test4@outlook.com ","Helloworld24");
         ResearchLinePage researchLinePage = new ResearchLinePage();
         researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
         BrowserUtils.wait(5);
 
         List<String> actualResearchLines = researchLinePage.getAvailableResearchLines();
+        System.out.println("actualResearchLines = " + actualResearchLines);
         assertTestCase.assertEquals(actualResearchLines.size(), 6, "Existing Research Lines Validation ");
        // assertTestCase.assertTrue(actualResearchLines.stream().filter(e -> e.equals("ESG Assessments")).count()==0);
 
