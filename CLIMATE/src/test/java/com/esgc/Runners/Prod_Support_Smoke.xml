@@ -1,0 +1,44 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+<!--<suite name="ESGC Smoke Suite" verbose="2" parallel="methods" thread-count="8">-->
+<suite name="ESGC Smoke Suite" verbose="2" parallel="classes" thread-count="8">
+    <listeners>
+        <listener class-name="com.esgc.Utilities.XrayListener"/>
+        <listener class-name="com.esgc.Reporting.Listeners"/>
+    </listeners>
+    <test name="ESGC Smoke Test">
+
+        <parameter name="reportName" value=" Test Report"/>
+
+        <groups>
+            <run>
+                <include name="smoke"/>
+                <exclude name="robot_dependency"></exclude>
+            </run>
+        </groups>
+
+        <classes>
+            <class name="com.esgc.Tests.UI.DashboardPage.DashboardHeatMapEntityListTests"/>
+            <!--<class name="com.esgc.Tests.UI.DashboardPage.Widgets.GeographicRiskMap"/>-->
+            <class name="com.esgc.Tests.UI.DashboardPage.DashboardSummaryHeader"/>
+            <class name="com.esgc.Tests.UI.DashboardPage.Widgets.ControversiesTable"/>
+            <class name="com.esgc.Tests.UI.DashboardPage.Widgets.PerformanceChart"/>
+            <class name="com.esgc.Tests.UI.PortfolioAnalysisPage.ResearchLineWidgets.PortfolioScore"/>
+            <class name="com.esgc.Tests.UI.PortfolioAnalysisPage.ResearchLineWidgets.PortfolioCoverage"/>
+            <class name="com.esgc.Tests.UI.PortfolioAnalysisPage.ResearchLineWidgets.PortfolioDistribution"/>
+            <class name="com.esgc.Tests.UI.PortfolioAnalysisPage.ResearchLineWidgets.PortfolioUpdatesTest"/>
+            <class name="com.esgc.Tests.UI.PortfolioAnalysisPage.ResearchLineWidgets.LeadersAndLaggards"/>
+            <class name="com.esgc.Tests.UI.PortfolioAnalysisPage.ResearchLineWidgets.ImpactTableTests"/>
+            <class name="com.esgc.Tests.UI.PortfolioAnalysisPage.ResearchLineWidgets.HistoryTableTests"/>
+            <!--  <class name="com.esgc.Tests.UI.PortfolioAnalysisPage.ResearchLineWidgets.RegionMapTests"/>-->
+            <class name="com.esgc.Tests.UI.PortfolioAnalysisPage.ResearchLineWidgets.RegionsSectors"/>
+            <!-- <class name="com.esgc.Tests.UI.PortfolioAnalysisPage.ResearchLineWidgets.UnderLyingDataMetrics"/>-->
+            <class name="com.esgc.Tests.UI.PortfolioAnalysisPage.ResearchLineWidgets.CarbonFootprint_EmissionWidgetsTest"/>
+            <class name="com.esgc.Tests.UI.PortfolioAnalysisPage.PhysicalRiskHazardsTests"/>
+            <class name="com.esgc.Tests.UI.EntityClimateProfile.EntityClimateProfile"/>
+            <class name="com.esgc.Tests.UI.EntityClimateProfile.EntityClimateProfileSummaryTests"/>
+        </classes>
+
+
+    </test>
+
+</suite>
