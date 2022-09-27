@@ -29,8 +29,11 @@ public class EMCAccountDetailsPage extends EMCBasePage {
     @FindBy (xpath = "//label//input")
     public WebElement statusCheckBox;
 
-    @FindBy (xpath = "//div[@name='subscriberType']")
+    @FindBy (xpath = "//div[@name='subscriberType']//input")
     public WebElement subscriberInput;
+
+    @FindBy (xpath = "//ul/li")
+    public List<WebElement> subscriberTypeList;
 
     @FindBy (name="contractStartDate")
     public WebElement startDateInput;
