@@ -1,12 +1,20 @@
 package com.esgc.Controllers.EntityIssuerPageController;
 
 import com.esgc.APIModels.EntityIssuerPage.DriverDetailPayload;
+import com.esgc.APIModels.EntityIssuerPage.ESGCategories;
+import com.esgc.APIModels.EntityIssuerPage.SubCategories;
+import com.esgc.APIModels.RangeAndScoreCategory;
 import com.esgc.Utilities.API.EntityPageEndpoints;
 import com.esgc.Utilities.APIUtulities.EntityIssuerPageEndPoints;
 import com.esgc.Utilities.Environment;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
+import net.snowflake.client.jdbc.internal.net.minidev.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import static io.restassured.RestAssured.given;
 
@@ -99,5 +107,62 @@ public class EntityIssuerPageAPIController {
         return response;
     }
 
+    public static  List<ESGCategories> getESGSubCategories(String methodology) {
 
+        List<ESGCategories> categories = new ArrayList<>();
+
+        switch (methodology) {
+            case "Environmental":
+                categories.add(new ESGCategories(methodology,  getSubcategoriesPojo(Arrays.asList(new String[]
+                        {"Environmental Protection","Transition Risks",
+                                "Biodiversity","Water Management","Air Emissions","Material Flows", "Physical Risks"}))));
+                break;
+
+            case "Social":
+                categories.add(new ESGCategories(methodology,  getSubcategoriesPojo(Arrays.asList(new String[]
+                        {
+                        "Labor Rights & Relations",
+                        "Reorganizations",
+                        "Career Development",
+                        "Health & Safety",
+                        "Wages & Work Hours",
+                        "Diversity & Inclusion",
+                        "Fundamental Human Rights",
+                        "Modern Slavery",
+                        "Social & Economic Development",
+                        "Societal Impact",
+                        "Responsible Tax",
+                        "Product Safety",
+                        "Customer Engagement"
+                        }))));
+                
+                break;
+
+            case "Governance":
+                categories.add(new ESGCategories(methodology, getSubcategoriesPojo(Arrays.asList(new String[]
+                        {
+                                "Supplier Relations",
+                                "Sustainable Sourcing",
+                                "Business Ethics",
+                                "Competition",
+                                "Lobbying",
+                                "Board",
+                                "Internal Controls & Risk Management",
+                                "Stakeholder Relations",
+                                "Executive Remuneration",
+                                "Cyber & Technological Risks"
+                        }))));
+
+                break;
+        }
+        return categories;
+    }
+
+    public static List<SubCategories> getSubcategoriesPojo (List<String> list){
+        List<SubCategories> subcat = new ArrayList<>();
+        for(String e : list){
+            subcat.add(new SubCategories(e));
+        }
+      return  subcat;
+    }
 }
