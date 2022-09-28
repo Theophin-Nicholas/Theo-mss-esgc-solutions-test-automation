@@ -43,6 +43,7 @@ public class GlobalHeaderSidePanel extends UITestBase {
         List<String> actualList = new ArrayList<>();
         List<String> expectedList = new ArrayList<>();
         for (WebElement names : portfolioName) {
+            System.out.println("names.getText() = " + names.getText());
             actualList.add(names.getText());
             expectedList.add(names.getText());
         }
