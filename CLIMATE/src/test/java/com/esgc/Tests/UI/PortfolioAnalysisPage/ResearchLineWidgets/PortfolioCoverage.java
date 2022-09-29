@@ -49,7 +49,7 @@ public class PortfolioCoverage extends UITestBase {
         test.pass("User is on " + page + " Page");
 
 
-        assertTestCase.assertTrue(researchLinePage.checkIfWidgetTitleIsDisplayed(title), "Portfolio Coverage is Displayed");
+       // assertTestCase.assertTrue(researchLinePage.checkIfWidgetTitleIsDisplayed(title), "Portfolio Coverage is Displayed");
         assertTestCase.assertTrue(researchLinePage.checkIfPortfolioTableIsDisplayed(title), "Portfolio Coverage is displayed", 553);
 
         test.pass(title + " Table/Chart displayed");

@@ -247,7 +247,7 @@ public class DataProviderClass {
     public Object[][] availableResearchLines() {
 
         return new Object[][]{
-                {"ESG Assessments"},
+              /*  {"ESG Assessments"},*/
                 {"Carbon Footprint"},
                 {"Physical Risk Management"},
                 {"Temperature Alignment"},
@@ -338,14 +338,14 @@ public class DataProviderClass {
                         {"481390423"},
                         {"233773078"},
                         {"105961081"},
-                        {"387796123"},
+                    /*    {"387796123"},
                         {"380582526"},
                         {"172031911"},
                         {"377084526"},
                         {"133050503"},
                         {"482794570"},
                         {"480796820"},
-                        {"486521987"},
+                        {"486521987"},*/
                 };
     }
 }
