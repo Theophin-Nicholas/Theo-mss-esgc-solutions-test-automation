@@ -438,7 +438,7 @@ public class ResearchLinePage extends UploadPage {
     @FindBy(xpath = "//div[@id='cardInfo_box']")
     public WebElement esgCardInfoBox;
 
-    @FindBy(xpath = "//div[@id='cardInfo_box']//span/..")
+    @FindBy(xpath = "//div[@id='cardInfo_box']//span")
     public WebElement esgCardInfoBoxScore;
 
     @FindBy(xpath = "//div[@id='cardInfo_box']//a")

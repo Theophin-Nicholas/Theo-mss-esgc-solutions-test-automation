@@ -717,20 +717,25 @@ public class PortfolioQueries {
         return getQueryResultList(query2);
     }
 
-    public String getEsgScoreOfPortfolio() {
+    public int getEsgScoreOfPortfolio() {
         String query1 = "select sum(value) from df_portfolio where portfolio_id='00000000-0000-0000-0000-000000000000'";
         String total = getQueryResultList(query1).get(0).get(0).toString();
 
         String query2 = "select df.COMPANY_NAME,round((df.value/" + total + ")*100,2) as investment,eos.value, ect.METHODOLOGY_VERSION from df_portfolio df " +
                 " join entity_coverage_tracking ect on ect.orbis_id=df.bvd9_number and coverage_status = 'Published' and publish = 'yes'" +
-                " join ESG_OVERALL_SCORES eos on ect.orbis_id=eos.orbis_id and data_type = 'overall_alphanumeric_score' and sub_category = 'ESG'" +
+                " join ESG_OVERALL_SCORES eos on ect.orbis_id=eos.orbis_id and data_type = 'esg_pillar_score' and sub_category = 'ESG'" +
                 " where portfolio_id='00000000-0000-0000-0000-000000000000'" +
                 " and eos.year || eos.month <= '202208'" +
                 " qualify row_number() OVER (PARTITION BY eos.orbis_id ORDER BY eos.year DESC, eos.month DESC, eos.scored_date DESC) =1";
 
-        getQueryResultList(query2);
+        List<Map<String, Object>> esgInfo = getQueryResultMap(query2);
+        int totalCompanies = esgInfo.size();
+        int sum = 0;
+        for(Map<String, Object> entityEsgInfo: esgInfo){
+            sum= sum+Integer.valueOf(entityEsgInfo.get("VALUE").toString());
+        }
 
-        return "";
+        return sum/totalCompanies;
 
     }
 
