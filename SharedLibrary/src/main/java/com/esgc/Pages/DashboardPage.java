@@ -194,7 +194,7 @@ public class DashboardPage extends UploadPage {
     //============= Heat Map
     @FindBy(xpath = "//*[text()='Select two:']/following-sibling::div/div")
     public List<WebElement> heatMapResearchLines;
-    @FindBy(xpath = "//h3[normalize-space()='Overall ESG Score']")
+    @FindBy(xpath = "//div[@id='heatmapentity-test-id']")
     public WebElement heatMapNoEntityWidget;
     @FindBy(xpath = "//div[@class='entityList']//br/..")
     public WebElement heatMapWidgetTitle;

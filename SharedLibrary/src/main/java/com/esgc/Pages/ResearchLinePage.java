@@ -234,7 +234,7 @@ public class ResearchLinePage extends UploadPage {
     @FindBy(xpath = "//*[contains(text(),'selected. Please')]")
     public WebElement noBenchmarkMessage;
 
-    @FindBy(xpath = "//*[@id='benchmark_4_box']")
+    @FindBy(xpath = "(//div[@id='distribution_box'])[2]")
     public WebElement BenchmarkSection;
 
     @FindBy(xpath = "//*[@id='benchmark_4_box']//div[text()='Score']/following-sibling::h6")
@@ -350,8 +350,13 @@ public class ResearchLinePage extends UploadPage {
     @FindBy(xpath = "//div[@id='impact-filter']")
     public WebElement impactFilter;
 
+    @FindBy(xpath = "//div[@id='impact-filter']")
+    public List<WebElement> impactFilters;
     @FindBy(xpath = "//div[@class='impactTableWrapper']")
     public WebElement impactTable;
+
+    @FindBy(xpath = "//div[@class='impactTableWrapper']")
+    public List<WebElement> impactTables;
 
     @FindBy(xpath = "//*[text()='Physical Risk Hazards: Operations Risk']")
     public WebElement impactTableMainTitle;
@@ -494,7 +499,6 @@ public class ResearchLinePage extends UploadPage {
 
     @FindBy(xpath = "//a[.='hide']")
     public WebElement geoSectionHideButton;
-
 
 
     //=============== Methods
@@ -689,7 +693,9 @@ public class ResearchLinePage extends UploadPage {
                     .replace("<", ""));
             System.out.println("investment = " + investment);
             if (investment > 0 && investment < 1) {
-                if (!investmentPerc.equals("<1%")) {
+                System.out.println("Investment is less then one");
+                if (investmentPerc.equals("<1%")) {
+                    System.out.println("Investment has <1%");
                     return false;
                 }
             }
@@ -1556,7 +1562,7 @@ public class ResearchLinePage extends UploadPage {
                                         return false;
                                     }
                                 }
-                            }else {
+                            } else {
                                 for (String headerValue : dataHeaders) {
                                     if (Arrays.stream(spanData).anyMatch(p -> p.contains(headerValue))) {
                                         matched = true;
@@ -2201,12 +2207,12 @@ public class ResearchLinePage extends UploadPage {
      */
 
     public List<String> impactFilterOptions() {
-        wait.until(ExpectedConditions.elementToBeClickable(impactFilter)).isDisplayed();
-        impactFilter.click();
-        BrowserUtils.wait(2);
-        String text = Driver.getDriver().findElement(By.xpath("//ul[@role='listbox']")).getText();
-        List<String> options = Arrays.asList(text.split("\\n"));
-        return options;
+            wait.until(ExpectedConditions.elementToBeClickable(impactFilter)).isDisplayed();
+            impactFilter.click();
+            BrowserUtils.wait(2);
+            String text = Driver.getDriver().findElement(By.xpath("//ul[@role='listbox']")).getText();
+            List<String> options = Arrays.asList(text.split("\\n"));
+            return options;
     }
 
     public void selectImpactFilterOption(String option) {
@@ -2234,8 +2240,14 @@ public class ResearchLinePage extends UploadPage {
     }
 
     public List<String> verifyImpactTableColumns() {
-        wait.until(ExpectedConditions.visibilityOf(impactTable)).isDisplayed();
-        return impactTable.findElements(By.xpath(".//thead/tr/th")).stream().map(WebElement::getText).collect(Collectors.toList());
+        if (impactTables.size() > 0) {
+            wait.until(ExpectedConditions.visibilityOf(impactTable)).isDisplayed();
+            System.out.println("List: " + impactTable.findElements(By.xpath(".//thead/tr/th")).stream().map(WebElement::getText).collect(Collectors.toList()));
+            return impactTable.findElements(By.xpath(".//thead/tr/th")).stream().map(WebElement::getText).collect(Collectors.toList());
+        } else {
+            System.out.println("No Impact table");
+            return Arrays.asList("No Impact Table Present");
+        }
     }
 
     public boolean verifyImpactTableScoreCategoryColors(String researchLine) {
@@ -2655,7 +2667,9 @@ public class ResearchLinePage extends UploadPage {
                 "Read more about Methodology ESG Assessment 1.0\n" +
                 "Read more about Methodology ESG Assessment 2.0\n" +
                 "Read more about Methodology Controversy Risk Assessment";
+        BrowserUtils.wait(2);
         String UIText = EsgSummaryBox.getText();
+        BrowserUtils.wait(2);
         assertTestCase.assertEquals(ExpextedText, UIText);
 
     }
