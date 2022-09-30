@@ -6,6 +6,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class EMCAccountsPage extends EMCBasePage {
     @FindBy(tagName = "h4")
@@ -97,7 +98,7 @@ public class EMCAccountsPage extends EMCBasePage {
 
     public List<String> getAccountNames() {
         //return accountnames as String list
-        return accountNames.stream().map(WebElement::getText).collect(java.util.stream.Collectors.toList());
+         return accountNames.stream().map(name -> name.getText().toLowerCase()).collect(Collectors.toList());
     }
 
     public void clickOnCreateAccountButton() {
