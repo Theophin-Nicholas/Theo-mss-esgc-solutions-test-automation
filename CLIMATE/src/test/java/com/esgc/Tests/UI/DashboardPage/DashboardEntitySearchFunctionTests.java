@@ -4,10 +4,7 @@ import com.esgc.Pages.DashboardPage;
 import com.esgc.Pages.ResearchLinePage;
 import com.esgc.Tests.TestBases.UITestBase;
 import com.esgc.Utilities.BrowserUtils;
-import com.esgc.Utilities.Driver;
 import com.esgc.Utilities.Xray;
-import org.openqa.selenium.Keys;
-import org.openqa.selenium.interactions.Actions;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -64,7 +61,6 @@ public class DashboardEntitySearchFunctionTests extends UITestBase {
     public void verifySearchBoxDisappearOnDashboardOnClickCloseICon() {
         DashboardPage dashboardPage = new DashboardPage();
         test.info("Navigate to Portfolio Analysis page");
-
         dashboardPage.navigateToPageFromMenu("Dashboard");
         test.info("Click on Search Icon");
         dashboardPage.clickSearchIcon();
@@ -98,7 +94,6 @@ public class DashboardEntitySearchFunctionTests extends UITestBase {
     public void verifySearchBoxOnPortfolioAnalysisPageDisappearsOnPressingESCKey() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio Analysis page");
-
 
         researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
         researchLinePage.waitForDataLoadCompletion();
@@ -150,35 +145,31 @@ public class DashboardEntitySearchFunctionTests extends UITestBase {
         DashboardPage dashboardPage = new DashboardPage();
         test.info("Navigate to Dashboard page");
         dashboardPage.navigateToPageFromMenu("Dashboard");
-
         dashboardPage.searchIconPortfolioPage.click();
-
         assertTestCase.assertTrue(dashboardPage.checkWarningWhenNoMatchEntry("sss"), "No results found message appeared as warning");
-
     }
 
     @Test(groups = {"regression", "ui", "search_entity"},
-            description = "ESGCA-5843 - UI | Dashboard Page | Search Function | Verify that clicking on Entity name redirects to Entity page")
-    @Xray(test = 5843)
+            description = "Verify that clicking on Entity name redirects to Entity page and ESC button is closing the Entity page")
+    @Xray(test = {5843,5846})
     public void testClickingOnEntityName() {
         DashboardPage dashboardPage = new DashboardPage();
         test.info("Navigate to Dashboard page");
         dashboardPage.navigateToPageFromMenu("Dashboard");
-
         dashboardPage.searchIconPortfolioPage.click();
-
         assertTestCase.assertFalse(dashboardPage.checkClickingOnEntityName("App"), "Clicking on entity name on search bar worked");
         assertTestCase.assertTrue(dashboardPage.checkIfUserIsOnRightPage(), "User is not on expected page");
-
+        dashboardPage.pressESCKey();
+        assertTestCase.assertFalse(dashboardPage.isSearchBoxDisplayed(), "User is on expected page");
     }
 
-    @Test(groups = {"regression", "ui", "search_entity"},
+  /*  @Test(groups = {"regression", "ui", "search_entity"},
             description = "ESGCA-5846 - UI | Dashboard Page | Search Function | Verify that clicking ESC button is closing the Entity page")
     @Xray(test = 5846)
     public void testESCButtonClosingEntityPage() {
         DashboardPage dashboardPage = new DashboardPage();
         test.info("Navigate to Dashboard page");
-        dashboardPage.navigateToPageFromMenu("Dashboard");
+    //    dashboardPage.navigateToPageFromMenu("Dashboard");
         dashboardPage.searchIconPortfolioPage.click();
         assertTestCase.assertFalse(dashboardPage.checkClickingOnEntityName("App"), "Clicking on entity name on search bar worked");
 
@@ -186,7 +177,7 @@ public class DashboardEntitySearchFunctionTests extends UITestBase {
         action.sendKeys(Keys.ESCAPE).build().perform();
         assertTestCase.assertFalse(dashboardPage.isSearchBoxDisplayed(), "User is on expected page");
     }
-
+*/
 
 }
 

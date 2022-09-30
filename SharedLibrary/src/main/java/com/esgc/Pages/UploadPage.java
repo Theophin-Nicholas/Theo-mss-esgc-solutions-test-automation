@@ -255,7 +255,7 @@ public class UploadPage extends PageBase {
      */
     public boolean checkifSuccessPopUpIsDisplyed() {
         try {
-            return wait.until(ExpectedConditions.visibilityOf(successMessagePopUP)).isDisplayed();
+            return successMessagePopUP.isDisplayed();
         } catch (NoSuchElementException e) {
             return false;
         }

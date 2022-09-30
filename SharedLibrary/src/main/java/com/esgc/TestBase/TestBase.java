@@ -9,6 +9,7 @@ import com.aventstack.extentreports.reporter.ExtentSparkReporter;
 import com.esgc.APIModels.TestCase;
 import com.esgc.Reporting.CustomAssertion;
 import com.esgc.Utilities.*;
+import org.apache.commons.lang.time.StopWatch;
 import org.openqa.selenium.JavascriptExecutor;
 import org.testng.ITestResult;
 import org.testng.Reporter;
@@ -33,6 +34,8 @@ public abstract class TestBase {
     public static boolean isAPITest = false;
     public static boolean isDataValidationTest = false;
     public static boolean isBrowserOpen = false;
+    public static StopWatch stopWatch = new StopWatch();
+
 
 
     @BeforeTest(alwaysRun = true)
@@ -115,13 +118,12 @@ public abstract class TestBase {
         }
     }
 
-    //TODO Not in use as of now
     public void getExistingUsersAccessTokenFromUI() {
         System.out.println("getting token");
-        String getAccessTokenScript = "return JSON.parse(localStorage.getItem('okta-token-storage')).accessToken.accessToken";
-        accessToken = ((JavascriptExecutor) Driver.getDriver()).executeScript(getAccessTokenScript).toString();
-        System.setProperty("token", accessToken);
-        System.out.println("token = " + accessToken);
+            String getAccessTokenScript = "return JSON.parse(localStorage.getItem('okta-token-storage')).accessToken.accessToken";
+            String accessToken = ((JavascriptExecutor) Driver.getDriver()).executeScript(getAccessTokenScript).toString();
+            System.setProperty("token", accessToken);
+            System.out.println("token = " + accessToken);
     }
 
 }

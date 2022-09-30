@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class PerformanceChart extends DashboardUITestBase {
-
+//TODO portfolio selection should be updated since some portfolios do not have enough data
     @Test(groups = {"ui", "dashboard", "smoke", "regression"})
     @Xray(test = {2051, 4273, 4448, 2064, 7838, 8683, 8684, 8690})
     public void verifyPerformanceChartsAreDisplayed() {

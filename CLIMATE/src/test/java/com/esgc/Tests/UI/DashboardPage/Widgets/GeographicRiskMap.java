@@ -11,6 +11,7 @@ import org.testng.annotations.Test;
 import java.util.List;
 
 public class GeographicRiskMap extends DashboardUITestBase {
+    //TODO Geomap is de-scoped until get an update from business
    //Todo there is random fails due to clicking on the country."Holdings Title Verification"
     @Test(enabled = false, groups = {"ui", "dashboard", "smoke", "regression"},
             dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
@@ -45,7 +46,7 @@ public class GeographicRiskMap extends DashboardUITestBase {
 
 
     }
-
+    //TODO Geomap is de-scoped until get an update from business
     @Test(enabled = false, groups = {"ui", "dashboard", "smoke", "regression"},
             dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
     @Xray(test = {4559, 6309, 6310, 6311})
