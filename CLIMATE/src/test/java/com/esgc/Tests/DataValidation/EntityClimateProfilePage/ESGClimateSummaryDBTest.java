@@ -1,12 +1,16 @@
 package com.esgc.Tests.DataValidation.EntityClimateProfilePage;
 
 
+import com.esgc.APIModels.EntityHeader;
 import com.esgc.APIModels.EntityProfileClimatePage.SummarySection.BrownShareAndGreenShareClimateSummary;
 import com.esgc.APIModels.EntityProfileClimatePage.SummarySection.CarbonFootprintSummary;
 import com.esgc.APIModels.EntityProfileClimatePage.SummarySection.PhysicalRiskHazardsSummary;
 import com.esgc.APIModels.EntityProfileClimatePage.SummarySection.TemperatureAlignmentSummary;
 import com.esgc.APIModels.EntityProfileClimatePage.UnderlyingDataMetrics.PhysicalRiskHazardsDetails;
 import com.esgc.APIModels.EntityProfileClimatePage.UnderlyingDataMetrics.PhysicalRiskHazardsWrapper;
+import com.esgc.APIModels.EntityScoreCategory.ESGScores;
+import com.esgc.Controllers.EntityPage.EntityProfileClimatePageAPIController;
+import com.esgc.TestBase.DataProviderClass;
 import com.esgc.Tests.TestBases.EntityClimateProfileDataValidationTestBase;
 import com.esgc.Utilities.Xray;
 import io.restassured.path.json.JsonPath;
@@ -15,9 +19,10 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Test;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+
+import static com.esgc.Utilities.Database.EntityClimateProfilePageQueries.getESGDbScores;
+import static com.esgc.Utilities.Database.EntityClimateProfilePageQueries.getHeaderDB;
 
 public class ESGClimateSummaryDBTest extends EntityClimateProfileDataValidationTestBase {
 
@@ -29,7 +34,7 @@ public class ESGClimateSummaryDBTest extends EntityClimateProfileDataValidationT
                 controller.getClimateSummaryAPIResponse(orbisID, "Green Share")
                         .as(BrownShareAndGreenShareClimateSummary[].class));
         assertTestCase.assertEquals(
-                Integer.parseInt(data.get("SCORE")),
+                data.get("SCORE") == null ? "" : Integer.parseInt(data.get("SCORE")),
                 climateSummaryGreenShareAPIResponse.get(0).getClimate().getScore(),
                 "Green Share Score Validation for " + orbisID);
 
@@ -43,7 +48,7 @@ public class ESGClimateSummaryDBTest extends EntityClimateProfileDataValidationT
                 controller.getClimateSummaryAPIResponse(orbisID, "Brown Share")
                         .as(BrownShareAndGreenShareClimateSummary[].class));
         assertTestCase.assertEquals(
-                Integer.parseInt(data.get("SCORE")),
+                data.get("SCORE") == null ? "" : Integer.parseInt(data.get("SCORE")),
                 climateSummaryBrownShareAPIResponse.get(0).getClimate().getScore(),
                 "Brown Share Score Validation for " + orbisID);
 
@@ -63,7 +68,7 @@ public class ESGClimateSummaryDBTest extends EntityClimateProfileDataValidationT
                 climateSummaryTempertureAlignmentAPIResponse.getClimate().getEmissions_reduction_target_year(),
                 "Temperature Alignment Validation for EMISSIONS_REDUCTION_TARGET_YEAR");
         assertTestCase.assertEquals(data.get("IMPLIED_TEMPERATURE_RISE").equals("No Info") ?
-                -1d: Double.parseDouble(data.get("IMPLIED_TEMPERATURE_RISE")),
+                        -1d : Double.parseDouble(data.get("IMPLIED_TEMPERATURE_RISE")),
                 climateSummaryTempertureAlignmentAPIResponse.getClimate().getImplied_temperature_rise(),
                 "Temperature Alignment Validation for IMPLIED_TEMPERATURE_RISE");
         assertTestCase.assertEquals(data.get("UPDATED_DATE"),
@@ -105,7 +110,7 @@ public class ESGClimateSummaryDBTest extends EntityClimateProfileDataValidationT
                         {"000002959"},
                         {"000411117"},
                         {"000411117"},
-                        {"492557665"}, {"001812590"},{"048977121"}
+                        {"492557665"}, {"001812590"}, {"048977121"}
                 };
     }
 
@@ -188,7 +193,7 @@ public class ESGClimateSummaryDBTest extends EntityClimateProfileDataValidationT
     @Xray(test = {8988, 8989})
     public void validatePhysicalRiskManagement(@Optional String orbisID) {
         Map<String, String> data = entityClimateProfilepagequeries.getPhysicalRiskData(orbisID);
-        if (data.size()>0) {
+        if (data.size() > 0) {
             PhysicalRiskHazardsWrapper climateSummaryGreenShareAPIResponse = controller.getEntityUnderLyingPhysicalHazardAPIResponse(orbisID)
                     .as(PhysicalRiskHazardsWrapper.class);
 
@@ -220,11 +225,58 @@ public class ESGClimateSummaryDBTest extends EntityClimateProfileDataValidationT
                 }
 
             }
-        }
-        else{
+        } else {
             System.out.println("Entity does not have data to test");
         }
     }
 
+    @Test(groups = {"regression","smoke", "data_validation"},
+            dataProviderClass = DataProviderClass.class, dataProvider = "orbisIDWithDisclosureScore")
+    @Xray(test = {8750})
+    public void validateDisclosureRatio(@Optional String orbisID) {
+        //Get the header details via API
+        List<EntityHeader> entityHeader = Arrays.asList(controller.getHeaderDetailsWithPayload("{\"orbis_id\":\"" + orbisID + "\"}").getBody().as(EntityHeader[].class));
+        int disclosureRate = entityHeader.get(0).getOverall_disclosure_score();
+        System.out.println("list = " + entityHeader.get(0).getOverall_disclosure_score());
 
+        //Get the entity details which has Overall Disclosure rate from DB
+        List<String> dbResults = getHeaderDB(orbisID);
+
+        //Verify API and DB values
+        int disclosureDBRRate = (int) (Double.parseDouble(dbResults.get(0)) * 100);
+        assertTestCase.assertEquals(disclosureRate, disclosureDBRRate);
+
+    }
+
+    @Test(groups = {"regression", "smoke","data_validation"},
+            dataProviderClass = DataProviderClass.class, dataProvider = "orbisIDWithDisclosureScore")
+    @Xray(test = {9841})
+    public void verifyAPIForOverallESGScoreWidget(String orbis_id) {
+        EntityProfileClimatePageAPIController entityClimateProfileApiController = new EntityProfileClimatePageAPIController();
+        test.info("ESG Score widget API validation for " + orbis_id);
+        // Get the API response as ArrayList
+        Response response = entityClimateProfileApiController.getESGClimateSummary(orbis_id);
+        assertTestCase.assertEquals(response.getStatusCode(), 200, "ESG Climate Summary Projection API Response status is verified");
+        List<ESGScores> esgList = Arrays.asList(response.as(ESGScores[].class));
+        int size = esgList.get(0).getEsg_assessment().getScore_categories().size();
+        List<String> allScores = new ArrayList<>();
+        for (int i = 0; i < size; i++) {
+            if (!esgList.get(0).getEsg_assessment().getScore_categories().get(i).getScore().toString().contains("ESG")) {
+                Double value= (Double) esgList.get(0).getEsg_assessment().getScore_categories().get(i).getScore();
+                allScores.add(String.valueOf(Math.round(value*10000.0)/10000.0));
+            }
+        }
+        System.out.println("allScores = " + allScores);
+
+        List<String> dbResults = getESGDbScores(orbis_id);
+        List<String> dbScores=new ArrayList<>();
+        for(String dbScore: dbResults){
+            dbScores.add(String.valueOf(Math.round(Double.parseDouble(dbScore)*10000.0)/10000.0));
+        }
+        System.out.println("dbScores = " + dbScores);
+        //Compare both values
+        Collections.sort(allScores);
+        Collections.sort(dbScores);
+        assertTestCase.assertSame(allScores,dbScores);
+    }
 }

@@ -25,7 +25,8 @@ public class ImpactTableTests extends UITestBase {
         test.info("Test Cases: ESGCA-4932 ");
         ResearchLinePage researchLinePage = new ResearchLinePage();
         researchLinePage.navigateToResearchLine(page);
-        List<String> expected = Arrays.asList("Top 5", "Top 10", "Bottom 5", "Bottom 10", "Top 10% of Investment", "Bottom 10% of Investment");
+        List<String> expected = Arrays.asList("Top 5", "Top 10", "Bottom 5", "Bottom 10");
+        BrowserUtils.wait(4);
         List<String> actual = researchLinePage.impactFilterOptions();
         actual.forEach(System.out::println);
         Assert.assertTrue(expected.containsAll(actual));
@@ -111,6 +112,9 @@ public class ImpactTableTests extends UITestBase {
     public void verifyWidgetTitles(String page) {
         test.info("Test Cases: ESGCA-5543");
         ResearchLinePage researchLinePage = new ResearchLinePage();
+        if ( page.equals("ESG Assessments")) {
+            throw new SkipException("not ready to test in " + page);
+        }
         researchLinePage.navigateToResearchLine(page);
         if (page.equals("Physical Risk Hazards")) {
             assertTestCase.assertEquals(researchLinePage.impactTableMainTitle.getText(), "Physical Risk Hazards: Operations Risk");
