@@ -36,6 +36,7 @@ public class XrayFileImporter {
             System.out.println("current = " + current);
             current = current.substring(0,current.lastIndexOf("/"));
             System.out.println("current = " + current);
+
             //provides access to the file
             FileInputStream fileInputStream = new FileInputStream(current + "/configuration.properties");
 

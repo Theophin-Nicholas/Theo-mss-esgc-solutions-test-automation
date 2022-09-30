@@ -8,7 +8,7 @@ import org.testng.annotations.Test;
 public class ExportEntitlementTests extends APITestBase {
 
     @Test(groups = {"api", "regression"})
-    @Xray(test= {7817, 7843})
+    @Xray(test= {7817, 7843, 9805})
     public void VerifyExportIsAvailable() {
         DashboardAPIController dashboardAPIController = new DashboardAPIController();
         dashboardAPIController.verifyExport(APITestBase.portfolioID, APITestBase.portfolioName,"all","all", "2022","05").then().assertThat().statusCode(200);

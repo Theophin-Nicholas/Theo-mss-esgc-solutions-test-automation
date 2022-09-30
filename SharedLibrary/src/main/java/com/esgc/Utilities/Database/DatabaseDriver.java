@@ -25,25 +25,25 @@ public class DatabaseDriver {
     private static ResultSetMetaData resultSetMetaData;
 
     //properties for db connection with JDBC driver
-    private static final Properties props = ((Supplier<Properties>)() -> {
+    private static final Properties props = ((Supplier<Properties>) () -> {
         Properties props = new Properties();
-        props.put("db",DB_DATABASE);
+        props.put("db", DB_DATABASE);
         props.put("user", DB_USERNAME);
         props.put("password", DB_PASSWORD);
-        props.put("warehouse",DB_WAREHOUSE);
+        props.put("warehouse", DB_WAREHOUSE);
         return props;
     }).get();
 
     public static void createDBConnection() {
 
-            System.out.println("CONNECTING TO DEFAULT DATABASE...");
-            Properties props = new Properties();
-            props.put("db",DB_DATABASE);
-            props.put("user", DB_USERNAME);
-            props.put("password", DB_PASSWORD);
-            props.put("warehouse",DB_WAREHOUSE);
-            props.put("schema",DB_SCHEMA);
-            props.put("role",DB_ROLE);
+        System.out.println("CONNECTING TO DEFAULT DATABASE...");
+        Properties props = new Properties();
+        props.put("db", DB_DATABASE);
+        props.put("user", DB_USERNAME);
+        props.put("password", DB_PASSWORD);
+        props.put("warehouse", DB_WAREHOUSE);
+        props.put("schema", DB_SCHEMA);
+        props.put("role", DB_ROLE);
         try {
             connection = DriverManager.getConnection(DB_HOST, props);
         } catch (SQLException e) {
@@ -151,6 +151,52 @@ public class DatabaseDriver {
             e.printStackTrace();
         }
         return rowList;
+    }
+
+
+    public synchronized static List<String> getQueryResultListMap(String query) {
+        executeQuery(query);
+        List<String> colNameValueList = new ArrayList<>();
+        ;
+        try {
+         //   rsmd = resultSet.getMetaData();
+            while (resultSet.next()) {
+                colNameValueList.add((String) resultSet.getObject("RELATED_DOMAIN"));
+            }
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return colNameValueList;
+    }
+
+    public synchronized static List<String> getQueryResultLisDisclosure(String query) {
+        executeQuery(query);
+        List<String> colNameValueList = new ArrayList<>();
+        ;
+        try {
+            //   rsmd = resultSet.getMetaData();
+            while (resultSet.next()) {
+                colNameValueList.add((String) resultSet.getObject("DISCLOSURE_RATE"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return colNameValueList;
+    }
+
+    public synchronized static List<String> getQueryResultListESGScores(String query) {
+        executeQuery(query);
+        List<String> colNameValueList = new ArrayList<>();
+        ;
+        try {
+            while (resultSet.next()) {
+                colNameValueList.add((String) resultSet.getObject("VALUE"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return colNameValueList;
     }
 
     /**

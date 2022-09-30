@@ -1,4 +1,4 @@
-package com.esgc.Utulities;
+package com.esgc.Utilities;
 
 public class ResearchLineColors {
 
