@@ -359,4 +359,13 @@ public class DataProviderClass {
                         {"486521987"},*/
                 };
     }
+
+    @DataProvider(name = "ESGMaterialitycredentials11")
+    public Object[][] provideESGCredentials() {
+
+        return new Object[][]
+                {
+                        {"mesg-platform-issuer-qa+test1@outlook.com", "Moodys123"}
+                };
+    }
 }
