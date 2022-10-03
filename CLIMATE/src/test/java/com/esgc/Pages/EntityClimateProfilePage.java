@@ -71,6 +71,9 @@ public class EntityClimateProfilePage extends PageBase {
     @FindBy(id = "export_sources_doc_button")
     public WebElement exportSourcesDocumentsTab;
 
+    @FindBy(id = "export_pdf")
+    public WebElement pdfDownloadButton;
+
     @FindBy(id = "ref_Meth_button")
     public WebElement referenceAndMethodologiesTab;
 
@@ -477,6 +480,42 @@ public class EntityClimateProfilePage extends PageBase {
 
     public void selectExportSourcesDocuments() {
         BrowserUtils.waitForClickablility(exportSourcesDocumentsTab, 30).click();
+    }
+
+    public void selectPdfDownload() {
+        BrowserUtils.waitForClickablility(pdfDownloadButton, 30).click();
+    }
+
+    public boolean checkDownloadProgressBarIsPresent() {
+        try {
+            return Driver.getDriver().findElement(By.xpath("//div[text()='Download in progress!']")).isDisplayed();
+        }catch(Exception e){
+            return false;
+        }
+    }
+
+    public void closeEntityProfilePage() {
+        Driver.getDriver().findElement(By.xpath("//li[starts-with(text(),'Profile')]/../../div[2]")).click();
+    }
+
+    public void closeDownloadProgressBar() {
+        Driver.getDriver().findElement(By.xpath("//div[text()='Download in progress!']/following-sibling::div/button/span")).click();
+
+    }
+
+    public boolean verifyDownloadProgressMessage() {
+        try {
+            WebElement progressMessage = Driver.getDriver().findElement(By.xpath("//div[text()='Download in progress!']"));
+            BrowserUtils.waitForVisibility(progressMessage, 30);
+            BrowserUtils.waitForInvisibility(progressMessage, 60);
+        }catch(Exception e){
+            return false;
+        }
+        return true;
+    }
+
+    public boolean verifyDownloadPdfButtonIsDisabled() {
+        return pdfDownloadButton.getAttribute("class").contains("disable");
     }
 
     public boolean verifyMethodologiesTabIsDisplayed() {
