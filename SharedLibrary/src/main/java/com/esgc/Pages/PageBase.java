@@ -1950,7 +1950,7 @@ public abstract class PageBase {
 
 
     public void clickCloseIcon() {
-        List<WebElement> closeIcon = Driver.getDriver().findElements(By.xpath("//div[@class=\"MuiToolbar-root MuiToolbar-regular\"]//*[local-name()='svg' and @class=\"MuiSvgIcon-root\"]"));
+        List<WebElement> closeIcon = Driver.getDriver().findElements(By.xpath("//div[@class='MuiToolbar-root MuiToolbar-regular']//*[local-name()='svg' and @class='MuiSvgIcon-root']"));
         closeIcon.get(1).click();
     }
 
