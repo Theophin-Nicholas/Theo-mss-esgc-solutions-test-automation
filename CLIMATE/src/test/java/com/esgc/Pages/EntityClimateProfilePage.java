@@ -396,7 +396,27 @@ public class EntityClimateProfilePage extends PageBase {
     @FindBy(xpath = " //span[contains(text(),'Overall Disclosure Score')]")
     public WebElement entityDisclosureScore;
 
+    // Entity Page
+    @FindBy(xpath = "//*[@id=\"controversyError\"]/div/div/div[1] ")
+    public WebElement noControversies;
 
+    @FindBy(xpath = "//span[normalize-space()='Controversies'] ")
+    public List<WebElement> controversiesTitle;
+
+    @FindBy(xpath = "// div[normalize-space()='Filter by most impacted categories of ESG:']")
+    public WebElement controversiesStaticText;
+
+    @FindBy(xpath = "//div[normalize-space()='Filter by most impacted categories of ESG:']//following-sibling::div")
+    public List<WebElement> subCategoryList;
+
+    @FindBy(xpath = "//div[@id='div-mainlayout']//div//div//main//header/following-sibling::div/div[3]/div/div/div/div/div/div/div/following-sibling::div[2]/div/table/tbody/tr")
+    public List<WebElement> controversiesTableRow;
+
+    @FindBy(xpath = "//main/div/div/div/div/div/div/div/div/div/div/span[1]")
+    public WebElement controversiesPopUpClose;
+
+    @FindBy(xpath = "(//div[contains(text(),'Controversies')])")
+    public WebElement controversiesPopUpVerify;
 
     ///============= Methods
 
