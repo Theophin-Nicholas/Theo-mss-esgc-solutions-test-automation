@@ -5,7 +5,7 @@ import com.esgc.APIModels.EntityPage.Item;
 import com.esgc.APIModels.EntityPage.ItemDetail;
 import com.esgc.DBModels.EntityPage.DriverDetailsDBModel;
 import com.esgc.DBModels.EntityPage.DriverTrendDetailModel;
-import com.esgc.Test.TestBases.EntityPageDataValidationTestBase;
+import com.esgc.Test.TestBases.EntityIssuerPageDataValidationTestBase;
 import com.esgc.Utilities.Database.EntityPageQueries;
 import com.esgc.Utilities.Environment;
 import com.esgc.Utilities.Xray;
@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-public class DriverDetailsTest extends EntityPageDataValidationTestBase {
+public class DriverDetailsTest extends EntityIssuerPageDataValidationTestBase {
     List<String> criteria = new ArrayList<>();
 
     @Xray(test = {6290,7074,8896})
@@ -47,7 +47,7 @@ public class DriverDetailsTest extends EntityPageDataValidationTestBase {
 
             //API call for driverDetails
             DriverDetailPayload driverPayload = new DriverDetailPayload(criteriaId, orbisID);
-            Response response = controller_issuer.getDriverDetails(driverPayload);
+            Response response = controller.getDriverDetails(driverPayload);
             List<DriverDetailsAPIWrapper> driverDetailsAPIResponse = Arrays.asList(response.getBody().as(DriverDetailsAPIWrapper[].class));
             List<String> expectedMetricValues = Arrays.asList(new String[]{"Yes","Not Indicated", "No"});
 
@@ -108,7 +108,7 @@ public class DriverDetailsTest extends EntityPageDataValidationTestBase {
 
             //API call for driverDetails
             DriverDetailPayload driverPayload = new DriverDetailPayload(criteriaId, orbisID);
-            Response response = controller_issuer.getDriverDetails(driverPayload);
+            Response response = controller.getDriverDetails(driverPayload);
             List<DriverDetailsAPIWrapper> driverDetailsAPIResponse = Arrays.asList(response.getBody().as(DriverDetailsAPIWrapper[].class));
 
             if (driverDetailsAPIResponse.get(0).getTrends().size()>0 && driverTrendDetailsDBModelList.size()>0){

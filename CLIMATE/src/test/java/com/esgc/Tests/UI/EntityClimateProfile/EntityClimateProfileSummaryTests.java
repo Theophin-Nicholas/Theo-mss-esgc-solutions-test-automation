@@ -1,7 +1,7 @@
 package com.esgc.Tests.UI.EntityClimateProfile;
 
 import com.esgc.APIModels.EntityPage.EntityPageSummaryCarbonFootprintMain;
-import com.esgc.Controllers.APIController;
+import com.esgc.Controllers.EntityPage.EntityProfileClimatePageAPIController;
 import com.esgc.Pages.EntityClimateProfilePage;
 import com.esgc.Pages.LoginPage;
 import com.esgc.Pages.ResearchLinePage;
@@ -879,7 +879,7 @@ public class EntityClimateProfileSummaryTests extends UITestBase {
 
 
         //Get the API values for Summary - Carbon Footprint
-        APIController apiController = new APIController();
+        EntityProfileClimatePageAPIController apiController = new EntityProfileClimatePageAPIController();
         Response response = apiController.getEntityPageResponse(Entity, "climate-summary");
         response.prettyPeek();
         List<EntityPageSummaryCarbonFootprintMain> list = Arrays.asList(response.getBody().as(EntityPageSummaryCarbonFootprintMain[].class));

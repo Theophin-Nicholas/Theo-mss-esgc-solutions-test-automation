@@ -183,7 +183,7 @@ public class GeographicRiskMap extends DataValidationTestBase {
 
             //Get all entities details
             List<GeoMapCountryEntity> geoMapCountryEntityList = Arrays.asList(
-                    controller.getEntityListResponse(portfolioId, researchLine, apiEntityListPayload)
+                    dashboardAPIController.getGeoMapEntityListResponse(portfolioId, researchLine, apiEntityListPayload)
                             .as(GeoMapCountryEntity[].class));
             System.out.println(geoMapCountryEntityList);
 

@@ -146,7 +146,7 @@ public class ClimateProfileSummaryAPITests extends EntityClimateProfileTestBase 
     @Xray(test = {6710})
     public void verifyPostAPIRequestForTemperatureAlignmentGraphWithInvalidTokenTest() {
         RestAssured.useRelaxedHTTPSValidation();
-        RestAssured.baseURI = "https://solutions-qa.mra-esg-nprd.aws.moodys.tld/api/portfolios/00000000-0000-0000-0000-000000000000/transitionrisk/temperaturealgmt/sector-temp-rise";
+        RestAssured.baseURI = "https://solutions-qa.mra-esg-nprd.aws.moodys.tld/api/portfolio/00000000-0000-0000-0000-000000000000/transitionrisk/temperaturealgmt/sector-temp-rise";
         Response response = RestAssured.given().accept(ContentType.JSON).when().contentType(ContentType.JSON).get();
         response.prettyPrint();
         assertTestCase.assertEquals(response.getStatusCode(), 403,
