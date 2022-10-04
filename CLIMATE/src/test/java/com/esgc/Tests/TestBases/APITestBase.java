@@ -8,7 +8,6 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 
 
-
 public abstract class APITestBase extends TestBaseClimate {
 
     public static String portfolioID = null;
@@ -51,15 +50,12 @@ public abstract class APITestBase extends TestBaseClimate {
     public Object[][] availableResearchLinesForAPITests2() {
 
         return new Object[][]{
-//                {"operationsrisk"},
-//                {"marketrisk"},
-//                {"supplychainrisk"},
-                //{"physicalriskmgmt"},
+                {"esgasmt"},
+                {"physicalriskhazard"},
+                {"physicalriskmgmt"},
                 {"temperaturealgmt"},
                 {"carbonfootprint"},
                 {"brownshareasmt"},
-                //{"energytransmgmt"},
-                //{"tcfdstrategy"},
                 {"greenshareasmt"},
         };
     }

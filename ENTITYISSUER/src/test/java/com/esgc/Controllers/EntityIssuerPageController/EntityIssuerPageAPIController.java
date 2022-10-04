@@ -1,7 +1,7 @@
 package com.esgc.Controllers.EntityIssuerPageController;
 
 import com.esgc.APIModels.EntityIssuerPage.DriverDetailPayload;
-import com.esgc.Utilities.API.EntityPageEndpoints;
+import com.esgc.APIModels.EntityPage.EntityFilterPayload;
 import com.esgc.Utilities.APIUtulities.EntityIssuerPageEndPoints;
 import com.esgc.Utilities.Environment;
 import io.restassured.http.ContentType;
@@ -13,28 +13,48 @@ import static io.restassured.RestAssured.given;
 
 public class EntityIssuerPageAPIController {
 
-    private RequestSpecification configSpec() {
-        return given().accept(ContentType.JSON)
-                .baseUri(Environment.URL)
-                .relaxedHTTPSValidation()
-                .header("Authorization", "Bearer " + System.getProperty("token"))
-                .header("Accept", "application/json")
-                .header("Content-type", "application/json")
-                .log().ifValidationFails();
+    boolean isInvalidTest = false;
+
+    public void setInvalid() {
+        this.isInvalidTest = true;
     }
 
-    public Response getSouceDocument(String orbis_id) {
+    public void resetInvalid() {
+        this.isInvalidTest = false;
+    }
+
+    private RequestSpecification configSpec() {
+        if (isInvalidTest) {
+            return given().accept(ContentType.JSON)
+                    .baseUri(Environment.URL)
+                    .relaxedHTTPSValidation()
+                    .header("Authorization", "Bearer " +
+                            System.getProperty("token").substring(0, System.getProperty("token").length() - 2))
+                    .header("Accept", "application/json")
+                    .header("Content-Type", "application/json")
+                    .log().ifValidationFails();
+        } else {
+            return given().accept(ContentType.JSON)
+                    .baseUri(Environment.ENTITY_URL)
+                    .relaxedHTTPSValidation()
+                    .header("Authorization", "Bearer " + System.getProperty("token"))
+                    .header("Accept", "application/json")
+                    .header("Content-type", "application/json")
+                    .log().ifValidationFails();
+        }
+    }
+
+    public Response getSourceDocument(String orbis_id) {
         Response response = null;
         try {
             response = configSpec()
                     .when()
-                    .body("{\"orbis_id\":\"" + orbis_id +"\"}")
-                    .post(EntityIssuerPageEndPoints.POST_sourceDocuments);
+                    .body("{\"orbis_id\":\"" + orbis_id + "\"}")
+                    .post(EntityIssuerPageEndPoints.POST_SOURCE_DOCUMENTS).prettyPeek();
 
         } catch (Exception e) {
             System.out.println("Inside exception " + e.getMessage());
         }
-        System.out.println(response.prettyPrint());
         return response;
     }
 
@@ -43,13 +63,12 @@ public class EntityIssuerPageAPIController {
         try {
             response = configSpec()
                     .when()
-                    .body("{\"orbis_id\":\"" + orbis_id +"\"}")
-                    .post(EntityIssuerPageEndPoints.POST_SUMMARY);
+                    .body("{\"orbis_id\":\"" + orbis_id + "\"}")
+                    .post(EntityIssuerPageEndPoints.POST_SUMMARY).prettyPeek();
 
         } catch (Exception e) {
             System.out.println("Inside exception " + e.getMessage());
         }
-        System.out.println(response.prettyPrint());
         return response;
     }
 
@@ -58,12 +77,11 @@ public class EntityIssuerPageAPIController {
         try {
             response = configSpec()
                     .when()
-                    .post(EntityIssuerPageEndPoints.POST_HEADER);
+                    .post(EntityIssuerPageEndPoints.POST_HEADER).prettyPeek();
 
         } catch (Exception e) {
             System.out.println("Inside exception " + e.getMessage());
         }
-        System.out.println(response.prettyPrint());
         return response;
     }
 
@@ -72,13 +90,78 @@ public class EntityIssuerPageAPIController {
         try {
             response = configSpec()
                     .when()
-                    .body("{\"orbis_id\":\"" + orbis_id +"\"}")
-                    .post(EntityIssuerPageEndPoints.POST_CONTROVERSIES);
+                    .body("{\"orbis_id\":\"" + orbis_id + "\"}")
+                    .post(EntityIssuerPageEndPoints.POST_CONTROVERSIES).prettyPeek();
 
         } catch (Exception e) {
             System.out.println("Inside exception " + e.getMessage());
         }
-        System.out.println(response.prettyPrint());
+        return response;
+    }
+
+
+    public Response getIssuerSummary() {
+        Response response = null;
+        try {
+            response = configSpec()
+                    .when()
+                    .post(EntityIssuerPageEndPoints.POST_ISSUER_SUMMARY);
+            System.out.println(response.prettyPrint());
+
+        } catch (Exception e) {
+            System.out.println("Inside exception " + e.getMessage());
+        }
+
+        return response;
+    }
+
+    public Response getControversies(EntityFilterPayload apiFilterPayload) {
+        Response response = null;
+        System.out.println(configSpec()
+                .body(apiFilterPayload));
+        try {
+            response = configSpec()
+                    .body(apiFilterPayload)
+                    .when()
+                    .post(EntityIssuerPageEndPoints.POST_ENTITY_CONTROVERSIES);
+
+        } catch (Exception e) {
+            System.out.println("Inside exception " + e.getMessage());
+        }
+
+        return response;
+    }
+
+    public Response getDriverSummary() {
+        Response response = null;
+        try {
+            response = configSpec()
+                    .when()
+                    .post(EntityIssuerPageEndPoints.POST_DRIVERS_SUMMARY);
+            System.out.println(response.prettyPrint());
+
+        } catch (Exception e) {
+            System.out.println("Inside exception " + e.getMessage());
+        }
+
+        return response;
+    }
+
+    public Response getSectorDrivers(String orbisId) {
+        //OrbisIds are based in API Key
+        System.out.println("Request Sent..");
+        Response response = null;
+        try {
+            response = configSpec()
+                    .when()
+                    .body("{\"orbis_id\":\"" + orbisId + "\"}")
+                    .post(EntityIssuerPageEndPoints.POST_SECTOR_ALLOCATION);
+            // System.out.println(response.prettyPrint());
+            System.out.println("Response Printed...");
+        } catch (Exception e) {
+            System.out.println("Inside exception " + e.getMessage());
+        }
+
         return response;
     }
 
@@ -89,7 +172,21 @@ public class EntityIssuerPageAPIController {
                     .when()
                     .body(apiFilterPayload)
                     //.body("{\"orbis_id\":\"" + orbisId + "\", \"criteria\":\"" + criteria + "\"}")
-                    .post(EntityPageEndpoints.POST_DRIVERS_DETAILS);
+                    .post(EntityIssuerPageEndPoints.POST_DRIVERS_DETAILS).prettyPeek();
+
+        } catch (Exception e) {
+            System.out.println("Inside exception " + e.getMessage());
+        }
+
+        return response;
+    }
+
+    public Response getHeaderAPI() {
+        Response response = null;
+        try {
+            response = configSpec()
+                    .when()
+                    .post(EntityIssuerPageEndPoints.POST_HEADER);
             System.out.println(response.prettyPrint());
 
         } catch (Exception e) {
