@@ -438,7 +438,7 @@ public class ResearchLinePage extends UploadPage {
     @FindBy(xpath = "//div[@id='cardInfo_box']")
     public WebElement esgCardInfoBox;
 
-    @FindBy(xpath = "//div[@id='cardInfo_box']//span/..")
+    @FindBy(xpath = "//div[@id='cardInfo_box']//span")
     public WebElement esgCardInfoBoxScore;
 
     @FindBy(xpath = "//div[@id='cardInfo_box']//a")
@@ -2541,6 +2541,27 @@ public class ResearchLinePage extends UploadPage {
         return esgCardInfoBox.isDisplayed();
     }
 
+    public void validateEsgAssessmentLegends(){
+
+        String labelXpath = "//div[contains(text(),'ESG Assessment Score:')]//span";
+
+        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("("+labelXpath+")[1]")).getText(),"Advanced");
+        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("("+labelXpath+"/div)[1]")).getAttribute("style"),"background: rgb(219, 229, 163);");
+
+        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("("+labelXpath+")[2]")).getText(),"Robust");
+        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("("+labelXpath+"/div)[2]")).getAttribute("style"),"background: rgb(234, 197, 80);");
+
+        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("("+labelXpath+")[3]")).getText(),"Limited");
+        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("("+labelXpath+"/div)[3]")).getAttribute("style"),"background: rgb(232, 149, 28);");
+
+        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("("+labelXpath+")[4]")).getText(),"Weak");
+        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("("+labelXpath+"/div)[4]")).getAttribute("style"),"background: rgb(221, 88, 29);");
+
+        assertTestCase.assertTrue(Driver.getDriver().findElement(By.xpath("("+labelXpath+")[1]")).getCssValue("font-size").equals("10px"));
+
+
+    }
+
     public Boolean validateCompaniesEsgPopupIsDisplayed() {
         return esgCompaniesPopup.isDisplayed();
     }
@@ -2570,13 +2591,32 @@ public class ResearchLinePage extends UploadPage {
     }
 
     public Boolean verifyEsgMethodologyValues() {
-        String methodologiesXpath = "//div[contains(@class,'MuiDrawer-paper')]//table[@id='table-id']//tr/td[4]/span";
+        String methodologiesXpath = "//div[contains(@class,'MuiDrawer-paper')]//table[contains(@id,'table-id')]//tr/td[4]/span";
         List<WebElement> methodologyValues = Driver.getDriver().findElements(By.xpath(methodologiesXpath));
+        assertTestCase.assertTrue(methodologyValues.size()!=0);
         String methodologyValue = "";
         for (WebElement methodology : methodologyValues) {
             BrowserUtils.scrollTo(methodology);
             methodologyValue = methodology.getText();
             if (!(methodologyValue.equals("1.0") || methodologyValue.equals("2.0"))) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public Boolean verifyEsgScoreValues() {
+        String scoreValuesXpath = "//div[contains(@class,'MuiDrawer-paper')]//table[contains(@id,'table-id')]//tr/td[3]";
+        List<WebElement> scoreValues = Driver.getDriver().findElements(By.xpath(scoreValuesXpath));
+        assertTestCase.assertTrue(scoreValues.size()!=0);
+        String scoreValue = "";
+        for (WebElement score : scoreValues) {
+            BrowserUtils.scrollTo(score);
+            scoreValue = score.getText();
+            if (!(scoreValue.equals("Advanced")
+                    || scoreValue.equals("Robust")
+                    || scoreValue.equals("Limited")
+                    || scoreValue.equals("Weak"))) {
                 return false;
             }
         }
@@ -2820,8 +2860,8 @@ public class ResearchLinePage extends UploadPage {
     public void validateEsgGradeDistribution() {
         assertTestCase.assertTrue(esgScoreDistribution.isDisplayed(), "Validate Grade Distribution Widget is available");
         assertTestCase.assertTrue(esgScoreDistributionHeader.getText().equals("ESG Score Distribution"), "Validate Grade Distribution Widget Header");
-        assertTestCase.assertTrue(esgScoreDistributionTableHeader.get(0).getText().equals(""), "Validate Category coloumn");
-        assertTestCase.assertTrue(esgScoreDistributionTableHeader.get(1).getText().equals("% Investment"), "Validate Category coloumn");
+        assertTestCase.assertTrue(esgScoreDistributionTableHeader.get(0).getText().equals(""), "Validate Category column");
+        assertTestCase.assertTrue(esgScoreDistributionTableHeader.get(1).getText().equals("% Investment"), "Validate Category column");
 
         List<String> Categories = Arrays.asList(new String[]{"Advanced", "Robust", "Limited", "Weak"});
         for (int i = 0; i < esgScoreDistributionTableCategoryList.size(); i++) {
