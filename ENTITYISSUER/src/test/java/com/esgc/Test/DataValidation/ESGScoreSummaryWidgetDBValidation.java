@@ -4,7 +4,7 @@ import com.esgc.APIModels.EntityIssuerPage.ScoreCategory;
 import com.esgc.APIModels.EntityIssuerPage.Summary;
 import com.esgc.Controllers.EntityIssuerPageController.EntityIssuerPageAPIController;
 import com.esgc.DBModels.EntityIssuerPageDBModels.SummaryWidgetDBModel;
-import com.esgc.Test.TestBases.EntityPageDataValidationTestBase;
+import com.esgc.Test.TestBases.EntityIssuerPageDataValidationTestBase;
 import com.esgc.Utilities.Database.EntityIssuerQueries;
 import com.esgc.Utilities.Environment;
 import com.esgc.Utilities.Xray;
@@ -17,7 +17,7 @@ import java.util.List;
 
 import static com.esgc.Utilities.DateTimeUtilities.getFormattedDate;
 
-public class ESGScoreSummaryWidgetDBValidation extends EntityPageDataValidationTestBase {
+public class ESGScoreSummaryWidgetDBValidation extends EntityIssuerPageDataValidationTestBase {
     List<String> criteria = new ArrayList<>();
 
     @Xray(test = {7439, 7440,7441,7444})

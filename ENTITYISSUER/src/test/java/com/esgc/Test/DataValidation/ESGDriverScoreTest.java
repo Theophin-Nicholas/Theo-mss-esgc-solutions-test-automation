@@ -4,7 +4,7 @@ import com.esgc.APIModels.EntityPage.SectorDrivers;
 import com.esgc.APIModels.EntityPage.SectorDriversWrapper;
 import com.esgc.APIModels.EntityPage.SectorIndicator;
 import com.esgc.DBModels.EntityPage.SectorDriverDBModel;
-import com.esgc.Test.TestBases.EntityPageDataValidationTestBase;
+import com.esgc.Test.TestBases.EntityIssuerPageDataValidationTestBase;
 import com.esgc.Utilities.Database.EntityPageQueries;
 import com.esgc.Utilities.Xray;
 import org.testng.annotations.DataProvider;
@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 
-public class ESGDriverScoreTest extends EntityPageDataValidationTestBase {
+public class ESGDriverScoreTest extends EntityIssuerPageDataValidationTestBase {
 
    /* @Test(enabled = false, dataProvider = "orbisID", groups = {"entity_page"})
     @Xray(test = {4049, 4065})

@@ -3,6 +3,7 @@ package com.esgc.Tests.API.Dashboard;
 import com.esgc.APIModels.APIFilterPayload;
 import com.esgc.APIModels.Dashboard.PerformanceChartCompany;
 import com.esgc.Controllers.APIController;
+import com.esgc.Controllers.DashboardAPIController;
 import com.esgc.Tests.TestBases.APITestBase;
 import com.esgc.Utilities.Xray;
 import io.restassured.http.ContentType;
@@ -18,7 +19,7 @@ public class PerformanceChartAPITest extends APITestBase {
     @Test(groups = {"api", "regression"}, dataProvider = "API Research Lines2")
     @Xray(test = {8044})
     public void PerformanceChartAPI_Success(@Optional String researchLine) {
-        APIController apiController = new APIController();
+        DashboardAPIController apiController = new DashboardAPIController();
 
         test.info("POST Request sending for Performance Chart");
 
@@ -60,22 +61,25 @@ public class PerformanceChartAPITest extends APITestBase {
     @Test(groups = {"api", "regression"}, dataProvider = "API Research Lines2")
     @Xray(test = {8045})
     public void PerformanceChartAPI_InvalidPayload(@Optional String researchLine) {
-        APIController apiController = new APIController();
+        DashboardAPIController apiController = new DashboardAPIController();
 
         test.info("POST Request sending for Performance Chart");
         APIFilterPayload apiFilterPayload = new APIFilterPayload(null, null, "03", "2021", "");
 
         Response response = apiController
                 .getPerformanceChartList(portfolioID, researchLine, apiFilterPayload, "largest_holdings", "10");
-        response.then().assertThat().body(".", is(empty()));
+        response.then().assertThat().statusCode(400).and().body("errorType", is("ValueError"))
+                .and().body("errorMessage", is("Request Invalid. "));
 
         response = apiController
                 .getPerformanceChartList(portfolioID, researchLine, apiFilterPayload, "leaders", "10");
-        response.then().assertThat().body(".", is(empty()));
+        response.then().assertThat().statusCode(400).and().body("errorType", is("ValueError"))
+                .and().body("errorMessage", is("Request Invalid. "));
 
         response = apiController
                 .getPerformanceChartList(portfolioID, researchLine, apiFilterPayload, "laggards", "10");
-        response.then().assertThat().body(".", is(empty()));
+        response.then().assertThat().statusCode(400).and().body("errorType", is("ValueError"))
+                .and().body("errorMessage", is("Request Invalid. "));
 
 
         test.pass("Response received for Performance Chart");
@@ -86,7 +90,7 @@ public class PerformanceChartAPITest extends APITestBase {
     @Xray(test = {8045})
     public void PerformanceChart_UnauthorisedAccess(@Optional String researchLine) {
 
-        APIController apiController = new APIController();
+        DashboardAPIController apiController = new DashboardAPIController();
 
         String portfolioID = RandomStringUtils.randomAlphanumeric(20);
 

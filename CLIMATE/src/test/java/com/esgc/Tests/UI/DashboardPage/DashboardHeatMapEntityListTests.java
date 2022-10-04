@@ -3,6 +3,7 @@ package com.esgc.Tests.UI.DashboardPage;
 import com.esgc.APIModels.Dashboard.APIHeatMapResponse;
 import com.esgc.APIModels.Dashboard.APIHeatMapSinglePayload;
 import com.esgc.Controllers.APIController;
+import com.esgc.Controllers.DashboardAPIController;
 import com.esgc.Pages.DashboardPage;
 import com.esgc.Pages.LoginPage;
 import com.esgc.Tests.TestBases.Descriptions;
@@ -300,6 +301,7 @@ public class DashboardHeatMapEntityListTests extends UITestBase {
 
 
         APIController apiController = new APIController();
+        DashboardAPIController dashboardAPIController = new DashboardAPIController();
         DashboardPage dashboardPage = new DashboardPage();
         if (!dashboardPage.verifyPortfolioName.getText().equalsIgnoreCase("Sample Portfolio"))
             dashboardPage.selectPortfolioByNameFromPortfolioSelectionModal("Sample Portfolio");
@@ -322,7 +324,7 @@ public class DashboardHeatMapEntityListTests extends UITestBase {
             //Api connection for verification
             APIHeatMapSinglePayload apiHeatMapSinglePayload = new APIHeatMapSinglePayload("all", "all", "06", "2022", apiController.apiResourceMapperWithoutphysicalriskinit(researchLine.trim()));
             String portfolio_id = "00000000-0000-0000-0000-000000000000";
-            Response response = apiController.getHeatMapResponse(portfolio_id, researchLine, apiHeatMapSinglePayload);
+            Response response = dashboardAPIController.getHeatMapResponse(portfolio_id, researchLine, apiHeatMapSinglePayload);
             List<APIHeatMapResponse> list = Arrays.asList(response.getBody().as(APIHeatMapResponse[].class));
             System.out.println("dashboardPage.heatMapYAxisIndicatorsAPI.size() = " + dashboardPage.heatMapYAxisIndicatorsAPI.size());
             switch (researchLine) {

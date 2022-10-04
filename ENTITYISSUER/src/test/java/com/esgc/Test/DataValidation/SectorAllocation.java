@@ -1,7 +1,7 @@
 package com.esgc.Test.DataValidation;
 
 import com.esgc.APIModels.EntityIssuerPage.Header;
-import com.esgc.Test.TestBases.EntityPageDataValidationTestBase;
+import com.esgc.Test.TestBases.EntityIssuerPageDataValidationTestBase;
 import com.esgc.Utilities.Database.EntityPageQueries;
 import com.esgc.Utilities.Xray;
 import io.restassured.response.Response;
@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class SectorAllocation extends EntityPageDataValidationTestBase {
+public class SectorAllocation extends EntityIssuerPageDataValidationTestBase {
     List<String> criteria = new ArrayList<>();
 
     @Xray(test = 6267)
