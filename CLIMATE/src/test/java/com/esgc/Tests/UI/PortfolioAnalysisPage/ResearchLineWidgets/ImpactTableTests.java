@@ -208,4 +208,31 @@ public class ImpactTableTests extends UITestBase {
         assertTestCase.assertTrue(researchLinePage.validateOrder("Bottom 5"),"Verify Order is Descending for Bottom 5");
         assertTestCase.assertTrue(researchLinePage.validateOrder("Bottom 10"),"Verify Order is Descending for Bottom 10");
     }
+
+    @Test(groups = {"regression", "ui"},
+            description = "ESGCA-6777 - UI | Temperature Alignment | Impact Table | Verify Impact Tables Presentation without Data")
+    @Xray(test = {6777})
+    public void checkImpactTablesWithoutData() {
+
+        ResearchLinePage researchLinePage = new ResearchLinePage();
+        researchLinePage.navigateToResearchLine("Temperature Alignment");
+        researchLinePage.selectPortfolioByNameFromPortfolioSelectionModal("Sample Portfolio");
+
+        researchLinePage.clickFiltersDropdown();
+        researchLinePage.selectOptionFromFiltersDropdown("regions", "Americas");
+        researchLinePage.waitForDataLoadCompletion();
+
+        researchLinePage.clickFiltersDropdown();
+        researchLinePage.selectOptionFromFiltersDropdown("sectors", "Basic Materials");
+        //researchLinePage.closeFilterByKeyboard();
+        researchLinePage.waitForDataLoadCompletion();
+
+        BrowserUtils.scrollTo(researchLinePage.updatesAndLeadersAndLaggardsHeader);
+        BrowserUtils.wait(3);
+
+        assertTestCase.assertTrue(researchLinePage.verifyMessage("Impact", "There are no companies in this portfolio that contribute to positive impacts."),
+                "Verify No Companies for Positive impact message");
+        assertTestCase.assertTrue(researchLinePage.verifyMessage("Impact", "There are no positive impacts in Americas, Basic Materials in your portfolio."),
+                "Verify No Companies for Positive impact message");
+    }
 }
