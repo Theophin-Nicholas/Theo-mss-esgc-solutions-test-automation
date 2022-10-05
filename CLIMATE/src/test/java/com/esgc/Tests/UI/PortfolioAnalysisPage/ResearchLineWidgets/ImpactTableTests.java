@@ -20,7 +20,7 @@ public class ImpactTableTests extends UITestBase {
     @Test(groups = {"regression", "ui", "smoke"},
             description = "ESGCA-4932 - Verify Impact Filter dropdown",
             dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
-    @Xray(test = {4932})
+    @Xray(test = {4932, 6772})
     public void checkImpactFilterDropdownOptions(String page) {
         test.info("Test Cases: ESGCA-4932 ");
         ResearchLinePage researchLinePage = new ResearchLinePage();
@@ -35,7 +35,7 @@ public class ImpactTableTests extends UITestBase {
     @Test(groups = {"regression", "ui", "smoke"},
             description = "ESGCA-4913, ESGCA-4997,  ESGCA-5007 - Verify Impact Table and graph is present",
             dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
-    @Xray(test = {4913, 4997, 5007})
+    @Xray(test = {4913, 4997, 5007, 6772})
     public void verifyImpactTableAndGraphPresent(String page) {
         test.info("Test Cases: ESGCA-4913, ESGCA-4997,  ESGCA-5007 ");
         ResearchLinePage researchLinePage = new ResearchLinePage();
@@ -88,14 +88,11 @@ public class ImpactTableTests extends UITestBase {
         }
     }
 
-    @Test(enabled = false, groups = {"regression", "ui", "smoke"},
+    @Test(enabled = true, groups = {"regression", "ui", "smoke"},
             description = "ESGCA-4998 - Verify Score Category colors",
             dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
-    @Xray(test = {4998})
+    @Xray(test = {4998, 6772})
     public void verifyScoreCategoryColors(String page) {
-        if (page.equals("Temperature Alignment")){
-            throw new SkipException("Export is not ready to test in " + page);
-        }
         test.info("Test Cases: ESGCA-4998 ");
         ResearchLinePage researchLinePage = new ResearchLinePage();
         researchLinePage.navigateToResearchLine(page);
@@ -108,7 +105,7 @@ public class ImpactTableTests extends UITestBase {
     @Test(groups = {"regression", "ui", "smoke"},
             description = "ESGCA-5543 - Verify labels for positive ane negative impact table",
             dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
-    @Xray(test = {5543})
+    @Xray(test = {5543, 6772})
     public void verifyWidgetTitles(String page) {
         test.info("Test Cases: ESGCA-5543");
         ResearchLinePage researchLinePage = new ResearchLinePage();
@@ -190,25 +187,52 @@ public class ImpactTableTests extends UITestBase {
     @Test(groups = {"regression", "ui"},
             description = "ESGCA-9809 - UI | Portfolio Analysis | Impact Table | Verify Sorting Orders by Impact Filter",
             dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
-    @Xray(test = {4933})
+    @Xray(test = {4933, 6774})
     public void verifySortingOrderByImpactFilter(String researchLine) {
         test.info("Test Cases: ESGCA-4933");
         if (researchLine.equals("Physical Risk Hazards") ||
-                researchLine.equals("Temperature Alignment") ||
+                //researchLine.equals("Temperature Alignment") ||
                 researchLine.equals("Physical Risk Management") ||
                 researchLine.equals("ESG Assessments")) {
             throw new SkipException("Portfolio Analysis Page - Impact Table is not ready to test in " + researchLine);
         }
         ResearchLinePage researchLinePage = new ResearchLinePage();
         researchLinePage.navigateToResearchLine(researchLine);
-        researchLinePage.selectSamplePortfolioFromPortfolioSelectionModal();
-        researchLinePage.validateOrder("Top 5");
-        researchLinePage.validateOrder("Top 10");
-        researchLinePage.validateOrder("Bottom 5");
-        researchLinePage.validateOrder("Bottom 10");
+        // researchLinePage.selectSamplePortfolioFromPortfolioSelectionModal();
+//        researchLinePage.validateOrder("Top 5");
+//        researchLinePage.validateOrder("Top 10");
+//        researchLinePage.validateOrder("Bottom 5");
+//        researchLinePage.validateOrder("Bottom 10");
         assertTestCase.assertTrue(researchLinePage.validateOrder("Top 5"),"Verify Order is Ascending for Top 5");
         assertTestCase.assertTrue(researchLinePage.validateOrder("Top 10"),"Verify Order is Ascending for Top 10");
         assertTestCase.assertTrue(researchLinePage.validateOrder("Bottom 5"),"Verify Order is Descending for Bottom 5");
         assertTestCase.assertTrue(researchLinePage.validateOrder("Bottom 10"),"Verify Order is Descending for Bottom 10");
+    }
+
+    @Test(groups = {"regression", "ui"},
+            description = "ESGCA-6777 - UI | Temperature Alignment | Impact Table | Verify Impact Tables Presentation without Data")
+    @Xray(test = {6777})
+    public void checkImpactTablesWithoutData() {
+
+        ResearchLinePage researchLinePage = new ResearchLinePage();
+        researchLinePage.navigateToResearchLine("Temperature Alignment");
+        researchLinePage.selectPortfolioByNameFromPortfolioSelectionModal("Sample Portfolio");
+
+        researchLinePage.clickFiltersDropdown();
+        researchLinePage.selectOptionFromFiltersDropdown("regions", "Americas");
+        researchLinePage.waitForDataLoadCompletion();
+
+        researchLinePage.clickFiltersDropdown();
+        researchLinePage.selectOptionFromFiltersDropdown("sectors", "Basic Materials");
+        //researchLinePage.closeFilterByKeyboard();
+        researchLinePage.waitForDataLoadCompletion();
+
+        BrowserUtils.scrollTo(researchLinePage.updatesAndLeadersAndLaggardsHeader);
+        BrowserUtils.wait(3);
+
+        assertTestCase.assertTrue(researchLinePage.verifyMessage("Impact", "There are no companies in this portfolio that contribute to positive impacts."),
+                "Verify No Companies for Positive impact message");
+        assertTestCase.assertTrue(researchLinePage.verifyMessage("Impact", "There are no positive impacts in Americas, Basic Materials in your portfolio."),
+                "Verify No Companies for Positive impact message");
     }
 }
