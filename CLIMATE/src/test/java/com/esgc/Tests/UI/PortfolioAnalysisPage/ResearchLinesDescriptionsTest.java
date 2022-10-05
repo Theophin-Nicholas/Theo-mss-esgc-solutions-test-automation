@@ -19,7 +19,7 @@ public class ResearchLinesDescriptionsTest extends UITestBase {
  */
 
     @Test(groups = {"regression", "ui", "smoke", "esg"}, dataProvider = "Descriptions")
-    @Xray(test = 3918)
+    @Xray(test = {3918,6934})
     public void verifyDescriptions(String page, String description, Integer... testCases) {
 
         ResearchLinePage researchLinePage = new ResearchLinePage();
@@ -46,6 +46,7 @@ public class ResearchLinesDescriptionsTest extends UITestBase {
                 //{"Market Risk", MARKET_RISK_DESCRIPTION, 725},
                 //{"Supply Chain Risk", SUPPLY_CHAIN_RISK_DESCRIPTION, 727},
                 {"Physical Risk Hazards", PHYSICAL_RISK_HAZARDS_DESCRIPTION, 724},
+                {"Temperature Alignment", TEMPERATURE_ALIGNMENTS_DESCRIPTION, 6934},
                 {"Carbon Footprint", CARBON_FOOTPRINT_DESCRIPTION, 549, 726},
                 {"Brown Share Assessment", BROWN_SHARE_ASSESSMENT_DESCRIPTION, 2266},
                 // {"Energy Transition Management",ENERGY_TRANSITION_MANAGEMENT_DESCRIPTION},
