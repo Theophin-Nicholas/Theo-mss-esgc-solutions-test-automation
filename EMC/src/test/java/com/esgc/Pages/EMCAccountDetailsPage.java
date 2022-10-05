@@ -29,8 +29,11 @@ public class EMCAccountDetailsPage extends EMCBasePage {
     @FindBy (xpath = "//label//input")
     public WebElement statusCheckBox;
 
-    @FindBy (xpath = "//div[@name='subscriberType']")
+    @FindBy (xpath = "//div[@name='subscriberType']//input")
     public WebElement subscriberInput;
+
+    @FindBy (xpath = "//ul/li")
+    public List<WebElement> subscriberTypeList;
 
     @FindBy (name="contractStartDate")
     public WebElement startDateInput;
@@ -330,7 +333,7 @@ public class EMCAccountDetailsPage extends EMCBasePage {
     }
 
     public boolean verifyApplication(String applicationName) {
-        System.out.println("Number of current applications = " + applicationsNamesList.size());
+        //System.out.println("Number of current applications = " + applicationsNamesList.size());
         for(WebElement application : applicationsNamesList) {
             if(application.getText().equals(applicationName)) {
                 System.out.println(applicationName + " application found");
