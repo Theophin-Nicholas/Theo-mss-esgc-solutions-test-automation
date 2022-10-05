@@ -44,7 +44,7 @@ public class PortfolioScore extends UITestBase {
         Assert.assertTrue(researchLinePage.checkIfResearchLineTitleIsDisplayed(page));
         test.pass("User is on " + page + " Page");
 
-        Assert.assertTrue(researchLinePage.checkIfPortfolioLoadMaskIsDisplayed(title));
+       // Assert.assertTrue(researchLinePage.checkIfPortfolioLoadMaskIsDisplayed(title));
         Assert.assertTrue(researchLinePage.checkIfWidgetTitleIsDisplayed(title));
         Assert.assertTrue(researchLinePage.checkIfPortfolioTableIsDisplayed(title));
 
