@@ -2266,6 +2266,7 @@ public class ResearchLinePage extends UploadPage {
 
             case "Brown Share Assessment":
             case "Green Share Assessment":
+            case "Temperature Alignment":
             case "Carbon Footprint":
                 for (int i = 0; i < actualScoresBrownShare.size(); i++) {
                     expectedColor = getColorByScoreCategory(researchLine, actualScoresBrownShare.get(i).getText());
@@ -2731,6 +2732,7 @@ public class ResearchLinePage extends UploadPage {
          * -If Percentages are same sorting should be in alphabetical order
          */
         selectImpactFilterOption(option);
+        BrowserUtils.wait(5);
         System.out.println("Verifying for " + option);
         if (option.contains("Top")) {
             for (int i = 0; i < impactTableCompanies.size() - 2; i++) {
@@ -2741,7 +2743,7 @@ public class ResearchLinePage extends UploadPage {
                 }
                 //If Percentages are same sorting should be in alphabetical order
                 else if (impactTableInvestmentPercentages.get(i).getText().equals(impactTableInvestmentPercentages.get(i + 1).getText())) {
-                    if (impactTableCompanyNames.get(i).getText().compareTo(impactTableCompanyNames.get(i + 1).getText()) > 0) {
+                    if (impactTableCompanyNames.get(i).getText().compareToIgnoreCase(impactTableCompanyNames.get(i + 1).getText()) > 0) {
                         System.out.println("Company Name is not in ascending order for same investment percentage");
                         System.out.println(impactTableCompanyNames.get(i).getText() + " | " + impactTableCompanyNames.get(i + 1).getText());
                         return false;
@@ -2759,7 +2761,7 @@ public class ResearchLinePage extends UploadPage {
                 }
                 //If Percentages are same sorting should be in alphabetical order
                 else if (impactTableInvestmentPercentages.get(i).getText().equals(impactTableInvestmentPercentages.get(i + 1).getText())) {
-                    if (impactTableCompanyNames.get(i).getText().compareTo(impactTableCompanyNames.get(i + 2).getText()) > 0) {
+                    if (impactTableCompanyNames.get(i).getText().compareToIgnoreCase(impactTableCompanyNames.get(i + 1).getText()) > 0) {
                         System.out.println("Company Name is not in ascending order for same investment percentage");
                         System.out.println(impactTableCompanyNames.get(i).getText() + " | " + impactTableCompanyNames.get(i + 1).getText());
                         return false;
