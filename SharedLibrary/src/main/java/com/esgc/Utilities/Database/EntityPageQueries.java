@@ -2,10 +2,7 @@ package com.esgc.Utilities.Database;
 
 import com.esgc.APIModels.EntityPage.EntityControversy;
 import com.esgc.APIModels.EntityPage.EntityFilterPayload;
-import com.esgc.DBModels.EntityIssuerPageDBModels.P3ControversiesDBModel;
-import com.esgc.DBModels.EntityIssuerPageDBModels.P3HeaderIdentifiersDBModel;
-import com.esgc.DBModels.EntityIssuerPageDBModels.SourceDocumentDBModel;
-import com.esgc.DBModels.EntityIssuerPageDBModels.SummaryWidgetDBModel;
+import com.esgc.DBModels.EntityIssuerPageDBModels.*;
 import com.esgc.DBModels.EntityPage.*;
 import com.esgc.TestBase.DriverUnits;
 
@@ -821,6 +818,58 @@ public class EntityPageQueries {
         each = getRowMap(query);
         return (int) Math.round(Double.valueOf(each.get("VALUE").toString())*100);
 
+    }
+
+
+    public static List<ESGMaterlityDBModel> getESGMaterlityData(String orbisID) {
+        String query = "WITH EMS as (SELECT * FROM DF_TARGET.ESG_MODEL_SCORES WHERE DATA_TYPE in ('criteria_score','information_rate_criteria')\n" +
+                "AND ORBIS_ID IN ('"+orbisID+"') QUALIFY ROW_NUMBER() OVER (PARTITION BY ORBIS_ID,CRITERIA,DATA_TYPE ORDER BY LOAD_DATE_TIME DESC) =1),SMW AS (\n" +
+                "SELECT * FROM DF_TARGET.SECTOR_METHODOLOGY_WEIGHTS WHERE DATA_TYPE IN ('Business Materiality', 'Stakeholder Materiality','criteria_weight')\n" +
+                "and SECTOR_ID in (SELECT DISTINCT SECTOR_ID FROM EMS) QUALIFY ROW_NUMBER() OVER (PARTITION BY SECTOR_ID,INTERNAL_SUB_CATEGORY_ID,DATA_TYPE ORDER BY LOAD_DATE DESC) =1),P_EMS AS (\n" +
+                "SELECT P.ORBIS_ID,P.CRITERIA,P.SECTOR_ID, max(P.\"'criteria_score'\") AS CRITERIA_SCORE ,max(P.\"'information_rate_criteria'\") AS INFORMATION_RATE_CRITERIA " +
+                "FROM EMS PIVOT(MAX(VALUE) FOR DATA_TYPE IN ('criteria_score','information_rate_criteria')) AS P GROUP BY P.ORBIS_ID,P.CRITERIA,P.SECTOR_ID)," +
+                "CCONT AS ( SELECT DISTINCT c.ORBIS_ID AS ORBIS_ID, s.CRITERIA AS CRITERIA, true AS flag FROM P_EMS s INNER JOIN DF_TARGET.CONTROVERSY_DETAILS c " +
+                "ON c.ORBIS_ID = s.ORBIS_ID AND CONTAINS ( c.RELATED_SUSTAINABILITY_DRIVER_REF, s.CRITERIA)\n" +
+                "AND c.SEVERITY = 'Critical'AND c.CONTROVERSY_STATUS = 'Active'AND c.CONTROVERSY_STEPS = 'last'AND c.CONTROVERSY_EVENTS > DATEADD( 'month', -48, CURRENT_DATE)::DATE)\n" +
+                ",METRIC AS ( SELECT DISTINCT EMFD.CATEGORY AS CRITERIA_CODE, EMFS.CATEGORY AS CRITERIA_NAME,\n" +
+                "EMFS.DOMAIN ,EMFS.INDICATOR,MSC.SUB_CATEGORY_DETAILED_DESCRIPTION FROM DF_TARGET.ESG_METRIC_FRAMEWORK_DETAIL EMFD JOIN DF_TARGET.ESG_METRIC_FRAMEWORK_SUMMARY EMFS \n" +
+                "on emfd.taxonomy_id = emfs.taxonomy_id LEFT JOIN df_lookup.MESG_SUB_CATEGORY msc on emfd.category = msc.INTERNAL_SUB_CATEGORY_CODE WHERE 1=1 \n" +
+                "AND EMFD.AS_OF_DATE = (SELECT MAX(AS_OF_DATE) FROM DF_TARGET.ESG_METRIC_FRAMEWORK_DETAIL)  AND EMFD.DATA_SOURCE = 'data_capture' AND EMFD.ITEM_TYPE = 'Input (raw)'  \n" +
+                "AND EMFD.STATUS='Active' AND msc.RESEARCH_LINE_ID = '1015')\n" +
+                "SELECT EMS.ORBIS_ID AS \"orbis_id\", EMS.CRITERIA as \"criteria_code\", METRIC.CRITERIA_NAME AS \"criteria_name\", METRIC.INDICATOR AS \"indicator\", " +
+                "METRIC.DOMAIN AS \"domain\", METRIC.SUB_CATEGORY_DETAILED_DESCRIPTION AS \"sub_catg_desc\" ,NVL(MAX(CCONT.FLAG), 'false') AS \"critical_controversy_exists_flag\", " +
+                "MAX(lkp.QUALIFIER) AS \"score_category\", CASE SMW.DATA_TYPE WHEN 'criteria_weight' then 'Dual'\n" +
+                "WHEN 'Business Materiality' then 'Business' WHEN 'Stakeholder Materiality' then 'Stakeholder' END \"data_type\", TRY_TO_NUMBER(SMW.DATA_VALUE) \"value\", " +
+                "DECODE(TRY_TO_NUMBER(SMW.DATA_VALUE),0,'Low',1,'Moderate',2,'High',3,'Very High') \"weight\", MAX(TRY_TO_DECIMAL(EMS.CRITERIA_SCORE,30,2)) AS \"criteria_score\", " +
+                "MAX(TRY_TO_DECIMAL(EMS.INFORMATION_RATE_CRITERIA,30,2)*100) AS \"disclosure_ratio\"\n" +
+                "FROM P_EMS EMS JOIN SMW ON smw.sector_id = ems.sector_id and smw.internal_sub_category_id = ems.criteria LEFT JOIN CCONT ON EMS.ORBIS_ID = CCONT.ORBIS_ID \n" +
+                "and EMS.CRITERIA = CCONT.CRITERIA LEFT JOIN DF_TARGET.ESG_ENTITY_MASTER EEM ON (EMS.ORBIS_ID = EEM.ORBIS_ID AND NVL(EEM.ENTITY_STATUS,'Active') = 'Active') \n" +
+                "LEFT JOIN METRIC ON (EMS.CRITERIA = METRIC.CRITERIA_CODE) LEFT JOIN DF_LOOKUP.ESG_SCORE_REFERENCE lkp ON 1=1\n" +
+                "AND lkp.RESEARCH_LINE_ID = '1015' AND lkp.STATUS = 'Active' AND lkp.GRADE IS NULL\n" +
+                "AND (floor(EMS.CRITERIA_SCORE) BETWEEN LOWER_SCORE_THRESHOLD AND UPPER_SCORE_THRESHOLD) WHERE 1=1  \n" +
+                "group by EMS.ORBIS_ID, EMS.CRITERIA,\"data_type\", \"value\",\"weight\", METRIC.CRITERIA_NAME, METRIC.INDICATOR, METRIC.DOMAIN, METRIC.SUB_CATEGORY_DETAILED_DESCRIPTION\n";
+
+        List<ESGMaterlityDBModel> list = new ArrayList<>();
+        for (Map<String, Object> rs : getQueryResultMap(query)) {
+            ESGMaterlityDBModel entity = new ESGMaterlityDBModel();
+
+            entity.setORBIS_ID(rs.get("orbis_id").toString());
+            entity.setCriteria_code(rs.get("criteria_code").toString());
+            entity.setCriteria_name(rs.get("criteria_name").toString());
+            entity.setIndicator(rs.get("indicator").toString());
+            entity.setDomain(rs.get("domain").toString());
+            entity.setSub_catg_desc(rs.get("sub_catg_desc").toString());
+            entity.setCritical_controversy_exists_flag(rs.get("critical_controversy_exists_flag").toString());
+            entity.setScore_category(rs.get("score_category").toString());
+            entity.setData_type(rs.get("data_type").toString());
+            entity.setValue(Integer.valueOf(rs.get("value").toString()));
+            entity.setWeight(rs.get("weight").toString());
+            entity.setCriteria_score(Double.valueOf(rs.get("criteria_score").toString()));
+            entity.setDisclosure_ratio(Integer.valueOf(rs.get("disclosure_ratio").toString().split("\\.")[0]));
+
+            list.add(entity);
+        }
+        return list;
     }
 
 
