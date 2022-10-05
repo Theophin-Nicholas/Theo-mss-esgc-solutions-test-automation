@@ -202,8 +202,8 @@ public class LoginPage extends PageBase {
     public void dataValidationLogin() {
         wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.DATA_USERNAME, Keys.ENTER);
         wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.DATA_PASSWORD);
-        if (!termsAndConditionsCheckBox.isSelected())
-            wait.until(ExpectedConditions.visibilityOf(termsAndConditionsLabel)).click();
+       // if (!termsAndConditionsCheckBox.isSelected()) //TODO This is removed
+         //   wait.until(ExpectedConditions.visibilityOf(termsAndConditionsLabel)).click();
         wait.until(ExpectedConditions.visibilityOf(loginButton)).click();
     }
 
