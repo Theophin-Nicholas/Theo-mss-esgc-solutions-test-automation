@@ -8,7 +8,7 @@ import org.testng.annotations.Test;
 public class EsgAssessmentUITests extends UITestBase {
 
      @Test(groups = {"regression", "ui", "smoke", "esg"})
-    @Xray(test = {8704})
+    @Xray(test = {8704, 9969})
     public void verifyESGGradeDistributionIsDisplayed() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         researchLinePage.navigateToResearchLine("ESG Assessments");
@@ -24,5 +24,14 @@ public class EsgAssessmentUITests extends UITestBase {
         researchLinePage.navigateToResearchLine("ESG Assessments");
         test.info("Navigated to ESG Assessments Page");
         researchLinePage.validateCountry();
+    }
+
+    @Test(groups = {"regression", "ui", "esg"})
+    @Xray(test = {9967})
+    public void verifyEsgAssessmentScoreLegend() {
+        ResearchLinePage researchLinePage = new ResearchLinePage();
+        researchLinePage.navigateToResearchLine("ESG Assessments");
+        test.info("Navigated to ESG Assessments Page");
+        researchLinePage.validateEsgAssessmentLegends();
     }
 }

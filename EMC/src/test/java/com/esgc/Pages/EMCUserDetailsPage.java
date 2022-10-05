@@ -112,9 +112,9 @@ public class EMCUserDetailsPage extends EMCBasePage {
                 BrowserUtils.waitForClickablility(doneButton, 15).click();
                 System.out.println("done button clicked");
                 BrowserUtils.waitForClickablility(detailsTab, 10).click();
-                BrowserUtils.wait(1);
-                BrowserUtils.waitForClickablility(applicationRolesTab, 10).click();
                 BrowserUtils.wait(3);
+                BrowserUtils.waitForClickablility(applicationRolesTab, 10).click();
+                BrowserUtils.wait(5);
                 break;
             }
         }
