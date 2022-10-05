@@ -26,6 +26,30 @@ public class EntitySearchFunctionTests extends UITestBase {
     }
 
     @Test(groups = {"regression", "ui"},
+            description = "ESGCA-5701 - UI | Portfolio Name Search | Verify the search functionality with wildcard characters")
+    @Xray(test = {5701})
+    public void testSearchFunctionWildCharacter1() {
+        ResearchLinePage researchLinePage = new ResearchLinePage();
+        test.info("Navigate to Portfolio Analysis page");
+        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        assertTestCase.assertTrue(researchLinePage.isSearchIconDisplayed());
+        researchLinePage.searchIconPortfolioPage.click();
+        researchLinePage.checkSearchResultWithWildChars("app%");
+    }
+
+    @Test(groups = {"regression", "ui"},
+            description = "ESGCA-5701 - UI | Portfolio Name Search | Verify the search functionality with wildcard characters")
+    @Xray(test = {5701})
+    public void testSearchFunctionWildCharacter2() {
+        ResearchLinePage researchLinePage = new ResearchLinePage();
+        test.info("Navigate to Portfolio Analysis page");
+        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        assertTestCase.assertTrue(researchLinePage.isSearchIconDisplayed());
+        researchLinePage.searchIconPortfolioPage.click();
+        researchLinePage.checkSearchResultWithWildChars("app*");
+    }
+
+    @Test(groups = {"regression", "ui"},
             description = "ESGCA-5312 - UI | Portfolio Name Search | Verify the search for portfolio is giving correct result as per the given words")
     @Xray(test = {5312})
     public void testSearchBoxIsGivingCorrectResult() {
