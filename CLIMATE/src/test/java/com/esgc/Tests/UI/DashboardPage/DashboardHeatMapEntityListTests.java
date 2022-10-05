@@ -10,6 +10,7 @@ import com.esgc.Tests.TestBases.Descriptions;
 import com.esgc.Tests.TestBases.UITestBase;
 import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.Driver;
+import com.esgc.Utilities.Environment;
 import com.esgc.Utilities.Xray;
 import io.restassured.response.Response;
 import org.openqa.selenium.By;
@@ -25,6 +26,7 @@ public class DashboardHeatMapEntityListTests extends UITestBase {
     @Test(groups = {"dashboard", "ui", "smoke"})
     @Xray(test = {4843, 4844, 4829, 7475, 7943, 9268, 9269, 9270, 6221})
     public void verifyEntityListTest() {
+        BrowserUtils.wait(4);
         DashboardPage dashboardPage = new DashboardPage();
         if (!dashboardPage.verifyPortfolioName.getText().equalsIgnoreCase("Sample Portfolio"))
             dashboardPage.selectPortfolioByNameFromPortfolioSelectionModal("Sample Portfolio");
@@ -294,8 +296,8 @@ public class DashboardHeatMapEntityListTests extends UITestBase {
         Driver.getDriver().manage().deleteAllCookies();
         Driver.getDriver().navigate().refresh();
 
-        loginPage.loginWithParams("esg-test1@outlook.com", "Helloworld21");
-        BrowserUtils.wait(2);
+        loginPage.loginWithParams(Environment.PHYSICAL_RISK_USERNAME, Environment.PHYSICAL_RISK_PASSWORD);
+        BrowserUtils.wait(5);
         Driver.getDriver().findElement(By.id("RegSector-test-id-1")).click();
         selectOptionFromFiltersDropdown("as_of_date", "June 2022");
 
@@ -315,7 +317,7 @@ public class DashboardHeatMapEntityListTests extends UITestBase {
         BrowserUtils.scrollTo(dashboardPage.heatMapResearchLines.get(0));
         for (int i = 0; i < dashboardPage.heatMapResearchLines.size(); i++) {
             dashboardPage.selectOneResearchLine(i);
-            BrowserUtils.wait(5);
+            BrowserUtils.wait(7);
             String color = Color.fromString(dashboardPage.heatMapResearchLines.get(i).getCssValue("background-color")).asHex();
             String researchLine = dashboardPage.heatMapResearchLines.get(i).getText();
             researchLine = researchLine.substring(researchLine.indexOf(":") + 1).trim();
@@ -399,9 +401,12 @@ public class DashboardHeatMapEntityListTests extends UITestBase {
                 System.out.println("j " + j);
                 BrowserUtils.scrollTo(dashboardPage.heatMapCells.get(counter));
                 String expPercentage = dashboardPage.heatMapCells.get(counter).getText();
+                BrowserUtils.wait(1);
                 dashboardPage.heatMapCells.get(counter).click();
                 counter++;
                 if (expPercentage.equals("0%")) continue;
+
+                BrowserUtils.waitForVisibility(dashboardPage.heatMapWidgetTitle,10);
                 String actPercentage = dashboardPage.heatMapWidgetTitle.getText();
                 actPercentage = actPercentage.substring(actPercentage.indexOf("\n") + 1);
                 actPercentage = actPercentage.substring(0, actPercentage.indexOf(" "));

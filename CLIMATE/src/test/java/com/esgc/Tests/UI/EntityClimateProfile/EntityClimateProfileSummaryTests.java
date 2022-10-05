@@ -737,8 +737,13 @@ public class EntityClimateProfileSummaryTests extends UITestBase {
             dataProviderClass = DataProviderClass.class, dataProvider = "orbisIDWithoutTempAlignment")
     @Xray(test = {7724, 7725, 7904})
     public void verifyNoDisplayMessageForNoData(String Entity) {
+        LoginPage loginPage = new LoginPage();
+        if(loginPage.loginButtons.size()>0) {
+            loginPage.login();
+        }
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio Analysis page");
+        BrowserUtils.wait(2);
         researchLinePage.navigateToFirstEntity(Entity);
         BrowserUtils.wait(5);
         EntityClimateProfilePage profilePage = new EntityClimateProfilePage();
@@ -827,6 +832,10 @@ public class EntityClimateProfileSummaryTests extends UITestBase {
     @Test(groups = {"regression", "ui", "smoke"}, dataProviderClass = DataProviderClass.class, dataProvider = "noInfoCarbonFootprintOrbisID")
     @Xray(test = {6345, 7008})
     public void verifyNoInfoDisplayedCarbonFootPrint1(String Entity) {
+        LoginPage loginPage = new LoginPage();
+        if(loginPage.loginButtons.size()>0) {
+            loginPage.login();
+        }
         ResearchLinePage researchLinePage = new ResearchLinePage();
       /*  test.info("Navigate to Portfolio Analysis page");
         researchLinePage.navigateToPageFromMenu("Portfolio Analysis");*/
@@ -924,8 +933,9 @@ public class EntityClimateProfileSummaryTests extends UITestBase {
 
     }
 
-    @Test(groups = {"regression", "ui", "smoke"}, dataProviderClass = DataProviderClass.class, dataProvider = "entitlementCheck")
-    @Xray(test = {8448, 8449, 8875,8878,8879,8880, 8881, 8884,8224,8225,8226})
+    //TODO need to update the entitlement to entitlementCheck for QA-QA2, UAT and entitlementCheckPrd for Prod
+    @Test(groups = {"regression", "ui", "smoke"}, dataProviderClass = DataProviderClass.class, dataProvider = "entitlementCheckPrd")
+    @Xray(test = {8448, 8449, 8875, 8878, 8879, 8880, 8881, 8884, 8224, 8225, 8226})
     public void verifyEntitlementBaseWidgets(String username, String password, String entitlement) {
         //Trying to log in with only Entitlement User
         LoginPage loginPage = new LoginPage();
