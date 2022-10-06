@@ -10,3 +10,4 @@ test-output
 /CLIMATE/src/test/resources/upload/portfolio_repository/*
 /personal-access-auth.properties
 /src/test/resorces/environments/prod.properties
+download
