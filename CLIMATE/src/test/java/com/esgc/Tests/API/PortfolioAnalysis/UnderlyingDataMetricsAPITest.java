@@ -21,7 +21,7 @@ import static org.hamcrest.Matchers.*;
  */
 public class UnderlyingDataMetricsAPITest extends APITestBase {
     //1178
-    @Test(groups = {"api", "regression"}, dataProvider = "API Research Lines")
+    @Test(groups = {"api", "regression"}, dataProvider = "No ESG API Research Lines")
     @Xray(test = {1178, 2378, 3117, 3852})
     public void UnderlyingDataMetricsAPI_Success(@Optional String researchLine) {
         APIController apiController = new APIController();

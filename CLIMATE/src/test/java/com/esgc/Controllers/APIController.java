@@ -467,7 +467,7 @@ public class APIController {
         try {
             response = configSpec()
                     .pathParam("portfolio_id", portfolio_id)
-                    .pathParam("research_line", researchLine)
+                    .pathParam("physical_risk", researchLine)
                     .body(apiFilterPayload)
                     .when()
                     .post(PortfolioAnalysisEndpoints.POST_PHYSICAL_RISK_UNDERLYING_DATA_METRICS_DETAILS);

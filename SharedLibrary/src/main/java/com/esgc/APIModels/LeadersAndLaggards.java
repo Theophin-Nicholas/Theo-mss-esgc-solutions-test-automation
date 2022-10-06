@@ -1,5 +1,6 @@
 package com.esgc.APIModels;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
@@ -44,4 +45,7 @@ public class LeadersAndLaggards {
 
     @JsonProperty("orbis_id")
     private String orbisId;
+
+    @JsonIgnore
+    private String score_quality;
 }
