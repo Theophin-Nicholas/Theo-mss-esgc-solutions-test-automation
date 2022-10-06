@@ -104,7 +104,7 @@ public class EntityClimateProfilePageQueries {
                 "FROM     df_target.entity_score_thresholds et\n" +
                 "JOIN     df_target.risk_category rc\n" +
                 "ON       et.risk_category_id=rc.risk_category_id\n" +
-                "WHERE    entity_id_bvd9 = '"+orbisID+"'\n" +
+                "WHERE    entity_id_bvd9 = '" + orbisID + "'\n" +
                 "AND      risk_threshold_id IN (3,4)\n" +
                 "AND      et.release_year\n" +
                 "                  || et.release_month=\n" +
@@ -116,7 +116,7 @@ public class EntityClimateProfilePageQueries {
                 "         (\n" +
                 "                  SELECT   risk_category_id\n" +
                 "                  FROM     df_target.entity_score_category\n" +
-                "                  WHERE    entity_id_bvd9 = '"+orbisID+"'\n" +
+                "                  WHERE    entity_id_bvd9 = '" + orbisID + "'\n" +
                 "                  AND      risk_category_id IN (14,1,12,4,2,16 ) qualify row_number() OVER( ORDER BY release_year DESC, release_month DESC, entity_category_score DESC nulls last)=1)\n" +
                 "GROUP BY rc.risk_category_name ;";
 
@@ -142,7 +142,7 @@ public class EntityClimateProfilePageQueries {
                 "ON        e.orbis_id = rl.bvd9_number\n" +
                 "JOIN (select distinct  MESG_SECTOR_ID,MESG_SECTOR  ,l1_sector from sector_hierarchy) s\n" +
                 "ON        e.mesg_sector_id = s.mesg_sector_id\n" +
-                "where  rl.bvd9_number = '"+orbisID+"' and ENTITY_STATUS  = 'Active'\n" +
+                "where  rl.bvd9_number = '" + orbisID + "' and ENTITY_STATUS  = 'Active'\n" +
                 "order by score desc;";
 
         return DatabaseDriver.getQueryResultMap(query);
@@ -150,7 +150,7 @@ public class EntityClimateProfilePageQueries {
 
     public Map<String, String> getPhysicalRiskData(String orbisID) {
         String query = " select bvd9_number,prm.score_category, prm.GS_PH_RISK_MGT_TOTAL ,GS_PH_RISK_MGT_LEADERSHIP,GS_PH_RISK_MGT_IMPLEMENTATION,GS_PH_RISK_MGT_RESULTS\n" +
-                "  from physical_risk_management prm where  prm.bvd9_number = '"+ orbisID +"' \n" +
+                "  from physical_risk_management prm where  prm.bvd9_number = '" + orbisID + "' \n" +
                 "  order by prm.year desc, prm.month desc Limit 1";
 
         query = String.format(query, orbisID);
@@ -172,10 +172,10 @@ public class EntityClimateProfilePageQueries {
     public static List<String> getCoverage(String orbisId) {
         String query = " select Related_Domain\n" +
                 " from Controversy_details\n" +
-                " where Orbis_id = '"+orbisId+"' and CONTROVERSY_STATUS = 'Active' and controversy_steps = 'last'\n" +
+                " where Orbis_id = '" + orbisId + "' and CONTROVERSY_STATUS = 'Active' and controversy_steps = 'last'\n" +
                 "order by CONTROVERSY_EVENTS desc";
 
-        List<String> result =  getQueryResultListMap(query);
+        List<String> result = getQueryResultListMap(query);
         System.out.println("result = " + result);
         return result;
     }
@@ -185,18 +185,18 @@ public class EntityClimateProfilePageQueries {
                 "FROM DF_TARGET.ESG_OVERALL_SCORES ESG  \n" +
                 "JOIN DF_TARGET.ENTITY_COVERAGE_TRACKING CT ON ESG.ORBIS_ID = CT.ORBIS_ID \n" +
                 "AND CT.COVERAGE_STATUS = 'Published' AND PUBLISH = 'yes'\n" +
-                "WHERE ESG.ORBIS_ID in ('"+orbisId+"')\n" +
+                "WHERE ESG.ORBIS_ID in ('" + orbisId + "')\n" +
                 "AND ESG.DATA_TYPE IN('information_rate_global')\n" +
                 "QUALIFY ROW_NUMBER() OVER(PARTITION BY ESG.ORBIS_ID,DATA_TYPE ORDER BY SCORED_DATE DESC) = 1;";
         System.out.println("query = " + query);
-        List<String> result =  getQueryResultLisDisclosure(query);
+        List<String> result = getQueryResultLisDisclosure(query);
         return result;
     }
 
 
-    public static List<String> getESGDbScores(String orbisId){
-        String query=" select value from esg_overall_scores \n" +
-                " where orbis_id="+orbisId+" \n" +
+    public static List<String> getESGDbScores(String orbisId) {
+        String query = " select value from esg_overall_scores \n" +
+                " where orbis_id=" + orbisId + " \n" +
                 " AND (\n" +
                 "        sub_category='Environmental' \n" +
                 "        or sub_category='Governance'\n" +
@@ -205,7 +205,51 @@ public class EntityClimateProfilePageQueries {
                 "    ) \n" +
                 "   and data_type='esg_pillar_score' ";
 
-        List<String> result =  getQueryResultListESGScores(query);
+        List<String> result = getQueryResultListESGScores(query);
         return result;
+    }
+
+    public static Map<String, Object> getEntityHeaderDetails(String orbisId) {
+        String query = "with p as (select ENTITY_NAME_BVD,BVD_ID_NUMBER,ORBIS_ID,COUNTRY_CODE,LEI, ISIN, MESG_SECTOR_ID\n" +
+                "from df_target.ESG_ENTITY_MASTER eem  left join DF_DERIVED.ISIN_SORTED di on eem.ORBIS_ID = di.BVD9_NUMBER and PRIMARY_ISIN = 'Y'\n" +
+                "where ORBIS_ID = '" + orbisId + "' ),\n" +
+                "ems as (select eos.RESEARCH_LINE_ID, p.ORBIS_ID  from entity_coverage_tracking ect\n" +
+                "join p  on ect.orbis_id=p.orbis_id \n" +
+                "join ESG_OVERALL_SCORES eos on ect.orbis_id=eos.orbis_id and data_type = 'esg_pillar_score' and sub_category = 'ESG' and eos.year || eos.month <= '202208'\n" +
+                "where coverage_status = 'Published' and publish = 'yes')\n" +
+                "select p.ENTITY_NAME_BVD, p.ORBIS_ID,p.COUNTRY_CODE,p.LEI, p.ISIN, ems.RESEARCH_LINE_ID,\n" +
+                "case when ems.RESEARCH_LINE_ID=1008 then  ve.GENERIC_SECTOR\n" +
+                "when ems.RESEARCH_LINE_ID=1015 then  L1_SECTOR end as sector\n" +
+                ",SH.MESG_SECTOR_ID from p join ems on ems.ORBIS_ID = p.ORBIS_ID\n" +
+                "join DF_TARGET.SECTOR_HIERARCHY SH on SH.MESG_SECTOR_ID = p.MESG_SECTOR_ID\n" +
+                "left join DF_TARGET.ESG_VE_SCORES VE on vE.ORBIS_ID = p.ORBIS_ID\n" +
+                "qualify row_number() OVER (PARTITION BY p.orbis_id ORDER BY RESEARCH_LINE_ID) =1";
+        return getQueryResultMap(query).get(0);
+    }
+
+    public static String getUpdatedDateforPhysicalRiskManagement(String orbisId) {
+
+        String query = "select TO_VARCHAR(PRODUCED_DATE) as PRODUCED_DATE  from PHYSICAL_RISK_MANAGEMENT where bvd9_number in\n" +
+                "(Select BVD9_ID from \"QA_MESGC\".\"DF_TARGET\".\"VW_ENTITY_DATA\" where bvd_ID in\n" +
+                "(select bvd_id_number from \"QA_MESGC\".\"DF_TARGET\".\"ESG_ENTITY_MASTER\" where orbis_id='" + orbisId + "') )\n" +
+                " order by produced_date desc limit  1";
+        try {
+            return getQueryResultMap(query).get(0).get("PRODUCED_DATE").toString();
+        } catch (Exception e) {
+            return "";
+        }
+
+    }
+
+
+    public static String getUpdatedDateforPhysicalClimateHazard(String orbisId) {
+        String query = " Select * from ENTITY_SCORE where entity_id_bvd9 in (Select BVD9_ID from \"QA_MESGC\".\"DF_TARGET\".\"VW_ENTITY_DATA\" where bvd_ID in\n" +
+                "(select bvd_id_number from \"QA_MESGC\".\"DF_TARGET\".\"ESG_ENTITY_MASTER\" where orbis_id='" + orbisId + "') )\n" +
+                " order by Release_date desc limit 1;";
+        try {
+            return getQueryResultMap(query).get(0).get("RELEASE_DATE").toString();
+        } catch (Exception e) {
+            return "";
+        }
     }
 }
