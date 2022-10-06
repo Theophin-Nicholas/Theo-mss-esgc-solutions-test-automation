@@ -5,7 +5,9 @@ import com.esgc.Pages.ResearchLinePage;
 import com.esgc.TestBase.DataProviderClass;
 import com.esgc.Tests.TestBases.UITestBase;
 import com.esgc.Utilities.BrowserUtils;
+import com.esgc.Utilities.Database.DatabaseDriver;
 import com.esgc.Utilities.Xray;
+import org.openqa.selenium.Keys;
 import org.testng.Assert;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Test;
@@ -141,5 +143,49 @@ public class EntityClimateProfile extends UITestBase {
         entityProfilePage.validatePhysicalRiskManagementTable();
 
     }
+
+    @Xray(test = {10044})
+    @Test(groups = {"regression", "ui", "entity_climate_profile"},
+            description = "Verify Entity page header of the Company Name' About Drawer",
+            dataProviderClass = DataProviderClass.class,  dataProvider = "CompanyNames")
+    public void validateCompanyNameAndAboutDrawer (String CompanyName) {
+
+        EntityClimateProfilePage entityProfilePage = new EntityClimateProfilePage();
+        entityProfilePage.searchAndLoadClimateProfilePage(CompanyName);
+        //Validate Hover on Company name :
+        entityProfilePage.validateCompanyNameHoverFunctionality(CompanyName);
+        //Validate About Icon next to name :
+        assertTestCase.assertTrue(entityProfilePage.validateInfoIcon(CompanyName),"Validate About Icon next to company Header");
+        entityProfilePage.openAboutDrawer(CompanyName);
+        //Validate if Drawer has opened upon click
+        assertTestCase.assertTrue(entityProfilePage.isAboutDrawerAvailable(),
+                "Validate About Drawer is displayed");
+        // Validate Header text in Drawer
+        assertTestCase.assertTrue(entityProfilePage.validateAboutHeader(CompanyName),"Validate Header Text");
+        // Validate validate Drawer Details
+        entityProfilePage.validateAboutDrawerDetails(CompanyName);
+        // Click on escape to close the drawer
+        BrowserUtils.ActionKeyPress(Keys.ESCAPE);
+
+    }
+
+    @Xray(test = {10275})
+    @Test(groups = {"regression", "ui", "entity_climate_profile"},
+            dataProviderClass = DataProviderClass.class,  dataProvider = "Company With Orbis ID")
+    public void validatePhysicalClimateHazardDate (String... Company) {
+        EntityClimateProfilePage entityProfilePage = new EntityClimateProfilePage();
+        entityProfilePage.searchAndLoadClimateProfilePage(Company[0]);
+        entityProfilePage.validatePhysicalClimateHazardUpdatedDate(Company[1]);
+    }
+
+    @Xray(test = {10282})
+    @Test(groups = {"regression", "ui", "entity_climate_profile"},
+            dataProviderClass = DataProviderClass.class,  dataProvider = "Company With Orbis ID")
+    public void validatePhysicalRiskManagementUpdatedDate (String... Company) {
+        EntityClimateProfilePage entityProfilePage = new EntityClimateProfilePage();
+        entityProfilePage.searchAndLoadClimateProfilePage(Company[0]);
+        entityProfilePage.validatePhysicalRiskManagementUpdatedDate(Company[1]);
+    }
+
 
 }

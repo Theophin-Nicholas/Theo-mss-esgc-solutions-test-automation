@@ -348,4 +348,15 @@ public class DataProviderClass {
                         {"486521987"},*/
                 };
     }
+
+    @DataProvider(name = "Company With Orbis ID")
+    public Object[][] companyWithOrbisID() {
+
+        return new Object[][]{
+
+                {"Apple, Inc.", "000411117"},  // VE scored company
+                {"FirstCash, Inc.","001668460"} // MESG scored Company
+
+        };
+    }
 }
