@@ -34,7 +34,7 @@ public class HistoryTableTest extends APITestBase{
             test.pass("Successfully validated for " + researchLine + "research line");
         }
 
-        @Test(groups = {"api", "regression"}, dataProvider = "API Research Lines")
+        @Test(groups = {"api", "regression"}, dataProvider = "No ESG API Research Lines")
         @Xray(test = {5097})
         public void getHistoryTableInvalidPayload(String researchLine) {
             APIController apiController = new APIController();

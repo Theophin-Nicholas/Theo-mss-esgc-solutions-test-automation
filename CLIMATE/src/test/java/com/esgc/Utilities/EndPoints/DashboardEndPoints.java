@@ -22,7 +22,7 @@ public class DashboardEndPoints {
 
     //============ Portfolio Summary =================
     public static String POST_PORTFOLIO_SUMMARY_COMPANIES = "api/portfolio/{portfolio_id}/portfolio-summary-companies";
-    public static String POST_ESG_SCORES = "api/portfolio/{portfolio_id}/corpesgdata/esgasmt/score";
+    public static String POST_ESG_SCORES = "api/portfolio/{portfolio_id}/esgasmt/score";
     public static String POST_DASHBOARD_COVERAGE = "api/portfolio/{portfolio_id}/dashboard-coverage";
 
 

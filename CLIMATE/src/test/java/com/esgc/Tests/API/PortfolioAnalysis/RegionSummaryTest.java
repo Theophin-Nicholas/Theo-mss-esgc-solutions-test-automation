@@ -14,7 +14,7 @@ import org.testng.annotations.Test;
 public class RegionSummaryTest extends APITestBase {
 //868,1190
 
-    @Test(groups = {"api", "regression"}, dataProvider = "API Research Lines")
+    @Test(groups = {"api", "regression"}, dataProvider = "No ESG API Research Lines")
     @Xray(test = {868, 2147, 1710, 1190,})
     public void RegionSummary(@Optional String researchLine) {
 

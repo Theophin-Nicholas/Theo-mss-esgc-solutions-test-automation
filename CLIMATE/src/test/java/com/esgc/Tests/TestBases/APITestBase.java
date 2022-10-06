@@ -45,6 +45,20 @@ public abstract class APITestBase extends TestBaseClimate {
         };
     }
 
+    @DataProvider(name = "No ESG API Research Lines")
+    public Object[][] availableResearchLinesForAPITestsWithoutESG() {
+
+        return new Object[][]{
+                {"operationsrisk"},
+                {"marketrisk"},
+                {"supplychainrisk"},
+                {"physicalriskmgmt"},
+                {"carbonfootprint"},
+                {"brownshareasmt"},
+                {"greenshareasmt"},
+        };
+    }
+
 
     @DataProvider(name = "API Research Lines2")
     public Object[][] availableResearchLinesForAPITests2() {
