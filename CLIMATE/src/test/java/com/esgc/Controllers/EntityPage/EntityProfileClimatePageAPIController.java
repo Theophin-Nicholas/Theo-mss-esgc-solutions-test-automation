@@ -29,9 +29,9 @@ public class EntityProfileClimatePageAPIController {
             response = configSpec()
                     .pathParam("orbis_id", orbis_id)
                     .pathParam("research_line", apiResourceMapper(research_line))
-
+                    .log().all()
                     .when()
-                    .post(EntityProfilePageEndpoints.POST_CLIMATE_SUMMARY);
+                    .post(EntityProfilePageEndpoints.POST_CLIMATE_SUMMARY).prettyPeek();
 
         } catch (Exception e) {
             System.out.println("Inside exception " + e.getMessage());
@@ -143,27 +143,27 @@ public class EntityProfileClimatePageAPIController {
         switch (researchLine) {
             case "Brown Share":
             case "brownshareasmt":
-                return "transitionrisk/brownshareasmt";
+                return "brownshareasmt";
 
             case "Green Share":
             case "greenshareasmt":
-                return "transitionrisk/greenshareasmt";
+                return "greenshareasmt";
 
             case "physicalriskhazard":
-                return "physicalrisk/physicalriskhazard";
+                return "physicalriskhazard";
 
 
             case "Temperature Alignment":
             case "temperaturealgmt":
-                return "transitionrisk/temperaturealgmt";
+                return "temperaturealgmt";
 
             case "Carbon Footprint":
             case "carbonfootprint":
-                return "transitionrisk/carbonfootprint";
+                return "carbonfootprint";
 
             case "Physical Risk Management":
             case "physicalriskmgmt":
-                return "physicalrisk/physicalriskmgmt";
+                return "physicalriskmgmt";
 
         }
         return "";
@@ -174,19 +174,19 @@ public class EntityProfileClimatePageAPIController {
 
             case "Carbon Footprint":
             case "carbonfootprint":
-                return "transitionrisk/carbonfootprint";
+                return "carbonfootprint";
 
             case "Operations Risk":
             case "operationsrisk":
-                return "physicalrisk/operationsrisk";
+                return "operationsrisk";
 
             case "Market Risk":
             case "marketrisk":
-                return "physicalrisk/marketrisk";
+                return "marketrisk";
 
             case "Supply Chain Risk":
             case "supplychainrisk":
-                return "physicalrisk/supplychainrisk";
+                return "supplychainrisk";
         }
         return "";
     }
