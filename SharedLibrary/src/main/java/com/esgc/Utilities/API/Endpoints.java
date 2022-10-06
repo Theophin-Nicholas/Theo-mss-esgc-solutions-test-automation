@@ -17,7 +17,7 @@ public class Endpoints {
     public static String GET_EMC_ALL_ROLES = "api/admin/roles";
     public static String GET_EMC_ALL_ADMIN_USERS = "api/admin/users";
     public static String POST_EMC_NEW_USER = "api/users";
-    public static String GET_PORTFOLIOS_FOR_USER = "api/portfolios";
+    public static String GET_PORTFOLIOS_FOR_USER = "api/portfolio";
 
     public static String POST_FILTER_OPTIONS_IN_PORTFOLIO = "api/portfolio/{portfolio_id}/filter";
     public static String PUT_PORTFOLIO_NAME_UPDATE = "api/portfolio/{portfolio_id}";
