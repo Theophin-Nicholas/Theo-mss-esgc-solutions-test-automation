@@ -197,6 +197,18 @@ public class DataProviderClass {
                 {"esg-test1+controversy@outlook.com","Moodys123","Physical Risk, Transition Risk and Controversies"},//
         };
     }
+
+
+    @DataProvider(name = "exportEntitlements")
+    public Object[][] exportEntitlements() {
+
+        return new Object[][]{
+                {"esg-test5@outlook.com","Helloworld25","Physical Risk"},//
+                {"esg-test6@outlook.com","Helloworld26","Transition Risk"},//
+                {"esg-test1+export@outlook.com","Moodys123","Physical Risk and Transition Risk"},//
+                {"esg-test33@outlook.com","Helloworld21","ESG"},//
+        };
+    }
     @DataProvider(name = "noInfoCarbonFootprintOrbisID")
     public Object[][] noInfoCarbonFootprintOrbisID1() {
 

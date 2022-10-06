@@ -68,7 +68,7 @@ public class UsersPageTests extends EMCUITestBase {
         BrowserUtils.waitForInvisibility(userDetailsPage.notification, 10);
         assertTestCase.assertEquals(userDetailsPage.userStatus.getText(),"Suspended", "User Details Page  - User status is Suspended");
         assertTestCase.assertTrue(userDetailsPage.unsuspendButton.isDisplayed(), "User Details Page  - Unsuspend button is displayed");
-        assertTestCase.assertTrue(userDetailsPage.resetPasswordButton.isDisplayed(), "User Details Page  - Reset Password button is displayed");
+        //assertTestCase.assertTrue(userDetailsPage.resetPasswordButton.isDisplayed(), "User Details Page  - Reset Password button is displayed");
         assertTestCase.assertTrue(userDetailsPage.deleteButton.isDisplayed(), "User Details Page  - Delete button is displayed");
 
         //Unsuspend user and verify user status
@@ -101,7 +101,7 @@ public class UsersPageTests extends EMCUITestBase {
         assertTestCase.assertTrue(userDetailsPage.userStatus.isDisplayed(), "User Details Page  - User status is displayed");
         assertTestCase.assertEquals(userDetailsPage.userStatus.getText(),"Staged", "User Details Page  - User status is Staged");
         assertTestCase.assertTrue(userDetailsPage.suspendButton.isDisplayed(), "User Details Page  - Suspend button is displayed");
-        assertTestCase.assertFalse(userDetailsPage.suspendButton.isEnabled(), "User Details Page  - Suspend button is not enabled for staged user");
+        assertTestCase.assertTrue(userDetailsPage.suspendButton.isEnabled(), "User Details Page  - Suspend button is not enabled for staged user");
         assertTestCase.assertTrue(userDetailsPage.activateButton.isDisplayed(), "User Details Page  - Reset Password button is displayed");
         assertTestCase.assertTrue(userDetailsPage.deleteButton.isDisplayed(), "User Details Page  - Delete button is displayed");
 
@@ -109,7 +109,7 @@ public class UsersPageTests extends EMCUITestBase {
         userDetailsPage.clickOnActivateButton();
         BrowserUtils.waitForVisibility(userDetailsPage.notification, 10);
         assertTestCase.assertTrue(userDetailsPage.notification.isDisplayed(), "User Details Page  - Notification is displayed");
-        BrowserUtils.waitForInvisibility(userDetailsPage.notification, 10);
+        //BrowserUtils.waitForInvisibility(userDetailsPage.notification, 10);
         assertTestCase.assertEquals(userDetailsPage.userStatus.getText(),"Pending user action", "User Details Page  - User status is Suspended");
         assertTestCase.assertTrue(userDetailsPage.suspendButton.isDisplayed(), "User Details Page  - Suspend button is displayed");
         assertTestCase.assertTrue(userDetailsPage.suspendButton.isEnabled(), "User Details Page  - Suspend button is enabled for pending user action");
