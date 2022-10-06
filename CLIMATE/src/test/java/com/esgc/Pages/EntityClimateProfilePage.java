@@ -73,6 +73,9 @@ public class EntityClimateProfilePage extends PageBase {
     @FindBy(id = "export_sources_doc_button")
     public WebElement exportSourcesDocumentsTab;
 
+    @FindBy(id = "export_pdf")
+    public WebElement pdfDownloadButton;
+
     @FindBy(id = "ref_Meth_button")
     public WebElement referenceAndMethodologiesTab;
 
@@ -407,12 +410,32 @@ public class EntityClimateProfilePage extends PageBase {
     @FindBy(xpath="//table[@id='table-id-3']/../../../following-sibling::div[3]/span")
     public WebElement PhysicalRisk_PhysicalRiskManagement_UpdatedDate_Span;
 
+    // Entity Page
+    @FindBy(xpath = "//*[@id=\"controversyError\"]/div/div/div[1] ")
+    public WebElement noControversies;
+
+    @FindBy(xpath = "//span[normalize-space()='Controversies'] ")
+    public List<WebElement> controversiesTitle;
 
     //return WebElement
 
     public WebElement getCompanyHeader(String companyName) {
         return Driver.getDriver().findElement(By.xpath("//header//span[contains(text(),'" + companyName + "')]"));
     }
+    @FindBy(xpath = "// div[normalize-space()='Filter by most impacted categories of ESG:']")
+    public WebElement controversiesStaticText;
+
+    @FindBy(xpath = "//div[normalize-space()='Filter by most impacted categories of ESG:']//following-sibling::div")
+    public List<WebElement> subCategoryList;
+
+    @FindBy(xpath = "//div[@id='div-mainlayout']//div//div//main//header/following-sibling::div/div[3]/div/div/div/div/div/div/div/following-sibling::div[2]/div/table/tbody/tr")
+    public List<WebElement> controversiesTableRow;
+
+    @FindBy(xpath = "//main/div/div/div/div/div/div/div/div/div/div/span[1]")
+    public WebElement controversiesPopUpClose;
+
+    @FindBy(xpath = "(//div[contains(text(),'Controversies')])")
+    public WebElement controversiesPopUpVerify;
 
     ///============= Methods
 
@@ -473,6 +496,42 @@ public class EntityClimateProfilePage extends PageBase {
 
     public void selectExportSourcesDocuments() {
         BrowserUtils.waitForClickablility(exportSourcesDocumentsTab, 30).click();
+    }
+
+    public void selectPdfDownload() {
+        BrowserUtils.waitForClickablility(pdfDownloadButton, 30).click();
+    }
+
+    public boolean checkDownloadProgressBarIsPresent() {
+        try {
+            return Driver.getDriver().findElement(By.xpath("//div[text()='Download in progress!']")).isDisplayed();
+        }catch(Exception e){
+            return false;
+        }
+    }
+
+    public void closeEntityProfilePage() {
+        Driver.getDriver().findElement(By.xpath("//li[starts-with(text(),'Profile')]/../../div[2]")).click();
+    }
+
+    public void closeDownloadProgressBar() {
+        Driver.getDriver().findElement(By.xpath("//div[text()='Download in progress!']/following-sibling::div/button/span")).click();
+
+    }
+
+    public boolean verifyDownloadProgressMessage() {
+        try {
+            WebElement progressMessage = Driver.getDriver().findElement(By.xpath("//div[text()='Download in progress!']"));
+            BrowserUtils.waitForVisibility(progressMessage, 30);
+            BrowserUtils.waitForInvisibility(progressMessage, 60);
+        }catch(Exception e){
+            return false;
+        }
+        return true;
+    }
+
+    public boolean verifyDownloadPdfButtonIsDisabled() {
+        return pdfDownloadButton.getAttribute("class").contains("disable");
     }
 
     public boolean verifyMethodologiesTabIsDisplayed() {

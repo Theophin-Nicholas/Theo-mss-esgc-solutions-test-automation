@@ -1,5 +1,6 @@
 package com.esgc.Utilities.Database;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -176,6 +177,66 @@ public class EntityClimateProfilePageQueries {
                 "order by CONTROVERSY_EVENTS desc";
 
         List<String> result = getQueryResultListMap(query);
+        System.out.println("result = " + result);
+        return result;
+    }
+
+    public static List<String> getCoverageForWidgets(String orbisId, String researchLine) {
+        String query = "";
+        if (researchLine.equalsIgnoreCase("Temperature Alignment")) {
+            query = "select max(data_value) UpdateDate\n" +
+                    "from RESEARCH_DATA\n" +
+                    "where bvd9_number = " + orbisId + "\n" +
+                    "and research_structure_datapoint_id =1017 and research_Data_id = 9";
+            List<String> result = getQueryResultListUnderlyingDataTempAligment(query);
+            System.out.println("result = " + result);
+            return result;
+        } else if (researchLine.equalsIgnoreCase("Carbon Footprint")) {
+            query = "select max(produced_date) UpdateDate from CARBON_FOOTPRINT\n" +
+                    "where bvd9_number = " + orbisId;
+        } else if (researchLine.equalsIgnoreCase("Brown Share Assessments")) {
+            query = "select max(produced_date) UpdateDate from BROWN_SHARE where bvd9_number = " + orbisId;
+        } else if (researchLine.equalsIgnoreCase("Green Share Assessments")) {
+            query = "select max(produced_date) UpdateDate from GREEN_SHARE\n" +
+                    "where bvd9_number = " + orbisId;
+        }
+        //This is for another test case
+        if (researchLine.equalsIgnoreCase("Brown Share")) {
+            query = "select * from GREEN_SHARE As C where bvd9_number =" + orbisId + " and C.Year ='2022' and C.Month ='08'";
+        } else if (researchLine.equalsIgnoreCase("Green Share")) {
+            query = "select \n" +
+                    "GS_BUILDING_MATERIALS_WOOD_ESTIMATE_OF_INCORPORATION_SOURCE SOURCE,\n" +
+                    "GS_BUILDING_MATERIALS_WOOD_ESTIMATE_OF_INCORPORATION MAIN,\n" +
+                    "GS_BUILDING_MATERIALS_WOOD_SCALE_OF_INCORPORATION SCALE\n" +
+                    "from GREEN_SHARE As C where bvd9_number =039634868 and C.Year ='2022' and C.Month ='08'";
+        }
+
+        List<String> result = getQueryResultListUnderlyingData(query);
+        System.out.println("result = " + result);
+        return result;
+    }
+
+    public static List<String> getCoverageForGreenShare(String orbisId, String researchLine) {
+        String query = "";
+        List<String> result=new ArrayList<>();
+        if (researchLine.equalsIgnoreCase("Brown Share")) {
+            query = "select BS_FOSF_TAR_SAND_N_OIL_SHALE_EXTRACTION_SERVICES_THRESHOLD THRESHOLD,\n" +
+                    "BS_FOSF_TAR_SAND_N_OIL_SHALE_EXTRACTION_SERVICES_SOURCE SOURCE,\n" +
+                    "BS_FOSF_TAR_SAND_N_OIL_SHALE_EXTRACTION_SERVICES SERVICES,\n" +
+                    "BS_FOSF_METHANE_HYDRATES_SOURCE METHANE_HYDRATES,\n"+
+                    "BS_FOSF_LIQUEFIED_NATURAL_GAS_SOURCE LIQUEFIED_NATURAL_GAS\n"+
+                    "from brown_share\n" +
+                    "where bvd9_number = "+orbisId+"\n" +
+                    "and AS_OF_DATE = ( select MAX(AS_OF_DATE) from brown_share where bvd9_number = "+orbisId+" )";
+            result = getQueryResultListUDBrownShare(query);
+        } else if (researchLine.equalsIgnoreCase("Green Share")) {
+            query = "select \n" +
+                    "GS_BUILDING_MATERIALS_WOOD_ESTIMATE_OF_INCORPORATION_SOURCE SOURCE,\n" +
+                    "GS_BUILDING_MATERIALS_WOOD_ESTIMATE_OF_INCORPORATION MAIN,\n" +
+                    "GS_BUILDING_MATERIALS_WOOD_SCALE_OF_INCORPORATION SCALE\n" +
+                    "from GREEN_SHARE As C where bvd9_number =039634868 and C.Year ='2022' and C.Month ='08'";
+            result = getQueryResultListUDGreenShare(query);
+        }
         System.out.println("result = " + result);
         return result;
     }
