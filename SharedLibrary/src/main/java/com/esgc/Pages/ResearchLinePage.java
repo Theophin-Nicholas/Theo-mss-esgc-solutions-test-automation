@@ -2465,6 +2465,28 @@ public class ResearchLinePage extends UploadPage {
         return true;
     }
 
+    public void verifyColorLegendOfScoreCategory() {
+        String xpath = "//div[text()='Physical Risk Hazards: Operations Risk']//span[text()='0-19']/div";
+        String actualColor = Driver.getDriver().findElement(By.xpath(xpath)).getAttribute("style");
+        assertTestCase.assertEquals(actualColor, "background: rgb(79, 163, 205);");
+
+        xpath = "//div[text()='Physical Risk Hazards: Operations Risk']//span[text()='20-39']/div";
+        actualColor = Driver.getDriver().findElement(By.xpath(xpath)).getAttribute("style");
+        assertTestCase.assertEquals(actualColor, "background: rgb(141, 163, 183);");
+
+        xpath = "//div[text()='Physical Risk Hazards: Operations Risk']//span[text()='40-59']/div";
+        actualColor = Driver.getDriver().findElement(By.xpath(xpath)).getAttribute("style");
+        assertTestCase.assertEquals(actualColor, "background: rgb(169, 137, 142);");
+
+        xpath = "//div[text()='Physical Risk Hazards: Operations Risk']//span[text()='60-79']/div";
+        actualColor = Driver.getDriver().findElement(By.xpath(xpath)).getAttribute("style");
+        assertTestCase.assertEquals(actualColor, "background: rgb(192, 105, 96);");
+
+        xpath = "//div[text()='Physical Risk Hazards: Operations Risk']//span[text()='80-100']/div";
+        actualColor = Driver.getDriver().findElement(By.xpath(xpath)).getAttribute("style");
+        assertTestCase.assertEquals(actualColor, "background: rgb(218, 73, 48);");
+    }
+
     public boolean verifyPhysicalRiskHazardsDrawers(String riskHazard, String topic) {
         System.out.println("riskHazard = " + riskHazard);
         System.out.println("topic = " + topic);
@@ -2559,6 +2581,24 @@ public class ResearchLinePage extends UploadPage {
 
         assertTestCase.assertTrue(Driver.getDriver().findElement(By.xpath("("+labelXpath+")[1]")).getCssValue("font-size").equals("10px"));
 
+
+    }
+
+    public void validatePhysicalRiskMgmtLegend(){
+
+        String labelXpath = "//div[contains(text(),'Physical Risk Management Score:')]//span";
+
+        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("("+labelXpath+")[1]")).getText(),"Advanced");
+        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("("+labelXpath+"/div)[1]")).getAttribute("style"),"background: rgb(34, 149, 149);");
+
+        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("("+labelXpath+")[2]")).getText(),"Robust");
+        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("("+labelXpath+"/div)[2]")).getAttribute("style"),"background: rgb(90, 151, 114);");
+
+        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("("+labelXpath+")[3]")).getText(),"Limited");
+        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("("+labelXpath+"/div)[3]")).getAttribute("style"),"background: rgb(175, 157, 63);");
+
+        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("("+labelXpath+")[4]")).getText(),"Weak");
+        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("("+labelXpath+"/div)[4]")).getAttribute("style"),"background: rgb(223, 161, 36);");
 
     }
 
