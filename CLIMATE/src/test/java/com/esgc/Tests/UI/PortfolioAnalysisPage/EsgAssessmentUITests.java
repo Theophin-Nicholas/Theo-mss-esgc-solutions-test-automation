@@ -34,4 +34,17 @@ public class EsgAssessmentUITests extends UITestBase {
         test.info("Navigated to ESG Assessments Page");
         researchLinePage.validateEsgAssessmentLegends();
     }
+
+    @Test(groups = {"regression", "ui", "esg"})
+    @Xray(test = {8291})
+    public void verifyEsgAssessmentWithBenchmark() {
+        ResearchLinePage researchLinePage = new ResearchLinePage();
+        researchLinePage.navigateToResearchLine("ESG Assessments");
+
+        researchLinePage.clickOnBenchmarkDropdown();
+        researchLinePage.waitForDataLoadCompletion();
+        researchLinePage.SelectAPortfolioFromBenchmark("Sample Portfolio");
+
+
+    }
 }
