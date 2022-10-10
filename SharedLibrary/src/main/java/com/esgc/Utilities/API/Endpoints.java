@@ -1,11 +1,14 @@
 package com.esgc.Utilities.API;
 
+import java.net.URI;
+
 /**
  * This utility class created to store all Endpoints for API calls
  */
 public class Endpoints {
     public static String GET_EMC_USER = "api/users";
-    public static String GET_EMC_ALL_ACCOUNTS = "api/admin/accounts";
+    public static String EMC_APPS = "api/applications";
+    public static String GET_EMC_ALL_ACCOUNTS = "api/accounts";
     public static String GET_EMC_ALL_ROLES = "api/admin/roles";
     public static String GET_EMC_ALL_ADMIN_USERS = "api/admin/users";
     public static String POST_EMC_NEW_USER = "api/users";

@@ -179,7 +179,10 @@ public class EMCRoleDetailsPage extends EMCBasePage {
         BrowserUtils.wait(3);
         assignMemberCheckBoxes.get(0).click();
         BrowserUtils.waitForClickablility(assignButton,5).click();
-        BrowserUtils.waitForClickablility(detailsTab, 15).click();
-        BrowserUtils.waitForClickablility(permissionsTab, 5).click();
+        BrowserUtils.wait(3);
+        detailsTab.click();
+        BrowserUtils.wait(1);
+        permissionsTab.click();
+        BrowserUtils.wait(3);
     }
 }
