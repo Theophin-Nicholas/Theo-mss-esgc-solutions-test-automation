@@ -86,7 +86,7 @@ public class DashboardSummaryHeader extends DashboardUITestBase {
     }
 
     @Test(groups = {"dashboard", "regression", "ui", "smoke"})
-    @Xray(test = 8334)
+    @Xray(test = {8334, 8328})
     public void verifyViewMethodologies(){
         // ESGCA-8334: General UI Checks for Methodology Drawer
         DashboardPage dashboardPage = new DashboardPage();
@@ -94,7 +94,8 @@ public class DashboardSummaryHeader extends DashboardUITestBase {
 
         dashboardPage.selectViewMethodologies();
         assertTestCase.assertTrue(dashboardPage.verifyMethodologiesPopup(),"Verify Methodologies popup");
-
+        dashboardPage.verifyMethodologiesHeader();
+        dashboardPage.verifyMethodologiesLinks();
         dashboardPage.clickHideLink();
     }
 
