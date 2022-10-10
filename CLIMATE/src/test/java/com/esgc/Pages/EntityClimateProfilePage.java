@@ -421,6 +421,14 @@ public class EntityClimateProfilePage extends PageBase {
     @FindBy(xpath = "(//div[contains(text(),'Controversies')])")
     public WebElement controversiesPopUpVerify;
 
+    @FindBy(xpath = " //*[@id=\"div-mainlayout\"]/div/div/main/header/div/div/div/div[2]/span[4]/span")
+    public WebElement sectorInHeader;
+
+    @FindBy(xpath = " //body/div[@id='company-summary-panel']/div/div/div[5]")
+    public WebElement companyDrawerSector;
+
+
+
     ///============= Methods
 
     public boolean isWidgetHave(String text) {
