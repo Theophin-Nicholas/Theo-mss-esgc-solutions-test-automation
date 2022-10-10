@@ -1,20 +1,34 @@
 package com.esgc.Tests.UI.DashboardPage;
 
 import com.esgc.Pages.DashboardPage;
+import com.esgc.Pages.ResearchLinePage;
 import com.esgc.Tests.TestBases.DashboardUITestBase;
 import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.Xray;
+import org.apache.commons.text.CaseUtils;
+import org.testng.annotations.Optional;
 import org.testng.annotations.Test;
+
+import java.time.Month;
 
 public class DashboardSummaryHeader extends DashboardUITestBase {
 
-    @Test(groups = {"dashboard", "regression", "ui", "smoke"})
-    @Xray(test = {3632, 5067, 6313, 7707, 8313, 8343})
-    public void validateDashboardSummaryHeader(){
+    @Test(groups = {"dashboard", "regression", "ui", "smoke"},dataProvider = "filters")
+    @Xray(test = {3632, 5067, 6313, 7707, 8313, 8343, 4267})
+    public void validateDashboardSummaryHeader(@Optional String sector, @Optional String region, @Optional String month, @Optional String year){
         DashboardPage dashboardPage = new DashboardPage();
-
+        ResearchLinePage researchLinePage = new ResearchLinePage();
         dashboardPage.navigateToPageFromMenu("Dashboard");
         test.info("Navigated to Dashboard Page");
+
+        String dateFilter = CaseUtils.toCamelCase(Month.of(Integer.valueOf(month)).name(),true,' ') + " " + year;
+
+        researchLinePage.clickFiltersDropdown();
+        researchLinePage.selectOptionFromFiltersDropdown("regions", region);
+        researchLinePage.clickFiltersDropdown();
+        researchLinePage.selectOptionFromFiltersDropdown("as_of_date", dateFilter);
+        BrowserUtils.wait(5);
+
 
         // ESGCA-5067: Verify the selected Portfolio widget details on the Climate Tile
         assertTestCase.assertTrue(dashboardPage.validateSelectedPortfolio(),"Verify selected portfolio name in summary");
