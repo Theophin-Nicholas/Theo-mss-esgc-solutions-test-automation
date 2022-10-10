@@ -5,25 +5,18 @@ import com.esgc.Pages.EntityClimateProfilePage;
 import com.esgc.Pages.ResearchLinePage;
 import com.esgc.TestBase.DataProviderClass;
 import com.esgc.Tests.TestBases.UITestBase;
-import com.esgc.Utilities.API.EntityPageEndpoints;
 import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.Driver;
-import com.esgc.Utilities.Environment;
-import com.esgc.Utilities.Database.DatabaseDriver;
 import com.esgc.Utilities.Xray;
-import io.restassured.http.ContentType;
-import io.restassured.response.Response;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.Keys;
+import org.openqa.selenium.WebElement;
 import org.testng.Assert;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Test;
 
 import java.util.Arrays;
 import java.util.List;
-
-import static io.restassured.RestAssured.given;
 
 public class EntityClimateProfile extends UITestBase {
 
@@ -123,8 +116,6 @@ public class EntityClimateProfile extends UITestBase {
             description = "Entity Climate Profile Page-Sector Comparison Chart for Physical risk",
             dataProviderClass = DataProviderClass.class, dataProvider = "CompanyNames")
     public void testSectorComparisonChartForPhysicalRisk(String CompanyName) {
-        // ResearchLinePage researchLinePage = new ResearchLinePage();
-        //  researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
         EntityClimateProfilePage entityProfilePage = new EntityClimateProfilePage();
         entityProfilePage.searchAndLoadClimateProfilePage(CompanyName);
         entityProfilePage.navigateToPhysicalRisk();
@@ -142,8 +133,6 @@ public class EntityClimateProfile extends UITestBase {
             description = "Entity Climate Profile Page-Physical risk management",
             dataProviderClass = DataProviderClass.class, dataProvider = "CompanyNames")
     public void testPhysicalRiskManagement(String CompanyName) {
-        //  ResearchLinePage researchLinePage = new ResearchLinePage();
-        // researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
         EntityClimateProfilePage entityProfilePage = new EntityClimateProfilePage();
         entityProfilePage.searchAndLoadClimateProfilePage(CompanyName);
         entityProfilePage.navigateToPhysicalRisk();
@@ -187,24 +176,6 @@ public class EntityClimateProfile extends UITestBase {
 
     }
 
-    public Response getHeaderAPI(String orbisId) {
-        Response response = null;
-        try {
-            response = given().accept(ContentType.JSON)
-                    .baseUri(Environment.URL)
-                    .relaxedHTTPSValidation()
-                    .header("Authorization", "Bearer " + System.getProperty("token"))
-                    .header("Accept", "application/json")
-                    .header("Content-Type", "application/json")
-                    .body("{\"orbis_id\":\"" + orbisId + "\"}")
-                    .when()
-                    .post(EntityPageEndpoints.POST_HEADER);
-        } catch (Exception e) {
-            System.out.println("Inside exception " + e.getMessage());
-        }
-
-        return response;
-    }
     @Xray(test = {10044})
     @Test(groups = {"regression", "ui", "entity_climate_profile"},
             description = "Verify Entity page header of the Company Name' About Drawer",
