@@ -269,4 +269,48 @@ public class EntityClimateProfilePageQueries {
         List<String> result = getQueryResultListESGScores(query);
         return result;
     }
+
+    public static Map<String, Object> getEntityHeaderDetails(String orbisId) {
+        String query = "with p as (select ENTITY_NAME_BVD,BVD_ID_NUMBER,ORBIS_ID,COUNTRY_CODE,LEI, ISIN, MESG_SECTOR_ID\n" +
+                "from df_target.ESG_ENTITY_MASTER eem  left join DF_DERIVED.ISIN_SORTED di on eem.ORBIS_ID = di.BVD9_NUMBER and PRIMARY_ISIN = 'Y'\n" +
+                "where ORBIS_ID = '" + orbisId + "' ),\n" +
+                "ems as (select eos.RESEARCH_LINE_ID, p.ORBIS_ID  from entity_coverage_tracking ect\n" +
+                "join p  on ect.orbis_id=p.orbis_id \n" +
+                "join ESG_OVERALL_SCORES eos on ect.orbis_id=eos.orbis_id and data_type = 'esg_pillar_score' and sub_category = 'ESG' and eos.year || eos.month <= '202208'\n" +
+                "where coverage_status = 'Published' and publish = 'yes')\n" +
+                "select p.ENTITY_NAME_BVD, p.ORBIS_ID,p.COUNTRY_CODE,p.LEI, p.ISIN, ems.RESEARCH_LINE_ID,\n" +
+                "case when ems.RESEARCH_LINE_ID=1008 then  ve.GENERIC_SECTOR\n" +
+                "when ems.RESEARCH_LINE_ID=1015 then  L1_SECTOR end as sector\n" +
+                ",SH.MESG_SECTOR_ID from p join ems on ems.ORBIS_ID = p.ORBIS_ID\n" +
+                "join DF_TARGET.SECTOR_HIERARCHY SH on SH.MESG_SECTOR_ID = p.MESG_SECTOR_ID\n" +
+                "left join DF_TARGET.ESG_VE_SCORES VE on vE.ORBIS_ID = p.ORBIS_ID\n" +
+                "qualify row_number() OVER (PARTITION BY p.orbis_id ORDER BY RESEARCH_LINE_ID) =1";
+        return getQueryResultMap(query).get(0);
+    }
+
+    public static String getUpdatedDateforPhysicalRiskManagement(String orbisId) {
+
+        String query = "select TO_VARCHAR(PRODUCED_DATE) as PRODUCED_DATE  from PHYSICAL_RISK_MANAGEMENT where bvd9_number in\n" +
+                "(Select BVD9_ID from \"QA_MESGC\".\"DF_TARGET\".\"VW_ENTITY_DATA\" where bvd_ID in\n" +
+                "(select bvd_id_number from \"QA_MESGC\".\"DF_TARGET\".\"ESG_ENTITY_MASTER\" where orbis_id='" + orbisId + "') )\n" +
+                " order by produced_date desc limit  1";
+        try {
+            return getQueryResultMap(query).get(0).get("PRODUCED_DATE").toString();
+        } catch (Exception e) {
+            return "";
+        }
+
+    }
+
+
+    public static String getUpdatedDateforPhysicalClimateHazard(String orbisId) {
+        String query = " Select * from ENTITY_SCORE where entity_id_bvd9 in (Select BVD9_ID from \"QA_MESGC\".\"DF_TARGET\".\"VW_ENTITY_DATA\" where bvd_ID in\n" +
+                "(select bvd_id_number from \"QA_MESGC\".\"DF_TARGET\".\"ESG_ENTITY_MASTER\" where orbis_id='" + orbisId + "') )\n" +
+                " order by Release_date desc limit 1;";
+        try {
+            return getQueryResultMap(query).get(0).get("RELEASE_DATE").toString();
+        } catch (Exception e) {
+            return "";
+        }
+    }
 }
