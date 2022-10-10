@@ -486,6 +486,12 @@ public abstract class PageBase {
         }
     }
 
+    public String getLastUpdatedDateContainsSearchKeyWord(String searchKeyword) {
+        String lastUpdateXpath = "//span[@title='"+searchKeyword+"']/../following-sibling::div/span";
+        String lastUpdatedDate = Driver.getDriver().findElement(By.xpath(lastUpdateXpath)).getText();
+        return lastUpdatedDate;
+    }
+
     public boolean verifyMessage(String section, String message) {
         try {
             //BrowserUtils.scrollTo(Driver.getDriver().findElement(By.xpath("//div/div/div[3]/main/div/div[1]/div[3]/div[2]/div[1]/div")));
