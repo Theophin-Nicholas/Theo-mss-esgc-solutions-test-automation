@@ -56,7 +56,7 @@ public class ESGClimateSummaryDBTest extends EntityClimateProfileDataValidationT
     }
 
     @Test(groups = {"data_validation", "regression"}, dataProvider = "orbisID")
-    @Xray(test = {6052})
+    @Xray(test = {6052, 6344})
     public void validateTemperatureAlignmentData(@Optional String orbisID) {
 
         Map<String, String> data = entityClimateProfilepagequeries.getTempratureAlignmentData(orbisID);
