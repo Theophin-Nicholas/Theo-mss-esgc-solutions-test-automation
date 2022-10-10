@@ -60,4 +60,17 @@ public abstract class DashboardUITestBase extends TestBase {
                 {"Green Share Assessment"},
         };
     }
+
+    @DataProvider(name = "filters")
+    public Object[][] provideFilterParameters() {
+
+        return new Object[][]
+                {
+                        {"all", "all", "03", "2022"},
+                        {"all", "APAC", "03", "2021"},
+                        {"all", "EMEA",  "09", "2022"},
+                        {"all", "AMER", "03", "2022"}
+
+                };
+    }
 }
