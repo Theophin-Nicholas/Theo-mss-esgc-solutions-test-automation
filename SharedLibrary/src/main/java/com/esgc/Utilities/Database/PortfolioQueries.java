@@ -5,10 +5,8 @@ import com.esgc.DBModels.EntityPage.PhysicalScore;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 import static com.esgc.Utilities.Database.DatabaseDriver.getQueryResultList;
 import static com.esgc.Utilities.Database.DatabaseDriver.getQueryResultMap;
@@ -737,6 +735,21 @@ public class PortfolioQueries {
 
         return sum/totalCompanies;
 
+    }
+
+    public String getLastUpdatedDateOfEntity(String entityName) {
+        String query = "Select UPDATED_DATE from DF_TARGET.ENTITY_SEARCH_FEED where entity_proper_name like ('"+entityName+"')";
+        String dateDB = getQueryResultList(query).get(0).get(0).toString().substring(0,10);
+
+        SimpleDateFormat month_date = new SimpleDateFormat("MMMM d, yyyy", Locale.ENGLISH);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String month_name = "";
+        try {
+            Date date = sdf.parse(dateDB);
+            month_name = month_date.format(date);
+        } catch (Exception e) {
+        }
+        return month_name;
     }
 
     public List<Map<String, Object>> getESGModelWithPortfolioID(String month, String year, String portfolioId) {
