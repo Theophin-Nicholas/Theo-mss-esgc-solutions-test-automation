@@ -168,8 +168,11 @@ public class LoginPage extends PageBase {
     public void login() {
         wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.UI_USERNAME, Keys.ENTER);
         wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.UI_PASSWORD);
-        if (!termsAndConditionsCheckBox.isSelected())
-            wait.until(ExpectedConditions.visibilityOf(termsAndConditionsLabel)).click();
+        String env = ConfigurationReader.getProperty("environment");
+        if (!(env.equals("qa") || env.equals("qa2"))) {
+            if (!termsAndConditionsCheckBox.isSelected())
+                wait.until(ExpectedConditions.visibilityOf(termsAndConditionsLabel)).click();
+        }
         wait.until(ExpectedConditions.visibilityOf(loginButton)).click();
     }
     public void userLoginWithNoControversiesBundle() {
@@ -182,15 +185,20 @@ public class LoginPage extends PageBase {
     public void userLoginWithNoEsgBundle() {
         wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.USER_WITH_OUT_ESG_ENTITLEMENT_USERNAME, Keys.ENTER);
         wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.USER_WITH_OUT_ESG_ENTITLEMENT_PASSWORD);
-        if (!termsAndConditionsCheckBox.isSelected())
-            wait.until(ExpectedConditions.visibilityOf(termsAndConditionsLabel)).click();
-        wait.until(ExpectedConditions.visibilityOf(loginButton)).click();
+        String env = ConfigurationReader.getProperty("environment");
+        if (!(env.equals("qa") || env.equals("qa2"))) {
+            if (!termsAndConditionsCheckBox.isSelected())
+                wait.until(ExpectedConditions.visibilityOf(termsAndConditionsLabel)).click();
+        } wait.until(ExpectedConditions.visibilityOf(loginButton)).click();
     }
     public void userLoginWithNoExportBundle() {
         wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.USER_WITH_OUT_EXPORT_ENTITLEMENT_USERNAME, Keys.ENTER);
         wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.USER_WITH_OUT_EXPORT_ENTITLEMENT_PASSWORD);
-        if (!termsAndConditionsCheckBox.isSelected())
-            wait.until(ExpectedConditions.visibilityOf(termsAndConditionsLabel)).click();
+        String env = ConfigurationReader.getProperty("environment");
+        if (!(env.equals("qa") || env.equals("qa2"))) {
+            if (!termsAndConditionsCheckBox.isSelected())
+                wait.until(ExpectedConditions.visibilityOf(termsAndConditionsLabel)).click();
+        }
         wait.until(ExpectedConditions.visibilityOf(loginButton)).click();
     }
 
@@ -202,8 +210,11 @@ public class LoginPage extends PageBase {
     public void dataValidationLogin() {
         wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.DATA_USERNAME, Keys.ENTER);
         wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.DATA_PASSWORD);
-       // if (!termsAndConditionsCheckBox.isSelected()) //TODO This is removed
-         //   wait.until(ExpectedConditions.visibilityOf(termsAndConditionsLabel)).click();
+        String env = ConfigurationReader.getProperty("environment");
+        if (!(env.equals("qa") || env.equals("qa2"))) {
+            if (!termsAndConditionsCheckBox.isSelected())
+                wait.until(ExpectedConditions.visibilityOf(termsAndConditionsLabel)).click();
+        }
         wait.until(ExpectedConditions.visibilityOf(loginButton)).click();
     }
 
