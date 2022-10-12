@@ -54,6 +54,7 @@ public class EntityProfileClimatePageAPIController {
 
         return response;
     }
+
     public Response getESGClimateSummary(String orbis_id) {
         Response response = null;
         try {
@@ -66,6 +67,7 @@ public class EntityProfileClimatePageAPIController {
         }
         return response;
     }
+
     public Response getClimateSummaryAPIResponseWithTemperedToken(String orbis_id, String research_line) {
         Response response = null;
         try {
@@ -86,6 +88,7 @@ public class EntityProfileClimatePageAPIController {
         }
         return response;
     }
+
     public Response getClimateSummaryAPIResponseWithInvalidToken() {
         Response response = null;
         String fullURI = "https://solutions-dev-us-east-1.mra-esg-nprd.aws.moodys.tld/api/portfolios/00000000-0000-0000-0000-000000000000/transitionrisk/temperaturealgmt/sector-temp-rise";
@@ -203,6 +206,7 @@ public class EntityProfileClimatePageAPIController {
         }
         return response;
     }
+
     public Response getHeaderDetailsWithPayload(String payload) {
         Response response = null;
         try {
@@ -216,6 +220,17 @@ public class EntityProfileClimatePageAPIController {
         }
         assert response != null;
         response.prettyPrint();
+        return response;
+    }
+
+    public Response geCompanyHeaderAPIResponse(String orbis_id) {
+        Response response = null;
+        response = configSpec()
+                .body("{\"orbis_id\":\"" + orbis_id+ "\"}")
+
+                .when()
+                .post(EntityClimateProfilePageEndpoints.POST_Header);
+        System.out.println(response.prettyPrint());
         return response;
     }
 }

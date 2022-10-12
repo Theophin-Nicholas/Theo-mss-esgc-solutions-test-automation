@@ -60,8 +60,8 @@ public class DataProviderClass {
         return new Object[][]
                 {
                         {"mesg360-testing+issuer21@outlook.com", "Test12345"},
-                    /*    {"mesg360-testing+issuer26@outlook.com", "Test12345"},*/
-                     /*   {"mesg360-testing+issuer31@outlook.com", "Test12345"}*/
+                        /*    {"mesg360-testing+issuer26@outlook.com", "Test12345"},*/
+                        /*   {"mesg360-testing+issuer31@outlook.com", "Test12345"}*/
                 };
 
     }
@@ -71,9 +71,9 @@ public class DataProviderClass {
 
         return new Object[][]
                 {
-                        {"mesg360-testing+issuer105@outlook.com","Test12345"},
-                     /*   {"mesg360-testing+issuer30@outlook.com", "Test12345"},*/
-                    /*    {"mesg360-testing+issuer70@outlook.com", "Test12345"}*/
+                        {"mesg360-testing+issuer105@outlook.com", "Test12345"},
+                        /*   {"mesg360-testing+issuer30@outlook.com", "Test12345"},*/
+                        /*    {"mesg360-testing+issuer70@outlook.com", "Test12345"}*/
                 };
     }
 
@@ -186,15 +186,16 @@ public class DataProviderClass {
                 {"000006182"}//Sector: Electric & Gas Utilities
         };
     }
+
     @DataProvider(name = "entitlementCheck")
     public Object[][] noInfoCarbonFootprintOrbisID() {
 
         return new Object[][]{
-                {"esg-test2@outlook.com","Helloworld21","Transition Risk"},//
-                {"esg-test1@outlook.com","Helloworld21","Physical Risk"},//
-                {"esg-test4@outlook.com","Helloworld24","Physical Risk and Transition Risk"},//
-             /*   {"esg-test7@outlook.com","Helloworld21","Physical Risk, Transition Risk, Corporate ESG and Controversies Entitlements"},//*/
-                {"esg-test1+controversy@outlook.com","Moodys123","Physical Risk, Transition Risk and Controversies"},//
+                {"esg-test2@outlook.com", "Helloworld21", "Transition Risk"},//
+                {"esg-test1@outlook.com", "Helloworld21", "Physical Risk"},//
+                {"esg-test4@outlook.com", "Helloworld24", "Physical Risk and Transition Risk"},//
+                /*   {"esg-test7@outlook.com","Helloworld21","Physical Risk, Transition Risk, Corporate ESG and Controversies Entitlements"},//*/
+                {"esg-test1+controversy@outlook.com", "Moodys123", "Physical Risk, Transition Risk and Controversies"},//
         };
     }
 
@@ -203,12 +204,13 @@ public class DataProviderClass {
     public Object[][] exportEntitlements() {
 
         return new Object[][]{
-                {"esg-test5@outlook.com","Helloworld25","Physical Risk"},//
-                {"esg-test6@outlook.com","Helloworld26","Transition Risk"},//
-                {"esg-test1+export@outlook.com","Moodys123","Physical Risk and Transition Risk"},//
-                {"esg-test33@outlook.com","Helloworld21","ESG"},//
+                {"esg-test5@outlook.com", "Helloworld25", "Physical Risk"},//
+                {"esg-test6@outlook.com", "Helloworld26", "Transition Risk"},//
+                {"esg-test1+export@outlook.com", "Moodys123", "Physical Risk and Transition Risk"},//
+                {"esg-test33@outlook.com", "Helloworld21", "ESG"},//
         };
     }
+
     @DataProvider(name = "noInfoCarbonFootprintOrbisID")
     public Object[][] noInfoCarbonFootprintOrbisID1() {
 
@@ -222,17 +224,32 @@ public class DataProviderClass {
 
         return new Object[][]{
                 {"058618674"},//Automobiles
-        /*        {"079299609"},//Airlines
-                {"006529465"},//Cement
-                {"000003497"},//Oil&Gas
-                {"187695688"},//Shipping
-                {"007270209"},//Steel
-                {"015984678"},//Aluminium
-                {"000411117"},//World (Apple)*/
+                /*        {"079299609"},//Airlines
+                        {"006529465"},//Cement
+                        {"000003497"},//Oil&Gas
+                        {"187695688"},//Shipping
+                        {"007270209"},//Steel
+                        {"015984678"},//Aluminium
+                        {"000411117"},//World (Apple)*/
 //                {"006533494"},//Electric & Gas Utilities
 
         };
     }
+
+    @DataProvider(name = "orbisIdWithCompanyName")
+    public Object[][] orbisIdWithCompanyName() {
+
+        return new Object[][]{
+                {"Apple, Inc.", "000411117"},
+                {"Rogers Corp.","000001484"},
+                {"Ford Motor Co.", "058618674"},//Automobiles
+                {"Wizz Air Holdings Plc", "079299609"},//Airlines
+                {"Taiwan Cement Corp.","006529465"},//Cement
+                {"ConocoPhillips","000003497"},//Oil&Gas
+                {"Mitsui O.S.K. Lines, Ltd.","187695688"},//Shipping
+        };
+    }
+
 
     @DataProvider(name = "orbisIDWithoutTempAlignment")
     public Object[][] orbisIDWithoutTempAlignment() {
@@ -243,15 +260,16 @@ public class DataProviderClass {
                 {"037507363"},//
         };
     }
+
     @DataProvider(name = "Research Lines Investments")
     public Object[][] investments() {
         return new Object[][]{
-                {"Sample Portfolio", "Physical Risk Hazards",    "All Regions", "All Sectors", "May 2022", "Sample Portfolio"},
+                {"Sample Portfolio", "Physical Risk Hazards", "All Regions", "All Sectors", "May 2022", "Sample Portfolio"},
                 {"Sample Portfolio", "Physical Risk Management", "All Regions", "Sovereign", "May 2022", "Sample Portfolio"},
-                {"Sample Portfolio", "Temperature Alignment",    "All Regions", "All Sectors", "May 2022", "Sample Portfolio"},
-                {"Sample Portfolio", "Carbon Footprint",         "All Regions", "All Sectors", "May 2022", "Sample Portfolio"},
-                {"Sample Portfolio", "Green Share Assessment",   "All Regions", "All Sectors", "May 2022", "Sample Portfolio"},
-                {"Sample Portfolio", "Brown Share Assessment",   "All Regions", "All Sectors", "May 2022", "Sample Portfolio"}
+                {"Sample Portfolio", "Temperature Alignment", "All Regions", "All Sectors", "May 2022", "Sample Portfolio"},
+                {"Sample Portfolio", "Carbon Footprint", "All Regions", "All Sectors", "May 2022", "Sample Portfolio"},
+                {"Sample Portfolio", "Green Share Assessment", "All Regions", "All Sectors", "May 2022", "Sample Portfolio"},
+                {"Sample Portfolio", "Brown Share Assessment", "All Regions", "All Sectors", "May 2022", "Sample Portfolio"}
         };
     }
 
@@ -273,7 +291,7 @@ public class DataProviderClass {
 
         return new Object[][]
                 {
-                        {"mesg-platform-issuer-qa+test40@outlook.com", "Moodys123","007091964"}
+                        {"mesg-platform-issuer-qa+test40@outlook.com", "Moodys123", "007091964"}
 
                 };
 
@@ -339,6 +357,7 @@ public class DataProviderClass {
                 {{"Apple, Inc."}, {"Black Hills Corp."}, {"SEEK Ltd."}
                 };
     }
+
     @DataProvider(name = "orbisIDWithDisclosureScore")
     public Object[][] orbisIDWithDisclosureScore() {
         return new Object[][]
@@ -350,14 +369,25 @@ public class DataProviderClass {
                         {"481390423"},
                         {"233773078"},
                         {"105961081"},
-                    /*    {"387796123"},
-                        {"380582526"},
-                        {"172031911"},
-                        {"377084526"},
-                        {"133050503"},
-                        {"482794570"},
-                        {"480796820"},
-                        {"486521987"},*/
+                        /*    {"387796123"},
+                            {"380582526"},
+                            {"172031911"},
+                            {"377084526"},
+                            {"133050503"},
+                            {"482794570"},
+                            {"480796820"},
+                            {"486521987"},*/
                 };
+    }
+
+    @DataProvider(name = "Company With Orbis ID")
+    public Object[][] companyWithOrbisID() {
+
+        return new Object[][]{
+
+                {"Apple, Inc.", "000411117"},  // VE scored company
+                {"FirstCash, Inc.","001668460"} // MESG scored Company
+
+        };
     }
 }
