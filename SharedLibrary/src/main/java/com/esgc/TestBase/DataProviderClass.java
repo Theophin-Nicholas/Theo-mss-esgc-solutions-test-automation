@@ -259,7 +259,7 @@ public class DataProviderClass {
     public Object[][] availableResearchLines() {
 
         return new Object[][]{
-              /*  {"ESG Assessments"},*/
+                {"ESG Assessments"},
                 {"Carbon Footprint"},
                 {"Physical Risk Management"},
                 {"Temperature Alignment"},
