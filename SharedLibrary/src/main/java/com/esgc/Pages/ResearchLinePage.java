@@ -435,6 +435,10 @@ public class ResearchLinePage extends UploadPage {
     @FindBy(xpath = "//div[@id='portfolio_box']")
     public WebElement EsgPortfolioBox;
 
+    @FindBy(xpath = "//div[@id='benchmark_box']")
+    public WebElement EsgBenchmarkBox;
+
+
     @FindBy(xpath = "//div[@id='cardInfo_box']")
     public WebElement esgCardInfoBox;
 
@@ -481,6 +485,9 @@ public class ResearchLinePage extends UploadPage {
     //Sector and Geographic Distribution Section Elements
     @FindBy(xpath = "(//div[.='Sector and Geographic Distribution'])")
     public WebElement geoSectionTitle;
+
+    @FindBy(xpath = "(//div[text()='Sector and Geographic Distribution']/../following-sibling::div[1])")
+    public WebElement geoSectionTreemap;
 
     @FindBy(xpath = "//table[@id='ESGTable']//th")
     public List<WebElement> geoTableHeaders;
@@ -2917,6 +2924,75 @@ public class ResearchLinePage extends UploadPage {
         for (int i = 0; i < e.size(); i++) {
             assertTestCase.assertTrue(Categories.contains(e.get(i).getText()), "Validate model values");
         }
+    }
+
+    public Boolean ValidateifEsgBenchmarkPortfolioBoxIsDisplayed() {
+        return wait.until(ExpectedConditions.visibilityOf(EsgBenchmarkBox)).isDisplayed();
+    }
+
+    public boolean IsBenchmarkLableAvailable() {
+        try {
+            WebElement e = EsgBenchmarkBox.findElement(By.xpath("span"));
+           return wait.until(ExpectedConditions.visibilityOf(e)).getText().equals("Benchmark");
+
+        } catch (Exception e) {
+            System.out.println("Failed");
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean IsBenchmarkScoreCategoryAvailable() {
+        try {
+            WebElement e = EsgBenchmarkBox.findElement(By.xpath("div[1]/div[1]/div/span"));
+            List<String> list =  Arrays.asList(new String[]{"Advanced","Robust","Limited","Weak"});
+            return list.contains(wait.until(ExpectedConditions.visibilityOf(e)).getText());
+
+        } catch (Exception e) {
+            System.out.println("Failed");
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean IsBenchmarkCoverageSectionAvailableAndMatchesWithPattern() {
+        try {
+            WebElement e = EsgBenchmarkBox.findElement(By.xpath("div[1]/div[2]/a"));
+            String pattern = "Coverage: \\d+ companies; (?:\\d+(?:\\.\\d*)?|\\.\\d+)% investments";
+            return e.getText().matches(pattern) ;
+
+        } catch (Exception e) {
+            System.out.println("Failed");
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public void validateBenchMarkDistributionSection() {
+        try {
+            WebElement DistibutionSection = EsgBenchmarkBox.findElement(By.xpath("div[2]"));
+            assertTestCase.assertTrue(DistibutionSection.isDisplayed(),"Validate that Benchmark Distribution section is available");
+            assertTestCase.assertTrue(DistibutionSection.findElement(By.xpath("div")).getText().equals("Benchmark Distribution"));
+            WebElement DistibutionSection_Table = DistibutionSection.findElement(By.xpath("//table"));
+            WebElement DistibutionSection_Table_Header = DistibutionSection_Table.findElement(By.xpath("thead/tr/th[2]"));
+            List<WebElement> DistibutionSection_Table_Body = DistibutionSection_Table.findElements(By.xpath("tbody/tr"));
+            assertTestCase.assertTrue(DistibutionSection_Table_Header.getText().equals("% Investment"),"Validate that Benchmark Distribution section's table header is '% Investment'");
+            List<String> list =  Arrays.asList(new String[]{"Advanced","Robust","Limited","Weak"});
+            for(WebElement e : DistibutionSection_Table_Body){
+                String[] rowText = e.getText().split("\n");
+                assertTestCase.assertTrue(list.contains(rowText[0]),"Validate Table category");
+                assertTestCase.assertTrue(rowText[1].matches("(?:\\d+(?:\\.\\d*)?|\\.\\d+)%"),"Validate Table investment Pecentage");
+            }
+
+        } catch (Exception e) {
+            System.out.println("Failed");
+            e.printStackTrace();
+
+        }
+    }
+
+    public Boolean IsGeoSectionTreeMapAvailable(){
+        return geoSectionTreemap.isDisplayed();
     }
 }
 
