@@ -90,5 +90,16 @@ public abstract class EntityClimateProfileTestBase extends TestBaseClimate {
 
         };
     }
+
+    @DataProvider(name = "Company With Orbis ID")
+    public Object[][] companyWithOrbisID() {
+
+        return new Object[][]{
+
+                {"Apple, Inc.", "000411117"},
+                {"Samsung Electronics Co., Ltd.","006529401"}
+
+        };
+    }
 }
 
