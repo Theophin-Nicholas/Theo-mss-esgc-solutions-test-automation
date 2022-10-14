@@ -1,7 +1,8 @@
 package com.esgc.Pages;
 
-import com.esgc.Test.TestBases.EntityPageDataValidationTestBase;
+import com.esgc.Test.TestBases.EntityIssuerPageDataValidationTestBase;
 import com.esgc.Test.TestBases.EntityPageTestBase;
+import com.esgc.Utilities.ConfigurationReader;
 import com.esgc.Utilities.Environment;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
@@ -26,7 +27,7 @@ public class LoginPageIssuer extends PageBase{
 
     public void entityIssuerLogin() {
         System.out.println("entityIssuerLogin started");
-        if ( EntityPageTestBase.isP3Test || EntityPageDataValidationTestBase.isP3Test) {
+        if ( EntityPageTestBase.isP3Test || EntityIssuerPageDataValidationTestBase.isP3Test) {
             System.out.println("Environment.ISSUER_USERNAMEP3 = " + Environment.ISSUER_USERNAMEP3);
             wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.ISSUER_USERNAMEP3, Keys.ENTER);
         } else {

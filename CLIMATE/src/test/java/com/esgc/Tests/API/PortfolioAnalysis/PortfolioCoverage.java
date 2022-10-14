@@ -15,7 +15,9 @@ import org.testng.annotations.Test;
 public class PortfolioCoverage extends APITestBase {
 
     @Test(groups = {"api", "regression"}, dataProvider = "API Research Lines")
-    @Xray(test = {1723, 1691, 621, 1221, 652, 2100, 2587, 2422})
+    @Xray(test = {  621, 1221, 652, 2100, 2587, 2422})
+    //1723 TCFD
+    //1691 Energy transition
     public void portfolioCoverage(@Optional String researchLine) {
 
         String user_id = APIUtilities.userID();

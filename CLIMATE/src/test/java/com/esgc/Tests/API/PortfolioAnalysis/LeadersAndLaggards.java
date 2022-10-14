@@ -38,7 +38,8 @@ public class LeadersAndLaggards extends APITestBase {
     }
 
     @Test(groups = {"api", "regression"}, dataProvider = "API Research Lines")
-    @Xray(test = {1168, 734, 1169, 2440, 3093, 2877})
+    @Xray(test = {1168, 734, 1169, 2440,  2877})
+    //3093 Energy Transition
     public void leadersAndLaggards_InvalidPayload(@Optional String researchLine) {
         APIController apiController = new APIController();
 

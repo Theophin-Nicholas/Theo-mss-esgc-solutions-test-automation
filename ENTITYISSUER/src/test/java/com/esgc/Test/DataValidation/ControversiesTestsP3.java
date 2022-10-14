@@ -2,7 +2,7 @@ package com.esgc.Test.DataValidation;
 
 import com.esgc.APIModels.EntityPage.EntityControversy;
 import com.esgc.APIModels.EntityPage.EntityFilterPayload;
-import com.esgc.Test.TestBases.EntityPageDataValidationTestBase;
+import com.esgc.Test.TestBases.EntityIssuerPageDataValidationTestBase;
 import com.esgc.Utilities.Xray;
 import io.restassured.response.Response;
 import org.testng.Assert;
@@ -11,7 +11,7 @@ import org.testng.annotations.Test;
 import java.util.Arrays;
 import java.util.List;
 
-public class ControversiesTestsP3 extends EntityPageDataValidationTestBase {
+public class ControversiesTestsP3 extends EntityIssuerPageDataValidationTestBase {
 
     @Test(enabled = false, groups = {"entity_issuer"})
     @Xray(test = {4354, 4355})

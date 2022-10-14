@@ -92,7 +92,7 @@ public class PerformanceChart extends DataValidationTestBase {
             //Get all regions
             List<PerformanceChartCompany> companyList = new ArrayList<>();
             companyList = Arrays.asList(
-                    controller.getPerformanceChartList(portfolioId, researchLine, apiFilterPayload, performanceChartType, "" + size)
+                    dashboardAPIController.getPerformanceChartList(portfolioId, researchLine, apiFilterPayload, performanceChartType, "" + size)
                             .as(PerformanceChartCompany[].class));
 
             //Get Score ranges and categories for research line
