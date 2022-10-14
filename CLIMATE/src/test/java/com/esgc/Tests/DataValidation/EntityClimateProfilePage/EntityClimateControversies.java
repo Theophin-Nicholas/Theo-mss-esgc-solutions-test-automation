@@ -20,7 +20,7 @@ import static io.restassured.RestAssured.given;
 public class EntityClimateControversies extends DataValidationTestBase {
 
     //Verify the Subcategories data for the entity is matching with the snowflake db
-    @Xray(test = {8418})
+    @Xray(test = {8418,8419})
     @Test(groups = {"regression", "ui", "smoke", "entity_climate_profile"},
             description = "Verify the Subcategories data for the entity is matching with the snowflake db")
     public void entityClimateControversies() {

@@ -5,10 +5,8 @@ import com.esgc.DBModels.EntityPage.PhysicalScore;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 import static com.esgc.Utilities.Database.DatabaseDriver.getQueryResultList;
 import static com.esgc.Utilities.Database.DatabaseDriver.getQueryResultMap;
@@ -708,13 +706,50 @@ public class PortfolioQueries {
         String total = getQueryResultList(query1).get(0).get(0).toString();
 
         String query2 = "select df.COMPANY_NAME,round((df.value/" + total + ")*100,2) as investment,eos.value, ect.METHODOLOGY_VERSION from df_portfolio df\n" +
-                "join entity_coverage_tracking ect on ect.orbis_id=df.bvd9_number and coverage_status = 'Published' and publish = 'yes'\n" +
-                "join ESG_OVERALL_SCORES eos on ect.orbis_id=eos.orbis_id and data_type = 'overall_alphanumeric_score' and sub_category = 'ESG'\n" +
-                "where portfolio_id='00000000-0000-0000-0000-000000000000'\n" +
+                " join entity_coverage_tracking ect on ect.orbis_id=df.bvd9_number and coverage_status = 'Published' and publish = 'yes'\n" +
+                " join ESG_OVERALL_SCORES eos on ect.orbis_id=eos.orbis_id and data_type = 'overall_alphanumeric_score' and sub_category = 'ESG'\n" +
+                " where portfolio_id='00000000-0000-0000-0000-000000000000'\n" +
                 " and eos.year || eos.month <= '202208'\n" +
                 " qualify row_number() OVER (PARTITION BY eos.orbis_id ORDER BY eos.year DESC, eos.month DESC, eos.scored_date DESC) =1";
 
         return getQueryResultList(query2);
+    }
+
+    public int getEsgScoreOfPortfolio() {
+        String query1 = "select sum(value) from df_portfolio where portfolio_id='00000000-0000-0000-0000-000000000000'";
+        String total = getQueryResultList(query1).get(0).get(0).toString();
+
+        String query2 = "select df.COMPANY_NAME,round((df.value/" + total + ")*100,2) as investment,eos.value, ect.METHODOLOGY_VERSION from df_portfolio df " +
+                " join entity_coverage_tracking ect on ect.orbis_id=df.bvd9_number and coverage_status = 'Published' and publish = 'yes'" +
+                " join ESG_OVERALL_SCORES eos on ect.orbis_id=eos.orbis_id and data_type = 'esg_pillar_score' and sub_category = 'ESG'" +
+                " where portfolio_id='00000000-0000-0000-0000-000000000000'" +
+                " and eos.year || eos.month <= '202208'" +
+                " qualify row_number() OVER (PARTITION BY eos.orbis_id ORDER BY eos.year DESC, eos.month DESC, eos.scored_date DESC) =1";
+
+        List<Map<String, Object>> esgInfo = getQueryResultMap(query2);
+        int totalCompanies = esgInfo.size();
+        int sum = 0;
+        for(Map<String, Object> entityEsgInfo: esgInfo){
+            sum= sum+Integer.valueOf(entityEsgInfo.get("VALUE").toString());
+        }
+
+        return sum/totalCompanies;
+
+    }
+
+    public String getLastUpdatedDateOfEntity(String entityName) {
+        String query = "Select UPDATED_DATE from DF_TARGET.ENTITY_SEARCH_FEED where entity_proper_name like ('"+entityName+"')";
+        String dateDB = getQueryResultList(query).get(0).get(0).toString().substring(0,10);
+
+        SimpleDateFormat month_date = new SimpleDateFormat("MMMM d, yyyy", Locale.ENGLISH);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String month_name = "";
+        try {
+            Date date = sdf.parse(dateDB);
+            month_name = month_date.format(date);
+        } catch (Exception e) {
+        }
+        return month_name;
     }
 
     public List<Map<String, Object>> getESGModelWithPortfolioID(String month, String year, String portfolioId) {
@@ -728,7 +763,6 @@ public class PortfolioQueries {
         System.out.println(query);
 
         return getQueryResultMap(query);
-
     }
 
     public List<List<Object>> getPortfolioCompaniesFromDB() {

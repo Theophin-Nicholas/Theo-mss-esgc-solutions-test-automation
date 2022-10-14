@@ -7,4 +7,8 @@ import lombok.Data;
 public class TemperatureAlignmentSummary {
     @JsonProperty("temperature_alignment")
     public TemperatureAlignmentSummaryDetails climate;
+
+    public TemperatureAlignmentSummaryDetails getClimate() {
+        return climate;
+    }
 }
