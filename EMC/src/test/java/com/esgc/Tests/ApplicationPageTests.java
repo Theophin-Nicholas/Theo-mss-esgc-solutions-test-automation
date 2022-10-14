@@ -2,12 +2,12 @@ package com.esgc.Tests;
 
 import com.esgc.Pages.*;
 import com.esgc.TestBases.EMCUITestBase;
-import com.esgc.Utilities.BrowserUtils;
-import com.esgc.Utilities.Driver;
-import com.esgc.Utilities.Xray;
+import com.esgc.Utilities.*;
 import com.github.javafaker.Faker;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.annotations.Test;
 
 import java.util.List;
@@ -18,17 +18,7 @@ public class ApplicationPageTests extends EMCUITestBase {
 
     public void navigateToApplicationsPage(String applicationName, String tabName) {
         EMCMainPage homePage = new EMCMainPage();
-        System.out.println("Navigating to Applications page");
-        //Select Account in the left menu
-        try {
-            homePage.openSidePanel();
-        } catch (Exception e) {
-            System.out.println("Side panel is not opened");
-        }
-        System.out.println("Side panel is opened");
-        homePage.clickApplicationsButton();
-        System.out.println("Applications button is clicked");
-        //User is able to see New Account Page
+        homePage.goToApplicationsPage();
         EMCApplicationsPage applicationsPage = new EMCApplicationsPage();
         assertTestCase.assertEquals(applicationsPage.pageTitle.getText(), "Applications", "Applications page is displayed");
         //Search for the account where a New user will be created
@@ -77,7 +67,7 @@ public class ApplicationPageTests extends EMCUITestBase {
         //New screen should be opened having three sections when user click into a specific application
         assertTestCase.assertTrue(emcApplicationDetailsPage.detailsTab.isDisplayed(), "Details tab is displayed");
         assertTestCase.assertTrue(emcApplicationDetailsPage.ProductsTab.isDisplayed(), "Products tab is displayed");
-        assertTestCase.assertTrue(emcApplicationDetailsPage.RolesTab.isDisplayed(), "Roles tab is displayed");
+        assertTestCase.assertTrue(emcApplicationDetailsPage.rolesTab.isDisplayed(), "Roles tab is displayed");
         //Verify that User is Able to See Application Details.
         emcApplicationDetailsPage.clickOnDetailsTab();
 
@@ -268,15 +258,13 @@ public class ApplicationPageTests extends EMCUITestBase {
     }
 
     @Test(groups = {"EMC", "ui", "regression", "smoke", "prod"})
-    @Xray(test = {3537})
+    @Xray(test = {3537, 3539})
     public void verifyProductDetailsTest() {
         navigateToApplicationsPage(applicationName, "products");
         EMCApplicationDetailsPage detailsPage = new EMCApplicationDetailsPage();
         BrowserUtils.waitForVisibility(detailsPage.addProductButton, 10);
         assertTestCase.assertTrue(detailsPage.addProductButton.isDisplayed(), "Add Product Button is displayed");
-
         assertTestCase.assertTrue(detailsPage.productsList.size()>0, "There are products assigned to the application");
-
         String productName = detailsPage.productsList.get(0).getText();
         System.out.println("productName = " + productName);
         BrowserUtils.waitForClickablility(detailsPage.productsList.get(0), 10).click();
@@ -378,4 +366,52 @@ public class ApplicationPageTests extends EMCUITestBase {
         }
     }
 
+    @Test(groups = {"EMC", "ui", "regression"}, description = "UI | EMC | OKTA | Application Role | Verify App Role Key is unique in EMC and OKTA")
+    @Xray(test = {5691})
+    public void verifyAppRoleKeyUniqueForEMCAndOKTA() {
+        navigateToApplicationsPage(applicationName, "roles");
+        EMCApplicationDetailsPage detailsPage = new EMCApplicationDetailsPage();
+
+        //Application Details page is displayed with Products and Roles tab
+        assertTestCase.assertTrue(detailsPage.ProductsTab.isDisplayed(), "Products Tab is displayed");
+        assertTestCase.assertTrue(detailsPage.rolesTab.isDisplayed(), "Roles Tab is displayed");
+        assertTestCase.assertTrue(detailsPage.detailsTab.isDisplayed(), "Roles Tab is displayed");
+
+        //Click Add Role button
+        assertTestCase.assertTrue(detailsPage.addRoleButton.isDisplayed(), "Add Role Button is displayed");
+        detailsPage.clickOnAddRoleButton();
+
+        //Add Role modal is displayed with fields: Role Name, Role Key
+        assertTestCase.assertTrue(detailsPage.addRolePopUpTitle.isDisplayed(), "Add Role Pop Up is displayed");
+        assertTestCase.assertTrue(detailsPage.roleNameInput.isDisplayed(), "Role Name Input is displayed");
+        assertTestCase.assertTrue(detailsPage.roleKeyInput.isDisplayed(), "Role Key Input is displayed");
+
+        //Add Role name and an Existing Role Key and click Save button
+        //Role Name: Issuer
+        //Role Key: mesg-platform-issuer-qa
+        detailsPage.roleNameInput.sendKeys("Issuer");
+        detailsPage.roleKeyInput.sendKeys("mesg-platform-issuer-qa");
+        detailsPage.clickOnSaveButton();
+
+        //Warning error message is displayed "Role key already exist in EMC and OKTA"
+        BrowserUtils.waitForVisibility(detailsPage.notification, 10);
+        assertTestCase.assertTrue(detailsPage.notification.isDisplayed(), "Error Message is displayed");
+        assertTestCase.assertTrue(detailsPage.notification.getText().equals("A role with the same name already exists. Try a different name."), "Error Message is displayed");
+
+        //Click Cancel button
+        detailsPage.clickOnCancelButton();
+    }
+
+    @Test(groups = {"EMC", "ui", "regression"}, description = "UI | EMC | Products | Validate User can View the Product Details View Sorting")
+    @Xray(test = {3538})
+    public void verifyUserViewProductDetailsSortedTest() {
+        navigateToApplicationsPage(applicationName, "products");
+        EMCApplicationDetailsPage detailsPage = new EMCApplicationDetailsPage();
+
+        //Verify Product Details View is sorted by Product Name
+        List<String> products = BrowserUtils.getElementsText(detailsPage.productsList);
+        products.sort(String::compareToIgnoreCase);
+        assertTestCase.assertEquals(products, BrowserUtils.getElementsText(detailsPage.productsList), "Products are sorted by Product Name");
+
+    }
 }
