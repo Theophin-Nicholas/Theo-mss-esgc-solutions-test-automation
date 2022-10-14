@@ -10,6 +10,7 @@ import com.github.javafaker.Faker;
 import io.restassured.response.Response;
 import org.testng.annotations.Test;
 
+import java.util.Collections;
 import java.util.List;
 
 public class EMCAPITests extends APITestBase {
@@ -81,7 +82,7 @@ public class EMCAPITests extends APITestBase {
     }
 
     @Test(groups = {"EMC", "api", "regression"}, description = "API | EMC | Users | Verify Error Handling for Required fields when Create a User")
-    @Xray(test = {5001})
+    @Xray(test = {5001, 5715})
     public void verifyErrorHandlingForRequiredFieldsWhenCreateUserTest() {
         String email = "erolvera.mx+006@gmail.com";
 
@@ -246,19 +247,19 @@ public class EMCAPITests extends APITestBase {
         //assertTestCase.assertEquals(application.getProvider(), provider, "Application provider is verified");
 
         //Get Details of Single Application
-        String applicationId = application.getId();
-        response = apiController.getEMCApplicationDetailsResponse(applicationId);
+        String appId = application.getId();
+        response = apiController.getEMCApplicationDetailsResponse(appId);
         response.prettyPrint();
         assertTestCase.assertEquals(response.statusCode(),200, "Status code 200 OK is verified");
         response.as(Application.class);
 
         //Update Application
         System.out.println("===================================");
-        System.out.println("Updating Application with id: "+applicationId);
+        System.out.println("Updating Application with id: "+appId);
         application.setName("API Test App Updated");
         application.setUrl("https://www.google.com.mx");
         application.setProvider("mss");
-        response = apiController.putEMCApplicationResponse(applicationId,application);
+        response = apiController.putEMCApplicationResponse(appId,application);
 
         response.prettyPrint();
         assertTestCase.assertEquals(response.statusCode(),204, "Status code 204 Updated is verified");
@@ -266,13 +267,13 @@ public class EMCAPITests extends APITestBase {
         //assertTestCase.assertEquals(response.path("message"), "Application "+key+" updated", "Application update response message with key is verified");
 
         //Verify Application details
-        Application updatedApplication = apiController.getEMCApplicationDetailsResponse(applicationId).as(Application.class);
+        Application updatedApplication = apiController.getEMCApplicationDetailsResponse(appId).as(Application.class);
         assertTestCase.assertEquals(updatedApplication.getName(), "API Test App Updated", "Application name is verified");
         assertTestCase.assertEquals(updatedApplication.getUrl(), "https://www.google.com.mx", "Application url is verified");
         //assertTestCase.assertEquals(updatedApplication.getProvider(), "mss", "Application provider is verified");
 
         //Delete Application
-        response = apiController.deleteEMCApplicationResponse(applicationId);
+        response = apiController.deleteEMCApplicationResponse(appId);
         response.prettyPrint();
         assertTestCase.assertEquals(response.statusCode(),403, "Status code 204 OK is verified");
         //assertTestCase.assertEquals(response.path("name"), "DeletedResponse", "Application delete response name is verified");
@@ -396,9 +397,9 @@ public class EMCAPITests extends APITestBase {
         assertTestCase.assertTrue(apiController.verifyApplication(accountId, applicationId), "Application is deleted from account successfully");
     }
 
-    @Test(groups = {"EMC", "api", "regression"},
+    @Test(groups = {"EMC", "api", "regression", "smoke"},
             description = "API | EMC | Accounts | Verify a user's with proper permission role (view users) API response to create, update, retrieve and dlete the user list from an account")
-    @Xray(test = {7309})
+    @Xray(test = {7309, 7312, 5712})
     public void verifyUserCRUDOperationsUnderAccountTest() {
         response = apiController.getListOfUsersResponse(accountId);
         //response.prettyPrint();
@@ -424,5 +425,95 @@ public class EMCAPITests extends APITestBase {
         assertTestCase.assertEquals(response.statusCode(),204, "Status code 204 Deleted is verified");
         assertTestCase.assertFalse(apiController.verifyUser(accountId, email), "User is deleted from account successfully");
 
+    }
+
+    @Test(groups = {"EMC", "api", "regression"},
+            description = "API | EMC | Issuer | Verify user is not Able to Create a New Issuer Account using Moody's email")
+    @Xray(test = {5713})
+    public void verifyUserCantCreateNewIssuerAccountUsingMoodyEmailTest() {
+        response = apiController.getListOfUsersResponse(accountId);
+        //response.prettyPrint();
+        assertTestCase.assertEquals(response.statusCode(),200, "Status code 200 OK is verified");
+        List<AssignedUser> users = response.jsonPath().getList("users", AssignedUser.class);
+        System.out.println("users.size() = " + users.size());
+
+        //create user
+        String email = "qatest@moodys.com";
+        String firstName = "QAtest";
+        String lastName = "QAtest";
+        String provider = "mss";
+        response = apiController.postEMCNewUserResponse("mss", firstName, lastName, email, email, false, accountId);
+        response.prettyPrint();
+        assertTestCase.assertEquals(response.statusCode(),403, "Status code 403 Exception is verified");
+        assertTestCase.assertEquals(response.path("name"), "ForbiddenException", "Response name is verified");
+        assertTestCase.assertEquals(response.path("message"), "Cannot create user: "+email, "Response message is verified");
+        assertTestCase.assertFalse(apiController.verifyUser(accountId, email), "User is verified in account");
+
+    }
+
+    @Test(groups = {"EMC", "api", "regression"},
+            description = "API | EMC | Issuer | Verify user is not able to create a New External Issuer Account for an existing User")
+    @Xray(test = {5714})
+    public void verifyUserCANTCreateNewExternalIssuerAccountWithExistingUserTest() {
+        //create user
+        String email = "ferhat.demir@atos.net";
+        String firstName = "QAtest";
+        String lastName = "QAtest";
+        String provider = "mss";
+        assertTestCase.assertTrue(apiController.verifyUser(accountId, email), "User is verified in account");
+        response = apiController.postEMCNewUserResponse("mss", firstName, lastName, email, email, false, accountId);
+        response.prettyPrint();
+        assertTestCase.assertEquals(response.statusCode(),409, "Status code 409 Duplicate Account Exception is verified");
+        assertTestCase.assertEquals(response.path("name"), "DuplicateException", "Response name is verified");
+        assertTestCase.assertEquals(response.path("message"), "Duplicate resource: "+email, "Response message is verified");
+    }
+
+    @Test(groups = {"EMC", "api", "regression"},
+            description = "API | EMC | Product | Verify GET Products API Response with Valid Parameters and Products Sort By Name")
+    @Xray(test = {3583, 3608})
+    public void verifyGETProductsAPIResponseWithValidParametersTest() {
+        assertTestCase.assertTrue(apiController.verifyApplication(applicationId), "Application is verified in account");
+        response = apiController.getEMCProductsForApplicationResponse(applicationId);
+        response.prettyPrint();
+        assertTestCase.assertEquals(response.statusCode(),200, "Status code 200 OK is verified");
+        List<Product> products = response.jsonPath().getList("products", Product.class);
+        System.out.println("products.size() = " + products.size());
+        assertTestCase.assertTrue(products.size() > 0, "Products are listed");
+        List<String> names = response.jsonPath().getList("products.name");
+        //sort names
+        names.sort(String::compareToIgnoreCase);
+        assertTestCase.assertEquals(names, response.jsonPath().getList("products.name"), "Products are sorted by name");
+    }
+
+    @Test(groups = {"EMC", "api", "regression"},
+            description = "API | EMC | Product | Verify User does not have Access to GET Products without Access Token")
+    @Xray(test = {3606})
+    public void verifyUserCantAccessGETProductsWithoutAccessTokenTest() {
+        assertTestCase.assertTrue(apiController.verifyApplication(applicationId), "Application is verified in account");
+        response = apiController.getEMCProductsForApplicationResponse(applicationId, true);//send true for no token
+        response.prettyPrint();
+        assertTestCase.assertEquals(response.statusCode(),401, "Status code 401 Unauthorized is verified");
+        assertTestCase.assertEquals(response.path("message"), "Unauthorized", "Response message is verified");
+    }
+
+    @Test(groups = {"EMC", "api", "regression"},
+            description = "API | EMC | Product | Verify User does not have Access to GET Products with Invalid Access Token")
+    @Xray(test = {3607})
+    public void verifyUserCantAccessGETProductsWithInvalidAccessToken() {
+        assertTestCase.assertTrue(apiController.verifyApplication(applicationId), "Application is verified in account");
+        String accessToken = System.getProperty("token");
+        System.out.println("accessToken = " + accessToken);
+        System.setProperty("token", "accessToken");
+        try{
+            //verify error handling for wrong token
+            response = apiController.getEMCProductsForApplicationResponse(applicationId);//send true for no token
+            response.prettyPrint();
+            assertTestCase.assertEquals(response.statusCode(),401, "Status code 401 Unauthorized is verified");
+            assertTestCase.assertEquals(response.path("message"), "Unauthorized", "Response message is verified");
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            System.setProperty("token", accessToken);
+        }
     }
 }
