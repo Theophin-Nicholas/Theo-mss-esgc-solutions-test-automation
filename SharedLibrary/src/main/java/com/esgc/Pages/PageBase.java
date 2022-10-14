@@ -486,6 +486,12 @@ public abstract class PageBase {
         }
     }
 
+    public String getLastUpdatedDateContainsSearchKeyWord(String searchKeyword) {
+        String lastUpdateXpath = "//span[@title='"+searchKeyword+"']/../following-sibling::div/span";
+        String lastUpdatedDate = Driver.getDriver().findElement(By.xpath(lastUpdateXpath)).getText();
+        return lastUpdatedDate;
+    }
+
     public boolean verifyMessage(String section, String message) {
         try {
             //BrowserUtils.scrollTo(Driver.getDriver().findElement(By.xpath("//div/div/div[3]/main/div/div[1]/div[3]/div[2]/div[1]/div")));
@@ -1791,7 +1797,18 @@ public abstract class PageBase {
                 case "MAJOR":
                     return "#39A885";
             }
-        } else if (researchLine.toUpperCase().equals("ESG")) {
+        } else if (researchLine.equals("Temperature Alignment")) {
+            switch (scoreCategory) {
+                case "Well Below 2°C":
+                    return "#eac550";
+                case "Below 2°C":
+                    return "#E8951C";
+                case "2°C":
+                    return "#DD581D";
+                case "Above 2°C":
+                    return "#D63229";
+            }
+        }else if (researchLine.toUpperCase().equals("ESG")) {
             switch (scoreCategory.toUpperCase()) {
                 case "WEAK":
                     return "#DD581D";
@@ -1953,7 +1970,7 @@ public abstract class PageBase {
 
 
     public void clickCloseIcon() {
-        List<WebElement> closeIcon = Driver.getDriver().findElements(By.xpath("//div[@class=\"MuiToolbar-root MuiToolbar-regular\"]//*[local-name()='svg' and @class=\"MuiSvgIcon-root\"]"));
+        List<WebElement> closeIcon = Driver.getDriver().findElements(By.xpath("//div[@class='MuiToolbar-root MuiToolbar-regular']//*[local-name()='svg' and @class='MuiSvgIcon-root']"));
         closeIcon.get(1).click();
     }
 
@@ -2016,6 +2033,20 @@ public abstract class PageBase {
             }
         }
         return true;
+    }
+
+    public void checkSearchResultWithWildChars(String searchKeyword) {
+        searchBarOfPortfolio.sendKeys(searchKeyword);
+        BrowserUtils.wait(3);
+        BrowserUtils.isElementVisible(Driver.getDriver().findElement(By.xpath("//header[@id='prop-search']/following-sibling::*/DIV/div/div/div[1]")), 3);
+        int numberOfSearchResult = Driver.getDriver().findElements(By.xpath("//header[@id='prop-search']/following-sibling::*/DIV/div/div/div")).size();
+        assertTestCase.assertEquals(numberOfSearchResult, 10);
+        String xpathSearchKeyWord = "//mark[.='" + searchKeyword + "']";
+        List<WebElement> list = Driver.getDriver().findElements(By.xpath(xpathSearchKeyWord));
+        searchKeyword = searchKeyword.replace("%","").replace("*", "");
+        for (int i = 0; i < list.size(); i++) {
+            assertTestCase.assertTrue(list.get(i).getText().contains(searchKeyword));
+        }
     }
 
     public boolean checkIfNumberOfSearchResultIsTen(String searchKeyword) {
