@@ -194,7 +194,7 @@ public class ESGClimateSummaryDBTest extends EntityClimateProfileDataValidationT
     public void validatePhysicalRiskManagement(@Optional String orbisID) {
         Map<String, String> data = entityClimateProfilepagequeries.getPhysicalRiskData(orbisID);
         if (data.size() > 0) {
-            PhysicalRiskHazardsWrapper climateSummaryGreenShareAPIResponse = controller.getEntityUnderLyingPhysicalHazardAPIResponse(orbisID)
+            PhysicalRiskHazardsWrapper climateSummaryGreenShareAPIResponse = controller.getEntityUnderLyingDataMetricsAPIResponse(orbisID, "physicalriskmgmt")
                     .as(PhysicalRiskHazardsWrapper.class);
 
             assertTestCase.assertTrue(data.get("SCORE_CATEGORY").equals(climateSummaryGreenShareAPIResponse.getScore_category()), "Validating Score Category");

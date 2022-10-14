@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 public class GeographicRiskMap extends DataValidationTestBase {
 
     //Test cases ESGCA-1933 ESGCA-4606 ESGCA-4607 ESGCA-4616 ESGCA-4617  ESGCA-4622
-    @Test(groups = {"regression", "data_validation", "dashboard"}, dataProvider = "researchLines", threadPoolSize = 1)
+    @Test(enabled = false, groups = {"regression", "data_validation", "dashboard"}, dataProvider = "researchLines", threadPoolSize = 1)
     @Xray(test = {1933, 4606, 4607, 4616, 4617, 4622})
     public void verifyGeographicRiskMap(@Optional String sector, @Optional String region, @Optional String researchLine, @Optional String month, @Optional String year) {
 
@@ -183,7 +183,7 @@ public class GeographicRiskMap extends DataValidationTestBase {
 
             //Get all entities details
             List<GeoMapCountryEntity> geoMapCountryEntityList = Arrays.asList(
-                    controller.getEntityListResponse(portfolioId, researchLine, apiEntityListPayload)
+                    dashboardAPIController.getGeoMapEntityListResponse(portfolioId, researchLine, apiEntityListPayload)
                             .as(GeoMapCountryEntity[].class));
             System.out.println(geoMapCountryEntityList);
 

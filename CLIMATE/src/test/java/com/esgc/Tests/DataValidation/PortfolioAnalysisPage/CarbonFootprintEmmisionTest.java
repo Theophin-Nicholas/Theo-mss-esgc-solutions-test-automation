@@ -50,7 +50,7 @@ public class CarbonFootprintEmmisionTest extends DataValidationTestBase {
         apiFilterPayload.setYear(year);
         apiFilterPayload.setMonth(month);
 
-       List<carbonFootprintEmissionWrapper> emmissionAPIResponse = Arrays.asList(controller.getCarbonFootprintEmmissionAPIResponse(portfolioId, apiFilterPayload)
+       List<carbonFootprintEmissionWrapper> emmissionAPIResponse = Arrays.asList(controller.getCarbonFootprintEmissionAPIResponse(portfolioId, apiFilterPayload)
                 .as(carbonFootprintEmissionWrapper[].class));
         List<carbonFootPrintEmissionDBModel> emmissionDBData = portfolioQueries.getCarbonFootPrintEmimmisionTest(portfolioId, month, year);
         for(carbonFootprintEmissionWrapper apiEntity :emmissionAPIResponse){

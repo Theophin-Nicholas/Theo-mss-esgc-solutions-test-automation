@@ -14,7 +14,7 @@ import java.util.List;
 
 public class ImpactTableTests extends APITestBase {
 
-    @Test(groups = {"api", "regression"}, dataProvider = "API Research Lines")
+    @Test(groups = {"api", "regression"}, dataProvider = "No ESG API Research Lines")
     @Xray(test = {4957})
     public void getImpactDistributionSuccess(String researchLine) {
         test.info("Tests ESGCA-4957");
@@ -37,7 +37,7 @@ public class ImpactTableTests extends APITestBase {
         System.out.println("STatus Code" + response.statusCode());
     }
 
-    @Test(groups = {"api", "regression"}, dataProvider = "API Research Lines")
+    @Test(groups = {"api", "regression"}, dataProvider = "No ESG API Research Lines")
     @Xray(test = {5010})
     public void getImpactDistributionInvalidToken(String researchLine) {
         test.info("Tests ESGCA-5010");

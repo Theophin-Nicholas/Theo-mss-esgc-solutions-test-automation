@@ -9,7 +9,7 @@ import io.restassured.response.Response;
 import org.testng.annotations.Test;
 
 public class ClimateProfileSectorComparisonChartAPITests extends EntityClimateProfileTestBase {
-
+//TODO add all research lines
     @Test(groups = {"api", "regression", "entity_climate_profile"}, dataProvider = "API Research Lines2 Carbon Footprint")
     @Xray(test = {6139})
     public void validateTransitionRiskSectorComparisonChartContentResponse(String researchLine, String orbis_id) {

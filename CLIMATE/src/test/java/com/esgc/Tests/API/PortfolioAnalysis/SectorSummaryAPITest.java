@@ -18,8 +18,10 @@ import static org.hamcrest.Matchers.*;
  * Created by ChaudhS2 on 11/9/2021.
  */
 public class SectorSummaryAPITest extends APITestBase {//870
-    @Test(groups = {"api", "regression"}, dataProvider = "API Research Lines")
-    @Xray(test = {870, 1923, 1751, 2215, 1184, 2571, 2666})
+    @Test(groups = {"api", "regression"}, dataProvider = "No ESG API Research Lines")
+    @Xray(test = {870,   2215, 1184, 2571, 2666})
+    //1751 Energy transition
+    //1923 TCFD
     public void SectorSummaryAPI_Success(@Optional String researchLine) {
         APIController apiController = new APIController();
 
