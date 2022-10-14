@@ -124,8 +124,8 @@ public class Environment {
         USER_WITH_CONTROVERSIES_ENTITLEMENT_PASSWORD = properties.getProperty("controversies_bundle_password");
         USER_WITH_OUT_CONTROVERSIES_ENTITLEMENT_USERNAME = properties.getProperty("no_controversies_bundle_username");
         USER_WITH_OUT_CONTROVERSIES_ENTITLEMENT_PASSWORD = properties.getProperty("no_controversies_bundle_password");
-        USER_WITH_OUT_ESG_ENTITLEMENT_USERNAME = properties.getProperty("no_esg_bundle_username");
-        USER_WITH_OUT_ESG_ENTITLEMENT_PASSWORD = properties.getProperty("no_esg_bundle_password");
+        USER_WITH_OUT_ESG_ENTITLEMENT_USERNAME = properties.getProperty("tr_bundle_username");
+        USER_WITH_OUT_ESG_ENTITLEMENT_PASSWORD = properties.getProperty("tr_bundle_password");
         USER_WITH_EXPORT_ENTITLEMENT_USERNAME = properties.getProperty("export_bundle_username");
         USER_WITH_EXPORT_ENTITLEMENT_PASSWORD = properties.getProperty("export_bundle_password");
         USER_WITH_OUT_EXPORT_ENTITLEMENT_USERNAME = properties.getProperty("no_export_bundle_username");

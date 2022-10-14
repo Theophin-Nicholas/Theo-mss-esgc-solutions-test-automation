@@ -3,7 +3,7 @@ package com.esgc.Test.API;
 import com.esgc.APIModels.EntityIssuerPage.DriverSummaryAPIWrapper;
 import com.esgc.APIModels.EntityIssuerPage.DriverSummaryCriterion;
 import com.esgc.APIModels.EntityIssuerPage.DriverSummaryDrivers;
-import com.esgc.Controllers.EntityIssuerPageController.EntityPageAPIController;
+import com.esgc.Controllers.EntityIssuerPageController.EntityIssuerPageAPIController;
 import com.esgc.Test.TestBases.EntityIssuerPageTestBase;
 import com.esgc.TestBase.DataProviderClass;
 import com.esgc.Utilities.Xray;
@@ -27,7 +27,7 @@ public class DriversSummaryAPITestP3 extends EntityIssuerPageTestBase {
         String userId = dataProvider[0];
         String password = dataProvider[1];
         getEntityPageAccessTokenLoginWithParameter(userId, password);
-        EntityPageAPIController controller = new EntityPageAPIController();
+        EntityIssuerPageAPIController controller = new EntityIssuerPageAPIController();
 
         Response response = controller.getDriverSummary();
         List<DriverSummaryAPIWrapper> driverSummaryPIResponse = Arrays.asList(
@@ -65,7 +65,7 @@ public class DriversSummaryAPITestP3 extends EntityIssuerPageTestBase {
         String userId = dataProvider[0];
         String password = dataProvider[1];
         getEntityPageAccessTokenLoginWithParameter(userId, password);
-        EntityPageAPIController controller = new EntityPageAPIController();
+        EntityIssuerPageAPIController controller = new EntityIssuerPageAPIController();
         controller.setInvalid();
         Response response = controller.getDriverSummary();
 

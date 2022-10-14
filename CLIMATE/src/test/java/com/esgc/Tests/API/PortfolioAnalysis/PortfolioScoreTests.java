@@ -18,7 +18,9 @@ import org.testng.annotations.Test;
 public class PortfolioScoreTests extends APITestBase {
 
     @Test(groups = {"api", "regression"},dataProvider = "API Research Lines")
-    @Xray(test = {2245, 1978, 2653, 3009, 2501, 1204})
+    @Xray(test = {2245,  2653,  2501, 1204})
+    //1978 TCFD
+    //Energy Transition 3009
     public void portfolioScoreSuccess(@Optional String researchLines) {
 
         String user_id = APIUtilities.userID();
@@ -55,6 +57,7 @@ public class PortfolioScoreTests extends APITestBase {
             case "brownshareasmt":
             case "energytransmgmt":
             case "greenshareasmt":
+            case "ESG Assessments":
                 response.as(PortfolioScoreWrapper[].class);
                 break;
 
@@ -95,7 +98,8 @@ public class PortfolioScoreTests extends APITestBase {
 
 
     @Test(groups = {"api", "regression"},expectedExceptions = NullPointerException.class)
-    @Xray(test = {2247,2652,3008,2502,2440,3093,2877,2304,})
+    @Xray(test = {2247,2652,2502,2440,2877,2304,})
+    //3008, 3093 Energy Transition
     public void portfolioScoreNullPayload() {
 
         String user_id = APIUtilities.userID();

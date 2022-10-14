@@ -17,8 +17,10 @@ import static org.hamcrest.Matchers.*;
 public class RegionMapAPITest extends APITestBase {
 
     //1062
-    @Test(groups = {"api", "regression"}, dataProvider = "API Research Lines")
-    @Xray(test = {1062, 2387, 1824, 1802, 2450, 2905, 1267})
+    @Test(groups = {"api", "regression"}, dataProvider = "No ESG API Research Lines")
+    @Xray(test = {1062, 2387,   2450, 2905, 1267})
+    //1824 TCFD
+    //1802 Energy Trantision
     public void RegionMapAPI_Success(@Optional String researchLine) {
         APIController apiController = new APIController();
 
