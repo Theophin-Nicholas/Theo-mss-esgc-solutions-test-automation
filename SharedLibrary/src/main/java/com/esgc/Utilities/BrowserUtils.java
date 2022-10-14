@@ -183,6 +183,26 @@ public class BrowserUtils {
         return wait.until(ExpectedConditions.elementToBeClickable(element));
     }
 
+    /**
+     * Tries to click on the element every second until it is clicked
+     *
+     * @param element
+     * @param seconds
+     * @return
+     */
+
+    public static void waitAndClick(WebElement element, int seconds) {
+        for (int i = 0; i < seconds; i++) {
+            try {
+                BrowserUtils.waitForClickablility(element, 5).click();
+                return;
+            } catch (Exception e) {
+                BrowserUtils.wait(1);
+            }
+        }
+        System.out.println("Element is not clickable");
+    }
+
 
     /**
      * checks that an element is present on the DOM of a page. This does not

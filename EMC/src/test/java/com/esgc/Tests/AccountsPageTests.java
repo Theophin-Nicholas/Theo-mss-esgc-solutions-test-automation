@@ -12,6 +12,7 @@ import org.testng.annotations.Test;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -71,7 +72,7 @@ public class AccountsPageTests extends EMCUITestBase {
         assertTestCase.assertTrue(detailsPage.editButton.isDisplayed(), "Edit button is displayed");
         assertTestCase.assertTrue(detailsPage.backToAccountsButton.isDisplayed(), "Back to Accounts button is displayed");
 
-        //Back to Accounts Table
+        //Back to Accounts Page
         BrowserUtils.waitForClickablility(detailsPage.backToAccountsButton, 5).click();
         assertTestCase.assertEquals(accountsPage.pageTitle.getText(), "Accounts", "Accounts page is displayed");
         accountsPage.goToAccount(currentAccountName);
@@ -94,7 +95,7 @@ public class AccountsPageTests extends EMCUITestBase {
     }
 
     @Test(groups = {"EMC", "ui", "regression", "smoke"})
-    @Xray(test = {3374, 4174, 4175, 4222, 3979, 3981, 3992})
+    @Xray(test = {3374, 4174, 4175, 4222, 3979, 3981, 3992, 7316})
     public void accountCreationTests() {
         EMCMainPage homePage = new EMCMainPage();
 
@@ -130,7 +131,7 @@ public class AccountsPageTests extends EMCUITestBase {
         //Select Applications Tab
         detailsPage.clickOnApplicationsTab();
         assertTestCase.assertTrue(detailsPage.applicationsTabTitle.isDisplayed(), "Applications Tab is displayed");
-        assertTestCase.assertEquals(detailsPage.applicationsNamesList.size(),0, "Add Application button is displayed");
+        assertTestCase.assertEquals(detailsPage.applicationsNamesList.size(), 0, "Add Application button is displayed");
         assertTestCase.assertTrue(detailsPage.noApplicationMessage.isDisplayed(), "No Applications assigned message is displayed");
 
         //Click Assign Applications button on the top right of the section.
@@ -139,7 +140,7 @@ public class AccountsPageTests extends EMCUITestBase {
         assertTestCase.assertTrue(detailsPage.assignApplicationsModalTitle.isDisplayed(), "Assign Applications popup is displayed");
         BrowserUtils.waitForClickablility(detailsPage.doneButton, 5).click();
         //Click more than one Assign button from the list of available applications
-        assertTestCase.assertTrue(detailsPage.assignApplication(applicationName),"Application is assigned");
+        assertTestCase.assertTrue(detailsPage.assignApplication(applicationName), "Application is assigned");
         BrowserUtils.waitForVisibility(detailsPage.applicationAddedMessage, 5);
         assertTestCase.assertTrue(detailsPage.applicationAddedMessage.isDisplayed(),
                 "Application is added to the list");
@@ -154,15 +155,13 @@ public class AccountsPageTests extends EMCUITestBase {
 
         detailsPage.productsTab.click();
         assertTestCase.assertEquals(detailsPage.productsTabTitle.getText(), "Products", "Products Tab is displayed");
-        assertTestCase.assertEquals(detailsPage.currentProductsList.size(),0, "Add Product button is displayed");
+        assertTestCase.assertEquals(detailsPage.currentProductsList.size(), 0, "Add Product button is displayed");
         assertTestCase.assertTrue(detailsPage.noProductsMessage.isDisplayed(), "No Products assigned message is displayed");
 
         detailsPage.addAllProducts(applicationName);
-        assertTestCase.assertTrue(detailsPage.verifyProduct(applicationName),
-                "Product is displayed in the current list");
+        assertTestCase.assertTrue(detailsPage.verifyProduct(applicationName), "Product is displayed in the current list");
         detailsPage.deleteProduct(applicationName);
-        assertTestCase.assertFalse(detailsPage.verifyProduct(applicationName),
-                "Product is not displayed in the current list");
+        assertTestCase.assertFalse(detailsPage.verifyProduct(applicationName), "Product is not displayed in the current list");
         //Back to Accounts Table
         detailsPage.backToAccountsButton.click();
         assertTestCase.assertEquals(accountsPage.pageTitle.getText(), "Accounts", "Accounts page is displayed");
@@ -183,19 +182,18 @@ public class AccountsPageTests extends EMCUITestBase {
         detailsPage.deleteApplication(applicationName + 2);
 
         detailsPage.addApplication(applicationName);
-        BrowserUtils.wait(1);
-        assertTestCase.assertTrue(detailsPage.notification.isDisplayed(),
-                "Application is added message is displayed");
+        //BrowserUtils.wait(1);
+        assertTestCase.assertTrue(detailsPage.notification.isDisplayed(), "Application is added message is displayed");
         detailsPage.addApplication(applicationName + 2);
-        BrowserUtils.wait(1);
-        assertTestCase.assertTrue(detailsPage.notification.isDisplayed(),
-                "Application is added message is displayed");
+//        BrowserUtils.wait(1);
+        assertTestCase.assertTrue(detailsPage.notification.isDisplayed(), "Application is added message is displayed");
+
         //User is able to see that Application is assigned to account2 without any problem.
         assertTestCase.assertTrue(detailsPage.verifyApplication(applicationName), "Application is added to the list");
         assertTestCase.assertTrue(detailsPage.verifyApplication(applicationName + 2), "Application is added to the list");
     }
 
-    @Test(groups = {"EMC", "ui","regression", "smoke", "prod"})
+    @Test(groups = {"EMC", "ui", "regression", "smoke", "prod"})
     @Xray(test = {4812, 4813, 4814, 4815, 2350})
     public void accountDetailsPageTest() {
         navigateToAccountsPage(accountName, "users");
@@ -244,7 +242,7 @@ public class AccountsPageTests extends EMCUITestBase {
         navigateToAccountsPage(accountName, "users");
         EMCAccountDetailsPage detailsPage = new EMCAccountDetailsPage();
         assertTestCase.assertTrue(detailsPage.addUserButton.isDisplayed(), "Users Tab is displayed");
-        assertTestCase.assertTrue(detailsPage.userNamesList.size()> 0, "Users list is displayed");
+        assertTestCase.assertTrue(detailsPage.userNamesList.size() > 0, "Users list is displayed");
         //Click on Add User button
         detailsPage.clickOnAddUserButton();
         assertTestCase.assertTrue(detailsPage.addUserPanelTitle.isDisplayed(), "Add User popup is displayed");
@@ -265,15 +263,15 @@ public class AccountsPageTests extends EMCUITestBase {
                 "User is created successfully");
         assertTestCase.assertTrue(detailsPage.notification.isDisplayed(), "User is created message is displayed");
         assertTestCase.assertTrue(detailsPage.addUserButton.isDisplayed(), "Users Tab is displayed");
-        assertTestCase.assertTrue(detailsPage.userNamesList.size()> 0, "Users list is displayed");
-        assertTestCase.assertTrue(detailsPage.verifyUser(fname+" "+lname), "User is verified in users list");
+        assertTestCase.assertTrue(detailsPage.userNamesList.size() > 0, "Users list is displayed");
+        assertTestCase.assertTrue(detailsPage.verifyUser(fname + " " + lname), "User is verified in users list");
         detailsPage.searchUser(email);
         EMCAccountsEditUserPage editUserPage = new EMCAccountsEditUserPage();
         assertTestCase.assertTrue(editUserPage.editPageTitle.isDisplayed(), "Edit User popup is displayed");
         assertTestCase.assertTrue(editUserPage.deleteButton.isDisplayed(), "Delete button is displayed");
         assertTestCase.assertTrue(editUserPage.deleteUser(), "User is deleted successfully");
         assertTestCase.assertTrue(detailsPage.notification.isDisplayed(), "User is deleted message is displayed");
-        assertTestCase.assertFalse(detailsPage.verifyUser(fname+" "+lname), "User is not verified in users list");
+        assertTestCase.assertFalse(detailsPage.verifyUser(fname + " " + lname), "User is not verified in users list");
     }
 
     @Test(enabled = true, groups = {"EMC", "ui", "regression", "smoke"})
@@ -369,7 +367,6 @@ public class AccountsPageTests extends EMCUITestBase {
         //convert to lower case and sort alphabetically
         accountNames.sort(String::compareToIgnoreCase);
         assertTestCase.assertEquals(accountNames, accountsPage.getAccountNames(), "Accounts are sorted alphabetically");
-
     }
 
     @Test(groups = {"EMC", "ui", "smoke", "regression", "prod"})
@@ -669,7 +666,7 @@ public class AccountsPageTests extends EMCUITestBase {
         detailsPage.clickOnApplicationsTab();
         BrowserUtils.wait(3);
         assertTestCase.assertTrue(detailsPage.verifyApplication(applicationName), "Application is present");
-        assertTestCase.assertTrue(detailsPage.deleteApplicationsButtons.size()>0, "Trash icons are displayed");
+        assertTestCase.assertTrue(detailsPage.deleteApplicationsButtons.size() > 0, "Trash icons are displayed");
 
         assertTestCase.assertTrue(detailsPage.deleteApplication(applicationName), "Application is deleted");
         assertTestCase.assertFalse(detailsPage.verifyApplication(applicationName), "Application is not present");
@@ -693,7 +690,7 @@ public class AccountsPageTests extends EMCUITestBase {
         assertTestCase.assertTrue(detailsPage.assignApplicationsButton.isDisplayed(), "Applications Tab is displayed");
 
         //Click on Remove Application (trash can icon)
-        while (detailsPage.verifyApplication(applicationName)){
+        while (detailsPage.verifyApplication(applicationName)) {
             detailsPage.deleteApplication(applicationName);
         }
 
@@ -723,7 +720,7 @@ public class AccountsPageTests extends EMCUITestBase {
         BrowserUtils.waitForClickablility(userDetailsPage.doneButton, 5).click();
 
         //re-add removed application
-        BrowserUtils.waitForClickablility(userDetailsPage.backToUserButton,5).click();
+        BrowserUtils.waitForClickablility(userDetailsPage.backToUserButton, 5).click();
         detailsPage.clickOnApplicationsTab();
         assertTestCase.assertTrue(detailsPage.assignApplicationsButton.isDisplayed(), "Applications Tab is displayed");
         assertTestCase.assertTrue(detailsPage.assignApplication(applicationName), "Application is assigned for the user");
@@ -765,7 +762,7 @@ public class AccountsPageTests extends EMCUITestBase {
             BrowserUtils.wait(5);
         }
         assertTestCase.assertTrue(detailsPage.deleteApplication(applicationName), "Application is deleted");
-        System.out.println("Application Deleted Message = " + BrowserUtils.waitForVisibility(detailsPage.notification, 5).getText());
+        //System.out.println("Application Deleted Message = " + BrowserUtils.waitForVisibility(detailsPage.notification, 5).getText());
         assertTestCase.assertTrue(detailsPage.applicationAddedMessage.isDisplayed(), "Application deleted message is displayed");
         assertTestCase.assertEquals(detailsPage.applicationAddedMessage.getText(), "Application " + applicationName + " removed successfully");
     }
@@ -777,11 +774,11 @@ public class AccountsPageTests extends EMCUITestBase {
 
         EMCAccountDetailsPage detailsPage = new EMCAccountDetailsPage();
         assertTestCase.assertTrue(detailsPage.assignApplicationsButton.isDisplayed(), "Applications Tab is displayed");
-        if(detailsPage.verifyApplication(applicationName)) detailsPage.deleteApplication(applicationName);
-        if (detailsPage.verifyApplication(applicationName+2)) detailsPage.deleteApplication(applicationName+2);
+        if (detailsPage.verifyApplication(applicationName)) detailsPage.deleteApplication(applicationName);
+        if (detailsPage.verifyApplication(applicationName + 2)) detailsPage.deleteApplication(applicationName + 2);
 
-        assertTestCase.assertTrue(detailsPage.addTestApplications(applicationName), applicationName+" Applications is assigned");
-        assertTestCase.assertTrue(detailsPage.addTestApplications(applicationName+2), applicationName+2+" Applications is assigned");
+        assertTestCase.assertTrue(detailsPage.addTestApplications(applicationName), applicationName + " Applications is assigned");
+        assertTestCase.assertTrue(detailsPage.addTestApplications(applicationName + 2), applicationName + 2 + " Applications is assigned");
 
         //We can choose a different test account
         String accountName2 = "Test Account";
@@ -797,10 +794,10 @@ public class AccountsPageTests extends EMCUITestBase {
         detailsPage.clickOnApplicationsTab();
 
         assertTestCase.assertTrue(detailsPage.assignApplicationsButton.isDisplayed(), "Applications Tab is displayed");
-        if(detailsPage.verifyApplication(applicationName)) detailsPage.deleteApplication(applicationName);
-        if (detailsPage.verifyApplication(applicationName+2)) detailsPage.deleteApplication(applicationName+2);
+        if (detailsPage.verifyApplication(applicationName)) detailsPage.deleteApplication(applicationName);
+        if (detailsPage.verifyApplication(applicationName + 2)) detailsPage.deleteApplication(applicationName + 2);
         assertTestCase.assertTrue(detailsPage.addTestApplications(applicationName), "Test Applications is assigned");
-        assertTestCase.assertTrue(detailsPage.addTestApplications(applicationName+2), "TestQA Application is assigned");
+        assertTestCase.assertTrue(detailsPage.addTestApplications(applicationName + 2), "TestQA Application is assigned");
     }
 
     @Test(groups = {"EMC", "ui", "regression"})
@@ -1019,40 +1016,40 @@ public class AccountsPageTests extends EMCUITestBase {
         assertTestCase.assertFalse(userDetailsPage.verifyApplicationRole(applicationName), "MSS Application Role is not assigned to the user");
     }
 
-    @Test(groups = {"EMC", "ui","regression"}, description = "UI | EMC | Users | Verify User can Cancel/Save the Update User Information")
+    @Test(groups = {"EMC", "ui", "regression"}, description = "UI | EMC | Users | Verify User can Cancel/Save the Update User Information")
     @Xray(test = {4973, 4974, 4976})
     public void verifyUserCanCancelUpdateTest() {
         navigateToAccountsPage(accountName, "users");
         EMCAccountDetailsPage detailsPage = new EMCAccountDetailsPage();
-        assertTestCase.assertTrue(detailsPage.userNamesList.size()>0, "Users Page - List of Users is displayed");
+        assertTestCase.assertTrue(detailsPage.userNamesList.size() > 0, "Users Page - List of Users is displayed");
         EMCAccountsEditUserPage editPage = new EMCAccountsEditUserPage();
 
         //Click over a User name
-        if (detailsPage.verifyUser("QA"+activeUserName)) {
-            System.out.println("QA"+activeUserName+" is already available under the account");
-            detailsPage.searchUser("QA"+activeUserName);
-            editPage.editUser(editPage.firstNameInput.getAttribute("value").replaceAll("QA",""),
-                                editPage.lastNameInput.getAttribute("value"),
-                                editPage.emailInput.getAttribute("value"));
+        if (detailsPage.verifyUser("QA" + activeUserName)) {
+            System.out.println("QA" + activeUserName + " is already available under the account");
+            detailsPage.searchUser("QA" + activeUserName);
+            editPage.editUser(editPage.firstNameInput.getAttribute("value").replaceAll("QA", ""),
+                    editPage.lastNameInput.getAttribute("value"),
+                    editPage.emailInput.getAttribute("value"));
             BrowserUtils.wait(5);
         }
         detailsPage.searchUser(activeUserName);
 
         //User details is displayed with EDIT hyperlink on the upper right
-        assertTestCase.assertTrue(editPage.editButton.isDisplayed(),"Edit User Page - Edit Hyperlink is displayed");
-        assertTestCase.assertFalse(editPage.firstNameInput.isEnabled(),"Edit User Page - First Name Input is disabled");
-        assertTestCase.assertFalse(editPage.lastNameInput.isEnabled(),"Edit User Page - Last Name Input is disabled");
-        assertTestCase.assertFalse(editPage.emailInput.isEnabled(),"Edit User Page - Email Input is disabled");
+        assertTestCase.assertTrue(editPage.editButton.isDisplayed(), "Edit User Page - Edit Hyperlink is displayed");
+        assertTestCase.assertFalse(editPage.firstNameInput.isEnabled(), "Edit User Page - First Name Input is disabled");
+        assertTestCase.assertFalse(editPage.lastNameInput.isEnabled(), "Edit User Page - Last Name Input is disabled");
+        assertTestCase.assertFalse(editPage.emailInput.isEnabled(), "Edit User Page - Email Input is disabled");
 
         //Click Edit hyperlink
         BrowserUtils.waitForClickablility(editPage.editButton, 5).click();
 
         //User fields are in Editable mode. Save button and Cancel button are available.
-        assertTestCase.assertTrue(editPage.saveButton.isEnabled(),"Edit User Page - Save Button is enabled");
-        assertTestCase.assertTrue(editPage.cancelButton.isEnabled(),"Edit User Page - Cancel Button is enabled");
-        assertTestCase.assertTrue(editPage.firstNameInput.isEnabled(),"Edit User Page - First Name Input is enabled");
-        assertTestCase.assertTrue(editPage.lastNameInput.isEnabled(),"Edit User Page - Last Name Input is enabled");
-        assertTestCase.assertTrue(editPage.emailInput.isEnabled(),"Edit User Page - Email Input is enabled");
+        assertTestCase.assertTrue(editPage.saveButton.isEnabled(), "Edit User Page - Save Button is enabled");
+        assertTestCase.assertTrue(editPage.cancelButton.isEnabled(), "Edit User Page - Cancel Button is enabled");
+        assertTestCase.assertTrue(editPage.firstNameInput.isEnabled(), "Edit User Page - First Name Input is enabled");
+        assertTestCase.assertTrue(editPage.lastNameInput.isEnabled(), "Edit User Page - Last Name Input is enabled");
+        assertTestCase.assertTrue(editPage.emailInput.isEnabled(), "Edit User Page - Email Input is enabled");
 
 
         String firstName = editPage.firstNameInput.getAttribute("value");
@@ -1062,98 +1059,98 @@ public class AccountsPageTests extends EMCUITestBase {
         //Update and remove one or more of the Required Fields inside the User Form
         //Fields display a Red colored Error message below the missing Field
         //Save button is not available and User can not save changes
-        String color="";
+        String color = "";
         clear(editPage.firstNameInput);
-        assertTestCase.assertTrue(editPage.firstNameInputWarning.isDisplayed(),"Edit User Page - First Name cannot be empty warning is displayed");
-        assertTestCase.assertFalse(editPage.saveButton.isEnabled(),"Edit User Page - Save Button is disabled");
+        assertTestCase.assertTrue(editPage.firstNameInputWarning.isDisplayed(), "Edit User Page - First Name cannot be empty warning is displayed");
+        assertTestCase.assertFalse(editPage.saveButton.isEnabled(), "Edit User Page - Save Button is disabled");
         color = Color.fromString(editPage.firstNameInputWarning.getCssValue("color")).asHex().toUpperCase();
-        assertTestCase.assertEquals(color,"#F44336","Edit User Page - First Name cannot be empty warning is displayed in red color");
+        assertTestCase.assertEquals(color, "#F44336", "Edit User Page - First Name cannot be empty warning is displayed in red color");
         editPage.firstNameInput.sendKeys("Test");
 
         clear(editPage.lastNameInput);
-        assertTestCase.assertTrue(editPage.lastNameInputWarning.isDisplayed(),"Edit User Page - Last Name cannot be empty warning is displayed");
-        assertTestCase.assertFalse(editPage.saveButton.isEnabled(),"Edit User Page - Save Button is disabled");
+        assertTestCase.assertTrue(editPage.lastNameInputWarning.isDisplayed(), "Edit User Page - Last Name cannot be empty warning is displayed");
+        assertTestCase.assertFalse(editPage.saveButton.isEnabled(), "Edit User Page - Save Button is disabled");
         color = Color.fromString(editPage.lastNameInputWarning.getCssValue("color")).asHex().toUpperCase();
-        assertTestCase.assertEquals(color,"#F44336","Edit User Page - Last Name cannot be empty warning is displayed in red color");
+        assertTestCase.assertEquals(color, "#F44336", "Edit User Page - Last Name cannot be empty warning is displayed in red color");
         editPage.lastNameInput.sendKeys("Test");
 
         clear(editPage.emailInput);
-        assertTestCase.assertTrue(editPage.emailInputWarning.isDisplayed(),"Edit User Page - Email cannot be empty warning is displayed");
-        assertTestCase.assertFalse(editPage.saveButton.isEnabled(),"Edit User Page - Save Button is disabled");
+        assertTestCase.assertTrue(editPage.emailInputWarning.isDisplayed(), "Edit User Page - Email cannot be empty warning is displayed");
+        assertTestCase.assertFalse(editPage.saveButton.isEnabled(), "Edit User Page - Save Button is disabled");
         color = Color.fromString(editPage.emailInputWarning.getCssValue("color")).asHex().toUpperCase();
-        assertTestCase.assertEquals(color,"#F44336","Edit User Page - Email cannot be empty warning is displayed in red color");
+        assertTestCase.assertEquals(color, "#F44336", "Edit User Page - Email cannot be empty warning is displayed in red color");
         editPage.emailInput.sendKeys("Test");
-        assertTestCase.assertTrue(editPage.validEmailWarning.isDisplayed(),"Edit User Page - Email is not valid warning is displayed");
+        assertTestCase.assertTrue(editPage.validEmailWarning.isDisplayed(), "Edit User Page - Email is not valid warning is displayed");
         editPage.emailInput.clear();
         editPage.emailInput.sendKeys(email);
         //Update/Change any of the fields inside the User Form and Click Cancel button
-        assertTestCase.assertTrue(editPage.saveButton.isEnabled(),"Edit User Page - Save Button is enabled");
-        assertTestCase.assertTrue(editPage.cancelButton.isEnabled(),"Edit User Page - Cancel Button is enabled");
+        assertTestCase.assertTrue(editPage.saveButton.isEnabled(), "Edit User Page - Save Button is enabled");
+        assertTestCase.assertTrue(editPage.cancelButton.isEnabled(), "Edit User Page - Cancel Button is enabled");
         BrowserUtils.waitForClickablility(editPage.cancelButton, 5).click();
-        assertTestCase.assertFalse(editPage.firstNameInput.isEnabled(),"Edit User Page - First Name Input is disabled");
-        assertTestCase.assertFalse(editPage.lastNameInput.isEnabled(),"Edit User Page - Last Name Input is disabled");
-        assertTestCase.assertFalse(editPage.emailInput.isEnabled(),"Edit User Page - Email Input is disabled");
-        assertTestCase.assertTrue(editPage.firstNameInput.getAttribute("value").equals(firstName),"Edit User Page - First Name Input is not changed");
-        assertTestCase.assertTrue(editPage.lastNameInput.getAttribute("value").equals(lastName),"Edit User Page - Last Name Input is not changed");
-        assertTestCase.assertTrue(editPage.emailInput.getAttribute("value").equals(email),"Edit User Page - Email Input is not changed");
+        assertTestCase.assertFalse(editPage.firstNameInput.isEnabled(), "Edit User Page - First Name Input is disabled");
+        assertTestCase.assertFalse(editPage.lastNameInput.isEnabled(), "Edit User Page - Last Name Input is disabled");
+        assertTestCase.assertFalse(editPage.emailInput.isEnabled(), "Edit User Page - Email Input is disabled");
+        assertTestCase.assertTrue(editPage.firstNameInput.getAttribute("value").equals(firstName), "Edit User Page - First Name Input is not changed");
+        assertTestCase.assertTrue(editPage.lastNameInput.getAttribute("value").equals(lastName), "Edit User Page - Last Name Input is not changed");
+        assertTestCase.assertTrue(editPage.emailInput.getAttribute("value").equals(email), "Edit User Page - Email Input is not changed");
 
         //Update/Change any of the fields inside the User Form and Click Save button
         String createdInfo = editPage.createdByInfo.getText();
         String modifiedInfo = editPage.modifiedByInfo.getText();
 
-        editPage.editUser("QA"+firstName, lastName, email);
+        editPage.editUser("QA" + firstName, lastName, email);
         BrowserUtils.waitForVisibility(detailsPage.notification, 5);
-        assertTestCase.assertTrue(detailsPage.notification.isDisplayed(),"Account Details Page - Notification is displayed");
-        detailsPage.searchUser("QA"+firstName+" "+lastName);
-        assertTestCase.assertTrue(editPage.editButton.isDisplayed(),"Edit User Page - Edit Hyperlink is displayed");
-        assertTestCase.assertEquals(editPage.firstNameInput.getAttribute("value"),"QA"+firstName,"Edit User Page - First Name Input is changed");
-        assertTestCase.assertEquals(editPage.createdByInfo.getText(),createdInfo,"Edit User Page - Created By Info is not changed");
+        assertTestCase.assertTrue(detailsPage.notification.isDisplayed(), "Account Details Page - Notification is displayed");
+        detailsPage.searchUser("QA" + firstName + " " + lastName);
+        assertTestCase.assertTrue(editPage.editButton.isDisplayed(), "Edit User Page - Edit Hyperlink is displayed");
+        assertTestCase.assertEquals(editPage.firstNameInput.getAttribute("value"), "QA" + firstName, "Edit User Page - First Name Input is changed");
+        assertTestCase.assertEquals(editPage.createdByInfo.getText(), createdInfo, "Edit User Page - Created By Info is not changed");
         //assertTestCase.assertNotEquals(editPage.modifiedByInfo.getText(),modifiedInfo,"Edit User Page - Modified By Info is changed");
-        assertTestCase.assertTrue(editPage.modifiedByInfo.getText().contains(DateTimeUtilities.getCurrentDate("MM/dd/yyyy")),"Edit User Page - Modified By Info date is verified");
+        assertTestCase.assertTrue(editPage.modifiedByInfo.getText().contains(DateTimeUtilities.getCurrentDate("MM/dd/yyyy")), "Edit User Page - Modified By Info date is verified");
         editPage.editUser(firstName, lastName, email);
     }
 
-    @Test(groups = {"EMC", "ui","regression"}, description = "UI | EMC | Accounts Applications | Validate that User is Able to Assign More than one Application to the Account")
-    @Xray(test = {3983})
+    @Test(groups = {"EMC", "ui", "regression"}, description = "UI | EMC | Accounts Applications | Validate that User is Able to Assign More than one Application to the Account")
+    @Xray(test = {3983, 3997})
     public void verifyAssignMultipleApplicationsToAccountTest() {
         navigateToAccountsPage(accountName, "applications");
         EMCAccountDetailsPage detailsPage = new EMCAccountDetailsPage();
-        assertTestCase.assertEquals(detailsPage.applicationsTabTitle.getText(),"Applications","Account Details Page - AApplication Tab Title is verified");
-        if(detailsPage.verifyApplication(applicationName)) detailsPage.deleteApplication(applicationName);
-        if(detailsPage.verifyApplication(applicationName+2)) detailsPage.deleteApplication(applicationName+2);
+        assertTestCase.assertEquals(detailsPage.applicationsTabTitle.getText(), "Applications", "Account Details Page - AApplication Tab Title is verified");
+        if (detailsPage.verifyApplication(applicationName)) detailsPage.deleteApplication(applicationName);
+        if (detailsPage.verifyApplication(applicationName + 2)) detailsPage.deleteApplication(applicationName + 2);
         BrowserUtils.waitForClickablility(detailsPage.assignApplicationsButton, 5).click();
-        assertTestCase.assertTrue(detailsPage.assignApplicationsModalTitle.isDisplayed(),"Account Details Page - Assign Applications Modal is displayed");
-        assertTestCase.assertTrue(detailsPage.assignApplicationsModalSearchInput.isDisplayed(),"Account Details Page - Assign Applications Modal Search Box is displayed");
+        assertTestCase.assertTrue(detailsPage.assignApplicationsModalTitle.isDisplayed(), "Account Details Page - Assign Applications Modal is displayed");
+        assertTestCase.assertTrue(detailsPage.assignApplicationsModalSearchInput.isDisplayed(), "Account Details Page - Assign Applications Modal Search Box is displayed");
         detailsPage.searchInput.sendKeys(applicationName);
-        assertTestCase.assertTrue(detailsPage.assignApplicationsModalAssignButtonsList.size()>1,"Account Details Page - Assign Application modal - Multiple Assign Buttons are displayed");
+        assertTestCase.assertTrue(detailsPage.assignApplicationsModalAssignButtonsList.size() > 1, "Account Details Page - Assign Application modal - Multiple Assign Buttons are displayed");
         for (int i = 0; i < detailsPage.assignApplicationsModalAssignButtonsList.size(); i++) {
             BrowserUtils.waitForClickablility(detailsPage.assignApplicationsModalAssignButtonsList.get(i), 5).click();
             BrowserUtils.wait(1);
             System.out.println("i = " + i);
         }
 
-        assertTestCase.assertTrue(detailsPage.assignApplicationModalDoneButton.isEnabled(),"Account Details Page - Assign Application Modal - Done Button is enabled");
+        assertTestCase.assertTrue(detailsPage.assignApplicationModalDoneButton.isEnabled(), "Account Details Page - Assign Application Modal - Done Button is enabled");
         BrowserUtils.waitForClickablility(detailsPage.assignApplicationModalDoneButton, 5).click();
         BrowserUtils.waitForVisibility(detailsPage.notification, 15);
-        assertTestCase.assertTrue(detailsPage.notification.isDisplayed(),"Account Details Page - Notification is displayed");
+        assertTestCase.assertTrue(detailsPage.notification.isDisplayed(), "Account Details Page - Notification is displayed");
         detailsPage.clickOnDetailsTab();
         BrowserUtils.wait(1);
         detailsPage.clickOnApplicationsTab();
         BrowserUtils.wait(3);
-        assertTestCase.assertTrue(detailsPage.verifyApplication(applicationName),applicationName+" application is assigned to the account");
-        assertTestCase.assertTrue(detailsPage.verifyApplication(applicationName+2),applicationName+2+" application is assigned to the account");
+        assertTestCase.assertTrue(detailsPage.verifyApplication(applicationName), applicationName + " application is assigned to the account");
+        assertTestCase.assertTrue(detailsPage.verifyApplication(applicationName + 2), applicationName + 2 + " application is assigned to the account");
 
         //Validate that User can not See Assigned Applications in Assign Application Modal
         BrowserUtils.waitForClickablility(detailsPage.assignApplicationsButton, 5).click();
-        assertTestCase.assertTrue(detailsPage.assignApplicationsModalTitle.isDisplayed(),"Account Details Page - Assign Applications Modal is displayed");
-        assertTestCase.assertTrue(detailsPage.assignApplicationsModalSearchInput.isDisplayed(),"Account Details Page - Assign Applications Modal Search Box is displayed");
+        assertTestCase.assertTrue(detailsPage.assignApplicationsModalTitle.isDisplayed(), "Account Details Page - Assign Applications Modal is displayed");
+        assertTestCase.assertTrue(detailsPage.assignApplicationsModalSearchInput.isDisplayed(), "Account Details Page - Assign Applications Modal Search Box is displayed");
         detailsPage.searchInput.sendKeys(applicationName);
-        assertTestCase.assertTrue(detailsPage.assignApplicationsModalAssignButtonsList.size()==0,"Account Details Page - Assign Application modal - Multiple Assign Buttons are displayed");
+        assertTestCase.assertTrue(detailsPage.assignApplicationsModalAssignButtonsList.size() == 0, "Account Details Page - Assign Application modal - Multiple Assign Buttons are displayed");
 
     }
 
-    @Test(groups = {"EMC", "ui","regression"}, description = "UI | EMC | Accounts | Verify that User Can't Create a New Account if Required Fields are Missing ")
-    @Xray(test = {3983})
+    @Test(groups = {"EMC", "ui", "regression"}, description = "UI | EMC | Accounts | Verify that User Can't Create a New Account if Required Fields are Missing ")
+    @Xray(test = {3378})
     public void verifyRequiredFieldsForAccountCreationTest() {
         EMCMainPage homePage = new EMCMainPage();
 
@@ -1179,7 +1176,7 @@ public class AccountsPageTests extends EMCUITestBase {
         assertTestCase.assertTrue(createPage.dateClearButton.isDisplayed(), "Date Clear button is displayed");
         BrowserUtils.waitForClickablility(createPage.dateClearButton, 5).click();
         assertTestCase.assertTrue(createPage.requiredTag.isDisplayed(), "Account Creation - Contract Start Date field is required message is displayed");
-        assertTestCase.assertFalse(createPage.saveButton.isEnabled(),"Account Creation - Save button is disabled");
+        assertTestCase.assertFalse(createPage.saveButton.isEnabled(), "Account Creation - Save button is disabled");
         BrowserUtils.waitForVisibility(createPage.startDateInput, 5).click();
         BrowserUtils.waitForVisibility(createPage.dateOkButton, 5).click();
         assertTestCase.assertFalse(createPage.startDateInput.getAttribute("value").isEmpty(), "Account Creation - Contract Start Date field value is not empty");
@@ -1189,17 +1186,17 @@ public class AccountsPageTests extends EMCUITestBase {
         assertTestCase.assertTrue(createPage.dateClearButton.isDisplayed(), "Date Clear button is displayed");
         BrowserUtils.waitForClickablility(createPage.dateClearButton, 5).click();
         assertTestCase.assertTrue(createPage.requiredTag.isDisplayed(), "Account Creation - Contract End Date field is required message is displayed");
-        assertTestCase.assertFalse(createPage.saveButton.isEnabled(),"Account Creation - Save button is disabled");
+        assertTestCase.assertFalse(createPage.saveButton.isEnabled(), "Account Creation - Save button is disabled");
         BrowserUtils.waitForVisibility(createPage.endDateInput, 5).click();
         BrowserUtils.waitForVisibility(createPage.dateOkButton, 5).click();
         assertTestCase.assertFalse(createPage.endDateInput.getAttribute("value").isEmpty(), "Account Creation - Contract End Date field value is not empty");
-        assertTestCase.assertTrue(createPage.saveButton.isEnabled(),"Account Creation - Save button is enabled");
-        assertTestCase.assertTrue(createPage.cancelButton.isEnabled(),"Account Creation - Save button is enabled");
+        assertTestCase.assertTrue(createPage.saveButton.isEnabled(), "Account Creation - Save button is enabled");
+        assertTestCase.assertTrue(createPage.cancelButton.isEnabled(), "Account Creation - Save button is enabled");
         BrowserUtils.waitForClickablility(createPage.cancelButton, 5).click();
 
     }
 
-    @Test(groups = {"EMC", "ui","regression"}, description = "UI | EMC | Accounts | Verify the ability to search for an account")
+    @Test(groups = {"EMC", "ui", "regression"}, description = "UI | EMC | Accounts | Verify the ability to search for an account")
     @Xray(test = {4514})
     public void verifySearchForAccountTest() {
         EMCMainPage homePage = new EMCMainPage();
@@ -1211,60 +1208,60 @@ public class AccountsPageTests extends EMCUITestBase {
         //User is able to see New Account Page
         EMCAccountsPage accountsPage = new EMCAccountsPage();
         assertTestCase.assertEquals(accountsPage.pageTitle.getText(), "Accounts", "Accounts page is displayed");
-        assertTestCase.assertTrue(accountsPage.searchInput.isDisplayed(),"Accounts Page - Search Input is displayed");
+        assertTestCase.assertTrue(accountsPage.searchInput.isDisplayed(), "Accounts Page - Search Input is displayed");
 
         //Verify that User can search for an account
         accountsPage.search(accountName);
-        assertTestCase.assertTrue(accountsPage.verifyAccount(accountName),"Account is displayed in the search results");
+        assertTestCase.assertTrue(accountsPage.verifyAccount(accountName), "Account is displayed in the search results");
 
         //Enter the active account's full name on the search field using lowercases.
         accountsPage.search(accountName);
-        assertTestCase.assertTrue(accountsPage.verifyAccount(accountName),"Account is displayed in the search results");
+        assertTestCase.assertTrue(accountsPage.verifyAccount(accountName), "Account is displayed in the search results");
 
         //Enter the active account's full name on the search field using uppercases.
         accountsPage.search(accountName.toUpperCase());
-        assertTestCase.assertTrue(accountsPage.verifyAccount(accountName),"Account is displayed in the search results");
+        assertTestCase.assertTrue(accountsPage.verifyAccount(accountName), "Account is displayed in the search results");
 
         //Enter the active account's full name on the search field using mixed cases.
         accountsPage.search(accountName.substring(0, 1).toUpperCase() + accountName.substring(1).toLowerCase());
-        assertTestCase.assertTrue(accountsPage.verifyAccount(accountName),"Account is displayed in the search results");
+        assertTestCase.assertTrue(accountsPage.verifyAccount(accountName), "Account is displayed in the search results");
 
         //Enter the active account's partial name on the search field using lowercases.
         accountsPage.search(accountName.substring(0, 3).toLowerCase());
-        assertTestCase.assertTrue(accountsPage.verifyAccount(accountName),"Account is displayed in the search results");
+        assertTestCase.assertTrue(accountsPage.verifyAccount(accountName), "Account is displayed in the search results");
 
         //Enter the active account's partial name on the search field using uppercases.
         accountsPage.search(accountName.substring(0, 3).toUpperCase());
-        assertTestCase.assertTrue(accountsPage.verifyAccount(accountName),"Account is displayed in the search results");
+        assertTestCase.assertTrue(accountsPage.verifyAccount(accountName), "Account is displayed in the search results");
 
         //Enter the active account's partial name on the search field using mixed cases.
         accountsPage.search(accountName.substring(0, 1).toUpperCase() + accountName.substring(1, 3).toLowerCase());
-        assertTestCase.assertTrue(accountsPage.verifyAccount(accountName),"Account is displayed in the search results");
+        assertTestCase.assertTrue(accountsPage.verifyAccount(accountName), "Account is displayed in the search results");
 
         String inactiveAccountName = "Test Account";
         //Enter the inactive account's full name on the search field using lowercases.
         accountsPage.search(inactiveAccountName.toLowerCase());
-        assertTestCase.assertTrue(accountsPage.verifyAccount(inactiveAccountName, false),"Account is displayed in the search results");
+        assertTestCase.assertTrue(accountsPage.verifyAccount(inactiveAccountName, false), "Account is displayed in the search results");
 
         //Enter the inactive account's full name on the search field using uppercases.
         accountsPage.search(inactiveAccountName.toUpperCase());
-        assertTestCase.assertTrue(accountsPage.verifyAccount(inactiveAccountName,false),"Account is displayed in the search results");
+        assertTestCase.assertTrue(accountsPage.verifyAccount(inactiveAccountName, false), "Account is displayed in the search results");
 
         //Enter the inactive account's full name on the search field using mixed cases.
         accountsPage.search(inactiveAccountName.substring(0, 1).toUpperCase() + inactiveAccountName.substring(1).toLowerCase());
-        assertTestCase.assertTrue(accountsPage.verifyAccount(inactiveAccountName,false),"Account is displayed in the search results");
+        assertTestCase.assertTrue(accountsPage.verifyAccount(inactiveAccountName, false), "Account is displayed in the search results");
 
         //Enter the inactive account's partial name on the search field using lowercases.
         accountsPage.search(inactiveAccountName.substring(0, 3).toLowerCase());
-        assertTestCase.assertTrue(accountsPage.verifyAccount(inactiveAccountName, false),"Account is displayed in the search results");
+        assertTestCase.assertTrue(accountsPage.verifyAccount(inactiveAccountName, false), "Account is displayed in the search results");
 
         //Enter the inactive account's partial name on the search field using uppercases.
         accountsPage.search(inactiveAccountName.substring(0, 3).toUpperCase());
-        assertTestCase.assertTrue(accountsPage.verifyAccount(inactiveAccountName, false),"Account is displayed in the search results");
+        assertTestCase.assertTrue(accountsPage.verifyAccount(inactiveAccountName, false), "Account is displayed in the search results");
 
         //Enter the inactive account's partial name on the search field using mixed cases.
         accountsPage.search(inactiveAccountName.substring(0, 1).toUpperCase() + inactiveAccountName.substring(1, 3).toLowerCase());
-        assertTestCase.assertTrue(accountsPage.verifyAccount(inactiveAccountName, false),"Account is displayed in the search results");
+        assertTestCase.assertTrue(accountsPage.verifyAccount(inactiveAccountName, false), "Account is displayed in the search results");
 
 
     }
@@ -1311,7 +1308,7 @@ public class AccountsPageTests extends EMCUITestBase {
 
         String accountName = "QATest" + java.time.LocalDateTime.now().format(java.time.format.DateTimeFormatter.ofPattern("yyMMdd-hhmmss"));
         createAccountPage.accountNameInput.sendKeys(accountName);
-        if(createAccountPage.statusCheckbox.isSelected()){
+        if (createAccountPage.statusCheckbox.isSelected()) {
             createAccountPage.statusCheckbox.click();
         }
         createAccountPage.subscriberInput.click();
@@ -1319,7 +1316,7 @@ public class AccountsPageTests extends EMCUITestBase {
         createAccountPage.subscriberTypeList.get(0).click();
 
         createAccountPage.saveButton.click();
-        assertTestCase.assertTrue(accountsPage.verifyAccount(accountName),"Account is displayed in the search results");
+        assertTestCase.assertTrue(accountsPage.verifyAccount(accountName), "Account is displayed in the search results");
         accountsPage.search(accountName);
         accountsPage.clickOnAccount(accountName);
         createAccountPage = new EMCCreateAccountPage();
@@ -1330,7 +1327,7 @@ public class AccountsPageTests extends EMCUITestBase {
     @Test(groups = {"EMC", "ui", "regression"}, description = "UI | EMC | Accounts | Verify the \"Subscriber Type\" options inside Dropbox for existing account")
     @Xray(test = {9593, 9595})
     public void verifySubscriberTypeInputForOldAccountTests() {
-        navigateToAccountsPage("Test Account","details");
+        navigateToAccountsPage("Test Account", "details");
         EMCAccountDetailsPage detailsPage = new EMCAccountDetailsPage();
         assertTestCase.assertTrue(detailsPage.editButton.isDisplayed(), "Edit button is displayed");
         assertTestCase.assertTrue(detailsPage.subscriberInput.isDisplayed(), "Subscriber input is displayed");
@@ -1362,25 +1359,38 @@ public class AccountsPageTests extends EMCUITestBase {
 
     }
 
+    @Test(groups = {"EMC", "ui", "regression"}, description = "UI | EMC | Roles | Verify User with Admin Role can view Accounts list and Create Account button available")
+    @Xray(test = {7315})
+    public void verifyUserWithAdminRoleViewAccountsTest() {
+        navigateToAccountsPage("", "details");
+        assertTestCase.assertTrue(accountsPage.createAccountButton.isDisplayed(), "Create Account button is displayed");
+        assertTestCase.assertTrue(accountsPage.searchInput.isDisplayed(), "Search input is displayed");
+        assertTestCase.assertTrue(accountsPage.pageTitle.isDisplayed(), "Accounts page title is displayed");
+        int randomAccount = new Random().nextInt(accountsPage.accountNames.size());
+        String accountName = accountsPage.accountNames.get(randomAccount).getText();
+        accountsPage.clickOnAccount(accountName);
+        EMCAccountDetailsPage detailsPage = new EMCAccountDetailsPage();
+        assertTestCase.assertTrue(detailsPage.editButton.isDisplayed(), "Edit button is displayed");
+        assertTestCase.assertTrue(detailsPage.detailsTab.isDisplayed(), "Account Details tab is displayed");
+        assertTestCase.assertTrue(detailsPage.usersTab.isDisplayed(), "Account Users tab is displayed");
+        assertTestCase.assertTrue(detailsPage.productsTab.isDisplayed(), "Account Products tab is displayed");
+        assertTestCase.assertTrue(detailsPage.applicationsTab.isDisplayed(), "Account Applications tab is displayed");
+        assertTestCase.assertTrue(detailsPage.backToAccountsButton.isDisplayed(), "Back to Accounts button is displayed");
+    }
+
     public void navigateToAccountsPage(String accountName, String tabName) {
         EMCMainPage homePage = new EMCMainPage();
-        System.out.println("Navigating to Accounts page");
-        //Select Account in the left menu
-        try {
-            homePage.openSidePanel();
-        } catch (Exception e) {
-            System.out.println("Side panel is not opened");
-        }
-        System.out.println("Side panel is opened");
-        homePage.clickAccountsButton();
-        System.out.println("Accounts button is clicked");
-        //User is able to see New Account Page
+        homePage.goToAccountsPage();
         EMCAccountsPage accountsPage = new EMCAccountsPage();
-        BrowserUtils.waitForVisibility(accountsPage.accountNames.get(0), 15);
+
         //assertTestCase.assertEquals(accountsPage.pageTitle.getText(), "Accounts", "Accounts page is displayed");
         System.out.println("Accounts page is displayed");
         //Search for the account where a New user will be created
         if (accountName.isEmpty()) return;
+
+        while(!accountsPage.verifyAccount(accountName)) {
+            BrowserUtils.wait(1);
+        }
         accountsPage.search(accountName);
         //assertTestCase.assertEquals(accountsPage.accountNames.size() > 0, true, "Account is displayed");
         System.out.println(accountsPage.accountNames.get(0).getText().toLowerCase());
@@ -1411,5 +1421,65 @@ public class AccountsPageTests extends EMCUITestBase {
             element.sendKeys(Keys.BACK_SPACE);
         }
         element.sendKeys(Keys.TAB);
+    }
+
+    @Test(groups = {"EMC", "ui", "regression"}, description = "UI | EMC | Products | Verify that after assign Application Role, User get Access to the Products")
+    @Xray(test = {5646, 5678})
+    public void verifyAssignApplicationRoleProductUserLoginTest() {
+        navigateToAccountsPage(accountName, "applications");
+        EMCAccountDetailsPage detailsPage = new EMCAccountDetailsPage();
+        if (!detailsPage.verifyApplication("MESG Platform - DEV - QA"))
+            detailsPage.assignApplication("MESG Platform - DEV - QA");
+        detailsPage.clickOnUsersTab();
+        assertTestCase.assertTrue(detailsPage.verifyUser("Active User"), "Active User is displayed");
+        detailsPage.searchUser("Active User");
+        EMCUserDetailsPage userPage = new EMCUserDetailsPage();
+        assertTestCase.assertEquals(userPage.userStatus.getText(), "Active", "User status is Active");
+        userPage.clickOnApplicationRolesTab();
+        if (!userPage.verifyApplicationRole("MESG Platform - DEV - QA"))
+            userPage.assignApplicationRoles("MESG Platform - DEV - QA");
+        assertTestCase.assertTrue(userPage.verifyApplicationRole("MESG Platform - DEV - QA"), "Application role is assigned");
+        assertTestCase.assertTrue(loginAndVerify(), "User is logged in");
+
+        Driver.getDriver().get(Environment.EMC_URL);
+        LoginPageEMC loginPage = new LoginPageEMC();
+        loginPage.loginWithInternalUser();
+
+        navigateToAccountsPage(accountName, "users");
+
+
+        detailsPage = new EMCAccountDetailsPage();
+        detailsPage.searchUser("Active User");
+        userPage = new EMCUserDetailsPage();
+        userPage.clickOnApplicationRolesTab();
+        userPage.deleteApplicationRole("MESG Platform - DEV - QA");
+        assertTestCase.assertFalse(userPage.verifyApplicationRole("MESG Platform - DEV - QA"), "Application role is deleted");
+        assertTestCase.assertFalse(loginAndVerify(), "User is not logged in");
+        Driver.getDriver().get(Environment.EMC_URL);
+        loginPage = new LoginPageEMC();
+        loginPage.loginWithInternalUser();
+        navigateToAccountsPage("", "users");
+    }
+
+    public boolean loginAndVerify() {
+        String currentTab = Driver.getDriver().getWindowHandle();
+        JavascriptExecutor js = (JavascriptExecutor) Driver.getDriver();
+
+        js.executeScript("window.open('" + Environment.URL + "','_blank');");
+        Set<String> windows = Driver.getDriver().getWindowHandles();
+        Driver.getDriver().switchTo().window(windows.toArray()[1].toString());
+        LoginPageEMC loginPage = new LoginPageEMC();
+        try {
+            loginPage.clickOnLogout();
+            loginPage.loginWithParams("ferhat.demir@atos.net", "Moodys2022");
+            BrowserUtils.wait(5);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            BrowserUtils.wait(5);
+            String link = Driver.getDriver().getCurrentUrl();
+            Driver.closeDriver();
+            return link.endsWith("issuerworkspace");
+        }
     }
 }

@@ -98,4 +98,45 @@ public class EMCMainPage {
     public void clickConfigurationsButton() {
         wait.until(ExpectedConditions.visibilityOf(configurationButton)).click();
     }
+
+    public void goToApplicationsPage() {
+        try {
+            openSidePanel();
+        } catch (Exception e) {
+            System.out.println("Side panel is not opened");
+        }
+        System.out.println("Side panel is opened");
+        clickApplicationsButton();
+        System.out.println("Applications button is clicked");
+    }
+    public void goToAccountsPage() {
+        try {
+            openSidePanel();
+        } catch (Exception e) {
+            System.out.println("Side panel is not opened");
+        }
+        System.out.println("Side panel is opened");
+        clickAccountsButton();
+        System.out.println("Accounts button is clicked");
+    }
+    public void goToUsersPage() {
+        try {
+            openSidePanel();
+        } catch (Exception e) {
+            System.out.println("Side panel is not opened");
+        }
+        System.out.println("Side panel is opened");
+        clickUsersButton();
+        System.out.println("Users button is clicked");
+    }
+    public void goToConfigurationsPage() {
+        try {
+            openSidePanel();
+        } catch (Exception e) {
+            System.out.println("Side panel is not opened");
+        }
+        System.out.println("Side panel is opened");
+        clickConfigurationsButton();
+        System.out.println("Configurations button is clicked");
+    }
 }
