@@ -207,8 +207,14 @@ public abstract class PageBase {
     @FindBy(id = "RegSector-test-id-1")
     public WebElement filtersDropdown;
 
+    @FindBy(xpath = "//div[contains(@class, 'MuiPopover-paper')]")
+    public WebElement filtersDropdownPopup;
+
     @FindBy(xpath = "//div[contains(@heap_filter,'month_')]")
     public List<WebElement> monthsInAsOfDate;
+
+    @FindBy(xpath = "//table//tr[@heap_id='event']")
+    public List<WebElement> controversies;
 
     @FindBy(xpath = "//button/span[text()='Last 60 Days']")
     public WebElement last60DaysFilterButton;
@@ -412,6 +418,15 @@ public abstract class PageBase {
     public boolean isFiltersDropdownDisplayed() {
         try {
             return filtersDropdown.isDisplayed();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean isFiltersDropdownPopupDisplayed() {
+        try {
+            return filtersDropdownPopup.isDisplayed();
         } catch (Exception e) {
             e.printStackTrace();
             return false;
