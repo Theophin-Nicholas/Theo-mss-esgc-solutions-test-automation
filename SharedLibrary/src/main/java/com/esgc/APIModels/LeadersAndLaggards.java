@@ -48,4 +48,7 @@ public class LeadersAndLaggards {
 
     @JsonIgnore
     private String score_quality;
+
+    @JsonIgnore
+    private String managed_type;
 }
