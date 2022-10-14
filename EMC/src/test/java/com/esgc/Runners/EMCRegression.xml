@@ -38,6 +38,7 @@
             <run>
                 <!-- Used tag names: "EMC", "ui", "smoke", "regression", "prod" -->
                 <include name="regression"/>
+                <include name="smoke"/>
             </run>
         </groups>
 

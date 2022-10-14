@@ -48,10 +48,14 @@ public class EMCAccountsPage extends EMCBasePage {
     }
 
     public boolean verifyAccount(String accountName) {
-        for (int i = 0; i < accountNames.size(); i++) {
-            if (accountNames.get(i).getText().equals(accountName)) {
-                return true;
+        try {
+            for (int i = 0; i < accountNames.size(); i++) {
+                if (accountNames.get(i).getText().equalsIgnoreCase(accountName)) {
+                    return true;
+                }
             }
+        } catch (Exception e) {
+            return false;
         }
         return false;
     }
