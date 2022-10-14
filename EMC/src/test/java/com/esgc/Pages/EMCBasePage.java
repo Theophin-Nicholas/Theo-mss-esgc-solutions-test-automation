@@ -8,7 +8,11 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
+import java.security.PublicKey;
+import java.util.List;
+
 public abstract class EMCBasePage {
+
     @FindBy(id = "notistack-snackbar")
     public WebElement notification;
     public EMCBasePage() {
@@ -22,5 +26,30 @@ public abstract class EMCBasePage {
         while (!element.getAttribute("value").isEmpty()) {
             element.sendKeys(Keys.BACK_SPACE);
         }
+    }
+    public void wait(WebElement element, int seconds) {
+        for (int i = 0; i < seconds; i++) {
+            try {
+                if (element.isDisplayed()) {
+                    return;
+                }
+            } catch (Exception e) {
+                BrowserUtils.wait(1);
+            }
+        }
+        System.out.println("Element is not displayed after " + seconds + " seconds");
+    }
+    public void wait(List<WebElement> elements, int seconds) {
+        for (int i = 0; i < seconds; i++) {
+            try {
+                if (elements.size() > 0) {
+                    System.out.println("elements = " + elements.size());
+                    return;
+                }
+            } catch (Exception e) {
+                BrowserUtils.wait(1);
+            }
+        }
+        System.out.println("Element is not displayed after " + seconds + " seconds");
     }
 }
