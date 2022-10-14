@@ -28,7 +28,7 @@ public class LeadersAndLaggards extends UITestBase {
         }
         String title = "Updates as of June 2021 and Current Leaders/Laggards";
         String commonWidgetsID = "updates_and_current_leaders_laggards";
-
+        researchLinePage.selectSamplePortfolioFromPortfolioSelectionModal();
         researchLinePage.navigateToResearchLine(page);
         BrowserUtils.wait(5);
         test.info("Navigated to " + page + " Page");
