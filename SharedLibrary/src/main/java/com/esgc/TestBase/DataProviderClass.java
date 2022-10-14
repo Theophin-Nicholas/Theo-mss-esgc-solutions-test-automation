@@ -198,6 +198,17 @@ public class DataProviderClass {
                 {"esg-test1+controversy@outlook.com", "Moodys123", "Physical Risk, Transition Risk and Controversies"},//
         };
     }
+    @DataProvider(name = "entitlementCheckPrd")
+    public Object[][] entitlementCheckPrd() {
+
+        return new Object[][]{
+                {"esg-test2@outlook.com","Testing123","Transition Risk"},//
+                {"esg-test1@outlook.com","Testing123","Physical Risk"},//
+                {"esg-test4@outlook.com","Testing123","Physical Risk and Transition Risk"},//
+                /*   {"esg-test7@outlook.com","Helloworld21","Physical Risk, Transition Risk, Corporate ESG and Controversies Entitlements"},//*/
+               // {"esg-test1+controversy@outlook.com","Testing123","Physical Risk, Transition Risk and Controversies"},//
+        };
+    }
 
 
     @DataProvider(name = "exportEntitlements")
@@ -377,6 +388,15 @@ public class DataProviderClass {
                             {"482794570"},
                             {"480796820"},
                             {"486521987"},*/
+                };
+    }
+
+    @DataProvider(name = "ESGMaterialitycredentials11")
+    public Object[][] provideESGCredentials() {
+
+        return new Object[][]
+                {
+                        {"mesg-platform-issuer-qa+test1@outlook.com", "Moodys123"}
                 };
     }
 

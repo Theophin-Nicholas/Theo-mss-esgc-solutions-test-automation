@@ -36,11 +36,11 @@ public class DashboardSummaryHeader extends DashboardUITestBase {
         // ESGCA-3632: Verify Coverage is Displayed on Dashboard
         assertTestCase.assertTrue(dashboardPage.verifyCoverage(),"Verify coverage information in summary");
 
-        // ESGCA-8313: Verify Weighted Average ESG Score widget is Displayed
-        assertTestCase.assertTrue(dashboardPage.verifyAverageEsgScoreWidget(),"Verify Investment weighted average score in summary");
+        // ESGCA-8313: Verify Weighted Average ESG Score widget is Displayed TODO ESG is de-scoped
+     //   assertTestCase.assertTrue(dashboardPage.verifyAverageEsgScoreWidget(),"Verify Investment weighted average score in summary");
 
-        // ESGCA-8322: Verify ESG Score is valid
-        assertTestCase.assertTrue(dashboardPage.verifyEsgScoreValue(),"Verify ESG Score is valid");
+        // ESGCA-8322: Verify ESG Score is valid TODO ESG is de-scoped
+     //   assertTestCase.assertTrue(dashboardPage.verifyEsgScoreValue(),"Verify ESG Score is valid");
 
         //ESGCA-7707: UI Checks on Physical Risk Management card
         assertTestCase.assertTrue(dashboardPage.verifyPhysicalRiskWidget(),"Verify Physical Risk Widget in summary");

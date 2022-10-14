@@ -28,8 +28,8 @@ public class PerformanceChart extends DashboardUITestBase {
         dashboardPage.selectPortfolioByNameFromPortfolioSelectionModal("My Number ONE Portfolio");
         test.info("Check if Performance Charts are Displayed");
 
-        List<String> expectedColumnNames =
-                Arrays.asList("Company", "% Investment", "Overall ESG Score", "Total Critical Controversies",
+        List<String> expectedColumnNames =//TODO as of now ESG is de-scoped
+                Arrays.asList("Company", "% Investment", /*"Overall ESG Score",*/ "Total Critical Controversies",
                         "Highest Risk Hazard", "Facilities Exposed to High Risk/Red Flag",
                         "Physical Risk Management", "Temperature Alignment",
                         "Carbon Footprint (tCO2eq)", "Green Share Assessment", "Brown Share Assessment");
