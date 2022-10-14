@@ -6,6 +6,7 @@ import com.esgc.Controllers.APIController;
 import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.ConfigurationReader;
 import com.esgc.Utilities.Database.DatabaseDriver;
+import com.esgc.Utilities.Database.EntityClimateProfilePageQueries;
 import com.esgc.Utilities.Driver;
 import com.google.common.collect.Ordering;
 import org.apache.commons.lang3.math.NumberUtils;
@@ -32,6 +33,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import static com.esgc.Utilities.Database.DatabaseDriver.getQueryResultMap;
+import static com.esgc.Utilities.DateTimeUtilities.getFormattedDate;
 
 
 public class EntityClimateProfilePage extends PageBase {
@@ -70,6 +72,9 @@ public class EntityClimateProfilePage extends PageBase {
 
     @FindBy(id = "export_sources_doc_button")
     public WebElement exportSourcesDocumentsTab;
+
+    @FindBy(id = "export_pdf")
+    public WebElement pdfDownloadButton;
 
     @FindBy(id = "ref_Meth_button")
     public WebElement referenceAndMethodologiesTab;
@@ -396,6 +401,48 @@ public class EntityClimateProfilePage extends PageBase {
     @FindBy(xpath = " //span[contains(text(),'Overall Disclosure Score')]")
     public WebElement entityDisclosureScore;
 
+    @FindBy(xpath = "//div[contains(text(),'About')]/ancestor::div[contains(@class,'MuiPaper-root MuiDrawer')]")
+    public WebElement aboutDrawerMainDiv;
+
+    @FindBy(xpath="//table[@id='table-id-3']/../../../following-sibling::div[1]/span")
+    public WebElement PhysicalRisk_ClimateHazard_UpdatedDate_Span;
+
+    @FindBy(xpath="//table[@id='table-id-3']/../../../following-sibling::div[3]/span")
+    public WebElement PhysicalRisk_PhysicalRiskManagement_UpdatedDate_Span;
+
+    // Entity Page
+    @FindBy(xpath = "//*[@id=\"controversyError\"]/div/div/div[1] ")
+    public WebElement noControversies;
+
+    @FindBy(xpath = "//span[normalize-space()='Controversies'] ")
+    public List<WebElement> controversiesTitle;
+
+    //return WebElement
+
+    public WebElement getCompanyHeader(String companyName) {
+        return Driver.getDriver().findElement(By.xpath("//header//span[contains(text(),'" + companyName + "')]"));
+    }
+    @FindBy(xpath = "// div[normalize-space()='Filter by most impacted categories of ESG:']")
+    public WebElement controversiesStaticText;
+
+    @FindBy(xpath = "//div[normalize-space()='Filter by most impacted categories of ESG:']//following-sibling::div")
+    public List<WebElement> subCategoryList;
+
+    @FindBy(xpath = "//div[@id='div-mainlayout']//div//div//main//header/following-sibling::div/div[3]/div/div/div/div/div/div/div/following-sibling::div[2]/div/table/tbody/tr")
+    public List<WebElement> controversiesTableRow;
+
+    @FindBy(xpath = "//main/div/div/div/div/div/div/div/div/div/div/span[1]")
+    public WebElement controversiesPopUpClose;
+
+    @FindBy(xpath = "(//div[contains(text(),'Controversies')])")
+    public WebElement controversiesPopUpVerify;
+
+    @FindBy(xpath = " //*[@id=\"div-mainlayout\"]/div/div/main/header/div/div/div/div[2]/span[4]/span")
+    public WebElement sectorInHeader;
+
+    @FindBy(xpath = " //body/div[@id='company-summary-panel']/div/div/div[5]")
+    public WebElement companyDrawerSector;
+
 
 
     ///============= Methods
@@ -446,7 +493,7 @@ public class EntityClimateProfilePage extends PageBase {
 
     public void validateCompanyHeader(String CompanyName) {
         List<String> headerList = Arrays.asList("LEI", "Orbis ID", "ISIN");
-        WebElement companyNameHeader = Driver.getDriver().findElement(By.xpath("//header//span[contains(text(),'" + CompanyName + "')]"));
+        WebElement companyNameHeader = getCompanyHeader(CompanyName);
         List<WebElement> companySummary = companyNameHeader.findElements(By.xpath("parent::span/parent::div/following-sibling::div/span"));
         Assert.assertTrue(headerList.stream().anyMatch(a -> Arrays.asList(companySummary.get(0).getText().split(":|,")).contains(a)));
         System.out.println("companySummary.get(3).getText() = " + companySummary.get(2).getText());
@@ -457,6 +504,42 @@ public class EntityClimateProfilePage extends PageBase {
 
     public void selectExportSourcesDocuments() {
         BrowserUtils.waitForClickablility(exportSourcesDocumentsTab, 30).click();
+    }
+
+    public void selectPdfDownload() {
+        BrowserUtils.waitForClickablility(pdfDownloadButton, 30).click();
+    }
+
+    public boolean checkDownloadProgressBarIsPresent() {
+        try {
+            return Driver.getDriver().findElement(By.xpath("//div[text()='Download in progress!']")).isDisplayed();
+        }catch(Exception e){
+            return false;
+        }
+    }
+
+    public void closeEntityProfilePage() {
+        Driver.getDriver().findElement(By.xpath("//li[starts-with(text(),'Profile')]/../../div[2]")).click();
+    }
+
+    public void closeDownloadProgressBar() {
+        Driver.getDriver().findElement(By.xpath("//div[text()='Download in progress!']/following-sibling::div/button/span")).click();
+
+    }
+
+    public boolean verifyDownloadProgressMessage() {
+        try {
+            WebElement progressMessage = Driver.getDriver().findElement(By.xpath("//div[text()='Download in progress!']"));
+            BrowserUtils.waitForVisibility(progressMessage, 30);
+            BrowserUtils.waitForInvisibility(progressMessage, 60);
+        }catch(Exception e){
+            return false;
+        }
+        return true;
+    }
+
+    public boolean verifyDownloadPdfButtonIsDisabled() {
+        return pdfDownloadButton.getAttribute("class").contains("disable");
     }
 
     public boolean verifyMethodologiesTabIsDisplayed() {
@@ -965,38 +1048,38 @@ public class EntityClimateProfilePage extends PageBase {
 //        }
 //    }
 
-    public void validateNoneForTheSectorButton(){
+    public void validateNoneForTheSectorButton() {
         // Based on the xpath - can say element is not clickable
-        List <WebElement> sectors = Driver.getDriver().findElements(By.xpath("//ul/li/section/span[text()='None for the sector']"));
-        Assert.assertTrue(sectors.size()!=0, "Check 'None for the Sector' button");
+        List<WebElement> sectors = Driver.getDriver().findElements(By.xpath("//ul/li/section/span[text()='None for the sector']"));
+        Assert.assertTrue(sectors.size() != 0, "Check 'None for the Sector' button");
     }
 
-    public void validateEsgMaterialityLegends(){
+    public void validateEsgMaterialityLegends() {
 
         String labelXpath = "//button[@heap_perfchart_id='Materiality']/../../..//div[contains(@class,'MuiPaper-elevation1')]//span";
 
-        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("("+labelXpath+")[1]")).getText(),"Weak");
-        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("("+labelXpath+"/div)[1]")).getAttribute("style"),"background: rgb(221, 88, 29);");
+        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("(" + labelXpath + ")[1]")).getText(), "Weak");
+        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("(" + labelXpath + "/div)[1]")).getAttribute("style"), "background: rgb(221, 88, 29);");
 
-        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("("+labelXpath+")[2]")).getText(),"Limited");
-        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("("+labelXpath+"/div)[2]")).getAttribute("style"),"background: rgb(232, 149, 28);");
+        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("(" + labelXpath + ")[2]")).getText(), "Limited");
+        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("(" + labelXpath + "/div)[2]")).getAttribute("style"), "background: rgb(232, 149, 28);");
 
-        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("("+labelXpath+")[3]")).getText(),"Robust");
-        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("("+labelXpath+"/div)[3]")).getAttribute("style"),"background: rgb(234, 197, 80);");
+        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("(" + labelXpath + ")[3]")).getText(), "Robust");
+        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("(" + labelXpath + "/div)[3]")).getAttribute("style"), "background: rgb(234, 197, 80);");
 
-        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("("+labelXpath+")[4]")).getText(),"Advanced");
-        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("("+labelXpath+"/div)[4]")).getAttribute("style"),"background: rgb(219, 229, 163);");
+        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("(" + labelXpath + ")[4]")).getText(), "Advanced");
+        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("(" + labelXpath + "/div)[4]")).getAttribute("style"), "background: rgb(219, 229, 163);");
 
         String criticalControversiesXpath = "//button[@heap_perfchart_id='Materiality']/../../..//div[text()='Critical controversies']";
         assertTestCase.assertTrue(Driver.getDriver().findElement(By.xpath(criticalControversiesXpath)).isDisplayed());
 
     }
 
-    public boolean validateNoPopupIsDisplayedWhenClickedOnSubCategories(){
+    public boolean validateNoPopupIsDisplayedWhenClickedOnSubCategories() {
         Driver.getDriver().findElement(By.xpath("(//ul/li/section)[1]")).click();
-        try{
+        try {
             return !Driver.getDriver().findElement(By.xpath("//h2[@class='MuiTypography-root MuiTypography-h6']")).isDisplayed();
-        }catch(Exception e){
+        } catch (Exception e) {
             return true;
         }
     }
@@ -1008,8 +1091,8 @@ public class EntityClimateProfilePage extends PageBase {
         return highScore && lowScore;
     }
 
-    public void verifyLowMaterialityMatrixColumnProperties(){
-        for(WebElement element: lowMaterialityElements) {
+    public void verifyLowMaterialityMatrixColumnProperties() {
+        for (WebElement element : lowMaterialityElements) {
             Assert.assertTrue(Color.fromString(element.getCssValue("background-color")).asHex().equals("#ffffff"));
         }
     }
@@ -2212,6 +2295,74 @@ public class EntityClimateProfilePage extends PageBase {
     public void verifyComparisonChartLegendHasNumericvalue() {
         assertTestCase.assertTrue(NumberUtils.isParsable(Para_comparisonChartLegends.get(0).getText().split(":")[1].trim()), "Validate Legend has Numeric value");
         assertTestCase.assertTrue(NumberUtils.isParsable(Para_comparisonChartLegends.get(1).getText().split(":")[1].trim()), "Validate Legend has Numeric value");
+    }
+
+    public Boolean validateInfoIcon(String comapnyName) {
+        return getCompanyHeader(comapnyName).findElement(By.xpath("../*[name()='svg']")).isDisplayed();
+    }
+    public void openAboutDrawer(String comapnyName) {
+        getCompanyHeader(comapnyName).click();
+    }
+
+    public Boolean isAboutDrawerAvailable() {
+        return wait.until(ExpectedConditions.visibilityOf(aboutDrawerMainDiv)).isDisplayed();
+    }
+
+    public Boolean validateAboutHeader(String comapnyName) {
+        WebElement header = aboutDrawerMainDiv.findElement(By.xpath("header"));
+        return header.getText().split("\n")[0].equals("About " + comapnyName);
+    }
+
+    public void validateAboutDrawerDetails(String comapnyName) {
+        List<String> expectedsections = Arrays.asList("ISIN", "Orbis ID", "LEI", "Region", "Sector", "Model", "Company's Description - Coming Soon");
+        List<WebElement> detailDiv = aboutDrawerMainDiv.findElements(By.xpath("div/div"));
+        for (WebElement e : detailDiv) {
+            assertTestCase.assertTrue(expectedsections.contains(e.getText().split(":")[0]), "Validate " + e.getText() + " text");
+        }
+    }
+ public void validateCompanyNameHoverFunctionality(String CompanyName){
+        WebElement Company = getCompanyHeader(CompanyName);
+        BrowserUtils.hover(Company);
+        BrowserUtils.wait(1);
+        String color = Color.fromString(Company.findElement(By.xpath(".."))
+                .getCssValue("background-color")).asHex().toUpperCase();
+     System.out.println(color);
+        assertTestCase.assertTrue(color.equals("#EBF4FA")
+                ,"Validate Company Name hover functionality");
+ }
+
+    public void validatePhysicalClimateHazardUpdatedDate(String orbisID){
+        EntityClimateProfilePageQueries entityClimateProfilepagequeries = new EntityClimateProfilePageQueries();
+       // DatabaseDriver.createDBConnection();
+        String dbDate = getFormattedDate(entityClimateProfilepagequeries.getUpdatedDateforPhysicalClimateHazard(orbisID).substring(0,10),"MMMM d, yyyy");
+        if (!dbDate.equals("")) {
+            BrowserUtils.scrollTo(physicalClimateHazards);
+            validateUpdatedOndate(physicalClimateHazards.getText().split("\n")[3], dbDate);
+            navigateToPhysicalRisk();
+            BrowserUtils.scrollTo(PhysicalRisk_ClimateHazard_UpdatedDate_Span);
+            validateUpdatedOndate(PhysicalRisk_ClimateHazard_UpdatedDate_Span.getText(), dbDate);
+        }
+
+    }
+
+    public void validatePhysicalRiskManagementUpdatedDate(String orbisID){
+        EntityClimateProfilePageQueries entityClimateProfilepagequeries = new EntityClimateProfilePageQueries();
+        String dbDate = getFormattedDate(entityClimateProfilepagequeries.getUpdatedDateforPhysicalRiskManagement(orbisID),"MMMM d, yyyy");
+        if (!dbDate.equals("")) {
+            BrowserUtils.scrollTo(physicalRiskManagementWidgetDescription);
+            validateUpdatedOndate(physicalRiskManagementWidgetDescription.getText().split("\n")[1], dbDate);
+            navigateToPhysicalRisk();
+            BrowserUtils.scrollTo(PhysicalRisk_PhysicalRiskManagement_UpdatedDate_Span);
+            validateUpdatedOndate(PhysicalRisk_PhysicalRiskManagement_UpdatedDate_Span.getText(), dbDate);
+        }
+    }
+
+    public void validateUpdatedOndate(String updatedDateText, String dbDate){
+        assertTestCase.assertTrue(updatedDateText.contains("Updated on"), "Validating Date ");
+        String UIUpdateDate =  updatedDateText.split("on ")[1];
+        assertTestCase.assertTrue(isValidFormat("MMMM d, yyyy", UIUpdateDate), "Validating Date format");
+        assertTestCase.assertTrue(dbDate.equals(UIUpdateDate), "Validate Date from Database");
+
     }
 
 }
