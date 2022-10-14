@@ -10,7 +10,8 @@ import org.testng.annotations.Test;
 public class InvalidAuthorizationTests extends APITestBase {
 
     @Test(groups = {"api", "regression"}, dataProvider = "API Research Lines")
-    @Xray(test = {3324, 3325, 3326, 3327, 3328, 3329, 3330, 3331, 3332})
+    @Xray(test = {3324, 3325, 3326, 3327, 3328, 3329, 3330,  3332})
+    //3331 TCFD
     public void invalidTokenAuthorizationTest(String researchLine) {
         APIController apiController = new APIController();
         APIFilterPayload apiFilterPayload = new APIFilterPayload("all", "all", "03", "2021", "");
@@ -38,7 +39,8 @@ public class InvalidAuthorizationTests extends APITestBase {
     }
 
     @Test(groups = {"api", "regression"}, dataProvider = "API Research Lines")
-    @Xray(test = {3308, 3309, 3310, 3311, 3312, 3313, 3314, 3315, 3316})
+    @Xray(test = {3308, 3309, 3310, 3311, 3312, 3313, 3314,  3316})
+    //3315 TCFD
     public void noTokenAuthorizationTest(String researchLine) {
         APIController apiController = new APIController();
         apiController.setInvalid();
@@ -62,7 +64,7 @@ public class InvalidAuthorizationTests extends APITestBase {
             if (researchLine.equals("carbonfootprint"))
                 apiController.getPortfolioEmissionsResponse(portfolio_id, researchLine, apiFilterPayload).prettyPeek().then().assertThat().statusCode(401);
             if (researchLine.equals("marketrisk") || researchLine.equals("supplychainrisk") )
-                apiController.getPhysicalRiskUnderlyingDataMetricsResponse(portfolio_id, researchLine, apiFilterPayload).then().assertThat().statusCode(200);
+                apiController.getPhysicalRiskUnderlyingDataMetricsResponse(portfolio_id, researchLine, apiFilterPayload).then().assertThat().statusCode(401);
             APIFilterPayloadWithImpactFilter apiImpactFilterPayload = new APIFilterPayloadWithImpactFilter("all", "all", "03", "2021", "");
             apiController.getImpactDistributionResponse(portfolio_id, researchLine, apiImpactFilterPayload).then().assertThat().statusCode(401);
             apiController.getHistoryTablesResponse(portfolio_id, researchLine, apiFilterPayload).then().assertThat().statusCode(401);

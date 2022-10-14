@@ -109,10 +109,11 @@ public class DashboardAPIController extends APIController {
         return response;
     }
 
-    public Response verifyPortfolioAnalysisExcelExport() {
+    public Response verifyPortfolioAnalysisExcelExport(String portfolioId) {
         Response response = null;
         try {
             response = configSpec().when()
+                    .pathParam("portfolio_id",portfolioId)
                     .get(PortfolioAnalysisEndpoints.GET_PORTFOLIO_ANALYSIS_EXCEL_EXPORT);
 
             System.out.println(response.prettyPrint());
@@ -124,10 +125,11 @@ public class DashboardAPIController extends APIController {
         return response;
     }
 
-    public Response verifyPortfolioAnalysisUploadJsonUrl() {
+    public Response verifyPortfolioAnalysisUploadJsonUrl(String portfolioId) {
         Response response = null;
         try {
             response = configSpec().when()
+                    .pathParam("portfolio_id",portfolioId)
                     .get(PortfolioAnalysisEndpoints.GET_PORTFOLIO_ANALYSIS_JSON_UPLOAD);
 
             System.out.println(response.prettyPrint());

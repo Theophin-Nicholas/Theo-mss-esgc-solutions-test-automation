@@ -17,6 +17,6 @@ public class PortfolioAnalysisEndpoints {
     public final static String POST_PORTFOLIO_UNDERLYING_DATA_METRICS = "api/portfolio/{portfolio_id}/{research_line}/underlying-data-metrics";
     public final static String POST_PHYSICAL_RISK_UNDERLYING_DATA_METRICS_DETAILS = "api/portfolio/{portfolio_id}/{physical_risk}/underlying-data-metrics-details";
     public final static String POST_PORTFOLIO_EMISSIONS = "api/portfolio/{portfolio_id}/{research_line}/emissions";
-    public static String GET_PORTFOLIO_ANALYSIS_EXCEL_EXPORT = "/api/portfolio/excel-report";
-    public static String GET_PORTFOLIO_ANALYSIS_JSON_UPLOAD = "/api/portfolio/upload-json-url?fileName=Carbon%20Footprint_8-Jun-2022_1654699096466.json";
+    public static String GET_PORTFOLIO_ANALYSIS_EXCEL_EXPORT = "/api/portfolio/{portfolio_id}/excel-report";
+    public static String GET_PORTFOLIO_ANALYSIS_JSON_UPLOAD = "/api/portfolio/{portfolio_id}/upload-json-url?fileName=Carbon%20Footprint_8-Jun-2022_1654699096466.json";
 }
