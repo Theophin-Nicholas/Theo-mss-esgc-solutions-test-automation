@@ -1071,6 +1071,7 @@ public class EntityClimateProfilePage extends PageBase {
             String dateDB = dbRecordControversies.get(i).get("CONTROVERSY_EVENTS").toString();
             String month_name = "";
             try {
+                System.out.println("dateDB = " + dateDB);
                 Date date = sdf.parse(dateDB);
                 month_name = month_date.format(date);
             } catch (Exception e) {

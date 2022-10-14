@@ -40,8 +40,8 @@ public class AuthorizationTest extends APITestBase {
         }
 
     }
-
-    @Xray(test = {3333, 3334, 3335, 3336, 3337, 3338, 3339, 3340, 3341})
+//3340 TCFD
+    @Xray(test = {3333, 3334, 3335, 3336, 3337, 3338, 3339,  3341})
     @Test(groups = {"api", "regression"}, dataProvider = "API Research Lines")
     public void invalidPortfolioAuthorizationTest(String researchLine) {
         APIController apiController = new APIController();
