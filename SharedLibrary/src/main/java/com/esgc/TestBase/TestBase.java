@@ -8,8 +8,8 @@ import com.aventstack.extentreports.markuputils.MarkupHelper;
 import com.aventstack.extentreports.reporter.ExtentSparkReporter;
 import com.esgc.APIModels.TestCase;
 import com.esgc.Reporting.CustomAssertion;
+import com.esgc.Utilities.API.EntityProfilePageEndpoints;
 import com.esgc.Utilities.*;
-import com.esgc.Utilities.API.EntityPageEndpoints;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import org.apache.commons.lang.time.StopWatch;
@@ -141,7 +141,7 @@ public abstract class TestBase {
                     .header("Content-Type", "application/json")
                     .body("{\"orbis_id\":\"" + orbisId + "\"}")
                     .when()
-                    .post(EntityPageEndpoints.POST_HEADER);
+                    .post(EntityProfilePageEndpoints.POST_HEADER);
         } catch (Exception e) {
             System.out.println("Inside exception " + e.getMessage());
         }

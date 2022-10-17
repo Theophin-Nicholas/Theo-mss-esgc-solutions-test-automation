@@ -7,7 +7,7 @@ import com.esgc.APIModels.Dashboard.APIHeatMapPayload;
 import com.esgc.APIModels.Dashboard.APIHeatMapSinglePayload;
 import com.esgc.APIModels.Dashboard.APIPerformanceChartPayload;
 import com.esgc.Utilities.EndPoints.DashboardEndPoints;
-import com.esgc.Utilities.EndPoints.EntityProfilePageEndpoints;
+import com.esgc.Utilities.API.EntityProfilePageEndpoints;
 import com.esgc.Utilities.EndPoints.PortfolioAnalysisEndpoints;
 import io.restassured.RestAssured;
 import io.restassured.parsing.Parser;
