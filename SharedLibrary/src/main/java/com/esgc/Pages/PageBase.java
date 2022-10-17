@@ -63,7 +63,7 @@ public abstract class PageBase {
     @FindBy(xpath = "//li[text()='Portfolio Analysis']")
     public WebElement portfolioAnalysis;
 
-    @FindBy(xpath = "//li[text()='Portfolio Settings']")
+    @FindBy(xpath = "//li[text()='Portfolio Selection/Upload']")
     public WebElement portfolioSettings;
 
     @FindBy(xpath = "(//table[@id='table-id'])[1]/tbody/tr/td[1]")
@@ -112,6 +112,11 @@ public abstract class PageBase {
 
     @FindBy(xpath = "//a[@id='link-upload']")
     public WebElement portfolioReUpload;
+    @FindBy(xpath = "(//h2[normalize-space()='Import Portfolio'])[1]")
+    public WebElement importPortfolioPopUp;
+    @FindBy(xpath = "//h2[normalize-space()='Import Portfolio']//*[name()='svg']")
+    public WebElement closePortfolioPopUp;
+
 
     @FindBy(xpath = "//body/div[@role='presentation']/div/div/div/header/div[2]/div[2]")
     public WebElement portfolioNameWithStar;
@@ -2547,7 +2552,9 @@ public abstract class PageBase {
 
     public void selectPortfolio(String portfolioName) {
         try {
-            Driver.getDriver().findElement(By.xpath("//span[@title='" + portfolioName + "']")).click();
+            WebElement portfolio=Driver.getDriver().findElement(By.xpath("//span[@title='" + portfolioName + "']"));
+            BrowserUtils.scrollTo(portfolio);
+            portfolio.click();
             System.out.println("Portfolio found : " + portfolioName);
         } catch (Exception e) {
             System.out.println("Could not find the Portfolio");
