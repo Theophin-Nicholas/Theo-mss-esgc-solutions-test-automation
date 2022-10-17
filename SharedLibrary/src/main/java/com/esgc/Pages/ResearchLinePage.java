@@ -1029,10 +1029,21 @@ public class ResearchLinePage extends UploadPage {
         String xpath = "";
         if (dataType.toLowerCase().equals("pdf"))
             xpath = String.format("//li[contains(text(),'%s (%s)')]", researchLine, dataType);
-        else xpath = String.format("//li[contains(text(),'%s - %s')]", dataType, researchLine);
+        else {
+            xpath = String.format("//li[contains(text(),'%s - %s')]", dataType, researchLine);
+            if(researchLine.equals("ESG Assessments"))
+                xpath = String.format("//li[contains(text(),'%s')]", researchLine);
+        }
         System.out.println(xpath);
         WebElement exportOption = Driver.getDriver().findElement(By.xpath(xpath));
         wait.until(ExpectedConditions.elementToBeClickable(exportOption)).click();
+    }
+
+    public void verifyExportOptions(String researchLine) {
+        String pdfOptionXpath = "//li[starts-with(@id,'ExportDropdown')][@data-value='pdf'][text()='"+researchLine+" (pdf)']";
+        String excelOptionXpath = "//li[starts-with(@id,'ExportDropdown')][@data-value='individual'][text()='Data - "+researchLine+" (.xlsx)']";
+        wait.until(ExpectedConditions.numberOfElementsToBe(By.xpath(pdfOptionXpath), 1));
+        wait.until(ExpectedConditions.numberOfElementsToBe(By.xpath(excelOptionXpath), 1));
     }
 
     /**
