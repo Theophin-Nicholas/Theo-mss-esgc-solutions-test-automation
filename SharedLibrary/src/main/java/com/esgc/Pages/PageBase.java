@@ -1280,6 +1280,9 @@ public abstract class PageBase {
     public String getDataFromExportedFile(int rowNum, int columnNum, String researchLine) {
         String excelData = "";
         String sheetName = String.format("Summary %s", researchLine);
+        if(researchLine.equals("ESG Assessment")) {
+            sheetName = "Data - ESG";
+        }
         ExcelUtil excelUtil = new ExcelUtil(BrowserUtils.exportPath(researchLine), sheetName);
 
         excelData = excelUtil.getCellData(rowNum, columnNum);
