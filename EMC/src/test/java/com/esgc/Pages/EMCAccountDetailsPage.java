@@ -334,6 +334,7 @@ public class EMCAccountDetailsPage extends EMCBasePage {
 
     public boolean verifyApplication(String applicationName) {
         //System.out.println("Number of current applications = " + applicationsNamesList.size());
+        wait(applicationsNamesList, 10);
         for(WebElement application : applicationsNamesList) {
             if(application.getText().equals(applicationName)) {
                 System.out.println(applicationName + " application found");
@@ -378,9 +379,7 @@ public class EMCAccountDetailsPage extends EMCBasePage {
     }
     public void clickOnApplicationsTab() {
         System.out.println("clicking on applications tab");
-        BrowserUtils.scrollTo(applicationsTab);
         BrowserUtils.waitAndClick(applicationsTab, 20);
-        BrowserUtils.wait(3);
     }
     public void clickOnProductsTab() {
         System.out.println("clicking on products tab");
@@ -526,5 +525,10 @@ public class EMCAccountDetailsPage extends EMCBasePage {
     public void clickOnBackToUsersButton() {
         System.out.println("clicking on back to users button");
         BrowserUtils.waitForClickablility(backToUsersButton,5).click();
+    }
+
+    public void clickOnAssignApplicationButton() {
+        System.out.println("clicking on assign application button");
+        BrowserUtils.waitAndClick(assignApplicationsButton,10);
     }
 }

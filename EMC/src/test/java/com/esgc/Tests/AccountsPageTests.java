@@ -135,7 +135,7 @@ public class AccountsPageTests extends EMCUITestBase {
         assertTestCase.assertTrue(detailsPage.noApplicationMessage.isDisplayed(), "No Applications assigned message is displayed");
 
         //Click Assign Applications button on the top right of the section.
-        detailsPage.assignApplicationsButton.click();
+        detailsPage.clickOnAssignApplicationButton();
         BrowserUtils.waitForVisibility(detailsPage.assignApplicationsModalTitle, 5);
         assertTestCase.assertTrue(detailsPage.assignApplicationsModalTitle.isDisplayed(), "Assign Applications popup is displayed");
         BrowserUtils.waitForClickablility(detailsPage.doneButton, 5).click();
@@ -173,7 +173,7 @@ public class AccountsPageTests extends EMCUITestBase {
         detailsPage.applicationsTab.click();
         assertTestCase.assertTrue(detailsPage.applicationsTabTitle.isDisplayed(), "Applications Tab is displayed");
         //Click Assign Applications button on the top right of the section.
-        detailsPage.assignApplicationsButton.click();
+        detailsPage.clickOnAssignApplicationButton();
         BrowserUtils.waitForVisibility(detailsPage.assignApplicationsModalTitle, 5);
         assertTestCase.assertTrue(detailsPage.assignApplicationsModalTitle.isDisplayed(), "Assign Applications popup is displayed");
         BrowserUtils.waitForClickablility(detailsPage.doneButton, 5).click();
@@ -316,6 +316,7 @@ public class AccountsPageTests extends EMCUITestBase {
         navigateToAccountsPage("All entitlements", "users");
 
         EMCAccountDetailsPage detailsPage = new EMCAccountDetailsPage();
+        wait(detailsPage.addUserButton,1000);
         assertTestCase.assertTrue(detailsPage.addUserButton.isDisplayed(), "Users Tab is displayed");
         detailsPage.searchUser("External User");
         EMCAccountsEditUserPage editUserPage = new EMCAccountsEditUserPage();
@@ -333,6 +334,7 @@ public class AccountsPageTests extends EMCUITestBase {
     public void verifyEMCUserDetailsTest() {
         navigateToAccountsPage(accountName, "users");
         EMCAccountDetailsPage detailsPage = new EMCAccountDetailsPage();
+        wait(detailsPage.addUserButton,1000);
         assertTestCase.assertTrue(detailsPage.addUserButton.isDisplayed(), "Users Tab is displayed");
         detailsPage.searchUser("");//goes to first user
         EMCAccountsEditUserPage editUserPage = new EMCAccountsEditUserPage();
@@ -374,6 +376,7 @@ public class AccountsPageTests extends EMCUITestBase {
     public void verifySearchBoxOnUsersPageTest() {
         navigateToAccountsPage(accountName, "users");
         EMCAccountDetailsPage detailsPage = new EMCAccountDetailsPage();
+        wait(detailsPage.addUserButton,1000);
         assertTestCase.assertTrue(detailsPage.addUserButton.isDisplayed(), "Users Tab is displayed");
         assertTestCase.assertTrue(detailsPage.searchInput.isDisplayed(), "Search Box is displayed");
 
@@ -384,6 +387,7 @@ public class AccountsPageTests extends EMCUITestBase {
     public void verifySuspendUserTest() {
         navigateToAccountsPage("AutomationAccount", "users");
         EMCAccountDetailsPage detailsPage = new EMCAccountDetailsPage();
+        wait(detailsPage.addUserButton,1000);
         assertTestCase.assertTrue(detailsPage.addUserButton.isDisplayed(), "Users Tab is displayed");
         //erolvera.mx+333@gmail.com and Helloworld123 as Pass
 
@@ -524,7 +528,7 @@ public class AccountsPageTests extends EMCUITestBase {
         assertTestCase.assertTrue(detailsPage.popupDeleteButton.isDisplayed(), "Delete button is verified");
         assertTestCase.assertTrue(detailsPage.popupCancelButton.isDisplayed(), "Cancel button is verified");
         detailsPage.popupDeleteButton.click();
-        BrowserUtils.waitForVisibility(detailsPage.deleteMessage, 5);
+        //BrowserUtils.waitForVisibility(detailsPage.deleteMessage, 5);
         assertTestCase.assertTrue(detailsPage.deleteMessage.isDisplayed(), "User deleted message is displayed");
         BrowserUtils.waitForInvisibility(detailsPage.deleteMessage, 15);
         detailsPage.clickOnDetailsTab();
@@ -671,7 +675,7 @@ public class AccountsPageTests extends EMCUITestBase {
         assertTestCase.assertTrue(detailsPage.deleteApplication(applicationName), "Application is deleted");
         assertTestCase.assertFalse(detailsPage.verifyApplication(applicationName), "Application is not present");
 
-        BrowserUtils.waitForClickablility(detailsPage.assignApplicationsButton, 5).click();
+        detailsPage.clickOnAssignApplicationButton();
         assertTestCase.assertTrue(detailsPage.assignApplicationsModalTitle.isDisplayed(), "Assign Application Model is displayed");
         assertTestCase.assertTrue(detailsPage.assignApplicationsModalSearchInput.isDisplayed(), "Assign Application Model - Search Input is displayed");
         BrowserUtils.waitForClickablility(detailsPage.assignApplicationsModalSearchInput, 5).sendKeys(applicationName);
@@ -805,6 +809,7 @@ public class AccountsPageTests extends EMCUITestBase {
     public void verifyCreatingExternalAccountWithoutBeingActivatedTest() {
         navigateToAccountsPage(accountName, "users");
         EMCAccountDetailsPage detailsPage = new EMCAccountDetailsPage();
+        wait(detailsPage.addUserButton,100);
         assertTestCase.assertTrue(detailsPage.addUserButton.isDisplayed(), "Users Tab is displayed");
 
         //Click on Add User button
@@ -879,6 +884,7 @@ public class AccountsPageTests extends EMCUITestBase {
 
         EMCAccountDetailsPage detailsPage = new EMCAccountDetailsPage();
         //First, verify if application is added to the account
+        wait(detailsPage.applicationsNamesList,1000);
         if (!detailsPage.verifyApplication(applicationName)) {
             System.out.println(applicationName + " must be added to the account first");
             detailsPage.addApplication(applicationName);
@@ -911,6 +917,7 @@ public class AccountsPageTests extends EMCUITestBase {
 
         EMCAccountDetailsPage detailsPage = new EMCAccountDetailsPage();
         //First, verify if application is added to the account
+        wait(detailsPage.applicationsNamesList,1000);
         if (!detailsPage.verifyApplication(applicationName)) {
             System.out.println(applicationName + " must be added to the account first");
             detailsPage.addApplication(applicationName);
@@ -991,6 +998,7 @@ public class AccountsPageTests extends EMCUITestBase {
         String maUserName = "MA Test Account";
         EMCAccountDetailsPage detailsPage = new EMCAccountDetailsPage();
         //First, verify if application is added to the account
+        wait(detailsPage.applicationsNamesList,1000);
         if (!detailsPage.verifyApplication(applicationName)) {
             System.out.println(applicationName + " must be added to the account first");
             detailsPage.addApplication(applicationName);
@@ -1116,12 +1124,16 @@ public class AccountsPageTests extends EMCUITestBase {
         navigateToAccountsPage(accountName, "applications");
         EMCAccountDetailsPage detailsPage = new EMCAccountDetailsPage();
         assertTestCase.assertEquals(detailsPage.applicationsTabTitle.getText(), "Applications", "Account Details Page - AApplication Tab Title is verified");
+        wait(detailsPage.applicationsNamesList, 1000);
         if (detailsPage.verifyApplication(applicationName)) detailsPage.deleteApplication(applicationName);
+        wait(detailsPage.applicationsNamesList, 1000);
         if (detailsPage.verifyApplication(applicationName + 2)) detailsPage.deleteApplication(applicationName + 2);
-        BrowserUtils.waitForClickablility(detailsPage.assignApplicationsButton, 5).click();
+
+        detailsPage.clickOnAssignApplicationButton();
         assertTestCase.assertTrue(detailsPage.assignApplicationsModalTitle.isDisplayed(), "Account Details Page - Assign Applications Modal is displayed");
         assertTestCase.assertTrue(detailsPage.assignApplicationsModalSearchInput.isDisplayed(), "Account Details Page - Assign Applications Modal Search Box is displayed");
         detailsPage.searchInput.sendKeys(applicationName);
+        BrowserUtils.wait(5);
         assertTestCase.assertTrue(detailsPage.assignApplicationsModalAssignButtonsList.size() > 1, "Account Details Page - Assign Application modal - Multiple Assign Buttons are displayed");
         for (int i = 0; i < detailsPage.assignApplicationsModalAssignButtonsList.size(); i++) {
             BrowserUtils.waitForClickablility(detailsPage.assignApplicationsModalAssignButtonsList.get(i), 5).click();
@@ -1141,7 +1153,8 @@ public class AccountsPageTests extends EMCUITestBase {
         assertTestCase.assertTrue(detailsPage.verifyApplication(applicationName + 2), applicationName + 2 + " application is assigned to the account");
 
         //Validate that User can not See Assigned Applications in Assign Application Modal
-        BrowserUtils.waitForClickablility(detailsPage.assignApplicationsButton, 5).click();
+        detailsPage.clickOnAssignApplicationButton();
+        wait(detailsPage.assignApplicationsModalTitle,3);
         assertTestCase.assertTrue(detailsPage.assignApplicationsModalTitle.isDisplayed(), "Account Details Page - Assign Applications Modal is displayed");
         assertTestCase.assertTrue(detailsPage.assignApplicationsModalSearchInput.isDisplayed(), "Account Details Page - Assign Applications Modal Search Box is displayed");
         detailsPage.searchInput.sendKeys(applicationName);
@@ -1153,10 +1166,7 @@ public class AccountsPageTests extends EMCUITestBase {
     @Xray(test = {3378})
     public void verifyRequiredFieldsForAccountCreationTest() {
         EMCMainPage homePage = new EMCMainPage();
-
-        //Select Account in the left menu
-        homePage.openSidePanel();
-        homePage.clickAccountsButton();
+        homePage.goToAccountsPage();
 
         //User is able to see New Account Page
         EMCAccountsPage accountsPage = new EMCAccountsPage();
@@ -1200,13 +1210,11 @@ public class AccountsPageTests extends EMCUITestBase {
     @Xray(test = {4514})
     public void verifySearchForAccountTest() {
         EMCMainPage homePage = new EMCMainPage();
-
-        //Select Account in the left menu
-        homePage.openSidePanel();
-        homePage.clickAccountsButton();
+        homePage.goToAccountsPage();
 
         //User is able to see New Account Page
         EMCAccountsPage accountsPage = new EMCAccountsPage();
+        wait(accountsPage.searchInput, 1000);
         assertTestCase.assertEquals(accountsPage.pageTitle.getText(), "Accounts", "Accounts page is displayed");
         assertTestCase.assertTrue(accountsPage.searchInput.isDisplayed(), "Accounts Page - Search Input is displayed");
 
@@ -1280,6 +1288,7 @@ public class AccountsPageTests extends EMCUITestBase {
         assertTestCase.assertEquals(accountsPage.pageTitle.getText(), "Accounts", "Accounts page is displayed");
 
         //Click Create Account button
+        wait(accountsPage.createAccountButton, 1000);
         accountsPage.createAccountButton.click();
         EMCCreateAccountPage createAccountPage = new EMCCreateAccountPage();
         assertTestCase.assertEquals(createAccountPage.pageTitle.getText(), "Create a new Account", "Create Account page is displayed");
@@ -1329,6 +1338,7 @@ public class AccountsPageTests extends EMCUITestBase {
     public void verifySubscriberTypeInputForOldAccountTests() {
         navigateToAccountsPage("Test Account", "details");
         EMCAccountDetailsPage detailsPage = new EMCAccountDetailsPage();
+        wait(detailsPage.editButton, 1000);
         assertTestCase.assertTrue(detailsPage.editButton.isDisplayed(), "Edit button is displayed");
         assertTestCase.assertTrue(detailsPage.subscriberInput.isDisplayed(), "Subscriber input is displayed");
         BrowserUtils.waitForClickablility(detailsPage.editButton, 5).click();
@@ -1385,12 +1395,11 @@ public class AccountsPageTests extends EMCUITestBase {
 
         //assertTestCase.assertEquals(accountsPage.pageTitle.getText(), "Accounts", "Accounts page is displayed");
         System.out.println("Accounts page is displayed");
+        wait(accountsPage.searchInput, 15);
         //Search for the account where a New user will be created
         if (accountName.isEmpty()) return;
 
-        while(!accountsPage.verifyAccount(accountName)) {
-            BrowserUtils.wait(1);
-        }
+
         accountsPage.search(accountName);
         //assertTestCase.assertEquals(accountsPage.accountNames.size() > 0, true, "Account is displayed");
         System.out.println(accountsPage.accountNames.get(0).getText().toLowerCase());
@@ -1423,8 +1432,26 @@ public class AccountsPageTests extends EMCUITestBase {
         element.sendKeys(Keys.TAB);
     }
 
+    @Test(groups = {"EMC", "ui", "regression"}, description = "UI | EMC | Products | Verify that after remove Application Role, User can't get Access to the Products")
+    @Xray(test = {5678})
+    public void verifyRemoveApplicationRoleProductUserLoginTest() {
+        navigateToAccountsPage(accountName, "applications");
+        EMCAccountDetailsPage detailsPage = new EMCAccountDetailsPage();
+        if (!detailsPage.verifyApplication("MESG Platform - DEV - QA"))
+            detailsPage.assignApplication("MESG Platform - DEV - QA");
+        detailsPage.clickOnUsersTab();
+        assertTestCase.assertTrue(detailsPage.verifyUser("Active User"), "Active User is displayed");
+        detailsPage.searchUser("Active User");
+        EMCUserDetailsPage userPage = new EMCUserDetailsPage();
+        assertTestCase.assertEquals(userPage.userStatus.getText(), "Active", "User status is Active");
+        if (userPage.verifyApplicationRole("MESG Platform - DEV - QA"))
+            userPage.deleteApplicationRole("MESG Platform - DEV - QA");
+        assertTestCase.assertFalse(userPage.verifyApplicationRole("MESG Platform - DEV - QA"), "Application role is assigned");
+        assertTestCase.assertFalse(loginAndVerify(), "User is logged in");
+    }
+
     @Test(groups = {"EMC", "ui", "regression"}, description = "UI | EMC | Products | Verify that after assign Application Role, User get Access to the Products")
-    @Xray(test = {5646, 5678})
+    @Xray(test = {5646})
     public void verifyAssignApplicationRoleProductUserLoginTest() {
         navigateToAccountsPage(accountName, "applications");
         EMCAccountDetailsPage detailsPage = new EMCAccountDetailsPage();
@@ -1435,36 +1462,15 @@ public class AccountsPageTests extends EMCUITestBase {
         detailsPage.searchUser("Active User");
         EMCUserDetailsPage userPage = new EMCUserDetailsPage();
         assertTestCase.assertEquals(userPage.userStatus.getText(), "Active", "User status is Active");
-        userPage.clickOnApplicationRolesTab();
         if (!userPage.verifyApplicationRole("MESG Platform - DEV - QA"))
             userPage.assignApplicationRoles("MESG Platform - DEV - QA");
         assertTestCase.assertTrue(userPage.verifyApplicationRole("MESG Platform - DEV - QA"), "Application role is assigned");
         assertTestCase.assertTrue(loginAndVerify(), "User is logged in");
-
-        Driver.getDriver().get(Environment.EMC_URL);
-        LoginPageEMC loginPage = new LoginPageEMC();
-        loginPage.loginWithInternalUser();
-
-        navigateToAccountsPage(accountName, "users");
-
-
-        detailsPage = new EMCAccountDetailsPage();
-        detailsPage.searchUser("Active User");
-        userPage = new EMCUserDetailsPage();
-        userPage.clickOnApplicationRolesTab();
-        userPage.deleteApplicationRole("MESG Platform - DEV - QA");
-        assertTestCase.assertFalse(userPage.verifyApplicationRole("MESG Platform - DEV - QA"), "Application role is deleted");
-        assertTestCase.assertFalse(loginAndVerify(), "User is not logged in");
-        Driver.getDriver().get(Environment.EMC_URL);
-        loginPage = new LoginPageEMC();
-        loginPage.loginWithInternalUser();
-        navigateToAccountsPage("", "users");
     }
 
     public boolean loginAndVerify() {
         String currentTab = Driver.getDriver().getWindowHandle();
         JavascriptExecutor js = (JavascriptExecutor) Driver.getDriver();
-
         js.executeScript("window.open('" + Environment.URL + "','_blank');");
         Set<String> windows = Driver.getDriver().getWindowHandles();
         Driver.getDriver().switchTo().window(windows.toArray()[1].toString());
@@ -1478,8 +1484,11 @@ public class AccountsPageTests extends EMCUITestBase {
         } finally {
             BrowserUtils.wait(5);
             String link = Driver.getDriver().getCurrentUrl();
-            Driver.closeDriver();
+            Driver.getDriver().close();
+            Driver.getDriver().switchTo().window(currentTab);
+            BrowserUtils.wait(2);
             return link.endsWith("issuerworkspace");
         }
+
     }
 }
