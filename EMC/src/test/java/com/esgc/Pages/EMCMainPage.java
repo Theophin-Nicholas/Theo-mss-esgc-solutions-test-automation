@@ -112,12 +112,13 @@ public class EMCMainPage {
     public void goToAccountsPage() {
         try {
             openSidePanel();
+            System.out.println("Side panel is opened");
+            clickAccountsButton();
+            System.out.println("Accounts button is clicked");
         } catch (Exception e) {
             System.out.println("Side panel is not opened");
         }
-        System.out.println("Side panel is opened");
-        clickAccountsButton();
-        System.out.println("Accounts button is clicked");
+
     }
     public void goToUsersPage() {
         try {

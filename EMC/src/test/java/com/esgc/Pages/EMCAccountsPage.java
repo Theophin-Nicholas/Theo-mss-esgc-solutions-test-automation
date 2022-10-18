@@ -41,7 +41,7 @@ public class EMCAccountsPage extends EMCBasePage {
 
     public void search(String accountName) {
         if (!searchInput.isDisplayed()) System.out.println("searchInput is not Displayed!");
-        if(!searchInput.getAttribute("value").isEmpty()) clear(searchInput);
+        clear(searchInput);
         searchInput.sendKeys(accountName);
         searchButton.click();
         if (accountNames.size()==0) System.out.println("No account found!");
