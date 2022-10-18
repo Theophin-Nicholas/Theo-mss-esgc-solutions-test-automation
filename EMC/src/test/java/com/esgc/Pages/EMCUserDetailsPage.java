@@ -67,7 +67,7 @@ public class EMCUserDetailsPage extends EMCBasePage {
     @FindBy(xpath = "//li/div[1]//span")
     public List<WebElement> applicationRolesListFeaturesNames;
 
-    @FindBy(xpath = "//ul//button")
+    @FindBy(xpath = "//div[@aria-expanded='true']//..//button")
     public List<WebElement> applicationRolesListDeleteButtons;
 
     @FindBy(xpath = "//button[.='Assign application roles']")
@@ -87,19 +87,6 @@ public class EMCUserDetailsPage extends EMCBasePage {
 
     @FindBy(xpath = "//button[.='Back to Users']")
     public WebElement backToUserButton;
-
-    public void addApplicationRoles() {
-        BrowserUtils.waitForClickablility(assignApplicationRolesButton, 15).click();
-        BrowserUtils.waitForClickablility(newApplicationRolesList.get(0), 5).click();
-        BrowserUtils.wait(5);
-        BrowserUtils.waitForClickablility(newApplicationRolesAssignButtons.get(0), 10).click();
-        System.out.println("application assign button clicked");
-        BrowserUtils.wait(3);
-        BrowserUtils.waitForClickablility(doneButton, 15).click();
-        BrowserUtils.wait(3);
-        System.out.println("done button clicked");
-        BrowserUtils.waitForClickablility(applicationRolesTab, 10).click();
-    }
 
     public void addApplicationRoles(String applicationName) {
         BrowserUtils.waitForClickablility(assignApplicationRolesButton, 15).click();
@@ -125,7 +112,8 @@ public class EMCUserDetailsPage extends EMCBasePage {
     }
 
     public boolean verifyApplicationRole(String applicationName) {
-        BrowserUtils.wait(3);
+        BrowserUtils.waitForClickablility(applicationRolesTab, 10).click();
+        //wait(applicationRolesList.get(), 5);
         for (WebElement applicationRole : applicationRolesList) {
             if (applicationRole.getText().equals(applicationName)) {
                 System.out.println("Application role found");
@@ -138,8 +126,8 @@ public class EMCUserDetailsPage extends EMCBasePage {
 
     public boolean deleteApplicationRole(String applicationName) {
         System.out.println("Deleting all application roles for " + applicationName);
-        BrowserUtils.waitAndClick(applicationRolesTab, 10);
-        BrowserUtils.wait(5);
+        BrowserUtils.waitForClickablility(applicationRolesTab, 10).click();
+//        wait(applicationRolesList, 10);
         for (WebElement applicationRole : applicationRolesList) {
             if (applicationRole.getText().equals(applicationName)) {
                 System.out.println("Application Found");
