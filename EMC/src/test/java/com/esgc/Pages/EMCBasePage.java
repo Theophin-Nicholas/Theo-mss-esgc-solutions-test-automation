@@ -43,7 +43,7 @@ public abstract class EMCBasePage {
         for (int i = 0; i < seconds; i++) {
             try {
                 if (elements.size() > 0) {
-                    System.out.println("elements = " + elements.size());
+                    System.out.println("Found the list after " + i + " seconds");
                     return;
                 }
             } catch (Exception e) {

@@ -128,12 +128,16 @@ public class LoginPageEMC extends PageBase {
      * @param password
      */
     public void loginWithParams(String userName, String password) {
+        Driver.getDriver().manage().window().maximize();
+
         wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(userName, Keys.ENTER);
         wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(password);
 //        if (!termsAndConditionsCheckBox.isSelected())
 //            wait.until(ExpectedConditions.visibilityOf(termsAndConditionsLabel)).click();
         wait.until(ExpectedConditions.visibilityOf(loginButton)).click();
         System.out.println("Login with params");
+        Driver.getDriver().manage().window().maximize();
+
     }
 
     /**
@@ -142,10 +146,13 @@ public class LoginPageEMC extends PageBase {
      * Credentials will be retrieved from properties files
      */
     public void loginWithInternalUser() {
+        Driver.getDriver().manage().window().maximize();
+        System.out.println("Login with internal user");
         wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.INTERNAL_USER_USERNAME, Keys.ENTER);
         if (!ConfigurationReader.getProperty("environment").equalsIgnoreCase("prod")) {
             wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.INTERNAL_USER_PASSWORD, Keys.ENTER);
         }
+        Driver.getDriver().manage().window().maximize();
     }
 
     public void loginEMCInternal() {
