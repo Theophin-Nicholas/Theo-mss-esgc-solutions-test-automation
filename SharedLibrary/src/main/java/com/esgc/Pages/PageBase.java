@@ -317,10 +317,10 @@ public abstract class PageBase {
     public WebElement exportPdf;
 
     // =======================Search Box elements for portfolio Analysis page =======
-    @FindBy(xpath = "//div[@style = 'display: flex; cursor: pointer; margin-right: 14px; margin-top: 8px;']")
+    @FindBy(xpath = "//div[@heap_id='search']//*[name()='svg']")
     public WebElement searchIconPortfolioPage;
 
-    @FindBy(xpath = "//div[@style = 'display: flex; cursor: pointer; margin-right: 14px; margin-top: 8px;']")
+    @FindBy(xpath = "//div[@heap_id='search']//*[name()='svg']")
     List<WebElement> searchIconPortfolioPages;
 
     @FindBy(id = "platform-search-test-id")
@@ -1741,7 +1741,7 @@ public abstract class PageBase {
             // menuList.get(0).findElement(By.xpath("span")).click();
             //Validating that menu list is closed and background page is still on
             waitForDataLoadCompletion();
-            Assert.assertTrue(menuList.size()==1 && Driver.getDriver().getCurrentUrl().equals(url), "Menu is still displayed and is not focused on main page");
+            Assert.assertTrue(menuList.size() == 1 && Driver.getDriver().getCurrentUrl().equals(url), "Menu is still displayed and is not focused on main page");
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -1765,6 +1765,9 @@ public abstract class PageBase {
                 case "Market Risk":
                 case "Supply Chain Risk":
                     whatToValidate = "Updates as of " + monthDate + ", Impact, and Current Leaders/Laggards";
+                    break;
+                case "Temperature Alignment":
+                    whatToValidate = "Impact";
                     break;
                 default:
                     whatToValidate = "Updates in " + monthDate + ", Impact, and Current Leaders/Laggards";
@@ -2170,6 +2173,7 @@ public abstract class PageBase {
     }
 
     public void navigateToFirstEntity(String nameOfEntity) {
+        BrowserUtils.isElementVisible(searchIconPortfolioPage, 5);
         searchIconPortfolioPage.click();
         searchBarOfPortfolio.sendKeys(nameOfEntity);
         BrowserUtils.wait(3);
@@ -2495,7 +2499,7 @@ public abstract class PageBase {
     public void selectPortfolio(String portfolioName) {
         try {
             Driver.getDriver().findElement(By.xpath("//span[@title='" + portfolioName + "']")).click();
-            System.out.println("Portfolio found : "+portfolioName);
+            System.out.println("Portfolio found : " + portfolioName);
         } catch (Exception e) {
             System.out.println("Could not find the Portfolio");
             return;
@@ -2519,7 +2523,7 @@ public abstract class PageBase {
 
     public void validatePortfolioNameNotChangedAfterUpdateAndClickOutside(String OriginalPortFolioName) {
         updatePortfolio(OriginalPortFolioName + "111");
-       // BrowserUtils.wait(10);
+        // BrowserUtils.wait(10);
         closeMenuByClickingOutSide();
         clickMenu();
         portfolioSettings.click();
