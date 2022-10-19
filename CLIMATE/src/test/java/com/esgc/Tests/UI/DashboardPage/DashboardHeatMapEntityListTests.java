@@ -37,11 +37,13 @@ public class DashboardHeatMapEntityListTests extends UITestBase {
         assertTestCase.assertTrue(dashboardPage.heatMapNoEntityWidget.isDisplayed(),
                 "Verified the widget doesn't show anything before a cell is selected.");
         System.out.println("heatMapNoEntityWidget displayed..");
+        dashboardPage.heatMapResearchLines.get(0).click();
         //Click on any cell from the heatmap
         /*The entity list is updated and the records (companies) which meet the criteria are now displayed in descending
         order based on percentage of investment on the same.*/
         verifyCells();
         System.out.println("verifyCells(); passed");
+
         for (int i = 2; i < dashboardPage.heatMapResearchLines.size(); i++) {
             //De-select a research line from the heatmap section
             dashboardPage.heatMapResearchLines.get(i).click();
@@ -50,6 +52,17 @@ public class DashboardHeatMapEntityListTests extends UITestBase {
         }
     }
 
+    @Test(groups = {"dashboard", "ui", "smoke"})
+    @Xray(test = {9271})
+    public void verifyHeatMapDrawer() {
+        //Verify that user is able to close drawer by clicking outside of drawer
+        DashboardPage dashboardPage = new DashboardPage();
+        if (!dashboardPage.verifyPortfolioName.getText().equalsIgnoreCase("Sample Portfolio"))
+            dashboardPage.selectPortfolioByNameFromPortfolioSelectionModal("Sample Portfolio");
+        //Navigate to the heatmap section
+        BrowserUtils.scrollTo(dashboardPage.heatMapResearchLines.get(0));
+        verifyDrawer();
+    }
     @Test(groups = {"dashboard", "ui", "regression"})
     @Xray(test = {4784, 4785, 4786, 4787, 4788, 4789, 4798, 4799, 6208, 7899, 7900, 9266})
     public void DashboardUIHeatMapTest() {
@@ -418,6 +431,24 @@ public class DashboardHeatMapEntityListTests extends UITestBase {
                 assertTestCase.assertEquals(dashboardPage.heatMapWidgetXIndicator.getText()
                         , dashboardPage.heatMapXAxisIndicators.get(j).getText(),
                         "Cell X Axis indicator vs Widget X axis indicator verified");
+            }
+        }
+    }
+    public void verifyDrawer() {
+        DashboardPage dashboardPage = new DashboardPage();
+        int counter = 0;
+        for (int i = 0; i < dashboardPage.heatMapYAxisIndicators.size(); i++) {
+            for (int j = 0; j < dashboardPage.heatMapXAxisIndicators.size(); j++) {
+                System.out.println(counter);
+                System.out.println("j " + j);
+                BrowserUtils.scrollTo(dashboardPage.heatMapCells.get(counter));
+                String expPercentage = dashboardPage.heatMapCells.get(counter).getText();
+                BrowserUtils.wait(1);
+                dashboardPage.heatMapCells.get(counter).click();
+                counter++;
+                if (expPercentage.equals("0%")) continue;
+                BrowserUtils.waitForVisibility(dashboardPage.heatMapWidgetTitle,10);
+               Driver.getDriver().findElement(By.xpath("//div[normalize-space()='Analyze Companies by Range']")).click();
             }
         }
     }
