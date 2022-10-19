@@ -7,6 +7,7 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
 
+import java.util.List;
 import java.util.Set;
 
 public class LoginPage extends PageBase {
@@ -17,7 +18,8 @@ public class LoginPage extends PageBase {
 
     @FindBy(id = "okta-signin-submit")
     public WebElement loginButton;
-
+    @FindBy(id = "idp-discovery-submit")
+    public List<WebElement> loginButtons;
     @FindBy(id = "idp-discovery-username")
     public WebElement usernameBox;
 
