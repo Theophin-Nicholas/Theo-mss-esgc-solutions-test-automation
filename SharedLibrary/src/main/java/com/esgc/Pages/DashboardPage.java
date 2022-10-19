@@ -58,7 +58,8 @@ public class DashboardPage extends UploadPage {
     public WebElement methodologyPopup_Link_Methodology20;
     @FindBy(xpath = "//a[@id='link-link-test-id-3']")
     public WebElement methodologyPopup_Link_RiskAssessmentts;
-
+    @FindBy(xpath = "//div[contains(text(),'Viewing')]")
+    public WebElement regionTitleInStickyHeader;
 
     @FindBy(xpath = "//a[text()='hide']")
     public WebElement hideLink;
@@ -393,7 +394,7 @@ public class DashboardPage extends UploadPage {
     }
 
     public void selectViewMethodologies(){
-        BrowserUtils.waitForInvisibility(btnViewMethodologies, 50);
+      //  BrowserUtils.waitForInvisibility(btnViewMethodologies, 50);
         btnViewMethodologies.click();
     }
 
