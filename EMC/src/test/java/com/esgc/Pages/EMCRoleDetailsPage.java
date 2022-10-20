@@ -72,7 +72,7 @@ public class EMCRoleDetailsPage extends EMCBasePage {
     @FindBy(xpath = "//button[.='Assign members']")
     public WebElement assignMembersButton;
 
-    @FindBy(xpath = "//li//span")
+    @FindBy(xpath = "//li//p/../span")
     public List<WebElement> memberNamesList;
 
     @FindBy(xpath = "//li//p")
@@ -179,7 +179,48 @@ public class EMCRoleDetailsPage extends EMCBasePage {
         BrowserUtils.wait(3);
         assignMemberCheckBoxes.get(0).click();
         BrowserUtils.waitForClickablility(assignButton,5).click();
-        BrowserUtils.waitForClickablility(detailsTab, 15).click();
-        BrowserUtils.waitForClickablility(permissionsTab, 5).click();
+        BrowserUtils.wait(3);
+        detailsTab.click();
+        BrowserUtils.wait(1);
+        permissionsTab.click();
+        BrowserUtils.wait(3);
+    }
+
+    public boolean verifyUser(String userName) {
+        System.out.println("Verifying user " + userName);
+        for (WebElement member : memberNamesList) {
+            BrowserUtils.scrollTo(member);
+            if (member.getText().equals(userName)) {
+                System.out.println("User " + userName + " found");
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void assignMember(String userName) {
+        System.out.println("Assigning member " + userName);
+        BrowserUtils.scrollTo(assignMembersButton);
+        BrowserUtils.waitForClickablility(assignMembersButton,5).click();
+        assignMemberSearchInput.sendKeys(userName);
+        BrowserUtils.wait(3);
+        assignMemberCheckBoxes.get(0).click();
+        BrowserUtils.waitForClickablility(assignButton,5).click();
+        BrowserUtils.wait(3);
+        detailsTab.click();
+        BrowserUtils.wait(1);
+        usersTab.click();
+        BrowserUtils.wait(3);
+    }
+
+    public void deleteMember(String userName) {
+        System.out.println("Deleting member " + userName);
+        for (WebElement member : memberNamesList) {
+            BrowserUtils.scrollTo(member);
+            if (member.getText().equals(userName)) {
+                memberDeleteButtons.get(memberNamesList.indexOf(member)).click();
+//                break;
+            }
+        }
     }
 }

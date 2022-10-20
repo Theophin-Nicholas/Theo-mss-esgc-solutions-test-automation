@@ -1,7 +1,7 @@
 package com.esgc.Test.API;
 
-import com.esgc.APIModels.EntityPage.SectorDriversWrapper;
-import com.esgc.Controllers.EntityIssuerPageController.EntityPageAPIController;
+import com.esgc.APIModels.EntityIssuerPage.SectorDriversWrapper;
+import com.esgc.Controllers.EntityIssuerPageController.EntityIssuerPageAPIController;
 import com.esgc.Test.TestBases.EntityIssuerPageTestBase;
 import com.esgc.TestBase.DataProviderClass;
 import com.esgc.Utilities.Xray;
@@ -19,7 +19,7 @@ public class SectorDriversAPITestP3 extends EntityIssuerPageTestBase {
     @Xray(test = {5867})
     public void validateSectorDriversAPIResponse(String userId, String password,String orbisId){
         getEntityPageAccessTokenLoginWithParameter(userId,password);
-        EntityPageAPIController controller = new EntityPageAPIController();
+        EntityIssuerPageAPIController controller = new EntityIssuerPageAPIController();
         Response response = controller.getSectorDrivers(orbisId);
         response.as(SectorDriversWrapper[].class);
         response.then().log().all();

@@ -3,8 +3,8 @@ package com.esgc.Tests.API.PortfolioAnalysis;
 import com.esgc.APIModels.APIFilterPayload;
 import com.esgc.Controllers.APIController;
 import com.esgc.Tests.TestBases.APITestBase;
-import com.esgc.Utilities.Xray;
 import com.esgc.Utilities.APIUtilities;
+import com.esgc.Utilities.Xray;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
@@ -15,7 +15,8 @@ import static io.restassured.RestAssured.requestSpecification;
 
 public class PortfolioDistributionTest extends APITestBase {
     @Test(groups = {"api", "regression"}, dataProvider = "API Research Lines")
-    @Xray(test = {3106, 2539, 2697, 2303, 570})
+    @Xray(test = { 2539, 2697, 2303, 570})
+    //3106 Energy Transition
     public void APIPortfolioDistributionTest(@Optional String researchLine) {
         String user_id = APIUtilities.userID();
         APIController apiController = new APIController();
@@ -35,7 +36,8 @@ public class PortfolioDistributionTest extends APITestBase {
     }
 
     @Test(groups = {"api", "regression"}, dataProvider = "API Research Lines")
-    @Xray(test = {2698, 3108, 2540, 2304, 572})
+    @Xray(test = {2698,  2540, 2304, 572})
+    //3108 Energy Transition
     public void APIPortfolioDistributionNegativeTest(@Optional String researchLine) {
         String user_id = APIUtilities.userID();
         APIController apiController = new APIController();
