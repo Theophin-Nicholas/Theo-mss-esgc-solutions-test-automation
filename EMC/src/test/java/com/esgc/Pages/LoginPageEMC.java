@@ -1,6 +1,8 @@
 package com.esgc.Pages;
 
 import com.esgc.Utilities.BrowserUtils;
+import com.esgc.Utilities.ConfigurationReader;
+import com.esgc.Utilities.Driver;
 import com.esgc.Utilities.Environment;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
@@ -126,12 +128,16 @@ public class LoginPageEMC extends PageBase {
      * @param password
      */
     public void loginWithParams(String userName, String password) {
+        Driver.getDriver().manage().window().maximize();
+
         wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(userName, Keys.ENTER);
         wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(password);
-     /*   if (!termsAndConditionsCheckBox.isSelected())
-            wait.until(ExpectedConditions.visibilityOf(termsAndConditionsLabel)).click();*/
+//        if (!termsAndConditionsCheckBox.isSelected())
+//            wait.until(ExpectedConditions.visibilityOf(termsAndConditionsLabel)).click();
         wait.until(ExpectedConditions.visibilityOf(loginButton)).click();
         System.out.println("Login with params");
+        Driver.getDriver().manage().window().maximize();
+
     }
 
     /**
@@ -140,16 +146,21 @@ public class LoginPageEMC extends PageBase {
      * Credentials will be retrieved from properties files
      */
     public void loginWithInternalUser() {
+        Driver.getDriver().manage().window().maximize();
+        System.out.println("Login with internal user");
         wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.INTERNAL_USER_USERNAME, Keys.ENTER);
-        if (!Environment.INTERNAL_USER_USERNAME.contains("moodys.com")) {
+        if (!ConfigurationReader.getProperty("environment").equalsIgnoreCase("prod")) {
             wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.INTERNAL_USER_PASSWORD, Keys.ENTER);
         }
+        Driver.getDriver().manage().window().maximize();
     }
 
     public void loginEMCInternal() {
+        Driver.getDriver().manage().window().maximize();
         wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.INTERNAL_USER_USERNAME, Keys.ENTER);
         //wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.INTERNAL_USER_PASSWORD, Keys.ENTER);
         System.out.println("Logged in to Prod with Authorized User");
+        Driver.getDriver().manage().window().maximize();
     }
     public void loginWithWrongPass() {
         wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.INTERNAL_USER_USERNAME, Keys.ENTER);
@@ -169,11 +180,12 @@ public class LoginPageEMC extends PageBase {
     }
 
     public void loginEMCWithParams(String userName, String password) {
+        Driver.getDriver().manage().window().maximize();
         wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(userName, Keys.ENTER);
         BrowserUtils.wait(2);
         wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(password);
         wait.until(ExpectedConditions.visibilityOf(loginButton)).click();
-
+        Driver.getDriver().manage().window().maximize();
     }
 }
 
