@@ -164,7 +164,9 @@ public class DataProviderClass {
 
         return new Object[][]{
                 {"Apple, Inc."},
-                {"AT&T, Inc."},
+                {"Samsung Securities Co., Ltd."},
+                {"Alibaba Health Information Technology Ltd."},
+                {"Development Bank of Japan, Inc."},
         };
     }
 
