@@ -1,6 +1,7 @@
 package com.esgc.Tests.UI.EntityClimateProfile;
 
-import com.esgc.APIModels.EntityHeader;
+import com.esgc.APIModels.EntityProfilePageModels.EntityHeader;
+import com.esgc.Controllers.EntityPage.EntityProfileClimatePageAPIController;
 import com.esgc.Pages.EntityClimateProfilePage;
 import com.esgc.Pages.ResearchLinePage;
 import com.esgc.TestBase.DataProviderClass;
@@ -154,7 +155,8 @@ public class EntityClimateProfile extends UITestBase {
         entityProfilePage.searchAndLoadClimateProfilePage(orbisId);
         getExistingUsersAccessTokenFromUI();
         BrowserUtils.wait(2);
-        List<EntityHeader> list = Arrays.asList(getHeaderAPI(orbisId).as(EntityHeader[].class));
+        EntityProfileClimatePageAPIController apiController = new EntityProfileClimatePageAPIController();
+        List<EntityHeader> list = Arrays.asList(apiController.geCompanyHeaderAPIResponse(orbisId).as(EntityHeader[].class));
         String l3ApiValue = list.get(0).getMesg_sector();
         l3ApiValue="Sector: "+l3ApiValue;
         System.out.println("l3ApiValue = " + l3ApiValue);

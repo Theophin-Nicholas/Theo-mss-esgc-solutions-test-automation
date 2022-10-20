@@ -1,6 +1,7 @@
 package com.esgc.Pages;
 
 
+import com.esgc.Reporting.CustomAssertion;
 import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.Driver;
 import com.esgc.Utilities.EntityIssuerESGSubcategoriesDescriptions;
@@ -30,6 +31,8 @@ import static org.openqa.selenium.By.xpath;
 
 
 public class EntityIssuerPage extends PageBase {
+
+    protected CustomAssertion assertTestCase = new CustomAssertion();
 
     //============ Sector curve
     @FindBy(xpath = "//div[contains(@id,'highchart')]")
