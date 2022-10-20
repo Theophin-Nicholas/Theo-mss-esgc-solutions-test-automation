@@ -1,6 +1,6 @@
 package com.esgc.Tests.UI.EntityClimateProfile;
 
-import com.esgc.APIModels.EntityPage.EntityPageSummaryCarbonFootprintMain;
+import com.esgc.APIModels.EntityProfilePageModels.SummarySection.EntityPageSummaryCarbonFootprintMain;
 import com.esgc.Controllers.EntityPage.EntityProfileClimatePageAPIController;
 import com.esgc.Pages.EntityClimateProfilePage;
 import com.esgc.Pages.LoginPage;

@@ -3,11 +3,7 @@ package com.esgc.Tests.UI.PortfolioAnalysisPage;
 import com.esgc.Pages.PortfolioAnalysisPage.PhysicalRiskPages.PhysicalRiskManagementPages.PhysicalRiskManagementPage;
 import com.esgc.Pages.ResearchLinePage;
 import com.esgc.Tests.TestBases.UITestBase;
-import com.esgc.Utilities.BrowserUtils;
-import com.esgc.Utilities.ResearchLineColors;
 import com.esgc.Utilities.Xray;
-import org.openqa.selenium.support.Color;
-import org.testng.Assert;
 import org.testng.annotations.Test;
 
 public class PhysicalRiskManagementTests extends UITestBase {

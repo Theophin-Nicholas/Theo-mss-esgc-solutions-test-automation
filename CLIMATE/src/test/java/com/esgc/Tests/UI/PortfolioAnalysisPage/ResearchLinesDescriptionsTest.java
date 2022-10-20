@@ -19,7 +19,7 @@ public class ResearchLinesDescriptionsTest extends UITestBase {
  */
 
     @Test(groups = {"regression", "ui", "smoke", "esg"}, dataProvider = "Descriptions")
-    @Xray(test = {3918,6934})
+    @Xray(test = {3918,6934,6502})
     public void verifyDescriptions(String page, String description, Integer... testCases) {
 
         ResearchLinePage researchLinePage = new ResearchLinePage();
