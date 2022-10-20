@@ -435,6 +435,10 @@ public class ResearchLinePage extends UploadPage {
     @FindBy(xpath = "//div[@id='portfolio_box']")
     public WebElement EsgPortfolioBox;
 
+    @FindBy(xpath = "//div[@id='benchmark_box']")
+    public WebElement EsgBenchmarkBox;
+
+
     @FindBy(xpath = "//div[@id='cardInfo_box']")
     public WebElement esgCardInfoBox;
 
@@ -481,6 +485,9 @@ public class ResearchLinePage extends UploadPage {
     //Sector and Geographic Distribution Section Elements
     @FindBy(xpath = "(//div[.='Sector and Geographic Distribution'])")
     public WebElement geoSectionTitle;
+
+    @FindBy(xpath = "(//div[text()='Sector and Geographic Distribution']/../following-sibling::div[1])")
+    public WebElement geoSectionTreemap;
 
     @FindBy(xpath = "//table[@id='ESGTable']//th")
     public List<WebElement> geoTableHeaders;
@@ -1022,10 +1029,21 @@ public class ResearchLinePage extends UploadPage {
         String xpath = "";
         if (dataType.toLowerCase().equals("pdf"))
             xpath = String.format("//li[contains(text(),'%s (%s)')]", researchLine, dataType);
-        else xpath = String.format("//li[contains(text(),'%s - %s')]", dataType, researchLine);
+        else {
+            xpath = String.format("//li[contains(text(),'%s - %s')]", dataType, researchLine);
+            if(researchLine.equals("ESG Assessments"))
+                xpath = String.format("//li[contains(text(),'%s')]", researchLine);
+        }
         System.out.println(xpath);
         WebElement exportOption = Driver.getDriver().findElement(By.xpath(xpath));
         wait.until(ExpectedConditions.elementToBeClickable(exportOption)).click();
+    }
+
+    public void verifyExportOptions(String researchLine) {
+        String pdfOptionXpath = "//li[starts-with(@id,'ExportDropdown')][@data-value='pdf'][text()='"+researchLine+" (pdf)']";
+        String excelOptionXpath = "//li[starts-with(@id,'ExportDropdown')][@data-value='individual'][text()='Data - "+researchLine+" (.xlsx)']";
+        wait.until(ExpectedConditions.numberOfElementsToBe(By.xpath(pdfOptionXpath), 1));
+        wait.until(ExpectedConditions.numberOfElementsToBe(By.xpath(excelOptionXpath), 1));
     }
 
     /**
@@ -2465,6 +2483,28 @@ public class ResearchLinePage extends UploadPage {
         return true;
     }
 
+    public void verifyColorLegendOfScoreCategory() {
+        String xpath = "//div[text()='Physical Risk Hazards: Operations Risk']//span[text()='0-19']/div";
+        String actualColor = Driver.getDriver().findElement(By.xpath(xpath)).getAttribute("style");
+        assertTestCase.assertEquals(actualColor, "background: rgb(79, 163, 205);");
+
+        xpath = "//div[text()='Physical Risk Hazards: Operations Risk']//span[text()='20-39']/div";
+        actualColor = Driver.getDriver().findElement(By.xpath(xpath)).getAttribute("style");
+        assertTestCase.assertEquals(actualColor, "background: rgb(141, 163, 183);");
+
+        xpath = "//div[text()='Physical Risk Hazards: Operations Risk']//span[text()='40-59']/div";
+        actualColor = Driver.getDriver().findElement(By.xpath(xpath)).getAttribute("style");
+        assertTestCase.assertEquals(actualColor, "background: rgb(169, 137, 142);");
+
+        xpath = "//div[text()='Physical Risk Hazards: Operations Risk']//span[text()='60-79']/div";
+        actualColor = Driver.getDriver().findElement(By.xpath(xpath)).getAttribute("style");
+        assertTestCase.assertEquals(actualColor, "background: rgb(192, 105, 96);");
+
+        xpath = "//div[text()='Physical Risk Hazards: Operations Risk']//span[text()='80-100']/div";
+        actualColor = Driver.getDriver().findElement(By.xpath(xpath)).getAttribute("style");
+        assertTestCase.assertEquals(actualColor, "background: rgb(218, 73, 48);");
+    }
+
     public boolean verifyPhysicalRiskHazardsDrawers(String riskHazard, String topic) {
         System.out.println("riskHazard = " + riskHazard);
         System.out.println("topic = " + topic);
@@ -2559,6 +2599,24 @@ public class ResearchLinePage extends UploadPage {
 
         assertTestCase.assertTrue(Driver.getDriver().findElement(By.xpath("("+labelXpath+")[1]")).getCssValue("font-size").equals("10px"));
 
+
+    }
+
+    public void validatePhysicalRiskMgmtLegend(){
+
+        String labelXpath = "//div[contains(text(),'Physical Risk Management Score:')]//span";
+
+        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("("+labelXpath+")[1]")).getText(),"Advanced");
+        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("("+labelXpath+"/div)[1]")).getAttribute("style"),"background: rgb(34, 149, 149);");
+
+        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("("+labelXpath+")[2]")).getText(),"Robust");
+        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("("+labelXpath+"/div)[2]")).getAttribute("style"),"background: rgb(90, 151, 114);");
+
+        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("("+labelXpath+")[3]")).getText(),"Limited");
+        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("("+labelXpath+"/div)[3]")).getAttribute("style"),"background: rgb(175, 157, 63);");
+
+        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("("+labelXpath+")[4]")).getText(),"Weak");
+        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("("+labelXpath+"/div)[4]")).getAttribute("style"),"background: rgb(223, 161, 36);");
 
     }
 
@@ -2917,6 +2975,75 @@ public class ResearchLinePage extends UploadPage {
         for (int i = 0; i < e.size(); i++) {
             assertTestCase.assertTrue(Categories.contains(e.get(i).getText()), "Validate model values");
         }
+    }
+
+    public Boolean ValidateifEsgBenchmarkPortfolioBoxIsDisplayed() {
+        return wait.until(ExpectedConditions.visibilityOf(EsgBenchmarkBox)).isDisplayed();
+    }
+
+    public boolean IsBenchmarkLableAvailable() {
+        try {
+            WebElement e = EsgBenchmarkBox.findElement(By.xpath("span"));
+           return wait.until(ExpectedConditions.visibilityOf(e)).getText().equals("Benchmark");
+
+        } catch (Exception e) {
+            System.out.println("Failed");
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean IsBenchmarkScoreCategoryAvailable() {
+        try {
+            WebElement e = EsgBenchmarkBox.findElement(By.xpath("div[1]/div[1]/div/span"));
+            List<String> list =  Arrays.asList(new String[]{"Advanced","Robust","Limited","Weak"});
+            return list.contains(wait.until(ExpectedConditions.visibilityOf(e)).getText());
+
+        } catch (Exception e) {
+            System.out.println("Failed");
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean IsBenchmarkCoverageSectionAvailableAndMatchesWithPattern() {
+        try {
+            WebElement e = EsgBenchmarkBox.findElement(By.xpath("div[1]/div[2]/a"));
+            String pattern = "Coverage: \\d+ companies; (?:\\d+(?:\\.\\d*)?|\\.\\d+)% investments";
+            return e.getText().matches(pattern) ;
+
+        } catch (Exception e) {
+            System.out.println("Failed");
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public void validateBenchMarkDistributionSection() {
+        try {
+            WebElement DistibutionSection = EsgBenchmarkBox.findElement(By.xpath("div[2]"));
+            assertTestCase.assertTrue(DistibutionSection.isDisplayed(),"Validate that Benchmark Distribution section is available");
+            assertTestCase.assertTrue(DistibutionSection.findElement(By.xpath("div")).getText().equals("Benchmark Distribution"));
+            WebElement DistibutionSection_Table = DistibutionSection.findElement(By.xpath("//table"));
+            WebElement DistibutionSection_Table_Header = DistibutionSection_Table.findElement(By.xpath("thead/tr/th[2]"));
+            List<WebElement> DistibutionSection_Table_Body = DistibutionSection_Table.findElements(By.xpath("tbody/tr"));
+            assertTestCase.assertTrue(DistibutionSection_Table_Header.getText().equals("% Investment"),"Validate that Benchmark Distribution section's table header is '% Investment'");
+            List<String> list =  Arrays.asList(new String[]{"Advanced","Robust","Limited","Weak"});
+            for(WebElement e : DistibutionSection_Table_Body){
+                String[] rowText = e.getText().split("\n");
+                assertTestCase.assertTrue(list.contains(rowText[0]),"Validate Table category");
+                assertTestCase.assertTrue(rowText[1].matches("(?:\\d+(?:\\.\\d*)?|\\.\\d+)%"),"Validate Table investment Pecentage");
+            }
+
+        } catch (Exception e) {
+            System.out.println("Failed");
+            e.printStackTrace();
+
+        }
+    }
+
+    public Boolean IsGeoSectionTreeMapAvailable(){
+        return geoSectionTreemap.isDisplayed();
     }
 }
 
