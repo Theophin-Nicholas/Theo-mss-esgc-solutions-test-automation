@@ -8,7 +8,6 @@ import com.esgc.Utilities.Xray;
 import org.testng.annotations.Test;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class EsgAssessmentTests extends DataValidationTestBase {

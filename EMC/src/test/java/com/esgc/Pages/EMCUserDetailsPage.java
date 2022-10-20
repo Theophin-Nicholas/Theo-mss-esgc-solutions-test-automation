@@ -67,7 +67,7 @@ public class EMCUserDetailsPage extends EMCBasePage {
     @FindBy(xpath = "//li/div[1]//span")
     public List<WebElement> applicationRolesListFeaturesNames;
 
-    @FindBy(xpath = "//ul//button")
+    @FindBy(xpath = "//div[@aria-expanded='true']//..//button")
     public List<WebElement> applicationRolesListDeleteButtons;
 
     @FindBy(xpath = "//button[.='Assign application roles']")
@@ -79,24 +79,14 @@ public class EMCUserDetailsPage extends EMCBasePage {
     @FindBy(xpath = "//h2/../..//button")
     public List<WebElement> newApplicationRolesAssignButtons;
 
+    @FindBy(xpath = "//button[.='Assign']/../..//span[1]")
+    public List<WebElement> newApplicationRolesNames;
+
     @FindBy(xpath = "//button[.='Done']")
     public WebElement doneButton;
 
     @FindBy(xpath = "//button[.='Back to Users']")
     public WebElement backToUserButton;
-
-    public void addApplicationRoles() {
-        BrowserUtils.waitForClickablility(assignApplicationRolesButton, 15).click();
-        BrowserUtils.waitForClickablility(newApplicationRolesList.get(0), 5).click();
-        BrowserUtils.wait(5);
-        BrowserUtils.waitForClickablility(newApplicationRolesAssignButtons.get(0), 10).click();
-        System.out.println("application assign button clicked");
-        BrowserUtils.wait(3);
-        BrowserUtils.waitForClickablility(doneButton, 15).click();
-        BrowserUtils.wait(3);
-        System.out.println("done button clicked");
-        BrowserUtils.waitForClickablility(applicationRolesTab, 10).click();
-    }
 
     public void addApplicationRoles(String applicationName) {
         BrowserUtils.waitForClickablility(assignApplicationRolesButton, 15).click();
@@ -122,7 +112,8 @@ public class EMCUserDetailsPage extends EMCBasePage {
     }
 
     public boolean verifyApplicationRole(String applicationName) {
-        BrowserUtils.wait(3);
+        BrowserUtils.waitForClickablility(applicationRolesTab, 10).click();
+        //wait(applicationRolesList.get(), 5);
         for (WebElement applicationRole : applicationRolesList) {
             if (applicationRole.getText().equals(applicationName)) {
                 System.out.println("Application role found");
@@ -136,21 +127,14 @@ public class EMCUserDetailsPage extends EMCBasePage {
     public boolean deleteApplicationRole(String applicationName) {
         System.out.println("Deleting all application roles for " + applicationName);
         BrowserUtils.waitForClickablility(applicationRolesTab, 10).click();
+//        wait(applicationRolesList, 10);
         for (WebElement applicationRole : applicationRolesList) {
             if (applicationRole.getText().equals(applicationName)) {
                 System.out.println("Application Found");
                 applicationRole.click();
                 System.out.println(applicationRolesListFeaturesNames.size() + " application roles will be deleted");
-                boolean check = true;
-                while (check) {
-                    for (WebElement deleteButton : applicationRolesListDeleteButtons) {
-                        if (deleteButton.isDisplayed()) {
-                            deleteButton.click();
-                            check = true;
-                            break;
-                        }
-                    }
-                    check = false;
+                while (applicationRolesListDeleteButtons.size() > 0) {
+                    applicationRolesListDeleteButtons.get(0).click();
                 }
                 System.out.println("All application features deleted successfully");
                 BrowserUtils.waitForClickablility(detailsTab, 10).click();
@@ -194,5 +178,74 @@ public class EMCUserDetailsPage extends EMCBasePage {
     public void clickUnsuspendUserButton() {
         System.out.println("Clicking on unsuspend user button");
         BrowserUtils.waitForClickablility(unsuspendButton, 15).click();
+    }
+
+    public void clickOnApplicationRolesTab() {
+        System.out.println("Clicking on application roles tab");
+        wait(applicationRolesTab,20);
+        BrowserUtils.waitForClickablility(applicationRolesTab, 15).click();
+    }
+
+    public void deleteAllRoles() {
+        for (WebElement roles : applicationRolesList) {
+            roles.click();
+            for (WebElement deleteButton : applicationRolesListDeleteButtons) {
+                deleteButton.click();
+            }
+        }
+    }
+
+    public void assignApplicationRoles(String applicationName, String roleName) {
+        System.out.println("Assigning application roles");
+        BrowserUtils.waitForClickablility(assignApplicationRolesButton, 15).click();
+        for (WebElement applicationRole : newApplicationRolesList) {
+            if (applicationRole.getText().equals(applicationName)) {
+                System.out.println("Application Found");
+                applicationRole.click();
+                BrowserUtils.wait(5);
+                for (WebElement roles : newApplicationRolesNames) {
+                    if (roles.getText().equals(roleName)) {
+                        System.out.println("Role Found");
+                        newApplicationRolesNames.get(newApplicationRolesNames.indexOf(roles) + 1).click();
+                        System.out.println("application assign button clicked");
+                        break;
+                    }
+                }
+                BrowserUtils.scrollTo(doneButton);
+                BrowserUtils.waitForClickablility(doneButton, 15).click();
+                System.out.println("done button clicked");
+                BrowserUtils.waitForClickablility(detailsTab, 10).click();
+                BrowserUtils.wait(3);
+                BrowserUtils.waitForClickablility(applicationRolesTab, 10).click();
+                BrowserUtils.wait(5);
+                return;
+            }
+        }
+        System.out.println("application role not found in available applications list");
+    }
+
+    public void assignApplicationRoles(String applicationName) {
+        System.out.println("Assigning application roles");
+        BrowserUtils.waitForClickablility(assignApplicationRolesButton, 15).click();
+        for (WebElement applicationRole : newApplicationRolesList) {
+            if (applicationRole.getText().equals(applicationName)) {
+                System.out.println("Application Found");
+                applicationRole.click();
+                BrowserUtils.wait(5);
+                for (int i = 0; i < newApplicationRolesNames.size(); i++) {
+                    newApplicationRolesNames.get(i).click();
+                    System.out.println("Role added = " + newApplicationRolesNames.get(i).getText());
+                }
+                BrowserUtils.scrollTo(doneButton);
+                BrowserUtils.waitForClickablility(doneButton, 15).click();
+                System.out.println("done button clicked");
+                BrowserUtils.waitForClickablility(detailsTab, 10).click();
+                BrowserUtils.wait(3);
+                BrowserUtils.waitForClickablility(applicationRolesTab, 10).click();
+                BrowserUtils.wait(5);
+                return;
+            }
+        }
+        System.out.println("application role not found in available applications list");
     }
 }

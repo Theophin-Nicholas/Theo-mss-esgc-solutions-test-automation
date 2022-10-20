@@ -1,8 +1,8 @@
 package com.esgc.Tests.DataValidation.PortfolioAnalysisPage;
 
 import com.esgc.APIModels.APIFilterPayload;
-import com.esgc.APIModels.RangeAndScoreCategory;
-import com.esgc.APIModels.RegionMap;
+import com.esgc.APIModels.PortoflioAnalysisModels.RangeAndScoreCategory;
+import com.esgc.APIModels.PortoflioAnalysisModels.RegionMap;
 import com.esgc.DBModels.ResearchLineIdentifier;
 import com.esgc.Tests.TestBases.DataValidationTestBase;
 import com.esgc.Utilities.APIUtilities;

@@ -12,7 +12,7 @@ public class EMCApplicationDetailsPage extends EMCBasePage{
     @FindBy (xpath = "//button[.='Products']")
     public WebElement ProductsTab;
     @FindBy (xpath = "//button[.='Roles']")
-    public WebElement RolesTab;
+    public WebElement rolesTab;
 
     @FindBy(id = "notistack-snackbar")
     public WebElement notification;
@@ -126,7 +126,7 @@ public class EMCApplicationDetailsPage extends EMCBasePage{
 
     public void clickOnRolesTab() {
         System.out.println("Navigating to Roles tab");
-        BrowserUtils.waitForClickablility(RolesTab, 5).click();
+        BrowserUtils.waitForClickablility(rolesTab, 5).click();
     }
 
     public void clickOnAddProductButton() {
@@ -192,4 +192,19 @@ public class EMCApplicationDetailsPage extends EMCBasePage{
         }
     }
 
+    public void clickOnAddRoleButton() {
+        System.out.println("Clicking on Add Role button");
+        BrowserUtils.waitForClickablility(addRoleButton, 5).click();
+
+    }
+
+    public void clickOnSaveButton() {
+        System.out.println("Clicking on Save button");
+        BrowserUtils.waitForClickablility(saveButton, 5).click();
+    }
+
+    public void clickOnCancelButton() {
+        System.out.println("Clicking on Cancel button");
+        BrowserUtils.waitForClickablility(cancelButton, 5).click();
+    }
 }
