@@ -1,7 +1,7 @@
 package com.esgc.Pages;
 
 
-import com.esgc.APIModels.RangeAndScoreCategory;
+import com.esgc.APIModels.PortoflioAnalysisModels.RangeAndScoreCategory;
 import com.esgc.Controllers.APIController;
 import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.ConfigurationReader;
@@ -36,7 +36,7 @@ import static com.esgc.Utilities.Database.DatabaseDriver.getQueryResultMap;
 import static com.esgc.Utilities.DateTimeUtilities.getFormattedDate;
 
 
-public class EntityClimateProfilePage extends PageBase {
+public class EntityClimateProfilePage extends ClimatePageBase {
     public List<String> sectorsList = Arrays.asList("Automobiles", "ARA - all sectors", "Oil&Gas", "Electric & Gas Utilities",
             "Shipping", "Airlines", "Cement", "Steel", "Aluminium");
 

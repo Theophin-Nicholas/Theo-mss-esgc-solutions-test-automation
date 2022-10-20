@@ -9,7 +9,6 @@ import com.aventstack.extentreports.reporter.ExtentSparkReporter;
 import com.esgc.APIModels.TestCase;
 import com.esgc.Reporting.CustomAssertion;
 import com.esgc.Utilities.*;
-
 import org.apache.commons.lang.time.StopWatch;
 import org.openqa.selenium.JavascriptExecutor;
 import org.testng.ITestResult;
@@ -21,7 +20,6 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
-import static io.restassured.RestAssured.given;
 import static io.restassured.RestAssured.requestSpecification;
 
 

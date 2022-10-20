@@ -3,13 +3,13 @@ package com.esgc.Test.TestBases;
 import com.esgc.Controllers.EntityIssuerPageController.EntityIssuerPageAPIController;
 import com.esgc.TestBase.TestBase;
 import com.esgc.Utilities.Database.DatabaseDriver;
-import com.esgc.Utilities.Database.EntityPageQueries;
+import com.esgc.Utilities.Database.EntityIssuerQueries;
 import org.testng.annotations.BeforeClass;
 
 public abstract class EntityIssuerPageDataValidationTestBase extends TestBase {
 
     public EntityIssuerPageAPIController controller = new EntityIssuerPageAPIController();
-    public EntityPageQueries entitypagequeries = new EntityPageQueries();
+    public EntityIssuerQueries entityIssuerQueries = new EntityIssuerQueries();
 
     public static boolean isP3Test = false;
 
