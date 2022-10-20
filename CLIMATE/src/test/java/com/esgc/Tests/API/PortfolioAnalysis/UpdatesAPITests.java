@@ -1,11 +1,11 @@
 package com.esgc.Tests.API.PortfolioAnalysis;
 
 import com.esgc.APIModels.APIFilterPayload;
-import com.esgc.APIModels.UpdatesModel;
+import com.esgc.APIModels.PortoflioAnalysisModels.UpdatesModel;
 import com.esgc.Controllers.APIController;
 import com.esgc.Tests.TestBases.APITestBase;
-import com.esgc.Utilities.Xray;
 import com.esgc.Utilities.APIUtilities;
+import com.esgc.Utilities.Xray;
 import io.restassured.response.Response;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Test;

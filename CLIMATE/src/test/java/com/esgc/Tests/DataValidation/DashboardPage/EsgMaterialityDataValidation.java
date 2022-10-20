@@ -6,7 +6,6 @@ import com.esgc.Utilities.Database.EntityPageQueries;
 import com.esgc.Utilities.Xray;
 import org.testng.annotations.Test;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 

@@ -1,7 +1,7 @@
 package com.esgc.Tests.UI.DashboardPage;
 
-import com.esgc.APIModels.Dashboard.APIHeatMapResponse;
-import com.esgc.APIModels.Dashboard.APIHeatMapSinglePayload;
+import com.esgc.APIModels.DashboardModels.APIHeatMapResponse;
+import com.esgc.APIModels.DashboardModels.APIHeatMapSinglePayload;
 import com.esgc.Controllers.APIController;
 import com.esgc.Controllers.DashboardAPIController;
 import com.esgc.Pages.DashboardPage;
