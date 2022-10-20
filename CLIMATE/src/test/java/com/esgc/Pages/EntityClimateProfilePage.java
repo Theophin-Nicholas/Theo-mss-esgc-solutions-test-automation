@@ -525,6 +525,14 @@ public class EntityClimateProfilePage extends PageBase {
         BrowserUtils.waitForClickablility(exportSourcesDocumentsTab, 30).click();
     }
 
+    public boolean IsExportSourcesDocumentsButtonAvailable() {
+        try{
+            return exportSourcesDocumentsTab.isDisplayed();
+        }catch(Exception e){
+            return false;
+        }
+    }
+
     public void selectPdfDownload() {
         BrowserUtils.waitForClickablility(pdfDownloadButton, 30).click();
     }
@@ -1173,6 +1181,7 @@ public class EntityClimateProfilePage extends PageBase {
             String dateDB = dbRecordControversies.get(i).get("CONTROVERSY_EVENTS").toString();
             String month_name = "";
             try {
+                System.out.println("dateDB = " + dateDB);
                 Date date = sdf.parse(dateDB);
                 month_name = month_date.format(date);
             } catch (Exception e) {
