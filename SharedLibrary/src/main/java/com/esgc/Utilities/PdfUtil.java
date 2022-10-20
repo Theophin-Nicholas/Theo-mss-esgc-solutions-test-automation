@@ -1,23 +1,18 @@
 package com.esgc.Utilities;
 
 
-import com.opencsv.CSVReader;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
-import org.apache.poi.ss.usermodel.*;
-import org.testng.Assert;
 
 import java.io.*;
-import java.util.*;
 
 /*
- * This is a utility class for reading from writing to excel files.
- * it works with xls and xlsx files.
+ * This is a utility class for reading from pdf files.
  */
 
 public class PdfUtil {
 
-    public static String getPdfContent(String filePath){
+    public static String getPdfContent(String filePath) {
 
         try {
             File file = new File(filePath);
@@ -25,7 +20,9 @@ public class PdfUtil {
 
             //Instantiate PDFTextStripper class
             PDFTextStripper pdfStripper = new PDFTextStripper();
-
+            //  pdfStripper.setSortByPosition(true);
+            pdfStripper.setStartPage(0);
+            pdfStripper.setEndPage(document.getNumberOfPages());
             //Retrieving text from PDF document
             String text = pdfStripper.getText(document);
 
@@ -33,12 +30,12 @@ public class PdfUtil {
             document.close();
 
             return text;
-        }catch(IOException e){
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public static String getPdfContent(String filePath, int pageNumber){
+    public static String getPdfContent(String filePath, int pageNumber) {
 
         try {
             File file = new File(filePath);
@@ -57,22 +54,67 @@ public class PdfUtil {
             document.close();
 
             return text;
-        }catch(IOException e){
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public static int getNumberOfPages(String filePath){
+    public static int getNumberOfPages(String filePath) {
         try {
             File file = new File(filePath);
             PDDocument document = PDDocument.load(file);
             int pagesCount = document.getNumberOfPages();
             document.close();
             return pagesCount;
-        }catch(IOException e){
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
+    public static String extractPDFText(String pdfFileInText, String strStartIndentifier, String strEndIdentifier) {
+        String returnString = "";
+        try {
+            String strStart = strStartIndentifier;
+            String strEnd = strEndIdentifier;
+            int startInddex = pdfFileInText.indexOf(strStart);
+            int endInddex = pdfFileInText.indexOf(strEnd);
+            returnString = pdfFileInText.substring(startInddex, endInddex) + strEnd;
 
+        } catch (Exception e) {
+            returnString = "No ParaGraph Found";
+        }
+        return returnString;
+    }
+
+    public static String extractPDFText(String pdfFileInText, String str) {
+        String returnString = "";
+        try {
+            pdfFileInText = pdfFileInText.replaceAll("\n", " ");
+            int startInddex = pdfFileInText.indexOf(str);
+            returnString = pdfFileInText.substring(startInddex, startInddex + str.length());
+
+        } catch (Exception e) {
+            returnString = "No ParaGraph Found";
+        }
+        return returnString;
+    }
+
+    public static int getCountofTextOccurrencesInPdf(String pdfFileInText, String str) {
+        String returnString = "";
+        int count = 0;
+        try {
+            pdfFileInText = pdfFileInText.replaceAll("\n", " ");
+            int index = 0;
+            while (index != -1) {
+                index = pdfFileInText.indexOf(str, index + str.length());
+                if (index != -1) {
+                    count++;
+                }
+
+            }
+        } catch (Exception e) {
+            returnString = "No ParaGraph Found";
+        }
+        return count;
+    }
 }
