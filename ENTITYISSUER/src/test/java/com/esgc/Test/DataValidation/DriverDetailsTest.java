@@ -1,12 +1,10 @@
 package com.esgc.Test.DataValidation;
 
 import com.esgc.APIModels.EntityIssuerPage.*;
-import com.esgc.APIModels.EntityPage.Item;
-import com.esgc.APIModels.EntityPage.ItemDetail;
-import com.esgc.DBModels.EntityPage.DriverDetailsDBModel;
-import com.esgc.DBModels.EntityPage.DriverTrendDetailModel;
+import com.esgc.DBModels.EntityIssuerPageDBModels.DriverDetailsDBModel;
+import com.esgc.DBModels.EntityIssuerPageDBModels.DriverTrendDetailModel;
 import com.esgc.Test.TestBases.EntityIssuerPageDataValidationTestBase;
-import com.esgc.Utilities.Database.EntityPageQueries;
+import com.esgc.Utilities.Database.EntityIssuerQueries;
 import com.esgc.Utilities.Environment;
 import com.esgc.Utilities.Xray;
 import io.restassured.response.Response;
@@ -42,7 +40,7 @@ public class DriverDetailsTest extends EntityIssuerPageDataValidationTestBase {
             System.out.println("Checking for criteria =" + criteriaId);
 
             //DB call for driverDetails
-            List<DriverDetailsDBModel> driverDetailsDBModelList = EntityPageQueries.getDriverDetails(orbisID, criteriaId).stream().
+            List<DriverDetailsDBModel> driverDetailsDBModelList = EntityIssuerQueries.getDriverDetails(orbisID, criteriaId).stream().
                     filter(e->e.getTrend().equals("Non_Trend")).collect(Collectors.toList());
 
             //API call for driverDetails
@@ -103,7 +101,7 @@ public class DriverDetailsTest extends EntityIssuerPageDataValidationTestBase {
             System.out.println("Checking for criteria =" + criteriaId);
 
             //DB call for driverDetails
-            List<DriverTrendDetailModel> driverTrendDetailsDBModelList = EntityPageQueries.getTrendDetails(orbisID, criteriaId);
+            List<DriverTrendDetailModel> driverTrendDetailsDBModelList = EntityIssuerQueries.getTrendDetails(orbisID, criteriaId);
 
 
             //API call for driverDetails

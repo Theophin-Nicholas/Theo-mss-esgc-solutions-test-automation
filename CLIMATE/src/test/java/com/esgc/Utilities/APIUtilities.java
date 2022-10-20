@@ -2,7 +2,7 @@ package com.esgc.Utilities;
 
 import com.esgc.APIModels.Portfolio;
 import com.esgc.Controllers.APIController;
-import com.esgc.Utilities.API.Endpoints;
+import com.esgc.Utilities.EndPoints.CommonEndPoints;
 import io.restassured.response.Response;
 import org.hamcrest.Matchers;
 
@@ -45,7 +45,7 @@ public class APIUtilities {
                     .header("Authorization", "Bearer " + System.getProperty("token"))
                     .queryParam("user_id", user_id)
                     .when()
-                    .get(Endpoints.GET_PORTFOLIOS_FOR_USER);
+                    .get(CommonEndPoints.GET_PORTFOLIOS_FOR_USER);
 
             response.then().log().ifError();
             response.then().assertThat().statusCode(200);
@@ -66,7 +66,7 @@ public class APIUtilities {
                     .relaxedHTTPSValidation()
                     .header("Authorization", "Bearer " + System.getProperty("token"))
                     .when()
-                    .get(Endpoints.GET_PORTFOLIOS_FOR_USER);
+                    .get(CommonEndPoints.GET_PORTFOLIOS_FOR_USER);
 
             response.then().log().ifError();
             response.then().assertThat().statusCode(200);

@@ -1,6 +1,8 @@
 package com.esgc.Tests.UI.PortfolioAnalysisPage.ExcelComparison;
 
-import com.esgc.APIModels.*;
+import com.esgc.APIModels.APIFilterPayload;
+import com.esgc.APIModels.APIFilterPayloadWithImpactFilter;
+import com.esgc.APIModels.PortoflioAnalysisModels.*;
 import com.esgc.Controllers.APIController;
 import com.esgc.Pages.ResearchLinePage;
 import com.esgc.Reporting.CustomAssertion;
