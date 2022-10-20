@@ -125,7 +125,6 @@
             <groupId>com.esgc.automation</groupId>
             <artifactId>CLIMATE</artifactId>
             <version>1.0-SNAPSHOT</version>
-            <scope>test</scope>
         </dependency>
     </dependencies>
     <build>
