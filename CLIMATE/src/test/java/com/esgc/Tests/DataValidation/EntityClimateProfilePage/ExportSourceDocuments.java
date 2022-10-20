@@ -1,25 +1,14 @@
 package com.esgc.Tests.DataValidation.EntityClimateProfilePage;
 
-import com.esgc.APIModels.EntityProfileClimatePage.SummarySection.TemperatureAlignmentSummary;
-import com.esgc.APIModels.EntityUnderlyingData.BrownShare;
-import com.esgc.APIModels.EntityUnderlyingData.CarbonFootprint;
-import com.esgc.APIModels.EntityUnderlyingData.GreenShare;
 import com.esgc.Pages.EntityClimateProfilePage;
 import com.esgc.Tests.TestBases.EntityClimateProfileDataValidationTestBase;
-import com.esgc.Utilities.API.EntityClimateProfilePageEndpoints;
-import com.esgc.Utilities.Environment;
 import com.esgc.Utilities.Xray;
-import io.restassured.http.ContentType;
-import io.restassured.response.Response;
 import org.openqa.selenium.WebElement;
 import org.testng.annotations.Test;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-import static com.esgc.Utilities.Database.EntityClimateProfilePageQueries.*;
-import static io.restassured.RestAssured.given;
+import static com.esgc.Utilities.Database.EntityClimateProfilePageQueries.getExportOrSourceDocumentsFromDB;
 
 public class ExportSourceDocuments extends EntityClimateProfileDataValidationTestBase {
 

@@ -1,9 +1,9 @@
 package com.esgc.Tests.DataValidation.EntityClimateProfilePage;
 
-import com.esgc.APIModels.EntityProfileClimatePage.SummarySection.TemperatureAlignmentSummary;
-import com.esgc.APIModels.EntityUnderlyingData.BrownShare;
-import com.esgc.APIModels.EntityUnderlyingData.CarbonFootprint;
-import com.esgc.APIModels.EntityUnderlyingData.GreenShare;
+import com.esgc.APIModels.EntityProfilePageModels.EntityUnderlyingData.BrownShare;
+import com.esgc.APIModels.EntityProfilePageModels.EntityUnderlyingData.CarbonFootprint;
+import com.esgc.APIModels.EntityProfilePageModels.EntityUnderlyingData.GreenShare;
+import com.esgc.APIModels.EntityProfilePageModels.SummarySection.TemperatureAlignmentSummary;
 import com.esgc.Tests.TestBases.EntityClimateProfileDataValidationTestBase;
 import com.esgc.Utilities.EndPoints.EntityProfilePageEndpoints;
 import com.esgc.Utilities.Environment;

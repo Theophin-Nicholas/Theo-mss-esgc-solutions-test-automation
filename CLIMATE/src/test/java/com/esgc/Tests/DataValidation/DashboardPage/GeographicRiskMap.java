@@ -1,10 +1,10 @@
 package com.esgc.Tests.DataValidation.DashboardPage;
 
 import com.esgc.APIModels.APIFilterPayload;
-import com.esgc.APIModels.Dashboard.APIEntityListPayload;
-import com.esgc.APIModels.Dashboard.GeoMapCountryEntity;
-import com.esgc.APIModels.RangeAndScoreCategory;
-import com.esgc.APIModels.RegionMap;
+import com.esgc.APIModels.DashboardModels.APIEntityListPayload;
+import com.esgc.APIModels.DashboardModels.GeoMapCountryEntity;
+import com.esgc.APIModels.PortoflioAnalysisModels.RangeAndScoreCategory;
+import com.esgc.APIModels.PortoflioAnalysisModels.RegionMap;
 import com.esgc.DBModels.ResearchLineIdentifier;
 import com.esgc.Tests.TestBases.DataValidationTestBase;
 import com.esgc.Utilities.APIUtilities;

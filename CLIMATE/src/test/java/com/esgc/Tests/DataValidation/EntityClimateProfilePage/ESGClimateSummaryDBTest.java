@@ -1,14 +1,14 @@
 package com.esgc.Tests.DataValidation.EntityClimateProfilePage;
 
 
-import com.esgc.APIModels.EntityClimateProfile.EntityHeader;
-import com.esgc.APIModels.EntityProfileClimatePage.SummarySection.BrownShareAndGreenShareClimateSummary;
-import com.esgc.APIModels.EntityProfileClimatePage.SummarySection.CarbonFootprintSummary;
-import com.esgc.APIModels.EntityProfileClimatePage.SummarySection.PhysicalRiskHazardsSummary;
-import com.esgc.APIModels.EntityProfileClimatePage.SummarySection.TemperatureAlignmentSummary;
-import com.esgc.APIModels.EntityProfileClimatePage.UnderlyingDataMetrics.PhysicalRiskHazardsDetails;
-import com.esgc.APIModels.EntityProfileClimatePage.UnderlyingDataMetrics.PhysicalRiskHazardsWrapper;
-import com.esgc.APIModels.EntityScoreCategory.ESGScores;
+import com.esgc.APIModels.EntityProfilePageModels.EntityHeader;
+import com.esgc.APIModels.EntityProfilePageModels.EntityScoreCategory.ESGScores;
+import com.esgc.APIModels.EntityProfilePageModels.SummarySection.BrownShareAndGreenShareClimateSummary;
+import com.esgc.APIModels.EntityProfilePageModels.SummarySection.CarbonFootprintSummary;
+import com.esgc.APIModels.EntityProfilePageModels.SummarySection.PhysicalRiskHazardsSummary;
+import com.esgc.APIModels.EntityProfilePageModels.SummarySection.TemperatureAlignmentSummary;
+import com.esgc.APIModels.EntityProfilePageModels.UnderlyingDataMetrics.PhysicalRiskHazardsDetails;
+import com.esgc.APIModels.EntityProfilePageModels.UnderlyingDataMetrics.PhysicalRiskHazardsWrapper;
 import com.esgc.Controllers.EntityPage.EntityProfileClimatePageAPIController;
 import com.esgc.TestBase.DataProviderClass;
 import com.esgc.Tests.TestBases.EntityClimateProfileDataValidationTestBase;

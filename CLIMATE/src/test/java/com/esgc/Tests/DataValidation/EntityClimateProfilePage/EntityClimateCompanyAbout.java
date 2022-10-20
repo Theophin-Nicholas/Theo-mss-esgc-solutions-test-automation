@@ -1,6 +1,6 @@
 package com.esgc.Tests.DataValidation.EntityClimateProfilePage;
 
-import com.esgc.APIModels.EntityClimateProfile.EntityHeader;
+import com.esgc.APIModels.EntityProfilePageModels.EntityHeader;
 import com.esgc.Controllers.EntityPage.EntityProfileClimatePageAPIController;
 import com.esgc.Tests.TestBases.DataValidationTestBase;
 import com.esgc.Utilities.Xray;
@@ -9,6 +9,7 @@ import org.testng.annotations.Test;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+
 import static com.esgc.Utilities.Database.EntityClimateProfilePageQueries.getEntityHeaderDetails;
 
 

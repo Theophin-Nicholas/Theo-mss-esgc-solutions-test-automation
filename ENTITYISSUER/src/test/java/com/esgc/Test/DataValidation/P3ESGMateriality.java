@@ -1,38 +1,32 @@
 package com.esgc.Test.DataValidation;
 
-import com.esgc.APIModels.EntityIssuerPage.DriverDetail;
 import com.esgc.APIModels.EntityIssuerPage.ESGMaterlityDriverSummaryAPIWrapper;
 import com.esgc.APIModels.EntityIssuerPage.ESGMaterlityDriverSummaryDetails;
 import com.esgc.APIModels.EntityIssuerPage.ESGMaterlityDriverWeights;
-import com.esgc.APIModels.EntityPage.SectorDrivers;
-import com.esgc.APIModels.EntityPage.SectorDriversWrapper;
-import com.esgc.APIModels.EntityPage.SectorIndicator;
 import com.esgc.DBModels.EntityIssuerPageDBModels.ESGMaterlityDBModel;
-import com.esgc.DBModels.EntityPage.SectorDriverDBModel;
-import com.esgc.DBModels.ResearchLineIdentifier;
-import com.esgc.Test.TestBases.EntityPageDataValidationTestBase;
-import com.esgc.Utilities.Database.EntityPageQueries;
+import com.esgc.Test.TestBases.EntityIssuerPageDataValidationTestBase;
+import com.esgc.Utilities.Database.EntityIssuerQueries;
 import com.esgc.Utilities.Xray;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Test;
-import org.testng.asserts.SoftAssert;
 
-import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import static com.esgc.Utilities.PortfolioUtilities.distinctByKey;
 
-
-public class P3ESGMateriality extends EntityPageDataValidationTestBase {
+public class P3ESGMateriality extends EntityIssuerPageDataValidationTestBase {
 
     @Test(dataProvider = "orbisID", groups = {"regression", "entity_issuer"})
     @Xray(test = {9953})
     public void validateESGMaterialitySummaryData(@Optional String orbisID) {
 
         // DB Data
-        List<ESGMaterlityDBModel> DBData = EntityPageQueries.getESGMaterlityData(orbisID);
+        List<ESGMaterlityDBModel> DBData = EntityIssuerQueries.getESGMaterlityData(orbisID);
 
         // API Data
         ESGMaterlityDriverSummaryAPIWrapper APIData = controller.getDriverSummary().as(ESGMaterlityDriverSummaryAPIWrapper.class);
@@ -63,6 +57,11 @@ public class P3ESGMateriality extends EntityPageDataValidationTestBase {
                 assertTestCase.assertTrue(dbWeight.getWeight().equals(weights.getMateriality_weight()),"Validate Materiallity Weight");
             }
         }
+    }
+
+    public static <T> Predicate<T> distinctByKey(Function<? super T, ?> keyExtractor) {
+        Set<Object> seen = ConcurrentHashMap.newKeySet();
+        return t -> seen.add(keyExtractor.apply(t));
     }
 
 

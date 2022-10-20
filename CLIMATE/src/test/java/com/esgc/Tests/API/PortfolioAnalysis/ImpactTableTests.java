@@ -1,7 +1,7 @@
 package com.esgc.Tests.API.PortfolioAnalysis;
 
 import com.esgc.APIModels.APIFilterPayloadWithImpactFilter;
-import com.esgc.APIModels.ImpactDistributionWrappers;
+import com.esgc.APIModels.PortoflioAnalysisModels.ImpactDistributionWrappers;
 import com.esgc.Controllers.APIController;
 import com.esgc.Tests.TestBases.APITestBase;
 import com.esgc.Utilities.Xray;

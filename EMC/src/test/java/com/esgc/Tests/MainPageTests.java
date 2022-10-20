@@ -7,8 +7,6 @@ import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.Driver;
 import com.esgc.Utilities.Environment;
 import com.esgc.Utilities.Xray;
-import org.openqa.selenium.Keys;
-import org.openqa.selenium.WebElement;
 import org.testng.annotations.Test;
 
 public class MainPageTests extends EMCUITestBase {

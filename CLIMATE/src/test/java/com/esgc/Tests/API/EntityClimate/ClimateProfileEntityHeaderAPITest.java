@@ -1,6 +1,6 @@
 package com.esgc.Tests.API.EntityClimate;
 
-import com.esgc.APIModels.EntityClimateProfile.EntityHeader;
+import com.esgc.APIModels.EntityProfilePageModels.EntityHeader;
 import com.esgc.Controllers.EntityPage.EntityProfileClimatePageAPIController;
 import com.esgc.Tests.TestBases.EntityClimateProfileTestBase;
 import com.esgc.Utilities.Xray;

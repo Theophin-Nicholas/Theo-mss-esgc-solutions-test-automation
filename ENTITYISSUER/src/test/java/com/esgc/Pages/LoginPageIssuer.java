@@ -2,7 +2,6 @@ package com.esgc.Pages;
 
 import com.esgc.Test.TestBases.EntityIssuerPageDataValidationTestBase;
 import com.esgc.Test.TestBases.EntityPageTestBase;
-import com.esgc.Utilities.ConfigurationReader;
 import com.esgc.Utilities.Environment;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
