@@ -6,10 +6,12 @@ import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.ConfigurationReader;
 import com.esgc.Utilities.Driver;
 import com.esgc.Utilities.Environment;
+import org.openqa.selenium.WebElement;
 import org.testng.ITestResult;
 import org.testng.annotations.*;
 
 import java.time.Duration;
+import java.util.List;
 
 public abstract class EMCUITestBase extends TestBase {
 
@@ -49,6 +51,32 @@ public abstract class EMCUITestBase extends TestBase {
     @AfterClass(alwaysRun = true)
     public void closeDriverAfterEMCTests() {
         Driver.closeDriver();
+    }
+
+    public void wait(WebElement element, int seconds) {
+        for (int i = 0; i < seconds; i++) {
+            try {
+                if (element.isDisplayed()) {
+                    return;
+                }
+            } catch (Exception e) {
+                BrowserUtils.wait(1);
+            }
+        }
+        System.out.println("Element is not displayed after " + seconds + " seconds");
+    }
+    public void wait(List<WebElement> elements, int seconds) {
+        for (int i = 0; i < seconds; i++) {
+            try {
+                if (elements.size() > 0) {
+                    System.out.println("elements = " + elements.size());
+                    return;
+                }
+            } catch (Exception e) {
+                BrowserUtils.wait(1);
+            }
+        }
+        System.out.println("Element is not displayed after " + seconds + " seconds");
     }
 
 }
