@@ -17,6 +17,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
 
 import java.text.Collator;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
@@ -1183,6 +1184,44 @@ public class ResearchLinePage extends UploadPage {
         }
     }
 
+    public boolean verifyUpdatesSortingOrder(String page){
+        try {
+            List<WebElement> rows = Driver.getDriver().findElements(By.xpath("//td[@heap_id='updates']"));
+            if (rows.size() > 0) {
+                SimpleDateFormat sdformat = new SimpleDateFormat("yyyy-MM-dd");
+                for (int i = 1; i < rows.size() - 1; i++) {
+                    String updateDateXpath = "(//td[@heap_id='updates']/following-sibling::td[1]//span[@title])";
+                    if(page.equals("Brown Share Assessment"))
+                        updateDateXpath = "(//td[@heap_id='updates']/following-sibling::td[1])";
+                    Date updatedDate1 = sdformat.parse(Driver.getDriver().findElement(By.xpath(updateDateXpath+"[" + i + "]")).getText());
+                    Date updatedDate2 = sdformat.parse(Driver.getDriver().findElement(By.xpath(updateDateXpath+"[" + (i + 1) + "]")).getText());
+
+                    if (updatedDate1.compareTo(updatedDate2) < 0)
+                        return false;
+                    else if (updatedDate1.compareTo(updatedDate2) == 0) {
+                        float row1Inv = Float.parseFloat(Driver.getDriver().findElement(By.xpath("(//td[@heap_id='updates']/following-sibling::td[5])[" + i + "]")).getText().replace("%", ""));
+                        float row2Inv = Float.parseFloat(Driver.getDriver().findElement(By.xpath("(//td[@heap_id='updates']/following-sibling::td[5])[" + (i + 1) + "]")).getText().replace("%", ""));
+                        if (row1Inv < row2Inv)
+                            return false;
+                        else if (row1Inv == row2Inv) {
+                            String row1Company = Driver.getDriver().findElement(By.xpath("(//td[@heap_id='updates']//span[@title])[" + i + "]")).getText();
+                            String row2Company = Driver.getDriver().findElement(By.xpath("(//td[@heap_id='updates']//span[@title])[" + (i + 1) + "]")).getText();
+                            if (row1Company.compareTo(row2Company) > 0)
+                                return false;
+                        }
+                    }
+                }
+            } else {
+                System.out.println("No data was displayed for Updates Section");
+            }
+        }catch(Exception e){
+            return false;
+        }
+
+        return true;
+    }
+
+
     public boolean verifyRegionSectorsTables(String PageName) {
         try {
             List<String> ExpectedColumnList = expectedRegionSectorList;
@@ -2164,6 +2203,57 @@ public class ResearchLinePage extends UploadPage {
         return LaggardsScoreLogicStatus;
     }
 
+    public boolean VerifySortingOrderForLeaders() {
+
+        List<WebElement> rows = Driver.getDriver().findElements(By.xpath("//div[@heap_leadlag_id='leaders']//tbody/tr"));
+        if (rows.size() > 0) {
+            for (int i = 1; i < rows.size() - 1; i++) {
+                int row1Rank = Integer.parseInt(Driver.getDriver().findElement(By.xpath("//div[@heap_leadlag_id='leaders']//tbody/tr["+i+"]/td[1]")).getText());
+                int row2Rank = Integer.parseInt(Driver.getDriver().findElement(By.xpath("//div[@heap_leadlag_id='leaders']//tbody/tr["+(i+1)+"]/td[1]")).getText());
+                if(row1Rank>row2Rank)
+                    return false;
+                else if (row1Rank==row2Rank){
+                    float row1Inv = Float.parseFloat(Driver.getDriver().findElement(By.xpath("//div[@heap_leadlag_id='leaders']//tbody/tr["+i+"]/td[3]")).getText().replace("%",""));
+                    float row2Inv = Float.parseFloat(Driver.getDriver().findElement(By.xpath("//div[@heap_leadlag_id='leaders']//tbody/tr["+(i+1)+"]/td[3]")).getText().replace("%",""));
+                    if(row1Inv<row2Inv)
+                        return false;
+                    else if(row1Inv==row2Inv) {
+                        String row1Company = Driver.getDriver().findElement(By.xpath("//div[@heap_leadlag_id='leaders']//tbody/tr[" + i + "]/td[2]//span/span")).getText();
+                        String row2Company = Driver.getDriver().findElement(By.xpath("//div[@heap_leadlag_id='leaders']//tbody/tr[" + (i + 1) + "]/td[2]//span/span")).getText();
+                        if (row1Company.compareToIgnoreCase(row2Company) > 0)
+                            return false;
+                    }
+                }
+            }
+        } else {
+            System.out.println("No data was displayed for Leaders Section");
+        }
+
+        return true;
+    }
+
+    public boolean VerifySortingOrderForLaggards() {
+
+        List<WebElement> rows = Driver.getDriver().findElements(By.xpath("//div[@heap_leadlag_id='laggards']//tbody/tr"));
+        if (rows.size() > 0) {
+            for (int i = 1; i < rows.size() - 1; i++) {
+                int row1Rank = Integer.parseInt(Driver.getDriver().findElement(By.xpath("//div[@heap_leadlag_id='laggards']//tbody/tr["+i+"]/td[1]")).getText());
+                int row2Rank = Integer.parseInt(Driver.getDriver().findElement(By.xpath("//div[@heap_leadlag_id='laggards']//tbody/tr["+(i+1)+"]/td[1]")).getText());
+                if(row1Rank<row2Rank)
+                    return false;
+                else if (row1Rank==row2Rank){
+                    String row1Company = Driver.getDriver().findElement(By.xpath("//div[@heap_leadlag_id='laggards']//tbody/tr["+i+"]/td[2]//span/span")).getText();
+                    String row2Company = Driver.getDriver().findElement(By.xpath("//div[@heap_leadlag_id='laggards']//tbody/tr["+(i+1)+"]/td[2]//span/span")).getText();
+                    if(row1Company.compareToIgnoreCase(row2Company)<0)
+                        return false;
+                }
+            }
+        } else {
+            System.out.println("No data was displayed for Laggards Section");
+        }
+
+        return true;
+    }
 
     public void validateRegionCardOrder() {
         int previousCompanyCount = 0;
@@ -2266,6 +2356,19 @@ public class ResearchLinePage extends UploadPage {
             System.out.println("No Impact table");
             return Arrays.asList("No Impact Table Present");
         }
+    }
+
+    public boolean verifyPercentageSymbolWithInvestmentColumn() {
+        BrowserUtils.wait(10);
+        List<WebElement> tableColumns = Driver.getDriver().findElements(By.xpath("//table/thead/tr/th"));
+        for(WebElement column:tableColumns){
+            if(column.getText().endsWith("Investment")){
+                System.out.println("Testing column");
+                if(!column.getText().equals("% Investment"))
+                    return false;
+            }
+        }
+        return true;
     }
 
     public boolean verifyImpactTableScoreCategoryColors(String researchLine) {
