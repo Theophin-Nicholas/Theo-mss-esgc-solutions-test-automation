@@ -1,11 +1,11 @@
 package com.esgc.Test.DataValidation;
 
-import com.esgc.APIModels.EntityPage.SectorDrivers;
-import com.esgc.APIModels.EntityPage.SectorDriversWrapper;
-import com.esgc.APIModels.EntityPage.SectorIndicator;
-import com.esgc.DBModels.EntityPage.SectorDriverDBModel;
+import com.esgc.APIModels.EntityIssuerPage.SectorDrivers;
+import com.esgc.APIModels.EntityIssuerPage.SectorDriversWrapper;
+import com.esgc.APIModels.EntityIssuerPage.SectorIndicator;
+import com.esgc.DBModels.EntityIssuerPageDBModels.SectorDriverDBModel;
 import com.esgc.Test.TestBases.EntityIssuerPageDataValidationTestBase;
-import com.esgc.Utilities.Database.EntityPageQueries;
+import com.esgc.Utilities.Database.EntityIssuerQueries;
 import com.esgc.Utilities.Xray;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Optional;
@@ -78,10 +78,10 @@ public class ESGDriverScoreTest extends EntityIssuerPageDataValidationTestBase {
     @Xray(test = {4049,5868, 5869})
     public void validateSubSectorDrivers(@Optional String orbisID) {
         SoftAssert softAssert = new SoftAssert();
-        String sector = EntityPageQueries.getSectorFromOrbisId(orbisID);
+        String sector = EntityIssuerQueries.getSectorFromOrbisId(orbisID);
         System.out.println("Sector:" + sector);
 
-        List<SectorDriverDBModel> sectorDriversFromDB = EntityPageQueries.getSectorDrivers(sector);
+        List<SectorDriverDBModel> sectorDriversFromDB = EntityIssuerQueries.getSectorDrivers(sector);
         System.out.println(sectorDriversFromDB.size());
         List<SectorDriversWrapper> sectorDriversList = Arrays.asList(
                 controller.getSectorDrivers(orbisID)

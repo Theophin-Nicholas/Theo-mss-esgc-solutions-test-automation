@@ -4,12 +4,13 @@ import com.aventstack.extentreports.markuputils.CodeLanguage;
 import com.aventstack.extentreports.markuputils.MarkupHelper;
 import com.esgc.APIModels.APIFilterPayload;
 import com.esgc.APIModels.APIFilterPayloadWithImpactFilter;
-import com.esgc.APIModels.RangeAndScoreCategory;
+import com.esgc.APIModels.PortoflioAnalysisModels.RangeAndScoreCategory;
 import com.esgc.DBModels.ResearchLineIdentifier;
-import com.esgc.Utilities.API.Endpoints;
 import com.esgc.Utilities.APIUtilities;
 import com.esgc.Utilities.Driver;
+import com.esgc.Utilities.EndPoints.CommonEndPoints;
 import com.esgc.Utilities.EndPoints.PortfolioAnalysisEndpoints;
+import com.esgc.Utilities.EndPoints.PortfolioSettingsEndPoints;
 import com.esgc.Utilities.Environment;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
@@ -74,7 +75,7 @@ public class APIController {
                     .multiPart("file", fileName, FileUtils.readFileToByteArray(new File(filepath)), "text/csv")
                     .param("filename", "\"" + fileName + "\"")
                     .when()
-                    .put(Endpoints.IMPORT_PORTFOLIO);
+                    .put(PortfolioSettingsEndPoints.IMPORT_PORTFOLIO);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -86,7 +87,7 @@ public class APIController {
                 .header("Content-Type", "application/json, text/plain, */*")
                 .pathParam("portfolio_id", portfolioId)
                 .when()
-                .delete(Endpoints.DELETE_PORTFOLIO).prettyPeek();
+                .delete(PortfolioSettingsEndPoints.DELETE_PORTFOLIO).prettyPeek();
     }
 
     /**
@@ -108,7 +109,7 @@ public class APIController {
                             "    \"sector\": \"" + sector + "\"\n" +
                             "}")
                     .when()
-                    .post(Endpoints.POST_FILTER_OPTIONS_IN_PORTFOLIO);
+                    .post(CommonEndPoints.POST_FILTER_OPTIONS_IN_PORTFOLIO);
 
         } catch (Exception e) {
             System.out.println("Inside exception " + e.getMessage());
@@ -930,7 +931,7 @@ public class APIController {
                     .pathParam("portfolio_id", portfolio_id)
                     .body("{\"portfolio_name\":\"" + portfolio_name + "\"}")
                     .when()
-                    .put(Endpoints.PUT_PORTFOLIO_NAME_UPDATE);
+                    .put(PortfolioSettingsEndPoints.PUT_PORTFOLIO_NAME_UPDATE);
 
 
         } catch (Exception e) {
@@ -944,7 +945,7 @@ public class APIController {
         Response response = null;
         try {
             response = configSpec()
-                    .get(Endpoints.GET_ENTITLEMENT_HANDLER);
+                    .get(CommonEndPoints.GET_ENTITLEMENT_HANDLER);
         } catch (Exception e) {
             System.out.println("Inside exception " + e.getMessage());
         }
@@ -960,7 +961,7 @@ public class APIController {
             response = configSpec()
                     .pathParam("portfolio_id", portfolio_id)
                     .when()
-                    .post(Endpoints.POST_PORTFOLIO_SETTINGS);
+                    .post(PortfolioSettingsEndPoints.POST_PORTFOLIO_SETTINGS);
         } catch (Exception e) {
             System.out.println("Inside exception " + e.getMessage());
         }
@@ -975,7 +976,7 @@ public class APIController {
 
                     .body("{search_term: " + searchItem + "}")
                     .when()
-                    .post(Endpoints.SEARCH);
+                    .post(CommonEndPoints.SEARCH);
 
 
         } catch (Exception e) {

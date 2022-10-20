@@ -2,7 +2,6 @@ package com.esgc.Tests.UI.EntityClimateProfile;
 
 import com.esgc.Pages.EntityClimateProfilePage;
 import com.esgc.Pages.LoginPage;
-import com.esgc.Pages.ResearchLinePage;
 import com.esgc.TestBase.DataProviderClass;
 import com.esgc.Tests.TestBases.UITestBase;
 import com.esgc.Utilities.*;

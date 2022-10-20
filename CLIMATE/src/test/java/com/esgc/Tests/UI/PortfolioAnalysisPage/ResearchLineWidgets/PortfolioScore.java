@@ -1,8 +1,8 @@
 package com.esgc.Tests.UI.PortfolioAnalysisPage.ResearchLineWidgets;
 
 import com.esgc.Pages.PortfolioAnalysisPage.PhysicalRiskPages.PhysicalRiskManagementPages.PhysicalRiskManagementPage;
-import com.esgc.Pages.UploadPage;
 import com.esgc.Pages.ResearchLinePage;
+import com.esgc.Pages.UploadPage;
 import com.esgc.TestBase.DataProviderClass;
 import com.esgc.Tests.TestBases.UITestBase;
 import com.esgc.Utilities.BrowserUtils;

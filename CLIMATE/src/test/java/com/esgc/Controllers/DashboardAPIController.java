@@ -2,10 +2,10 @@ package com.esgc.Controllers;
 
 import com.esgc.APIModels.APIFilterPayload;
 import com.esgc.APIModels.APIFilterPayloadWithoutBenchmark;
-import com.esgc.APIModels.Dashboard.APIEntityListPayload;
-import com.esgc.APIModels.Dashboard.APIHeatMapPayload;
-import com.esgc.APIModels.Dashboard.APIHeatMapSinglePayload;
-import com.esgc.APIModels.Dashboard.APIPerformanceChartPayload;
+import com.esgc.APIModels.DashboardModels.APIEntityListPayload;
+import com.esgc.APIModels.DashboardModels.APIHeatMapPayload;
+import com.esgc.APIModels.DashboardModels.APIHeatMapSinglePayload;
+import com.esgc.APIModels.DashboardModels.APIPerformanceChartPayload;
 import com.esgc.Utilities.EndPoints.DashboardEndPoints;
 import com.esgc.Utilities.EndPoints.EntityProfilePageEndpoints;
 import com.esgc.Utilities.EndPoints.PortfolioAnalysisEndpoints;

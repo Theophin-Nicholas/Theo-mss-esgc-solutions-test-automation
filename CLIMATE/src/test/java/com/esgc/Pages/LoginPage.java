@@ -10,7 +10,7 @@ import org.testng.Assert;
 import java.util.List;
 import java.util.Set;
 
-public class LoginPage extends PageBase {
+public class LoginPage extends ClimatePageBase {
 
 
     @FindBy(id = "")
