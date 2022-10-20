@@ -1,4 +1,4 @@
-package com.esgc.Utilities.API;
+package com.esgc.Utilities.EndPoints;
 
 /**
  * This utility class created to store all Endpoints for API calls
