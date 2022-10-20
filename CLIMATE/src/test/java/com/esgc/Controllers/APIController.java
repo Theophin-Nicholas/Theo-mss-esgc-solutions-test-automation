@@ -1,10 +1,13 @@
 package com.esgc.Controllers;
 
+import com.aventstack.extentreports.markuputils.CodeLanguage;
+import com.aventstack.extentreports.markuputils.MarkupHelper;
 import com.esgc.APIModels.APIFilterPayload;
 import com.esgc.APIModels.APIFilterPayloadWithImpactFilter;
 import com.esgc.APIModels.RangeAndScoreCategory;
 import com.esgc.DBModels.ResearchLineIdentifier;
 import com.esgc.Utilities.API.Endpoints;
+import com.esgc.Utilities.APIUtilities;
 import com.esgc.Utilities.Driver;
 import com.esgc.Utilities.EndPoints.PortfolioAnalysisEndpoints;
 import com.esgc.Utilities.Environment;
@@ -23,6 +26,8 @@ import java.util.stream.Collectors;
 
 import static io.restassured.RestAssured.given;
 import static java.util.stream.Collectors.groupingBy;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
 
 
 public class APIController {
@@ -74,6 +79,14 @@ public class APIController {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public Response deletePortfolio(String portfolioId) {
+        return configSpec()
+                .header("Content-Type", "application/json, text/plain, */*")
+                .pathParam("portfolio_id", portfolioId)
+                .when()
+                .delete(Endpoints.DELETE_PORTFOLIO).prettyPeek();
     }
 
     /**
@@ -972,4 +985,45 @@ public class APIController {
         return response;
     }
 
+    public String postValidPortfolio(String portfolioNameToDelete) {
+        String filePath = System.getProperty("user.dir") + File.separator + "src" +
+                File.separator + "test" + File.separator + "resources" +
+                File.separator + "upload" + File.separator + portfolioNameToDelete;
+        File file = new File(filePath);
+        String fileName = file.getName();
+        String user_id = APIUtilities.userID();
+
+        System.out.println("File name:" + fileName);
+
+        byte[] fileContent = new byte[0];
+
+        try {
+            fileContent = FileUtils.readFileToByteArray(file);
+        } catch (IOException e) {
+            System.out.println("FILE NOT FOUND!!!");
+            System.out.println(e.getMessage());
+        }
+
+        System.out.println("Importing Portfolio:" + fileName);
+        APIController apiController = new APIController();
+
+        Response response = apiController.importPortfolio(user_id, fileName, filePath);
+
+        response.then().log().ifError();
+        System.out.println("Response received");
+        response.then()
+                .assertThat()
+                .statusCode(200)
+                .contentType(ContentType.JSON)
+                .body("portfolio_name", is(notNullValue()))
+                .body("portfolio_id", is(notNullValue()));
+        System.out.println(MarkupHelper.createCodeBlock(response.statusLine()));
+        System.out.println(MarkupHelper.createCodeBlock(response.body().jsonPath().prettyPrint(), CodeLanguage.JSON));
+
+        String portfolioName = response.jsonPath().getString("portfolio_name");
+        String portfolioID = response.jsonPath().getString("portfolio_id");
+
+        System.out.println(portfolioName + " imported to database successfully");
+        return portfolioID;
+    }
 }

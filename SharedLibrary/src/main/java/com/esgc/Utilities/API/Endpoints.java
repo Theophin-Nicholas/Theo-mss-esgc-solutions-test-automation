@@ -1,7 +1,5 @@
 package com.esgc.Utilities.API;
 
-import java.net.URI;
-
 /**
  * This utility class created to store all Endpoints for API calls
  */
@@ -9,6 +7,7 @@ public class Endpoints {
 
     //=================PORTFOLIO APIs
     public static String IMPORT_PORTFOLIO = "api/portfolio";
+    public static String DELETE_PORTFOLIO = "api/portfolio/{portfolio_id}";
 
     //================FILTERS
 
