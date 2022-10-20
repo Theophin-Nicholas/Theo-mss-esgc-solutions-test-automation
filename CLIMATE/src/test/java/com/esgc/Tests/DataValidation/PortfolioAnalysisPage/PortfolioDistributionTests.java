@@ -1,15 +1,14 @@
 package com.esgc.Tests.DataValidation.PortfolioAnalysisPage;
 
-import com.esgc.APIModels.*;
-import com.esgc.DBModels.ESGLeaderANDLaggers;
 import com.esgc.APIModels.APIFilterPayload;
-import com.esgc.APIModels.PortfolioDistribution;
-import com.esgc.APIModels.PortfolioDistributionWrapper;
-import com.esgc.APIModels.RangeAndScoreCategory;
+import com.esgc.APIModels.PortoflioAnalysisModels.PortfolioDistribution;
+import com.esgc.APIModels.PortoflioAnalysisModels.PortfolioDistributionWrapper;
+import com.esgc.APIModels.PortoflioAnalysisModels.RangeAndScoreCategory;
+import com.esgc.DBModels.ESGLeaderANDLaggers;
 import com.esgc.DBModels.ResearchLineIdentifier;
 import com.esgc.Tests.TestBases.DataValidationTestBase;
-import com.esgc.Utilities.PortfolioUtilities;
 import com.esgc.Utilities.APIUtilities;
+import com.esgc.Utilities.PortfolioUtilities;
 import com.esgc.Utilities.Xray;
 import io.restassured.response.Response;
 import org.hamcrest.Matchers;
@@ -17,7 +16,10 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Test;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.DoubleSummaryStatistics;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 

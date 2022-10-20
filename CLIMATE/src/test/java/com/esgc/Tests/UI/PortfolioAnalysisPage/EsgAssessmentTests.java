@@ -145,7 +145,7 @@ public class EsgAssessmentTests extends UITestBase {
 
     @Test(groups = {"regression", "ui", "esg"},
             description = "Verify ESG Weighted Average Score Data Validation")
-    @Xray(test = {9084,9086})
+    @Xray(test = {9084,9086,9083})
     public void verifyGeographicAndSectorDistributionSectionComponentsTest() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
 
@@ -162,6 +162,7 @@ public class EsgAssessmentTests extends UITestBase {
         BrowserUtils.scrollTo(researchLinePage.geoSectionTitle);
         assertTestCase.assertEquals(researchLinePage.geoSectionTitle.getText(), "Sector and Geographic Distribution", "Sector and Geographic Distribution Section Title is verified");
 
+        assertTestCase.assertTrue(researchLinePage.IsGeoSectionTreeMapAvailable(),"Validate if Tree map section is available");
         //verify Geo Table Headers
         assertTestCase.assertEquals(researchLinePage.geoTableHeaders.size(), 3, "Verify Geo Table Headers");
         assertTestCase.assertEquals(researchLinePage.geoTableHeaders.get(0).getText(), "Country", "Verify Geo Table Headers");

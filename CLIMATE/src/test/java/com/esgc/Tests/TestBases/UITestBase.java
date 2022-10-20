@@ -4,6 +4,7 @@ package com.esgc.Tests.TestBases;
 import com.esgc.Pages.LoginPage;
 import com.esgc.TestBase.TestBase;
 import com.esgc.Utilities.BrowserUtils;
+import com.esgc.Utilities.Database.DatabaseDriver;
 import com.esgc.Utilities.Driver;
 import com.esgc.Utilities.Environment;
 import org.testng.ITestResult;
@@ -39,6 +40,9 @@ public abstract class UITestBase extends TestBase {
         }
         isUITest = true;
         Driver.getDriver().manage().window().maximize();
+
+        DatabaseDriver.createDBConnection();
+
     }
 
     @BeforeMethod(onlyForGroups = {"entitlements"}, groups = {"smoke", "regression", "entitlements"},alwaysRun = true)

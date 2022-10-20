@@ -29,8 +29,11 @@ public class EMCAccountDetailsPage extends EMCBasePage {
     @FindBy (xpath = "//label//input")
     public WebElement statusCheckBox;
 
-    @FindBy (xpath = "//div[@name='subscriberType']")
+    @FindBy (xpath = "//div[@name='subscriberType']//input")
     public WebElement subscriberInput;
+
+    @FindBy (xpath = "//ul/li")
+    public List<WebElement> subscriberTypeList;
 
     @FindBy (name="contractStartDate")
     public WebElement startDateInput;
@@ -254,7 +257,7 @@ public class EMCAccountDetailsPage extends EMCBasePage {
     }
 
     public void searchUser(String test) {
-
+        wait(searchInput,20);
         clear(searchInput);
         System.out.println("Searching for the user : "+test);
         searchInput.sendKeys(test);
@@ -286,9 +289,7 @@ public class EMCAccountDetailsPage extends EMCBasePage {
             System.out.println(applicationName + " application assigned");
             doneButton.click();
             clickOnDetailsTab();
-            BrowserUtils.wait(1);
             clickOnApplicationsTab();
-            BrowserUtils.wait(3);
             return true;
         }
     }
@@ -322,6 +323,8 @@ public class EMCAccountDetailsPage extends EMCBasePage {
                 BrowserUtils.waitForClickablility(deleteButton, 5).click();
                 BrowserUtils.waitForClickablility(popupDeleteButton, 5).click();
                 System.out.println("user "+name+" deleted");
+                clickOnDetailsTab();
+                clickOnUsersTab();
                 return true;
             }
         }
@@ -330,7 +333,8 @@ public class EMCAccountDetailsPage extends EMCBasePage {
     }
 
     public boolean verifyApplication(String applicationName) {
-        System.out.println("Number of current applications = " + applicationsNamesList.size());
+        //System.out.println("Number of current applications = " + applicationsNamesList.size());
+        wait(applicationsNamesList, 10);
         for(WebElement application : applicationsNamesList) {
             if(application.getText().equals(applicationName)) {
                 System.out.println(applicationName + " application found");
@@ -352,9 +356,7 @@ public class EMCAccountDetailsPage extends EMCBasePage {
                     applicationsDeleteButtons.get(i).click();
                     BrowserUtils.waitForClickablility(deleteApplicationsProceedButton,5).click();
                     clickOnDetailsTab();
-                    BrowserUtils.wait(1);
                     clickOnApplicationsTab();
-                    BrowserUtils.wait(3);
                     break;
                 }
             }
@@ -369,25 +371,24 @@ public class EMCAccountDetailsPage extends EMCBasePage {
 
     public void clickOnUsersTab() {
         System.out.println("clicking on users tab");
-        BrowserUtils.waitForClickablility(usersTab, 5).click();
+        BrowserUtils.waitAndClick(usersTab, 20);
     }
     public void clickOnDetailsTab() {
         System.out.println("clicking on details tab");
-        BrowserUtils.waitForClickablility(detailsTab, 5).click();
+        BrowserUtils.waitAndClick(detailsTab, 20);
     }
     public void clickOnApplicationsTab() {
         System.out.println("clicking on applications tab");
-        BrowserUtils.scrollTo(applicationsTab);
-        BrowserUtils.waitForClickablility(applicationsTab, 15).click();
+        BrowserUtils.waitAndClick(applicationsTab, 20);
     }
     public void clickOnProductsTab() {
         System.out.println("clicking on products tab");
-        BrowserUtils.waitForClickablility(productsTab, 5).click();
+        BrowserUtils.waitAndClick(productsTab, 20);
     }
 
     public void deleteRandomUsers() {
         expandList();
-        List<String> keepUsers = new ArrayList<>(Arrays.asList("Efrain June2022", "QA Test", "Ferhat Test","MA Test Account"));
+        List<String> keepUsers = new ArrayList<>(Arrays.asList("Efrain June2022", "QA Test", "Ferhat Test","MA Test Account","Active User"));
         int waitTime = userNamesList.size();
         if(userNamesList.size()>keepUsers.size()) {
             for (int i = 0; i < userNamesList.size(); i++) {
@@ -452,9 +453,7 @@ public class EMCAccountDetailsPage extends EMCBasePage {
         BrowserUtils.waitForClickablility(assignApplicationsModalAssignButtonsList.get(0),5).click();
         BrowserUtils.waitForClickablility(doneButton,5).click();
         clickOnDetailsTab();
-        BrowserUtils.wait(1);
         clickOnApplicationsTab();
-        BrowserUtils.wait(3);
         System.out.println(applicationName + " application added");
     }
 
@@ -526,5 +525,10 @@ public class EMCAccountDetailsPage extends EMCBasePage {
     public void clickOnBackToUsersButton() {
         System.out.println("clicking on back to users button");
         BrowserUtils.waitForClickablility(backToUsersButton,5).click();
+    }
+
+    public void clickOnAssignApplicationButton() {
+        System.out.println("clicking on assign application button");
+        BrowserUtils.waitAndClick(assignApplicationsButton,10);
     }
 }

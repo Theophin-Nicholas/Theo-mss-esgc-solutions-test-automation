@@ -2,29 +2,22 @@ package com.esgc.Tests;
 
 import com.esgc.Pages.*;
 import com.esgc.TestBases.EMCUITestBase;
-import com.esgc.Utilities.BrowserUtils;
-import com.esgc.Utilities.Xray;
+import com.esgc.Utilities.*;
+import com.github.javafaker.DateAndTime;
 import com.github.javafaker.Faker;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.testng.annotations.Test;
 
 public class ConfigurationPageTests extends EMCUITestBase {
+    String accountName = "INTERNAL QATest - PROD123";
+    String applicationName = "TestQA";
     String roleName = "TestRole";
     String userName = "Ferhat Demir";
     Faker faker = new Faker();
     public void navigateToConfigPage(String option) {
         EMCMainPage mainPage = new EMCMainPage();
-        System.out.println("Navigating to Accounts page");
-        //Select config in the left menu
-        try {
-            mainPage.openSidePanel();
-            System.out.println("Side panel is opened");
-        } catch (Exception e) {
-            System.out.println("Side panel is not opened");
-        }
-        mainPage.clickConfigurationsButton();
-        System.out.println("Configuration button is clicked");
+        mainPage.goToConfigurationsPage();
         EMCConfigurationsPage configurationsPage = new EMCConfigurationsPage();
         BrowserUtils.waitForVisibility(configurationsPage.pageTitle, 10);
         if(option.toLowerCase().equals("users")){
@@ -250,6 +243,8 @@ public class ConfigurationPageTests extends EMCUITestBase {
         //The new Role is created and the same is now visible on the Role list
         BrowserUtils.waitForVisibility(rolesPage.notification, 15);
         assertTestCase.assertTrue(rolesPage.notification.isDisplayed(), "Role created message is displayed");
+        BrowserUtils.waitForClickablility(rolesPage.createRoleButton, 5).click();
+        BrowserUtils.waitForClickablility(createRolePage.backButton, 5).click();
         assertTestCase.assertTrue(rolesPage.verifyRole(roleName),"New role is creation is verified");
     }
 
@@ -269,7 +264,7 @@ public class ConfigurationPageTests extends EMCUITestBase {
         assertTestCase.assertTrue(createRolePage.generalInfoTag.isDisplayed(),"Create Role Page - General Info tag is displayed");
 
         //Fill the mandatory fields (Key and Name), DO NOT fill the optional fields (Description and Permissions) and click on Save
-        String roleName = "qatestrole"+new Faker().food().fruit().replaceAll("\\W","").toLowerCase();
+        String roleName = "qatestrole"+ java.time.LocalDateTime.now().format(java.time.format.DateTimeFormatter.ofPattern("dd-hhmmss"));
         System.out.println("roleName = " + roleName);
         createRolePage.keyInput.sendKeys(roleName);
         createRolePage.nameInput.sendKeys(roleName);
@@ -378,5 +373,241 @@ public class ConfigurationPageTests extends EMCUITestBase {
         assertTestCase.assertTrue(detailsPage.verifyPermission("Search account users"),"Permission is assigned to the role");
         detailsPage.deletePermission("Search account users");
         assertTestCase.assertFalse(detailsPage.verifyPermission("Search account users"),"Permission is not assigned to the role");
+    }
+
+    @Test(groups = {"EMC", "ui","regression"}, description = "UI | EMC | Roles | Verify User with Admin Role can view Accounts menu on EMC")
+    @Xray(test = {7314, 7435, 7454, 7555, 7597, 7598})
+    public void verifyUserWithAdminRoleCanViewAccountsMenuTest() {
+        navigateToConfigPage("permission roles");
+        EMCRolesPage rolesPage = new EMCRolesPage();
+
+        assertTestCase.assertTrue(rolesPage.verifyRole("Administrator"), "TestRole are located in the page");
+        rolesPage.selectRole("Administrator");
+        EMCRoleDetailsPage detailsPage = new EMCRoleDetailsPage();
+        BrowserUtils.waitForClickablility(detailsPage.usersTab, 5).click();
+        if(!detailsPage.verifyUser("Ferhat Demir")){
+            System.out.println("User is not assigned to the role. Assigning it...");
+            detailsPage.assignMember("Ferhat Demir");
+        }
+        assertTestCase.assertTrue(detailsPage.verifyUser("Ferhat Demir"),"User is assigned to the role");
+
+        //Login with Test User
+        Driver.closeDriver();
+        Driver.getDriver().get(Environment.EMC_URL);
+        BrowserUtils.waitForPageToLoad(10);
+        LoginPageEMC loginPageEMC = new LoginPageEMC();
+        loginPageEMC.loginEMCWithParams("ferhat.demir-non-empl@moodys.com", "Odessa2022??");
+
+        //Go to Accounts page and open account
+        EMCMainPage homePage = new EMCMainPage();
+        homePage.goToAccountsPage();
+        EMCAccountsPage accountsPage = new EMCAccountsPage();
+        BrowserUtils.wait(5);
+        assertTestCase.assertEquals(accountsPage.pageTitle.getText(), "Accounts", "Accounts page is displayed");
+        System.out.println("Accounts page is displayed");
+        assertTestCase.assertEquals(accountsPage.accountNames.size() > 0, true, "Account is displayed");
+        accountsPage.goToAccount(accountName);
+
+        //verify details tab
+        EMCAccountDetailsPage accountDetailsPage = new EMCAccountDetailsPage();
+        BrowserUtils.waitForVisibility(accountDetailsPage.editButton,20);
+        assertTestCase.assertTrue(accountDetailsPage.editButton.isEnabled(), "Users tab is verified for Admin Role");
+        BrowserUtils.waitForClickablility(accountDetailsPage.editButton, 5).click();
+        assertTestCase.assertTrue(accountDetailsPage.accountNameInput.isEnabled(), "Admin User can edit fields");
+        assertTestCase.assertTrue(accountDetailsPage.saveButton.isEnabled(), "Save button is verified for Admin Role");
+        assertTestCase.assertTrue(accountDetailsPage.cancelButton.isEnabled(), "Cancel button is verified for Admin Role");
+        accountDetailsPage.cancelButton.click();
+        //verify applications tab
+        accountDetailsPage.clickOnApplicationsTab();
+        BrowserUtils.wait(5);
+        assertTestCase.assertTrue(accountDetailsPage.assignApplicationsButton.isEnabled(), "Applications tab is verified for Admin Role");
+        if(accountDetailsPage.verifyApplication(applicationName)) accountDetailsPage.deleteApplication(applicationName);
+        assertTestCase.assertTrue(accountDetailsPage.assignApplication(applicationName), "Assigning application is verified for Admin Role");
+        assertTestCase.assertTrue(accountDetailsPage.verifyApplication(applicationName), "Application is assigned to the account");
+        assertTestCase.assertTrue(accountDetailsPage.deleteApplication(applicationName), "Deleting application is verified for Admin Role");
+        assertTestCase.assertFalse(accountDetailsPage.verifyApplication(applicationName), "Application is not assigned to the account");
+        accountDetailsPage.assignApplication(applicationName);
+        //verify products tab
+        accountDetailsPage.clickOnProductsTab();
+        BrowserUtils.wait(3);
+        assertTestCase.assertTrue(accountDetailsPage.assignProductsButton.isEnabled(), "Products tab is verified for Admin Role");
+        BrowserUtils.waitForClickablility(accountDetailsPage.currentProductsList.get(0), 5).click();
+        assertTestCase.assertTrue(accountDetailsPage.currentProductFeaturesList.size()>0, "Products and Features List is verified for Admin Role");
+        assertTestCase.assertTrue(accountDetailsPage.currentProductFeaturesDeleteButtons.size()>0, "Products and Features Delete Buttons List is verified for Admin Role");
+        assertTestCase.assertTrue(accountDetailsPage.currentProductFeaturesDeleteButtons.get(0).isEnabled(), "Products and Features List Delete Buttons are enabled for Admin Role");
+
+        //verify users tab
+        accountDetailsPage.clickOnUsersTab();
+        BrowserUtils.wait(3);
+        assertTestCase.assertTrue(accountDetailsPage.addUserButton.isEnabled(), "Users tab is verified for Admin Role");
+        accountDetailsPage.clickOnAddUserButton();
+        assertTestCase.assertTrue(accountDetailsPage.createUser("Aaaa","Asdf",new Faker().internet().emailAddress(),false), "User creation is verified for Admin Role");
+        assertTestCase.assertTrue(accountDetailsPage.verifyUser("Aaaa Asdf"), "New user is verified for Admin Role");
+        assertTestCase.assertTrue(accountDetailsPage.deleteUser("Aaaa Asdf"), "User deletion is verified for Admin Role");
+        assertTestCase.assertFalse(accountDetailsPage.verifyUser("Aaaa Asdf"), "New user deletion is verified for Admin Role");
+
+        //Go back to roles page and reset settings for the test users
+        Driver.closeDriver();
+        Driver.getDriver().get(Environment.EMC_URL);
+        loginPageEMC = new LoginPageEMC();
+        BrowserUtils.waitForVisibility(loginPageEMC.usernameBox, 25);
+        loginPageEMC.loginWithInternalUser();
+        navigateToConfigPage("permission roles");
+
+        rolesPage = new EMCRolesPage();
+        while(!rolesPage.verifyRole("Administrator")){BrowserUtils.wait(1);}
+        rolesPage.selectRole("Administrator");
+        detailsPage = new EMCRoleDetailsPage();
+        BrowserUtils.waitForClickablility(detailsPage.usersTab, 25).click();
+        while(!detailsPage.verifyUser("Ferhat Demir")){BrowserUtils.wait(1);}
+        detailsPage.deleteMember("Ferhat Demir");
+        BrowserUtils.waitForVisibility(detailsPage.notification, 15).click();
+        assertTestCase.assertTrue(detailsPage.notification.isDisplayed(),"User unassigned from the role notification is displayed");
+        assertTestCase.assertFalse(detailsPage.verifyUser("Ferhat Demir"),"User is not assigned to the role");
+    }
+
+    @Test(groups = {"EMC", "ui","regression"}, description = "UI | EMC | Roles | Verify non-Admin User and can't view Accounts menu")
+    @Xray(test = {7335})
+    public void verifyUserWithNonAdminRoleCantViewAccountsMenuTest() {
+        navigateToConfigPage("permission roles");
+        EMCRolesPage rolesPage = new EMCRolesPage();
+        while(!rolesPage.verifyRole("Administrator")){BrowserUtils.wait(1);}
+        assertTestCase.assertTrue(rolesPage.verifyRole("Administrator"), "TestRole are located in the page");
+        rolesPage.selectRole("Administrator");
+        EMCRoleDetailsPage detailsPage = new EMCRoleDetailsPage();
+        BrowserUtils.waitForClickablility(detailsPage.usersTab, 5).click();
+        if(detailsPage.verifyUser("Ferhat Demir")){
+            System.out.println("User is assigned to the role. Deleting it...");
+            detailsPage.deleteMember("Ferhat Demir");
+            BrowserUtils.waitForVisibility(detailsPage.notification, 5).click();
+            assertTestCase.assertTrue(detailsPage.notification.isDisplayed(),"User unassigned from the role notification is displayed");
+        }
+        assertTestCase.assertFalse(detailsPage.verifyUser("Ferhat Demir"),"User is not assigned to the role");
+        Driver.closeDriver();
+        Driver.getDriver().get(Environment.EMC_URL);
+        BrowserUtils.waitForPageToLoad(10);
+        LoginPageEMC loginPageEMC = new LoginPageEMC();
+        loginPageEMC.loginEMCWithParams("ferhat.demir-non-empl@moodys.com", "Odessa2022??");
+        EMCMainPage homePage = new EMCMainPage();
+
+        try {
+            homePage.goToAccountsPage();
+            EMCAccountsPage accountsPage = new EMCAccountsPage();
+            BrowserUtils.wait(5);
+            assertTestCase.assertEquals(accountsPage.pageTitle.getText(), "Accounts", "Accounts page is displayed");
+            System.out.println("Accounts page is displayed");
+            //Search for the account where a New user will be created
+            assertTestCase.assertEquals(accountsPage.accountNames.size() > 0, true, "Account is displayed");
+
+            //On Account Details view, select USERS tab
+            accountsPage.goToAccount(accountName);
+            EMCAccountDetailsPage accountDetailsPage = new EMCAccountDetailsPage();
+            accountDetailsPage.wait(accountDetailsPage.editButton,10);
+            assertTestCase.assertFalse(accountDetailsPage.editButton.isDisplayed(), "Users tab is displayed");
+        } catch (Exception e) {
+            assertTestCase.assertTrue(true, "Accounts button is not displayed");
+        }
+
+        Driver.closeDriver();
+        Driver.getDriver().get(Environment.EMC_URL);
+        BrowserUtils.waitForPageToLoad(10);
+        loginPageEMC = new LoginPageEMC();
+        loginPageEMC.loginWithInternalUser();
+        BrowserUtils.wait(5);
+        Driver.getDriver().manage().window().maximize();
+    }
+
+    @Test(groups = {"EMC", "ui","regression"}, description = "UI | EMC | Roles | Verify User with View Role can view Accounts menu on EMC")
+    @Xray(test = {7336, 7434, 7552, 7599})
+    public void verifyUserWithViewerRoleCanViewAccountsMenuTest() {
+        navigateToConfigPage("permission roles");
+        EMCRolesPage rolesPage = new EMCRolesPage();
+        while(!rolesPage.verifyRole("Viewer")){BrowserUtils.wait(1);}
+        assertTestCase.assertTrue(rolesPage.verifyRole("Viewer"), "TestRole are located in the page");
+        rolesPage.selectRole("Viewer");
+        EMCRoleDetailsPage detailsPage = new EMCRoleDetailsPage();
+        BrowserUtils.waitForClickablility(detailsPage.usersTab, 5).click();
+        if(!detailsPage.verifyUser("Ferhat Demir")){
+            System.out.println("User is not assigned to the role. Assigning it...");
+            detailsPage.assignMember("Ferhat Demir");
+        }
+        assertTestCase.assertTrue(detailsPage.verifyUser("Ferhat Demir"),"User is assigned to the role");
+        Driver.closeDriver();
+        Driver.getDriver().get(Environment.EMC_URL);
+        BrowserUtils.waitForPageToLoad(10);
+        LoginPageEMC loginPageEMC = new LoginPageEMC();
+        loginPageEMC.loginEMCWithParams("ferhat.demir-non-empl@moodys.com", "Odessa2022??");
+        EMCMainPage homePage = new EMCMainPage();
+        homePage.goToAccountsPage();
+        EMCAccountsPage accountsPage = new EMCAccountsPage();
+        BrowserUtils.wait(5);
+        assertTestCase.assertEquals(accountsPage.pageTitle.getText(), "Accounts", "Accounts page is displayed");
+        assertTestCase.assertEquals(accountsPage.accountNames.size() > 0, true, "Account is displayed");
+
+        accountsPage.goToAccount(accountName);
+        EMCAccountDetailsPage accountDetailsPage = new EMCAccountDetailsPage();
+        BrowserUtils.wait(5);
+        assertTestCase.assertTrue(accountDetailsPage.usersTab.isDisplayed(), "Users tab is displayed");
+        assertTestCase.assertTrue(accountDetailsPage.applicationsTab.isDisplayed(), "Applications tab is enabled");
+        assertTestCase.assertTrue(accountDetailsPage.productsTab.isDisplayed(), "Products tab is enabled");
+        assertTestCase.assertTrue(accountDetailsPage.accountNameInput.isDisplayed(), "Account Name is displayed");
+
+        //verify details tab
+        try{
+            assertTestCase.assertFalse(accountDetailsPage.editButton.isDisplayed(), "Users tab is displayed");
+        } catch (Exception e){
+            assertTestCase.assertTrue(true, "edit button is not displayed for viewer users");
+        }
+        //verify applications tab
+        try{
+            accountDetailsPage.clickOnApplicationsTab();
+            BrowserUtils.waitForVisibility(accountDetailsPage.applicationsNamesList.get(0), 15);
+            assertTestCase.assertFalse(accountDetailsPage.assignApplicationsButton.isDisplayed(), "Add Application button shouldn't displayed");
+        } catch (Exception e){
+            assertTestCase.assertTrue(true, "Assign Application button is not displayed");
+        }
+        //verify products tab
+        try{
+            accountDetailsPage.clickOnProductsTab();
+            BrowserUtils.waitForVisibility(accountDetailsPage.currentProductsList.get(0), 15);
+            assertTestCase.assertFalse(accountDetailsPage.assignProductsButton.isDisplayed(), "Add Product button shouldn't displayed");
+        } catch (Exception e){
+            assertTestCase.assertTrue(true, "Assign Product button is not displayed");
+        }
+        //verify users tab
+        try{
+            accountDetailsPage.clickOnUsersTab();
+            BrowserUtils.waitForVisibility(accountDetailsPage.userNamesList.get(0), 15);
+            assertTestCase.assertFalse(accountDetailsPage.addUserButton.isDisplayed(), "Add User button shouldn't displayed");
+        } catch (Exception e){
+            assertTestCase.assertTrue(true, "Assign User button is not displayed");
+        }
+        try{
+            accountDetailsPage.wait(accountDetailsPage.userNamesList.get(0),20);
+            assertTestCase.assertTrue(accountDetailsPage.userNamesList.size()>0, "Users List is enabled for Admin Role");
+            BrowserUtils.waitForClickablility(accountDetailsPage.userCheckboxList.get(0),5).click();
+            assertTestCase.assertFalse(accountDetailsPage.deleteButton.isEnabled(), "Users Delete Button is not enabled for Admin Role");
+        } catch (Exception e){
+            assertTestCase.assertTrue(true, "Delete User button is not displayed");
+        }
+
+        //Go back to Admin user and reset settings for the test user
+        Driver.closeDriver();
+        Driver.getDriver().get(Environment.EMC_URL);
+        BrowserUtils.waitForPageToLoad(10);
+        loginPageEMC = new LoginPageEMC();
+        loginPageEMC.loginWithInternalUser();
+        navigateToConfigPage("permission roles");
+        BrowserUtils.wait( 5);
+        rolesPage = new EMCRolesPage();
+        assertTestCase.assertTrue(rolesPage.verifyRole("Viewer"), "TestRole are located in the page");
+        rolesPage.selectRole("Viewer");
+        detailsPage = new EMCRoleDetailsPage();
+        BrowserUtils.waitForClickablility(detailsPage.usersTab, 5).click();
+        while(!detailsPage.verifyUser("Ferhat Demir")){BrowserUtils.wait(1);}
+        detailsPage.deleteMember("Ferhat Demir");
+        BrowserUtils.waitForVisibility(detailsPage.notification, 5).click();
+        assertTestCase.assertTrue(detailsPage.notification.isDisplayed(),"User unassigned from the role notification is displayed");
+        assertTestCase.assertFalse(detailsPage.verifyUser("Ferhat Demir"),"User is not assigned to the role");
     }
 }

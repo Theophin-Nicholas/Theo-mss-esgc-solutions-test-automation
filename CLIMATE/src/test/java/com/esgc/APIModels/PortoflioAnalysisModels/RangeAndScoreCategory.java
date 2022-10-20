@@ -1,0 +1,24 @@
+package com.esgc.APIModels.PortoflioAnalysisModels;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class RangeAndScoreCategory {
+    private String category;
+    private Double min;
+    private Double max;
+    private String impact;
+    private Double min2;
+    private Double max2;
+
+    public RangeAndScoreCategory(String category, Double min, Double max, String impact) {
+        this.category = category;
+        this.min = min;
+        this.max = max;
+        this.impact = impact;
+    }
+}
