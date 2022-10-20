@@ -1,8 +1,8 @@
 package com.esgc.Tests.UI.PortfolioAnalysisPage.ResearchLineWidgets;
 
 import com.esgc.Pages.PortfolioAnalysisPage.PhysicalRiskPages.PhysicalRiskManagementPages.PhysicalRiskManagementPage;
-import com.esgc.Pages.UploadPage;
 import com.esgc.Pages.ResearchLinePage;
+import com.esgc.Pages.UploadPage;
 import com.esgc.TestBase.DataProviderClass;
 import com.esgc.Tests.TestBases.UITestBase;
 import com.esgc.Utilities.BrowserUtils;
@@ -44,7 +44,7 @@ public class PortfolioScore extends UITestBase {
         Assert.assertTrue(researchLinePage.checkIfResearchLineTitleIsDisplayed(page));
         test.pass("User is on " + page + " Page");
 
-        Assert.assertTrue(researchLinePage.checkIfPortfolioLoadMaskIsDisplayed(title));
+       // Assert.assertTrue(researchLinePage.checkIfPortfolioLoadMaskIsDisplayed(title));
         Assert.assertTrue(researchLinePage.checkIfWidgetTitleIsDisplayed(title));
         Assert.assertTrue(researchLinePage.checkIfPortfolioTableIsDisplayed(title));
 

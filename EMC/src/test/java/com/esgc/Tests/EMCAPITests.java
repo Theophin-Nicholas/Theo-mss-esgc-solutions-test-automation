@@ -5,7 +5,6 @@ import com.esgc.APIModels.EMCAPIController;
 import com.esgc.TestBases.APITestBase;
 import com.esgc.Utilities.Environment;
 import com.esgc.Utilities.Xray;
-import com.github.javafaker.App;
 import com.github.javafaker.Faker;
 import io.restassured.response.Response;
 import org.testng.annotations.Test;

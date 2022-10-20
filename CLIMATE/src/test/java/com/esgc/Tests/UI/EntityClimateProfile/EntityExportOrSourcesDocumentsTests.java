@@ -2,7 +2,6 @@ package com.esgc.Tests.UI.EntityClimateProfile;
 
 import com.esgc.Pages.EntityClimateProfilePage;
 import com.esgc.Pages.LoginPage;
-import com.esgc.Pages.ResearchLinePage;
 import com.esgc.TestBase.DataProviderClass;
 import com.esgc.Tests.TestBases.UITestBase;
 import com.esgc.Utilities.*;
@@ -10,12 +9,13 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.testng.annotations.Test;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class EntityExportOrSourcesDocumentsTests extends UITestBase {
 
     @Test(groups = {"entity_climate_profile", "regression", "ui", "robot_dependency"})
-    @Xray(test = {9209, 9212, 10175})
+    @Xray(test = {9206, 9208, 9209, 9212, 10175})
     public void validateExportSourceDocumentsPopup(){
 
         String company = "Rogers Corp.";

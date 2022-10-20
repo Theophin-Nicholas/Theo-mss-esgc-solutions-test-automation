@@ -1,7 +1,7 @@
 package com.esgc.Tests.DataValidation.PortfolioAnalysisPage;
 
-import com.esgc.APIModels.Entities;
-import com.esgc.APIModels.PhysicalRiskEntities;
+import com.esgc.APIModels.PortoflioAnalysisModels.Entities;
+import com.esgc.APIModels.PortoflioAnalysisModels.PhysicalRiskEntities;
 import com.esgc.Controllers.APIController;
 import com.esgc.Tests.TestBases.DataValidationTestBase;
 import com.esgc.Utilities.Database.UnderlyingDataMetricsQueries;

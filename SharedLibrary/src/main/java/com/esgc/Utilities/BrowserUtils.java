@@ -459,4 +459,9 @@ public class BrowserUtils {
     public static void waitFor(int seconds) {
         wait(seconds);
     }
+
+    public static void ActionKeyPress(Keys key){
+        Actions act = new Actions(Driver.getDriver());
+        act.sendKeys(key).build().perform();
+    }
 }
