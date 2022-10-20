@@ -6,6 +6,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class EMCAccountsPage extends EMCBasePage {
     @FindBy(tagName = "h4")
@@ -39,22 +40,37 @@ public class EMCAccountsPage extends EMCBasePage {
     public List<WebElement> accountModifiedByEmails;
 
     public void search(String accountName) {
-        System.out.println("searchInput.isDisplayed() = " + searchInput.isDisplayed());
-        searchInput.clear();
+        if (!searchInput.isDisplayed()) System.out.println("searchInput is not Displayed!");
+        clear(searchInput);
         searchInput.sendKeys(accountName);
         searchButton.click();
-        System.out.println("Searching for account: " + accountName);
-        System.out.println(accountNames.size() + " accounts found");
+        if (accountNames.size()==0) System.out.println("No account found!");
     }
 
-    public boolean findAccount(String accountName) {
+    public boolean verifyAccount(String accountName) {
+        try {
+            for (int i = 0; i < accountNames.size(); i++) {
+                if (accountNames.get(i).getText().equalsIgnoreCase(accountName)) {
+                    return true;
+                }
+            }
+        } catch (Exception e) {
+            return false;
+        }
+        return false;
+    }
+    public boolean verifyAccount(String accountName, boolean status) {
+        String statusString = status ? "Active" : "Inactive";
         for (int i = 0; i < accountNames.size(); i++) {
             if (accountNames.get(i).getText().equals(accountName)) {
-                return true;
+                if (accountStatuses.get(i).getText().equals(statusString)) {
+                    return true;
+                }
             }
         }
         return false;
     }
+
 
     public void clickOnAccount(String accountName){
         for (int i = 0; i < accountNames.size(); i++) {
@@ -86,7 +102,7 @@ public class EMCAccountsPage extends EMCBasePage {
 
     public List<String> getAccountNames() {
         //return accountnames as String list
-        return accountNames.stream().map(WebElement::getText).collect(java.util.stream.Collectors.toList());
+         return accountNames.stream().map(name -> name.getText().toLowerCase()).collect(Collectors.toList());
     }
 
     public void clickOnCreateAccountButton() {
