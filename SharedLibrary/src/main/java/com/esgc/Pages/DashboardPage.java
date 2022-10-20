@@ -49,10 +49,22 @@ public class DashboardPage extends UploadPage {
     @FindBy(xpath = "//div[contains(@class,'MuiDrawer-paperAnchorRight')]//div[text()='Methodologies']")
     public WebElement methodologiesPopup;
 
+    @FindBy(xpath = "//div[contains(@class,'MuiDrawer-paperAnchorRight')]//h2[1]")
+    public WebElement methodologyPopup_Header;
+
+    @FindBy(xpath = "//a[@id='link-link-test-id-1']")
+    public WebElement methodologyPopup_Link_Methodology10;
+    @FindBy(xpath = "//a[@id='link-link-test-id-2']")
+    public WebElement methodologyPopup_Link_Methodology20;
+    @FindBy(xpath = "//a[@id='link-link-test-id-3']")
+    public WebElement methodologyPopup_Link_RiskAssessmentts;
+    @FindBy(xpath = "//div[contains(text(),'Viewing')]")
+    public WebElement regionTitleInStickyHeader;
+
     @FindBy(xpath = "//a[text()='hide']")
     public WebElement hideLink;
 
-    @FindBy(xpath = "//*[text()='Largest Holdings']")
+    @FindBy(xpath = "//div[@id='heatmapentity-test-id']")
     public WebElement endOfPage;
 
     @FindBy(id = "button-holdings")
@@ -194,7 +206,7 @@ public class DashboardPage extends UploadPage {
     //============= Heat Map
     @FindBy(xpath = "//*[text()='Select two:']/following-sibling::div/div")
     public List<WebElement> heatMapResearchLines;
-    @FindBy(xpath = "//div[@id='heatmapentity-test-id']")
+    @FindBy(xpath = "//h3[normalize-space()='Overall ESG Score']")
     public WebElement heatMapNoEntityWidget;
     @FindBy(xpath = "//div[@class='entityList']//br/..")
     public WebElement heatMapWidgetTitle;
@@ -382,7 +394,8 @@ public class DashboardPage extends UploadPage {
     }
 
     public void selectViewMethodologies(){
-        wait.until(ExpectedConditions.visibilityOf(btnViewMethodologies)).click();
+      //  BrowserUtils.waitForInvisibility(btnViewMethodologies, 50);
+        btnViewMethodologies.click();
     }
 
     public boolean verifyMethodologiesPopup(){
@@ -394,8 +407,6 @@ public class DashboardPage extends UploadPage {
         }
     }
 
-
-
     public void downloadDashboardExportFile(){
         navigateToPageFromMenu("Dashboard");
         clickViewCompaniesAndInvestments();
@@ -405,6 +416,7 @@ public class DashboardPage extends UploadPage {
         closePortfolioExportDrawer();
         assertTestCase.assertEquals(filesCountInDownloadsFolder(),1,"Verify download of export file");
     }
+
 
     public void clickHideLink(){
         hideLink.click();
@@ -846,13 +858,13 @@ public class DashboardPage extends UploadPage {
         switch (bundles) {
             case PHYSICAL_RISK:
                 return Arrays.asList("Operations Risk", "Market Risk", "Supply Chain Risk","Physical Risk Management");
-
+            //JULY, "Physical Risk Management");
             case TRANSITION_RISK:
                 return Arrays.asList("Temperature Alignment",
                         "Carbon Footprint", "Green Share Assessment", "Brown Share Assessment");
             case PHYSICAL_RISK_TRANSITION_RISK:
             case ALL:
-                return Arrays.asList("Controversies", "Operations Risk", "Market Risk", "Supply Chain Risk",
+                return Arrays.asList("Operations Risk", "Market Risk", "Supply Chain Risk",
                         "Physical Risk Management", "Temperature Alignment",
                         "Carbon Footprint", "Green Share Assessment", "Brown Share Assessment");
             default:
@@ -1206,4 +1218,26 @@ public class DashboardPage extends UploadPage {
 
         }
     }
+
+    public boolean verifyMethodologiesHeader() {
+        try {
+            assertTestCase.assertTrue(methodologyPopup_Header.getText().equals("ESG Assessment Framework"), "Validate header text as 'ESG Assessment Framework'");
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public boolean verifyMethodologiesLinks() {
+        try {
+            assertTestCase.assertTrue(methodologyPopup_Link_Methodology10.getText().equals("Read more about ESG Assessment Methodology 1.0"), "Validate link as 'Read more about ESG Assessment Methodology 1.0'");
+            assertTestCase.assertTrue(methodologyPopup_Link_Methodology20.getText().equals("Read more about ESG Assessment Methodology 2.0"), "Validate link as 'Read more about ESG Assessment Methodology 2.0'");
+            assertTestCase.assertTrue(methodologyPopup_Link_RiskAssessmentts.getText().equals("Read more about Controversy Risk Assessment Methodology"), "Validate link as 'Read more about Controversy Risk Assessment Methodology'");
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
 }
+
