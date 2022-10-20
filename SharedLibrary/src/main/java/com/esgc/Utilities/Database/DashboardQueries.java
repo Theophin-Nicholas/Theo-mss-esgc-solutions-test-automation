@@ -344,10 +344,16 @@ public class DashboardQueries {
 
     public List<Map<String, Object>> getEsgScoresInfo(String portfolioId) {
         String queryForLatestMonthAndYear = "select * from VW_DASHBOARD_CLIMATE_ENTITY_DATA_EXPORT order by year desc, month desc limit 1;";
-        Map<String,Object> monthAndYear = getQueryResultMap(queryForLatestMonthAndYear).get(0);
+        Map<String, Object> monthAndYear = getQueryResultMap(queryForLatestMonthAndYear).get(0);
         String query = "SELECT * FROM VW_DASHBOARD_CLIMATE_ENTITY_DATA_EXPORT\n" +
-                "WHERE PORTFOLIO_ID = '"+portfolioId+"'\n" +
-                "and YEAR = '"+monthAndYear.get("YEAR").toString()+"' AND MONTH = '"+monthAndYear.get("MONTH").toString()+"'";
+                "WHERE PORTFOLIO_ID = '" + portfolioId + "'\n" +
+                "and YEAR = '" + monthAndYear.get("YEAR").toString() + "' AND MONTH = '" + monthAndYear.get("MONTH").toString() + "'";
+        System.out.println("query = " + query);
+        return getQueryResultMap(query);
+    }
+
+    public List<Map<String, Object>> getEsgAssessmentInfo(String portfolioId, String year, String month) {
+        String query = "select * from DF_TARGET.VW_EXPORT_ESG_ASSESSMENTS where \"portfolio_id\" = '"+portfolioId+"' and \"Year\" = '"+year+"' and \"Month\" = '"+month+"'";
         System.out.println("query = " + query);
         return getQueryResultMap(query);
     }

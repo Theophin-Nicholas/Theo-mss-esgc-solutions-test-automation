@@ -37,7 +37,7 @@ public class PortfolioFilePaths {
     public static String scorePortfolioPath(){
         return System.getProperty("user.dir")+ File.separator+"src"+
                 File.separator+"test"+File.separator+"resources"+
-                File.separator+"upload"+File.separator+"Portfolio_Score_Data.csv";
+                File.separator+"upload"+File.separator+"Portfolio_Score_Data";
     }
 
     /**
