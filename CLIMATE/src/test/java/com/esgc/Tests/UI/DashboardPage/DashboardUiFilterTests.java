@@ -1,7 +1,9 @@
 package com.esgc.Tests.UI.DashboardPage;
 
 import com.esgc.Pages.DashboardPage;
+import com.esgc.Pages.ResearchLinePage;
 import com.esgc.Tests.TestBases.UITestBase;
+import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.Xray;
 import org.testng.annotations.Test;
 
@@ -60,6 +62,42 @@ public class DashboardUiFilterTests extends UITestBase {
         assertTestCase.assertTrue(dashboardPage.isAsOfDateFilterPresent(),"As Of Date filter is not available");
         assertTestCase.assertTrue(dashboardPage.verifyAsOfDatesSort(), "Verify As Of Dates are sorted");
         assertTestCase.assertTrue(dashboardPage.verifyDefaultSelectedAsOfDateValue(), "Verify default selected as of date value is Current Month and Year");
+
+    }
+
+    @Test(groups = {"regression", "ui", "smoke", "dashboard"})
+    @Xray(test = {7727})
+    public void verifyDataAfterFilter() {
+
+        DashboardPage dashboardPage = new DashboardPage();
+        ResearchLinePage researchLine = new ResearchLinePage();
+        dashboardPage.selectSamplePortfolioFromPortfolioSelectionModal();
+
+        // Verify filter by using region
+        dashboardPage.navigateToPageFromMenu("Dashboard");
+        int initControversiesCount = dashboardPage.controversies.size();
+        dashboardPage.clickFiltersDropdown();
+        dashboardPage.selectOptionFromFiltersDropdown("regions","Europe, Middle East & Africa");
+        dashboardPage.waitForDataLoadCompletion();
+        assertTestCase.assertTrue(dashboardPage.regionsDropdown.getText().contains("Europe, Middle East & Africa"), "Verify the filter text");
+        int afterControversiesCount = dashboardPage.controversies.size();
+        assertTestCase.assertNotEquals(initControversiesCount, afterControversiesCount);
+
+        // Verify filter by using sector
+        dashboardPage.navigateToPageFromMenu("Dashboard");
+        initControversiesCount = dashboardPage.controversies.size();
+        dashboardPage.clickFiltersDropdown();
+        dashboardPage.selectOptionFromFiltersDropdown("sectors","Energy");
+        dashboardPage.waitForDataLoadCompletion();
+        assertTestCase.assertTrue(!researchLine.isFiltersDropdownPopupDisplayed(), "Verify filter popup is closed");
+        assertTestCase.assertTrue(dashboardPage.regionsDropdown.getText().contains("Energy"), "Verify the filter text");
+        afterControversiesCount = dashboardPage.controversies.size();
+        assertTestCase.assertNotEquals(initControversiesCount, afterControversiesCount);
+
+        dashboardPage.clickFiltersDropdown();
+        researchLine.clickOutsideOfDrillDownPanel();
+        BrowserUtils.wait(5);
+        assertTestCase.assertTrue(!researchLine.isFiltersDropdownPopupDisplayed(), "Verify filter popup is closed");
 
     }
 }

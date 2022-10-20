@@ -1,8 +1,8 @@
 package com.esgc.Tests.DataValidation.EntityClimateProfilePage;
 
-import com.esgc.APIModels.EntityControversies.Controversies;
+import com.esgc.APIModels.EntityProfilePageModels.EntityControversies.Controversies;
 import com.esgc.Tests.TestBases.DataValidationTestBase;
-import com.esgc.Utilities.API.EntityPageEndpoints;
+import com.esgc.Utilities.EndPoints.EntityProfilePageEndpoints;
 import com.esgc.Utilities.Environment;
 import com.esgc.Utilities.Xray;
 import io.restassured.http.ContentType;
@@ -95,7 +95,7 @@ public class EntityClimateControversies extends DataValidationTestBase {
                     .header("Content-Type", "application/json")
                     .body(payload)
                     .when()
-                    .post(EntityPageEndpoints.POST_ENTITY_CONTROVERSIES);
+                    .post(EntityProfilePageEndpoints.POST_ENTITY_CONTROVERSIES);
 
         } catch (Exception e) {
             System.out.println("Inside exception " + e.getMessage());

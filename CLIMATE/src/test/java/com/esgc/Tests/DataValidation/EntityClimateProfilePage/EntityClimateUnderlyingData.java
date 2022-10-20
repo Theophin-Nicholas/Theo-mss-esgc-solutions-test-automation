@@ -1,11 +1,11 @@
 package com.esgc.Tests.DataValidation.EntityClimateProfilePage;
 
-import com.esgc.APIModels.EntityProfileClimatePage.SummarySection.TemperatureAlignmentSummary;
-import com.esgc.APIModels.EntityUnderlyingData.BrownShare;
-import com.esgc.APIModels.EntityUnderlyingData.CarbonFootprint;
-import com.esgc.APIModels.EntityUnderlyingData.GreenShare;
+import com.esgc.APIModels.EntityProfilePageModels.EntityUnderlyingData.BrownShare;
+import com.esgc.APIModels.EntityProfilePageModels.EntityUnderlyingData.CarbonFootprint;
+import com.esgc.APIModels.EntityProfilePageModels.EntityUnderlyingData.GreenShare;
+import com.esgc.APIModels.EntityProfilePageModels.SummarySection.TemperatureAlignmentSummary;
 import com.esgc.Tests.TestBases.EntityClimateProfileDataValidationTestBase;
-import com.esgc.Utilities.API.EntityClimateProfilePageEndpoints;
+import com.esgc.Utilities.EndPoints.EntityProfilePageEndpoints;
 import com.esgc.Utilities.Environment;
 import com.esgc.Utilities.Xray;
 import io.restassured.http.ContentType;
@@ -27,7 +27,7 @@ public class EntityClimateUnderlyingData extends EntityClimateProfileDataValidat
     public void verifyUnderlyingDataMetricsCorrectGreenShare() {
         String orbisId = "039634868";//"000411117";
         List<String> dbResults;
-        String greenShare = EntityClimateProfilePageEndpoints.POST_UnderlyingDataGreenShare;
+        String greenShare = EntityProfilePageEndpoints.POST_UnderlyingDataGreenShare;
         List<GreenShare> greenShareList = Arrays.asList(getUnderlyingDataAPI(orbisId, greenShare).as(GreenShare[].class));
         System.out.println("Green Share = " + greenShareList.get(0).getGreen_share_products());
 
@@ -66,7 +66,7 @@ public class EntityClimateUnderlyingData extends EntityClimateProfileDataValidat
     public void verifyUnderlyingDataMetricsCorrectBrownShare() {
         String orbisId = "143622191";//"000411117";
         List<String> dbResults;
-        String brownShare = EntityClimateProfilePageEndpoints.POST_UnderlyingDataBrownShare;
+        String brownShare = EntityProfilePageEndpoints.POST_UnderlyingDataBrownShare;
         List<BrownShare> brownShareList = Arrays.asList(getUnderlyingDataAPI(orbisId, brownShare).as(BrownShare[].class));
         System.out.println("Brown Share = " + brownShareList.get(0).getBrown_share_products());
 
@@ -102,10 +102,10 @@ public class EntityClimateUnderlyingData extends EntityClimateProfileDataValidat
             System.out.println("researchLine = " + researchLine);
             String orbisId = "000411117";
             List<String> dbResults = new ArrayList<>();
-            String temperatureAlignment = EntityClimateProfilePageEndpoints.POST_SummaryTemperatureAlignment;
-            String carbonFootprint = EntityClimateProfilePageEndpoints.POST_UnderlyingDataCarbonFootprint;
-            String greenShare = EntityClimateProfilePageEndpoints.POST_UnderlyingDataGreenShare;
-            String brownShare = EntityClimateProfilePageEndpoints.POST_UnderlyingDataBrownShare;
+            String temperatureAlignment = EntityProfilePageEndpoints.POST_SummaryTemperatureAlignment;
+            String carbonFootprint = EntityProfilePageEndpoints.POST_UnderlyingDataCarbonFootprint;
+            String greenShare = EntityProfilePageEndpoints.POST_UnderlyingDataGreenShare;
+            String brownShare = EntityProfilePageEndpoints.POST_UnderlyingDataBrownShare;
             //Get the snowflake response
             if (researchLine.equalsIgnoreCase("Temperature Alignment")) {
                 // Get the api response

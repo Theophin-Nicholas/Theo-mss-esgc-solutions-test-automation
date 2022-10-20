@@ -1,12 +1,10 @@
 package com.esgc.Test.DataValidation;
 
 import com.esgc.APIModels.EntityIssuerPage.*;
-import com.esgc.APIModels.EntityPage.Item;
-import com.esgc.APIModels.EntityPage.ItemDetail;
-import com.esgc.DBModels.EntityPage.DriverDetailsDBModel;
-import com.esgc.DBModels.EntityPage.DriverTrendDetailModel;
-import com.esgc.Test.TestBases.EntityPageDataValidationTestBase;
-import com.esgc.Utilities.Database.EntityPageQueries;
+import com.esgc.DBModels.EntityIssuerPageDBModels.DriverDetailsDBModel;
+import com.esgc.DBModels.EntityIssuerPageDBModels.DriverTrendDetailModel;
+import com.esgc.Test.TestBases.EntityIssuerPageDataValidationTestBase;
+import com.esgc.Utilities.Database.EntityIssuerQueries;
 import com.esgc.Utilities.Environment;
 import com.esgc.Utilities.Xray;
 import io.restassured.response.Response;
@@ -19,7 +17,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-public class DriverDetailsTest extends EntityPageDataValidationTestBase {
+public class DriverDetailsTest extends EntityIssuerPageDataValidationTestBase {
     List<String> criteria = new ArrayList<>();
 
     @Xray(test = {6290,7074,8896})
@@ -42,12 +40,12 @@ public class DriverDetailsTest extends EntityPageDataValidationTestBase {
             System.out.println("Checking for criteria =" + criteriaId);
 
             //DB call for driverDetails
-            List<DriverDetailsDBModel> driverDetailsDBModelList = EntityPageQueries.getDriverDetails(orbisID, criteriaId).stream().
+            List<DriverDetailsDBModel> driverDetailsDBModelList = EntityIssuerQueries.getDriverDetails(orbisID, criteriaId).stream().
                     filter(e->e.getTrend().equals("Non_Trend")).collect(Collectors.toList());
 
             //API call for driverDetails
             DriverDetailPayload driverPayload = new DriverDetailPayload(criteriaId, orbisID);
-            Response response = controller_issuer.getDriverDetails(driverPayload);
+            Response response = controller.getDriverDetails(driverPayload);
             List<DriverDetailsAPIWrapper> driverDetailsAPIResponse = Arrays.asList(response.getBody().as(DriverDetailsAPIWrapper[].class));
             List<String> expectedMetricValues = Arrays.asList(new String[]{"Yes","Not Indicated", "No"});
 
@@ -103,12 +101,12 @@ public class DriverDetailsTest extends EntityPageDataValidationTestBase {
             System.out.println("Checking for criteria =" + criteriaId);
 
             //DB call for driverDetails
-            List<DriverTrendDetailModel> driverTrendDetailsDBModelList = EntityPageQueries.getTrendDetails(orbisID, criteriaId);
+            List<DriverTrendDetailModel> driverTrendDetailsDBModelList = EntityIssuerQueries.getTrendDetails(orbisID, criteriaId);
 
 
             //API call for driverDetails
             DriverDetailPayload driverPayload = new DriverDetailPayload(criteriaId, orbisID);
-            Response response = controller_issuer.getDriverDetails(driverPayload);
+            Response response = controller.getDriverDetails(driverPayload);
             List<DriverDetailsAPIWrapper> driverDetailsAPIResponse = Arrays.asList(response.getBody().as(DriverDetailsAPIWrapper[].class));
 
             if (driverDetailsAPIResponse.get(0).getTrends().size()>0 && driverTrendDetailsDBModelList.size()>0){

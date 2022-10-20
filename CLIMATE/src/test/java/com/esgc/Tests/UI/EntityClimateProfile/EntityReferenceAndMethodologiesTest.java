@@ -63,7 +63,7 @@ public class EntityReferenceAndMethodologiesTest extends UITestBase {
     }
 
     @Test(groups = {"entity_climate_profile", "regression", "ui"})
-    @Xray(test = {8350, 8891})
+    @Xray(test = {8350, 8891,})
     public void validateReferenceAndMethodologyLinks(){
 
         String company = "Rogers Corp.";

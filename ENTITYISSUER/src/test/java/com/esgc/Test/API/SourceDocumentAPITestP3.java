@@ -21,7 +21,7 @@ public class SourceDocumentAPITestP3 extends EntityIssuerPageTestBase {
         EntityIssuerPageAPIController entityIssuerPageAPIController = new EntityIssuerPageAPIController();
         test.info("Validating Source Document API response");
         Response response = entityIssuerPageAPIController
-                .getSouceDocument(orbisId);
+                .getSourceDocument(orbisId);
         response.as(SourceDocument[].class);
         response.then().log().all();
         response.then().assertThat()
