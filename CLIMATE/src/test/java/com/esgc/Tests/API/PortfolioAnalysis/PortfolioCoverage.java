@@ -3,7 +3,7 @@ package com.esgc.Tests.API.PortfolioAnalysis;
 import com.aventstack.extentreports.markuputils.CodeLanguage;
 import com.aventstack.extentreports.markuputils.MarkupHelper;
 import com.esgc.APIModels.APIFilterPayload;
-import com.esgc.APIModels.PortfolioCoverageWrapper;
+import com.esgc.APIModels.PortoflioAnalysisModels.PortfolioCoverageWrapper;
 import com.esgc.Controllers.APIController;
 import com.esgc.Tests.TestBases.APITestBase;
 import com.esgc.Utilities.APIUtilities;

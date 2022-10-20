@@ -3,7 +3,6 @@ package com.esgc.Tests.UI.PortfolioAnalysisPage;
 import com.esgc.Pages.ResearchLinePage;
 import com.esgc.Tests.TestBases.UITestBase;
 import com.esgc.Utilities.*;
-import com.esgc.Utilities.PortfolioFilePaths;
 import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
@@ -12,7 +11,7 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.esgc.Utilities.API.ErrorMessages.*;
+import static com.esgc.Utilities.ErrorMessages.*;
 
 public class ImportPortfolio extends UITestBase {
 

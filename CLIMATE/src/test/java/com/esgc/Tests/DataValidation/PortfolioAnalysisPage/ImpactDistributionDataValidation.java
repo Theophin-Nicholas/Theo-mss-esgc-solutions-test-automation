@@ -1,6 +1,10 @@
 package com.esgc.Tests.DataValidation.PortfolioAnalysisPage;
 
-import com.esgc.APIModels.*;
+import com.esgc.APIModels.APIFilterPayloadWithImpactFilter;
+import com.esgc.APIModels.PortoflioAnalysisModels.ImpactDistribution;
+import com.esgc.APIModels.PortoflioAnalysisModels.ImpactDistributionWrappers;
+import com.esgc.APIModels.PortoflioAnalysisModels.InvestmentAndScore;
+import com.esgc.APIModels.PortoflioAnalysisModels.RangeAndScoreCategory;
 import com.esgc.DBModels.ResearchLineIdentifier;
 import com.esgc.Pages.ResearchLinePage;
 import com.esgc.Tests.TestBases.DataValidationTestBase;

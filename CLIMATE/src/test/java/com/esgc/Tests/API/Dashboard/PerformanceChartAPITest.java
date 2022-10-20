@@ -1,8 +1,7 @@
 package com.esgc.Tests.API.Dashboard;
 
 import com.esgc.APIModels.APIFilterPayload;
-import com.esgc.APIModels.Dashboard.PerformanceChartCompany;
-import com.esgc.Controllers.APIController;
+import com.esgc.APIModels.DashboardModels.PerformanceChartCompany;
 import com.esgc.Controllers.DashboardAPIController;
 import com.esgc.Tests.TestBases.APITestBase;
 import com.esgc.Utilities.Xray;
