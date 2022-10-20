@@ -1,11 +1,11 @@
 package com.esgc.Tests.API.PortfolioAnalysis;
 
 import com.esgc.APIModels.APIFilterPayload;
-import com.esgc.APIModels.HistoryTableWrapper;
+import com.esgc.APIModels.PortoflioAnalysisModels.HistoryTableWrapper;
 import com.esgc.Controllers.APIController;
 import com.esgc.Tests.TestBases.APITestBase;
-import com.esgc.Utilities.Xray;
 import com.esgc.Utilities.APIUtilities;
+import com.esgc.Utilities.Xray;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -34,7 +34,7 @@ public class HistoryTableTest extends APITestBase{
             test.pass("Successfully validated for " + researchLine + "research line");
         }
 
-        @Test(groups = {"api", "regression"}, dataProvider = "API Research Lines")
+        @Test(groups = {"api", "regression"}, dataProvider = "No ESG API Research Lines")
         @Xray(test = {5097})
         public void getHistoryTableInvalidPayload(String researchLine) {
             APIController apiController = new APIController();
