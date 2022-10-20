@@ -1,11 +1,11 @@
 package com.esgc.Tests.API.PortfolioAnalysis;
 
 import com.esgc.APIModels.APIFilterPayload;
-import com.esgc.APIModels.LeadersAndLaggardsWrapper;
+import com.esgc.APIModels.PortoflioAnalysisModels.LeadersAndLaggardsWrapper;
 import com.esgc.Controllers.APIController;
 import com.esgc.Tests.TestBases.APITestBase;
-import com.esgc.Utilities.Xray;
 import com.esgc.Utilities.APIUtilities;
+import com.esgc.Utilities.Xray;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import org.testng.annotations.Optional;
@@ -38,7 +38,8 @@ public class LeadersAndLaggards extends APITestBase {
     }
 
     @Test(groups = {"api", "regression"}, dataProvider = "API Research Lines")
-    @Xray(test = {1168, 734, 1169, 2440, 3093, 2877})
+    @Xray(test = {1168, 734, 1169, 2440,  2877})
+    //3093 Energy Transition
     public void leadersAndLaggards_InvalidPayload(@Optional String researchLine) {
         APIController apiController = new APIController();
 
