@@ -506,6 +506,14 @@ public class EntityClimateProfilePage extends PageBase {
         BrowserUtils.waitForClickablility(exportSourcesDocumentsTab, 30).click();
     }
 
+    public boolean IsExportSourcesDocumentsButtonAvailable() {
+        try{
+            return exportSourcesDocumentsTab.isDisplayed();
+        }catch(Exception e){
+            return false;
+        }
+    }
+
     public void selectPdfDownload() {
         BrowserUtils.waitForClickablility(pdfDownloadButton, 30).click();
     }
