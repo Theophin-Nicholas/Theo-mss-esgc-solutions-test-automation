@@ -1,9 +1,9 @@
 package com.esgc.Tests.API.PortfolioAnalysis;
 
 import com.esgc.APIModels.APIFilterPayload;
-import com.esgc.APIModels.PhysicalRiskEntities;
-import com.esgc.APIModels.UnderlyingDataMetricsWrapper;
-import com.esgc.APIModels.UnderlyingDataMetricsWrapperNew;
+import com.esgc.APIModels.PortoflioAnalysisModels.PhysicalRiskEntities;
+import com.esgc.APIModels.PortoflioAnalysisModels.UnderlyingDataMetricsWrapper;
+import com.esgc.APIModels.PortoflioAnalysisModels.UnderlyingDataMetricsWrapperNew;
 import com.esgc.Controllers.APIController;
 import com.esgc.Tests.TestBases.APITestBase;
 import com.esgc.Utilities.APIUtilities;

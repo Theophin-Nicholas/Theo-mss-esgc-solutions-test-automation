@@ -1,6 +1,7 @@
 package com.esgc.Tests.DataValidation.PortfolioAnalysisPage;
 
-import com.esgc.APIModels.*;
+import com.esgc.APIModels.APIFilterPayload;
+import com.esgc.APIModels.PortoflioAnalysisModels.*;
 import com.esgc.DBModels.ResearchLineIdentifier;
 import com.esgc.Tests.TestBases.DataValidationTestBase;
 import com.esgc.Utilities.APIUtilities;

@@ -4,7 +4,9 @@ package com.esgc.Utilities;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+
 
 /*
  * This is a utility class for reading from pdf files.
