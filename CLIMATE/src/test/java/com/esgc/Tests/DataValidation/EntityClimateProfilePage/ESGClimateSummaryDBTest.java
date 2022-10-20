@@ -1,7 +1,7 @@
 package com.esgc.Tests.DataValidation.EntityClimateProfilePage;
 
 
-import com.esgc.APIModels.EntityHeader;
+import com.esgc.APIModels.EntityClimateProfile.EntityHeader;
 import com.esgc.APIModels.EntityProfileClimatePage.SummarySection.BrownShareAndGreenShareClimateSummary;
 import com.esgc.APIModels.EntityProfileClimatePage.SummarySection.CarbonFootprintSummary;
 import com.esgc.APIModels.EntityProfileClimatePage.SummarySection.PhysicalRiskHazardsSummary;
@@ -235,8 +235,10 @@ public class ESGClimateSummaryDBTest extends EntityClimateProfileDataValidationT
     @Xray(test = {8750})
     public void validateDisclosureRatio(@Optional String orbisID) {
         //Get the header details via API
-        List<EntityHeader> entityHeader = Arrays.asList(controller.getHeaderDetailsWithPayload("{\"orbis_id\":\"" + orbisID + "\"}").getBody().as(EntityHeader[].class));
-        int disclosureRate = entityHeader.get(0).getOverall_disclosure_score();
+        EntityProfileClimatePageAPIController apiController = new EntityProfileClimatePageAPIController();
+        List<EntityHeader> entityHeader =
+                Arrays.asList(controller.getHeaderDetailsWithPayload(orbisID).getBody().as(EntityHeader[].class));
+        int disclosureRate = Integer.parseInt(entityHeader.get(0).getOverall_disclosure_score());
         System.out.println("list = " + entityHeader.get(0).getOverall_disclosure_score());
 
         //Get the entity details which has Overall Disclosure rate from DB

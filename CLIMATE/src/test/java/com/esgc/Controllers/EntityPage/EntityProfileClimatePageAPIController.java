@@ -209,11 +209,11 @@ public class EntityProfileClimatePageAPIController {
         return response;
     }
 
-    public Response getHeaderDetailsWithPayload(String payload) {
+    public Response getHeaderDetailsWithPayload(String orbisID) {
         Response response = null;
         try {
             response = configSpec()
-                    .body(payload)
+                    .body("{\"orbis_id\":\"" + orbisID + "\"}")
                     .when()
                     .post(EntityProfilePageEndpoints.POST_HEADER);
 
@@ -263,7 +263,7 @@ public class EntityProfileClimatePageAPIController {
                 .body("{\"orbis_id\":\"" + orbis_id+ "\"}")
 
                 .when()
-                .post(EntityClimateProfilePageEndpoints.POST_Header);
+                .post(EntityProfilePageEndpoints.POST_HEADER);
         System.out.println(response.prettyPrint());
         return response;
     }
