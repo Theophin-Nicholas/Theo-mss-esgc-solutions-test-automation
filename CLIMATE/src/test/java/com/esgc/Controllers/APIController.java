@@ -851,7 +851,8 @@ public class APIController {
                                         i1.getWORLD_REGION(),
                                         i1.getInvestmentPercentage() + i2.getInvestmentPercentage(),
                                         i1.getValue() + i2.getValue(),
-                                        i1.getResearchLineIdForESGModel())))
+                                        i1.getResearchLineIdForESGModel(),
+                                        i1.getEntityStatus())))
                 .map(java.util.Optional::get)
                 .collect(Collectors.toList()).stream()
                 .sorted(compareByValueThenName)

@@ -1,7 +1,6 @@
 package com.esgc.Tests.API.EntityClimate;
 
-import com.esgc.APIModels.EntityClimateProfile.CompanyHeader;
-import com.esgc.APIModels.EntityProfileClimatePage.SectorComparison;
+import com.esgc.APIModels.EntityClimateProfile.EntityHeader;
 import com.esgc.Controllers.EntityPage.EntityProfileClimatePageAPIController;
 import com.esgc.Tests.TestBases.EntityClimateProfileTestBase;
 import com.esgc.Utilities.Xray;
@@ -9,7 +8,7 @@ import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import org.testng.annotations.Test;
 
-public class ClimateProfileCompanyHeaderAPITest extends EntityClimateProfileTestBase {
+public class ClimateProfileEntityHeaderAPITest extends EntityClimateProfileTestBase {
 
     @Test(groups = {"api", "regression", "entity_climate_profile"},dataProvider = "Company With Orbis ID")
     @Xray(test = {10047})
@@ -18,7 +17,7 @@ public class ClimateProfileCompanyHeaderAPITest extends EntityClimateProfileTest
 
         Response response = entityClimateProfileApiController
                 .geCompanyHeaderAPIResponse(dataprovider[1]);
-        response.as(CompanyHeader[].class);
+        response.as(EntityHeader[].class);
         response.then().log().all();
         response.then().assertThat()
                 .statusCode(200)
