@@ -241,6 +241,18 @@ public class EntityClimateProfilePageQueries {
         return result;
     }
 
+    public static List<String> getExportOrSourceDocumentsFromDB(String orbisId) {
+        String query = "select DOCUMENT_NAME from MESGC_DATAPOINTS where BVD9_NUMBER ='"+orbisId+"' \n" +
+                " and DOCUMENT_NAME != 'NA' QUALIFY row_number() over (partition by (\"DOCUMENT_NAME\" ,\"DOCUMENT_URL\",internal_document_name) ORDER BY METRIC_YEAR desc) =1\n" +
+                " ORDER BY METRIC_YEAR desc";
+        List<String> docsList=new ArrayList<>();
+        List<List<Object>> result = getQueryResultList(query);
+        for(List<Object> obj:result){
+            docsList.add(obj.get(0).toString());
+        }
+        return docsList;
+    }
+
     public static List<String> getHeaderDB(String orbisId) {
         String query = "SELECT esg.value Disclosure_Rate\n" +
                 "FROM DF_TARGET.ESG_OVERALL_SCORES ESG  \n" +
