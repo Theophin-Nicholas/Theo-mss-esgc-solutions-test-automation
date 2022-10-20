@@ -10,6 +10,7 @@ import com.esgc.Utilities.Database.PortfolioQueries;
 import com.esgc.Utilities.PortfolioUtilities;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
+import org.testng.annotations.DataProvider;
 
 
 public abstract class DataValidationTestBase extends TestBaseClimate {
@@ -31,6 +32,17 @@ public abstract class DataValidationTestBase extends TestBaseClimate {
     @AfterMethod(alwaysRun = true)
     public synchronized void refreshTokenForPlatformDataValidation(){
         refreshToken();
+    }
+
+    @DataProvider(name = "Company With Orbis ID")
+    public Object[][] companyWithOrbisID() {
+
+        return new Object[][]{
+
+                {"Apple, Inc.", "000411117"},  // VE scored company
+                {"FirstCash, Inc.","001668460"} // MESG scored Company
+
+        };
     }
 
 }

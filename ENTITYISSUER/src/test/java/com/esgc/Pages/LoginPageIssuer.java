@@ -1,6 +1,6 @@
 package com.esgc.Pages;
 
-import com.esgc.Test.TestBases.EntityPageDataValidationTestBase;
+import com.esgc.Test.TestBases.EntityIssuerPageDataValidationTestBase;
 import com.esgc.Test.TestBases.EntityPageTestBase;
 import com.esgc.Utilities.Environment;
 import org.openqa.selenium.Keys;
@@ -26,7 +26,7 @@ public class LoginPageIssuer extends PageBase{
 
     public void entityIssuerLogin() {
         System.out.println("entityIssuerLogin started");
-        if ( EntityPageTestBase.isP3Test || EntityPageDataValidationTestBase.isP3Test) {
+        if ( EntityPageTestBase.isP3Test || EntityIssuerPageDataValidationTestBase.isP3Test) {
             System.out.println("Environment.ISSUER_USERNAMEP3 = " + Environment.ISSUER_USERNAMEP3);
             wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.ISSUER_USERNAMEP3, Keys.ENTER);
         } else {
@@ -35,16 +35,16 @@ public class LoginPageIssuer extends PageBase{
         }
 
         wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.ISSUER_PASSWORD);
-        if (!termsAndConditionsCheckBox.isSelected())
-            wait.until(ExpectedConditions.visibilityOf(termsAndConditionsLabel)).click();
+      /*  if (!termsAndConditionsCheckBox.isSelected())
+            wait.until(ExpectedConditions.visibilityOf(termsAndConditionsLabel)).click();*/
         wait.until(ExpectedConditions.visibilityOf(loginButton)).click();
     }
 
     public void loginWithParams(String userName, String password) {
         wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(userName, Keys.ENTER);
         wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(password);
-        if (!termsAndConditionsCheckBox.isSelected())
-            wait.until(ExpectedConditions.visibilityOf(termsAndConditionsLabel)).click();
+      /*  if (!termsAndConditionsCheckBox.isSelected())
+            wait.until(ExpectedConditions.visibilityOf(termsAndConditionsLabel)).click();*/
         wait.until(ExpectedConditions.visibilityOf(loginButton)).click();
 
     }

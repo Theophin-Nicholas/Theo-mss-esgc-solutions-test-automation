@@ -1,15 +1,15 @@
 package com.esgc.Tests.DataValidation.DashboardPage;
 
 import com.esgc.APIModels.APIFilterPayload;
-import com.esgc.APIModels.Dashboard.PerformanceChartCompany;
-import com.esgc.APIModels.RangeAndScoreCategory;
+import com.esgc.APIModels.DashboardModels.PerformanceChartCompany;
+import com.esgc.APIModels.PortoflioAnalysisModels.RangeAndScoreCategory;
 import com.esgc.Controllers.APIController;
 import com.esgc.DBModels.EntityWithScores;
 import com.esgc.DBModels.ResearchLineIdentifier;
 import com.esgc.Tests.TestBases.DataValidationTestBase;
+import com.esgc.Utilities.APIUtilities;
 import com.esgc.Utilities.PortfolioUtilities;
 import com.esgc.Utilities.Xray;
-import com.esgc.Utilities.APIUtilities;
 import io.restassured.response.Response;
 import org.hamcrest.Matchers;
 import org.testng.annotations.DataProvider;
@@ -92,7 +92,7 @@ public class PerformanceChart extends DataValidationTestBase {
             //Get all regions
             List<PerformanceChartCompany> companyList = new ArrayList<>();
             companyList = Arrays.asList(
-                    controller.getPerformanceChartList(portfolioId, researchLine, apiFilterPayload, performanceChartType, "" + size)
+                    dashboardAPIController.getPerformanceChartList(portfolioId, researchLine, apiFilterPayload, performanceChartType, "" + size)
                             .as(PerformanceChartCompany[].class));
 
             //Get Score ranges and categories for research line

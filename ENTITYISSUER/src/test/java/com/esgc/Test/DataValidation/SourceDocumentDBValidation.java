@@ -3,7 +3,7 @@ package com.esgc.Test.DataValidation;
 import com.esgc.APIModels.EntityIssuerPage.SourceDocument;
 import com.esgc.Controllers.EntityIssuerPageController.EntityIssuerPageAPIController;
 import com.esgc.DBModels.EntityIssuerPageDBModels.SourceDocumentDBModel;
-import com.esgc.Test.TestBases.EntityPageDataValidationTestBase;
+import com.esgc.Test.TestBases.EntityIssuerPageDataValidationTestBase;
 import com.esgc.Utilities.Database.EntityIssuerQueries;
 import com.esgc.Utilities.Environment;
 import com.esgc.Utilities.Xray;
@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class SourceDocumentDBValidation extends EntityPageDataValidationTestBase {
+public class SourceDocumentDBValidation extends EntityIssuerPageDataValidationTestBase {
     List<String> criteria = new ArrayList<>();
 
     @Xray(test = 6968)
@@ -23,7 +23,7 @@ public class SourceDocumentDBValidation extends EntityPageDataValidationTestBase
         String orbisID = Environment.OrbisId;
         List<SourceDocumentDBModel> sourceDocumentDBData = EntityIssuerQueries.getSourceDocumentDBData(orbisID);
         EntityIssuerPageAPIController entityIssuerPageAPIController = new EntityIssuerPageAPIController();
-        Response response = entityIssuerPageAPIController.getSouceDocument(orbisID);
+        Response response = entityIssuerPageAPIController.getSourceDocument(orbisID);
         List<SourceDocument> sourceDocumentAPIResponse = Arrays.asList(response.getBody().as(SourceDocument[].class));
         assertTestCase.assertTrue(sourceDocumentAPIResponse.size()==(sourceDocumentDBData.size()));
         for  (SourceDocument item : sourceDocumentAPIResponse) {
