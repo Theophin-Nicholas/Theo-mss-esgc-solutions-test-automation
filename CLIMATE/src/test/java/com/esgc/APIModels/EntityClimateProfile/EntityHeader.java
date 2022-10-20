@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 
-public class CompanyHeader {
+public class EntityHeader {
     private String company_name;
     private String country;
     private String generic_sector;
