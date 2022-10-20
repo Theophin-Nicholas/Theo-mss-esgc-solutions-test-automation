@@ -17,7 +17,7 @@ public class PortfolioScore {
     private String ranking;
 
     @JsonProperty(value="score")
-    @JsonAlias({"portfolio_score"})
+    @JsonAlias({"portfolio_score", "weighted_avg"})
     private String score;
 
     @JsonProperty(value="benchmark_ranking")

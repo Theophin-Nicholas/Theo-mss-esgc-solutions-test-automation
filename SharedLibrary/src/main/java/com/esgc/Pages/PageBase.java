@@ -63,7 +63,7 @@ public abstract class PageBase {
     @FindBy(xpath = "//li[text()='Portfolio Analysis']")
     public WebElement portfolioAnalysis;
 
-    @FindBy(xpath = "//li[text()='Portfolio Settings']")
+    @FindBy(xpath = "//li[text()='Portfolio Selection/Upload']")
     public WebElement portfolioSettings;
 
     @FindBy(xpath = "(//table[@id='table-id'])[1]/tbody/tr/td[1]")
@@ -112,6 +112,11 @@ public abstract class PageBase {
 
     @FindBy(xpath = "//a[@id='link-upload']")
     public WebElement portfolioReUpload;
+    @FindBy(xpath = "(//h2[normalize-space()='Import Portfolio'])[1]")
+    public WebElement importPortfolioPopUp;
+    @FindBy(xpath = "//h2[normalize-space()='Import Portfolio']//*[name()='svg']")
+    public WebElement closePortfolioPopUp;
+
 
     @FindBy(xpath = "//body/div[@role='presentation']/div/div/div/header/div[2]/div[2]")
     public WebElement portfolioNameWithStar;
@@ -207,8 +212,14 @@ public abstract class PageBase {
     @FindBy(id = "RegSector-test-id-1")
     public WebElement filtersDropdown;
 
+    @FindBy(xpath = "//div[contains(@class, 'MuiPopover-paper')]")
+    public WebElement filtersDropdownPopup;
+
     @FindBy(xpath = "//div[contains(@heap_filter,'month_')]")
     public List<WebElement> monthsInAsOfDate;
+
+    @FindBy(xpath = "//table//tr[@heap_id='event']")
+    public List<WebElement> controversies;
 
     @FindBy(xpath = "//button/span[text()='Last 60 Days']")
     public WebElement last60DaysFilterButton;
@@ -309,6 +320,8 @@ public abstract class PageBase {
 
     @FindBy(xpath = "//span[@heap_id='view-panel']")
     public WebElement viewCompaniesAndInvestmentsLink;
+    @FindBy(xpath = "//table[@id='viewcomapnies-0-Basic_Materials']/tbody/tr/td[5]")
+    public List<WebElement> viewRegionCountryColumnValues;
 
     @FindBy(xpath = "//*[@id='dashboard-export-button-test-id' or @id='ExportDropdown-test-id-1']")
     public WebElement exportCompaniesButton;
@@ -317,10 +330,10 @@ public abstract class PageBase {
     public WebElement exportPdf;
 
     // =======================Search Box elements for portfolio Analysis page =======
-    @FindBy(xpath = "//div[@style = 'display: flex; cursor: pointer; margin-right: 14px; margin-top: 8px;']")
+    @FindBy(xpath = "//div[@heap_id='search']//*[name()='svg']")
     public WebElement searchIconPortfolioPage;
 
-    @FindBy(xpath = "//div[@style = 'display: flex; cursor: pointer; margin-right: 14px; margin-top: 8px;']")
+    @FindBy(xpath = "//div[@heap_id='search']//*[name()='svg']")
     List<WebElement> searchIconPortfolioPages;
 
     @FindBy(id = "platform-search-test-id")
@@ -418,6 +431,15 @@ public abstract class PageBase {
         }
     }
 
+    public boolean isFiltersDropdownPopupDisplayed() {
+        try {
+            return filtersDropdownPopup.isDisplayed();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     /*
     This is to verify the date format is correct
      */
@@ -487,7 +509,7 @@ public abstract class PageBase {
     }
 
     public String getLastUpdatedDateContainsSearchKeyWord(String searchKeyword) {
-        String lastUpdateXpath = "//span[@title='"+searchKeyword+"']/../following-sibling::div/span";
+        String lastUpdateXpath = "//span[@title='" + searchKeyword + "']/../following-sibling::div/span";
         String lastUpdatedDate = Driver.getDriver().findElement(By.xpath(lastUpdateXpath)).getText();
         return lastUpdatedDate;
     }
@@ -1265,6 +1287,9 @@ public abstract class PageBase {
     public String getDataFromExportedFile(int rowNum, int columnNum, String researchLine) {
         String excelData = "";
         String sheetName = String.format("Summary %s", researchLine);
+        if (researchLine.equals("ESG Assessment")) {
+            sheetName = "Data - ESG";
+        }
         ExcelUtil excelUtil = new ExcelUtil(BrowserUtils.exportPath(researchLine), sheetName);
 
         excelData = excelUtil.getCellData(rowNum, columnNum);
@@ -1634,6 +1659,13 @@ public abstract class PageBase {
         BrowserUtils.wait(5);
     }
 
+    public void verifyDrawerRegionCountryColumn(){
+        List<String>expectedValues =Arrays.asList("EMEA","AMER","APAC");
+        for(WebElement value :viewRegionCountryColumnValues){
+            assertTestCase.assertTrue(expectedValues.contains(value.getText().substring(0,value.getText().indexOf("/"))));
+        }
+    }
+
     public boolean verifyRegion(String region) {
         return Driver.getDriver().findElement(By.xpath("//div[text()='" + region + "']")).isDisplayed();
     }
@@ -1747,7 +1779,7 @@ public abstract class PageBase {
             // menuList.get(0).findElement(By.xpath("span")).click();
             //Validating that menu list is closed and background page is still on
             waitForDataLoadCompletion();
-            Assert.assertTrue(menuList.size()==1 && Driver.getDriver().getCurrentUrl().equals(url), "Menu is still displayed and is not focused on main page");
+            Assert.assertTrue(menuList.size() == 1 && Driver.getDriver().getCurrentUrl().equals(url), "Menu is still displayed and is not focused on main page");
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -1771,6 +1803,9 @@ public abstract class PageBase {
                 case "Market Risk":
                 case "Supply Chain Risk":
                     whatToValidate = "Updates as of " + monthDate + ", Impact, and Current Leaders/Laggards";
+                    break;
+                case "Temperature Alignment":
+                    whatToValidate = "Impact";
                     break;
                 default:
                     whatToValidate = "Updates in " + monthDate + ", Impact, and Current Leaders/Laggards";
@@ -1805,7 +1840,7 @@ public abstract class PageBase {
                 case "Above 2°C":
                     return "#D63229";
             }
-        }else if (researchLine.toUpperCase().equals("ESG")) {
+        } else if (researchLine.toUpperCase().equals("ESG")) {
             switch (scoreCategory.toUpperCase()) {
                 case "WEAK":
                     return "#DD581D";
@@ -2040,7 +2075,7 @@ public abstract class PageBase {
         assertTestCase.assertEquals(numberOfSearchResult, 10);
         String xpathSearchKeyWord = "//mark[.='" + searchKeyword + "']";
         List<WebElement> list = Driver.getDriver().findElements(By.xpath(xpathSearchKeyWord));
-        searchKeyword = searchKeyword.replace("%","").replace("*", "");
+        searchKeyword = searchKeyword.replace("%", "").replace("*", "");
         for (int i = 0; i < list.size(); i++) {
             assertTestCase.assertTrue(list.get(i).getText().contains(searchKeyword));
         }
@@ -2201,6 +2236,7 @@ public abstract class PageBase {
     }
 
     public void navigateToFirstEntity(String nameOfEntity) {
+        BrowserUtils.isElementVisible(searchIconPortfolioPage, 5);
         searchIconPortfolioPage.click();
         searchBarOfPortfolio.sendKeys(nameOfEntity);
         BrowserUtils.wait(3);
@@ -2360,15 +2396,18 @@ public abstract class PageBase {
     public boolean verifyStickyHeaderInfo() {
         try {
             DashboardPage dashboardPage = new DashboardPage();
-            String portfolio = getSelectedPortfolioNameFromDropdown();
+            String portfolio = "Sample Portfolio";
+            selectPortfolio(portfolio);
             BrowserUtils.scrollTo(dashboardPage.endOfPage);// scrolling to the last widget on the page
+            BrowserUtils.wait(2);
             if (!dashboardPage.isStickyHeaderDisplayed()) {
                 return false;
             }
-            Assert.assertTrue(dashboardPage.isStickyHeaderDisplayed(), "Sticky header is not displayed");
+            assertTestCase.assertTrue(dashboardPage.regionTitleInStickyHeader.isDisplayed(), "Verify Title and Region/Sector Toggle are in Sticky Header in the Drawer ");
+            assertTestCase.assertTrue(dashboardPage.isStickyHeaderDisplayed(), "Sticky header is not displayed");
 
             // Verify portfolio name in sticky header
-            Assert.assertTrue(Driver.getDriver().findElement(By.xpath("//header[contains(@class,'Sticky')]//div[contains(text(),'Viewing " + portfolio + ": All Regions, All Sectors')]")).isDisplayed(), "Portfolio name is not displayed in sticky header");
+            assertTestCase.assertTrue(Driver.getDriver().findElement(By.xpath("//header[contains(@class,'Sticky')]//div[contains(text(),'Viewing " + portfolio + ": All Regions, All Sectors')]")).isDisplayed(), "Portfolio name is not displayed in sticky header");
 
             // Verify physical risk climate tile details in sticky header
             String highestRiskHazardStatus = Driver.getDriver().findElement(By.xpath("//header//div[text()='Highest Risk Hazard']/..//span[2]")).getText();
@@ -2381,7 +2420,7 @@ public abstract class PageBase {
             highestRiskHazardStatusList.add("Wildfires");
 
             String facilitiesExposedValue = Driver.getDriver().findElement(By.xpath("//header//div[text()='Facilities Exposed to " + highestRiskHazardStatus + "']/..//span[1]")).getText();
-            Assert.assertTrue(highestRiskHazardStatusList.contains(highestRiskHazardStatus) &&
+            assertTestCase.assertTrue(highestRiskHazardStatusList.contains(highestRiskHazardStatus) &&
                     facilitiesExposedValue.substring(0, facilitiesExposedValue.indexOf('%') - 1).chars().allMatch(Character::isDigit), "Physical Risk climate tile details are not displayed in sticky header");
 
 
@@ -2395,7 +2434,7 @@ public abstract class PageBase {
             carbonFootprintScores.add("Intense");
 
             String carbonFootprintScore = Driver.getDriver().findElement(By.xpath("//header//div[text()='Carbon Footprint']/..//span[1]")).getText();
-            Assert.assertTrue(temperatureAlignmentValue.contains("°C")
+            assertTestCase.assertTrue(temperatureAlignmentValue.contains("°C")
                     && carbonFootprintScores.contains(carbonFootprintScore), "Transition Risk climate tile details are not displayed in sticky header");
 
             return true;
@@ -2525,8 +2564,10 @@ public abstract class PageBase {
 
     public void selectPortfolio(String portfolioName) {
         try {
-            Driver.getDriver().findElement(By.xpath("//span[@title='" + portfolioName + "']")).click();
-            System.out.println("Portfolio found : "+portfolioName);
+            WebElement portfolio = Driver.getDriver().findElement(By.xpath("//button[@title='" + portfolioName + "']"));
+            BrowserUtils.scrollTo(portfolio);
+            portfolio.click();
+            System.out.println("Portfolio found : " + portfolioName);
         } catch (Exception e) {
             System.out.println("Could not find the Portfolio");
             return;
@@ -2550,7 +2591,7 @@ public abstract class PageBase {
 
     public void validatePortfolioNameNotChangedAfterUpdateAndClickOutside(String OriginalPortFolioName) {
         updatePortfolio(OriginalPortFolioName + "111");
-       // BrowserUtils.wait(10);
+        // BrowserUtils.wait(10);
         closeMenuByClickingOutSide();
         clickMenu();
         portfolioSettings.click();

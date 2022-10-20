@@ -16,7 +16,7 @@ import java.util.List;
 public class EntityExportOrSourcesDocumentsTests extends UITestBase {
 
     @Test(groups = {"entity_climate_profile", "regression", "ui", "robot_dependency"})
-    @Xray(test = {9209, 9212, 10175})
+    @Xray(test = {9206, 9208, 9209, 9212, 10175})
     public void validateExportSourceDocumentsPopup(){
 
         String company = "Rogers Corp.";

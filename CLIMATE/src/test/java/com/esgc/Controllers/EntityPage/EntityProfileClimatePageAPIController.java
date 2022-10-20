@@ -1,11 +1,13 @@
 package com.esgc.Controllers.EntityPage;
 
 import com.esgc.Utilities.API.EntityClimateProfilePageEndpoints;
-import com.esgc.Utilities.API.EntityPageEndpoints;
+import com.esgc.Utilities.Driver;
+import com.esgc.Utilities.API.EntityProfilePageEndpoints;
 import com.esgc.Utilities.Environment;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
+import org.openqa.selenium.JavascriptExecutor;
 
 import static io.restassured.RestAssured.given;
 
@@ -28,9 +30,9 @@ public class EntityProfileClimatePageAPIController {
             response = configSpec()
                     .pathParam("orbis_id", orbis_id)
                     .pathParam("research_line", apiResourceMapper(research_line))
-
+                    .log().all()
                     .when()
-                    .post(EntityClimateProfilePageEndpoints.POST_climateSummary);
+                    .post(EntityProfilePageEndpoints.POST_CLIMATE_SUMMARY).prettyPeek();
 
         } catch (Exception e) {
             System.out.println("Inside exception " + e.getMessage());
@@ -46,7 +48,7 @@ public class EntityProfileClimatePageAPIController {
                     .pathParam("orbis_id", orbis_id)
                     //.pathParam("research_line", apiResourceMapper(research_line))
 
-                    .when().post(EntityClimateProfilePageEndpoints.POST_climateTempProjection);
+                    .when().post(EntityProfilePageEndpoints.POST_CLIMATE_TEMPERATURE_ALIGNMENT_PROJECTION);
 
         } catch (Exception e) {
             System.out.println("Inside exception " + e.getMessage());
@@ -60,7 +62,7 @@ public class EntityProfileClimatePageAPIController {
         try {
             response = configSpec()
                     .pathParam("orbis_id", orbis_id)
-                    .when().post(EntityClimateProfilePageEndpoints.POST_ESGClimateSummary);
+                    .when().post(EntityProfilePageEndpoints.POST_ESG_CLIMATE_SUMMARY);
 
         } catch (Exception e) {
             System.out.println("Inside exception " + e.getMessage());
@@ -81,7 +83,7 @@ public class EntityProfileClimatePageAPIController {
                     .pathParam("orbis_id", orbis_id)
                     .pathParam("research_line", apiResourceMapper(research_line))
                     .when()
-                    .post(EntityClimateProfilePageEndpoints.POST_climateSummary);
+                    .post(EntityProfilePageEndpoints.POST_CLIMATE_SUMMARY);
 
         } catch (Exception e) {
             System.out.println("Inside exception " + e.getMessage());
@@ -115,7 +117,7 @@ public class EntityProfileClimatePageAPIController {
                     .pathParam("orbis_id", orbis_id)
                     .pathParam("research_line", apiResourceMapperForClimateSectorComparison(research_line))
                     .when()
-                    .post(EntityClimateProfilePageEndpoints.POST_climateSectorComparison);
+                    .post(EntityProfilePageEndpoints.POST_CLIMATE_SECTOR_COMPARISON);
 
         } catch (Exception e) {
             System.out.println("Inside exception " + e.getMessage());
@@ -126,13 +128,13 @@ public class EntityProfileClimatePageAPIController {
     public Response getComparisonChartContentResponse(String orbis_id, String research_line) {
         Response response = null;
 
-        System.out.println("URL = " + Environment.URL + EntityClimateProfilePageEndpoints.POST_climateSectorComparison);
+        System.out.println("URL = " + Environment.URL + EntityProfilePageEndpoints.POST_CLIMATE_SECTOR_COMPARISON);
         try {
             response = configSpec()
                     .pathParam("orbis_id", orbis_id)
                     .pathParam("research_line", apiResourceMapperForClimateSectorComparison(research_line))
                     .when()
-                    .post(EntityClimateProfilePageEndpoints.POST_climateSectorComparison);
+                    .post(EntityProfilePageEndpoints.POST_CLIMATE_SECTOR_COMPARISON);
 
         } catch (Exception e) {
             System.out.println("Inside exception " + e.getMessage());
@@ -145,27 +147,27 @@ public class EntityProfileClimatePageAPIController {
         switch (researchLine) {
             case "Brown Share":
             case "brownshareasmt":
-                return "transitionrisk/brownshareasmt";
+                return "brownshareasmt";
 
             case "Green Share":
             case "greenshareasmt":
-                return "transitionrisk/greenshareasmt";
+                return "greenshareasmt";
 
             case "physicalriskhazard":
-                return "physicalrisk/physicalriskhazard";
+                return "physicalriskhazard";
 
 
             case "Temperature Alignment":
             case "temperaturealgmt":
-                return "transitionrisk/temperaturealgmt";
+                return "temperaturealgmt";
 
             case "Carbon Footprint":
             case "carbonfootprint":
-                return "transitionrisk/carbonfootprint";
+                return "carbonfootprint";
 
             case "Physical Risk Management":
             case "physicalriskmgmt":
-                return "physicalrisk/physicalriskmgmt";
+                return "physicalriskmgmt";
 
         }
         return "";
@@ -176,30 +178,31 @@ public class EntityProfileClimatePageAPIController {
 
             case "Carbon Footprint":
             case "carbonfootprint":
-                return "transitionrisk/carbonfootprint";
+                return "carbonfootprint";
 
             case "Operations Risk":
             case "operationsrisk":
-                return "physicalrisk/operationsrisk";
+                return "operationsrisk";
 
             case "Market Risk":
             case "marketrisk":
-                return "physicalrisk/marketrisk";
+                return "marketrisk";
 
             case "Supply Chain Risk":
             case "supplychainrisk":
-                return "physicalrisk/supplychainrisk";
+                return "supplychainrisk";
         }
         return "";
     }
 
-    public Response getEntityUnderLyingPhysicalHazardAPIResponse(String orbis_id) {
+    public Response getEntityUnderLyingDataMetricsAPIResponse(String orbis_id, String researchLine) {
         Response response = null;
         try {
             response = configSpec()
                     .pathParam("orbis_id", orbis_id)
+                    .pathParam("research_line", researchLine)
                     .when()
-                    .post(EntityClimateProfilePageEndpoints.POST_EntityUnderlyingDataMetrics);
+                    .post(EntityProfilePageEndpoints.POST_ENTITY_UNDERLYING_DATA_METRICS);
 
         } catch (Exception e) {
             System.out.println("Inside exception " + e.getMessage());
@@ -213,13 +216,45 @@ public class EntityProfileClimatePageAPIController {
             response = configSpec()
                     .body(payload)
                     .when()
-                    .post(EntityPageEndpoints.POST_HEADER);
+                    .post(EntityProfilePageEndpoints.POST_HEADER);
 
         } catch (Exception e) {
             System.out.println("Inside exception " + e.getMessage());
         }
         assert response != null;
         response.prettyPrint();
+        return response;
+    }
+
+    public Response getEntityPageResponse(String orbisId, String api) {
+        Response response = null;
+        String getAccessTokenScript = "return JSON.parse(localStorage.getItem('okta-token-storage')).accessToken.accessToken";
+        String accessToken = ((JavascriptExecutor) Driver.getDriver()).executeScript(getAccessTokenScript).toString();
+        System.setProperty("token", accessToken);
+
+        try {
+            response = configSpec()
+                    .pathParam("orbisId", orbisId)
+                    .pathParam("api", api)
+                    .when()
+                    .post(EntityProfilePageEndpoints.POST_ENTITY_PATH);
+        } catch (Exception e) {
+            System.out.println("Inside exception " + e.getMessage());
+        }
+        return response;
+    }
+
+    public Response getEntityMaterialityMetrics(String orbis_id) {
+        Response response = null;
+        try {
+            response = configSpec()
+                    .body("{\"orbis_id\":\"" + orbis_id + "\"}")
+                    .when()
+                    .post(EntityProfilePageEndpoints.POST_ENTITY_MATERIALITY_METRICS).prettyPeek();
+
+        } catch (Exception e) {
+            System.out.println("Inside exception " + e.getMessage());
+        }
         return response;
     }
 

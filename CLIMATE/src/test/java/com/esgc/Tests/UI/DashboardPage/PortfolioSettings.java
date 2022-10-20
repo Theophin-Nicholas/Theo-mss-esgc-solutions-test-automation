@@ -9,6 +9,7 @@ import com.esgc.Utilities.*;
 import com.esgc.Utilities.Database.DatabaseDriver;
 import com.esgc.Utilities.Database.PortfolioQueries;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import org.testng.annotations.Test;
 
@@ -151,7 +152,7 @@ public class PortfolioSettings extends UITestBase {
         BrowserUtils.wait(5);
         //-The title should be the portfolio name, example: Sample Portfolio.
         assertTestCase.assertEquals(researchLinePage.samplePortfolioTitle.getText(), "Sample Portfolio");
-        //-Under the title, should be Re-upload hyperlink
+        //-Under the title, should be re-upload hyperlink
         assertTestCase.assertEquals(researchLinePage.portfolioReUpload.getText(), "Re-upload");
         //-Should be a text field with a label saying "Name *"
         assertTestCase.assertEquals(researchLinePage.portfolioNameWithStar.getText(), "Name*");
@@ -289,4 +290,31 @@ public class PortfolioSettings extends UITestBase {
         dashboardPage.getSelectedPortfolioNameFromDropdown();
         BrowserUtils.wait(10);
     }
+
+    @Test(groups = {"regression", "ui", "smoke"})
+    @Xray(test = {9637})
+    public void validateReUploadInPortfolioSettings() {
+        //Upload a portfolio
+        BrowserUtils.wait(10);
+        String getAccessTokenScript = "return JSON.parse(localStorage.getItem('okta-token-storage')).accessToken.accessToken";
+       String accessToken = ((JavascriptExecutor) Driver.getDriver()).executeScript(getAccessTokenScript).toString();
+        System.setProperty("token", accessToken);
+        System.out.println("token = " + accessToken);
+        APIController apiController = new APIController();
+
+       apiController.postValidPortfolio("SamplePortfolioToDelete.csv");
+
+        ResearchLinePage researchLinePage = new ResearchLinePage();
+        researchLinePage.clickMenu();
+        researchLinePage.portfolioSettings.click();
+        researchLinePage.selectPortfolio("SamplePortfolioToDelete");
+
+        //Verify re-upload portfolio hyperlink functionality working
+        researchLinePage.portfolioReUpload.click();
+        assertTestCase.assertEquals(researchLinePage.importPortfolioPopUp.getText(), "Import Portfolio");
+        BrowserUtils.wait(2);
+        researchLinePage.closePortfolioPopUp.click();
+    }
+
+
 }
