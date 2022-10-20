@@ -1,18 +1,17 @@
 package com.esgc.Controllers;
 
+import com.aventstack.extentreports.markuputils.CodeLanguage;
+import com.aventstack.extentreports.markuputils.MarkupHelper;
 import com.esgc.APIModels.APIFilterPayload;
 import com.esgc.APIModels.APIFilterPayloadWithImpactFilter;
-import com.esgc.APIModels.Dashboard.APIEntityListPayload;
-import com.esgc.APIModels.Dashboard.APIHeatMapSinglePayload;
 import com.esgc.APIModels.RangeAndScoreCategory;
 import com.esgc.DBModels.ResearchLineIdentifier;
-import com.esgc.Utilities.API.DashboardEndPoints;
 import com.esgc.Utilities.API.Endpoints;
+import com.esgc.Utilities.APIUtilities;
 import com.esgc.Utilities.Driver;
+import com.esgc.Utilities.EndPoints.PortfolioAnalysisEndpoints;
 import com.esgc.Utilities.Environment;
-import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
-import io.restassured.parsing.Parser;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import org.apache.commons.io.FileUtils;
@@ -27,6 +26,8 @@ import java.util.stream.Collectors;
 
 import static io.restassured.RestAssured.given;
 import static java.util.stream.Collectors.groupingBy;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
 
 
 public class APIController {
@@ -73,11 +74,19 @@ public class APIController {
                     .multiPart("file", fileName, FileUtils.readFileToByteArray(new File(filepath)), "text/csv")
                     .param("filename", "\"" + fileName + "\"")
                     .when()
-                    .post(Endpoints.IMPORT_PORTFOLIO);
+                    .put(Endpoints.IMPORT_PORTFOLIO);
         } catch (IOException e) {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public Response deletePortfolio(String portfolioId) {
+        return configSpec()
+                .header("Content-Type", "application/json, text/plain, */*")
+                .pathParam("portfolio_id", portfolioId)
+                .when()
+                .delete(Endpoints.DELETE_PORTFOLIO).prettyPeek();
     }
 
     /**
@@ -125,8 +134,8 @@ public class APIController {
                     .pathParam("portfolio_id", portfolio_id)
                     .pathParam("research_line", apiResourceMapper(research_line))
                     .body(apiFilterPayload)
-                    .when()
-                    .post(Endpoints.POST_PORTFOLIO_SCORE);
+                    .when().log().all()
+                    .post(PortfolioAnalysisEndpoints.POST_PORTFOLIO_SCORE).prettyPeek();
         } catch (Exception e) {
             System.out.println("Inside exception " + e.getMessage());
         }
@@ -152,7 +161,7 @@ public class APIController {
                     .pathParam("research_line", apiResourceMapper(research_line))
                     .body(apiFilterPayload).log().all()
                     .when()
-                    .post(Endpoints.POST_PORTFOLIO_DISTRIBUTION).prettyPeek();
+                    .post(PortfolioAnalysisEndpoints.POST_PORTFOLIO_DISTRIBUTION).prettyPeek();
 
         } catch (Exception e) {
             System.out.println("Inside exception " + e.getMessage());
@@ -169,7 +178,7 @@ public class APIController {
                     .pathParam("research_line", apiResourceMapperWithoutphysicalriskinit(research_line))
                     .body(apiFilterPayload)
                     .when()
-                    .post(Endpoints.POST_HISTORY_TABLE);
+                    .post(PortfolioAnalysisEndpoints.POST_PORTFOLIO_HISTORY_TABLE);
 
         } catch (Exception e) {
             System.out.println("Inside exception " + e.getMessage());
@@ -196,7 +205,7 @@ public class APIController {
                     .pathParam("research_line", apiResourceMapper(research_line))
                     .body(apiFilterPayload)
                     .when()
-                    .post(Endpoints.POST_PORTFOLIO_COVERAGE).prettyPeek();
+                    .post(PortfolioAnalysisEndpoints.POST_PORTFOLIO_COVERAGE).prettyPeek();
 
         } catch (Exception e) {
             System.out.println("Inside exception " + e.getMessage());
@@ -223,7 +232,7 @@ public class APIController {
                     .pathParam("research_line", apiResourceMapper(research_line))
                     .body(apiFilterPayload)
                     .when()
-                    .post(Endpoints.POST_PORTFOLIO_UPDATES);
+                    .post(PortfolioAnalysisEndpoints.POST_PORTFOLIO_UPDATES);
 
         } catch (Exception e) {
             System.out.println("Inside exception " + e.getMessage());
@@ -250,7 +259,7 @@ public class APIController {
                     .pathParam("research_line", apiResourceMapper(research_line))
                     .body(apiFilterPayload)
                     .when()
-                    .post(Endpoints.POST_PORTFOLIO_EMISSIONS);
+                    .post(PortfolioAnalysisEndpoints.POST_PORTFOLIO_EMISSIONS);
 
         } catch (Exception e) {
             System.out.println("Inside exception " + e.getMessage());
@@ -278,7 +287,7 @@ public class APIController {
                     .body(apiFilterPayload)
                     .when()
                     .log().all()
-                    .post(Endpoints.POST_LEADERS_AND_LAGGARDS);
+                    .post(PortfolioAnalysisEndpoints.POST_PORTFOLIO_LEADERS_AND_LAGGARDS);
 
 
         } catch (Exception e) {
@@ -306,7 +315,7 @@ public class APIController {
                     .pathParam("research_line", apiResourceMapper(research_line))
                     .body(apiFilterPayload)
                     .when()
-                    .post(Endpoints.POST_PORTFOLIO_REGION_SUMMARY);
+                    .post(PortfolioAnalysisEndpoints.POST_PORTFOLIO_REGION_SUMMARY);
 
         } catch (Exception e) {
             System.out.println("Inside exception " + e.getMessage());
@@ -333,7 +342,7 @@ public class APIController {
                     .pathParam("research_line", apiResourceMapper(research_line))
                     .body(apiFilterPayload)
                     .when()
-                    .post(Endpoints.POST_PORTFOLIO_REGION_DETAILS);
+                    .post(PortfolioAnalysisEndpoints.POST_PORTFOLIO_REGION_DETAILS);
 
         } catch (Exception e) {
             System.out.println("Inside exception " + e.getMessage());
@@ -360,7 +369,7 @@ public class APIController {
                     .pathParam("research_line", apiResourceMapper(research_line))
                     .body(apiFilterPayload)
                     .when()
-                    .post(Endpoints.POST_PORTFOLIO_SECTOR_SUMMARY);
+                    .post(PortfolioAnalysisEndpoints.POST_PORTFOLIO_SECTOR_SUMMARY);
 
         } catch (Exception e) {
             System.out.println("Inside exception " + e.getMessage());
@@ -387,7 +396,7 @@ public class APIController {
                     .pathParam("research_line", apiResourceMapper(research_line))
                     .body(apiFilterPayload)
                     .when()
-                    .post(Endpoints.POST_PORTFOLIO_SECTOR_DETAILS);
+                    .post(PortfolioAnalysisEndpoints.POST_PORTFOLIO_SECTOR_DETAILS);
 
         } catch (Exception e) {
             System.out.println("Inside exception " + e.getMessage());
@@ -414,7 +423,7 @@ public class APIController {
                     .pathParam("research_line", apiResourceMapper(research_line))
                     .body(apiFilterPayload)
                     .when()
-                    .post(Endpoints.POST_PORTFOLIO_REGION_MAP);
+                    .post(PortfolioAnalysisEndpoints.POST_PORTFOLIO_REGION_MAP);
 
         } catch (Exception e) {
             System.out.println("Inside exception " + e.getMessage());
@@ -441,7 +450,7 @@ public class APIController {
                     .pathParam("research_line", apiResourceMapper(research_line))
                     .body(apiFilterPayload)
                     .when()
-                    .post(Endpoints.POST_PORTFOLIO_UNDERLYING_DATA_METRICS);
+                    .post(PortfolioAnalysisEndpoints.POST_PORTFOLIO_UNDERLYING_DATA_METRICS);
 
         } catch (Exception e) {
             System.out.println("Inside exception " + e.getMessage());
@@ -458,7 +467,23 @@ public class APIController {
                     .pathParam("physical_risk", physical_risk)
                     .body("{\"region\":\"all\",\"sector\":\"all\",\"month\":\"12\",\"year\":\"2021\"}")
                     .when()
-                    .post(Endpoints.POST_PHYSICAL_RISK_UNDERLYING_DATA_METRICS_DETAILS);
+                    .post(PortfolioAnalysisEndpoints.POST_PHYSICAL_RISK_UNDERLYING_DATA_METRICS_DETAILS);
+
+        } catch (Exception e) {
+            System.out.println("Inside exception " + e.getMessage());
+        }
+
+        return response;
+    }
+    public Response getPhysicalRiskUnderlyingDataMetricsResponse(String portfolio_id, String researchLine, APIFilterPayload apiFilterPayload) {
+        Response response = null;
+        try {
+            response = configSpec()
+                    .pathParam("portfolio_id", portfolio_id)
+                    .pathParam("physical_risk", researchLine)
+                    .body(apiFilterPayload)
+                    .when()
+                    .post(PortfolioAnalysisEndpoints.POST_PHYSICAL_RISK_UNDERLYING_DATA_METRICS_DETAILS);
 
         } catch (Exception e) {
             System.out.println("Inside exception " + e.getMessage());
@@ -589,91 +614,13 @@ public class APIController {
         return null;
     }
 
-    /**
-     * This method posts a request and gets api response
-     *
-     * @param portfolio_id  - portfolio Id
-     * @param research_line - research line
-     * @return response
-     * <p>
-     * Response Example:
-     */
-    public Response getEntityListResponse(String portfolio_id, String research_line, APIEntityListPayload apiEntityListPayload) {
-        Response response = null;
-        try {
-
-            response = configSpec()
-                    .pathParam("portfolio_id", portfolio_id)
-                    .pathParam("research_line", apiResourceMapper(research_line))
-                    .body(apiEntityListPayload)
-                    .when()
-                    .post(DashboardEndPoints.POST_ENTITY_LIST);
-
-        } catch (Exception e) {
-            System.out.println("Inside exception " + e.getMessage());
-        }
-
-        return response;
-    }
-
-    public Response getEntityPageResponse(String orbisId, String api) {
-        Response response = null;
-        String getAccessTokenScript = "return JSON.parse(localStorage.getItem('okta-token-storage')).accessToken.accessToken";
-        String accessToken = ((JavascriptExecutor) Driver.getDriver()).executeScript(getAccessTokenScript).toString();
-        System.setProperty("token", accessToken);
-
-        try {
-            response = configSpec()
-                    .pathParam("orbisId", orbisId)
-                    .pathParam("api", api)
-                    .when()
-                    .post(DashboardEndPoints.POST_ENTITY_PATH);
-        } catch (Exception e) {
-            System.out.println("Inside exception " + e.getMessage());
-        }
-        return response;
-    }
-
-    public Response getPerformanceChartList(String portfolio_id, String research_line, APIFilterPayload apiFilterPayload, String performanceChart, String size) {
-        Response response = null;
-        try {
-            String payload = null;
-            if (performanceChart.equalsIgnoreCase("leaders") || performanceChart.equalsIgnoreCase("laggards")) {
-
-                payload = "{\n" +
-                        "    \"region\": \"" + apiFilterPayload.getRegion() + "\",\n" +
-                        "    \"sector\": \"" + apiFilterPayload.getSector() + "\",\n" +
-                        "    \"month\": \"" + apiFilterPayload.getMonth() + "\",\n" +
-                        "    \"year\": \"" + apiFilterPayload.getYear() + "\",\n" +
-                        "    \"research_line\": \"" + apiResourceMapperWithoutphysicalriskinit(research_line) + "\"\n" +
-                        "}";
-            } else {
-                payload = "{\n" +
-                        "    \"region\": \"" + apiFilterPayload.getRegion() + "\",\n" +
-                        "    \"sector\": \"" + apiFilterPayload.getSector() + "\",\n" +
-                        "    \"month\": \"" + apiFilterPayload.getMonth() + "\",\n" +
-                        "    \"year\": \"" + apiFilterPayload.getYear() + "\"\n" +
-                        "}";
-            }
-            RestAssured.defaultParser = Parser.JSON;
-            System.out.println("payload = " + payload);
-            response = configSpec()
-                    .pathParam("portfolio_id", portfolio_id)
-                    .pathParam("performance_chart", performanceChart)
-                    .pathParam("size", size)
-                    .body(payload)
-                    .when()
-                    .post(DashboardEndPoints.POST_PERFORMANCE_CHART);
 
 
-        } catch (Exception e) {
-            System.out.println("Inside exception " + e.getMessage());
-        }
 
-        return response;
-    }
 
-    private String apiResourceMapper(String researchLine) {
+
+
+    public String apiResourceMapper(String researchLine) {
         switch (researchLine) {
             case "tcfdstrategy":
             case "TCFD":
@@ -690,15 +637,15 @@ public class APIController {
 
             case "Operations Risk":
             case "operationsrisk":
-                return "physicalrisk/operationsrisk";
+                return "operationsrisk";
 
             case "Market Risk":
             case "marketrisk":
-                return "physicalrisk/marketrisk";
+                return "marketrisk";
 
             case "Supply Chain Risk":
             case "supplychainrisk":
-                return "physicalrisk/supplychainrisk";
+                return "supplychainrisk";
 
             case "Carbon Footprint":
             case "carbonfootprint":
@@ -714,14 +661,12 @@ public class APIController {
                 return "greenshareasmt";
 
             case "physicalriskhazard":
-                return "physicalrisk/physicalriskhazard";
+                return "physicalriskhazard";
             case "Temperature Alignment":
             case "temperaturealgmt":
                 return "temperaturealgmt";
             //case "ESG Assessments":
             case "esgasmt":
-                return "corpesgdata/esgasmt";
-
             case "ESG":
             case "esg":
             case "Esg":
@@ -848,7 +793,7 @@ public class APIController {
                     .body(apiFilterPayloadWithImpactFilter)
                     .when()
                     .log().all()
-                    .post(Endpoints.POST_IMPACT_DISTRIBUTION);
+                    .post(PortfolioAnalysisEndpoints.POST_PORTFOLIO_IMPACT_DISTRIBUTION);
             System.out.println(response.prettyPrint());
 
         } catch (Exception e) {
@@ -858,22 +803,8 @@ public class APIController {
         return response;
     }
 
-    public Response getCarbonFootprintEmmissionAPIResponse(String portfolio_id, APIFilterPayload apiFilterPayload) {
-        Response response = null;
-        try {
-
-            response = configSpec()
-                    .pathParam("portfolio_id", portfolio_id)
-
-                    .body(apiFilterPayload)
-                    .when()
-                    .post(Endpoints.POST_CARBONFOOTPRINT_EMMISSION);
-
-        } catch (Exception e) {
-            System.out.println("Inside exception " + e.getMessage());
-        }
-
-        return response;
+    public Response getCarbonFootprintEmissionAPIResponse(String portfolio_id, APIFilterPayload apiFilterPayload) {
+        return getPortfolioEmissionsResponse(portfolio_id,"carbonfootprint",apiFilterPayload);
     }
 
     public List<ResearchLineIdentifier> getfilteredData(List<ResearchLineIdentifier> portfolio, String filter) {
@@ -988,23 +919,7 @@ public class APIController {
         return null;
     }
 
-    public Response getHeatMapResponse(String portfolio_id, String research_line, APIHeatMapSinglePayload apiHeatMapPayload) {
-        Response response = null;
-        try {
-            //apiResourceMapperWithoutphysicalriskinit(research_line)
-            response = configSpec()
-                    // .header("Authorization", "Bearer " + System.getProperty("token"))
-                    .pathParam("portfolio_id", portfolio_id)
-                    .body(apiHeatMapPayload)
-                    .when()
-                    .post(Endpoints.POST_HEATMAP);
 
-        } catch (Exception e) {
-            System.out.println("Inside exception " + e.getMessage());
-        }
-
-        return response;
-    }
 
     public Response getPortfolioNameUpdateAPIResponse(String portfolio_id, String portfolio_name) {
         Response response = null;
@@ -1069,4 +984,45 @@ public class APIController {
         return response;
     }
 
+    public String postValidPortfolio(String portfolioNameToDelete) {
+        String filePath = System.getProperty("user.dir") + File.separator + "src" +
+                File.separator + "test" + File.separator + "resources" +
+                File.separator + "upload" + File.separator + portfolioNameToDelete;
+        File file = new File(filePath);
+        String fileName = file.getName();
+        String user_id = APIUtilities.userID();
+
+        System.out.println("File name:" + fileName);
+
+        byte[] fileContent = new byte[0];
+
+        try {
+            fileContent = FileUtils.readFileToByteArray(file);
+        } catch (IOException e) {
+            System.out.println("FILE NOT FOUND!!!");
+            System.out.println(e.getMessage());
+        }
+
+        System.out.println("Importing Portfolio:" + fileName);
+        APIController apiController = new APIController();
+
+        Response response = apiController.importPortfolio(user_id, fileName, filePath);
+
+        response.then().log().ifError();
+        System.out.println("Response received");
+        response.then()
+                .assertThat()
+                .statusCode(200)
+                .contentType(ContentType.JSON)
+                .body("portfolio_name", is(notNullValue()))
+                .body("portfolio_id", is(notNullValue()));
+        System.out.println(MarkupHelper.createCodeBlock(response.statusLine()));
+        System.out.println(MarkupHelper.createCodeBlock(response.body().jsonPath().prettyPrint(), CodeLanguage.JSON));
+
+        String portfolioName = response.jsonPath().getString("portfolio_name");
+        String portfolioID = response.jsonPath().getString("portfolio_id");
+
+        System.out.println(portfolioName + " imported to database successfully");
+        return portfolioID;
+    }
 }

@@ -28,8 +28,10 @@ public class UpdatesAPITests extends APITestBase {
         test.pass("Response Invalid Payload Verified Successfully");
     }
 
-    @Test(groups = {"api", "regression"}, dataProvider = "API Research Lines")
-    @Xray(test = {2283, 2024, 2021})
+    @Test(groups = {"api", "regression"}, dataProvider = "No ESG API Research Lines")
+    @Xray(test = {2283})
+    //2024 TCFD
+    //2021 Energy Transition
     public void updates_Success(@Optional String researchLine) {
         APIController con = new APIController();
         APIFilterPayload apiFilterPayload = new APIFilterPayload("all", "all", "03", "2021", "");
