@@ -1,10 +1,10 @@
 package com.esgc.Test.DataValidation;
 
-import com.esgc.APIModels.EntityPage.ESGScoreSummary;
-import com.esgc.APIModels.EntityPage.ScoreCategory;
-import com.esgc.DBModels.EntityPage.ESGScoreSummaryDBModel;
+import com.esgc.APIModels.EntityIssuerPage.ESGScoreSummary;
+import com.esgc.APIModels.EntityIssuerPage.ScoreCategory;
+import com.esgc.DBModels.EntityIssuerPageDBModels.ESGScoreSummaryDBModel;
 import com.esgc.Test.TestBases.EntityIssuerPageDataValidationTestBase;
-import com.esgc.Utilities.Database.EntityPageQueries;
+import com.esgc.Utilities.Database.EntityIssuerQueries;
 import com.esgc.Utilities.Environment;
 import com.esgc.Utilities.Xray;
 import org.testng.annotations.DataProvider;
@@ -26,7 +26,7 @@ public class ESGScoreTest extends EntityIssuerPageDataValidationTestBase {
     public void validateScoreRange() {
         String orbisID = Environment.OrbisId;
         SoftAssert softAssert = new SoftAssert();
-        List<ESGScoreSummaryDBModel> ESGScoreSummaryDbModel = EntityPageQueries.getEsgScore(orbisID);
+        List<ESGScoreSummaryDBModel> ESGScoreSummaryDbModel = EntityIssuerQueries.getEsgScore(orbisID);
         System.out.println(ESGScoreSummaryDbModel.size());
         String lastTimeStamp =  getFormattedDate(ESGScoreSummaryDbModel.stream().max(Comparator.comparing(c -> c.getLasttimestamp())).get().getLasttimestamp(),"MMMM dd, yyyy");
 

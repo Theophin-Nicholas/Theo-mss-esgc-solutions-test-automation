@@ -6,7 +6,6 @@ import com.esgc.Controllers.EntityIssuerPageController.EntityIssuerPageAPIContro
 import com.esgc.Pages.EntityIssuerPage;
 import com.esgc.Pages.LoginPageIssuer;
 import com.esgc.Test.TestBases.EntityPageTestBase;
-
 import com.esgc.TestBase.DataProviderClass;
 import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.Xray;

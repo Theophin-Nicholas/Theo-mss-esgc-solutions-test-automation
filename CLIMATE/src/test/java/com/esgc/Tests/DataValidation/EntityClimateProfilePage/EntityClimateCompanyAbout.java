@@ -1,15 +1,15 @@
 package com.esgc.Tests.DataValidation.EntityClimateProfilePage;
 
-import com.esgc.APIModels.EntityClimateProfile.CompanyHeader;
+import com.esgc.APIModels.EntityProfilePageModels.EntityHeader;
 import com.esgc.Controllers.EntityPage.EntityProfileClimatePageAPIController;
 import com.esgc.Tests.TestBases.DataValidationTestBase;
 import com.esgc.Utilities.Xray;
 import org.testng.annotations.Test;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import static com.esgc.Utilities.Database.EntityClimateProfilePageQueries.getEntityHeaderDetails;
 
 
@@ -22,8 +22,8 @@ public class EntityClimateCompanyAbout extends DataValidationTestBase {
 
         EntityProfileClimatePageAPIController entityClimateProfileApiController = new EntityProfileClimatePageAPIController();
 
-        List<CompanyHeader> companyheaderAPIResponse = Arrays.asList(entityClimateProfileApiController
-                .geCompanyHeaderAPIResponse(dataprovider[1]).as(CompanyHeader[].class));
+        List<EntityHeader> companyheaderAPIResponse = Arrays.asList(entityClimateProfileApiController
+                .geCompanyHeaderAPIResponse(dataprovider[1]).as(EntityHeader[].class));
 
         Map<String,Object> dbResults = getEntityHeaderDetails(dataprovider[1]);
 

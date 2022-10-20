@@ -1,6 +1,7 @@
 package com.esgc.Tests.DataValidation.PortfolioAnalysisPage;
 
-import com.esgc.APIModels.*;
+import com.esgc.APIModels.APIFilterPayload;
+import com.esgc.APIModels.PortoflioAnalysisModels.*;
 import com.esgc.DBModels.ResearchLineIdentifier;
 import com.esgc.Tests.TestBases.DataValidationTestBase;
 import com.esgc.Utilities.APIUtilities;
@@ -23,7 +24,7 @@ import java.util.stream.Stream;
 public class SectorTests extends DataValidationTestBase {
 
     @Test(groups = {"regression", "data_validation"}, dataProvider = "researchLines")
-    @Xray(test = {2218, 2575, 3687, 3686, 4991, 3691, 1383, 1384, 5143})
+    @Xray(test = {1750, 2140, 2213, 2218, 2575, 3687, 3686, 4991, 3691, 1383, 1384, 5143})
     public void verifySectorSummaryAndDetails(@Optional String sector, @Optional String region,
                                               @Optional String researchLine, @Optional String month, @Optional String year) {
 
