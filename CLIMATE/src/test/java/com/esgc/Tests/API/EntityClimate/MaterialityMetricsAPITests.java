@@ -1,14 +1,10 @@
 package com.esgc.Tests.API.EntityClimate;
 
-import com.esgc.APIModels.EntityProfileClimatePage.SummarySection.*;
 import com.esgc.Controllers.EntityPage.EntityProfileClimatePageAPIController;
 import com.esgc.Tests.TestBases.EntityClimateProfileTestBase;
-import com.esgc.Utilities.Xray;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import org.testng.annotations.Test;
-
-import static org.hamcrest.Matchers.*;
 
 public class MaterialityMetricsAPITests extends EntityClimateProfileTestBase {
 

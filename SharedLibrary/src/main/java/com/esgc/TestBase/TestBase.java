@@ -8,10 +8,7 @@ import com.aventstack.extentreports.markuputils.MarkupHelper;
 import com.aventstack.extentreports.reporter.ExtentSparkReporter;
 import com.esgc.APIModels.TestCase;
 import com.esgc.Reporting.CustomAssertion;
-import com.esgc.Utilities.API.EntityProfilePageEndpoints;
 import com.esgc.Utilities.*;
-import io.restassured.http.ContentType;
-import io.restassured.response.Response;
 import org.apache.commons.lang.time.StopWatch;
 import org.openqa.selenium.JavascriptExecutor;
 import org.testng.ITestResult;
@@ -23,7 +20,6 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
-import static io.restassured.RestAssured.given;
 import static io.restassured.RestAssured.requestSpecification;
 
 
@@ -128,25 +124,6 @@ public abstract class TestBase {
             String accessToken = ((JavascriptExecutor) Driver.getDriver()).executeScript(getAccessTokenScript).toString();
             System.setProperty("token", accessToken);
             System.out.println("token = " + accessToken);
-    }
-
-    public Response getHeaderAPI(String orbisId) {
-        Response response = null;
-        try {
-            response = given().accept(ContentType.JSON)
-                    .baseUri(Environment.URL)
-                    .relaxedHTTPSValidation()
-                    .header("Authorization", "Bearer " + System.getProperty("token"))
-                    .header("Accept", "application/json")
-                    .header("Content-Type", "application/json")
-                    .body("{\"orbis_id\":\"" + orbisId + "\"}")
-                    .when()
-                    .post(EntityProfilePageEndpoints.POST_HEADER);
-        } catch (Exception e) {
-            System.out.println("Inside exception " + e.getMessage());
-        }
-
-        return response;
     }
 
 }
