@@ -1,8 +1,8 @@
 package com.esgc.Tests.DataValidation.PortfolioAnalysisPage;
 
 import com.esgc.APIModels.APIFilterPayload;
-import com.esgc.APIModels.LeadersAndLaggards;
-import com.esgc.APIModels.LeadersAndLaggardsWrapper;
+import com.esgc.APIModels.PortoflioAnalysisModels.LeadersAndLaggards;
+import com.esgc.APIModels.PortoflioAnalysisModels.LeadersAndLaggardsWrapper;
 import com.esgc.DBModels.ESGLeaderANDLaggers;
 import com.esgc.DBModels.ResearchLineIdentifier;
 import com.esgc.Reporting.CustomAssertion;

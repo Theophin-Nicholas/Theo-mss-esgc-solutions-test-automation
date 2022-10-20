@@ -3,7 +3,6 @@ package com.esgc.Tests.UI.PortfolioAnalysisPage;
 import com.esgc.Pages.ResearchLinePage;
 import com.esgc.Tests.TestBases.UITestBase;
 import com.esgc.Utilities.*;
-import com.esgc.Utilities.PortfolioFilePaths;
 import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
@@ -12,7 +11,7 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.esgc.Utilities.API.ErrorMessages.*;
+import static com.esgc.Utilities.ErrorMessages.*;
 
 public class ImportPortfolio extends UITestBase {
 
@@ -372,32 +371,66 @@ public class ImportPortfolio extends UITestBase {
 
     }
 
+    @Test(groups = {"regression", "ui", "errorMessages", "robot_dependency"}, dataProvider = "ErrorMessages", singleThreaded = true)
+    public void importPortfolio_ErrorMessageMissingBBGorISINIndetifier(String fileName, String errorMessage) {
+        ResearchLinePage researchLinePage = new ResearchLinePage();
+
+        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        test.info("Navigated to Portfolio Analysis Page");
+        test.info("Clicked on Upload button");
+
+        researchLinePage.clickUploadPortfolioButton();
+        test.info("Navigated to Upload Page");
+
+        test.info("Clicked on the Browse File button");
+        researchLinePage.clickBrowseFile();
+        BrowserUtils.wait(2);
+
+        String inputFile = PortfolioFilePaths.getFilePathForInvalidPortfolio(fileName);
+        RobotRunner.selectFileToUpload(inputFile);
+
+        BrowserUtils.wait(4);
+        test.info("Import portfolio file was selected");
+        researchLinePage.clickUploadButton();
+        test.info("Clicked on the Upload button");
+        BrowserUtils.wait(2);
+
+        String popUpMessage = researchLinePage.getErrorMessage();
+        String expectedErrorMessage = errorMessage.trim().replaceAll("  ", " ").replace(" ", " ");
+
+        assertTestCase.assertTrue(researchLinePage.CheckifErrorPopUpIsDisplyed(), " Error Pop Up displayed");
+        assertTestCase.assertEquals(popUpMessage, expectedErrorMessage, "Error message verification");
+        test.pass("Verified:After an unsuccessful file upload attempt,error popup was displayed successfully");
+        test.pass("Verified:Error Message");
+
+    }
 
     @DataProvider(name = "ErrorMessages")
     public Object[][] dpMethod() {
 
         return new Object[][]{
-                {"InvalidCurrencyInPortfolio.csv", INVALID_CURRENCY_ERROR_MESSAGE, 498},//498
+               {"InvalidCurrencyInPortfolio.csv", INVALID_CURRENCY_ERROR_MESSAGE, 498},//498
                 {"InvalidCurrencyCodeInPortfolio.csv", INVALID_CURRENCY_ERROR_MESSAGE, 498},//498
-                {"InvalidCurrencyCodeInPortfolio2.csv", INVALID_CURRENCY_ERROR_MESSAGE, 3047},
-                {"NoIdentifierInPortfolio.csv", NO_IDENTIFIER_ERROR_MESSAGE, 504, 839},//504//839
-                {"EmptyIdentifier.csv", EMPTY_IDENTIFIER_ERROR_MESSAGE, 504, 839},//504//839
-                {"InvalidIdentifierValue.csv", INVALID_IDENTIFIER_VALUE_ERROR_MESSAGE, 506, 837},//506//837
-                {"MissingIdentifier.csv", MISSING_IDENTIFIER_ERROR_MESSAGE, 504, 839, 824},//504//839
-//                {"InvalidDate.csv", INVALID_DATE_ERROR_MESSAGE, 512, 836},//512/836
-//                {"InvalidDate2.csv", INVALID_DATE_ERROR_MESSAGE, 512, 836},//512/836
-//                {"InvalidDate3.csv", INVALID_DATE_ERROR_MESSAGE, 512, 836},//512/836
-                {"NoHeader.csv", INVALID_COLUMN_ERROR_MESSAGE, 520, 831},//520//831
-                {"InvalidHeader.csv", INVALID_HEADER_ERROR_MESSAGE, 520},//520
-                {"ValueMissingHeader.csv", INVALID_COLUMN_ERROR_MESSAGE, 520},//520
-                {"ValueMissingHeader2.csv", CHECK_DOCUMENT_ERROR_MESSAGE, 520},//520
-                {"InvalidColumn.csv", INVALID_COLUMN_ERROR_MESSAGE, 520},//520
-                {"InvalidFile.json", INVALID_FILE_ERROR_MESSAGE, 507, 815, 4154},//507,815, 4154
-                {"InvalidFile.txt", INVALID_FILE_ERROR_MESSAGE, 507, 815, 4154},//507,815, 4154
-                {"EmptyFile.csv", EMPTY_FILE_ERROR_MESSAGE, 524},//524*/
-                {"SeveralMissingFields.csv", SEVERAL_MISSING_ERROR_MESSAGE, 819},//819 several missing fields
-                {"MissingValue.csv", MISSING_VALUE_ERROR_MESSAGE, 840},//840 value missing
-                {"AllUnmatchedIdentifiers.csv", All_UNMATCHED_IDENTIFIERS_ERROR_MESSAGE, 984}//all value unmatched
+                 {"InvalidCurrencyCodeInPortfolio2.csv", INVALID_CURRENCY_ERROR_MESSAGE, 3047},
+                 {"NoIdentifierInPortfolio.csv", NO_IDENTIFIER_ERROR_MESSAGE, 504, 839},//504//839
+                 {"EmptyIdentifier.csv", EMPTY_IDENTIFIER_ERROR_MESSAGE, 504, 839},//504//839
+                 {"InvalidIdentifierValue.csv", INVALID_IDENTIFIER_VALUE_ERROR_MESSAGE, 506, 837},//506//837
+                 {"MissingIdentifier.csv", MISSING_IDENTIFIER_ERROR_MESSAGE, 504, 839, 824},//504//839
+ //                {"InvalidDate.csv", INVALID_DATE_ERROR_MESSAGE, 512, 836},//512/836
+ //                {"InvalidDate2.csv", INVALID_DATE_ERROR_MESSAGE, 512, 836},//512/836
+ //                {"InvalidDate3.csv", INVALID_DATE_ERROR_MESSAGE, 512, 836},//512/836
+                 {"NoHeader.csv", INVALID_COLUMN_ERROR_MESSAGE, 520, 831},//520//831
+                 {"InvalidHeader.csv", INVALID_HEADER_ERROR_MESSAGE, 520},//520
+                 {"ValueMissingHeader.csv", INVALID_COLUMN_ERROR_MESSAGE, 520},//520
+                 {"ValueMissingHeader2.csv", CHECK_DOCUMENT_ERROR_MESSAGE, 520},//520
+                 {"InvalidColumn.csv", INVALID_COLUMN_ERROR_MESSAGE, 520},//520
+                 {"InvalidFile.json", INVALID_FILE_ERROR_MESSAGE, 507, 815, 4154},//507,815, 4154
+                 {"InvalidFile.txt", INVALID_FILE_ERROR_MESSAGE, 507, 815, 4154},//507,815, 4154
+                 {"EmptyFile.csv", EMPTY_FILE_ERROR_MESSAGE, 524},//524
+                 {"SeveralMissingFields.csv", SEVERAL_MISSING_ERROR_MESSAGE, 819},//819 several missing fields
+                 {"MissingValue.csv", MISSING_VALUE_ERROR_MESSAGE, 840},//840 value missing
+                 {"AllUnmatchedIdentifiers.csv", All_UNMATCHED_IDENTIFIERS_ERROR_MESSAGE, 984},//all value unmatched
+                {"MISSING_ISIN_OR_BBG_TICKER_IDENTIFIER.csv",MISSING_ISIN_OR_BBG_TICKER_IDENTIFIER,10102}
 
         };
     }

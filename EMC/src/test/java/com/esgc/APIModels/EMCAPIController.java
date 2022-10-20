@@ -1,5 +1,8 @@
 package com.esgc.APIModels;
 
+import com.esgc.APIModels.EMC.Application;
+import com.esgc.APIModels.EMC.AssignedApplication;
+import com.esgc.APIModels.EMC.AssignedUser;
 import com.esgc.APIModels.EMC.User;
 import com.esgc.TestBase.TestBase;
 import com.esgc.Utilities.API.Endpoints;
@@ -8,6 +11,8 @@ import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 
+import java.util.List;
+
 import static io.restassured.RestAssured.given;
 
 public class EMCAPIController extends TestBase {
@@ -15,6 +20,7 @@ public class EMCAPIController extends TestBase {
     RequestSpecification configSpec() {
         //getAccessToken();
         if (isInvalidTest) {
+            resetInvalid();
             return given().accept(ContentType.JSON)
                     .baseUri(Environment.EMC_URL)
                     .relaxedHTTPSValidation()
@@ -43,11 +49,11 @@ public class EMCAPIController extends TestBase {
 
     public Response getEMCAllAdminUsersResponse() {
         Response response = null;
-        System.out.println("EMC API URL: " + Environment.EMC_URL + Endpoints.GET_EMC_ALL_ADMIN_USERS);
+        System.out.println("EMC API URL: " + Environment.EMC_URL + Endpoints.EMC_ADMIN_USERS);
         try {
             response = configSpec()
                     .when()
-                    .get(Endpoints.GET_EMC_ALL_ADMIN_USERS);
+                    .get(Endpoints.EMC_ADMIN_USERS);
 
         } catch (Exception e) {
             System.out.println("Inside exception " + e.getMessage());
@@ -58,11 +64,11 @@ public class EMCAPIController extends TestBase {
 
     public Response getEMCAllRolesResponse() {
         Response response = null;
-        System.out.println("EMC API URL: " + Environment.EMC_URL + Endpoints.GET_EMC_ALL_ROLES);
+        System.out.println("EMC API URL: " + Environment.EMC_URL + Endpoints.EMC_ADMIN_ROLES);
         try {
             response = configSpec()
                     .when()
-                    .get(Endpoints.GET_EMC_ALL_ROLES);
+                    .get(Endpoints.EMC_ADMIN_ROLES);
 
         } catch (Exception e) {
             System.out.println("Inside exception " + e.getMessage());
@@ -73,11 +79,11 @@ public class EMCAPIController extends TestBase {
 
     public Response getEMCUserRolesResponse(String userID) {
         Response response = null;
-        System.out.println("EMC API URL: " + Environment.EMC_URL + Endpoints.GET_EMC_ALL_ADMIN_USERS+"/"+userID+"/roles");
+        System.out.println("EMC API URL: " + Environment.EMC_URL + Endpoints.EMC_ADMIN_USERS +"/"+userID+"/roles");
         try {
             response = configSpec()
                     .when()
-                    .get(Endpoints.GET_EMC_ALL_ADMIN_USERS+"/"+userID+"/roles");
+                    .get(Endpoints.EMC_ADMIN_USERS +"/"+userID+"/roles");
 
         } catch (Exception e) {
             System.out.println("Inside exception " + e.getMessage());
@@ -88,11 +94,11 @@ public class EMCAPIController extends TestBase {
 
     public Response getEMCRoleUsersResponse(String roleID) {
         Response response = null;
-        System.out.println("EMC API URL: " + Environment.EMC_URL + Endpoints.GET_EMC_ALL_ROLES+"/"+roleID+"/users");
+        System.out.println("EMC API URL: " + Environment.EMC_URL + Endpoints.EMC_ADMIN_ROLES +"/"+roleID+"/users");
         try {
             response = configSpec()
                     .when()
-                    .get(Endpoints.GET_EMC_ALL_ROLES+"/"+roleID+"/users");
+                    .get(Endpoints.EMC_ADMIN_ROLES +"/"+roleID+"/users");
 
         } catch (Exception e) {
             System.out.println("Inside exception " + e.getMessage());
@@ -102,21 +108,22 @@ public class EMCAPIController extends TestBase {
     }
 
     public Response postEMCNewUserResponse(String provider, String firstName, String lastName, String userName, String email, boolean isActive, String accountId) {
+        System.out.println("Creating new user");
         Response response = null;
-        System.out.println("EMC API URL: " + Environment.EMC_URL + Endpoints.POST_EMC_NEW_USER);
+        System.out.println("EMC API URL: " + Environment.EMC_URL + Endpoints.EMC_USER);
         String payload = "{\"provider\":\""+provider+"\",\"firstName\":\""+firstName+"\",\"lastName\":\""+lastName+"\",\"userName\":\""+userName+"\",\"email\":\""+email+"\",\"activate\":\""+isActive+"\",\"accountId\":\""+accountId+"\"}";
         System.out.println("payload = " + payload);
         try {
             response = configSpec()
                     .and().body(payload)
                     .when()
-                    .post(Endpoints.POST_EMC_NEW_USER);
+                    .post(Endpoints.EMC_USER);
 
         } catch (Exception e) {
             System.out.println("Inside exception " + e.getMessage());
         }
         System.out.println("Status Code = " + response.statusCode());
-        response.prettyPrint();
+        System.out.println();
         return response;
     }
 
@@ -132,7 +139,7 @@ public class EMCAPIController extends TestBase {
         try {
             response = configSpec()
                     .and().body(user)
-                    .when().put(Endpoints.GET_EMC_USER+"/"+email);
+                    .when().put(Endpoints.EMC_USER +"/"+email);
 
         } catch (Exception e) {
             System.out.println("Inside exception " + e.getMessage());
@@ -143,11 +150,11 @@ public class EMCAPIController extends TestBase {
 
     public Response deleteEMCUserResponse(String email) {
         Response response = null;
-        System.out.println("EMC API URL: " + Environment.EMC_URL + Endpoints.GET_EMC_USER+"/"+email);
+        System.out.println("EMC API URL: " + Environment.EMC_URL + Endpoints.EMC_USER +"/"+email);
         try {
             response = configSpec()
                     .when()
-                    .delete(Endpoints.GET_EMC_USER+"/"+email);
+                    .delete(Endpoints.EMC_USER +"/"+email);
 
         } catch (Exception e) {
             System.out.println("Inside exception " + e.getMessage());
@@ -158,11 +165,11 @@ public class EMCAPIController extends TestBase {
 
     public Response getEMCAllAccountsResponse() {
         Response response = null;
-        System.out.println("EMC API URL: " + Environment.EMC_URL + Endpoints.GET_EMC_ALL_ACCOUNTS);
+        System.out.println("EMC API URL: " + Environment.EMC_URL + Endpoints.EMC_ACCOUNTS);
         try {
             response = configSpec()
                     .when()
-                    .get(Endpoints.GET_EMC_ALL_ACCOUNTS);
+                    .get(Endpoints.EMC_ACCOUNTS);
 
         } catch (Exception e) {
             System.out.println("Inside exception " + e.getMessage());
@@ -174,11 +181,11 @@ public class EMCAPIController extends TestBase {
     public Response getEMCUserDetailsResponse(String email) {
         System.out.println("Getting user details for : " + email);
         Response response = null;
-        System.out.println("EMC API URL: " + Environment.EMC_URL + Endpoints.GET_EMC_USER);
+        System.out.println("EMC API URL: " + Environment.EMC_URL + Endpoints.EMC_USER);
         try {
             response = configSpec()
                     .when()
-                    .get(Endpoints.GET_EMC_USER+"/"+email);
+                    .get(Endpoints.EMC_USER +"/"+email);
 
         } catch (Exception e) {
             System.out.println("Inside exception " + e.getMessage());
@@ -189,16 +196,253 @@ public class EMCAPIController extends TestBase {
 
     public Response getEMCAllUsersResponse() {
         Response response = null;
-        System.out.println("EMC API URL: " + Environment.EMC_URL + Endpoints.GET_EMC_USER);
+        System.out.println("EMC API URL: " + Environment.EMC_URL + Endpoints.EMC_USER);
         try {
             response = configSpec()
                     .when()
-                    .get(Endpoints.GET_EMC_USER);
+                    .get(Endpoints.EMC_USER);
 
         } catch (Exception e) {
             System.out.println("Inside exception " + e.getMessage());
         }
         System.out.println("Status Code = " + response.statusCode());
         return response;
+    }
+
+    public Response getEMCAllApplicationsResponse() {
+        System.out.println("Getting all applications");
+        Response response = null;
+        System.out.println("EMC API URL: " + Environment.EMC_URL + Endpoints.EMC_APPS);
+        try {
+            response = configSpec()
+                    .when()
+                    .get(Endpoints.EMC_APPS);
+
+        } catch (Exception e) {
+            System.out.println("Inside exception " + e.getMessage());
+        }
+        System.out.println("Status Code = " + response.statusCode());
+        System.out.println();
+        return response;
+    }
+
+    public Response postEMCNewApplicationResponse(String key, String name, String url, String provider) {
+        System.out.println("Creating new application with key = " + key);
+        Response response = null;
+        System.out.println("EMC API URL: " + Environment.EMC_URL + Endpoints.EMC_APPS);
+        String payload = "{\"key\":\""+key+"\",\"name\":\""+name+"\",\"url\":\""+url+"\",\"provider\":\""+provider+"\"}";
+        System.out.println("payload = " + payload);
+        try {
+            response = configSpec()
+                    .and().body(payload)
+                    .when()
+                    .post(Endpoints.EMC_APPS);
+
+        } catch (Exception e) {
+            System.out.println("Inside exception " + e.getMessage());
+        }
+        System.out.println("Status Code = " + response.statusCode());
+        System.out.println();
+        return response;
+    }
+
+    public Response getEMCApplicationDetailsResponse(String applicationId) {
+        System.out.println("Getting application details for : " + applicationId);
+        Response response = null;
+        System.out.println("EMC API URL: " + Environment.EMC_URL + Endpoints.EMC_APPS);
+        try {
+            response = configSpec()
+                    .when()
+                    .get(Endpoints.EMC_APPS+"/"+applicationId);
+
+        } catch (Exception e) {
+            System.out.println("Inside exception " + e.getMessage());
+        }
+        System.out.println("Status Code = " + response.statusCode());
+        System.out.println();
+        return response;
+    }
+
+    public Response putEMCApplicationResponse(String applicationId, Application application) {
+        System.out.println("Updating application with id = " + applicationId);
+        Response response = null;
+        System.out.println("EMC API URL: " + Environment.EMC_URL + Endpoints.EMC_APPS);
+        try {
+            response = configSpec()
+                    .and().body(application)
+                    .when()
+                    .put(Endpoints.EMC_APPS+"/"+applicationId);
+
+        } catch (Exception e) {
+            System.out.println("Inside exception " + e.getMessage());
+        }
+        System.out.println("Status Code = " + response.statusCode());
+        System.out.println();
+        return response;
+    }
+
+    public Response deleteEMCApplicationResponse(String applicationId) {
+        System.out.println("Deleting application with id = " + applicationId);
+        Response response = null;
+        System.out.println("EMC API URL: " + Environment.EMC_URL + Endpoints.EMC_APPS);
+        try {
+            response = configSpec()
+                    .when()
+                    .delete(Endpoints.EMC_APPS+"/"+applicationId);
+
+        } catch (Exception e) {
+            System.out.println("Inside exception " + e.getMessage());
+        }
+        System.out.println("Status Code = " + response.statusCode());
+        System.out.println();
+        return response;
+    }
+
+    public Response getEMCAllApplicationsForAccountResponse(String accountId) {
+        System.out.println("Getting all applications for account : " + accountId);
+        Response response = null;
+        System.out.println("EMC API URL: " + Environment.EMC_URL + Endpoints.EMC_ACCOUNTS +"/"+accountId+"/applications");
+        try {
+            response = configSpec()
+                    .when()
+                    .get(Endpoints.EMC_ACCOUNTS +"/"+accountId+"/applications");
+
+        } catch (Exception e) {
+            System.out.println("Inside exception " + e.getMessage());
+        }
+        System.out.println("Status Code = " + response.statusCode());
+        System.out.println();
+        return response;
+    }
+
+    public Response assignApplicationToAccountResponse(String accountId, String applicationId) {
+        System.out.println("Assigning application to account");
+        Response response = null;
+        System.out.println("EMC API URL: " + Environment.EMC_URL + Endpoints.EMC_ACCOUNTS +"/"+accountId+"/applications/"+applicationId);
+        try {
+            response = configSpec()
+                    .when().put(Endpoints.EMC_ACCOUNTS +"/"+accountId+"/applications/"+applicationId);
+
+        } catch (Exception e) {
+            System.out.println("Inside exception " + e.getMessage());
+        }
+        System.out.println("Status Code = " + response.statusCode());
+        System.out.println();
+        return response;
+    }
+
+    public Response assignApplicationToAccountResponse(String accountId, String applicationId, boolean isInvalid) {
+        isInvalidTest = isInvalid;
+        return assignApplicationToAccountResponse(accountId, applicationId);
+    }
+
+    public Response deleteEMCRemoveApplicationFromAccountResponse(String accountId, String qaTestApplicationId) {
+        System.out.println("Removing application from account");
+        Response response = null;
+        System.out.println("EMC API URL: " + Environment.EMC_URL + Endpoints.EMC_ACCOUNTS +"/"+accountId+"/applications");
+        try {
+            response = configSpec()
+                    .when()
+                    .delete(Endpoints.EMC_ACCOUNTS +"/"+accountId+"/applications/"+qaTestApplicationId);
+
+        } catch (Exception e) {
+            System.out.println("Inside exception " + e.getMessage());
+        }
+        System.out.println("Status Code = " + response.statusCode());
+        System.out.println();
+        return response;
+    }
+
+    public Response deleteEMCRemoveApplicationFromAccountResponse(String accountId, String applicationId, boolean isInvalid) {
+        isInvalidTest = isInvalid;
+        return deleteEMCRemoveApplicationFromAccountResponse(accountId, applicationId);
+    }
+
+    public boolean verifyApplication(String accountId, String applicationID) {
+        System.out.println("Verifying application with id = " + applicationID);
+        Response response = getEMCAllApplicationsForAccountResponse(accountId);
+        //response.prettyPrint();
+        List<AssignedApplication> applications = response.jsonPath().getList("", AssignedApplication.class);
+        //System.out.println("applications.size() = " + applications.size());
+        for (AssignedApplication application : applications) {
+            //System.out.println("application = " + application.getApplicationId());
+            if (application.getApplicationId().equals(applicationID)) {
+                System.out.println("Application found with id = " + applicationID);
+                return true;
+            }
+        }
+        System.out.println("Application not found with id = " + applicationID);
+        return false;
+    }
+
+    public boolean verifyApplication(String applicationID) {
+        System.out.println("Verifying application with id = " + applicationID);
+        Response response = getEMCAllApplicationsResponse();
+        //response.prettyPrint();
+        List<Application> applications = response.jsonPath().getList("", Application.class);
+        //System.out.println("applications.size() = " + applications.size());
+        for (Application application : applications) {
+            //System.out.println("application = " + application.getApplicationId());
+            if (application.getId().equals(applicationID)) {
+                System.out.println("Application found with id = " + applicationID);
+                return true;
+            }
+        }
+        System.out.println("Application not found with id = " + applicationID);
+        return false;
+    }
+
+    public boolean verifyUser(String accountId, String userId) {
+        System.out.println("Verifying user with id = " + userId);
+        Response response = getListOfUsersResponse(accountId);
+        //response.prettyPrint();
+        List<AssignedUser> users = response.jsonPath().getList("", AssignedUser.class);
+        for (AssignedUser user : users) {
+            if (user.getId().equals(userId)) {
+                System.out.println("User found with id = " + userId);
+                return true;
+            }
+        }
+        System.out.println("User not found with id = " + userId);
+        return false;
+    }
+
+    public Response getListOfUsersResponse(String accountId) {
+        System.out.println("Getting list of users for account : " + accountId);
+        Response response = null;
+        System.out.println("EMC API URL: " + Environment.EMC_URL + Endpoints.EMC_ACCOUNTS +"/"+accountId+"/users");
+        try {
+            response = configSpec()
+                    .when()
+                    .get(Endpoints.EMC_ACCOUNTS +"/"+accountId+"/users");
+
+        } catch (Exception e) {
+            System.out.println("Inside exception " + e.getMessage());
+        }
+        System.out.println("Status Code = " + response.statusCode());
+        System.out.println();
+        return response;
+    }
+
+    public Response getEMCProductsForApplicationResponse(String applicationId) {
+        System.out.println("Getting all products for application : " + applicationId);
+        Response response = null;
+        System.out.println("EMC API URL: " + Environment.EMC_URL + Endpoints.EMC_APPS +"/"+applicationId+"/products");
+        try {
+            response = configSpec()
+                    .when()
+                    .get(Endpoints.EMC_APPS +"/"+applicationId+"/products");
+
+        } catch (Exception e) {
+            System.out.println("Inside exception " + e.getMessage());
+        }
+        System.out.println("Status Code = " + response.statusCode());
+        System.out.println();
+        return response;
+    }
+
+    public Response getEMCProductsForApplicationResponse(String applicationId, boolean isInvalid) {
+        setInvalid();
+        return getEMCProductsForApplicationResponse(applicationId);
     }
 }

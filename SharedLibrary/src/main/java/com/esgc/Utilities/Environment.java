@@ -61,6 +61,7 @@ public class Environment {
     public static final String USER_WITH_EXPORT_ENTITLEMENT_USERNAME;
     public static final String USER_WITH_EXPORT_ENTITLEMENT_PASSWORD;
     public static final String QA_TEST_ACCOUNT_ID;
+    public static final String QA_TEST_APPLICATION_ID;
 
 
     static String getPropertiesPath() {
@@ -123,8 +124,8 @@ public class Environment {
         USER_WITH_CONTROVERSIES_ENTITLEMENT_PASSWORD = properties.getProperty("controversies_bundle_password");
         USER_WITH_OUT_CONTROVERSIES_ENTITLEMENT_USERNAME = properties.getProperty("no_controversies_bundle_username");
         USER_WITH_OUT_CONTROVERSIES_ENTITLEMENT_PASSWORD = properties.getProperty("no_controversies_bundle_password");
-        USER_WITH_OUT_ESG_ENTITLEMENT_USERNAME = properties.getProperty("no_esg_bundle_username");
-        USER_WITH_OUT_ESG_ENTITLEMENT_PASSWORD = properties.getProperty("no_esg_bundle_password");
+        USER_WITH_OUT_ESG_ENTITLEMENT_USERNAME = properties.getProperty("tr_bundle_username");
+        USER_WITH_OUT_ESG_ENTITLEMENT_PASSWORD = properties.getProperty("tr_bundle_password");
         USER_WITH_EXPORT_ENTITLEMENT_USERNAME = properties.getProperty("export_bundle_username");
         USER_WITH_EXPORT_ENTITLEMENT_PASSWORD = properties.getProperty("export_bundle_password");
         USER_WITH_OUT_EXPORT_ENTITLEMENT_USERNAME = properties.getProperty("no_export_bundle_username");
@@ -132,5 +133,6 @@ public class Environment {
         OrbisId = properties.getProperty("orbis_id");
         p3OrbisId = properties.getProperty("p3Orbisid");
         QA_TEST_ACCOUNT_ID = properties.getProperty("account_id");
+        QA_TEST_APPLICATION_ID = properties.getProperty("application_id");
     }
 }
