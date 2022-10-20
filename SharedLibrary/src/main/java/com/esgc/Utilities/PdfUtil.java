@@ -1,14 +1,11 @@
 package com.esgc.Utilities;
 
 
-import com.opencsv.CSVReader;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
-import org.apache.poi.ss.usermodel.*;
-import org.testng.Assert;
 
-import java.io.*;
-import java.util.*;
+import java.io.File;
+import java.io.IOException;
 
 /*
  * This is a utility class for reading from writing to excel files.

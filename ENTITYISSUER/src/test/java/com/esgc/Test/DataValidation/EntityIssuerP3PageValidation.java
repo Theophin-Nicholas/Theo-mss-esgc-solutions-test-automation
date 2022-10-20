@@ -9,7 +9,6 @@ import com.esgc.DBModels.EntityIssuerPageDBModels.P3HeaderIdentifiersDBModel;
 import com.esgc.DBModels.EntityIssuerPageDBModels.SourceDocumentDBModel;
 import com.esgc.Test.TestBases.EntityIssuerPageDataValidationTestBase;
 import com.esgc.Utilities.Database.EntityIssuerQueries;
-import com.esgc.Utilities.Database.EntityPageQueries;
 import com.esgc.Utilities.Environment;
 import com.esgc.Utilities.Xray;
 import io.restassured.response.Response;
@@ -86,7 +85,7 @@ public class EntityIssuerP3PageValidation extends EntityIssuerPageDataValidation
     @Test(groups = {"regression", "entity_issuer"})
     public void ValidateP3PageHeaderOverallDisclosureRatio() {
         String orbisID = Environment.p3OrbisId;
-        int OverallDisclosureRatio = EntityPageQueries.getOverallDisclosureRatio(orbisID);
+        int OverallDisclosureRatio = EntityIssuerQueries.getOverallDisclosureRatio(orbisID);
 
         EntityIssuerPageAPIController entityIssuerPageAPIController = new EntityIssuerPageAPIController();
         Response response = entityIssuerPageAPIController.getHeaderDetails();

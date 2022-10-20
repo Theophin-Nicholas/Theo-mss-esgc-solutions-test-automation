@@ -1,7 +1,7 @@
 package com.esgc.Tests.DataValidation.PortfolioAnalysisPage;
 
 import com.esgc.APIModels.APIFilterPayload;
-import com.esgc.APIModels.carbonFootprintEmissionWrapper;
+import com.esgc.APIModels.PortoflioAnalysisModels.carbonFootprintEmissionWrapper;
 import com.esgc.DBModels.ResearchLineIdentifier;
 import com.esgc.DBModels.carbonFootPrintEmissionDBModel;
 import com.esgc.Tests.TestBases.DataValidationTestBase;
