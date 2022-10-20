@@ -19,7 +19,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import static com.esgc.Utilities.API.ErrorMessages.*;
+import static com.esgc.Utilities.ErrorMessages.*;
 import static org.hamcrest.Matchers.*;
 
 public class ImportPortfolioTests extends APITestBase {

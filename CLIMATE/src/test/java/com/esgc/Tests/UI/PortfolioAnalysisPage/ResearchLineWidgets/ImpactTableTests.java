@@ -47,7 +47,7 @@ public class ImpactTableTests extends UITestBase {
     @Test(groups = {"regression", "ui", "smoke"},
             description = "ESGCA-4962  - Verify Impact Table columns",
             dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
-    @Xray(test = {4962})
+    @Xray(test = {4962, 6931})
     public void verifyImpactTableColumns(String page) {
         test.info("Test Cases: ESGCA-4962 ");
         ResearchLinePage researchLinePage = new ResearchLinePage();
@@ -97,6 +97,17 @@ public class ImpactTableTests extends UITestBase {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         researchLinePage.navigateToResearchLine(page);
         assertTestCase.assertTrue(researchLinePage.verifyImpactTableScoreCategoryColors(page), "Verify Impact Table Colors");
+        System.out.println("End of test");
+
+    }
+
+    @Test(groups = {"regression", "ui"}, dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
+    @Xray(test = {6931})
+    public void verifyPercentageSymbolWithInvestmentColumn(String page) {
+        test.info("Test Cases: ESGCA-6931 ");
+        ResearchLinePage researchLinePage = new ResearchLinePage();
+        researchLinePage.navigateToResearchLine(page);
+        assertTestCase.assertTrue(researchLinePage.verifyPercentageSymbolWithInvestmentColumn(), "Verify % with Investment Columns in all tables");
         System.out.println("End of test");
 
     }

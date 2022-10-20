@@ -1,15 +1,19 @@
 package com.esgc.Tests.DataValidation.PortfolioAnalysisPage;
 
-import com.esgc.APIModels.*;
+import com.esgc.APIModels.APIFilterPayload;
+import com.esgc.APIModels.PortoflioAnalysisModels.RangeAndScoreCategory;
+import com.esgc.APIModels.PortoflioAnalysisModels.UnderlyingDataMetricsTCFD;
+import com.esgc.APIModels.PortoflioAnalysisModels.UnderlyingDataMetricsWrapper;
+import com.esgc.APIModels.PortoflioAnalysisModels.UnderlyingDataMetricsWrapperNew;
 import com.esgc.Controllers.APIController;
 import com.esgc.DBModels.ResearchLineIdentifier;
 import com.esgc.Tests.TestBases.DataValidationTestBase;
+import com.esgc.Utilities.APIUtilities;
 import com.esgc.Utilities.Database.DatabaseDriver;
 import com.esgc.Utilities.Database.PortfolioQueries;
 import com.esgc.Utilities.Database.UnderlyingDataMetricsQueries;
 import com.esgc.Utilities.PortfolioUtilities;
 import com.esgc.Utilities.Xray;
-import com.esgc.Utilities.APIUtilities;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import org.hamcrest.Matchers;

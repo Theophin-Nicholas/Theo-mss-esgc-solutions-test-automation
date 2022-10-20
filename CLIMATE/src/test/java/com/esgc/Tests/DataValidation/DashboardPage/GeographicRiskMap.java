@@ -1,10 +1,10 @@
 package com.esgc.Tests.DataValidation.DashboardPage;
 
 import com.esgc.APIModels.APIFilterPayload;
-import com.esgc.APIModels.Dashboard.APIEntityListPayload;
-import com.esgc.APIModels.Dashboard.GeoMapCountryEntity;
-import com.esgc.APIModels.RangeAndScoreCategory;
-import com.esgc.APIModels.RegionMap;
+import com.esgc.APIModels.DashboardModels.APIEntityListPayload;
+import com.esgc.APIModels.DashboardModels.GeoMapCountryEntity;
+import com.esgc.APIModels.PortoflioAnalysisModels.RangeAndScoreCategory;
+import com.esgc.APIModels.PortoflioAnalysisModels.RegionMap;
 import com.esgc.DBModels.ResearchLineIdentifier;
 import com.esgc.Tests.TestBases.DataValidationTestBase;
 import com.esgc.Utilities.APIUtilities;
@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 public class GeographicRiskMap extends DataValidationTestBase {
 
     //Test cases ESGCA-1933 ESGCA-4606 ESGCA-4607 ESGCA-4616 ESGCA-4617  ESGCA-4622
-    @Test(groups = {"regression", "data_validation", "dashboard"}, dataProvider = "researchLines", threadPoolSize = 1)
+    @Test(enabled = false, groups = {"regression", "data_validation", "dashboard"}, dataProvider = "researchLines", threadPoolSize = 1)
     @Xray(test = {1933, 4606, 4607, 4616, 4617, 4622})
     public void verifyGeographicRiskMap(@Optional String sector, @Optional String region, @Optional String researchLine, @Optional String month, @Optional String year) {
 
@@ -183,7 +183,7 @@ public class GeographicRiskMap extends DataValidationTestBase {
 
             //Get all entities details
             List<GeoMapCountryEntity> geoMapCountryEntityList = Arrays.asList(
-                    controller.getEntityListResponse(portfolioId, researchLine, apiEntityListPayload)
+                    dashboardAPIController.getGeoMapEntityListResponse(portfolioId, researchLine, apiEntityListPayload)
                             .as(GeoMapCountryEntity[].class));
             System.out.println(geoMapCountryEntityList);
 

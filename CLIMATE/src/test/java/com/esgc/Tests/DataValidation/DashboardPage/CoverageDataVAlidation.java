@@ -1,12 +1,12 @@
 package com.esgc.Tests.DataValidation.DashboardPage;
 
 import com.esgc.APIModels.APIFilterPayloadWithoutBenchmark;
-import com.esgc.APIModels.Dashboard.DashboardCoverage;
+import com.esgc.APIModels.DashboardModels.DashboardCoverage;
 import com.esgc.Controllers.DashboardAPIController;
 import com.esgc.Tests.TestBases.DataValidationTestBase;
+import com.esgc.Utilities.APIUtilities;
 import com.esgc.Utilities.Database.DashboardQueries;
 import com.esgc.Utilities.Xray;
-import com.esgc.Utilities.APIUtilities;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import org.testng.annotations.Test;
