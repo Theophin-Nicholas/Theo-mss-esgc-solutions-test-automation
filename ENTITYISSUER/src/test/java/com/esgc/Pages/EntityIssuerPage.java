@@ -1,6 +1,7 @@
 package com.esgc.Pages;
 
 
+import com.esgc.Reporting.CustomAssertion;
 import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.Driver;
 import com.esgc.Utilities.EntityIssuerESGSubcategoriesDescriptions;
@@ -24,11 +25,14 @@ import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.util.List;
 import java.util.*;
+import java.util.regex.Pattern;
 
 import static org.openqa.selenium.By.xpath;
 
 
 public class EntityIssuerPage extends PageBase {
+
+    protected CustomAssertion assertTestCase = new CustomAssertion();
 
     //============ Sector curve
     @FindBy(xpath = "//div[contains(@id,'highchart')]")
@@ -91,6 +95,9 @@ public class EntityIssuerPage extends PageBase {
 
     @FindBy(xpath = "//div[contains(@class,'MuiDialogTitle')]//div/div/div[1]")
     public WebElement modalDialogTitle;
+
+    @FindBy(xpath = "//div[contains(@class,'MuiGrid-root MuiGrid-container MuiGrid-spacing-xs-2 ')]")
+    public List<WebElement> ModalItems;
 
     @FindBy(xpath = " //div[contains(@class,'MuiDialogTitle')]//div/div/div//following-sibling::div")
     public WebElement sectorDescriptorElement;
@@ -301,6 +308,16 @@ public class EntityIssuerPage extends PageBase {
 
     @FindBy(xpath = "//span[contains(text(),'Overall Disclosure Ratio')]")
     public WebElement P3OverallDisclosureRatio;
+
+    @FindBy(xpath = "//button[@heap_perfchart_id='Materiality']")
+    public static WebElement esgMaterialityTab;
+
+    @FindBy(xpath = "//section//div/p")
+    public List<WebElement> esgMaterialityColumns;
+
+    @FindBy(xpath = "//section//li/section/span[1]")
+    public List<WebElement> esgSections;
+
 
 
     public boolean verifyFooter() {
@@ -1113,5 +1130,109 @@ public class EntityIssuerPage extends PageBase {
 
     }
 
+    public void validateEsgMaterialityLegends(){
+
+        String labelXpath = "//button[@heap_perfchart_id='Materiality']/../../..//div[contains(@class,'MuiPaper-elevation1')]//span";
+
+        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("("+labelXpath+")[1]")).getText(),"Weak");
+        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("("+labelXpath+"/div)[1]")).getAttribute("style"),"background: rgb(221, 88, 29);");
+
+        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("("+labelXpath+")[2]")).getText(),"Limited");
+        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("("+labelXpath+"/div)[2]")).getAttribute("style"),"background: rgb(232, 149, 28);");
+
+        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("("+labelXpath+")[3]")).getText(),"Robust");
+        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("("+labelXpath+"/div)[3]")).getAttribute("style"),"background: rgb(234, 197, 80);");
+
+        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("("+labelXpath+")[4]")).getText(),"Advanced");
+        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("("+labelXpath+"/div)[4]")).getAttribute("style"),"background: rgb(219, 229, 163);");
+
+        String criticalControversiesXpath = "//button[@heap_perfchart_id='Materiality']/../../..//div[text()='Critical controversies']";
+        assertTestCase.assertTrue(Driver.getDriver().findElement(By.xpath(criticalControversiesXpath)).isDisplayed());
+
+    }
+
+    public void selectEsgMaterialityTab() {
+        esgMaterialityTab.click();
+    }
+
+    public List<String> readEsgMaterialityColumns() {
+        List<String> columns = new ArrayList<String>();
+        for (WebElement column : esgMaterialityColumns) {
+            columns.add(column.getText());
+        }
+        return columns;
+    }
+
+    public boolean verifyMaterialityMatrixYaxisLabels() {
+        boolean highScore = Driver.getDriver().findElement(By.xpath("//section/div[text()='Higher Score']")).isDisplayed();
+        boolean lowScore = Driver.getDriver().findElement(By.xpath("//section/div[text()='Lower Score']")).isDisplayed();
+
+        return highScore && lowScore;
+    }
+
+    public boolean isProvidedFilterClickableInMaterialityMatrixFooter(String filterName) {
+        try {
+            WebElement element = Driver.getDriver().findElement(By.xpath("//div/a[text()='" + filterName + "']"));
+            BrowserUtils.scrollTo(element);
+            BrowserUtils.waitForClickablility(element, 30);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public boolean isProvidedFilterSelectedByDefaultInMaterialityMatrixFooter(String filterName) {
+        WebElement element = Driver.getDriver().findElement(By.xpath("//div/a[text()='" + filterName + "']"));
+        BrowserUtils.scrollTo(element);
+        String classAttribute = element.getAttribute("class");
+        System.out.println(classAttribute + " " + classAttribute.split("jss").length);
+        return classAttribute.split("jss").length == 4;
+    }
+
+    public void selectMaterialityMatrixFilter(String filterName) {
+        WebElement element = Driver.getDriver().findElement(By.xpath("//div[@id='driverFilter']//a[text()='" + filterName + "']"));
+        wait.until(ExpectedConditions.visibilityOf(element));
+        BrowserUtils.scrollTo(element);
+        element.click();
+        BrowserUtils.wait(3);
+        String classAttribute = element.getAttribute("class");
+        Assert.assertTrue(classAttribute.split("jss").length == 4, "Verify selected filter is highlites");
+    }
+
+    public List<String> readEsgMaterialityCategories() {
+        List<String> categories = new ArrayList<String>();
+        String sectionName = "";
+        for (WebElement section : esgSections) {
+            sectionName = section.getText();
+            if (!sectionName.equals("None for the sector"))
+                categories.add(section.getText());
+        }
+        return categories;
+    }
+
+    public void validateSubCategoryModal() {
+
+        String sectionName = "";
+        for (WebElement section : esgSections) {
+            sectionName = section.getText();
+            section.click();
+            assertTestCase.assertTrue(wait.until(ExpectedConditions.visibilityOf(modalDialog)).isDisplayed());
+            assertTestCase.assertTrue(wait.until(ExpectedConditions.visibilityOf(modalDialogTitle)).getText().equals(sectionName), "Validate Section name");
+            List<String> expectedMetricValues = Arrays.asList(new String[]{"Yes","No Info", "No"});
+            for (int i =2 ; i<ModalItems.size() ;i++){
+                String[] values = ModalItems.get(i).getText().split("\n") ;
+                if (expectedMetricValues.contains(values[0].toString())){
+                    assertTestCase.assertTrue(true, "Validating if item value is in " + expectedMetricValues);
+                }else{
+                    String decimalPattern = "([0-9]*)\\.([0-9]*)";
+                    boolean match = Pattern.matches(decimalPattern, values[0].toString());
+                    assertTestCase.assertTrue(match, "Validating if Item value is numeric");
+                }
+            }
+            Actions a = new Actions(Driver.getDriver());
+            a.sendKeys(Keys.ESCAPE).build().perform();
+        }
+
+    }
 
 }

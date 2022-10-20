@@ -19,7 +19,7 @@ public class ResearchLinesDescriptionsTest extends UITestBase {
  */
 
     @Test(groups = {"regression", "ui", "smoke", "esg"}, dataProvider = "Descriptions")
-    @Xray(test = {3918,6934})
+    @Xray(test = {3918,6934,6502})
     public void verifyDescriptions(String page, String description, Integer... testCases) {
 
         ResearchLinePage researchLinePage = new ResearchLinePage();
@@ -41,7 +41,7 @@ public class ResearchLinesDescriptionsTest extends UITestBase {
     public Object[][] dpMethod() {
 
         return new Object[][]{
-                //{"Physical Risk Management", PHYSICAL_RISK_MANAGEMENT_DESCRIPTION, 717},
+                {"Physical Risk Management", PHYSICAL_RISK_MANAGEMENT_DESCRIPTION, 717,7994},
                 //{"Operations Risk", OPERATIONS_RISK_DESCRIPTION, 724},
                 //{"Market Risk", MARKET_RISK_DESCRIPTION, 725},
                 //{"Supply Chain Risk", SUPPLY_CHAIN_RISK_DESCRIPTION, 727},
