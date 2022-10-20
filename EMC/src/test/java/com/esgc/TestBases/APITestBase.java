@@ -24,9 +24,7 @@ public abstract class APITestBase extends TestBase {
 
     public void getAccessToken() {
         System.out.println("getting token");
-        String URL = Environment.URL;
-        BrowserUtils.wait(1);
-        Driver.getDriver("chromeheadless").get(URL);
+        Driver.getDriver("chromeheadless").get(Environment.URL);
         Driver.getDriver().manage().window().maximize();
         Driver.getDriver().manage().timeouts().implicitlyWait(Duration.ofSeconds(30));
         LoginPageEMC loginPage = new LoginPageEMC();

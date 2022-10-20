@@ -41,17 +41,21 @@ public class EMCAccountsPage extends EMCBasePage {
 
     public void search(String accountName) {
         if (!searchInput.isDisplayed()) System.out.println("searchInput is not Displayed!");
-        if(!searchInput.getAttribute("value").isEmpty()) clear(searchInput);
+        clear(searchInput);
         searchInput.sendKeys(accountName);
         searchButton.click();
         if (accountNames.size()==0) System.out.println("No account found!");
     }
 
     public boolean verifyAccount(String accountName) {
-        for (int i = 0; i < accountNames.size(); i++) {
-            if (accountNames.get(i).getText().equals(accountName)) {
-                return true;
+        try {
+            for (int i = 0; i < accountNames.size(); i++) {
+                if (accountNames.get(i).getText().equalsIgnoreCase(accountName)) {
+                    return true;
+                }
             }
+        } catch (Exception e) {
+            return false;
         }
         return false;
     }
