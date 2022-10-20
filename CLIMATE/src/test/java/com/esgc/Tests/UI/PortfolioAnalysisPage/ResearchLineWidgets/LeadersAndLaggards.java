@@ -81,7 +81,7 @@ public class LeadersAndLaggards extends UITestBase {
     @Test(groups = {"regression", "ui"},
             description = "Verify the ScoreLogic for Leaders And Laggards Section",
             dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
-    @Xray(test = {2124, 3034, 3159, 2080})
+    @Xray(test = {2124, 3034, 3159, 2080, 3848, 3849})
     public void verifyScoreLogicForLeaderAndLaggards(String page){
         ResearchLinePage researchLinePage = new ResearchLinePage();
         if ( page.equals("Temperature Alignment")) {
@@ -96,6 +96,9 @@ public class LeadersAndLaggards extends UITestBase {
 
         assertTestCase.assertTrue(researchLinePage.VerifyIfScoreLogicIsCorrectForLeaders(page), "Entities were not ordered in correct order for Leaders");
         assertTestCase.assertTrue(researchLinePage.VerifyIfScoreLogicIsCorrectForLaggards(page), "Entities were not ordered in correct order for Laggards");
+
+        assertTestCase.assertTrue(researchLinePage.VerifySortingOrderForLeaders(), "Sorting order for Leaders");
+        assertTestCase.assertTrue(researchLinePage.VerifySortingOrderForLaggards(), "Sorting order for Laggards");
 
     }
 
