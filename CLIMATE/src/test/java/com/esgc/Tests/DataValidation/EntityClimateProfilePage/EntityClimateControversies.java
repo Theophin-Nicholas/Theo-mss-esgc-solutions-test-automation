@@ -2,7 +2,7 @@ package com.esgc.Tests.DataValidation.EntityClimateProfilePage;
 
 import com.esgc.APIModels.EntityControversies.Controversies;
 import com.esgc.Tests.TestBases.DataValidationTestBase;
-import com.esgc.Utilities.API.EntityProfilePageEndpoints;
+import com.esgc.Utilities.EndPoints.EntityProfilePageEndpoints;
 import com.esgc.Utilities.Environment;
 import com.esgc.Utilities.Xray;
 import io.restassured.http.ContentType;
