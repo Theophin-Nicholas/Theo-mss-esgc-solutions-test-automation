@@ -1,17 +1,14 @@
 package com.esgc.Controllers.EntityIssuerPageController;
 
 import com.esgc.APIModels.EntityIssuerPage.DriverDetailPayload;
-import com.esgc.APIModels.EntityPage.EntityFilterPayload;
 import com.esgc.APIModels.EntityIssuerPage.ESGCategories;
 import com.esgc.APIModels.EntityIssuerPage.SubCategories;
-import com.esgc.APIModels.RangeAndScoreCategory;
-import com.esgc.Utilities.API.EntityPageEndpoints;
+import com.esgc.APIModels.EntityPage.EntityFilterPayload;
 import com.esgc.Utilities.APIUtulities.EntityIssuerPageEndPoints;
 import com.esgc.Utilities.Environment;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
-import net.snowflake.client.jdbc.internal.net.minidev.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
