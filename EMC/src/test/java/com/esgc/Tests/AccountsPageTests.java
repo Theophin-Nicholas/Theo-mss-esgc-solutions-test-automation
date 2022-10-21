@@ -2,10 +2,7 @@ package com.esgc.Tests;
 
 import com.esgc.Pages.*;
 import com.esgc.TestBases.EMCUITestBase;
-import com.esgc.Utilities.BrowserUtils;
-import com.esgc.Utilities.DateTimeUtilities;
-import com.esgc.Utilities.Driver;
-import com.esgc.Utilities.Xray;
+import com.esgc.Utilities.*;
 import com.github.javafaker.Faker;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
@@ -426,8 +423,8 @@ public class AccountsPageTests extends EMCUITestBase {
             Driver.getDriver().switchTo().window(windows.toArray()[1].toString());
             BrowserUtils.waitForClickablility(loginPage.loginButton, 5).click();
             System.out.println("Login successful");
-            DashboardPage dashboardPage = new DashboardPage();
-            assertTestCase.assertTrue(dashboardPage.portfolioSelectionButton.isDisplayed(),
+           // DashboardPage dashboardPage = new DashboardPage();
+            assertTestCase.assertTrue(editUserPage.portfolioSelectionButton.isDisplayed(),
                     "Login sucessfull for account suspended and unsuspended");
             System.out.println("Login successful");
 
