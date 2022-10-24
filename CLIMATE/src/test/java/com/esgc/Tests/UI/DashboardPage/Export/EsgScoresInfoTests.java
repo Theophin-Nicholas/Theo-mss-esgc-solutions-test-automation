@@ -1,8 +1,10 @@
 package com.esgc.Tests.UI.DashboardPage.Export;
 
 import com.esgc.Pages.DashboardPage;
+import com.esgc.Pages.LoginPage;
 import com.esgc.Tests.TestBases.DataValidationTestBase;
 import com.esgc.Utilities.Database.DashboardQueries;
+import com.esgc.Utilities.EntitlementsBundles;
 import com.esgc.Utilities.Xray;
 import org.testng.annotations.Test;
 
@@ -16,7 +18,7 @@ public class EsgScoresInfoTests extends DataValidationTestBase {
     ExportUtils utils = new ExportUtils();
 
     @Test(groups = {"dashboard", "regression", "ui"})
-    @Xray(test = {9788, 9820})
+    @Xray(test = {9788, 9820, 11266})
     public void compareEsgScoresInfoFromExcelToDB() {
         DashboardPage dashboardPage = new DashboardPage();
         dashboardPage.downloadDashboardExportFile();
@@ -47,12 +49,64 @@ public class EsgScoresInfoTests extends DataValidationTestBase {
         dashboardPage.deleteDownloadFolder();
     }
 
+    @Test(groups = {"dashboard", "regression", "ui"})
+    @Xray(test = {11268})
+    public void compareEsgScoresWhenNoEsgEntitlement_Bundle() {
+        LoginPage login = new LoginPage();
+        login.clickOnLogout();
+        login.entitlementsLogin(EntitlementsBundles.USER_WITH_EXPORT_ENTITLEMENT);
+
+        DashboardPage dashboardPage = new DashboardPage();
+        dashboardPage.selectSamplePortfolioFromPortfolioSelectionModal();
+        dashboardPage.downloadDashboardExportFile();
+
+        // Read the data from Excel File
+        String filePath = dashboardPage.getDownloadedCompaniesExcelFilePath();
+        List<Map<String,String>> excelResults = utils.convertExcelToNestedMap(filePath);
+
+        Map<String, String> excelResult = excelResults.get(0);
+        boolean keyCheck = !(excelResult.containsKey("Scored Orbis ID") ||
+                excelResult.containsKey("LEI") ||
+                excelResult.containsKey("Methodology Model Version") ||
+                excelResult.containsKey("Scored Date") ||
+                excelResult.containsKey("Score Type") ||
+                excelResult.containsKey("Evaluation Year") ||
+                excelResult.containsKey("Overall Score"));
+
+        assertTestCase.assertTrue(keyCheck,"ESG Score columns should not be available");
+        dashboardPage.deleteDownloadFolder();
+    }
+
+    @Test(groups = {"dashboard", "regression", "ui"})
+    @Xray(test = {11267})
+    public void compareEsgScoresWhenNoEsgPredEntitlement_Bundle() {
+        LoginPage login = new LoginPage();
+        login.clickOnLogout();
+        login.entitlementsLogin(EntitlementsBundles.USER_WITH_EXPORT_ENTITLEMENT);
+
+        DashboardPage dashboardPage = new DashboardPage();
+        dashboardPage.selectSamplePortfolioFromPortfolioSelectionModal();
+        dashboardPage.downloadDashboardExportFile();
+
+        // Read the data from Excel File
+        String filePath = dashboardPage.getDownloadedCompaniesExcelFilePath();
+        List<Map<String,String>> excelResults = utils.convertExcelToNestedMap(filePath);
+
+        Map<String, String> excelResult = excelResults.get(0);
+        boolean keyCheck = !(excelResult.containsKey("Score Type") ||
+                excelResult.containsKey("Overall Score"));
+
+        assertTestCase.assertTrue(keyCheck,"ESG Score columns should not be available");
+        dashboardPage.deleteDownloadFolder();
+    }
+
     public boolean verifyEsgScoresInfo(Map<String,String> excelResult, Map<String,Object> dbResult) {
 
         boolean result = utils.compare(dbResult.get("Scored Orbis ID"),excelResult.get("Scored Orbis ID")) &&
                 utils.compare(dbResult.get("LEI"),excelResult.get("LEI")) &&
                 utils.compare(dbResult.get("Methodology Model Version"),excelResult.get("Methodology Model Version")) &&
                 utils.compare(dbResult.get("Scored Date"),excelResult.get("Scored Date")) &&
+                utils.compare(dbResult.get("Score Type"),excelResult.get("Score Type")) &&
                 utils.compare(dbResult.get("Evaluation Year"),excelResult.get("Evaluation Year")) &&
                 utils.compare(dbResult.get("Overall Score"),excelResult.get("Overall Score"));
 
