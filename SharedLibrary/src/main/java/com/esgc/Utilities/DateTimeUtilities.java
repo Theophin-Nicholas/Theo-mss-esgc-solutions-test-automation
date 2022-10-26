@@ -121,6 +121,60 @@ public class DateTimeUtilities {
     public static String getCurrentMonthNumeric() {
         return LocalDate.now().format(DateTimeFormatter.ofPattern("MM"));
     }
+
+    public static String convertNumericDateToText(String date, String seperator) {
+        String[] dateArray = date.split(seperator);
+        String month = dateArray[1];
+        String day = dateArray[0];
+        String year = dateArray[2];
+        String monthText = "";
+        switch (month) {
+            case "01":
+                monthText = "January";
+                break;
+            case "02":
+                monthText = "February";
+                break;
+            case "03":
+                monthText = "March";
+                break;
+            case "04":
+                monthText = "April";
+                break;
+            case "05":
+                monthText = "May";
+                break;
+            case "06":
+                monthText = "June";
+                break;
+            case "07":
+                monthText = "July";
+                break;
+            case "08":
+                monthText = "August";
+                break;
+            case "09":
+                monthText = "September";
+                break;
+            case "10":
+                monthText = "October";
+                break;
+            case "11":
+                monthText = "November";
+                break;
+            case "12":
+                monthText = "December";
+                break;
+        }
+        return monthText + " " + day + ", " + year;
+    }
+    public static String convertUSNumericDateToText(String date, String seperator) {
+        String[] dateArray = date.split(seperator);
+        String month = dateArray[0];
+        String day = dateArray[1];
+        String year = dateArray[2];
+        return convertNumericDateToText(day + seperator + month + seperator + year, seperator);
+    }
 }
 
 
