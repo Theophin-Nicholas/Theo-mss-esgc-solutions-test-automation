@@ -74,6 +74,21 @@ public class DashboardPage extends UploadPage {
     @FindBy(id = "score-qualty-btn")
     public WebElement scoreQualityButton;
 
+    @FindBy(xpath = "//button[@id='score-qualty-btn']//*[local-name()='svg']/*[local-name()='path']")
+    public WebElement scoreQualityStatus;
+
+    @FindBy(xpath = "//td[@heap_id='perfchart']//*[local-name()='svg']/*[local-name()='rect'][1]")
+    public List<WebElement> scoreQualityIconsPerformanceTable;
+
+    @FindBy(xpath = "//td[contains(@id,'viewcomapnies')]//*[local-name()='svg']/*[local-name()='rect'][1]")
+    public List<WebElement> scoreQualityIconsCoveragePopup;
+
+    @FindBy(xpath = "//tr//td[contains(@id,'viewcomapnies')][1]")
+    public List<WebElement> rowsInCoveragePopup;
+
+    @FindBy(xpath = "//*[@heap_id='heatmap']//*[local-name()='svg']/*[local-name()='rect'][1]")
+    public List<WebElement> scoreQualityIconsInCompareRLs;
+
     //================ summary header tiles
 
     @FindBy(xpath = "//header//div[@id]/../preceding-sibling::div[text()]")
@@ -410,25 +425,25 @@ public class DashboardPage extends UploadPage {
     }
 
     public boolean verifyScoreQualityToggleIsOff() {
-        String scoreQualityStyle = Driver.getDriver().findElement(By.xpath("//button[@id='score-qualty-btn']//*[local-name()='svg']/*[local-name()='path']")).getAttribute("style");
+        String scoreQualityStyle = scoreQualityStatus.getAttribute("style");
         return scoreQualityStyle.equals("transform: translate(0px, 9px) scale(1.2);");
     }
 
     public boolean verifyScoreQualityToggleIsOn() {
-        String scoreQualityStyle = Driver.getDriver().findElement(By.xpath("//button[@id='score-qualty-btn']//*[local-name()='svg']/*[local-name()='path']")).getAttribute("style");
+        String scoreQualityStyle = scoreQualityStatus.getAttribute("style");
         return scoreQualityStyle.equals("transform: translate(0px, 3px) scale(1.2);");
     }
 
     public boolean verifyScoreQualityIconWithEntitiesInPerformanceTable(){
-        return Driver.getDriver().findElements(By.xpath("//td[@heap_id='perfchart']//*[local-name()='svg']/*[local-name()='rect'][1]")).size()==10;
+        return scoreQualityIconsPerformanceTable.size()==10;
     }
 
     public boolean verifyScoreQualityIconWithEntitiesInCoveragePopup(){
-        return Driver.getDriver().findElements(By.xpath("//td[contains(@id,'viewcomapnies')]//*[local-name()='svg']/*[local-name()='rect'][1]")).size()>0;
+        return scoreQualityIconsCoveragePopup.size()>0;
     }
 
     public void verifyScoreQualityLevelsInIconInCoveragePopup(){
-        int companiesCount = Driver.getDriver().findElements(By.xpath("//tr//td[contains(@id,'viewcomapnies')][1]")).size();
+        int companiesCount = rowsInCoveragePopup.size();
 
         for(int i=1; i<=companiesCount; i++){
             System.out.println("Record: "+i);
@@ -459,23 +474,7 @@ public class DashboardPage extends UploadPage {
     }
 
     public boolean verifyScoreQualityIconWithEntitiesUnderCompareResearchLines(){
-        return Driver.getDriver().findElements(By.xpath("//*[@heap_id='heatmap']//*[local-name()='svg']/*[local-name()='rect'][1]")).size()>0;
-    }
-
-    public boolean verifyScoreQualityIconWithEntitiesInCoveragePopup_PA(){
-        return Driver.getDriver().findElements(By.xpath("//td[@heap_id='coverage']//*[local-name()='svg']/*[local-name()='rect'][1]")).size()>0;
-    }
-
-    public boolean verifyScoreQualityIconWithEntitiesInLeadersAndLaggardsTables_PA(){
-        return Driver.getDriver().findElements(By.xpath("//td[@heap_id='leadlag']//*[local-name()='svg']/*[local-name()='rect'][1]")).size()==20;
-    }
-
-    public boolean verifyScoreQualityIconWithEntitiesInLeadersPopup_PA(){
-        return Driver.getDriver().findElements(By.xpath("//div[text()='Leaders']/../../../../..//td[@heap_id='leadlag']//*[local-name()='svg']/*[local-name()='rect'][1]")).size()>0;
-    }
-
-    public boolean verifyScoreQualityIconWithEntitiesInLaggardsPopup_PA(){
-        return Driver.getDriver().findElements(By.xpath("//div[text()='Laggards']/../../../../..//td[@heap_id='leadlag']//*[local-name()='svg']/*[local-name()='rect'][1]")).size()>0;
+        return scoreQualityIconsInCompareRLs.size()>0;
     }
 
     public boolean verifyFacilitiesExposedWidget() {
