@@ -14,7 +14,7 @@ public class EsgAssessmentTests extends DataValidationTestBase {
 
     @Test(groups = {"regression", "ui", "smoke", "esg"},
             description = "Verify ESG Summary Coverage section")
-    @Xray(test = {8373, 8374, 8375, 8376, 8377, 8378, 9968})
+    @Xray(test = {8373, 8374, 8375, 8376, 8377, 8378, 9968, 10910})
     public void verifyEsgAssessmentCoverage() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
 
