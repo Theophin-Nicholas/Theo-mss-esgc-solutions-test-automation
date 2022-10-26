@@ -3,11 +3,9 @@ package com.esgc.Pages;
 
 import com.esgc.APIModels.PortoflioAnalysisModels.RangeAndScoreCategory;
 import com.esgc.Controllers.APIController;
-import com.esgc.Utilities.BrowserUtils;
-import com.esgc.Utilities.ConfigurationReader;
+import com.esgc.Utilities.*;
 import com.esgc.Utilities.Database.DatabaseDriver;
 import com.esgc.Utilities.Database.EntityClimateProfilePageQueries;
-import com.esgc.Utilities.Driver;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Ordering;
 import org.apache.commons.lang3.math.NumberUtils;
@@ -242,9 +240,11 @@ public class EntityClimateProfilePage extends ClimatePageBase {
     @FindBy(xpath = "//span[text()='Transition Risk']/../../..//div[@id='carbonClimate-test-id']")
     public WebElement transitionRiskCarbonFootprintWidget;
 
+    @FindBy(xpath = "(//div[@id='carbonClimate-test-id']//div[@id='innerBox00'])[2]")
+    public WebElement transitionRiskCarbonFootprintCategory;
+
     @FindBy(xpath = "//span[text()='Transition Risk']/../../..//div[text()='Green Share Assessment']")
     public WebElement transitionRiskGreenShareWidget;
-
 
     @FindBy(xpath = "//span[text()='Transition Risk']/../../..//div[text()='Green Share Assessment']/../../../following-sibling::div//table/tbody/tr/td[1]")
     public List<WebElement> transitionRiskGreenShareTableBody;
@@ -263,6 +263,9 @@ public class EntityClimateProfilePage extends ClimatePageBase {
 
     @FindBy(xpath = "//span[text()='Transition Risk']/../../..//div[text()='Brown Share Assessment']/../../../following-sibling::div//table/tbody/tr/td[1]")
     public List<WebElement> transitionRiskBrownShareTableBody;
+
+    @FindBy(xpath = "//span[text()='Transition Risk']/../../..//div[text()='Brown Share Assessment']/../../../following-sibling::div//table/tbody/tr/td[2]")
+    public List<WebElement> transitionRiskBrownShareTableValues;
 
     @FindBy(xpath = "//span[text()='Transition Risk']/../../..//div[text()='Brown Share Assessment']/../../../following-sibling::div//table/thead/tr/th")
     public List<WebElement> transitionRiskBrownShareTableHeadings;
@@ -864,7 +867,7 @@ public class EntityClimateProfilePage extends ClimatePageBase {
     }
 
     public void navigateToTransitionRisk() {
-        BrowserUtils.waitForClickablility(transitionRiskPage, 3).click();
+        BrowserUtils.waitForClickablility(transitionRiskPage, 30).click();
     }
 
     public void navigateToPhysicalRisk() {
@@ -1408,6 +1411,14 @@ public class EntityClimateProfilePage extends ClimatePageBase {
             }
 
         }
+
+        //verify carbon footprint category color is true
+        String actColor= Color.fromString(transitionRiskCarbonFootprintCategory.getCssValue("background-color")).asHex();
+        System.out.println("TR - Carbon Footprint - actColor = " + actColor);
+        String expColor= new ResearchLineColors().getColorForScoreCategory(transitionRiskCarbonFootprintCategory.getText());
+        System.out.println("TR - Carbon Footprint - expColor = " + expColor);
+        check = check && actColor.equalsIgnoreCase(expColor);
+        if (!check) System.out.println("TR - Carbon Footprint - Category color is not verified");
         return check;
     }
 
@@ -1443,7 +1454,12 @@ public class EntityClimateProfilePage extends ClimatePageBase {
             }
 
         }
+        //verify if carbon footprint category displayed
+        check = check && transitionRiskCarbonFootprintCategory.isDisplayed();
+        //verify if carbon footprint category true
+        check = check && transitionRiskCarbonFootprintCategory.getText().equalsIgnoreCase(ESGUtilities.getCarbonFootprintCategory((Long) result.get("CARBON_FOOTPRINT_VALUE_TOTAL")));
         return check;
+
     }
 
     public boolean verifyTempratureAlignmentForNoInfoValue(String entityID) {
@@ -2256,7 +2272,7 @@ public class EntityClimateProfilePage extends ClimatePageBase {
     }
 
     public void verifyBrownShareFootPrintTable(List<String> metrics) {
-        navigateToTransitionRisk();
+//        navigateToTransitionRisk();
         Assert.assertTrue(transitionRiskBrownShareTableHeadings.get(0).getText().equals("Fossil Fuel Disclosures"), "Validating Table Heading");
         Assert.assertTrue(transitionRiskBrownShareTableHeadings.get(1).getText().equals("Investment in Category"), "Validating Table Heading");
         BrowserUtils.scrollTo(transitionRiskBrownShareTableBody.get(0));
@@ -2290,6 +2306,7 @@ public class EntityClimateProfilePage extends ClimatePageBase {
 
     public void verifyBrownShareWidget() {
         navigateToTransitionRisk();
+        BrowserUtils.scrollTo(transitionRiskBrownShareWidgetUpdatedDate);
         assertTestCase.assertTrue(transitionRiskBrownShareWidget.getText().contains("Brown Share Assessment"), "Validating Brown Share heading");
         assertTestCase.assertTrue(transitionRiskBrownShareWidgetSubHeading.getText().contains("% of Overall Revenue derived from Fossil Fuel\n" +
                 "Activities:"), "Validating Brown Share Sub heading");
@@ -2297,7 +2314,6 @@ public class EntityClimateProfilePage extends ClimatePageBase {
         String updatedDateText = transitionRiskBrownShareWidgetUpdatedDate.getText();
         assertTestCase.assertTrue(updatedDateText.contains("Updated on"), "Validating Date ");
         assertTestCase.assertTrue(isValidFormat("MMMM d, yyyy", updatedDateText.split("on ")[1]), "Validating Date format");
-
 
     }
 
@@ -2560,5 +2576,25 @@ public class EntityClimateProfilePage extends ClimatePageBase {
 
     }
 
+    public void verifyUnderlyingDataForBrownShareWidget(String orbisID) {
+        //navigateToTransitionRisk();
+        BrowserUtils.scrollTo(transitionRiskBrownShareWidgetUpdatedDate);
+        DatabaseDriver.createDBConnection();
+        String query = "select top 1 * from  DF_TARGET.BROWN_SHARE where bvd9_NUMBER = 000002269 order by year desc, month desc";
+        Map<String, Object> result = DatabaseDriver.getRowMap(query);
+        assertTestCase.assertTrue(transitionRiskBrownShareWidgetSubHeading.getText().contains(result.get("BS_FOSF_INDUSTRY_REVENUES").toString()),
+                "Brown Share Widget Sub Heading is verified matching with Database");
 
+        String expDate = result.get("PRODUCED_DATE").toString();
+        System.out.println("expDate = " + expDate);
+        //convert yyyy-mm-dd to month name dd, yyyy
+        expDate = expDate.substring(5, 7) + "/" + (Integer.parseInt(expDate.substring(8, 10))+1) + "/" + expDate.substring(0, 4);
+        System.out.println("expDate = " + expDate);
+        expDate = DateTimeUtilities.convertUSNumericDateToText(expDate, "/");
+        System.out.println("expDate = " + expDate);
+        String actDate = transitionRiskBrownShareWidgetUpdatedDate.getText();
+        System.out.println("actDate = " + actDate);
+        assertTestCase.assertTrue(actDate.contains(expDate),
+                "Brown Share Widget Updated Date is verified matching with Database");
+    }
 }
