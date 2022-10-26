@@ -71,6 +71,9 @@ public class DashboardPage extends UploadPage {
     @FindBy(id = "button-holdings")
     public WebElement selectPortfolioButton;
 
+    @FindBy(id = "score-qualty-btn")
+    public WebElement scoreQualityButton;
+
     //================ summary header tiles
 
     @FindBy(xpath = "//header//div[@id]/../preceding-sibling::div[text()]")
@@ -241,6 +244,9 @@ public class DashboardPage extends UploadPage {
     @FindBy(xpath = " //button[@id='button-holdings']/span/div")
     public WebElement verifyPortfolioName;
 
+    @FindBy(xpath = "(//div[@heap_heatmap_id='gridcell']/span[2])[2]")
+    public WebElement overallESGCell;
+
     @FindBy(xpath = "//p[contains(text(),'ESG performance. They measure the degree to which ')]")
     public WebElement overallESGDescription;
 
@@ -395,6 +401,82 @@ public class DashboardPage extends UploadPage {
         }
     }
 
+    public boolean isScoreQualityButtonAvailable(){
+        try{
+            return scoreQualityButton.isDisplayed();
+        }catch (Exception e){
+            return false;
+        }
+    }
+
+    public boolean verifyScoreQualityToggleIsOff() {
+        String scoreQualityStyle = Driver.getDriver().findElement(By.xpath("//button[@id='score-qualty-btn']//*[local-name()='svg']/*[local-name()='path']")).getAttribute("style");
+        return scoreQualityStyle.equals("transform: translate(0px, 9px) scale(1.2);");
+    }
+
+    public boolean verifyScoreQualityToggleIsOn() {
+        String scoreQualityStyle = Driver.getDriver().findElement(By.xpath("//button[@id='score-qualty-btn']//*[local-name()='svg']/*[local-name()='path']")).getAttribute("style");
+        return scoreQualityStyle.equals("transform: translate(0px, 3px) scale(1.2);");
+    }
+
+    public boolean verifyScoreQualityIconWithEntitiesInPerformanceTable(){
+        return Driver.getDriver().findElements(By.xpath("//td[@heap_id='perfchart']//*[local-name()='svg']/*[local-name()='rect'][1]")).size()==10;
+    }
+
+    public boolean verifyScoreQualityIconWithEntitiesInCoveragePopup(){
+        return Driver.getDriver().findElements(By.xpath("//td[contains(@id,'viewcomapnies')]//*[local-name()='svg']/*[local-name()='rect'][1]")).size()>0;
+    }
+
+    public void verifyScoreQualityLevelsInIconInCoveragePopup(){
+        int companiesCount = Driver.getDriver().findElements(By.xpath("//tr//td[contains(@id,'viewcomapnies')][1]")).size();
+
+        for(int i=1; i<=companiesCount; i++){
+            System.out.println("Record: "+i);
+            String xpath = "(//tr//td[contains(@id,'viewcomapnies')][1])["+i+"]//*[local-name()='svg']/*[local-name()='rect'][@fill='#26415E']";
+            int levels = Driver.getDriver().findElements(By.xpath(xpath)).size();
+            String levelName = "";
+            String level = "";
+            if(levels==4){
+                level = "Score Level 1";
+                levelName = "Analyst Verified";
+            } else if(levels==3){
+                level = "Score Level 2";
+                levelName = "Subsidiary";
+            } else if(levels==2){
+                level = "Score Level 3";
+                levelName = "On-Demand";
+            } else if(levels==1){
+                level = "Score Level 4";
+                levelName = "Predicted Score";
+            }
+            BrowserUtils.scrollTo(Driver.getDriver().findElement(By.xpath("(//tr//td[contains(@id,'viewcomapnies')][1])["+i+"]//*[local-name()='svg']/*[local-name()='rect']")));
+            BrowserUtils.hover(Driver.getDriver().findElement(By.xpath("(//tr//td[contains(@id,'viewcomapnies')][1])["+i+"]//*[local-name()='svg']/*[local-name()='rect']")));
+            assertTestCase.assertTrue(Driver.getDriver().findElement(By.xpath("//p/strong[text()='"+level+"']")).isDisplayed());
+            assertTestCase.assertTrue(Driver.getDriver().findElement(By.xpath("//p[text()='"+levelName+"']")).isDisplayed());
+
+        }
+
+    }
+
+    public boolean verifyScoreQualityIconWithEntitiesUnderCompareResearchLines(){
+        return Driver.getDriver().findElements(By.xpath("//*[@heap_id='heatmap']//*[local-name()='svg']/*[local-name()='rect'][1]")).size()>0;
+    }
+
+    public boolean verifyScoreQualityIconWithEntitiesInCoveragePopup_PA(){
+        return Driver.getDriver().findElements(By.xpath("//td[@heap_id='coverage']//*[local-name()='svg']/*[local-name()='rect'][1]")).size()>0;
+    }
+
+    public boolean verifyScoreQualityIconWithEntitiesInLeadersAndLaggardsTables_PA(){
+        return Driver.getDriver().findElements(By.xpath("//td[@heap_id='leadlag']//*[local-name()='svg']/*[local-name()='rect'][1]")).size()==20;
+    }
+
+    public boolean verifyScoreQualityIconWithEntitiesInLeadersPopup_PA(){
+        return Driver.getDriver().findElements(By.xpath("//div[text()='Leaders']/../../../../..//td[@heap_id='leadlag']//*[local-name()='svg']/*[local-name()='rect'][1]")).size()>0;
+    }
+
+    public boolean verifyScoreQualityIconWithEntitiesInLaggardsPopup_PA(){
+        return Driver.getDriver().findElements(By.xpath("//div[text()='Laggards']/../../../../..//td[@heap_id='leadlag']//*[local-name()='svg']/*[local-name()='rect'][1]")).size()>0;
+    }
 
     public boolean verifyFacilitiesExposedWidget() {
         try {
@@ -804,6 +886,15 @@ public class DashboardPage extends UploadPage {
                 Assert.fail("Bundle not found");
                 return null;
         }
+    }
+
+    public void selectOrDeselectResearchLineUnderAnalysisSection(String researchLine) {
+        WebElement element = Driver.getDriver().findElement(By.xpath("//div[@heap_heatmap_id='researchline'][text()='"+researchLine+"']"));
+
+        BrowserUtils.scrollTo(element);
+        wait.until(ExpectedConditions.elementToBeClickable(element));
+        BrowserUtils.clickWithJS(element);
+        BrowserUtils.wait(10);
     }
 
     public void selectOrDeselectHeatMapSection(String researchLine) {
