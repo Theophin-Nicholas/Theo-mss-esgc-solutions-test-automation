@@ -92,24 +92,24 @@ public class EsgPredictedScoreTests extends UITestBase {
         BrowserUtils.wait(5);
         assertTestCase.assertTrue(dashboardPage.verifyScoreQualityToggleIsOn(),"Verify Score Quality Button is on in Dashboard Page");
 
-        assertTestCase.assertTrue(dashboardPage.verifyScoreQualityIconWithEntitiesInLeadersAndLaggardsTables_PA(),"Verify Score Quality icon with Entity Names in Leaders and Laggards tables in Portfolio Analysis Page");
+        assertTestCase.assertTrue(researchLine.verifyScoreQualityIconWithEntitiesInLeadersAndLaggardsTables_PA(),"Verify Score Quality icon with Entity Names in Leaders and Laggards tables in Portfolio Analysis Page");
 
         researchLine.moreCompaniesRankedIn.get(0).click();
-        assertTestCase.assertTrue(dashboardPage.verifyScoreQualityIconWithEntitiesInLeadersPopup_PA(),"Verify Score Quality icon with Entity Names in Leaders popup in Portfolio Analysis Page");
+        assertTestCase.assertTrue(researchLine.verifyScoreQualityIconWithEntitiesInLeadersPopup_PA(),"Verify Score Quality icon with Entity Names in Leaders popup in Portfolio Analysis Page");
         researchLine.hideButton.click();
 
         researchLine.moreCompaniesRankedIn.get(1).click();
-        assertTestCase.assertTrue(dashboardPage.verifyScoreQualityIconWithEntitiesInLaggardsPopup_PA(),"Verify Score Quality icon with Entity Names in Laggards popup in Portfolio Analysis Page");
+        assertTestCase.assertTrue(researchLine.verifyScoreQualityIconWithEntitiesInLaggardsPopup_PA(),"Verify Score Quality icon with Entity Names in Laggards popup in Portfolio Analysis Page");
         researchLine.hideButton.click();
 
         BrowserUtils.scrollTo(researchLine.portfolioCoverage);
         researchLine.portfolioCoverage.click();
-        assertTestCase.assertTrue(dashboardPage.verifyScoreQualityIconWithEntitiesInCoveragePopup_PA(),"Verify Score Quality icon with Entity Names in Coverage popup in Portfolio Analysis Page");
+        assertTestCase.assertTrue(researchLine.verifyScoreQualityIconWithEntitiesInCoveragePopup_PA(),"Verify Score Quality icon with Entity Names in Coverage popup in Portfolio Analysis Page");
         researchLine.hideButton.click();
 
         researchLine.selectOptionFromFiltersDropdown("benchmark","Sample Portfolio");
         researchLine.portfolioCoverage.click();
-        assertTestCase.assertTrue(dashboardPage.verifyScoreQualityIconWithEntitiesInCoveragePopup_PA(),"Verify Score Quality icon with Entity Names in Coverage popup in Portfolio Analysis Page");
+        assertTestCase.assertTrue(researchLine.verifyScoreQualityIconWithEntitiesInCoveragePopup_PA(),"Verify Score Quality icon with Entity Names in Coverage popup in Portfolio Analysis Page");
         researchLine.hideButton.click();
     }
 
@@ -127,8 +127,49 @@ public class EsgPredictedScoreTests extends UITestBase {
         dashboardPage.navigateToPageFromMenu("Portfolio Analysis");
         ResearchLinePage researchLine = new ResearchLinePage();
         assertTestCase.assertTrue(!researchLine.getAvailableResearchLines().contains("ESG Assessments"), "Verify ESG Assessment is not available in Research Line dropdown");
-        assertTestCase.assertTrue(!dashboardPage.verifyScoreQualityIconWithEntitiesInLeadersAndLaggardsTables_PA(),"Verify Score Quality icon with Entity Names in Leaders and Laggards tables in Portfolio Analysis Page");
+        assertTestCase.assertTrue(!researchLine.verifyScoreQualityIconWithEntitiesInLeadersAndLaggardsTables_PA(),"Verify Score Quality icon with Entity Names in Leaders and Laggards tables in Portfolio Analysis Page");
 
+    }
+
+    @Test(groups = {"esg", "regression", "ui"})
+    @Xray(test = {11074, 11078})
+    public void verifyEntitiesWithPredictedScoresInLeadersAndLaggardsTables_PortfolioAnalysis() {
+        DashboardPage dashboardPage = new DashboardPage();
+        ResearchLinePage researchLine =new ResearchLinePage();
+
+        dashboardPage.navigateToPageFromMenu("Portfolio Analysis");
+        dashboardPage.selectResearchLineFromDropdown("ESG Assessments");
+
+        assertTestCase.assertTrue(researchLine.verifyEntitiesWithPredictedScoresInYellow_PA(researchLine.leadersTableRows),"Verify Entities with Predicted Scores are displaying in Yellow color in Leaders table");
+        assertTestCase.assertTrue(researchLine.verifyEntitiesWithPredictedScoresAreNotClickable_PA(researchLine.leadersTableCompanyNames),"Verify Entities with Predicted Scores are not clickable in Leaders table");
+        assertTestCase.assertTrue(researchLine.verifyEntitiesWithPredictedScoresInYellow_PA(researchLine.laggardsTableRows),"Verify Entities with Predicted Scores are displaying in Yellow color in Laggards table");
+        assertTestCase.assertTrue(researchLine.verifyEntitiesWithPredictedScoresAreNotClickable_PA(researchLine.laggardsTableCompanyNames),"Verify Entities with Predicted Scores are not clickable in Laggards table");
+
+        researchLine.moreCompaniesRankedIn.get(0).click();
+        assertTestCase.assertTrue(researchLine.verifyEntitiesWithPredictedScoresInYellow_PA(researchLine.leadersPopupRows),"Verify Entities with Predicted Scores are displaying in Yellow color in Leaders popup");
+        assertTestCase.assertTrue(researchLine.verifyEntitiesWithPredictedScoresAreNotClickable_PA(researchLine.leadersPopupCompanyNames),"Verify Entities with Predicted Scores are not clickable in Leaders popup");
+        researchLine.hideButton.click();
+
+        researchLine.moreCompaniesRankedIn.get(1).click();
+        assertTestCase.assertTrue(researchLine.verifyEntitiesWithPredictedScoresInYellow_PA(researchLine.laggardsPopupRows),"Verify Entities with Predicted Scores are displaying in Yellow color in Laggards popup");
+        assertTestCase.assertTrue(researchLine.verifyEntitiesWithPredictedScoresAreNotClickable_PA(researchLine.laggardsPopupCompanyNames),"Verify Entities with Predicted Scores are not clickable in Laggards popup");
+        researchLine.hideButton.click();
+    }
+
+    @Test(groups = {"esg", "regression", "ui"})
+    @Xray(test = {10901, 10903})
+    public void verifyEntitiesWithPredictedScoresInCoveragePopup_PortfolioAnalysis() {
+        DashboardPage dashboardPage = new DashboardPage();
+        ResearchLinePage researchLine =new ResearchLinePage();
+
+        dashboardPage.navigateToPageFromMenu("Portfolio Analysis");
+        dashboardPage.selectResearchLineFromDropdown("ESG Assessments");
+        researchLine.selectEsgPortfolioCoverage();
+
+        assertTestCase.assertTrue(researchLine.verifyEntitiesWithPredictedScoresInYellow_PA(researchLine.coveragePopupRows),"Verify Entities with Predicted Scores are displaying in Yellow color in Coverage popup");
+        assertTestCase.assertTrue(researchLine.verifyEntitiesWithPredictedScoresAreNotClickable_PA(researchLine.coveragePopupCompanyNames),"Verify Entities with Predicted Scores are not clickable in Coverage popup");
+
+        researchLine.hideButton.click();
     }
 
 }
