@@ -867,4 +867,10 @@ public class PortfolioQueries {
 
         return score;
     }
+
+    public Map<String, Object> getPortfolioDetails(String portfolioid) {
+        String query = "SELECT * FROM df_target.df_portfolio WHERE 1=1 AND portfolio_id = '" + portfolioid +"'";
+        Map<String, Object> rs = getQueryResultMap(query).get(0);
+        return rs;
+    }
 }
