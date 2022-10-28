@@ -32,6 +32,9 @@ public class ResearchLinePage extends UploadPage {
     @FindBy(xpath = "(//div[contains(@id,'test-id-from-overview-')])[2]//div[text()='Score']/following-sibling::h6")
     public WebElement portfolioScoreValue;
 
+    @FindBy(xpath = "//a[contains(text(),'Coverage')]")
+    public WebElement portfolioCoverage;
+
     @FindBy(xpath = "(//div[contains(@id,'phy-risk-mgm-test-id-from-overview-')])/div/div/div/h6")
     public WebElement portfolioScoreGreenShareValue;
 
