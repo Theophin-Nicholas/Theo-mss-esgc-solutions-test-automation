@@ -1,6 +1,7 @@
 package com.esgc.Pages;
 
 import com.esgc.Reporting.CustomAssertion;
+import com.esgc.Tests.UI.DashboardPage.PortfolioSettings;
 import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.Driver;
 import com.esgc.Utilities.EntitlementsBundles;
@@ -3204,5 +3205,38 @@ public class ResearchLinePage extends UploadPage {
         }
     }
 
+    public void selectPortfolio(String portfolioName){
+        System.out.println("Selecting portfolio: " + portfolioName);
+        try{
+            if (menu.isDisplayed()) {
+                clickMenu();
+                BrowserUtils.wait(2);
+                portfolioSettings.click();
+            }
+            WebElement targetPortfolio = Driver.getDriver().findElement(By.xpath("//span[@title='"+portfolioName+"']"));
+            BrowserUtils.scrollTo(targetPortfolio);
+            targetPortfolio.click();
+            BrowserUtils.wait(4);
+            System.out.println("Portfolio selected");
+        } catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    public void deletePortfolio(String portfolioName) {
+        System.out.println("Deleting portfolio: " + portfolioName);
+        selectPortfolio(portfolioName);
+        try{
+
+            BrowserUtils.waitForClickablility(deleteButton, 15).click();
+            BrowserUtils.waitForVisibility(confirmPortfolioDeletePopupHeader,10);
+            confirmPortfolioDeleteYesButton.click(); //clicking the Yes button and deleting the portfolio
+            BrowserUtils.wait(6);
+            pressESCKey();
+            System.out.println("Portfolio deleted");
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+    }
 }
 
