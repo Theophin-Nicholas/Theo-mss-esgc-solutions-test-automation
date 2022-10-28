@@ -482,6 +482,48 @@ public class ResearchLinePage extends UploadPage {
     @FindBy(xpath = "//div[contains(@class,'MuiDrawer-paperAnchorRight')]/header/div/div/div[1]")
     public WebElement esgAssessmentsCountryDrwaerPopup;
 
+    @FindBy(xpath = "//td[@heap_id='coverage']//*[local-name()='svg']/*[local-name()='rect'][1]")
+    public List<WebElement> scoreQualityIconsInCoveragePopup;
+
+    @FindBy(xpath = "//td[@heap_id='leadlag']//*[local-name()='svg']/*[local-name()='rect'][1]")
+    public List<WebElement> scoreQualityIconsInLeadersAndLaggardsTable;
+
+    @FindBy(xpath = "//div[text()='Leaders']/../../../../..//td[@heap_id='leadlag']//*[local-name()='svg']/*[local-name()='rect'][1]")
+    public List<WebElement> scoreQualityIconsInLeadersPopup;
+
+    @FindBy(xpath = "//div[text()='Laggards']/../../../../..//td[@heap_id='leadlag']//*[local-name()='svg']/*[local-name()='rect'][1]")
+    public List<WebElement> scoreQualityIconsInLaggardsPopup;
+
+    @FindBy(xpath = "//div[@heap_leadlag_id='leaders']//tbody/tr")
+    public List<WebElement> leadersTableRows;
+
+    @FindBy(xpath = "//div[@heap_leadlag_id='leaders']//tbody/tr/td[2]/div/span/span")
+    public List<WebElement> leadersTableCompanyNames;
+
+    @FindBy(xpath = "//div[@heap_leadlag_id='laggards']//tbody/tr")
+    public List<WebElement> laggardsTableRows;
+
+    @FindBy(xpath = "//div[@heap_leadlag_id='laggards']//tbody/tr/td[2]/div/span/span")
+    public List<WebElement> laggardsTableCompanyNames;
+
+    @FindBy(xpath = "//div[text()='Leaders']/../../../../..//td[@heap_id='leadlag']/parent::tr")
+    public List<WebElement> leadersPopupRows;
+
+    @FindBy(xpath = "//div[text()='Leaders']/../../../../..//td[@heap_id='leadlag']/div/span/span")
+    public List<WebElement> leadersPopupCompanyNames;
+
+    @FindBy(xpath = "//div[text()='Laggards']/../../../../..//td[@heap_id='leadlag']/parent::tr")
+    public List<WebElement> laggardsPopupRows;
+
+    @FindBy(xpath = "//div[text()='Laggards']/../../../../..//td[@heap_id='leadlag']/div/span/span")
+    public List<WebElement> laggardsPopupCompanyNames;
+
+    @FindBy(xpath = "//td[@heap_id='coverage']/parent::tr")
+    public List<WebElement> coveragePopupRows;
+
+    @FindBy(xpath = "//td[@heap_id='coverage']/div/span/span")
+    public List<WebElement> coveragePopupCompanyNames;
+
 
     @FindBy(xpath = "//table[@id='table-id-2']")
     public WebElement physicalRiskHazardInvestmentTable;
@@ -2708,6 +2750,46 @@ public class ResearchLinePage extends UploadPage {
 
     }
 
+    public boolean verifyScoreQualityIconWithEntitiesInCoveragePopup_PA(){
+        return scoreQualityIconsInCoveragePopup.size()>0;
+    }
+
+    public boolean verifyScoreQualityIconWithEntitiesInLeadersAndLaggardsTables_PA(){
+        return scoreQualityIconsInLeadersAndLaggardsTable.size()==20;
+    }
+
+    public boolean verifyScoreQualityIconWithEntitiesInLeadersPopup_PA(){
+        return scoreQualityIconsInLeadersPopup.size()>0;
+    }
+
+    public boolean verifyScoreQualityIconWithEntitiesInLaggardsPopup_PA(){
+        return scoreQualityIconsInLaggardsPopup.size()>0;
+    }
+
+    public boolean verifyEntitiesWithPredictedScoresInYellow_PA(List<WebElement> rows){
+        int i=1;
+        for(WebElement row:rows){
+            System.out.println("Record: "+(i++));
+            BrowserUtils.scrollTo(row);
+            if(row.getCssValue("background-color").equals("rgba(253, 247, 218, 1)")){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean verifyEntitiesWithPredictedScoresAreNotClickable_PA(List<WebElement> rows){
+        int i=1;
+        for(WebElement row:rows){
+            System.out.println("Record: "+(i++));
+            BrowserUtils.scrollTo(row);
+            if(!row.getCssValue("text-decoration").contains("underline")){
+                return true;
+            }
+        }
+        return false;
+    }
+
     public void validatePhysicalRiskMgmtLegend(){
 
         String labelXpath = "//div[contains(text(),'Physical Risk Management Score:')]//span";
@@ -2797,7 +2879,7 @@ public class ResearchLinePage extends UploadPage {
             BrowserUtils.scrollTo(methodologyValues.get(i));
             String currentRecordScore = Driver.getDriver().findElement(By.xpath("(" + esgScoresXpath + ")[" + i + "]")).getText().replace(".esg", "");
             String nextRecordScore = Driver.getDriver().findElement(By.xpath("(" + esgScoresXpath + ")[" + (i + 1) + "]")).getText().replace(".esg", "");
-            if (currentRecordScore.compareTo(nextRecordScore) > 0) {
+            if (getEsgRank(currentRecordScore)>getEsgRank(nextRecordScore)) {
                 return false;
             } else if (currentRecordScore.compareTo(nextRecordScore) == 0) {
                 String currentRecordInvestment = Driver.getDriver().findElement(By.xpath("(" + investmentsXpath + ")[" + i + "]")).getText();
@@ -2816,6 +2898,19 @@ public class ResearchLinePage extends UploadPage {
             }
         }
         return true;
+    }
+
+    public int getEsgRank(String esgScore){
+        if(esgScore.equals("Advanced")){
+            return 1;
+        } else if(esgScore.equals("Robust")){
+            return 2;
+        } else if(esgScore.equals("Limited")){
+            return 3;
+        } else if(esgScore.equals("Weak")){
+            return 4;
+        }
+        return 10;
     }
 
     public void ValidateSummaryBoxText() {
@@ -2847,6 +2942,7 @@ public class ResearchLinePage extends UploadPage {
     }
 
     public void selectEsgPortfolioCoverage() {
+        BrowserUtils.wait(5);
         wait.until(ExpectedConditions.elementToBeClickable(esgPortfolioCoverageLink)).click();
     }
 
