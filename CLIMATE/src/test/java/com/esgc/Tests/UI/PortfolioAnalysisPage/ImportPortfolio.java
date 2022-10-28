@@ -6,6 +6,7 @@ import com.esgc.Tests.TestBases.UITestBase;
 import com.esgc.Tests.UI.DashboardPage.PortfolioSettings;
 import com.esgc.Utilities.*;
 import com.esgc.Utilities.Database.DatabaseDriver;
+import com.esgc.Utilities.Database.PortfolioQueries;
 import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
@@ -20,6 +21,7 @@ import static com.esgc.Utilities.ErrorMessages.*;
 
 public class ImportPortfolio extends UITestBase {
     ResearchLinePage researchLinePage = new ResearchLinePage();
+    PortfolioQueries portfolioQueries = new PortfolioQueries();
         /*
     US JIRA # - ESGCA-227
     Acceptance Criteria:
@@ -501,9 +503,8 @@ public class ImportPortfolio extends UITestBase {
         APIController apiController = new APIController();
         String portfolioID = apiController.getCurrentPortfolioId();
         System.out.println("portfolioID = " + portfolioID);
-        DatabaseDriver.createDBConnection();
-        String query = "select * from df_portfolio df where portfolio_id='"+portfolioID+"'";
-        Map<String, Object> result = DatabaseDriver.getRowMap(query);
+
+        Map<String, Object> result = portfolioQueries.getPortfolioDetails(portfolioID);
         String expDate = result.get("AS_OF_DATE").toString();
 
         expDate = DateTimeUtilities.getDatePlusMinusDays(expDate, 1, "yyyy-MM-dd");
@@ -552,9 +553,7 @@ public class ImportPortfolio extends UITestBase {
         APIController apiController = new APIController();
         String portfolioID = apiController.getCurrentPortfolioId();
         System.out.println("portfolioID = " + portfolioID);
-        DatabaseDriver.createDBConnection();
-        String query = "select * from df_portfolio df where portfolio_id='"+portfolioID+"'";
-        Map<String, Object> result = DatabaseDriver.getRowMap(query);
+        Map<String, Object> result = portfolioQueries.getPortfolioDetails(portfolioID);
 
         //On this portfolio currency field set as GBP
         String expCurrency = result.get("CURRENCY").toString();
@@ -598,9 +597,7 @@ public class ImportPortfolio extends UITestBase {
         APIController apiController = new APIController();
         String portfolioID = apiController.getCurrentPortfolioId();
         System.out.println("portfolioID = " + portfolioID);
-        DatabaseDriver.createDBConnection();
-        String query = "select * from df_portfolio df where portfolio_id='"+portfolioID+"'";
-        Map<String, Object> result = DatabaseDriver.getRowMap(query);
+        Map<String, Object> result = portfolioQueries.getPortfolioDetails(portfolioID);
 
         //On this portfolio currency field set as EUR
         String expCurrency = result.get("CURRENCY").toString();
