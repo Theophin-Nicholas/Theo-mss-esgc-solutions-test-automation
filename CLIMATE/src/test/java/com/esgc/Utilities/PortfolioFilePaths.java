@@ -146,6 +146,12 @@ public class PortfolioFilePaths {
                 File.separator+"upload"+File.separator+"MyRegionSectorFilterTest.csv";
     }
 
+    public static String portfolioWithSubsidiaryCompany(){
+        return System.getProperty("user.dir")+ File.separator+"src"+
+                File.separator+"test"+File.separator+"resources"+
+                File.separator+"upload"+File.separator+"PortfolioWithSubsidiaryCompany.csv";
+    }
+
 
 
 }
