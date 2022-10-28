@@ -175,6 +175,14 @@ public class DateTimeUtilities {
         String year = dateArray[2];
         return convertNumericDateToText(day + seperator + month + seperator + year, seperator);
     }
+
+    /**
+     * get a date of a given date plus/minus days
+     */
+    public static String getDatePlusMinusDays(String date, int days, String format) {
+        LocalDate localDate = LocalDate.parse(date, DateTimeFormatter.ofPattern(format));
+        return localDate.plusDays(days).format(DateTimeFormatter.ofPattern(format));
+    }
 }
 
 
