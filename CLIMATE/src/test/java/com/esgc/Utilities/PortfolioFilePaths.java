@@ -159,6 +159,12 @@ public class PortfolioFilePaths {
                 File.separator+"upload"+File.separator+"PortfolioWithSubsidiaryCompany.csv";
     }
 
+    public static String portfolioWithInactiveSubsidiaryCompany(){
+        return System.getProperty("user.dir")+ File.separator+"src"+
+                File.separator+"test"+File.separator+"resources"+
+                File.separator+"upload"+File.separator+"PortfolioWithInactiveSubsidiaryCompany.csv";
+    }
+
 
 
 }
