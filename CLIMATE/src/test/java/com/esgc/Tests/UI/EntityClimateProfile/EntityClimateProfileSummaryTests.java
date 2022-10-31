@@ -933,7 +933,6 @@ public class EntityClimateProfileSummaryTests extends UITestBase {
 
     }
 
-    //TODO need to update the entitlement to entitlementCheck for QA-QA2, UAT and entitlementCheckPrd for Prod
     @Test(groups = {"regression", "ui", "smoke"}, dataProviderClass = DataProviderClass.class, dataProvider = "entitlementCheckPrd")
     @Xray(test = {8448, 8449, 8875, 8878, 8879, 8880, 8881, 8884, 8224, 8225, 8226})
     public void verifyEntitlementBaseWidgets(String username, String password, String entitlement) {
