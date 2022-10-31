@@ -27,7 +27,7 @@ public class EsgAssessmentUITests extends UITestBase {
     }
 
     @Test(groups = {"regression", "ui", "esg"})
-    @Xray(test = {9967})
+    @Xray(test = {9967, 9898})
     public void verifyEsgAssessmentScoreLegend() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         researchLinePage.navigateToResearchLine("ESG Assessments");
