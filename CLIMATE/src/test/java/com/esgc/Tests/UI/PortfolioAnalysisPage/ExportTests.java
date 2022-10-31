@@ -56,7 +56,7 @@ public class ExportTests extends UITestBase {
         if(researchLine.equals("ESG Assessments")) {
             sheetName = "Data - ESG";
             researchLine = "ESG Assessment";
-            expectedTitle = "Orbis ID";
+            expectedTitle = "Entity Name";
         }
         Assert.assertEquals(researchLinePage.getDataFromExportedFile(0, 0, researchLine), expectedTitle,
                 "Exported Document verified by title for " + researchLinePage + " page");
