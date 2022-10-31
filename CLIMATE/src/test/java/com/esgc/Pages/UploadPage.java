@@ -387,7 +387,7 @@ public class UploadPage extends ClimatePageBase {
     public boolean checkIfPortfolioUploadModalDescriptionIsDisplayedAsExpected() {
         try {
             String description = modalDescription.stream().map(WebElement::getText).collect(Collectors.joining(" "));
-            return description.equals("Upload a portfolio in CSV format. Acceptable identifiers include: <ISIN, Bloomberg Ticker>");
+            return description.equals("Upload a portfolio in CSV format. Acceptable identifiers include: <ISIN, Bloomberg Ticker, ORBIS_ID>");
         } catch (NoSuchElementException e) {
             return false;
         }

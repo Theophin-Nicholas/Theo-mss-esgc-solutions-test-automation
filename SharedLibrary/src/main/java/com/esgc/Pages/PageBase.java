@@ -139,7 +139,7 @@ public abstract class PageBase {
     @FindBy(xpath = " //table[@id='table-id-1']/tbody/tr")
     public WebElement portfolioFooterText;
 
-    @FindBy(xpath = "(//tbody)[6]/tr/td[1]")
+    @FindBy(xpath = "(//table[@id='table-id'])/tbody/tr/td[1]/div/span")
     public List<WebElement> portfolioEntityList;
 
     @FindBy(xpath = "//div[@role='dialog']/div/div/li")
@@ -1092,6 +1092,8 @@ public abstract class PageBase {
      */
     public void clickFiltersDropdown() {
         try {
+            By loadMaskByXpath = By.xpath("//*[@id=\"div-mainlayout\"]/div/div/div[2]/div/div/span");
+            wait.until(ExpectedConditions.invisibilityOfElementLocated(loadMaskByXpath));
             if (isFiltersDropdownDisplayed()) {
                 wait.until(ExpectedConditions.visibilityOf(filtersDropdown)).click();
             }
@@ -1295,8 +1297,10 @@ public abstract class PageBase {
     }
 
     public String getColorByScoreCategory(String researchLine, String scoreCategory) {
+        System.out.println("researchLine = " + researchLine);
+        System.out.println("scoreCategory = " + scoreCategory);
         if (researchLine.equals("Green Share Assessment")) {
-            switch (scoreCategory) {
+            switch (scoreCategory.toUpperCase()) {
                 case "NONE":
                     return "#B28559";
                 case "MINOR":
@@ -1307,14 +1311,14 @@ public abstract class PageBase {
                     return "#39A885";
             }
         } else if (researchLine.equals("Temperature Alignment")) {
-            switch (scoreCategory) {
-                case "Well Below 2°C":
+            switch (scoreCategory.toUpperCase()) {
+                case "WELL BELOW 2°C":
                     return "#eac550";
-                case "Below 2°C":
+                case "BELOW 2°C":
                     return "#E8951C";
                 case "2°C":
                     return "#DD581D";
-                case "Above 2°C":
+                case "ABOVE 2°C":
                     return "#D63229";
             }
         } else if (researchLine.toUpperCase().equals("ESG")) {
@@ -1329,7 +1333,7 @@ public abstract class PageBase {
                     return "#DBE5A3";
             }
         } else {
-            switch (scoreCategory) {
+            switch (scoreCategory.toUpperCase()) {
                 case "WEAK":
                     return "#DFA124";
                 case "LIMITED":
@@ -1980,13 +1984,23 @@ public abstract class PageBase {
 
     public void selectPortfolio(String portfolioName) {
         try {
-            WebElement portfolio = Driver.getDriver().findElement(By.xpath("//button[@title='" + portfolioName + "']"));
+            WebElement portfolio = Driver.getDriver().findElement(By.xpath("//*[@title='" + portfolioName + "']"));
             BrowserUtils.scrollTo(portfolio);
             portfolio.click();
             System.out.println("Portfolio found : " + portfolioName);
         } catch (Exception e) {
             System.out.println("Could not find the Portfolio");
-            return;
+        }
+    }
+
+    public void selectPortfolioFromPortfolioSettings(String portfolioName) {
+        try {
+            WebElement portfolio = Driver.getDriver().findElement(By.xpath("//span[@title='" + portfolioName + "']"));
+            BrowserUtils.scrollTo(portfolio);
+            portfolio.click();
+            System.out.println("Portfolio found : " + portfolioName);
+        } catch (Exception e) {
+            System.out.println("Could not find the Portfolio");
         }
     }
 
@@ -2016,6 +2030,7 @@ public abstract class PageBase {
     }
 
     public WebElement getPortfolioDrawerHeader(String portfolioName) {
+        BrowserUtils.wait(2);
         return Driver.getDriver().findElement(By.xpath("//span[@title='" + portfolioName + "']"));
     }
 
