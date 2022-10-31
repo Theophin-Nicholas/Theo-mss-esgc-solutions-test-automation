@@ -6,8 +6,11 @@ import com.opencsv.CSVWriter;
 
 import java.io.File;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -78,6 +81,13 @@ public class PortfolioUtilities extends DatabaseDriver {
         String portfolioRepository = PortfolioFilePaths.portfolioRepositoryPath();
 
         File directory = new File(portfolioRepository);
+        if(!directory.exists()){
+            try {
+                Files.createDirectories(Paths.get(portfolioRepository));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
         int count = 0;
         try {
             count = directory.list().length + 1;

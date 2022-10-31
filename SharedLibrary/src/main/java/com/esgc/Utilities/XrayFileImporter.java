@@ -10,6 +10,7 @@ import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Arrays;
@@ -34,7 +35,7 @@ public class XrayFileImporter {
         try {
             String current = new java.io.File(".").getCanonicalPath();
             System.out.println("current = " + current);
-            current = current.substring(0,current.lastIndexOf("/"));
+            current = current.substring(0,current.lastIndexOf(File.separator));
             System.out.println("current = " + current);
 
             //provides access to the file
