@@ -375,8 +375,15 @@ public class DataProviderClass {
 
         return new Object[][]{
 
+
+
                 {"Apple, Inc.", "000411117"},  // VE scored company
-                {"FirstCash, Inc.","001668460"} // MESG scored Company
+               // {"FirstCash, Inc.","001668460"} // MESG scored Company
+                {"Lexicon Pharmaceuticals, Inc.","001769888"}, // MESG scored Company
+                {"NMI Holdings, Inc.","136042839"}, // MESG scored Company
+                {"Samsung Securities Co., Ltd.","065260686"}, // VE scored company
+                {"Alibaba Health Information Technology Ltd.","261851236"}, // VE scored company
+                {"Development Bank of Japan, Inc.","093009310"}, // VE scored company
 
         };
     }
