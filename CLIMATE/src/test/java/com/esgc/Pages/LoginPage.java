@@ -23,6 +23,9 @@ public class LoginPage extends ClimatePageBase {
     @FindBy(id = "idp-discovery-username")
     public WebElement usernameBox;
 
+    @FindBy(id = "idp-discovery-username")
+    public List<WebElement> usernameBoxs;
+
     @FindBy(id = "okta-signin-username")
     public WebElement PTusernameBox;
 
