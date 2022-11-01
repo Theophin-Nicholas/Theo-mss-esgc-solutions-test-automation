@@ -100,8 +100,9 @@ public class EntityClimateProfileEntitlementsTests extends UITestBase {
 
     }
 
-    @Test(groups = {"entity_climate_profile", "regression", "ui", "smoke", "entitlements"})
-    @Xray(test = {8982})
+    @Test(enabled = false,groups = {"entity_climate_profile", "regression", "ui", "smoke", "entitlements"})
+    @Xray(test = {8982})//TODO #access only Climate Governance bundle cg_bundle_username=esg-test33@outlook.com not working
+                        // Portfolio Analysis link is not available in UI
     public void validatePhysicalRiskManagementIsUnavailable() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         LoginPage login = new LoginPage();

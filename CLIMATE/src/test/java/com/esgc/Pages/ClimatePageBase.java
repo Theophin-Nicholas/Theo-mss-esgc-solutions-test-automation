@@ -12,7 +12,7 @@ import java.io.File;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public abstract class ClimatePageBase extends PageBase{
+public abstract class ClimatePageBase extends PageBase {
 
     //============= Portfolio Selection Modal Elements
 
@@ -158,7 +158,7 @@ public abstract class ClimatePageBase extends PageBase{
      *                 -benchmark
      */
     public String selectRandomOptionFromFiltersDropdown(String dropdown) {
-
+        BrowserUtils.wait(4);
         WebElement element = null;
         String elementTitle = null;
         switch (dropdown) {
@@ -168,7 +168,7 @@ public abstract class ClimatePageBase extends PageBase{
                 element = regionsDropdown;
                 elementTitle = "list-region";
                 break;
-            case "sectors":
+            case "sector":
                 element = sectorsDropdown;
                 elementTitle = "list-sector";
                 break;
