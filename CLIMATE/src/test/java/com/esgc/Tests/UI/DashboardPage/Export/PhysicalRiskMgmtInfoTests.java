@@ -6,7 +6,8 @@ import com.esgc.Utilities.Database.DashboardQueries;
 import com.esgc.Utilities.Xray;
 import org.testng.annotations.Test;
 
-import java.util.*;
+import java.util.List;
+import java.util.Map;
 
 
 public class PhysicalRiskMgmtInfoTests extends DataValidationTestBase {
