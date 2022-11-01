@@ -33,7 +33,10 @@ public class XrayFileImporter {
 
         try {
             String current = new java.io.File(".").getCanonicalPath();
-            current = current.substring(0,current.indexOf("CLIMATE"));
+            System.out.println("current = " + current);
+            current = current.substring(0,current.lastIndexOf("/"));
+            System.out.println("current = " + current);
+
             //provides access to the file
             FileInputStream fileInputStream = new FileInputStream(current + "/configuration.properties");
 
@@ -183,7 +186,7 @@ public class XrayFileImporter {
         int totalTCsCount = allTestCases.size();
         int failedTCsCount = failedTestCases.size();
         int passedTCsCount = totalTCsCount - failedTCsCount;
-        double passRate = PortfolioUtilities.round((((double) passedTCsCount) / ((double) totalTCsCount)) * 100, 0);
+        double passRate = Math.ceil((((double) passedTCsCount) / ((double) totalTCsCount)) * 100);
 
         System.out.printf("%30s %6s \n", "Total Test Cases:", totalTCsCount);
         System.out.printf("%30s %6s \n", "Passed Test Cases:", passedTCsCount);

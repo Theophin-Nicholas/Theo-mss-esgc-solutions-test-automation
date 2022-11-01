@@ -1,6 +1,5 @@
 package com.esgc.APIModels.EntityIssuerPage;
 
-import com.esgc.APIModels.EntityPage.Item;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 

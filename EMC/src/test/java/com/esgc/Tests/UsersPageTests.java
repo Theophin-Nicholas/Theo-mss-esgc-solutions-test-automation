@@ -1,13 +1,10 @@
 package com.esgc.Tests;
 
-import com.esgc.Pages.EMCAccountDetailsPage;
-import com.esgc.Pages.EMCMainPage;
-import com.esgc.Pages.EMCUserDetailsPage;
-import com.esgc.Pages.EMCUsersPage;
+import com.esgc.Pages.*;
 import com.esgc.TestBases.EMCUITestBase;
-import com.esgc.Utilities.BrowserUtils;
-import com.esgc.Utilities.Xray;
+import com.esgc.Utilities.*;
 import com.github.javafaker.Faker;
+import org.openqa.selenium.JavascriptExecutor;
 import org.testng.annotations.Test;
 
 public class UsersPageTests extends EMCUITestBase {
@@ -68,7 +65,7 @@ public class UsersPageTests extends EMCUITestBase {
         BrowserUtils.waitForInvisibility(userDetailsPage.notification, 10);
         assertTestCase.assertEquals(userDetailsPage.userStatus.getText(),"Suspended", "User Details Page  - User status is Suspended");
         assertTestCase.assertTrue(userDetailsPage.unsuspendButton.isDisplayed(), "User Details Page  - Unsuspend button is displayed");
-        assertTestCase.assertTrue(userDetailsPage.resetPasswordButton.isDisplayed(), "User Details Page  - Reset Password button is displayed");
+        //assertTestCase.assertTrue(userDetailsPage.resetPasswordButton.isDisplayed(), "User Details Page  - Reset Password button is displayed");
         assertTestCase.assertTrue(userDetailsPage.deleteButton.isDisplayed(), "User Details Page  - Delete button is displayed");
 
         //Unsuspend user and verify user status
@@ -101,7 +98,7 @@ public class UsersPageTests extends EMCUITestBase {
         assertTestCase.assertTrue(userDetailsPage.userStatus.isDisplayed(), "User Details Page  - User status is displayed");
         assertTestCase.assertEquals(userDetailsPage.userStatus.getText(),"Staged", "User Details Page  - User status is Staged");
         assertTestCase.assertTrue(userDetailsPage.suspendButton.isDisplayed(), "User Details Page  - Suspend button is displayed");
-        assertTestCase.assertFalse(userDetailsPage.suspendButton.isEnabled(), "User Details Page  - Suspend button is not enabled for staged user");
+        assertTestCase.assertTrue(userDetailsPage.suspendButton.isEnabled(), "User Details Page  - Suspend button is not enabled for staged user");
         assertTestCase.assertTrue(userDetailsPage.activateButton.isDisplayed(), "User Details Page  - Reset Password button is displayed");
         assertTestCase.assertTrue(userDetailsPage.deleteButton.isDisplayed(), "User Details Page  - Delete button is displayed");
 
@@ -109,7 +106,7 @@ public class UsersPageTests extends EMCUITestBase {
         userDetailsPage.clickOnActivateButton();
         BrowserUtils.waitForVisibility(userDetailsPage.notification, 10);
         assertTestCase.assertTrue(userDetailsPage.notification.isDisplayed(), "User Details Page  - Notification is displayed");
-        BrowserUtils.waitForInvisibility(userDetailsPage.notification, 10);
+        //BrowserUtils.waitForInvisibility(userDetailsPage.notification, 10);
         assertTestCase.assertEquals(userDetailsPage.userStatus.getText(),"Pending user action", "User Details Page  - User status is Suspended");
         assertTestCase.assertTrue(userDetailsPage.suspendButton.isDisplayed(), "User Details Page  - Suspend button is displayed");
         assertTestCase.assertTrue(userDetailsPage.suspendButton.isEnabled(), "User Details Page  - Suspend button is enabled for pending user action");
@@ -132,5 +129,71 @@ public class UsersPageTests extends EMCUITestBase {
         BrowserUtils.waitForVisibility(userDetailsPage.notification, 10);
         assertTestCase.assertTrue(userDetailsPage.notification.isDisplayed(), "User Details Page  - Notification is displayed");
         BrowserUtils.waitForInvisibility(userDetailsPage.notification, 10);
+    }
+
+    @Test(groups = {"EMC", "ui", "regression"}, description = "UI | EMC | Roles | Verify Role/Group user Information is Available for Investor User")
+    @Xray(test = {5211})
+    public void verifyRoleGroupUserInformationAvailableForInvestorUserTest() {
+        navigateToUser("Ferhat Demir");
+        EMCUserDetailsPage detailsPage = new EMCUserDetailsPage();
+        detailsPage.clickOnApplicationRolesTab();
+        detailsPage.deleteAllRoles();
+        detailsPage.assignApplicationRoles("MESG Platform - DEV - QA", "Investor");
+        Driver.closeDriver();
+        Driver.getDriver().get(Environment.EMC_URL);
+        BrowserUtils.waitForPageToLoad(10);
+        LoginPageEMC loginPageEMC = new LoginPageEMC();
+        loginPageEMC.loginEMCWithParams("ferhat.demir-non-empl@moodys.com", "Odessa2022??");
+        EMCMainPage mainPage = new EMCMainPage();
+        BrowserUtils.waitForVisibility(mainPage.EMCTitle, 10);
+        String getAccessTokenScript = "return JSON.parse(localStorage.getItem('okta-token-storage')).accessToken.claims.groups";
+        String result = ((JavascriptExecutor) Driver.getDriver()).executeScript(getAccessTokenScript).toString();
+        System.out.println("result = " + result);
+        String environment = ConfigurationReader.getProperty("environment");
+        System.out.println("environment = " + environment);
+        if (environment.equals("qa")) assertTestCase.assertTrue(result.contains("mesg-platform-investor-qa"), "Investor Role is available for QA Environment");
+        else if (environment.equals("prod")) assertTestCase.assertTrue(result.contains("mesg-platform-investor-dev"), "Investor Role is available for PROD Environment");
+        else if (environment.equals("uat")) assertTestCase.assertTrue(result.contains("mesg-platform-investor-uat"), "Investor Role is available for UAT Environment");
+        else if (environment.equals("qa2")) assertTestCase.assertTrue(result.contains("mesg-platform-investor-qatwo"), "Investor Role is available for QA2 Environment");
+        Driver.closeDriver();
+        Driver.getDriver().get(Environment.EMC_URL);
+        BrowserUtils.waitForPageToLoad(10);
+        loginPageEMC = new LoginPageEMC();
+        loginPageEMC.loginWithInternalUser();
+        mainPage  = new EMCMainPage();
+        mainPage.goToUsersPage();
+    }
+
+    @Test(groups = {"EMC", "ui", "regression"}, description = "UI | EMC | Roles | Verify Role/Group user Information is Available for Issuer User")
+    @Xray(test = {5212})
+    public void verifyRoleGroupUserInformationAvailableForIssuerUserTest() {
+        navigateToUser("Ferhat Demir");
+        EMCUserDetailsPage detailsPage = new EMCUserDetailsPage();
+        detailsPage.clickOnApplicationRolesTab();
+        detailsPage.deleteAllRoles();
+        detailsPage.assignApplicationRoles("MESG Platform - DEV - QA", "Issuer");
+        Driver.closeDriver();
+        Driver.getDriver().get(Environment.EMC_URL);
+        BrowserUtils.waitForPageToLoad(10);
+        LoginPageEMC loginPageEMC = new LoginPageEMC();
+        loginPageEMC.loginEMCWithParams("ferhat.demir-non-empl@moodys.com", "Odessa2022??");
+        EMCMainPage mainPage = new EMCMainPage();
+        BrowserUtils.waitForVisibility(mainPage.EMCTitle, 10);
+        String getAccessTokenScript = "return JSON.parse(localStorage.getItem('okta-token-storage')).accessToken.claims.groups";
+        String result = ((JavascriptExecutor) Driver.getDriver()).executeScript(getAccessTokenScript).toString();
+        System.out.println("result = " + result);
+        String environment = ConfigurationReader.getProperty("environment");
+        System.out.println("environment = " + environment);
+        if (environment.equals("qa")) assertTestCase.assertTrue(result.contains("mesg-platform-investor-qa"), "Investor Role is available for QA Environment");
+        else if (environment.equals("prod")) assertTestCase.assertTrue(result.contains("mesg-platform-investor-dev"), "Investor Role is available for PROD Environment");
+        else if (environment.equals("uat")) assertTestCase.assertTrue(result.contains("mesg-platform-investor-uat"), "Investor Role is available for UAT Environment");
+        else if (environment.equals("qa2")) assertTestCase.assertTrue(result.contains("mesg-platform-investor-qatwo"), "Investor Role is available for QA2 Environment");
+        Driver.closeDriver();
+        Driver.getDriver().get(Environment.EMC_URL);
+        BrowserUtils.waitForPageToLoad(10);
+        loginPageEMC = new LoginPageEMC();
+        loginPageEMC.loginWithInternalUser();
+        mainPage  = new EMCMainPage();
+        mainPage.goToUsersPage();
     }
 }

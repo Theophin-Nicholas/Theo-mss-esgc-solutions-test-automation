@@ -25,7 +25,7 @@ public class PhysicalRiskHazardsTests extends UITestBase {
     }
 
     @Test(groups = {"regression", "ui"})
-    @Xray(test = {6362,6364,6365,6366})
+    @Xray(test = {6362,6364,6365,6366,7102})
     public void verifyPortfolioScoreSectionTest() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio Analysis page");
@@ -98,6 +98,20 @@ public class PhysicalRiskHazardsTests extends UITestBase {
         assertTestCase.assertTrue(researchLinePage.verifyPhysicalRiskHazardsDrawers("Supply Chain Risk", "Country of Origin"), "Supply Chain Risk:Country of Origin - Verify drawers");
         assertTestCase.assertTrue(researchLinePage.verifyPhysicalRiskHazardsDrawers("Supply Chain Risk", "Resource Demand"), "Supply Chain Risk:Resource Demand - Verify drawers");
 
+    }
+
+    @Test(groups = {"regression", "ui"})
+    @Xray(test = {7103})
+    public void verifyScoreRangeColors() {
+
+        ResearchLinePage researchLinePage = new ResearchLinePage();
+        test.info("Navigate to Portfolio Analysis page");
+        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        researchLinePage.selectResearchLineFromDropdown("Physical Risk Hazards");
+
+        BrowserUtils.wait(5);
+
+        researchLinePage.verifyColorLegendOfScoreCategory();
     }
 
     @Test(groups = {"regression", "ui"})
