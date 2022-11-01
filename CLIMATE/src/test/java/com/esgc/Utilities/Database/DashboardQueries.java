@@ -85,14 +85,51 @@ public class DashboardQueries {
     }
 
     public List<Map<String, Object>> getEsgInfo(String portfolioId, String year, String month){
-        String query = "select df.company_name,eos.value from df_portfolio df\n" +
+    /*    String query = "select df.company_name,eos.value from df_portfolio df\n" +
                 "join entity_coverage_tracking ect on ect.orbis_id=df.bvd9_number and coverage_status = 'Published' and publish = 'yes'\n" +
                 "join ESG_OVERALL_SCORES eos on ect.orbis_id=eos.orbis_id and data_type = 'overall_alphanumeric_score' and sub_category = 'ESG'\n" +
                 "where portfolio_id='"+portfolioId+"'\n" +
                 "and eos.year || eos.month <= '"+year+""+month+"'\n" +
                 "qualify row_number() OVER (PARTITION BY eos.orbis_id ORDER BY eos.year DESC, eos.month DESC, eos.scored_date DESC) =1";
-
+        */
+        String query=" with p as (\n" +
+                "     select * from df_portfolio df where portfolio_id='"+portfolioId+"'\n" +
+                " ),\n" +
+                "  esg as (\n" +
+                "    select  \n" +
+                "    CASE \n" +
+                "    WHEN eos.RESEARCH_LINE_ID in('1008','9999' )\n" +
+                "       THEN  CASE \n" +
+                "            WHEN eos.value>= 60 and eos.value<=100 THEN 4\n" +
+                "            WHEN eos.value>= 50 and eos.value<=59 THEN 3\n" +
+                "            WHEN eos.value>= 30 and eos.value<=49 THEN 2\n" +
+                "            WHEN eos.value>= 0 and eos.value<=29 THEN 1\n" +
+                "         END\n" +
+                "     WHEN eos.RESEARCH_LINE_ID = '1015' \n" +
+                "        THEN CASE \n" +
+                "            WHEN eos.value>= 65 and eos.value<=100 THEN 4\n" +
+                "            WHEN eos.value>= 45 and eos.value<65 THEN 3\n" +
+                "            WHEN eos.value>= 25 and eos.value<45 THEN 2\n" +
+                "            WHEN eos.value>= 0 and eos.value<25 THEN 1\n" +
+                "         END\n" +
+                "    END AS SCALE,\n" +
+                "    CASE \n" +
+                "    \n" +
+                "            WHEN scale=1 THEN 'Weak'\n" +
+                "            WHEN scale=2 THEN 'Limited'\n" +
+                "            WHEN scale=3 THEN 'Robust'\n" +
+                "            WHEN scale=4 THEN 'Advanced'\n" +
+                "         END AS VALUE_ESG,\n" +
+                "    eos.* from entity_coverage_tracking ect  \n" +
+                "join ESG_OVERALL_SCORES eos on ect.orbis_id=eos.orbis_id and data_type = 'esg_pillar_score'  and sub_category = 'ESG' and eos.year || eos.month <= '"+year+""+month+"' \n" +
+                "    and coverage_status = 'Published' and publish = 'yes' \n" +
+                " qualify row_number() OVER (PARTITION BY eos.orbis_id ORDER BY eos.year DESC, eos.month DESC, eos.scored_date DESC) =1\n" +
+                "    )\n" +
+                "     select * from p\n" +
+                "     join esg on p.bvd9_number=esg.orbis_id";
+        System.out.println("query = " + query);
         List<Map<String, Object>> esgInfo = getQueryResultMap(query);
+        System.out.println("esgInfo = " + esgInfo);
         return esgInfo;
     }
 
@@ -107,6 +144,9 @@ public class DashboardQueries {
                 strMonth = "0" + strMonth;
             }
             strYear = String.valueOf(earlier.getYear());
+            System.out.println("strMonth = " + strMonth);
+            System.out.println("strYear = " + strYear);
+            System.out.println("portfolioId = " + portfolioId);
             String query = "select gs.bvd9_number from df_portfolio df" +
                     "    left join temperature_alignment gs on gs.bvd9_number=df.bvd9_number and gs.month='" + strMonth + "' and gs.year='" + strYear + "'" +
                     "    where df.portfolio_id='" + portfolioId + "'" +
