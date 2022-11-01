@@ -26,6 +26,12 @@ public class EntityClimateProfileControversies extends UITestBase {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         BrowserUtils.wait(3);
         researchLinePage.navigateToFirstEntity("000411117");//apple
+        BrowserUtils.wait(5);
+        try {
+            BrowserUtils.scrollTo(entityProfilePage.controversiesTitle.get(0));
+        }catch (Exception e){
+            System.out.println("Didn't find the Controversies");
+        }
         //check if the entity has controversies
         if (entityProfilePage.controversiesTitle.size() > 0) {
             //Verify the title - Controversies
@@ -37,11 +43,11 @@ public class EntityClimateProfileControversies extends UITestBase {
             List<String> categoryExpectedList = new ArrayList<>(
                     Arrays.asList(
                             "Community Involvement (9)",
-                            "Business Behaviour (74)",
+                            "Business Behaviour (73)",
                             "Human Rights (17)",
                             "Human Resources (5)",
                             "Environment (3)",
-                            "Corporate Governance (4)"
+                            "Corporate Governance (5)"
                     )
             );
             //number of controversies in sub category
@@ -51,6 +57,8 @@ public class EntityClimateProfileControversies extends UITestBase {
             for (WebElement subCategoryActual : entityProfilePage.subCategoryList) {
 
                 System.out.println("subCategoryList = " + subCategoryActual.getText());
+                System.out.println("categoryExpectedList = " + categoryExpectedList);
+                System.out.println("subCategoryActual.getText() = " + subCategoryActual.getText());
                 assertTestCase.assertTrue(categoryExpectedList.contains(subCategoryActual.getText()));
                 subCategoryActual.click();
                 int numberOfSubCategoryControversies= Integer.parseInt(subCategoryActual.getText().substring( subCategoryActual.getText().indexOf("(")+1 ,subCategoryActual.getText().indexOf(")")));
@@ -71,6 +79,7 @@ public class EntityClimateProfileControversies extends UITestBase {
                     // Verify that clicking on a controversy row in the widget ,is opening up a Controversy modal popup
                     controversyList.add(controversiesDetails.findElement(By.xpath("td[1]")).getText());
                     controversiesDetails.click();
+                    System.out.println("entityProfilePage.controversiesPopUpVerify.getText() = " + entityProfilePage.controversiesPopUpVerify.getText());
                     assertTestCase.assertEquals(entityProfilePage.controversiesPopUpVerify.getText(),"Controversies");
                     BrowserUtils.wait(1);
                     entityProfilePage.controversiesPopUpClose.click();

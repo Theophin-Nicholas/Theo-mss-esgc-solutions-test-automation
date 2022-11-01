@@ -98,6 +98,7 @@ public class PortfolioUpdatesTest extends UITestBase {
     public void verifyPortfolioUpdatesHeader(String page) {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         researchLinePage.navigateToResearchLine(page);
+        researchLinePage.selectSamplePortfolioFromPortfolioSelectionModal();
         test.info("Navigated to Research Line page");
 
         test.info("Navigated to " + page + " Page");
