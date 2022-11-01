@@ -164,7 +164,7 @@ public class PortfolioScoreTests extends DataValidationTestBase {
             @Optional String researchLine,
             @Optional String month, @Optional String year) {
 
-        researchLine = "esgasmt";
+        researchLine = "ESG";
         month = "08";
         year = "2022";
 
@@ -202,7 +202,10 @@ public class PortfolioScoreTests extends DataValidationTestBase {
 
         return new Object[][]
                 {
-
+                        {"ESG", "09", "2022"},
+                        {"ESG", "08", "2022"},
+                        {"ESG", "07", "2022"},
+                        {"ESG", "06", "2022"},
                         {"Temperature Alignment", "03", "2022"},
                         {"Temperature Alignment", "03", "2022"},
                         {"Temperature Alignment", "03", "2022"},
