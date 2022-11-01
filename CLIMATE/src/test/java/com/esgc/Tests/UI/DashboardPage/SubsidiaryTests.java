@@ -20,7 +20,7 @@ import java.util.Map;
 public class SubsidiaryTests extends UITestBase {
 
 
-    @Test(groups = {"regression", "ui", "smoke", "dashboard"})
+    @Test(groups = {"regression", "ui", "search_entity"})
     @Xray(test = {11042})
     public void VerifyFileUploadSubsidiaryCompany() {
         DashboardPage dashboardPage = new DashboardPage();
@@ -51,6 +51,7 @@ public class SubsidiaryTests extends UITestBase {
 
         DashboardPage dashboardPage = new DashboardPage();
         dashboardPage.navigateToPageFromMenu("Dashboard");
+        dashboardPage.selectPortfolioByNameFromPortfolioSelectionModal("PortfolioWithSubsidiaryCompany1");
 
         String subsidiaryCompanyName = "National Grid North America, Inc.";
         String parentCompanyName = "National Grid Plc";
@@ -63,11 +64,13 @@ public class SubsidiaryTests extends UITestBase {
         // Parent company should be opened
         Assert.assertTrue(entityProfilePage.validateGlobalHeader(parentCompanyName));
 
-        dashboardPage.pressESCKey();
+        EntityClimateProfilePage entityClimateProfilePage = new EntityClimateProfilePage();
+        entityClimateProfilePage.closeEntityProfilePage();
         assertTestCase.assertFalse(dashboardPage.isSearchBoxDisplayed(), "User is on expected page");
 
         // Verify subsidiary company name along with parent company
         dashboardPage.clickCoverageLink();
+        BrowserUtils.wait(5);
         dashboardPage.verifyCompanyNameInCoveragePopup(subsidiaryCompanyName, parentCompanyName);
         dashboardPage.verifyCompanyIsNotClickableInCoveragePopup(subsidiaryCompanyName);
         dashboardPage.verifyCompanyIsClickableInCoveragePopup(parentCompanyName);
@@ -94,7 +97,7 @@ public class SubsidiaryTests extends UITestBase {
 
     }
 
-    @Test(groups = {"regression", "ui", "smoke", "dashboard"})
+    @Test(groups = {"regression", "ui", "search_entity"})
     @Xray(test = {11058, 11242})
     public void VerifyFileUploadWithInactiveSubsidiaryCompany() {
         DashboardPage dashboardPage = new DashboardPage();
@@ -125,6 +128,7 @@ public class SubsidiaryTests extends UITestBase {
 
         DashboardPage dashboardPage = new DashboardPage();
         dashboardPage.navigateToPageFromMenu("Dashboard");
+        dashboardPage.selectPortfolioByNameFromPortfolioSelectionModal("PortfolioWithInactiveSubsidiaryCompany");
 
         String subsidiaryCompanyName = "XTO ENERGY INC";
         ResearchLinePage researchLinePage = new ResearchLinePage();
