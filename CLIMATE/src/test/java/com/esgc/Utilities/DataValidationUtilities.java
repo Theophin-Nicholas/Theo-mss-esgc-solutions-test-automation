@@ -38,6 +38,13 @@ public class DataValidationUtilities {
 
         //query for null score ids if there are any
         List<ResearchLineIdentifier> nullScoreIdentifiers = portfolioQueries.getIdentifiersWithNullScores(researchLine, month, year);
+
+        List<ResearchLineIdentifier> ESGPredictedScoreIdentifiers = null;
+        List<ResearchLineIdentifier> ESGSubsidiaryIdentifiers = null;
+        if (researchLine.contains("ESG")) {
+            ESGPredictedScoreIdentifiers = portfolioQueries.getIdentifiersWithPredictedScores(researchLine, month, year);
+            ESGSubsidiaryIdentifiers = portfolioQueries.getSubsidiaryIdentifiersScores(researchLine, month, year);
+        }
 /*
         //unmatched identifiers
         ResearchLineIdentifier x1 = new ResearchLineIdentifier("abc", PortfolioUtilities.randomBetween(1000, 10000000));
@@ -52,8 +59,10 @@ public class DataValidationUtilities {
                 Stream.of(researchLineIdentifiers,
                                 unscoredIdentifiers,
                                 negativeScoreIdentifiers,
-                                nullScoreIdentifiers
+                                nullScoreIdentifiers,
                                 //unmatchedIdentifiers
+                                ESGPredictedScoreIdentifiers,
+                                ESGSubsidiaryIdentifiers
                         )
                         .filter(Objects::nonNull)
                         .flatMap(Collection::stream)
@@ -69,6 +78,10 @@ public class DataValidationUtilities {
         System.out.printf("%5s %s%n", negativeScoreIdentifiers.size(), " negative score identifiers added");
         System.out.printf("%5s %s%n", nullScoreIdentifiers.size(), " null score identifiers added");
         //System.out.printf("%5s %s%n", unmatchedIdentifiers.size(), " unmatched identifiers added");
+        if (researchLine.contains("ESG")) {
+            System.out.printf("%5s %s%n", ESGPredictedScoreIdentifiers.size(), " ESG Predicted score identifiers added");
+            System.out.printf("%5s %s%n", ESGSubsidiaryIdentifiers.size(), " Subsidiary identifiers added");
+        }
         System.out.println("-----------------------------------------------");
         System.out.printf("%5s %s%n", portfolioToUpload.size(), " identifiers added");
 
@@ -194,7 +207,7 @@ public class DataValidationUtilities {
         df.setRoundingMode(RoundingMode.HALF_UP);
         return Double.parseDouble(df.format(((researchLineIdentifiers.stream()
                 .filter(each -> each.getSCORE() != null)
-                .filter(each -> each.getSCORE() >-50)
+                .filter(each -> each.getSCORE() > -50)
                 .mapToDouble(ResearchLineIdentifier::getValue).sum()) / total) * 100));
     }
 
