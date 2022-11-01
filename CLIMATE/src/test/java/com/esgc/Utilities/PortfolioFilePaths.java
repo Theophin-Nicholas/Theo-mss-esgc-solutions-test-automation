@@ -59,10 +59,17 @@ public class PortfolioFilePaths {
                 File.separator+"test"+File.separator+"resources"+
                 File.separator+"upload"+File.separator+"Portfolio with very long name to check ellipses after limit.csv";
     }
+
     public static String portfolioWithNoData1(){
         return System.getProperty("user.dir")+ File.separator+"src"+
                 File.separator+"test"+File.separator+"resources"+
                 File.separator+"upload"+File.separator+"NoData1.csv";
+    }
+
+    public static String portfolioWithPredictedScores(){
+        return System.getProperty("user.dir")+ File.separator+"src"+
+                File.separator+"test"+File.separator+"resources"+
+                File.separator+"upload"+File.separator+"EsgWithPredictedScores.csv";
     }
 
     /**

@@ -120,6 +120,7 @@ public class ImpactTableTests extends UITestBase {
     public void verifyWidgetTitles(String page) {
         test.info("Test Cases: ESGCA-5543");
         ResearchLinePage researchLinePage = new ResearchLinePage();
+        researchLinePage.selectSamplePortfolioFromPortfolioSelectionModal();
         if ( page.equals("ESG Assessments")) {
             throw new SkipException("not ready to test in " + page);
         }
