@@ -98,6 +98,25 @@ public class IdentifierQueryModelFactory {
                         " where  coverage_status = 'Published' and publish = 'yes'\n" +
                         " qualify row_number() OVER (PARTITION BY eos.orbis_id ORDER BY eos.year DESC, eos.month DESC, eos.scored_date DESC) =1");
                 return identifierQueryModel;
+            case "ESG Predicted":
+                identifierQueryModel.setEntityIdColumnName("eos.ORBIS_ID");
+                identifierQueryModel.setPreviousScoreColumnName("EOS.RESEARCH_LINE_ID, NULL");
+                identifierQueryModel.setScoreColumnName("eos.VALUE");
+                identifierQueryModel.setTableName(" ESG_OVERALL_SCORES eos where data_type = 'esg_pillar_score'  " +
+                        "and sub_category = 'ESG' and eos.year || eos.month <= '" + year + month + "' \n" +
+                        " and  score_quality='Predicted'\n" +
+                        " qualify row_number() OVER (PARTITION BY eos.orbis_id ORDER BY eos.year DESC, eos.month DESC, eos.scored_date DESC) =1");
+                return identifierQueryModel;
+            case "ESG Subsidiary":
+                identifierQueryModel.setEntityIdColumnName("eos.ORBIS_ID");
+                identifierQueryModel.setPreviousScoreColumnName("EOS.RESEARCH_LINE_ID, NULL");
+                identifierQueryModel.setScoreColumnName("eos.VALUE");
+                identifierQueryModel.setTableName(" entity_coverage_tracking ect  \n" +
+                        "join esg_entity_master eem on eem.orbis_id=ect.orbis_id and eem.entity_status = 'Active' and eem.managed_type = 'Subsidiary' " +
+                        "join ESG_OVERALL_SCORES eos on ect.orbis_id=eos.orbis_id and data_type = 'esg_pillar_score'  " +
+                        "and sub_category = 'ESG' and eos.year || eos.month <= '" + year + month + "' \n" +
+                        " qualify row_number() OVER (PARTITION BY eos.orbis_id ORDER BY eos.year DESC, eos.month DESC, eos.scored_date DESC) =1");
+                return identifierQueryModel;
         }
         throw new IndexOutOfBoundsException("Research line not found");
     }
