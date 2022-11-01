@@ -81,7 +81,7 @@ public class LeadersAndLaggards extends UITestBase {
     @Test(groups = {"regression", "ui"},
             description = "Verify the ScoreLogic for Leaders And Laggards Section",
             dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
-    @Xray(test = {2124, 3034, 3159, 2080, 3848, 3849})
+    @Xray(test = {2124, 3034, 3159, 2080, 3848, 3849, 11077})
     public void verifyScoreLogicForLeaderAndLaggards(String page){
         ResearchLinePage researchLinePage = new ResearchLinePage();
         if ( page.equals("Temperature Alignment")) {
@@ -126,7 +126,7 @@ public class LeadersAndLaggards extends UITestBase {
         test.info("Verified that the More companies ranked in link is working as expected");
     }
     //TODO De-Scoped as of now
-    @Test(enabled = false,groups = {"regression", "ui", "smoke"})
+    @Test(enabled = true,groups = {"regression", "ui", "smoke"})
     @Xray(test = {9871})
     public void VerifyESGLeadersAndLaggersTable() {
         ResearchLinePage researchLinePage = new ResearchLinePage();

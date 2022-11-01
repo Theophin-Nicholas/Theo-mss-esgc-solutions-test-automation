@@ -80,8 +80,8 @@ public class ResearchLinesDescriptionsTest extends UITestBase {
 
     }
 
-    @Test(groups = {"regression", "ui", "smoke", "esg"},
-            description = "Verify  ESG Summary Section")
+    @Test(enabled = false, groups = {"regression", "ui", "smoke", "esg"},
+            description = "Verify  ESG Summary Section") //TODO De-scoped as of now.
     @Xray(test = {8283, 8285})
     public void verifyESGAssessmentBoxAndDescription() {
         ResearchLinePage researchLinePage = new ResearchLinePage();

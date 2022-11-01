@@ -3,6 +3,7 @@ package com.esgc.Tests.UI.DashboardPage.Widgets;
 import com.esgc.Pages.DashboardPage;
 import com.esgc.TestBase.DataProviderClass;
 import com.esgc.Tests.TestBases.DashboardUITestBase;
+import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.PortfolioUtilities;
 import com.esgc.Utilities.Xray;
 import org.openqa.selenium.By;
@@ -26,10 +27,11 @@ public class PerformanceChart extends DashboardUITestBase {
         test.info("Navigated to Dashboard Page");
 
         dashboardPage.selectPortfolioByNameFromPortfolioSelectionModal("My Number ONE Portfolio");
+        BrowserUtils.wait(3);
         test.info("Check if Performance Charts are Displayed");
 
-        List<String> expectedColumnNames =//TODO as of now ESG is de-scoped
-                Arrays.asList("Company", "% Investment", /*"Overall ESG Score",*/ "Total Critical Controversies",
+        List<String> expectedColumnNames =
+                Arrays.asList("Company", "% Investment", "Overall ESG Score", "Total Critical Controversies",
                         "Highest Risk Hazard", "Facilities Exposed to High Risk/Red Flag",
                         "Physical Risk Management", "Temperature Alignment",
                         "Carbon Footprint (tCO2eq)", "Green Share Assessment", "Brown Share Assessment");
@@ -45,6 +47,8 @@ public class PerformanceChart extends DashboardUITestBase {
         System.out.println("expectedColumnNames = " + expectedColumnNames);
         test.info("Switched to Leaders");
         assertTestCase.assertTrue(sizeOfTable <= 10, "10 companies are listed");
+        System.out.println("expectedTotalInvestment = " + expectedTotalInvestment);
+        System.out.println("actualColumnNames = " + actualColumnNames);
         assertTestCase.assertEquals(actualColumnNames, expectedColumnNames, "Performance Chart Verified", 6233, 6232);
         assertTestCase.assertEquals(actualTotalInvestment, expectedTotalInvestment, "Total Investments are matching", 2066);
 
