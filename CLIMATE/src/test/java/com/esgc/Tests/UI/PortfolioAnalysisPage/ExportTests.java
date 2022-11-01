@@ -15,7 +15,7 @@ import com.esgc.Utilities.Xray;
 import org.apache.commons.io.FileUtils;
 import org.testng.Assert;
 import org.testng.SkipException;
-import org.testng.annotations.AfterTest;
+import org.testng.annotations.AfterClass;
 import org.testng.annotations.Test;
 
 import java.io.File;
@@ -56,7 +56,7 @@ public class ExportTests extends UITestBase {
         if(researchLine.equals("ESG Assessments")) {
             sheetName = "Data - ESG";
             researchLine = "ESG Assessment";
-            expectedTitle = "Orbis ID";
+            expectedTitle = "Entity Name";
         }
         Assert.assertEquals(researchLinePage.getDataFromExportedFile(0, 0, researchLine), expectedTitle,
                 "Exported Document verified by title for " + researchLinePage + " page");
@@ -205,7 +205,7 @@ public class ExportTests extends UITestBase {
         }
     }
 
-    @AfterTest
+    @AfterClass
     public void deleteDownloadFolder() {
         File dir = new File(BrowserUtils.downloadPath());
         File[] dir_contents = dir.listFiles();
