@@ -46,7 +46,7 @@ public class SubsidiaryTests extends UITestBase {
     }
 
     @Test(groups = {"regression", "ui", "search_entity"})
-    @Xray(test = {11051, 11052, 11053, 11054})
+    @Xray(test = {11051, 11052, 11053, 11054, 11237})
     public void searchWithSubsidiaryCompanyName() {
 
         DashboardPage dashboardPage = new DashboardPage();
@@ -73,6 +73,10 @@ public class SubsidiaryTests extends UITestBase {
         dashboardPage.verifyCompanyIsClickableInCoveragePopup(parentCompanyName);
         dashboardPage.pressESCKey();
 
+        // ToDo - ESGCA-11052, ESGCA-11053, ESGCA-11054: Step3 - Can't automate as no subsidiary company controversies
+        // ToDo - ESGCA-11052, ESGCA-11053, ESGCA-11054: Step4 - Can't automate as geomap is not yet ready
+        // ToDo - ESGCA-11052, ESGCA-11053, ESGCA-11054: Step5 - Can't automate as no subsidiary under heatmap
+
         dashboardPage.clickAndSelectAPerformanceChart("Largest Holdings");
         dashboardPage.verifyCompanyNameInTables(subsidiaryCompanyName, parentCompanyName);
         dashboardPage.verifyCompanyIsNotClickable(subsidiaryCompanyName);
@@ -91,7 +95,7 @@ public class SubsidiaryTests extends UITestBase {
     }
 
     @Test(groups = {"regression", "ui", "smoke", "dashboard"})
-    @Xray(test = {11058})
+    @Xray(test = {11058, 11242})
     public void VerifyFileUploadWithInactiveSubsidiaryCompany() {
         DashboardPage dashboardPage = new DashboardPage();
 
@@ -131,4 +135,4 @@ public class SubsidiaryTests extends UITestBase {
 
     }
 
-    }
+}
