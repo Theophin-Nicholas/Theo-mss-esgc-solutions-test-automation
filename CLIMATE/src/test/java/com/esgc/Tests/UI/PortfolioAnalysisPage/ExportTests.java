@@ -15,7 +15,7 @@ import com.esgc.Utilities.Xray;
 import org.apache.commons.io.FileUtils;
 import org.testng.Assert;
 import org.testng.SkipException;
-import org.testng.annotations.AfterTest;
+import org.testng.annotations.AfterClass;
 import org.testng.annotations.Test;
 
 import java.io.File;
@@ -205,7 +205,7 @@ public class ExportTests extends UITestBase {
         }
     }
 
-    @AfterTest
+    @AfterClass
     public void deleteDownloadFolder() {
         File dir = new File(BrowserUtils.downloadPath());
         File[] dir_contents = dir.listFiles();
