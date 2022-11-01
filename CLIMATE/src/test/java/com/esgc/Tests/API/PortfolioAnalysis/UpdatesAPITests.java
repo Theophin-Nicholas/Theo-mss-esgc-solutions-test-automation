@@ -1,11 +1,11 @@
 package com.esgc.Tests.API.PortfolioAnalysis;
 
 import com.esgc.APIModels.APIFilterPayload;
-import com.esgc.APIModels.UpdatesModel;
+import com.esgc.APIModels.PortoflioAnalysisModels.UpdatesModel;
 import com.esgc.Controllers.APIController;
 import com.esgc.Tests.TestBases.APITestBase;
-import com.esgc.Utilities.Xray;
 import com.esgc.Utilities.APIUtilities;
+import com.esgc.Utilities.Xray;
 import io.restassured.response.Response;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Test;
@@ -28,8 +28,10 @@ public class UpdatesAPITests extends APITestBase {
         test.pass("Response Invalid Payload Verified Successfully");
     }
 
-    @Test(groups = {"api", "regression"}, dataProvider = "API Research Lines")
-    @Xray(test = {2283, 2024, 2021})
+    @Test(groups = {"api", "regression"}, dataProvider = "No ESG API Research Lines")
+    @Xray(test = {2283})
+    //2024 TCFD
+    //2021 Energy Transition
     public void updates_Success(@Optional String researchLine) {
         APIController con = new APIController();
         APIFilterPayload apiFilterPayload = new APIFilterPayload("all", "all", "03", "2021", "");

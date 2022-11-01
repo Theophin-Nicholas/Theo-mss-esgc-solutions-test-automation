@@ -1,7 +1,6 @@
 package com.esgc.Pages;
 
 import com.esgc.Utilities.BrowserUtils;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
@@ -14,6 +13,8 @@ public class EMCAccountsEditUserPage extends EMCBasePage {
     @FindBy (xpath = "//h4")
     public WebElement editPageTitle;
 
+    @FindBy(id = "button-holdings")
+    public WebElement portfolioSelectionButton;
     @FindBy (xpath = "//button[.='Back to Users']")
     public WebElement backToUsersButton;
     @FindBy (xpath = "//button[.='Suspend']")
