@@ -208,7 +208,7 @@ public class EntityIssuerAddMissingDocumentPopUpTestRouting extends EntityPageTe
         entitypage.logout.click();
     }
 
-    @Xray(test = {8087, 8088})
+    @Xray(test = {8087, 8088,10250})
     @Test(groups = {"regression", "ui", "smoke", "entity_issuer"},
             dataProvider = "credentialsP2", dataProviderClass = DataProviderClass.class,
             description = "Verify Methodology Links")
@@ -218,7 +218,7 @@ public class EntityIssuerAddMissingDocumentPopUpTestRouting extends EntityPageTe
             LoginPageIssuer LoginPageIssuer = new LoginPageIssuer();
             LoginPageIssuer.loginWithParams(UserID, Password);
 
-            entitypage.validateLinksOpenedInNewTab(entitypage.linkSeeMethodologyGuide, "Methodology%202.0_Moodys%20ESG");
+            entitypage.validateLinksOpenedInNewTab(entitypage.linkSeeMethodologyGuide, "Methodology%202.0%20ESG%20Assessment");
             entitypage.validateLinksOpenedInNewTab(entitypage.linkSeeSeeControversyMethodology, "Controversy%20Risk%20Assessment%20-%20Methodology");
             entitypage.validateLinksOpenedInNewTab(entitypage.linkSeeSubcategoryDefinitions, "ESG%20Assessment_Subcategory%20Definitions_FINAL");
             entitypage.validateLinksOpenedInNewTab(entitypage.linkSeeSeeESGMetricDefinitions, "ESGAssessmentMetrics_DefinitionsHandbook");

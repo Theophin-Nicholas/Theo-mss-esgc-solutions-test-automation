@@ -70,7 +70,7 @@ public class EntityIssuerP3PageTest extends EntityPageTestBase {
         entitypage.logout.click();
     }
 
-    @Xray(test = {7370, 7371, 7405, 7408, 7409, 7410})
+    @Xray(test = {7370, 7371, 7405, 7408, 7409, 7410, 9576})
     @Test(groups = {"regression", "ui", "smoke", "entity_issuer"},
             dataProvider = "credentials",dataProviderClass = DataProviderClass.class,
             description = "Verify Controversies")
@@ -125,6 +125,28 @@ public class EntityIssuerP3PageTest extends EntityPageTestBase {
         EntityIssuerPage entitypage = new EntityIssuerPage();
         entitypage.ValidateOverallDisclosureRatioIsVailableAndValueisNumeric();
         entitypage.logout.click();
+    }
+
+    @Xray(test = {10250})
+    @Test(groups = {"regression", "ui", "smoke", "entity_issuer"},
+            description = "Verify links")
+    public void verifyMethodologyLinks() {
+        EntityIssuerPage entitypage = new EntityIssuerPage();
+        try {
+            LoginPageIssuer loginPage = new LoginPageIssuer();
+            loginPage.entityIssuerLogin();
+            entitypage.navigateToSectorPage();
+
+            entitypage.validateP3LinksOpenedInNewTab(entitypage.linkSeeMethodologyGuide, "Methodology%202.0%20ESG%20Assessment");
+            entitypage.validateP3LinksOpenedInNewTab(entitypage.linkSeeSeeControversyMethodology, "Controversy%20Risk%20Assessment%20-%20Methodology");
+            entitypage.validateP3LinksOpenedInNewTab(entitypage.linkSeeSubcategoryDefinitions, "ESG%20Assessment_Subcategory%20Definitions_FINAL");
+            entitypage.validateP3LinksOpenedInNewTab(entitypage.linkSeeSeeESGMetricDefinitions, "ESGAssessmentMetrics_DefinitionsHandbook");
+            entitypage.validateP3LinksOpenedInNewTab(entitypage.linkSeeFAQ, "FAQ_Moodys%20ESG%20Assessment");
+            entitypage.logout.click();
+        } catch (Exception e) {
+            e.printStackTrace();
+            entitypage.logout.click();
+        }
     }
 
 }
