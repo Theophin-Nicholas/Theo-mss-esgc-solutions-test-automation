@@ -245,6 +245,9 @@ public class EntityIssuerPage extends PageBase {
     @FindBy(xpath = "(//div)[21]")
     public WebElement P3PageHeaderMainDiv;
 
+    @FindBy(xpath = "(//div)[21]/div[2]/span")
+    public List<WebElement> P3_HeaderIdentifilerList;
+
     @FindBy(xpath = "//button[@id='contact-button']")
     public WebElement P3ContactUSButton;
 
@@ -255,9 +258,13 @@ public class EntityIssuerPage extends PageBase {
     @FindBy(xpath = "(//div[@class='MuiGrid-root MuiGrid-item'])[2]//div[text()='ESG Score']")
     public WebElement ESGScore;
 
-    @FindBy(xpath = "(//div[@class='MuiGrid-root MuiGrid-item'])[2]/div/div/div[2]/div")
-    public WebElement EsgScoreRange;
+ /*   @FindBy(xpath = "(//div[@class='MuiGrid-root MuiGrid-item'])[2]/div/div/div[2]/div")
+    public WebElement EsgScoreRange;*/
 
+    @FindBy(xpath = "(//div[@class='MuiGrid-root MuiGrid-item'])[2]//div[contains(text(),'Updated on')]")
+    public WebElement EsgScoreRange;
+    @FindBy(xpath = "(//div[@id='sector_comparison_chart_box'])")
+    public WebElement NoSectorComparisionChart;
 
     @FindBy(xpath = "//div[normalize-space()='All Source Documents']")
     public WebElement P3headingSourceDocuments;
@@ -281,7 +288,7 @@ public class EntityIssuerPage extends PageBase {
     @FindBy(xpath = "//div[text()='Controversies']")
     public WebElement Controversies;
 
-    @FindBy(xpath = "//div[text()='Controversies']/..//table")
+        @FindBy(xpath = "//div[text()='Controversies']/..//table")
     public WebElement ControversiesTable;
 
     @FindBy(xpath = "//div[contains(text(),'RESPONSIVENESS UPDATE')]/../..")
@@ -289,6 +296,8 @@ public class EntityIssuerPage extends PageBase {
 
     @FindBy(xpath = "//span[@class='close']//*[name()='svg']")
     public WebElement ControversiesPopupCloseButton;
+
+
 
     @FindBy(xpath = "//button[@id='close-button']")
     public WebElement P3SectorPageCloseButton;
@@ -301,6 +310,9 @@ public class EntityIssuerPage extends PageBase {
 
     @FindBy(xpath = "//span[contains(text(),'Overall Disclosure Ratio')]")
     public WebElement P3OverallDisclosureRatio;
+
+    @FindBy(xpath = "//div[@id='cardInfo_box']/div[text()='Overall ESG Score']")
+    public WebElement overallEsgScoreWidget;
 
 
     public boolean verifyFooter() {
@@ -774,6 +786,48 @@ public class EntityIssuerPage extends PageBase {
         }
     }
 
+    public void validateP3LinksOpenedInNewTab(WebElement element, String whatToValidate) {
+        WebDriver driver = Driver.getDriver();
+
+        String mainWindowHandler = driver.getWindowHandle();
+
+        Set<String> allWindowHandles = driver.getWindowHandles();
+        Iterator<String> iterator = allWindowHandles.iterator();
+        while (iterator.hasNext()) {
+            String ChildWindow = iterator.next();
+            if (!mainWindowHandler.equalsIgnoreCase(ChildWindow)) {
+                driver.switchTo().window(ChildWindow);
+                String url = driver.getCurrentUrl();
+                if (url.contains("sector")) {
+                    driver = Driver.getDriver();
+                    wait.until(ExpectedConditions.visibilityOf(element)).isDisplayed();
+                    String mainWindowHandler1 = driver.getWindowHandle();
+                    element.click();
+                    allWindowHandles = driver.getWindowHandles();
+                    Iterator<String> iterator1 = allWindowHandles.iterator();
+                    while (iterator1.hasNext()) {
+                        ChildWindow = iterator1.next();
+                        if (!mainWindowHandler.equalsIgnoreCase(ChildWindow)&& !mainWindowHandler1.equalsIgnoreCase(ChildWindow)) {
+                            driver.switchTo().window(ChildWindow);
+                            url = driver.getCurrentUrl();
+                            System.out.println("actual url   = " + url);
+                            System.out.println("Expected url = " + whatToValidate);
+                            assertTestCase.assertTrue(driver.getCurrentUrl().contains(whatToValidate));
+                            driver.close();
+                            BrowserUtils.wait(2);
+                            driver.switchTo().window(mainWindowHandler1);
+                            driver.close();
+                            BrowserUtils.wait(2);
+                            driver.switchTo().window(mainWindowHandler);
+                        }
+                    }
+                }
+
+            }
+        }
+    }
+
+
     public void validateIssuerPageBanner() {
         assertTestCase.assertTrue(banner.get(0).getText().equals("Welcome to Moody’s ESG360: the portal connecting you to the Moody’s ESG Assessment process."), "Verify the Welcome Text in Banner");
         //Validating if Add missing button is next to ContactUS
@@ -915,7 +969,8 @@ public class EntityIssuerPage extends PageBase {
         // String esgScoreDate = EsgScoreRange.findElement(By.xpath("../following-sibling::div")).getText();
         assertTestCase.assertTrue(EsgScoreRange.getText().startsWith("Updated on"));
         assertTestCase.assertTrue((isValidFormat("MMMM dd, yyyy", EsgScoreRange.getText().split("on ")[1].toString())), "Validate date format");
-
+        assertTestCase.assertTrue(Color.fromString(EsgScoreRange.getCssValue("color")).asHex().equals("#ffffff"),"Validate Date text color");
+        assertTestCase.assertTrue(Color.fromString(EsgScoreRange.findElement(By.xpath("..")).getCssValue("background-color")).asHex().equals("#26415e"),"Validate Date text background color");
     }
 
     public void validateHeaderAvailability() {
@@ -997,9 +1052,9 @@ public class EntityIssuerPage extends PageBase {
 
     public void validateCopyFunctionlity() {
         wait.until(ExpectedConditions.visibilityOf(linkDocuments.get(0))).isDisplayed();
-        for (int i = 0; i <linkDocuments.size(); i++) {//linkDocuments.size()
+        for (int i = 0; i < linkDocuments.size(); i++) {//linkDocuments.size()
             assertTestCase.assertTrue(svgCopyURLbutton.get(i).isDisplayed(), "Validate if copy button is available");
-            svgCopyURLbutton.get(i+1).click();
+            svgCopyURLbutton.get(i + 1).click();
             try {
                 Thread.sleep(2000);
             } catch (InterruptedException e) {
@@ -1042,12 +1097,14 @@ public class EntityIssuerPage extends PageBase {
             if (!(previousRowDate == null) && !(currentRowDate.equals(previousRowDate)))
                 assertTestCase.assertTrue(currentRowDate.before(previousRowDate), "Validating if latest controversies are on top");
             previousRowDate = currentRowDate;
-            WebElement criticaLable = row.findElement(By.xpath("td[2]"));
+            //Removing as functionality has changed
+           /* WebElement criticaLable = row.findElement(By.xpath("td[2]"));
             if (!criticaLable.getText().equals("")) {
                 assertTestCase.assertTrue(criticaLable.getText().equals("Critical"), "Validating if Criticical lable text is correct");
                 assertTestCase.assertTrue(Color.fromString(criticaLable.getCssValue("background")).asHex().equals("#b31717"), "Validating Controversy display color when Severity Status is Critical");
             }
-            criticaLable.click();
+            criticaLable.click();*/
+            row.click();
             WebElement description = row.findElement(By.xpath("td[3]"));
             WebElement ControversiesPopup = Driver.getDriver().findElement(By.xpath("//div[contains(text(),\"" + description.getText() + "\")]/../.."));
 
@@ -1055,8 +1112,16 @@ public class EntityIssuerPage extends PageBase {
             List<WebElement> paragraphs = ControversiesPopup.findElements(By.xpath("div[2]/p"));
             paragraphs.get(paragraphs.size() - 1).getText().equals("Please contact veconnect@vigeo-eiris.com for any log-in queries.");
             paragraphs.get(paragraphs.size() - 2).getText().equals("To respond to an allegation or controversy, please go to: https://veconnect.vigeo-eiris.com.");
+            String firstParagraghText = paragraphs.get(0).getText();
+            int startindex = firstParagraghText.indexOf("considered")+11 ;
+            int endIndex = firstParagraghText.indexOf("based");
+            String severity = firstParagraghText.substring(startindex,endIndex).trim();
             ControversiesPopupCloseButton.click();
 
+            if (severity.equals("Critical")){
+                WebElement criticalIcon = row.findElement(By.xpath("td[2]/span/div[@data-testid='critical']/*[name()='svg']"));
+                assertTestCase.assertTrue(criticalIcon.isDisplayed());
+            }
 
         }
 
@@ -1111,6 +1176,19 @@ public class EntityIssuerPage extends PageBase {
         assertTestCase.assertTrue(wait.until(ExpectedConditions.visibilityOf(P3OverallDisclosureRatio)).isDisplayed(), "If Overall Disclosure Ratio is available");
         assertTestCase.assertTrue(NumberUtils.isParsable(P3OverallDisclosureRatio.getText().split(":")[1].split("%")[0].trim()), "Validate if Overall Disclosure Ratio value  is numeric ");
 
+    }
+
+    public void navigateToSectorPage() {
+        wait.until(ExpectedConditions.visibilityOf(P3_HeaderIdentifilerList.get(P3_HeaderIdentifilerList.size() - 1))).click();
+    }
+
+    public boolean verifyOverallEsgScoreWidget() {
+        try {
+            wait.until(ExpectedConditions.visibilityOf(overallEsgScoreWidget));
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
 

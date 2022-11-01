@@ -2,6 +2,7 @@ package com.esgc.Pages;
 
 import com.esgc.Test.TestBases.EntityPageDataValidationTestBase;
 import com.esgc.Test.TestBases.EntityPageTestBase;
+import com.esgc.Utilities.ConfigurationReader;
 import com.esgc.Utilities.Environment;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
@@ -35,17 +36,19 @@ public class LoginPageIssuer extends PageBase{
         }
 
         wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.ISSUER_PASSWORD);
-        if (!termsAndConditionsCheckBox.isSelected())
-            wait.until(ExpectedConditions.visibilityOf(termsAndConditionsLabel)).click();
+      /*  if (!termsAndConditionsCheckBox.isSelected())
+            wait.until(ExpectedConditions.visibilityOf(termsAndConditionsLabel)).click();*/
         wait.until(ExpectedConditions.visibilityOf(loginButton)).click();
     }
 
     public void loginWithParams(String userName, String password) {
         wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(userName, Keys.ENTER);
         wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(password);
-        if (!termsAndConditionsCheckBox.isSelected())
-            wait.until(ExpectedConditions.visibilityOf(termsAndConditionsLabel)).click();
+        String env = ConfigurationReader.getProperty("environment");
+        if (!(env.equals("qa") || env.equals("qa2"))) {
+            if (!termsAndConditionsCheckBox.isSelected())
+                wait.until(ExpectedConditions.visibilityOf(termsAndConditionsLabel)).click();
+        }
         wait.until(ExpectedConditions.visibilityOf(loginButton)).click();
-
     }
 }
