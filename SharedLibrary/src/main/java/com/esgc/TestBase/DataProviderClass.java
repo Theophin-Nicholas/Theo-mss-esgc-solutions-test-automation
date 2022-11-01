@@ -3,9 +3,6 @@ package com.esgc.TestBase;
 import com.esgc.Utilities.EntitlementsBundles;
 import org.testng.annotations.DataProvider;
 
-import static com.esgc.Utilities.API.ErrorMessages.*;
-import static com.esgc.Utilities.API.ErrorMessages.All_UNMATCHED_IDENTIFIERS_ERROR_MESSAGE;
-
 public class DataProviderClass {
 
     @DataProvider(name = "credentials")
@@ -60,8 +57,8 @@ public class DataProviderClass {
         return new Object[][]
                 {
                         {"mesg360-testing+issuer21@outlook.com", "Test12345"},
-                    /*    {"mesg360-testing+issuer26@outlook.com", "Test12345"},*/
-                     /*   {"mesg360-testing+issuer31@outlook.com", "Test12345"}*/
+                        /*    {"mesg360-testing+issuer26@outlook.com", "Test12345"},*/
+                        /*   {"mesg360-testing+issuer31@outlook.com", "Test12345"}*/
                 };
 
     }
@@ -71,9 +68,9 @@ public class DataProviderClass {
 
         return new Object[][]
                 {
-                        {"mesg360-testing+issuer105@outlook.com","Test12345"},
-                     /*   {"mesg360-testing+issuer30@outlook.com", "Test12345"},*/
-                    /*    {"mesg360-testing+issuer70@outlook.com", "Test12345"}*/
+                        {"mesg360-testing+issuer105@outlook.com", "Test12345"},
+                        /*   {"mesg360-testing+issuer30@outlook.com", "Test12345"},*/
+                        /*    {"mesg360-testing+issuer70@outlook.com", "Test12345"}*/
                 };
     }
 
@@ -167,7 +164,9 @@ public class DataProviderClass {
 
         return new Object[][]{
                 {"Apple, Inc."},
-                {"AT&T, Inc."},
+                {"Samsung Securities Co., Ltd."},
+                {"Alibaba Health Information Technology Ltd."},
+                {"Development Bank of Japan, Inc."},
         };
     }
 
@@ -186,15 +185,27 @@ public class DataProviderClass {
                 {"000006182"}//Sector: Electric & Gas Utilities
         };
     }
+
     @DataProvider(name = "entitlementCheck")
     public Object[][] noInfoCarbonFootprintOrbisID() {
 
         return new Object[][]{
-                {"esg-test2@outlook.com","Helloworld21","Transition Risk"},//
-                {"esg-test1@outlook.com","Helloworld21","Physical Risk"},//
-                {"esg-test4@outlook.com","Helloworld24","Physical Risk and Transition Risk"},//
-             /*   {"esg-test7@outlook.com","Helloworld21","Physical Risk, Transition Risk, Corporate ESG and Controversies Entitlements"},//*/
-                {"esg-test1+controversy@outlook.com","Moodys123","Physical Risk, Transition Risk and Controversies"},//
+                {"esg-test2@outlook.com", "Helloworld21", "Transition Risk"},//
+                {"esg-test1@outlook.com", "Helloworld21", "Physical Risk"},//
+                {"esg-test4@outlook.com", "Helloworld24", "Physical Risk and Transition Risk"},//
+                /*   {"esg-test7@outlook.com","Helloworld21","Physical Risk, Transition Risk, Corporate ESG and Controversies Entitlements"},//*/
+                {"esg-test1+controversy@outlook.com", "Moodys123", "Physical Risk, Transition Risk and Controversies"},//
+        };
+    }
+    @DataProvider(name = "entitlementCheckPrd")
+    public Object[][] entitlementCheckPrd() {
+
+        return new Object[][]{
+                {"esg-test2@outlook.com","Testing123","Transition Risk"},//
+                {"esg-test1@outlook.com","Testing123","Physical Risk"},//
+                {"esg-test4@outlook.com","Testing123","Physical Risk and Transition Risk"},//
+                /*   {"esg-test7@outlook.com","Helloworld21","Physical Risk, Transition Risk, Corporate ESG and Controversies Entitlements"},//*/
+               // {"esg-test1+controversy@outlook.com","Testing123","Physical Risk, Transition Risk and Controversies"},//
         };
     }
 
@@ -203,12 +214,13 @@ public class DataProviderClass {
     public Object[][] exportEntitlements() {
 
         return new Object[][]{
-                {"esg-test5@outlook.com","Helloworld25","Physical Risk"},//
-                {"esg-test6@outlook.com","Helloworld26","Transition Risk"},//
-                {"esg-test1+export@outlook.com","Moodys123","Physical Risk and Transition Risk"},//
-                {"esg-test33@outlook.com","Helloworld21","ESG"},//
+                {"esg-test5@outlook.com", "Helloworld25", "Physical Risk"},//
+                {"esg-test6@outlook.com", "Helloworld26", "Transition Risk"},//
+                {"esg-test1+export@outlook.com", "Moodys123", "Physical Risk and Transition Risk"},//
+                {"esg-test33@outlook.com", "Helloworld21", "ESG"},//
         };
     }
+
     @DataProvider(name = "noInfoCarbonFootprintOrbisID")
     public Object[][] noInfoCarbonFootprintOrbisID1() {
 
@@ -222,17 +234,32 @@ public class DataProviderClass {
 
         return new Object[][]{
                 {"058618674"},//Automobiles
-        /*        {"079299609"},//Airlines
-                {"006529465"},//Cement
-                {"000003497"},//Oil&Gas
-                {"187695688"},//Shipping
-                {"007270209"},//Steel
-                {"015984678"},//Aluminium
-                {"000411117"},//World (Apple)*/
+                /*        {"079299609"},//Airlines
+                        {"006529465"},//Cement
+                        {"000003497"},//Oil&Gas
+                        {"187695688"},//Shipping
+                        {"007270209"},//Steel
+                        {"015984678"},//Aluminium
+                        {"000411117"},//World (Apple)*/
 //                {"006533494"},//Electric & Gas Utilities
 
         };
     }
+
+    @DataProvider(name = "orbisIdWithCompanyName")
+    public Object[][] orbisIdWithCompanyName() {
+
+        return new Object[][]{
+                {"Apple, Inc.", "000411117"},
+                {"Rogers Corp.","000001484"},
+                {"Ford Motor Co.", "058618674"},//Automobiles
+                {"Wizz Air Holdings Plc", "079299609"},//Airlines
+                {"Taiwan Cement Corp.","006529465"},//Cement
+                {"ConocoPhillips","000003497"},//Oil&Gas
+                {"Mitsui O.S.K. Lines, Ltd.","187695688"},//Shipping
+        };
+    }
+
 
     @DataProvider(name = "orbisIDWithoutTempAlignment")
     public Object[][] orbisIDWithoutTempAlignment() {
@@ -243,15 +270,16 @@ public class DataProviderClass {
                 {"037507363"},//
         };
     }
+
     @DataProvider(name = "Research Lines Investments")
     public Object[][] investments() {
         return new Object[][]{
-                {"Sample Portfolio", "Physical Risk Hazards",    "All Regions", "All Sectors", "May 2022", "Sample Portfolio"},
+                {"Sample Portfolio", "Physical Risk Hazards", "All Regions", "All Sectors", "May 2022", "Sample Portfolio"},
                 {"Sample Portfolio", "Physical Risk Management", "All Regions", "Sovereign", "May 2022", "Sample Portfolio"},
-                {"Sample Portfolio", "Temperature Alignment",    "All Regions", "All Sectors", "May 2022", "Sample Portfolio"},
-                {"Sample Portfolio", "Carbon Footprint",         "All Regions", "All Sectors", "May 2022", "Sample Portfolio"},
-                {"Sample Portfolio", "Green Share Assessment",   "All Regions", "All Sectors", "May 2022", "Sample Portfolio"},
-                {"Sample Portfolio", "Brown Share Assessment",   "All Regions", "All Sectors", "May 2022", "Sample Portfolio"}
+                {"Sample Portfolio", "Temperature Alignment", "All Regions", "All Sectors", "May 2022", "Sample Portfolio"},
+                {"Sample Portfolio", "Carbon Footprint", "All Regions", "All Sectors", "May 2022", "Sample Portfolio"},
+                {"Sample Portfolio", "Green Share Assessment", "All Regions", "All Sectors", "May 2022", "Sample Portfolio"},
+                {"Sample Portfolio", "Brown Share Assessment", "All Regions", "All Sectors", "May 2022", "Sample Portfolio"}
         };
     }
 
@@ -259,7 +287,7 @@ public class DataProviderClass {
     public Object[][] availableResearchLines() {
 
         return new Object[][]{
-              /*  {"ESG Assessments"},*/
+                {"ESG Assessments"},
                 {"Carbon Footprint"},
                 {"Physical Risk Management"},
                 {"Temperature Alignment"},
@@ -273,7 +301,7 @@ public class DataProviderClass {
 
         return new Object[][]
                 {
-                        {"mesg-platform-issuer-qa+test40@outlook.com", "Moodys123","007091964"}
+                        {"mesg-platform-issuer-qa+test40@outlook.com", "Moodys123", "007091964"}
 
                 };
 
@@ -303,35 +331,6 @@ public class DataProviderClass {
         };
     }
 
-    @DataProvider(name = "ErrorMessages")
-    public Object[][] dpMethod2() {
-
-        return new Object[][]{
-                {"InvalidCurrencyInPortfolio.csv", INVALID_CURRENCY_ERROR_MESSAGE, 498},//498
-                {"InvalidCurrencyCodeInPortfolio.csv", INVALID_CURRENCY_ERROR_MESSAGE, 498},//498
-                {"InvalidCurrencyCodeInPortfolio2.csv", INVALID_CURRENCY_ERROR_MESSAGE, 3047},
-                {"NoIdentifierInPortfolio.csv", NO_IDENTIFIER_ERROR_MESSAGE, 504, 839},//504//839
-                {"EmptyIdentifier.csv", EMPTY_IDENTIFIER_ERROR_MESSAGE, 504, 839},//504//839
-                {"InvalidIdentifierValue.csv", INVALID_IDENTIFIER_VALUE_ERROR_MESSAGE, 506, 837},//506//837
-                {"MissingIdentifier.csv", MISSING_IDENTIFIER_ERROR_MESSAGE, 504, 839},//504//839
-//                {"InvalidDate.csv", INVALID_DATE_ERROR_MESSAGE, 512, 836},//512/836
-//                {"InvalidDate2.csv", INVALID_DATE_ERROR_MESSAGE, 512, 836},//512/836
-//                {"InvalidDate3.csv", INVALID_DATE_ERROR_MESSAGE, 512, 836},//512/836
-                {"NoHeader.csv", INVALID_COLUMN_ERROR_MESSAGE, 520, 831},//520//831
-                {"InvalidHeader.csv", INVALID_HEADER_ERROR_MESSAGE, 520},//520
-                {"ValueMissingHeader.csv", INVALID_COLUMN_ERROR_MESSAGE, 520},//520
-                {"ValueMissingHeader2.csv", CHECK_DOCUMENT_ERROR_MESSAGE, 520},//520
-                {"InvalidColumn.csv", INVALID_COLUMN_ERROR_MESSAGE, 520},//520
-                {"InvalidFile.json", INVALID_FILE_ERROR_MESSAGE, 507, 815, 4154},//507,815, 4154
-                {"InvalidFile.txt", INVALID_FILE_ERROR_MESSAGE, 507, 815, 4154},//507,815, 4154
-                {"EmptyFile.csv", EMPTY_FILE_ERROR_MESSAGE, 524},//524
-                {"SeveralMissingFields.csv", SEVERAL_MISSING_ERROR_MESSAGE, 819},//819 several missing fields
-                {"MissingValue.csv", MISSING_VALUE_ERROR_MESSAGE, 840},//840 value missing
-                {"AllUnmatchedIdentifiers.csv", All_UNMATCHED_IDENTIFIERS_ERROR_MESSAGE, 984}//all value unmatched
-
-        };
-    }
-
 
     @DataProvider(name = "CompanyNames")
     public Object[][] provideParameters() {
@@ -339,6 +338,7 @@ public class DataProviderClass {
                 {{"Apple, Inc."}, {"Black Hills Corp."}, {"SEEK Ltd."}
                 };
     }
+
     @DataProvider(name = "orbisIDWithDisclosureScore")
     public Object[][] orbisIDWithDisclosureScore() {
         return new Object[][]
@@ -350,14 +350,34 @@ public class DataProviderClass {
                         {"481390423"},
                         {"233773078"},
                         {"105961081"},
-                    /*    {"387796123"},
-                        {"380582526"},
-                        {"172031911"},
-                        {"377084526"},
-                        {"133050503"},
-                        {"482794570"},
-                        {"480796820"},
-                        {"486521987"},*/
+                        /*    {"387796123"},
+                            {"380582526"},
+                            {"172031911"},
+                            {"377084526"},
+                            {"133050503"},
+                            {"482794570"},
+                            {"480796820"},
+                            {"486521987"},*/
                 };
+    }
+
+    @DataProvider(name = "ESGMaterialitycredentials11")
+    public Object[][] provideESGCredentials() {
+
+        return new Object[][]
+                {
+                        {"mesg-platform-issuer-qa+test1@outlook.com", "Moodys123"}
+                };
+    }
+
+    @DataProvider(name = "Company With Orbis ID")
+    public Object[][] companyWithOrbisID() {
+
+        return new Object[][]{
+
+                {"Apple, Inc.", "000411117"},  // VE scored company
+                {"FirstCash, Inc.","001668460"} // MESG scored Company
+
+        };
     }
 }

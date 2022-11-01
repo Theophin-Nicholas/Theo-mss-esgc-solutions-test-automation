@@ -1,12 +1,7 @@
 package com.esgc.Tests.UI.DashboardPage.Export;
 
-import com.esgc.Pages.DashboardPage;
 import com.esgc.Tests.TestBases.DataValidationTestBase;
-import com.esgc.Utilities.Database.DashboardQueries;
-import com.esgc.Utilities.Xray;
-import org.testng.annotations.Test;
 
-import java.util.List;
 import java.util.Map;
 
 

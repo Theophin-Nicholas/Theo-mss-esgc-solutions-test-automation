@@ -7,8 +7,6 @@ import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.Xray;
 import org.testng.annotations.Test;
 
-import java.util.ArrayList;
-
 public class EntityHyperlinksTests extends UITestBase {
     @Test(groups = {"regression", "dashboard", "ui"})
     @Xray(test = {4040, 6814, 6865})

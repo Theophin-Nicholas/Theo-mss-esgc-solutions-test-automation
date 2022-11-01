@@ -1,6 +1,6 @@
 package com.esgc.Tests.API.EntityClimate;
 
-import com.esgc.APIModels.EntityProfileClimatePage.SectorComparison;
+import com.esgc.APIModels.EntityProfilePageModels.SectorComparison;
 import com.esgc.Controllers.EntityPage.EntityProfileClimatePageAPIController;
 import com.esgc.Tests.TestBases.EntityClimateProfileTestBase;
 import com.esgc.Utilities.Xray;
@@ -9,7 +9,7 @@ import io.restassured.response.Response;
 import org.testng.annotations.Test;
 
 public class ClimateProfileSectorComparisonChartAPITests extends EntityClimateProfileTestBase {
-
+//TODO add all research lines
     @Test(groups = {"api", "regression", "entity_climate_profile"}, dataProvider = "API Research Lines2 Carbon Footprint")
     @Xray(test = {6139})
     public void validateTransitionRiskSectorComparisonChartContentResponse(String researchLine, String orbis_id) {
