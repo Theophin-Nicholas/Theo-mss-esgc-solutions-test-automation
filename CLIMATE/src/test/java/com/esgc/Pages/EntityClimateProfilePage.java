@@ -2579,18 +2579,16 @@ public class EntityClimateProfilePage extends ClimatePageBase {
     public void verifyUnderlyingDataForBrownShareWidget(String orbisID) {
         //navigateToTransitionRisk();
         BrowserUtils.scrollTo(transitionRiskBrownShareWidgetUpdatedDate);
-        DatabaseDriver.createDBConnection();
-        String query = "select top 1 * from  DF_TARGET.BROWN_SHARE where bvd9_NUMBER = 000002269 order by year desc, month desc";
-        Map<String, Object> result = DatabaseDriver.getRowMap(query);
+        EntityClimateProfilePageQueries entityCPPQueries = new EntityClimateProfilePageQueries();
+        Map<String, Object> result = entityCPPQueries.getBrownShareAssessmentDataForEntity(orbisID);
+
         assertTestCase.assertTrue(transitionRiskBrownShareWidgetSubHeading.getText().contains(result.get("BS_FOSF_INDUSTRY_REVENUES").toString()),
                 "Brown Share Widget Sub Heading is verified matching with Database");
 
         String expDate = result.get("PRODUCED_DATE").toString();
         System.out.println("expDate = " + expDate);
-        //convert yyyy-mm-dd to month name dd, yyyy
-        expDate = expDate.substring(5, 7) + "/" + (Integer.parseInt(expDate.substring(8, 10))+1) + "/" + expDate.substring(0, 4);
-        System.out.println("expDate = " + expDate);
-        expDate = DateTimeUtilities.convertUSNumericDateToText(expDate, "/");
+        //
+        expDate = DateTimeUtilities.getDatePlusMinusDays(expDate, 1, "MMMM d, yyyy");
         System.out.println("expDate = " + expDate);
         String actDate = transitionRiskBrownShareWidgetUpdatedDate.getText();
         System.out.println("actDate = " + actDate);
