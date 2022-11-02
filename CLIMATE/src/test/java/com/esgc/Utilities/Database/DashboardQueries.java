@@ -197,6 +197,14 @@ public class DashboardQueries {
         return result;
     }
 
+    public List<Map<String, Object>> getSubsidiaryCompany(String subsidiaryCompanyIsin) {
+        String query = "select bvd9_number, max(ISIN) from DF_DERIVED.ISIN_SORTED d\n" +
+                "join esg_entity_master e on d.bvd9_number=e.orbis_id where MANAGED_TYPE='Subsidiary' and entity_status='Active' and ISIN = '"+subsidiaryCompanyIsin+"'\n" +
+                "group by 1;";
+        List<Map<String, Object>> result = getQueryResultMap(query);
+        return result;
+    }
+
     public Object getResearchData(String bvd9Number, String month, String year, String rdID, String dataPointId) {
         String query = "select rd.DATA_VALUE from RESEARCH_DATA rd\n" +
                 " where rd.bvd9_number='" + bvd9Number + "'\n" +
