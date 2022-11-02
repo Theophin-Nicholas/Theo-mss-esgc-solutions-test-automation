@@ -325,4 +325,9 @@ public class EntityClimateProfilePageQueries {
             return "";
         }
     }
+
+    public Map<String, Object> getBrownShareAssessmentDataForEntity(String orbisID) {
+        String query = "select top 1 * from  DF_TARGET.BROWN_SHARE where bvd9_NUMBER = "+orbisID+" order by year desc, month desc";
+        return getQueryResultMap(query).get(0);
+    }
 }
