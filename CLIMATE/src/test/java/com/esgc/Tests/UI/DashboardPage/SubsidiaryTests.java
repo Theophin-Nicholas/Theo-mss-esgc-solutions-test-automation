@@ -10,6 +10,7 @@ import com.esgc.Utilities.*;
 import com.esgc.Utilities.Database.DashboardQueries;
 import com.esgc.Utilities.Database.EntityPageQueries;
 import org.testng.Assert;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import java.io.File;
@@ -62,7 +63,7 @@ public class SubsidiaryTests extends UITestBase {
         entityProfilePage.searchAndLoadClimateProfilePage(subsidiaryCompanyName);
 
         // Parent company should be opened
-        Assert.assertTrue(entityProfilePage.validateGlobalHeader(parentCompanyName));
+        assertTestCase.assertTrue(entityProfilePage.validateGlobalHeader(parentCompanyName), "Global header verification");
 
         EntityClimateProfilePage entityClimateProfilePage = new EntityClimateProfilePage();
         entityClimateProfilePage.closeEntityProfilePage();
@@ -97,9 +98,9 @@ public class SubsidiaryTests extends UITestBase {
 
     }
 
-    @Test(groups = {"regression", "ui", "search_entity"})
+    @Test(groups = {"regression", "ui", "search_entity"}, dataProvider = "InactiveSubsidiaryCompany")
     @Xray(test = {11058, 11242})
-    public void VerifyFileUploadWithInactiveSubsidiaryCompany() {
+    public void VerifyFileUploadWithInactiveSubsidiaryCompany(String inactiveSubsidiaryCompany) {
         DashboardPage dashboardPage = new DashboardPage();
 
         BrowserUtils.wait(5);
@@ -116,7 +117,7 @@ public class SubsidiaryTests extends UITestBase {
         dashboardPage.waitForDataLoadCompletion();
 
         DashboardQueries dashboardQueries = new DashboardQueries();
-        List<Map<String, Object>> dbSubsidiaryCompanyInfo = dashboardQueries.getSubsidiaryCompany("XS0054748412");
+        List<Map<String, Object>> dbSubsidiaryCompanyInfo = dashboardQueries.getSubsidiaryCompany(inactiveSubsidiaryCompany);
 
         assertTestCase.assertTrue(dbSubsidiaryCompanyInfo.size()==0, "Verifying subsidiary company");
 
@@ -137,6 +138,14 @@ public class SubsidiaryTests extends UITestBase {
         researchLinePage.searchIconPortfolioPage.click();
         assertTestCase.assertTrue(researchLinePage.checkWarningWhenNoMatchEntry(subsidiaryCompanyName), "No results found message appeared as warning");
 
+    }
+
+    @DataProvider(name = "InactiveSubsidiaryCompany")
+    public Object[][] dpMethod() {
+
+        return new Object[][]{
+                {"XS0054748412"},
+        };
     }
 
 }
