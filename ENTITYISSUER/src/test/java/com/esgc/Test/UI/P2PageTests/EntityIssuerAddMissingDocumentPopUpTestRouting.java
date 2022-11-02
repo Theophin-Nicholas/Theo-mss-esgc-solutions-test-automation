@@ -16,7 +16,7 @@ import java.util.List;
 public class EntityIssuerAddMissingDocumentPopUpTestRouting extends EntityPageTestBase {
 
 
-    @Xray(test = {6430, 6471, 6468,8795})
+    @Xray(test = {6430, 6471, 6468,8795, 9821})
     @Test(groups = {"regression", "ui", "smoke", "entity_issuer"},
             dataProvider = "credentialsP2", dataProviderClass = DataProviderClass.class,
             description = "Verify Add missing document functionlity")
@@ -30,8 +30,9 @@ public class EntityIssuerAddMissingDocumentPopUpTestRouting extends EntityPageTe
         entitypage.addURL("Google.com");
         entitypage.validateAssignedCategories();
         entitypage.validateWrongURL();
+        entitypage.validatePageNoBox();
         entitypage.saveMissingDocuments();
-        entitypage.P2SectorPageCloseAddMissingDocument.click();
+        entitypage.CloseAddMissingDocumentMessage.click();
         entitypage.logout.click();
     }
 

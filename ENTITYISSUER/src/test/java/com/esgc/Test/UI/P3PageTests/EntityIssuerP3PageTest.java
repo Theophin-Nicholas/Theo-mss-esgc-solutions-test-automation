@@ -41,25 +41,13 @@ public class EntityIssuerP3PageTest extends EntityPageTestBase {
         entitypage.logout.click();
     }
 
-    @Xray(test = {7350,8795})
-    @Test(groups = {"regression", "ui", "smoke", "entity_issuer"},
-            dataProvider = "credentials",dataProviderClass = DataProviderClass.class,
-            description = "Verify Add Missing Document Functionality ")
-    public void testAddMissingDocument(String... dataProvider) {
-        String userId=dataProvider[0];
-        String password=dataProvider[1];
-        LoginPageIssuer LoginPageIssuer = new LoginPageIssuer();
-        LoginPageIssuer.loginWithParams(userId,password);
-        EntityIssuerPage entitypage = new EntityIssuerPage();
-        entitypage.validateMissingDocument();
-        entitypage.logout.click();
-    }
+
 
     @Xray(test = {7306, 7307, 7308, 7310})
     @Test(groups = {"regression", "ui", "smoke", "entity_issuer"},
             dataProvider = "credentials",dataProviderClass = DataProviderClass.class,
             description = "Verify Source Documents")
-    public void testMissingDocumentPopUp(String... dataProvider) {
+    public void testsourceDocumentWidget(String... dataProvider) {
         String userId=dataProvider[0];
         String password=dataProvider[1];
         LoginPageIssuer LoginPageIssuer = new LoginPageIssuer();
