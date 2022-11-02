@@ -863,7 +863,9 @@ public class EntityClimateProfilePage extends ClimatePageBase {
     }
 
     public void navigateToTransitionRisk() {
-        BrowserUtils.waitForClickablility(transitionRiskPage, 3).click();
+        JavascriptExecutor js  = (JavascriptExecutor) Driver.getDriver();
+        js.executeScript("arguments[0].click()", transitionRiskPage);
+      //  BrowserUtils.waitForClickablility(transitionRiskPage, 30).click();
     }
 
     public void navigateToPhysicalRisk() {
@@ -2393,7 +2395,7 @@ public class EntityClimateProfilePage extends ClimatePageBase {
 
     }
 
-    public List<String> getUnderlyingCarbonPrintDetails() {
+    public String getUnderlyingCarbonPrintDetails() {
         navigateToTransitionRisk();
         BrowserUtils.scrollTo(transitionRiskCarbonFootprintWidget);
         List<WebElement> elements = transitionRiskCarbonFootprintWidget.findElements(By.xpath("div/div/div"));
@@ -2408,6 +2410,8 @@ public class EntityClimateProfilePage extends ClimatePageBase {
                     for (WebElement span : spans) divValue = divValue.replace(span.getText(), " " + span.getText());
                 }
 
+
+
                 if (divValue.contains("Reporting Year"))
                     returnList.addAll(Arrays.stream(divValue.split("((?=Reporting Year)|(?<=Reporting Year))"))
                             .map(String::trim).collect(Collectors.toList()));
@@ -2418,11 +2422,12 @@ public class EntityClimateProfilePage extends ClimatePageBase {
                     returnList.add(divValue);
             }
         }
-        return returnList;
+
+        return returnList.stream().collect(Collectors.joining(" "));
     }
 
     public String getPhysicalClimateHazards() {
-        BrowserUtils.scrollTo(physicalClimateHazards);
+        BrowserUtils.scrollTo(wait.until(ExpectedConditions.visibilityOf(physicalClimateHazards)));
         String str = physicalClimateHazards.getText().replaceAll("\n", " ");
         str = str.replace("HIGHEST RISK HAZARD: ", "HIGHEST RISK HAZARD : ");
         String[] values = str.split(("((?= \\d+%)|(?<=\\d% ))").toString());
@@ -2430,7 +2435,7 @@ public class EntityClimateProfilePage extends ClimatePageBase {
     }
 
     public String getPhysicalRiskManagement() {
-        BrowserUtils.scrollTo(physicalRiskManagementWidget);
+        BrowserUtils.scrollTo(wait.until(ExpectedConditions.visibilityOf(physicalRiskManagementWidget)));
         String str = physicalRiskManagementWidget.getText().replaceAll("\n", " ");
         String Values[] = str.split((" "));
         str = str.replace("Physical Risk Management Anticipation", "Physical Risk Management " + Values[Values.length - 1] + " Anticipation").split("Updated")[0].trim();
@@ -2438,7 +2443,7 @@ public class EntityClimateProfilePage extends ClimatePageBase {
     }
 
     public String getTempratureAlignmentWidget() {
-        BrowserUtils.scrollTo(temperatureAlignmentWidget);
+        BrowserUtils.scrollTo(wait.until(ExpectedConditions.visibilityOf(temperatureAlignmentWidget)));
         String str = temperatureAlignmentWidget.getText().replaceAll("\n", " ");
         String climateText = temperatureAlignmentStatus.getText();
         str = str.replace(climateText, climateText.toUpperCase(Locale.ROOT));
@@ -2449,7 +2454,7 @@ public class EntityClimateProfilePage extends ClimatePageBase {
 
 
     public String getGreenShareWidget() {
-        BrowserUtils.scrollTo(greenShareCard);
+        BrowserUtils.scrollTo(wait.until(ExpectedConditions.visibilityOf(greenShareCard)));
         String returnString = "";
         if (!greenShareCard.getText().contains("No information available."))
             returnString = "Offering Green Solutions " + GreenShareWidgetValue.getText();
@@ -2459,7 +2464,7 @@ public class EntityClimateProfilePage extends ClimatePageBase {
     }
 
     public String getBrownShareWidget() {
-        BrowserUtils.scrollTo(brownShareCard);
+        BrowserUtils.scrollTo(wait.until(ExpectedConditions.visibilityOf(brownShareCard)));
         String returnString = "";
         if (!brownShareCard.getText().contains("No information available."))
             returnString = "Brown Share Overall Fossil Fuels Industry Revenues " + BrownShareWidgetValue.getText();
@@ -2504,7 +2509,7 @@ public class EntityClimateProfilePage extends ClimatePageBase {
         if (!underlyingDataMetrics_GreenShareAssessmentCard.getText().contains("No information available.")) {
             returnString = underlyingDataMetrics_GreenShareAssessment_Table.getText().replaceAll("\n", " ");
             returnString = returnString.replace("Products and Technologies Investment in Category",
-                    "Underlying Data Transition Risk GREENSHARE PRODUCTS AND TECHNOLOGIES INVESTMENT IN CATEGORY");
+                    "Underlying Data Transition Risk GREEN SHARE PRODUCTS AND TECHNOLOGIES INVESTMENT IN CATEGORY");
         } else
             returnString = underlyingDataMetrics_GreenShareAssessmentCard.getText();
         return returnString;
@@ -2519,7 +2524,7 @@ public class EntityClimateProfilePage extends ClimatePageBase {
         String identifiers = companySummary.get(0).getText().split("\\|")[0].trim();
 
         //TODO : Change includeEmptyIdentifier parameter in below line to false after implementation of ESGCA-10987
-        returnList.add(getIdentifiers(identifiers, true));
+        returnList.add(getIdentifiers(identifiers, false));
 
         return returnList;
     }
@@ -2559,5 +2564,15 @@ public class EntityClimateProfilePage extends ClimatePageBase {
 
     }
 
+
+    /*public String getESGMaterlityData() {
+        BrowserUtils.scrollTo(esgScores.get(0));
+       // String categoriesList = readEsgMaterialityCategories().stream().collect(Collectors.joining(" "))
+        //        .replaceAll("\\d+","");
+
+
+        return categoriesList;
+
+    }*/
 
 }
