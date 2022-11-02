@@ -71,6 +71,24 @@ public class DashboardPage extends UploadPage {
     @FindBy(id = "button-holdings")
     public WebElement selectPortfolioButton;
 
+    @FindBy(id = "score-qualty-btn")
+    public WebElement scoreQualityButton;
+
+    @FindBy(xpath = "//button[@id='score-qualty-btn']//*[local-name()='svg']/*[local-name()='path']")
+    public WebElement scoreQualityStatus;
+
+    @FindBy(xpath = "//td[@heap_id='perfchart']//*[local-name()='svg']/*[local-name()='rect'][1]")
+    public List<WebElement> scoreQualityIconsPerformanceTable;
+
+    @FindBy(xpath = "//td[contains(@id,'viewcomapnies')]//*[local-name()='svg']/*[local-name()='rect'][1]")
+    public List<WebElement> scoreQualityIconsCoveragePopup;
+
+    @FindBy(xpath = "//tr//td[contains(@id,'viewcomapnies')][1]")
+    public List<WebElement> rowsInCoveragePopup;
+
+    @FindBy(xpath = "//*[@heap_id='heatmap']//*[local-name()='svg']/*[local-name()='rect'][1]")
+    public List<WebElement> scoreQualityIconsInCompareRLs;
+
     //================ summary header tiles
 
     @FindBy(xpath = "//header//div[@id]/../preceding-sibling::div[text()]")
@@ -250,7 +268,7 @@ public class DashboardPage extends UploadPage {
     @FindBy(xpath = "//h3/following-sibling::p")
     public List<WebElement> heatMapActiveResearchLineInfo;
 
-    @FindBy(xpath = "//div[text()='Compare Research Lines']/..//div[text()='Temperature Alignment']")
+    @FindBy(xpath = "//div[text()='Analyze Companies by Range']/..//div[text()='Temperature Alignment']")
     public WebElement heatMapTemperatureAlignment;
 
     @FindBy(xpath = "//div[@id='heatmapentity-test-id']//li//h3")
@@ -265,6 +283,9 @@ public class DashboardPage extends UploadPage {
 
     @FindBy(xpath = " //button[@id='button-holdings']/span/div")
     public WebElement verifyPortfolioName;
+
+    @FindBy(xpath = "(//div[@heap_heatmap_id='gridcell']/span[2])[2]")
+    public WebElement overallESGCell;
 
     @FindBy(xpath = "//p[contains(text(),'ESG performance. They measure the degree to which ')]")
     public WebElement overallESGDescription;
@@ -342,18 +363,24 @@ public class DashboardPage extends UploadPage {
             String portfolio = "Sample Portfolio";
             selectPortfolio(portfolio);
             BrowserUtils.scrollTo(dashboardPage.endOfPage);// scrolling to the last widget on the page
-            BrowserUtils.wait(2);
+            System.out.println("Sticky1");
+            BrowserUtils.wait(4);
             if (!dashboardPage.isStickyHeaderDisplayed()) {
+                System.out.println("Sticky2");
                 return false;
             }
             assertTestCase.assertTrue(dashboardPage.regionTitleInStickyHeader.isDisplayed(), "Verify Title and Region/Sector Toggle are in Sticky Header in the Drawer ");
+            System.out.println("Sticky3");
             assertTestCase.assertTrue(dashboardPage.isStickyHeaderDisplayed(), "Sticky header is not displayed");
-
+            System.out.println("Sticky4");
             // Verify portfolio name in sticky header
-            assertTestCase.assertTrue(Driver.getDriver().findElement(By.xpath("//header[contains(@class,'Sticky')]//div[contains(text(),'Viewing " + portfolio + ": All Regions, All Sectors')]")).isDisplayed(), "Portfolio name is not displayed in sticky header");
+            //assertTestCase.assertTrue(Driver.getDriver().findElement(By.xpath("//header[contains(@class,'Sticky')]//div[contains(text(),'Viewing " + portfolio + ": All Regions, All Sectors')]")).isDisplayed(), "Portfolio name is not displayed in sticky header");
+           // assertTestCase.assertTrue(Driver.getDriver().findElements(By.xpath("//header[contains(@class,'Sticky')]//div[contains(text(),'Viewing " + portfolio + "')]")).get(0).isDisplayed(), "Portfolio name is not displayed in sticky header");
 
+            System.out.println("Sticky5");
             // Verify physical risk climate tile details in sticky header
             String highestRiskHazardStatus = Driver.getDriver().findElement(By.xpath("//header//div[text()='Highest Risk Hazard']/..//span[2]")).getText();
+            System.out.println("Sticky6");
             ArrayList<String> highestRiskHazardStatusList = new ArrayList<String>();
             highestRiskHazardStatusList.add("Floods");
             highestRiskHazardStatusList.add("Heat Stress");
@@ -365,11 +392,11 @@ public class DashboardPage extends UploadPage {
             String facilitiesExposedValue = Driver.getDriver().findElement(By.xpath("//header//div[text()='Facilities Exposed to " + highestRiskHazardStatus + "']/..//span[1]")).getText();
             assertTestCase.assertTrue(highestRiskHazardStatusList.contains(highestRiskHazardStatus) &&
                     facilitiesExposedValue.substring(0, facilitiesExposedValue.indexOf('%') - 1).chars().allMatch(Character::isDigit), "Physical Risk climate tile details are not displayed in sticky header");
-
+            System.out.println("Sticky7");
 
             // Verify transition risk climate tile details in sticky header
             String temperatureAlignmentValue = Driver.getDriver().findElement(By.xpath("//header//div[text()='Temperature Alignment']/..//span[1]")).getText();
-
+            System.out.println("Sticky8");
             ArrayList<String> carbonFootprintScores = new ArrayList<String>();
             carbonFootprintScores.add("Moderate");
             carbonFootprintScores.add("Significant");
@@ -379,10 +406,11 @@ public class DashboardPage extends UploadPage {
             String carbonFootprintScore = Driver.getDriver().findElement(By.xpath("//header//div[text()='Carbon Footprint']/..//span[1]")).getText();
             assertTestCase.assertTrue(temperatureAlignmentValue.contains("°C")
                     && carbonFootprintScores.contains(carbonFootprintScore), "Transition Risk climate tile details are not displayed in sticky header");
-
+            System.out.println("Sticky9");
             return true;
 
         } catch (Exception e) {
+            System.out.println("Sticky10");
             e.printStackTrace();
             return false;
         }
@@ -420,6 +448,66 @@ public class DashboardPage extends UploadPage {
         }
     }
 
+    public boolean isScoreQualityButtonAvailable(){
+        try{
+            return scoreQualityButton.isDisplayed();
+        }catch (Exception e){
+            return false;
+        }
+    }
+
+    public boolean verifyScoreQualityToggleIsOff() {
+        String scoreQualityStyle = scoreQualityStatus.getAttribute("style");
+        return scoreQualityStyle.equals("transform: translate(0px, 9px) scale(1.2);");
+    }
+
+    public boolean verifyScoreQualityToggleIsOn() {
+        String scoreQualityStyle = scoreQualityStatus.getAttribute("style");
+        return scoreQualityStyle.equals("transform: translate(0px, 3px) scale(1.2);");
+    }
+
+    public boolean verifyScoreQualityIconWithEntitiesInPerformanceTable(){
+        return scoreQualityIconsPerformanceTable.size()==10;
+    }
+
+    public boolean verifyScoreQualityIconWithEntitiesInCoveragePopup(){
+        return scoreQualityIconsCoveragePopup.size()>0;
+    }
+
+    public void verifyScoreQualityLevelsInIconInCoveragePopup(){
+        int companiesCount = rowsInCoveragePopup.size();
+
+        for(int i=1; i<=companiesCount; i++){
+            System.out.println("Record: "+i);
+            String xpath = "(//tr//td[contains(@id,'viewcomapnies')][1])["+i+"]//*[local-name()='svg']/*[local-name()='rect'][@fill='#26415E']";
+            int levels = Driver.getDriver().findElements(By.xpath(xpath)).size();
+            String levelName = "";
+            String level = "";
+            if(levels==4){
+                level = "Score Level 1";
+                levelName = "Analyst Verified";
+            } else if(levels==3){
+                level = "Score Level 2";
+                levelName = "Subsidiary";
+            } else if(levels==2){
+                level = "Score Level 3";
+                levelName = "On-Demand";
+            } else if(levels==1){
+                level = "Score Level 4";
+                levelName = "Predicted Score";
+            }
+            BrowserUtils.scrollTo(Driver.getDriver().findElement(By.xpath("(//tr//td[contains(@id,'viewcomapnies')][1])["+i+"]//*[local-name()='svg']/*[local-name()='rect']")));
+            BrowserUtils.hover(Driver.getDriver().findElement(By.xpath("(//tr//td[contains(@id,'viewcomapnies')][1])["+i+"]//*[local-name()='svg']/*[local-name()='rect']")));
+            assertTestCase.assertTrue(Driver.getDriver().findElement(By.xpath("//p/strong[text()='"+level+"']")).isDisplayed());
+            assertTestCase.assertTrue(Driver.getDriver().findElement(By.xpath("//p[text()='"+levelName+"']")).isDisplayed());
+
+        }
+
+    }
+
+    public boolean verifyScoreQualityIconWithEntitiesUnderCompareResearchLines(){
+        return scoreQualityIconsInCompareRLs.size()>0;
+    }
 
     public boolean verifyFacilitiesExposedWidget() {
         try {
@@ -439,35 +527,32 @@ public class DashboardPage extends UploadPage {
         String latestMonthAndYearWithData = dashboardQueries.getLatestMonthAndYearWithData(portfolioId);
         String month = latestMonthAndYearWithData.split(":")[0];
         String year = latestMonthAndYearWithData.split(":")[1];
+        System.out.println(month+year);
         List<Map<String, Object>> dbEsgInfo = dashboardQueries.getEsgInfo(portfolioId, year, month);
         List<WebElement> uiRecords = Driver.getDriver().findElements(By.xpath("//table[contains(@id, 'viewcomapnies')]/tbody/tr"));
 
         for(int i=1; i<=uiRecords.size(); i++){
             String companyName = Driver.getDriver().findElement(By.xpath("(//table[contains(@id, 'viewcomapnies')]/tbody/tr)["+i+"]/td[1]/span")).getText();
             String esgScore = Driver.getDriver().findElement(By.xpath("(//table[contains(@id, 'viewcomapnies')]/tbody/tr)["+i+"]/td[2]/span")).getText();
-            if(esgScore.equals("-")) break;
-            boolean match = false;
-            System.out.print("UI Info:"+ companyName+"--"+esgScore);
-            for(Map<String, Object> dbRecord:dbEsgInfo){
-                if(dbRecord.get("COMPANY_NAME").toString().equals(companyName)){
-                    System.out.println("-- Company Found");
-                    if(dbRecord.get("VALUE").toString().equals(esgScore)) {
-                        match = true;
-                    }else {
-                        System.out.print("DB ESG - "+dbRecord.get("VALUE").toString()+" is not matched");
+            System.out.println("companyName = " + companyName);
+            System.out.println("esgScore = " + esgScore);
+            if(!esgScore.equals("-")) {
+                boolean match = false;
+                System.out.print("UI Info:" + companyName + "--" + esgScore);
+                for (Map<String, Object> dbRecord : dbEsgInfo) {
+                    if (dbRecord.get("COMPANY_NAME").toString().equals(companyName)) {
+                        System.out.println("-- Company Found");
+                        if (dbRecord.get("VALUE_ESG").toString().equals(esgScore)) {
+                            match = true;
+                        } else {
+                            System.out.print("DB ESG - " + dbRecord.get("VALUE_ESG").toString() + " is not matched");
+                        }
+                        break;
                     }
-                    break;
                 }
+                Assert.assertTrue(match, companyName + " esg info is not found/matched in Database");
             }
-            Assert.assertTrue(match, companyName+" esg info is not found/matched in Database");
         }
-        //        assertTestCase.assertEquals(uiRecords.size(), dbEsgInfo.size());
-//        for (Map<String, Object> dbRecord : dbEsgInfo) {
-//            String xpath = "//table[contains(@id, 'viewcomapnies')]/tbody/tr/td/span[text()='"+dbRecord.get("COMPANY_NAME").toString()+"']" +
-//                    "/../following-sibling::td/span[text()='"+dbRecord.get("VALUE").toString()+"']";
-//            WebElement uiRecord = Driver.getDriver().findElement(By.xpath(xpath));
-//            assertTestCase.assertTrue(uiRecord.isDisplayed(), dbRecord.get("COMPANY_NAME")+ " record is not available");
-//        }
         return true;
     }
 
@@ -831,8 +916,17 @@ public class DashboardPage extends UploadPage {
         }
     }
 
+    public void selectOrDeselectResearchLineUnderAnalysisSection(String researchLine) {
+        WebElement element = Driver.getDriver().findElement(By.xpath("//div[@heap_heatmap_id='researchline'][text()='"+researchLine+"']"));
+
+        BrowserUtils.scrollTo(element);
+        wait.until(ExpectedConditions.elementToBeClickable(element));
+        BrowserUtils.clickWithJS(element);
+        BrowserUtils.wait(10);
+    }
+
     public void selectOrDeselectHeatMapSection(String researchLine) {
-        WebElement element = Driver.getDriver().findElement(By.xpath("//div[text()='Compare Research Lines']/..//div[contains(text(),'" + researchLine + "')]"));
+        WebElement element = Driver.getDriver().findElement(By.xpath("//div[text()='Analyze Companies by Range']/..//div[contains(text(),'" + researchLine + "')]"));
 
         BrowserUtils.scrollTo(element);
         wait.until(ExpectedConditions.elementToBeClickable(element));
@@ -878,7 +972,7 @@ public class DashboardPage extends UploadPage {
 
         for (int i = 1; i <= 5; i++) {
             for (int j = 1; j <= 5; j++) {
-                String xpath = "(//div[text()='Compare Research Lines']/../../..//table)[2]//tr[" + i + "]/td[" + j + "]//span[2]";
+                String xpath = "(//div[text()='Analyze Companies by Range']/../../..//table)[2]//tr[" + i + "]/td[" + j + "]//span[2]";
                 String cellValue = Driver.getDriver().findElement(By.xpath(xpath)).getText();
                 System.out.println(i + "," + j + "-" + cellValue);
                 if (!cellValue.endsWith("%")) {

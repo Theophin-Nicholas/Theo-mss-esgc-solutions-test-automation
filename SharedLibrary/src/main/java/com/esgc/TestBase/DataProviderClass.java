@@ -201,10 +201,10 @@ public class DataProviderClass {
     public Object[][] entitlementCheckPrd() {
 
         return new Object[][]{
-                {"esg-test2@outlook.com","Testing123","Transition Risk"},//
-                {"esg-test1@outlook.com","Testing123","Physical Risk"},//
-                {"esg-test4@outlook.com","Testing123","Physical Risk and Transition Risk"},//
-                /*   {"esg-test7@outlook.com","Helloworld21","Physical Risk, Transition Risk, Corporate ESG and Controversies Entitlements"},//*/
+                {"esg-test2@outlook.com","Helloworld21","Transition Risk"},//
+                {"esg-test1@outlook.com","Helloworld21","Physical Risk"},//
+                {"esg-test4@outlook.com","Helloworld24","Physical Risk and Transition Risk"},//
+                {"esg-test7@outlook.com","Moodys123","Physical Risk, Transition Risk, Corporate ESG and Controversies Entitlements"},
                // {"esg-test1+controversy@outlook.com","Testing123","Physical Risk, Transition Risk and Controversies"},//
         };
     }
@@ -287,7 +287,7 @@ public class DataProviderClass {
     public Object[][] availableResearchLines() {
 
         return new Object[][]{
-                {"ESG Assessments"},
+               /* {"ESG Assessments"},*/ //De-scoped as of now
                 {"Carbon Footprint"},
                 {"Physical Risk Management"},
                 {"Temperature Alignment"},
@@ -376,7 +376,7 @@ public class DataProviderClass {
         return new Object[][]{
 
                 {"Apple, Inc.", "000411117"},  // VE scored company
-                {"FirstCash, Inc.","001668460"} // MESG scored Company
+                {"FORD MOTOR CO","058618674"} // MESG scored Company
 
         };
     }
