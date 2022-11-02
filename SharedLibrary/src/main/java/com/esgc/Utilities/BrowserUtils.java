@@ -332,8 +332,9 @@ public class BrowserUtils {
      *
      * @param element
      */
-    public static void scrollTo(WebElement element) {
+    public static WebElement scrollTo(WebElement element) {
         ((JavascriptExecutor) Driver.getDriver()).executeScript("arguments[0].scrollIntoView({block: \"center\"});", element);
+        return element;
     }
 
     public static void scrollToByPixel() {
