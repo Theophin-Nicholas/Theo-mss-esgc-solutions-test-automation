@@ -230,9 +230,9 @@ public class ESGClimateSummaryDBTest extends EntityClimateProfileDataValidationT
         }
     }
 
-    @Test(groups = {"regression","smoke", "data_validation"},
+    @Test(enabled = false,groups = {"regression","smoke", "data_validation"},
             dataProviderClass = DataProviderClass.class, dataProvider = "orbisIDWithDisclosureScore")
-    @Xray(test = {8750})
+    @Xray(test = {8750}) //TODO disabled de-scoped. Entities dont have Disclosure rate
     public void validateDisclosureRatio(@Optional String orbisID) {
         //Get the header details via API
         EntityProfileClimatePageAPIController apiController = new EntityProfileClimatePageAPIController();
@@ -250,9 +250,9 @@ public class ESGClimateSummaryDBTest extends EntityClimateProfileDataValidationT
 
     }
 
-    @Test(groups = {"regression", "smoke","data_validation"},
+    @Test(enabled = false, groups = {"regression", "smoke","data_validation"},
             dataProviderClass = DataProviderClass.class, dataProvider = "orbisIDWithDisclosureScore")
-    @Xray(test = {9841})
+    @Xray(test = {9841}) //TODO ESG assessments de-scopped
     public void verifyAPIForOverallESGScoreWidget(String orbis_id) {
         EntityProfileClimatePageAPIController entityClimateProfileApiController = new EntityProfileClimatePageAPIController();
         test.info("ESG Score widget API validation for " + orbis_id);

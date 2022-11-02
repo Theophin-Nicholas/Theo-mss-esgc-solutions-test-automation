@@ -37,7 +37,7 @@ public class PortfolioFilePaths {
     public static String scorePortfolioPath(){
         return System.getProperty("user.dir")+ File.separator+"src"+
                 File.separator+"test"+File.separator+"resources"+
-                File.separator+"upload"+File.separator+"Portfolio_Score_Data";
+                File.separator+"upload"+File.separator+"Portfolio_Score_Data.csv";
     }
 
     /**
@@ -59,10 +59,17 @@ public class PortfolioFilePaths {
                 File.separator+"test"+File.separator+"resources"+
                 File.separator+"upload"+File.separator+"Portfolio with very long name to check ellipses after limit.csv";
     }
+
     public static String portfolioWithNoData1(){
         return System.getProperty("user.dir")+ File.separator+"src"+
                 File.separator+"test"+File.separator+"resources"+
                 File.separator+"upload"+File.separator+"NoData1.csv";
+    }
+
+    public static String portfolioWithPredictedScores(){
+        return System.getProperty("user.dir")+ File.separator+"src"+
+                File.separator+"test"+File.separator+"resources"+
+                File.separator+"upload"+File.separator+"EsgWithPredictedScores.csv";
     }
 
     /**
@@ -144,6 +151,18 @@ public class PortfolioFilePaths {
         return System.getProperty("user.dir")+ File.separator+"src"+
                 File.separator+"test"+File.separator+"resources"+
                 File.separator+"upload"+File.separator+"MyRegionSectorFilterTest.csv";
+    }
+
+    public static String portfolioWithSubsidiaryCompany(){
+        return System.getProperty("user.dir")+ File.separator+"src"+
+                File.separator+"test"+File.separator+"resources"+
+                File.separator+"upload"+File.separator+"PortfolioWithSubsidiaryCompany1.csv";
+    }
+
+    public static String portfolioWithInactiveSubsidiaryCompany(){
+        return System.getProperty("user.dir")+ File.separator+"src"+
+                File.separator+"test"+File.separator+"resources"+
+                File.separator+"upload"+File.separator+"PortfolioWithInactiveSubsidiaryCompany.csv";
     }
 
 
