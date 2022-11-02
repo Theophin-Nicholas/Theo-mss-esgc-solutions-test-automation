@@ -386,4 +386,12 @@ public class DataProviderClass {
 
         };
     }
+
+    @DataProvider(name = "orbisIDWithBrownShareScore")
+    public Object[][] orbisIDWithBrownShareScore() {
+        return new Object[][]
+                {
+                        {"000002269"},//Exxon Mobil
+                };
+    }
 }

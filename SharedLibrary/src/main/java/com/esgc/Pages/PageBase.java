@@ -90,7 +90,7 @@ public abstract class PageBase {
     @FindBy(xpath = "//span[@title='SamplePortfolioToDelete']")
     public WebElement samplePortfolioToDelete;
 
-    @FindBy(xpath = "(//button[@id='button-button-test-id-1'])[2]")
+    @FindBy(xpath = "(//button[@id='button-button-test-id-1'])")//ferhat: I removed [2] from end of the locator since there was no 2nd on the test page
     public WebElement deleteButton;
 
     @FindBy(xpath = "//div[@role='dialog']/div[2]/div/div")
