@@ -44,6 +44,7 @@ public class DatabaseDriver {
         props.put("warehouse", DB_WAREHOUSE);
         props.put("schema", DB_SCHEMA);
         props.put("role", DB_ROLE);
+        props.put("TIMEZONE", "America/New_York");
         try {
             connection = DriverManager.getConnection(DB_HOST, props);
         } catch (SQLException e) {
@@ -297,6 +298,7 @@ public class DatabaseDriver {
         try {
             statement = connection.createStatement(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
             statement.executeQuery("ALTER SESSION SET JDBC_QUERY_RESULT_FORMAT='JSON'");
+            statement.executeQuery("ALTER USER SET TIMEZONE='America/Los_Angeles'");
             resultSet = statement.executeQuery(query);
 
         } catch (SQLException e) {

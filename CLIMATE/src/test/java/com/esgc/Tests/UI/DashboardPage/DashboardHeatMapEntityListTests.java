@@ -28,20 +28,26 @@ public class DashboardHeatMapEntityListTests extends UITestBase {
     @Xray(test = {4843, 4844, 4829, 7475, 7943, 9268, 9269, 9270, 6221})
     public void verifyEntityListTest() {
         BrowserUtils.wait(4);
+        //This login is required in case, previous test case logged out
+        LoginPage loginPage = new LoginPage();
+        if (loginPage.usernameBoxs.size() > 0)
+            loginPage.login();
         DashboardPage dashboardPage = new DashboardPage();
         if (!dashboardPage.verifyPortfolioName.getText().equalsIgnoreCase("Sample Portfolio"))
             dashboardPage.selectPortfolioByNameFromPortfolioSelectionModal("Sample Portfolio");
+        BrowserUtils.wait(5);
         //Navigate to the heatmap section
         BrowserUtils.scrollTo(dashboardPage.heatMapResearchLines.get(0));
         BrowserUtils.wait(2);
         //Verify the entity list - Entity list should be displaying no records
-        assertTestCase.assertTrue(dashboardPage.heatMapNoEntityWidget.isDisplayed(),
-                "Verified the widget doesn't show anything before a cell is selected.");
+        // assertTestCase.assertTrue(dashboardPage.heatMapNoEntityWidget.isDisplayed(),
+        //        "Verified the widget doesn't show anything before a cell is selected.");
         System.out.println("heatMapNoEntityWidget displayed..");
-        dashboardPage.heatMapResearchLines.get(0).click();
+        // dashboardPage.heatMapResearchLines.get(0).click();
         //Click on any cell from the heatmap
         /*The entity list is updated and the records (companies) which meet the criteria are now displayed in descending
         order based on percentage of investment on the same.*/
+        BrowserUtils.wait(5);
         verifyCells();
         System.out.println("verifyCells(); passed");
 
@@ -62,8 +68,10 @@ public class DashboardHeatMapEntityListTests extends UITestBase {
             dashboardPage.selectPortfolioByNameFromPortfolioSelectionModal("Sample Portfolio");
         //Navigate to the heatmap section
         BrowserUtils.scrollTo(dashboardPage.heatMapResearchLines.get(0));
+        BrowserUtils.wait(3);
         verifyDrawer();
     }
+
     @Test(groups = {"dashboard", "ui", "regression"})
     @Xray(test = {4784, 4785, 4786, 4787, 4788, 4789, 4798, 4799, 6208, 7899, 7900, 9266})
     public void DashboardUIHeatMapTest() {
@@ -220,7 +228,7 @@ public class DashboardHeatMapEntityListTests extends UITestBase {
             int x = 0, y = 0;
             x = dashboardPage.heatMapXAxisIndicators.size();
             y = dashboardPage.heatMapYAxisIndicators.size();
-            System.out.println("x value: "+x+ " and y value: "+y);
+            System.out.println("x value: " + x + " and y value: " + y);
             int expMatrixSize = x * y;
             int actMatrixSize = dashboardPage.heatMapCells.size();
             assertTestCase.assertEquals(actMatrixSize, expMatrixSize, "Heat Map Matrix Size verified for X and Y axis");
@@ -243,7 +251,7 @@ public class DashboardHeatMapEntityListTests extends UITestBase {
         BrowserUtils.scrollTo(dashboardPage.heatMapResearchLines.get(0));
         for (int i = 0; i < dashboardPage.heatMapResearchLines.size(); i++) {
             dashboardPage.selectOneResearchLine(i);
-
+            BrowserUtils.wait(2);
             String color = Color.fromString(dashboardPage.heatMapResearchLines.get(i).getCssValue("background-color")).asHex();
             String researchLine = dashboardPage.heatMapResearchLines.get(i).getText();
             switch (researchLine) {
@@ -302,7 +310,7 @@ public class DashboardHeatMapEntityListTests extends UITestBase {
     @Xray(test = {8185, 7973,})
     public void heatMapAPIUIVerification() {
         LoginPage loginPage = new LoginPage();
-        //Trying to login with only Physical Risk Entitilment User
+        //Trying to log in with only Physical Risk Entitlement User
         WebElement portfolioSelectionButton = Driver.getDriver().findElement(By.id("button-holdings"));
         BrowserUtils.wait(3);
         if (portfolioSelectionButton.getAttribute("title").equals("Sample Portfolio"))
@@ -361,7 +369,7 @@ public class DashboardHeatMapEntityListTests extends UITestBase {
                         String totalInvestmentAPI = String.valueOf(list.get(0).getY_axis_total_invct_pct().get(y).getTotal_investment()) + "%"; //14.59%
                         APIValues.add(Arrays.asList(scoreRangeAPI, totalInvestmentAPI));
                     }
-                    BrowserUtils.wait(3);
+                    //BrowserUtils.wait(3);
                     System.out.println("UIValues = " + UIValues);
                     System.out.println("APIValues = " + APIValues);
                     assertTestCase.assertTrue(UIValues.containsAll(APIValues));
@@ -369,6 +377,7 @@ public class DashboardHeatMapEntityListTests extends UITestBase {
                     break;
             }
         }
+        loginPage.clickOnLogout();
     }
 
     public void selectOptionFromFiltersDropdown(String dropdown, String option) {
@@ -420,7 +429,7 @@ public class DashboardHeatMapEntityListTests extends UITestBase {
                 counter++;
                 if (expPercentage.equals("0%")) continue;
 
-                BrowserUtils.waitForVisibility(dashboardPage.heatMapWidgetTitle,10);
+                BrowserUtils.waitForVisibility(dashboardPage.heatMapWidgetTitle, 10);
                 String actPercentage = dashboardPage.heatMapWidgetTitle.getText();
                 actPercentage = actPercentage.substring(actPercentage.indexOf("\n") + 1);
                 actPercentage = actPercentage.substring(0, actPercentage.indexOf(" "));
@@ -435,6 +444,7 @@ public class DashboardHeatMapEntityListTests extends UITestBase {
             }
         }
     }
+
     public void verifyDrawer() {
         DashboardPage dashboardPage = new DashboardPage();
         int counter = 0;
@@ -443,13 +453,19 @@ public class DashboardHeatMapEntityListTests extends UITestBase {
                 System.out.println(counter);
                 System.out.println("j " + j);
                 BrowserUtils.scrollTo(dashboardPage.heatMapCells.get(counter));
+                System.out.println("#1");
                 String expPercentage = dashboardPage.heatMapCells.get(counter).getText();
+                System.out.println("#2");
                 BrowserUtils.wait(1);
+                System.out.println("dashboardPage.heatMapCells.get(counter).getText() = " + dashboardPage.heatMapCells.get(counter).getText());
                 dashboardPage.heatMapCells.get(counter).click();
+                System.out.println("#3");
                 counter++;
                 if (expPercentage.equals("0%")) continue;
-                BrowserUtils.waitForVisibility(dashboardPage.heatMapWidgetTitle,10);
-               Driver.getDriver().findElement(By.xpath("//div[normalize-space()='Analyze Companies by Range']")).click();
+                BrowserUtils.waitForVisibility(dashboardPage.heatMapWidgetTitle, 10);
+                System.out.println("#4");
+                Driver.getDriver().findElement(By.xpath("//div[normalize-space()='Analyze Companies by Range']")).click();
+                System.out.println("#5");
             }
         }
     }

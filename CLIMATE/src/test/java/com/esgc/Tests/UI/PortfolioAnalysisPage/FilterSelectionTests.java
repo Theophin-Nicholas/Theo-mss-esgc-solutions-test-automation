@@ -22,6 +22,7 @@ public class FilterSelectionTests extends UITestBase {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio Analysis page");
         researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        researchLinePage.selectSamplePortfolioFromPortfolioSelectionModal();
         BrowserUtils.wait(5);
         researchLinePage.openSelectionModalPopUp();
         assertTestCase.assertTrue(researchLinePage.checkIfSelectionModalPopupIsDisplayed(), "Selection Modal Popup was opened");
@@ -35,7 +36,7 @@ public class FilterSelectionTests extends UITestBase {
         researchLinePage.clickFiltersDropdown();
         researchLinePage.selectRandomOptionFromFiltersDropdown("regions");
         researchLinePage.clickFiltersDropdown();
-        researchLinePage.selectRandomOptionFromFiltersDropdown("sectors");
+        researchLinePage.selectRandomOptionFromFiltersDropdown("sector");
         researchLinePage.clickFiltersDropdown();
         researchLinePage.selectRandomOptionFromFiltersDropdown("as_of_date");
             /*
@@ -51,6 +52,7 @@ public class FilterSelectionTests extends UITestBase {
 
         String portfolioNameAfterRefresh = researchLinePage.getSelectedPortfolioNameFromDropdown();
         String filterDataAfterRefresh = researchLinePage.getRegionsSectionAndAsOfDateDropdownSelectedValue();
+        //TODO this might fail in parallel run due to same account. we might use different login test account to over come this issue
         assertTestCase.assertEquals(portfolioNameBeforeRefresh, portfolioNameAfterRefresh, "Default portfolio verified", 1293);
         assertTestCase.assertTrue(filterDataAfterRefresh.startsWith("Viewing data in All Regions, All Sectors, at the end of"), "Default filter verification");
         assertTestCase.assertNotEquals(filterDataBeforeRefresh, filterDataAfterRefresh, "After refreshing the Page , Filters are getting reset to default.");

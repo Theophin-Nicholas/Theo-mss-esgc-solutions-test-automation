@@ -86,7 +86,7 @@ public class LoginPageTest extends DashboardUITestBase {
         }
     }
 
-    @Test(groups = {"regression", "ui", "smoke"},
+    @Test(groups = {"regression", "ui"},
             description = "ESGCA -1506 : Verify the Next button functionality.")
     @Xray(test = {1506})
     public void verifyTheNextButtonFunctionalityPampa() {
@@ -164,7 +164,7 @@ public class LoginPageTest extends DashboardUITestBase {
 
             login.EnterUserName();
             BrowserUtils.wait(5);
-            login.checkTermsAndConditions();
+           // login.checkTermsAndConditions();
             login.EnterPasswordAsBlank();
             Assert.assertTrue(login.checkIfCorrectValidationErrorMsgForBlankPasswordDisplayed(), "No Error message was displayed for the blank Password.");
 
