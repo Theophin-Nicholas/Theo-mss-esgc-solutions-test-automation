@@ -23,7 +23,7 @@ public class BenchmarkSelectionTest extends UITestBase {
             dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
     @Xray(test = 1433)
     public void verifyUserIsAbleToSelectBenchmarkPortfolio(String researchLine) {
-
+        BrowserUtils.wait(2);
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio Analysis page");
         researchLinePage.navigateToResearchLine(researchLine);
@@ -37,7 +37,7 @@ public class BenchmarkSelectionTest extends UITestBase {
         researchLinePage.SelectAPortfolioFromBenchmark("Sample Portfolio");
 
         assertTestCase.assertTrue(researchLinePage.IsBenchmarkListBoxDisplayed(), "Portfolio Analysis page was loaded successfully after Benchmark selection.", 1433, 2254);
-
+        BrowserUtils.wait(3);
         researchLinePage.clickOnBenchmarkDropdown()
                 .SelectAPortfolioFromBenchmark("No Benchmark");
         //researchLinePage.waitForDataLoadCompletion();
@@ -166,7 +166,7 @@ public class BenchmarkSelectionTest extends UITestBase {
     }
 
 
-    @Test(groups = {"regression", "ui"},
+    @Test(enabled = false, groups = {"regression", "ui"}, //TODO disabled till ESG assessment scoped back.
             description = "Verify that Benchmark can be selected and displayed on Summary Section")
     @Xray(test = {8387})
     public void verifyESGAssessmentsBenchmarkSection() {
@@ -183,7 +183,7 @@ public class BenchmarkSelectionTest extends UITestBase {
         assertTestCase.assertTrue(researchLinePage.ValidateifEsgBenchmarkPortfolioBoxIsDisplayed(), "The Benchmark Box is displayed");
         assertTestCase.assertTrue(researchLinePage.IsBenchmarkLableAvailable(), "Benchmark Label for the Benchmark coverage section is displayed when a Benchmark portfolio selected");
         assertTestCase.assertTrue(researchLinePage.IsBenchmarkScoreCategoryAvailable(), "Benchmark Score category is available");
-        assertTestCase.assertTrue(researchLinePage.IsBenchmarkCoverageSectionAvailableAndMatchesWithPattern(),"Validate that Bechnmark Coverage section is diplayed");
+        assertTestCase.assertTrue(researchLinePage.IsBenchmarkCoverageSectionAvailableAndMatchesWithPattern(), "Validate that Bechnmark Coverage section is diplayed");
         researchLinePage.validateBenchMarkDistributionSection();
     }
 }

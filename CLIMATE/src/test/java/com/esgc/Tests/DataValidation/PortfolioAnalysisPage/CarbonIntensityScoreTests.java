@@ -54,6 +54,7 @@ public class CarbonIntensityScoreTests extends DataValidationTestBase {
         String score = portfolioScore.get(0).portfolioScore.stream().filter(c -> c.getName().equals("Carbon Intensity")).findFirst().get().getScore();
         int scoreFromDB = portfolioQueries.getCarbonFootPrintIntensityScore(portfolioId, month, year);
         assertTestCase.assertEquals(Integer.parseInt(score), scoreFromDB, "Intensity Score Validation");
+        //TODO choosing random portfolio and some time causing fail.
     }
 
     @DataProvider(name = "researchLines")

@@ -1,0 +1,15 @@
+Currency: Please only enter in values of USD or GBP or EUR. Platform values will be converted into USD. Only one currency is allowed per portfolio,,
+As of Date: Please enter date in yyyy-mm-dd format,,
+Identifier type: Please specify the values as one of the following Identifiers: ISIN or BBG_TICKER,,
+Identifier: First column below !AsOfDate: Enter an ISIN or a Bloomberg Ticker. For example: T UN or CMP UN,,
+Value: Second Column below !AsOfDate: Please enter total monetary value of investment. This must be in one single currency,,
+,,
+!Currency,GBP,
+!AsOfDate,1/1/2022,
+,,
+Identifier type,Identifier,Value
+ISIN,XS0097093636,123456
+ISIN,XS2508191884,1234567
+ISIN,US29364YAH71,12345678
+ISIN,ZAG000185612,123456
+ISIN,US45664XAB55,1234567
