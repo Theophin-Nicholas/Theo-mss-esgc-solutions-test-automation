@@ -24,9 +24,9 @@ import java.util.Map;
 
 public class EsgAssessmentTests extends UITestBase {
 
-    @Test(groups = {"regression", "ui", "smoke", "esg"},
+    @Test(enabled = false,groups = {"regression", "ui", "smoke", "esg"},
             description = "Verify ESG Weighted Average Score Data Validation")
-    @Xray(test = {8176})
+    @Xray(test = {8176}) //TODO de-scoped , enable after scoped
     public void verifyESGWeightedAverageScoreDataValidationTest() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
 
@@ -192,8 +192,8 @@ public class EsgAssessmentTests extends UITestBase {
         }
     }
 
-    @Test(groups = {"regression", "ui", "smoke", "esg"})
-    @Xray(test = {8704})
+    @Test(enabled = false,groups = {"regression", "ui", "smoke", "esg"})
+    @Xray(test = {8704}) //TODO de-scoped , enable after scoped
     public void verifyESGGradeDistributionIsDisplayed() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         researchLinePage.navigateToResearchLine("ESG Assessments");

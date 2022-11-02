@@ -31,14 +31,14 @@ public class PortfolioSettings extends UITestBase {
         researchLinePage.portfolioSettings.click();
         String originalPortfolioName = researchLinePage.getPortfolioName();
         System.out.println("originalPortfolioName = " + originalPortfolioName);
-        researchLinePage.selectPortfolio(originalPortfolioName);
+        researchLinePage.selectPortfolioFromPortfolioSettings(originalPortfolioName);
         BrowserUtils.wait(5);
 
         assertTestCase.assertTrue(researchLinePage.ValidatePortfolioNameFeildIsEditable(),
                 "Validate that portfolio name is editable");
 
         researchLinePage.validatePortfolioNameNotChangedAfterUpdateAndClickOutside(originalPortfolioName);
-        researchLinePage.selectPortfolio(originalPortfolioName);
+        researchLinePage.selectPortfolioFromPortfolioSettings(originalPortfolioName);
         researchLinePage.validatePortfolioNameChangedAfterUpdateAndClickInsideDrawer(originalPortfolioName);
         researchLinePage.validatePortfolioNameSavedAutomaticallyAfterTwoSecond(originalPortfolioName);
         researchLinePage.validatePortfolioNameRevertbyCtrlZ(originalPortfolioName);
@@ -53,9 +53,10 @@ public class PortfolioSettings extends UITestBase {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         researchLinePage.clickMenu();
         researchLinePage.portfolioSettings.click();
-        researchLinePage.selectPortfolio("Sample Portfolio");
+        BrowserUtils.wait(4);
+        researchLinePage.selectPortfolioFromPortfolioSettings("Sample Portfolio");
         assertTestCase.assertTrue(!researchLinePage.ValidatePortfolioNameFeildIsEditable(),
-                "Validate that Sample portfolio should not be editble");
+                "Validate that Sample portfolio should not be editable");
     }
 
     @Test(groups = {"regression", "ui", "smoke", "robot_dependency"})
@@ -64,7 +65,7 @@ public class PortfolioSettings extends UITestBase {
     validatePortfolioDeletionViaPortfolioSettings() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         researchLinePage.clickPortfolioSelectionButton();
-        researchLinePage.selectPortfolio("Sample Portfolio");
+        researchLinePage.selectPortfolioFromPortfolioSettings("Sample Portfolio");
         BrowserUtils.wait(10);
         researchLinePage.clickMenu();
         BrowserUtils.wait(2);
@@ -120,7 +121,7 @@ public class PortfolioSettings extends UITestBase {
     public void validatePortfolioManagementDrawer() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         researchLinePage.clickPortfolioSelectionButton();
-        researchLinePage.selectPortfolio("Sample Portfolio");
+        researchLinePage.selectPortfolioFromPortfolioSettings("Sample Portfolio");
         String portfolioNameDashboard = researchLinePage.getPortfolioNameFromDashboard.getText();
         BrowserUtils.wait(10);
         researchLinePage.clickMenu();
@@ -139,9 +140,12 @@ public class PortfolioSettings extends UITestBase {
     @Test(groups = {"regression", "ui", "smoke"})
     @Xray(test = {9537, 9563})
     public void validatePortfolioUnderPortfolioSettings() {
+        DashboardPage dashboardPage = new DashboardPage();
         ResearchLinePage researchLinePage = new ResearchLinePage();
-        researchLinePage.clickPortfolioSelectionButton();
-        researchLinePage.selectPortfolio("Sample Portfolio");
+        if (!dashboardPage.verifyPortfolioName.getText().equalsIgnoreCase("Sample Portfolio")) {
+            researchLinePage.clickPortfolioSelectionButton();
+            researchLinePage.selectPortfolioFromPortfolioSettings("Sample Portfolio");
+        }
         BrowserUtils.wait(10);
         researchLinePage.clickMenu();
         BrowserUtils.wait(2);
@@ -160,9 +164,9 @@ public class PortfolioSettings extends UITestBase {
         assertTestCase.assertEquals(researchLinePage.portfolioTextBoxGetValue.getAttribute("value"), "Sample Portfolio");
         //-Under name edit text box, there should be a dropdown.
         assertTestCase.assertTrue(researchLinePage.portfolioDropDownMenu.isDisplayed());
+        BrowserUtils.wait(8);
         //-On the bottom, there should be a button says "Delete Portfolio"
         assertTestCase.assertTrue(researchLinePage.deleteButton.isDisplayed());
-        BrowserUtils.wait(2);
         //Should be a box shadow saying "We've matched <X>/<Y> INVESTMENTS<Z> ENTITIES" and"Accounting for<N>%of your uploaded portfolio "
         System.out.println("researchLinePage.portfolioDescription.getText() = " + researchLinePage.portfolioDescription.getText());
         assertTestCase.assertTrue(researchLinePage.portfolioDescription.getText().contains("We've matched"));
@@ -178,20 +182,23 @@ public class PortfolioSettings extends UITestBase {
             System.out.println("researchLinePage.portfolioEntityList.get(i) = " + researchLinePage.portfolioEntityList.get(i).getText());
             System.out.println("researchLinePage.portfolioEntityList.size() = " + researchLinePage.portfolioEntityList.size());
             researchLinePage.portfolioEntityList.get(i).click();
-            BrowserUtils.wait(5);
+            BrowserUtils.wait(8);
             System.out.println("portfolioEntityName.getText() = " + researchLinePage.portfolioEntityName.getText());
             assertTestCase.assertTrue(researchLinePage.portfolioEntityName.getText().contains(entityName));
             researchLinePage.pressESCKey();
-            BrowserUtils.wait(1);
+            BrowserUtils.wait(2);
         }
     }
 
     @Test(groups = {"regression", "ui", "smoke"})
     @Xray(test = {9566, 9573, 9572})
     public void validateSelectedPortfolioDrawer() {
+        DashboardPage dashboardPage = new DashboardPage();
         ResearchLinePage researchLinePage = new ResearchLinePage();
-        researchLinePage.clickPortfolioSelectionButton();
-        researchLinePage.selectPortfolio("Sample Portfolio");
+        if (!dashboardPage.verifyPortfolioName.getText().equalsIgnoreCase("Sample Portfolio")) {
+            researchLinePage.clickPortfolioSelectionButton();
+            researchLinePage.selectPortfolioFromPortfolioSettings("Sample Portfolio");
+        }
         BrowserUtils.wait(10);
         researchLinePage.clickMenu();
         BrowserUtils.wait(2);
@@ -230,11 +237,11 @@ public class PortfolioSettings extends UITestBase {
         //Simple will verify the first 20 investment that matches with UI.
         researchLinePage.portfolioDropDownMenu.click();
         researchLinePage.portfolioSettingsLargest20Investment.click();
-        for (int i = 0; i < 20; i++) {
+       /* for (int i = 0; i < 20; i++) {
             String companyUIName = researchLinePage.portfolioSettingsCompanies.get(i).getText();
-            String companyAPINAme=portfolioDetails.getInvestments().get(i).getCompany_name();
-           // assertTestCase.assertEquals(companyUIName,companyAPINAme );
-        }
+            String companyAPINAme = portfolioDetails.getInvestments().get(i).getCompany_name();
+            // assertTestCase.assertEquals(companyUIName,companyAPINAme );
+        }*/
         // From UI: Get the company list and their percentage.
         BrowserUtils.scrollTo(researchLinePage.portfolioSettingsMoreCompanies);
         researchLinePage.portfolioSettingsMoreCompanies.click();
@@ -297,17 +304,17 @@ public class PortfolioSettings extends UITestBase {
         //Upload a portfolio
         BrowserUtils.wait(10);
         String getAccessTokenScript = "return JSON.parse(localStorage.getItem('okta-token-storage')).accessToken.accessToken";
-       String accessToken = ((JavascriptExecutor) Driver.getDriver()).executeScript(getAccessTokenScript).toString();
+        String accessToken = ((JavascriptExecutor) Driver.getDriver()).executeScript(getAccessTokenScript).toString();
         System.setProperty("token", accessToken);
         System.out.println("token = " + accessToken);
         APIController apiController = new APIController();
 
-       apiController.postValidPortfolio("SamplePortfolioToDelete.csv");
+        apiController.postValidPortfolio("SamplePortfolioToDelete.csv");
 
         ResearchLinePage researchLinePage = new ResearchLinePage();
         researchLinePage.clickMenu();
         researchLinePage.portfolioSettings.click();
-        researchLinePage.selectPortfolio("SamplePortfolioToDelete");
+        researchLinePage.selectPortfolioFromPortfolioSettings("SamplePortfolioToDelete");
 
         //Verify re-upload portfolio hyperlink functionality working
         researchLinePage.portfolioReUpload.click();

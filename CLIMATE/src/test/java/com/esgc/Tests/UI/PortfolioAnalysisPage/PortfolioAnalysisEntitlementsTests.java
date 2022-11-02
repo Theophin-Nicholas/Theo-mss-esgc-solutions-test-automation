@@ -24,7 +24,7 @@ public class PortfolioAnalysisEntitlementsTests extends UITestBase {
 
         login.entitlementsLogin(EntitlementsBundles.PHYSICAL_RISK);
         researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
-
+        BrowserUtils.wait(2);
         List<String> actualAvailableResearchLines = researchLinePage.getAvailableResearchLines();
         test.info("Available research lines" + actualAvailableResearchLines);
         System.out.println("actualAvailableResearchLines = " + actualAvailableResearchLines);
@@ -59,8 +59,8 @@ public class PortfolioAnalysisEntitlementsTests extends UITestBase {
         Assert.assertEquals(currentUrl, "portfolioanalysis/temperaturealignment");
     }
 
-    @Test(groups = {"regression", "ui", "smoke", "entitlements"})
-    @Xray(test = {4291, 4298})
+    @Test(enabled = false, groups = {"regression", "ui", "smoke", "entitlements"})
+    @Xray(test = {4291, 4298}) //TODO No climate governance, de-scopped  MAP this ESGCA-11327 with this test case
     public void validateClimateGovernanceBundleAccess() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         LoginPage login = new LoginPage();
@@ -102,7 +102,7 @@ public class PortfolioAnalysisEntitlementsTests extends UITestBase {
         Assert.assertEquals(currentUrl, "portfolioanalysis/physicalriskhazards");
     }
 
-    @Test (groups = {"regression", "ui", "smoke", "entitlements"})
+    @Test(groups = {"regression", "ui", "smoke", "entitlements"})
     @Xray(test = {4295, 4322})
     public void validateTransitionRiskAndClimateGovernanceBundleAccess() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
@@ -123,7 +123,7 @@ public class PortfolioAnalysisEntitlementsTests extends UITestBase {
         Assert.assertEquals(currentUrl, "portfolioanalysis/physicalriskhazards");
     }
 
-    @Test( groups = {"regression", "ui", "smoke", "entitlements"})
+    @Test(groups = {"regression", "ui", "smoke", "entitlements"})
     @Xray(test = {4294, 4321})
     public void validatePhysicalRiskClimateGovernanceBundleAccess() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
@@ -162,11 +162,11 @@ public class PortfolioAnalysisEntitlementsTests extends UITestBase {
     }
 
 
-    @Test(groups = {"regression", "ui", "smoke", "entitlements","esg"}, description = "Verify research line navigation")
+    @Test(enabled = false, groups = {"regression", "ui", "smoke", "entitlements", "esg"}, description = "Verify research line navigation")
     @Xray(test = {8214, 8215})
-    public void verifyESGAssessmentRL() {
+    public void verifyESGAssessmentRL() {//TODO De-scopped
         LoginPage loginPage = new LoginPage();
-        loginPage.loginWithParams("esg-test1+no-controversy@outlook.com","Moodys123");
+        loginPage.loginWithParams("esg-test1+no-controversy@outlook.com", "Moodys123");
         ResearchLinePage researchLinePage = new ResearchLinePage();
         researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
         BrowserUtils.wait(5);
@@ -174,17 +174,17 @@ public class PortfolioAnalysisEntitlementsTests extends UITestBase {
         List<String> actualResearchLines = researchLinePage.getAvailableResearchLines();
         assertTestCase.assertEquals(actualResearchLines.size(), 7, "Existing Research Lines Validation ");
         assertTestCase.assertEquals(actualResearchLines.get(6), "ESG Assessments", "ESG Assessments Research Line is available");
-        researchLinePage.validateExportButtonIsNotAvailable() ;
+        researchLinePage.validateExportButtonIsNotAvailable();
     }
 
     @Xray(test = {8219})
-    @Test(groups = {"regression", "ui", "smoke", "esg","entitlements"},
+    @Test(groups = {"regression", "ui", "smoke", "esg", "entitlements"},
             description = "Verify research line navigation")
     public void verifyESGAssessmentRLIsNotVailable() {
         Driver.getDriver().manage().deleteAllCookies();
         Driver.getDriver().navigate().refresh();
         LoginPage loginPage = new LoginPage();
-        loginPage.loginWithParams("esg-test4@outlook.com ","Helloworld24");
+        loginPage.loginWithParams("esg-test4@outlook.com ", "Helloworld24");
         ResearchLinePage researchLinePage = new ResearchLinePage();
         researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
         BrowserUtils.wait(5);
@@ -192,7 +192,7 @@ public class PortfolioAnalysisEntitlementsTests extends UITestBase {
         List<String> actualResearchLines = researchLinePage.getAvailableResearchLines();
         System.out.println("actualResearchLines = " + actualResearchLines);
         assertTestCase.assertEquals(actualResearchLines.size(), 6, "Existing Research Lines Validation ");
-       // assertTestCase.assertTrue(actualResearchLines.stream().filter(e -> e.equals("ESG Assessments")).count()==0);
+        // assertTestCase.assertTrue(actualResearchLines.stream().filter(e -> e.equals("ESG Assessments")).count()==0);
 
     }
 

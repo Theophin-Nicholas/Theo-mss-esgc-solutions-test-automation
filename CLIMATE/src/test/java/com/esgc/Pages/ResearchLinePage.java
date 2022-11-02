@@ -33,6 +33,9 @@ public class ResearchLinePage extends UploadPage {
     @FindBy(xpath = "(//div[contains(@id,'test-id-from-overview-')])[2]//div[text()='Score']/following-sibling::h6")
     public WebElement portfolioScoreValue;
 
+    @FindBy(xpath = "//a[contains(text(),'Coverage')]")
+    public WebElement portfolioCoverage;
+
     @FindBy(xpath = "(//div[contains(@id,'phy-risk-mgm-test-id-from-overview-')])/div/div/div/h6")
     public WebElement portfolioScoreGreenShareValue;
 
@@ -342,7 +345,7 @@ public class ResearchLinePage extends UploadPage {
     public WebElement historyTable;
 
     @FindBy(xpath = "//div[@id='history_box_benchmark']")
-    public WebElement historyTableBenchMark;
+    public List<WebElement> historyTableBenchMark;
 
     @FindBy(xpath = "(//*[name()='rect'][@class='highcharts-point highcharts-color-0'])[1]")
     public WebElement historyChartUnmatched;
@@ -480,6 +483,48 @@ public class ResearchLinePage extends UploadPage {
     @FindBy(xpath = "//div[contains(@class,'MuiDrawer-paperAnchorRight')]/header/div/div/div[1]")
     public WebElement esgAssessmentsCountryDrwaerPopup;
 
+    @FindBy(xpath = "//td[@heap_id='coverage']//*[local-name()='svg']/*[local-name()='rect'][1]")
+    public List<WebElement> scoreQualityIconsInCoveragePopup;
+
+    @FindBy(xpath = "//td[@heap_id='leadlag']//*[local-name()='svg']/*[local-name()='rect'][1]")
+    public List<WebElement> scoreQualityIconsInLeadersAndLaggardsTable;
+
+    @FindBy(xpath = "//div[text()='Leaders']/../../../../..//td[@heap_id='leadlag']//*[local-name()='svg']/*[local-name()='rect'][1]")
+    public List<WebElement> scoreQualityIconsInLeadersPopup;
+
+    @FindBy(xpath = "//div[text()='Laggards']/../../../../..//td[@heap_id='leadlag']//*[local-name()='svg']/*[local-name()='rect'][1]")
+    public List<WebElement> scoreQualityIconsInLaggardsPopup;
+
+    @FindBy(xpath = "//div[@heap_leadlag_id='leaders']//tbody/tr")
+    public List<WebElement> leadersTableRows;
+
+    @FindBy(xpath = "//div[@heap_leadlag_id='leaders']//tbody/tr/td[2]/div/span/span")
+    public List<WebElement> leadersTableCompanyNames;
+
+    @FindBy(xpath = "//div[@heap_leadlag_id='laggards']//tbody/tr")
+    public List<WebElement> laggardsTableRows;
+
+    @FindBy(xpath = "//div[@heap_leadlag_id='laggards']//tbody/tr/td[2]/div/span/span")
+    public List<WebElement> laggardsTableCompanyNames;
+
+    @FindBy(xpath = "//div[text()='Leaders']/../../../../..//td[@heap_id='leadlag']/parent::tr")
+    public List<WebElement> leadersPopupRows;
+
+    @FindBy(xpath = "//div[text()='Leaders']/../../../../..//td[@heap_id='leadlag']/div/span/span")
+    public List<WebElement> leadersPopupCompanyNames;
+
+    @FindBy(xpath = "//div[text()='Laggards']/../../../../..//td[@heap_id='leadlag']/parent::tr")
+    public List<WebElement> laggardsPopupRows;
+
+    @FindBy(xpath = "//div[text()='Laggards']/../../../../..//td[@heap_id='leadlag']/div/span/span")
+    public List<WebElement> laggardsPopupCompanyNames;
+
+    @FindBy(xpath = "//td[@heap_id='coverage']/parent::tr")
+    public List<WebElement> coveragePopupRows;
+
+    @FindBy(xpath = "//td[@heap_id='coverage']/div/span/span")
+    public List<WebElement> coveragePopupCompanyNames;
+
 
     @FindBy(xpath = "//table[@id='table-id-2']")
     public WebElement physicalRiskHazardInvestmentTable;
@@ -549,6 +594,7 @@ public class ResearchLinePage extends UploadPage {
             System.out.println("Check if " + subtitle + " Subtitle Is Displayed");
             String xpath = "//div[text()='" + subtitle + "']";
             WebElement subtitleElement = Driver.getDriver().findElement(By.xpath(xpath));
+            BrowserUtils.scrollTo(subtitleElement);
             wait.until(ExpectedConditions.visibilityOf(subtitleElement));
             System.out.println("TEST PASSED");
             return subtitleElement.isDisplayed();
@@ -574,7 +620,7 @@ public class ResearchLinePage extends UploadPage {
         try {
             BrowserUtils.wait(5);
             //wait.until(ExpectedConditions.visibilityOf(historyTableBenchMark));
-            return historyTableBenchMark.isDisplayed();
+            return historyTableBenchMark.size()>0;
         } catch (Exception e) {
             return false;
         }
@@ -919,8 +965,9 @@ public class ResearchLinePage extends UploadPage {
             System.out.println("Score/ScoreCategory:" + scoreCategory);
             String expectedColor;
             String actualColor = Color.fromString(portfolioScoreCategory.getCssValue("background-color")).asHex();
-
+            System.out.println("researchLine = " + researchLine);
             if (researchLine.equals("Physical Risk Hazards")) {
+                System.out.println("Physical Risk Hazards");
                 actualColor = Color.fromString(
                         Driver.getDriver().findElement(By.xpath("//div[./*[starts-with(text(),'Highest Risk Hazard')]]"))
                                 .getCssValue("background-color")).asHex();
@@ -928,14 +975,19 @@ public class ResearchLinePage extends UploadPage {
                 System.out.println(actualColor);
                 return Arrays.asList(new String[]{"#4FA3CD", "#8DA3B7", "#A9898E", "#C06960", "#D63229"}).contains(actualColor.toUpperCase());
             } else if (Arrays.asList("Operations Risk", "Market Risk", "Supply Chain Risk").contains(researchLine)) {
+                System.out.println("Expected Color for other Operations Risk, Market Risk, Supply Chain Risk");
                 //for these pages, we show score itself instead score category
                 expectedColor = getColorByScore(researchLine, Integer.parseInt(scoreCategory));
+            } else if(researchLine.equals("Temperature Alignment")){
+                System.out.println("Temp Alignment Color");
+                expectedColor = getColorByScoreCategory(researchLine, scoreCategory);
             } else {
+                System.out.println("Expected Color for others");
                 expectedColor = getColorByScoreCategory(researchLine, scoreCategory);
             }
 
-            System.out.println("Actual Color:" + actualColor);
-            System.out.println("Expected color:" + expectedColor);
+            System.out.println("Actual Color code:" + actualColor);
+            System.out.println("Expected color code:" + expectedColor);
             System.out.println("\n###################################################################");
             System.out.println("Portfolio Score Validation Completed");
             return actualColor.equalsIgnoreCase(expectedColor);
@@ -1033,7 +1085,7 @@ public class ResearchLinePage extends UploadPage {
             xpath = String.format("//li[contains(text(),'%s (%s)')]", researchLine, dataType);
         else {
             xpath = String.format("//li[contains(text(),'%s - %s')]", dataType, researchLine);
-            if(researchLine.equals("ESG Assessments"))
+            if (researchLine.equals("ESG Assessments"))
                 xpath = String.format("//li[contains(text(),'%s')]", researchLine);
         }
         System.out.println(xpath);
@@ -1042,8 +1094,8 @@ public class ResearchLinePage extends UploadPage {
     }
 
     public void verifyExportOptions(String researchLine) {
-        String pdfOptionXpath = "//li[starts-with(@id,'ExportDropdown')][@data-value='pdf'][text()='"+researchLine+" (pdf)']";
-        String excelOptionXpath = "//li[starts-with(@id,'ExportDropdown')][@data-value='individual'][text()='Data - "+researchLine+" (.xlsx)']";
+        String pdfOptionXpath = "//li[starts-with(@id,'ExportDropdown')][@data-value='pdf'][text()='" + researchLine + " (pdf)']";
+        String excelOptionXpath = "//li[starts-with(@id,'ExportDropdown')][@data-value='individual'][text()='Data - " + researchLine + " (.xlsx)']";
         wait.until(ExpectedConditions.numberOfElementsToBe(By.xpath(pdfOptionXpath), 1));
         wait.until(ExpectedConditions.numberOfElementsToBe(By.xpath(excelOptionXpath), 1));
     }
@@ -1185,17 +1237,17 @@ public class ResearchLinePage extends UploadPage {
         }
     }
 
-    public boolean verifyUpdatesSortingOrder(String page){
+    public boolean verifyUpdatesSortingOrder(String page) {
         try {
             List<WebElement> rows = Driver.getDriver().findElements(By.xpath("//td[@heap_id='updates']"));
             if (rows.size() > 0) {
                 SimpleDateFormat sdformat = new SimpleDateFormat("yyyy-MM-dd");
                 for (int i = 1; i < rows.size() - 1; i++) {
                     String updateDateXpath = "(//td[@heap_id='updates']/following-sibling::td[1]//span[@title])";
-                    if(page.equals("Brown Share Assessment"))
+                    if (page.equals("Brown Share Assessment"))
                         updateDateXpath = "(//td[@heap_id='updates']/following-sibling::td[1])";
-                    Date updatedDate1 = sdformat.parse(Driver.getDriver().findElement(By.xpath(updateDateXpath+"[" + i + "]")).getText());
-                    Date updatedDate2 = sdformat.parse(Driver.getDriver().findElement(By.xpath(updateDateXpath+"[" + (i + 1) + "]")).getText());
+                    Date updatedDate1 = sdformat.parse(Driver.getDriver().findElement(By.xpath(updateDateXpath + "[" + i + "]")).getText());
+                    Date updatedDate2 = sdformat.parse(Driver.getDriver().findElement(By.xpath(updateDateXpath + "[" + (i + 1) + "]")).getText());
 
                     if (updatedDate1.compareTo(updatedDate2) < 0)
                         return false;
@@ -1215,7 +1267,7 @@ public class ResearchLinePage extends UploadPage {
             } else {
                 System.out.println("No data was displayed for Updates Section");
             }
-        }catch(Exception e){
+        } catch (Exception e) {
             return false;
         }
 
@@ -1744,8 +1796,8 @@ public class ResearchLinePage extends UploadPage {
             case PHYSICAL_RISK_TRANSITION_RISK:
                 return Arrays.asList("Physical Risk Hazards", "Physical Risk Management", "Temperature Alignment", "Carbon Footprint", "Green Share Assessment", "Brown Share Assessment");
 
-            case ALL:
-                return Arrays.asList("Physical Risk Hazards", "Physical Risk Management", "Temperature Alignment", "Carbon Footprint", "Green Share Assessment", "Brown Share Assessment", "ESG Assessments");
+            case ALL://TODO ESG Assessments de-scoped
+                return Arrays.asList("Physical Risk Hazards", "Physical Risk Management", "Temperature Alignment", "Carbon Footprint", "Green Share Assessment", "Brown Share Assessment"); /*, "ESG Assessments"*/
             default:
                 Assert.fail("Bundle not found");
                 return null;
@@ -1948,6 +2000,7 @@ public class ResearchLinePage extends UploadPage {
                         url = url.replaceAll("%20", "");
                         System.out.println("Methodology URL is:" + url);
                         Driver.getDriver().close();
+                        BrowserUtils.wait(2);
                         Driver.getDriver().switchTo().window(currentWindowHandle);
                         switch (researchLine) {
                             case "Physical Risk Hazards":
@@ -2209,16 +2262,16 @@ public class ResearchLinePage extends UploadPage {
         List<WebElement> rows = Driver.getDriver().findElements(By.xpath("//div[@heap_leadlag_id='leaders']//tbody/tr"));
         if (rows.size() > 0) {
             for (int i = 1; i < rows.size() - 1; i++) {
-                int row1Rank = Integer.parseInt(Driver.getDriver().findElement(By.xpath("//div[@heap_leadlag_id='leaders']//tbody/tr["+i+"]/td[1]")).getText());
-                int row2Rank = Integer.parseInt(Driver.getDriver().findElement(By.xpath("//div[@heap_leadlag_id='leaders']//tbody/tr["+(i+1)+"]/td[1]")).getText());
-                if(row1Rank>row2Rank)
+                int row1Rank = Integer.parseInt(Driver.getDriver().findElement(By.xpath("//div[@heap_leadlag_id='leaders']//tbody/tr[" + i + "]/td[1]")).getText());
+                int row2Rank = Integer.parseInt(Driver.getDriver().findElement(By.xpath("//div[@heap_leadlag_id='leaders']//tbody/tr[" + (i + 1) + "]/td[1]")).getText());
+                if (row1Rank > row2Rank)
                     return false;
-                else if (row1Rank==row2Rank){
-                    float row1Inv = Float.parseFloat(Driver.getDriver().findElement(By.xpath("//div[@heap_leadlag_id='leaders']//tbody/tr["+i+"]/td[3]")).getText().replace("%",""));
-                    float row2Inv = Float.parseFloat(Driver.getDriver().findElement(By.xpath("//div[@heap_leadlag_id='leaders']//tbody/tr["+(i+1)+"]/td[3]")).getText().replace("%",""));
-                    if(row1Inv<row2Inv)
+                else if (row1Rank == row2Rank) {
+                    float row1Inv = Float.parseFloat(Driver.getDriver().findElement(By.xpath("//div[@heap_leadlag_id='leaders']//tbody/tr[" + i + "]/td[3]")).getText().replace("%", ""));
+                    float row2Inv = Float.parseFloat(Driver.getDriver().findElement(By.xpath("//div[@heap_leadlag_id='leaders']//tbody/tr[" + (i + 1) + "]/td[3]")).getText().replace("%", ""));
+                    if (row1Inv < row2Inv)
                         return false;
-                    else if(row1Inv==row2Inv) {
+                    else if (row1Inv == row2Inv) {
                         String row1Company = Driver.getDriver().findElement(By.xpath("//div[@heap_leadlag_id='leaders']//tbody/tr[" + i + "]/td[2]//span/span")).getText();
                         String row2Company = Driver.getDriver().findElement(By.xpath("//div[@heap_leadlag_id='leaders']//tbody/tr[" + (i + 1) + "]/td[2]//span/span")).getText();
                         if (row1Company.compareToIgnoreCase(row2Company) > 0)
@@ -2238,14 +2291,14 @@ public class ResearchLinePage extends UploadPage {
         List<WebElement> rows = Driver.getDriver().findElements(By.xpath("//div[@heap_leadlag_id='laggards']//tbody/tr"));
         if (rows.size() > 0) {
             for (int i = 1; i < rows.size() - 1; i++) {
-                int row1Rank = Integer.parseInt(Driver.getDriver().findElement(By.xpath("//div[@heap_leadlag_id='laggards']//tbody/tr["+i+"]/td[1]")).getText());
-                int row2Rank = Integer.parseInt(Driver.getDriver().findElement(By.xpath("//div[@heap_leadlag_id='laggards']//tbody/tr["+(i+1)+"]/td[1]")).getText());
-                if(row1Rank<row2Rank)
+                int row1Rank = Integer.parseInt(Driver.getDriver().findElement(By.xpath("//div[@heap_leadlag_id='laggards']//tbody/tr[" + i + "]/td[1]")).getText());
+                int row2Rank = Integer.parseInt(Driver.getDriver().findElement(By.xpath("//div[@heap_leadlag_id='laggards']//tbody/tr[" + (i + 1) + "]/td[1]")).getText());
+                if (row1Rank < row2Rank)
                     return false;
-                else if (row1Rank==row2Rank){
-                    String row1Company = Driver.getDriver().findElement(By.xpath("//div[@heap_leadlag_id='laggards']//tbody/tr["+i+"]/td[2]//span/span")).getText();
-                    String row2Company = Driver.getDriver().findElement(By.xpath("//div[@heap_leadlag_id='laggards']//tbody/tr["+(i+1)+"]/td[2]//span/span")).getText();
-                    if(row1Company.compareToIgnoreCase(row2Company)<0)
+                else if (row1Rank == row2Rank) {
+                    String row1Company = Driver.getDriver().findElement(By.xpath("//div[@heap_leadlag_id='laggards']//tbody/tr[" + i + "]/td[2]//span/span")).getText();
+                    String row2Company = Driver.getDriver().findElement(By.xpath("//div[@heap_leadlag_id='laggards']//tbody/tr[" + (i + 1) + "]/td[2]//span/span")).getText();
+                    if (row1Company.compareToIgnoreCase(row2Company) < 0)
                         return false;
                 }
             }
@@ -2316,12 +2369,12 @@ public class ResearchLinePage extends UploadPage {
      */
 
     public List<String> impactFilterOptions() {
-            wait.until(ExpectedConditions.elementToBeClickable(impactFilter)).isDisplayed();
-            impactFilter.click();
-            BrowserUtils.wait(2);
-            String text = Driver.getDriver().findElement(By.xpath("//ul[@role='listbox']")).getText();
-            List<String> options = Arrays.asList(text.split("\\n"));
-            return options;
+        wait.until(ExpectedConditions.elementToBeClickable(impactFilter)).isDisplayed();
+        impactFilter.click();
+        BrowserUtils.wait(2);
+        String text = Driver.getDriver().findElement(By.xpath("//ul[@role='listbox']")).getText();
+        List<String> options = Arrays.asList(text.split("\\n"));
+        return options;
     }
 
     public void selectImpactFilterOption(String option) {
@@ -2362,10 +2415,10 @@ public class ResearchLinePage extends UploadPage {
     public boolean verifyPercentageSymbolWithInvestmentColumn() {
         BrowserUtils.wait(10);
         List<WebElement> tableColumns = Driver.getDriver().findElements(By.xpath("//table/thead/tr/th"));
-        for(WebElement column:tableColumns){
-            if(column.getText().endsWith("Investment")){
+        for (WebElement column : tableColumns) {
+            if (column.getText().endsWith("Investment")) {
                 System.out.println("Testing column");
-                if(!column.getText().equals("% Investment"))
+                if (!column.getText().equals("% Investment"))
                     return false;
             }
         }
@@ -2378,7 +2431,7 @@ public class ResearchLinePage extends UploadPage {
         List<WebElement> actualScores = new ArrayList<>(impactTable.findElements(By.xpath(".//tbody/tr[*]/td[3]")));
         //remove empty Strings
         actualScores.removeIf(e -> e.getText().isEmpty());
-        List<WebElement> actualScoresBrownShare = new ArrayList<>(impactTable.findElements(By.xpath(".//tbody/tr[*]/td[3]/*")));
+        List<WebElement> actualScoresBrownShare = new ArrayList<>(impactTable.findElements(By.xpath(".//tbody/tr[*]/td[4]/*")));
         actualScoresBrownShare.removeIf(e -> e.getText().isEmpty());
         if (actualScoresBrownShare.isEmpty()) return true;
         String expectedColor;
@@ -2391,6 +2444,8 @@ public class ResearchLinePage extends UploadPage {
             case "Temperature Alignment":
             case "Carbon Footprint":
                 for (int i = 0; i < actualScoresBrownShare.size(); i++) {
+                    System.out.println("actualScoresBrownShare.get(i).getText() = " + actualScoresBrownShare.get(i).getText());
+
                     expectedColor = getColorByScoreCategory(researchLine, actualScoresBrownShare.get(i).getText());
                     actualColor = Color.fromString(actualScoresBrownShare.get(i).getCssValue("background-color")).asHex();
                     System.out.println("expectedColor = " + expectedColor);
@@ -2415,6 +2470,7 @@ public class ResearchLinePage extends UploadPage {
     }
 
     public boolean impactWidgetTitles() {
+        BrowserUtils.scrollTo(positiveImpactTable);
         return wait.until(ExpectedConditions.visibilityOf(positiveImpactTable)).isDisplayed() &&
                 wait.until(ExpectedConditions.visibilityOf(negativeImpactTable)).isDisplayed() &&
                 wait.until(ExpectedConditions.visibilityOf(positiveImpactGraph)).isDisplayed() &&
@@ -2685,42 +2741,82 @@ public class ResearchLinePage extends UploadPage {
         return esgCardInfoBox.isDisplayed();
     }
 
-    public void validateEsgAssessmentLegends(){
+    public void validateEsgAssessmentLegends() {
 
         String labelXpath = "//div[contains(text(),'ESG Assessment Score:')]//span";
 
-        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("("+labelXpath+")[1]")).getText(),"Advanced");
-        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("("+labelXpath+"/div)[1]")).getAttribute("style"),"background: rgb(219, 229, 163);");
+        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("(" + labelXpath + ")[1]")).getText(), "Advanced");
+        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("(" + labelXpath + "/div)[1]")).getAttribute("style"), "background: rgb(219, 229, 163);");
 
-        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("("+labelXpath+")[2]")).getText(),"Robust");
-        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("("+labelXpath+"/div)[2]")).getAttribute("style"),"background: rgb(234, 197, 80);");
+        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("(" + labelXpath + ")[2]")).getText(), "Robust");
+        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("(" + labelXpath + "/div)[2]")).getAttribute("style"), "background: rgb(234, 197, 80);");
 
-        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("("+labelXpath+")[3]")).getText(),"Limited");
-        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("("+labelXpath+"/div)[3]")).getAttribute("style"),"background: rgb(232, 149, 28);");
+        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("(" + labelXpath + ")[3]")).getText(), "Limited");
+        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("(" + labelXpath + "/div)[3]")).getAttribute("style"), "background: rgb(232, 149, 28);");
 
-        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("("+labelXpath+")[4]")).getText(),"Weak");
-        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("("+labelXpath+"/div)[4]")).getAttribute("style"),"background: rgb(221, 88, 29);");
+        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("(" + labelXpath + ")[4]")).getText(), "Weak");
+        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("(" + labelXpath + "/div)[4]")).getAttribute("style"), "background: rgb(221, 88, 29);");
 
-        assertTestCase.assertTrue(Driver.getDriver().findElement(By.xpath("("+labelXpath+")[1]")).getCssValue("font-size").equals("10px"));
+        assertTestCase.assertTrue(Driver.getDriver().findElement(By.xpath("(" + labelXpath + ")[1]")).getCssValue("font-size").equals("10px"));
 
 
+    }
+
+    public boolean verifyScoreQualityIconWithEntitiesInCoveragePopup_PA(){
+        return scoreQualityIconsInCoveragePopup.size()>0;
+    }
+
+    public boolean verifyScoreQualityIconWithEntitiesInLeadersAndLaggardsTables_PA(){
+        return scoreQualityIconsInLeadersAndLaggardsTable.size()==20;
+    }
+
+    public boolean verifyScoreQualityIconWithEntitiesInLeadersPopup_PA(){
+        return scoreQualityIconsInLeadersPopup.size()>0;
+    }
+
+    public boolean verifyScoreQualityIconWithEntitiesInLaggardsPopup_PA(){
+        return scoreQualityIconsInLaggardsPopup.size()>0;
+    }
+
+    public boolean verifyEntitiesWithPredictedScoresInYellow_PA(List<WebElement> rows){
+        int i=1;
+        for(WebElement row:rows){
+            System.out.println("Record: "+(i++));
+            BrowserUtils.scrollTo(row);
+            if(row.getCssValue("background-color").equals("rgba(253, 247, 218, 1)")){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean verifyEntitiesWithPredictedScoresAreNotClickable_PA(List<WebElement> rows){
+        int i=1;
+        for(WebElement row:rows){
+            System.out.println("Record: "+(i++));
+            BrowserUtils.scrollTo(row);
+            if(!row.getCssValue("text-decoration").contains("underline")){
+                return true;
+            }
+        }
+        return false;
     }
 
     public void validatePhysicalRiskMgmtLegend(){
 
         String labelXpath = "//div[contains(text(),'Physical Risk Management Score:')]//span";
 
-        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("("+labelXpath+")[1]")).getText(),"Advanced");
-        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("("+labelXpath+"/div)[1]")).getAttribute("style"),"background: rgb(34, 149, 149);");
+        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("(" + labelXpath + ")[1]")).getText(), "Advanced");
+        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("(" + labelXpath + "/div)[1]")).getAttribute("style"), "background: rgb(34, 149, 149);");
 
-        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("("+labelXpath+")[2]")).getText(),"Robust");
-        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("("+labelXpath+"/div)[2]")).getAttribute("style"),"background: rgb(90, 151, 114);");
+        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("(" + labelXpath + ")[2]")).getText(), "Robust");
+        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("(" + labelXpath + "/div)[2]")).getAttribute("style"), "background: rgb(90, 151, 114);");
 
-        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("("+labelXpath+")[3]")).getText(),"Limited");
-        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("("+labelXpath+"/div)[3]")).getAttribute("style"),"background: rgb(175, 157, 63);");
+        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("(" + labelXpath + ")[3]")).getText(), "Limited");
+        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("(" + labelXpath + "/div)[3]")).getAttribute("style"), "background: rgb(175, 157, 63);");
 
-        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("("+labelXpath+")[4]")).getText(),"Weak");
-        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("("+labelXpath+"/div)[4]")).getAttribute("style"),"background: rgb(223, 161, 36);");
+        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("(" + labelXpath + ")[4]")).getText(), "Weak");
+        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("(" + labelXpath + "/div)[4]")).getAttribute("style"), "background: rgb(223, 161, 36);");
 
     }
 
@@ -2755,7 +2851,7 @@ public class ResearchLinePage extends UploadPage {
     public Boolean verifyEsgMethodologyValues() {
         String methodologiesXpath = "//div[contains(@class,'MuiDrawer-paper')]//table[contains(@id,'table-id')]//tr/td[4]/span";
         List<WebElement> methodologyValues = Driver.getDriver().findElements(By.xpath(methodologiesXpath));
-        assertTestCase.assertTrue(methodologyValues.size()!=0);
+        assertTestCase.assertTrue(methodologyValues.size() != 0);
         String methodologyValue = "";
         for (WebElement methodology : methodologyValues) {
             BrowserUtils.scrollTo(methodology);
@@ -2770,7 +2866,7 @@ public class ResearchLinePage extends UploadPage {
     public Boolean verifyEsgScoreValues() {
         String scoreValuesXpath = "//div[contains(@class,'MuiDrawer-paper')]//table[contains(@id,'table-id')]//tr/td[3]";
         List<WebElement> scoreValues = Driver.getDriver().findElements(By.xpath(scoreValuesXpath));
-        assertTestCase.assertTrue(scoreValues.size()!=0);
+        assertTestCase.assertTrue(scoreValues.size() != 0);
         String scoreValue = "";
         for (WebElement score : scoreValues) {
             BrowserUtils.scrollTo(score);
@@ -2795,7 +2891,7 @@ public class ResearchLinePage extends UploadPage {
             BrowserUtils.scrollTo(methodologyValues.get(i));
             String currentRecordScore = Driver.getDriver().findElement(By.xpath("(" + esgScoresXpath + ")[" + i + "]")).getText().replace(".esg", "");
             String nextRecordScore = Driver.getDriver().findElement(By.xpath("(" + esgScoresXpath + ")[" + (i + 1) + "]")).getText().replace(".esg", "");
-            if (currentRecordScore.compareTo(nextRecordScore) > 0) {
+            if (getEsgRank(currentRecordScore)>getEsgRank(nextRecordScore)) {
                 return false;
             } else if (currentRecordScore.compareTo(nextRecordScore) == 0) {
                 String currentRecordInvestment = Driver.getDriver().findElement(By.xpath("(" + investmentsXpath + ")[" + i + "]")).getText();
@@ -2814,6 +2910,19 @@ public class ResearchLinePage extends UploadPage {
             }
         }
         return true;
+    }
+
+    public int getEsgRank(String esgScore){
+        if(esgScore.equals("Advanced")){
+            return 1;
+        } else if(esgScore.equals("Robust")){
+            return 2;
+        } else if(esgScore.equals("Limited")){
+            return 3;
+        } else if(esgScore.equals("Weak")){
+            return 4;
+        }
+        return 10;
     }
 
     public void ValidateSummaryBoxText() {
@@ -2845,6 +2954,7 @@ public class ResearchLinePage extends UploadPage {
     }
 
     public void selectEsgPortfolioCoverage() {
+        BrowserUtils.wait(5);
         wait.until(ExpectedConditions.elementToBeClickable(esgPortfolioCoverageLink)).click();
     }
 
@@ -3088,7 +3198,7 @@ public class ResearchLinePage extends UploadPage {
     public boolean IsBenchmarkLableAvailable() {
         try {
             WebElement e = EsgBenchmarkBox.findElement(By.xpath("span"));
-           return wait.until(ExpectedConditions.visibilityOf(e)).getText().equals("Benchmark");
+            return wait.until(ExpectedConditions.visibilityOf(e)).getText().equals("Benchmark");
 
         } catch (Exception e) {
             System.out.println("Failed");
@@ -3100,7 +3210,7 @@ public class ResearchLinePage extends UploadPage {
     public boolean IsBenchmarkScoreCategoryAvailable() {
         try {
             WebElement e = EsgBenchmarkBox.findElement(By.xpath("div[1]/div[1]/div/span"));
-            List<String> list =  Arrays.asList(new String[]{"Advanced","Robust","Limited","Weak"});
+            List<String> list = Arrays.asList(new String[]{"Advanced", "Robust", "Limited", "Weak"});
             return list.contains(wait.until(ExpectedConditions.visibilityOf(e)).getText());
 
         } catch (Exception e) {
@@ -3114,7 +3224,7 @@ public class ResearchLinePage extends UploadPage {
         try {
             WebElement e = EsgBenchmarkBox.findElement(By.xpath("div[1]/div[2]/a"));
             String pattern = "Coverage: \\d+ companies; (?:\\d+(?:\\.\\d*)?|\\.\\d+)% investments";
-            return e.getText().matches(pattern) ;
+            return e.getText().matches(pattern);
 
         } catch (Exception e) {
             System.out.println("Failed");
@@ -3126,17 +3236,17 @@ public class ResearchLinePage extends UploadPage {
     public void validateBenchMarkDistributionSection() {
         try {
             WebElement DistibutionSection = EsgBenchmarkBox.findElement(By.xpath("div[2]"));
-            assertTestCase.assertTrue(DistibutionSection.isDisplayed(),"Validate that Benchmark Distribution section is available");
+            assertTestCase.assertTrue(DistibutionSection.isDisplayed(), "Validate that Benchmark Distribution section is available");
             assertTestCase.assertTrue(DistibutionSection.findElement(By.xpath("div")).getText().equals("Benchmark Distribution"));
             WebElement DistibutionSection_Table = DistibutionSection.findElement(By.xpath("//table"));
             WebElement DistibutionSection_Table_Header = DistibutionSection_Table.findElement(By.xpath("thead/tr/th[2]"));
             List<WebElement> DistibutionSection_Table_Body = DistibutionSection_Table.findElements(By.xpath("tbody/tr"));
-            assertTestCase.assertTrue(DistibutionSection_Table_Header.getText().equals("% Investment"),"Validate that Benchmark Distribution section's table header is '% Investment'");
-            List<String> list =  Arrays.asList(new String[]{"Advanced","Robust","Limited","Weak"});
-            for(WebElement e : DistibutionSection_Table_Body){
+            assertTestCase.assertTrue(DistibutionSection_Table_Header.getText().equals("% Investment"), "Validate that Benchmark Distribution section's table header is '% Investment'");
+            List<String> list = Arrays.asList(new String[]{"Advanced", "Robust", "Limited", "Weak"});
+            for (WebElement e : DistibutionSection_Table_Body) {
                 String[] rowText = e.getText().split("\n");
-                assertTestCase.assertTrue(list.contains(rowText[0]),"Validate Table category");
-                assertTestCase.assertTrue(rowText[1].matches("(?:\\d+(?:\\.\\d*)?|\\.\\d+)%"),"Validate Table investment Pecentage");
+                assertTestCase.assertTrue(list.contains(rowText[0]), "Validate Table category");
+                assertTestCase.assertTrue(rowText[1].matches("(?:\\d+(?:\\.\\d*)?|\\.\\d+)%"), "Validate Table investment Pecentage");
             }
 
         } catch (Exception e) {
@@ -3146,7 +3256,7 @@ public class ResearchLinePage extends UploadPage {
         }
     }
 
-    public Boolean IsGeoSectionTreeMapAvailable(){
+    public Boolean IsGeoSectionTreeMapAvailable() {
         return geoSectionTreemap.isDisplayed();
     }
 
