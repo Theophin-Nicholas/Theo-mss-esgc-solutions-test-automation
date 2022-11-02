@@ -119,4 +119,10 @@ public class PdfUtil {
         }
         return count;
     }
+
+    public static Boolean ifMatchingWithRegex(String pdfFileInText, String regex) {
+          pdfFileInText = pdfFileInText.replaceAll("\n", " ");
+            return  pdfFileInText.matches(regex);
+
+    }
 }
