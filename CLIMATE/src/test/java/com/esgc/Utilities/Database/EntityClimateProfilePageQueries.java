@@ -297,6 +297,7 @@ public class EntityClimateProfilePageQueries {
                 "join DF_TARGET.SECTOR_HIERARCHY SH on SH.MESG_SECTOR_ID = p.MESG_SECTOR_ID\n" +
                 "left join DF_TARGET.ESG_VE_SCORES VE on vE.ORBIS_ID = p.ORBIS_ID\n" +
                 "qualify row_number() OVER (PARTITION BY p.orbis_id ORDER BY RESEARCH_LINE_ID) =1";
+        System.out.println("query = " + query);
         return getQueryResultMap(query).get(0);
     }
 
