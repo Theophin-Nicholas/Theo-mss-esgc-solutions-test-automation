@@ -207,37 +207,62 @@ public class DashboardPage extends UploadPage {
     //============= Heat Map
     @FindBy(xpath = "//*[text()='Select two:']/following-sibling::div/div")
     public List<WebElement> heatMapResearchLines;
+
     @FindBy(xpath = "//h3[normalize-space()='Overall ESG Score']")
     public WebElement heatMapNoEntityWidget;
+
     @FindBy(xpath = "//div[@class='entityList']//br/..")
     public WebElement heatMapWidgetTitle;
+
     @FindBy(xpath = "//div[@class='entityList']//br/../following-sibling::div/div[1]")
     public WebElement heatMapWidgetYIndicator;
+
     @FindBy(xpath = "//div[@class='entityList']//br/../following-sibling::div/div[2]")
     public WebElement heatMapWidgetXIndicator;
+
     @FindBy(xpath = "(//div[@id='div-mainlayout']//table)[3]//tbody//td")
     public List<WebElement> heatMapCells;
+
     @FindBy(xpath = "(//div[@id='div-mainlayout']//table)[2]//tbody//td//span[1]")
     public List<WebElement> heatMapYAxisIndicators;
+
     @FindBy(xpath = "(//div[@id='div-mainlayout']//table)[1]//tbody//td//span[1]")
     public List<WebElement> heatMapYAxisIndicatorsAPI;
 
     @FindBy(xpath = "(//div[@id='div-mainlayout']//table)[2]//tbody//td//span[2]")
     public List<WebElement> heatMapYAxisIndicatorPercentagesAPI;
+
     @FindBy(xpath = "(//div[@id='div-mainlayout']//table)[2]//tbody//td//span[2]")
     public List<WebElement> heatMapYAxisIndicatorPercentages;
+
     @FindBy(xpath = "(//div[@id='div-mainlayout']//table)[4]//tbody//td//span[1]")
     public List<WebElement> heatMapXAxisIndicators;
+
     @FindBy(xpath = "(//div[@id='div-mainlayout']//table)[4]//tbody//td//span[2]")
     public List<WebElement> heatMapXAxisIndicatorPercentages;
+
     @FindBy(xpath = "(//div[@id='div-mainlayout']//table)[2]//thead//td")
     public WebElement heatMapYAxisIndicatorTitle;
+
     @FindBy(xpath = "(//div[@id='div-mainlayout']//table)[4]//thead//td")
     public WebElement heatMapXAxisIndicatorTitle;
+
     @FindBy(xpath = "//h3/following-sibling::p")
     public List<WebElement> heatMapActiveResearchLineInfo;
+
     @FindBy(xpath = "//div[text()='Compare Research Lines']/..//div[text()='Temperature Alignment']")
     public WebElement heatMapTemperatureAlignment;
+
+    @FindBy(xpath = "//div[@id='heatmapentity-test-id']//li//h3")
+    public List<WebElement> heatMapDrawerEntityNames;
+
+    @FindBy(xpath = "//div[@id='heatmapentity-test-id']//li//h4")
+    public List<WebElement> heatMapDrawerEntityPercentages;
+
+
+
+    //Other locators
+
     @FindBy(xpath = " //button[@id='button-holdings']/span/div")
     public WebElement verifyPortfolioName;
 
@@ -1292,5 +1317,41 @@ public class DashboardPage extends UploadPage {
         }
     }
 
+    public boolean verifySelectedResearchLineForHeatMap(String researchLine) {
+        for(WebElement line: heatMapResearchLines){
+            if(line.getText().equalsIgnoreCase(researchLine)){
+                String color = Color.fromString(line.getCssValue("background-color")).asHex();
+                if(color.equalsIgnoreCase("#355b85")){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public boolean selectResearchLineForHeatMap(String researchLine) {
+        for(WebElement line: heatMapResearchLines){
+            if(line.getText().equalsIgnoreCase(researchLine)){
+                if(!verifySelectedResearchLineForHeatMap(researchLine)){
+                    line.click();
+                    return true;
+                } else {
+                    System.out.println("Research line is already selected");
+                    return true;
+                }
+            }
+        }
+        System.out.println("Research line is not found");
+        return false;
+    }
+
+    public void selectRandomCell() {
+        Random random = new Random();
+        int randomCell;
+        do{
+             randomCell = random.nextInt(heatMapCells.size());
+        } while (heatMapCells.get(randomCell).getText().equals("0%"));
+        BrowserUtils.scrollTo(heatMapCells.get(randomCell)).click();
+    }
 }
 
