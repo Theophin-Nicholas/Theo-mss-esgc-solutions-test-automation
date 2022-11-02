@@ -21,13 +21,14 @@ public class RegionsSectors extends UITestBase {
         researchLinePage.navigateToResearchLine(page);
         BrowserUtils.wait(5);
         test.info("Navigated to " + page + " Page");
-
+        if (page.equals("Temperature Alignment") || page.equals("Physical Risk Management")) {
+            throw new SkipException("Research Line is not having required widgets " + page);
+        }
         assertTestCase.assertTrue(researchLinePage.checkIfPageTitleIsDisplayed(page), "check if page title is displayed");
         test.pass("User is on " + page + " Page");
-
         assertTestCase.assertTrue(researchLinePage.checkIfWidgetTitleIsDisplayed("Regions"), "Region & Sector Title Verified", 590, 591);
-
         assertTestCase.assertTrue(researchLinePage.verifyRegionSectorsTables(page), "Region & Sector UI Verified for " + page, 414, 1158, 1697, 1916, 1744, 2478);
+
         test.pass("Regions & Sectors Table rows columns and content verified");
     }
 
@@ -36,10 +37,11 @@ public class RegionsSectors extends UITestBase {
     @Test(groups = {"regression", "ui", "smoke"},
             description = "Verify if Region and Sector Drill Downs are Displayed as Expected",
             dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
-    @Xray(test = {467, 822, 823, 1208, 1265, 1279, 1281, 1704, 1705, 1748, 1920, 2145, 2149, 2212, 2488, 6763, 6762, 6761, 6760, 6759, 6757,2665})
+    @Xray(test = {467, 822, 823, 1208, 1265, 1279, 1281, 1704, 1705, 1748, 1920, 2145, 2149, 2212, 2488, 6763, 6762, 6761, 6760, 6759, 6757, 2665})
     public void verifyRegionSectorDrillDowns(String page) {
         ResearchLinePage researchLinePage = new ResearchLinePage();
-        if ( page.equals("ESG Assessments")) {
+        researchLinePage.selectSamplePortfolioFromPortfolioSelectionModal();
+        if (page.equals("ESG Assessments") || page.equals("Physical Risk Management") || page.equals("Temperature Alignment")) {
             throw new SkipException("not ready to test in " + page);
         }
         researchLinePage.navigateToResearchLine(page);
