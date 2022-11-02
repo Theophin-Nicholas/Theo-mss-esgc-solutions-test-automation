@@ -27,7 +27,6 @@ import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.KeyEvent;
 import java.io.File;
-import java.sql.SQLOutput;
 import java.text.SimpleDateFormat;
 import java.time.Year;
 import java.util.List;
@@ -187,7 +186,7 @@ public class EntityClimateProfilePage extends ClimatePageBase {
     @FindBy(xpath = "//button[@heap_perfchart_id='Materiality']")
     public WebElement esgMaterialityTab;
 
-    @FindBy(xpath = "//section//li/section/span[1]")
+    @FindBy(xpath = "//section//li/section/span[1]/span[1]")
     public List<WebElement> esgSections;
 
     @FindBy(xpath = "//section//div/p")
@@ -451,7 +450,7 @@ public class EntityClimateProfilePage extends ClimatePageBase {
     @FindBy(xpath = "//div[@id='div-mainlayout']//div//div//main//header/following-sibling::div/div[3]/div/div/div/div/div/div/div/following-sibling::div[2]/div/table/tbody/tr")
     public List<WebElement> controversiesTableRow;
 
-    @FindBy(xpath = "//main/div/div/div/div/div/div/div/div/div/div/span[1]")
+    @FindBy(xpath = "//div[@id='methodologies_modal']//div[@role='dialog']/div[2]/div/div/div/span") //main/div/div/div/div/div/div/div/div/div/div/span[1]")
     public WebElement controversiesPopUpClose;
 
     @FindBy(xpath = "(//div[contains(text(),'Controversies')])")
