@@ -102,7 +102,7 @@ public class EntityIssuerPage extends PageBase {
     @FindBy(xpath = " //div[contains(@class,'MuiDialogTitle')]//div/div/div//following-sibling::div")
     public WebElement sectorDescriptorElement;
 
-
+// works for both P2 and P3
     @FindBy(xpath = "//button[@id='missing-docs-button']")
     public WebElement addMissingdDocumentsButton;
 
@@ -129,6 +129,10 @@ public class EntityIssuerPage extends PageBase {
 
     @FindBy(xpath = "//div[contains(text(),'Assigned Categories')]/../div/div/div")
     public List<WebElement> assignedCategories;
+
+    @FindBy(xpath = "//div[contains(text(),'Assigned Categories')]/../div/div/div/div/label")
+    public List<WebElement> Categories;
+
 
     @FindBy(xpath = "//p[@id='name-helper-text']")
     public WebElement errorMessage;
@@ -313,7 +317,7 @@ public class EntityIssuerPage extends PageBase {
     public WebElement P3SectorPageCloseAddMissingDocument;
 
     @FindBy(xpath = "//span[@class='MuiIconButton-label']")
-    public WebElement P2SectorPageCloseAddMissingDocument;
+    public WebElement CloseAddMissingDocumentMessage;
 
     @FindBy(xpath = "//span[contains(text(),'Overall Disclosure Ratio')]")
     public WebElement P3OverallDisclosureRatio;
@@ -649,6 +653,17 @@ public class EntityIssuerPage extends PageBase {
                 break;
             }
         }
+        Boolean selectorDiv = false ;
+        try{
+            selectorDiv= SelectDisclosureDiv.isDisplayed();
+        }catch(Exception e){
+            selectorDiv = false ;
+
+        }
+        if (selectorDiv){
+            SelectDisclosureDiv.click();
+            SelectDisclosureList.get(1).click();
+        }
         BrowserUtils.wait(1);
         buttonAddURL.click();
 
@@ -692,7 +707,9 @@ public class EntityIssuerPage extends PageBase {
                 "Supply Chain / Sustainable Sourcing"
         ));
 
+
         wait.until(ExpectedConditions.visibilityOf(assignedCategories.get(0))).isDisplayed();
+
         List<String> data = new ArrayList<String>();
         for (WebElement e : assignedCategories) {
             System.out.println(e.getText());
@@ -759,9 +776,20 @@ public class EntityIssuerPage extends PageBase {
 
     }
 
+    public void validatePageNoBox() {
+        for (WebElement e : Categories){
+            e.click();
+            assertTestCase.assertTrue(e.getText().contains("Page #"), "Validating if Page # lable is available");
+            WebElement inputBox = Driver.getDriver().findElement(By.xpath("//input[@id='"+e.getText().split("\n")[0]+"']"));
+            assertTestCase.assertTrue(inputBox.isDisplayed(),"Validating if Page# input box is visible");
+            Random rand = new Random();
+            inputBox.sendKeys(String.valueOf(rand.nextInt((10 - 1) + 1) + 1));
+        }
+    }
+
     public void saveMissingDocuments() {
-        WebElement category = assignedCategories.get(0).findElement(By.xpath("//span[text()='Waste and Pollution / Material Flows']"));
-        category.click();
+       // WebElement category = assignedCategories.get(0).findElement(By.xpath("//span[text()='Waste and Pollution / Material Flows']"));
+      //  category.click();
         buttonUpload.click();
         wait.until(ExpectedConditions.visibilityOf(alertMessage)).isDisplayed();
         assertTestCase.assertTrue(alertMessage.getText().equals("Documents saved"), "Validate if document is saved sucessfully");
