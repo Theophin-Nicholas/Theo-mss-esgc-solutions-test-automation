@@ -48,6 +48,9 @@ public class UploadPage extends ClimatePageBase {
     @FindBy(xpath = "//*[@class='MuiAlert-message']/div[1]")
     public WebElement AlertMessage;
 
+    @FindBy(xpath = "//*[@class='MuiAlert-message']//b")
+    public List<WebElement> AlertMessageMultipleTickersLists;
+
     @FindBy(xpath = "//*[text()='Portfolio Upload Successfully Saved']/following-sibling::div")
     public WebElement closeButtonIcon;
 
@@ -157,7 +160,7 @@ public class UploadPage extends ClimatePageBase {
         try {
             System.out.println("Uploading Mask Check");
             boolean loadMaskIsDisplayed = wait.until(ExpectedConditions.visibilityOf(uploadingLoadMask)).isDisplayed();
-            wait.until(ExpectedConditions.invisibilityOf(uploadingLoadMask));
+            //wait.until(ExpectedConditions.invisibilityOf(uploadingLoadMask));
             System.out.println("Uploading Completed!");
             return loadMaskIsDisplayed;
         } catch (Exception e) {
@@ -255,6 +258,7 @@ public class UploadPage extends ClimatePageBase {
      */
     public boolean checkifSuccessPopUpIsDisplyed() {
         try {
+            BrowserUtils.waitForVisibility(successMessagePopUP, 15);
             return successMessagePopUP.isDisplayed();
         } catch (NoSuchElementException e) {
             return false;
@@ -387,7 +391,7 @@ public class UploadPage extends ClimatePageBase {
     public boolean checkIfPortfolioUploadModalDescriptionIsDisplayedAsExpected() {
         try {
             String description = modalDescription.stream().map(WebElement::getText).collect(Collectors.joining(" "));
-            return description.equals("Upload a portfolio in CSV format. Acceptable identifiers include: <ISIN, Bloomberg Ticker>");
+            return description.equals("Upload a portfolio in CSV format. Acceptable identifiers include: <ISIN, Bloomberg Ticker, ORBIS_ID>");
         } catch (NoSuchElementException e) {
             return false;
         }
