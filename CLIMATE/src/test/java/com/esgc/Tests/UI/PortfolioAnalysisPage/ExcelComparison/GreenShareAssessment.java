@@ -326,13 +326,8 @@ public class GreenShareAssessment extends UITestBase {
         //Asserting the headers
         System.out.println("Excel Headers " + excelHeaders);
         System.out.println("UI Headers " + updatesUIHeaders);
-        try {
-            assertTestCase.assertTrue(CollectionUtils.isEqualCollection(updatesUIHeaders, excelHeaders),"Headers are Matching");
-        } catch (AssertionError ae) {
-           ae.printStackTrace();
-            System.out.println("Headers Not Matching");
-        }
 
+            assertTestCase.assertTrue(CollectionUtils.isEqualCollection(updatesUIHeaders, excelHeaders),"Headers are Matching");
 
         int updatesListStartsFrom = updatesHeadersRow + 1;
         List<List<Object>> excelUpdateList = new ArrayList<>();
