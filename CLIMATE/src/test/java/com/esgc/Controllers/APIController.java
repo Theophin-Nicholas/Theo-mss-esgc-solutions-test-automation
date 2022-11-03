@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import static io.restassured.RestAssured.given;
@@ -1026,5 +1027,18 @@ public class APIController {
 
         System.out.println(portfolioName + " imported to database successfully");
         return portfolioID;
+    }
+
+    public String getCurrentPortfolioId() {
+        Response response = null;
+        try {
+            response = configSpec()
+                    .when()
+                    .get(PortfolioSettingsEndPoints.GET_PORTFOLIO_ID);
+        } catch (Exception e) {
+            System.out.println("Inside exception " + e.getMessage());
+        }
+        response.then().log().ifError();
+        return response.path("last-viewed-portfolio");
     }
 }
