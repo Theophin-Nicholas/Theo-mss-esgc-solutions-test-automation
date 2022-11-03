@@ -23,6 +23,9 @@ public class LoginPage extends ClimatePageBase {
     @FindBy(id = "idp-discovery-username")
     public WebElement usernameBox;
 
+    @FindBy(id = "idp-discovery-username")
+    public List<WebElement> usernameBoxs;
+
     @FindBy(id = "okta-signin-username")
     public WebElement PTusernameBox;
 
@@ -257,6 +260,14 @@ public class LoginPage extends ClimatePageBase {
             case USER_WITH_OUT_EXPORT_ENTITLEMENT:
                 wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.USER_WITH_OUT_EXPORT_ENTITLEMENT_USERNAME, Keys.ENTER);
                 wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.USER_WITH_OUT_EXPORT_ENTITLEMENT_PASSWORD);
+                break;
+            case USER_WITH_ESG_PS_ENTITLEMENT:
+                wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.USER_WITH_ESG_PS_ENTITLEMENT_USERNAME, Keys.ENTER);
+                wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.USER_WITH_ESG_PS_ENTITLEMENT_PASSWORD);
+                break;
+            case USER_WITH_ESG_ENTITLEMENT:
+                wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.USER_WITH_ESG_ENTITLEMENT_USERNAME, Keys.ENTER);
+                wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.USER_WITH_ESG_ENTITLEMENT_PASSWORD);
                 break;
             default:
                 Assert.fail("Bundle not found!");
