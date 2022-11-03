@@ -57,10 +57,11 @@ public class HistoryTableTests extends UITestBase {
             ResearchLinePage researchLinePage = new ResearchLinePage();
 
             researchLinePage.navigateToResearchLine(page);
-            BrowserUtils.wait(5);
+            BrowserUtils.wait(3);
             researchLinePage.clickOnBenchmarkDropdown();
-            BrowserUtils.wait(5);
-            researchLinePage.selectSamplePortfolioFromPortfolioSelectionModal();
+            BrowserUtils.wait(3);
+            researchLinePage.SelectAPortfolioFromBenchmark("Sample Portfolio");
+            //researchLinePage.selectSamplePortfolioFromPortfolioSelectionModal();
             BrowserUtils.wait(5);
             Assert.assertTrue(Color.fromString(researchLinePage.historyChartUnmatched.getCssValue("fill")).asHex().equals("#dce1e6"));
 
