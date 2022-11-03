@@ -70,4 +70,11 @@ public class ESGUtilities {
         else if (researchLine.equals("1015")) return new ArrayList<>(Arrays.asList("0-24", "25-44", "45-64","65-100"));
         else return new ArrayList<>();
     }
+
+    public static String getCarbonFootprintCategory(Long score){
+        if (score<100000) return "Moderate";
+        else if (score<1000000) return "Significant";
+        else if (score<10000000) return "High";
+        else return "intense";
+    }
 }
