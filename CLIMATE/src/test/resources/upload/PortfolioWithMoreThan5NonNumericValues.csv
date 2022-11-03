@@ -1,0 +1,48 @@
+Name: This is the name of the portfolio that will appear as a selection on the Platform,,
+"Currency: Please only enter in values of USD, GBP and EUR. Platform values will be converted into USD. Only one currency is allowed per portfolio",,
+As of Date: Please enter date in yyyy-mm-dd format,,
+"Identifier type: Please specify the values as one of the following Identifiers: ISIN, SEDOL, BBG_TICKER",,
+"Identifier: First column below !AsOfDate: Enter an ISIN, SEDOL or a full Bloomberg Ticker, example: T UN Equity or CMP UN Equity",,
+Value: Second Column below !AsOfDate: Please enter total monetary value of investment; this must be in whole number format and in one single currency,,
+,,
+!Name,PortfoliowithMorethan5rowswithInvalidValue,
+!Currency,USD,
+!AsOfDate,1/10/2021,
+,,
+Identifier type,Identifier,Value
+ISIN,SE0011337708,123456
+ISIN,JP3326410002,1234567
+ISIN,CH0102659627,12345678
+ISIN,FR0000120644,123456
+ISIN,DE0005493365,1234567
+ISIN,SG1S04926220,12345678
+ISIN,FR0011950732,12@#
+ISIN,INE070A01015,#12
+ISIN,JP3299600001,#***
+ISIN,NZPFIE0001S5,ASD
+ISIN,SE0011337708,weere
+ISIN,JP3326410002,1@#dff12.78
+ISIN,CH0102659627,123456
+ISIN,FR0000120644,1234567
+ISIN,DE0005493365,12345678
+ISIN,SG1S04926220,12345678
+ISIN,FR0011950732,12345678
+ISIN,INE070A01015,12345678
+ISIN,JP3299600001,12345678
+ISIN,NZPFIE0001S5,12345678
+ISIN,SE0011337708,12345678
+ISIN,JP3326410002,12345678
+ISIN,CH0102659627,12345678
+ISIN,FR0000120644,12345678
+ISIN,DE0005493365,12345678
+ISIN,SG1S04926220,12345678
+ISIN,FR0011950732,12345678
+ISIN,INE070A01015,12345678
+ISIN,JP3299600001,12345678
+ISIN,NZPFIE0001S5,12345678
+ISIN,ABC,12345678
+ISIN,ABC,12345678
+ISIN,ABC,12345678
+ISIN,XYZ,12345678
+ISIN,XYZ,12345678
+ISIN,EFG,12345678

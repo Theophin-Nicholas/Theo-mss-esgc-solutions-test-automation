@@ -21,9 +21,9 @@ public class MethodologyLinksTest extends UITestBase {
         assertTestCase.assertTrue(result, "Methodology link verification");
     }
 
-    @Test(groups = {"regression", "ui", "smoke", "esg"},
+    @Test(enabled = false, groups = {"regression", "ui", "smoke", "esg"},
             description = "Verify  ESG Summary Section links")
-    @Xray(test = {8284})
+    @Xray(test = {8284}) //TODO de-scopped as of now. Enable it when scopped
     public void verifyPortfolioCoverage() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
 
