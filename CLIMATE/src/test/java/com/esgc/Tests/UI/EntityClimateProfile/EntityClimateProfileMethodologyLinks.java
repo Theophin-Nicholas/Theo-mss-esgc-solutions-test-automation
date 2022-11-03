@@ -5,7 +5,6 @@ import com.esgc.Pages.LoginPage;
 import com.esgc.Pages.ResearchLinePage;
 import com.esgc.Tests.TestBases.UITestBase;
 import com.esgc.Utilities.BrowserUtils;
-import com.esgc.Utilities.Driver;
 import com.esgc.Utilities.EntitlementsBundles;
 import com.esgc.Utilities.Xray;
 import org.testng.annotations.Test;
@@ -15,12 +14,12 @@ public class EntityClimateProfileMethodologyLinks extends UITestBase {
     @Test(groups = {"entity_climate_profile", "regression", "ui", "smoke", "entitlements"})
     @Xray(test = {6159})
     public void validatePhysicalRiskMethodologyLink() {
-        //Trying to login with only Physical Risk Entitilment User
-        Driver.getDriver().manage().deleteAllCookies();
-        Driver.getDriver().navigate().refresh();
-        ResearchLinePage researchLinePage = new ResearchLinePage();
+        //Trying to log in with only Physical Risk Entitilment User
+     /*   Driver.getDriver().manage().deleteAllCookies();
+        Driver.getDriver().navigate().refresh();*/
         LoginPage login = new LoginPage();
-
+        login.clickOnLogout();
+        ResearchLinePage researchLinePage = new ResearchLinePage();
         login.entitlementsLogin(EntitlementsBundles.PHYSICAL_RISK);
 
         test.info("Navigating to Portfolio Analysis page");

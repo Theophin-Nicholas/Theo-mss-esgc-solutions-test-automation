@@ -147,7 +147,7 @@ public class EntityClimateProfileSummaryTests extends UITestBase {
 
 
     @Test(groups = {"regression", "ui"}, dataProviderClass = DataProviderClass.class, dataProvider = "Entity")
-    @Xray(test = {6858})
+    @Xray(test = {6858, 7119, 7328})
     public void verifyXYAxisTest(String Entity) {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         EntityClimateProfilePage entityClimateProfilePage = new EntityClimateProfilePage();
@@ -316,16 +316,11 @@ public class EntityClimateProfileSummaryTests extends UITestBase {
     }
 
     @Test(groups = {"regression", "ui"}, dataProviderClass = DataProviderClass.class, dataProvider = "orbisID")
-    @Xray(test = {7774, 7776, 7777, 7778})
+    @Xray(test = {7774, 7776, 7777, 7778, 6346})
     public void verifyUnderlyingDataPresentForCarbonFootprintSummaryWidget(String Entity) {
         ResearchLinePage researchLinePage = new ResearchLinePage();
-        test.info("Navigate to Portfolio Analysis page");
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
-        //BrowserUtils.wait(5);
         researchLinePage.navigateToFirstEntity(Entity);
-
         EntityClimateProfilePage profilePage = new EntityClimateProfilePage();
-        BrowserUtils.wait(5);
         profilePage.navigateToTransitionRisk();
         assertTestCase.assertTrue(profilePage.verifyTransitionRiskItems(), "Transition Risk items are verified");
         assertTestCase.assertTrue(profilePage.verifyCarbonFootprintWidgetItems(),
@@ -674,22 +669,18 @@ public class EntityClimateProfileSummaryTests extends UITestBase {
         System.out.println("validated the Tool Tip of Carbon Footprint");
     }
 
-    @Test(groups = {"regression", "ui"})
-    @Xray(test = {6352, 9171, 8803, 8260, 8209})
-    public void verifyBrownShareUnderTransitionRisk() {
+    @Test(groups = {"regression", "ui"},
+            dataProviderClass = DataProviderClass.class, dataProvider = "orbisIDWithBrownShareScore")
+    @Xray(test = {6352, 9171, 8803, 8260, 8209, 6353})
+    public void verifyBrownShareUnderTransitionRisk(String orbisID) {
         ResearchLinePage researchLinePage = new ResearchLinePage();
-        test.info("Navigate to Portfolio Analysis page");
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
-        BrowserUtils.wait(5);
-        researchLinePage.navigateToFirstEntity("Exxon Mobil Corp.");
+        researchLinePage.navigateToFirstEntity(orbisID);
         EntityClimateProfilePage profilePage = new EntityClimateProfilePage();
-
         profilePage.verifyBrownShareWidget();
         List<String> metrics = Arrays.asList(new String[]{"Fossil fuels industry - Upstream", "Fossil fuels industry - Midstream", "Fossil fuels industry - Generation",
                 "Coal in electricity fuel mix", "Total Oil Potential Emissions(Gt CO2)", "Total Natural Gas Potential Emissions(Gt CO2)"});
         profilePage.verifyBrownShareFootPrintTable(metrics);
-
-        System.out.println("validated Brown Share metrics are displayed");
+        profilePage.verifyUnderlyingDataForBrownShareWidget(orbisID);
     }
 
     @Test(groups = {"regression", "ui"})
@@ -709,7 +700,7 @@ public class EntityClimateProfileSummaryTests extends UITestBase {
 
     @Test(groups = {"regression", "ui"})
     @Xray(test = {7079})
-    public void verifyPhysicaRiskSection() {
+    public void verifyPhysicalRiskSection() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio Analysis page");
         researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
@@ -735,7 +726,7 @@ public class EntityClimateProfileSummaryTests extends UITestBase {
 
     @Test(groups = {"regression", "ui", "smoke"},
             dataProviderClass = DataProviderClass.class, dataProvider = "orbisIDWithoutTempAlignment")
-    @Xray(test = {7724, 7725, 7904})
+    @Xray(test = {7724, 7725, 7904, 10772})
     public void verifyNoDisplayMessageForNoData(String Entity) {
         LoginPage loginPage = new LoginPage();
         if(loginPage.loginButtons.size()>0) {
@@ -933,7 +924,6 @@ public class EntityClimateProfileSummaryTests extends UITestBase {
 
     }
 
-    //TODO need to update the entitlement to entitlementCheck for QA-QA2, UAT and entitlementCheckPrd for Prod
     @Test(groups = {"regression", "ui", "smoke"}, dataProviderClass = DataProviderClass.class, dataProvider = "entitlementCheckPrd")
     @Xray(test = {8448, 8449, 8875, 8878, 8879, 8880, 8881, 8884, 8224, 8225, 8226})
     public void verifyEntitlementBaseWidgets(String username, String password, String entitlement) {

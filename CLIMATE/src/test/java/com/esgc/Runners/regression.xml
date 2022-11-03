@@ -1,5 +1,5 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
-<suite name="ESGC Regression Suite">   <!-- Parallel execution eg.: parallel="methods" thread-count="8" -->
+<suite name="ESGC Regression Suite"  parallel="classes" thread-count="8">   <!-- Parallel execution eg.: parallel="methods" thread-count="8" -->
     <listeners>
         <listener class-name="com.esgc.Utilities.XrayListener"/>
     </listeners>
@@ -10,6 +10,7 @@
         <groups>
             <run>
                 <include name="regression"/>
+                <exclude name="robot_dependency"></exclude>
             </run>
 
         </groups>
