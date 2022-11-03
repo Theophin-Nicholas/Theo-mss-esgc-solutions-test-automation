@@ -21,7 +21,7 @@ public class EsgAssessment extends DataValidationTestBase {
         List<Map<String,String>> excelResults = utils.convertExcelToNestedMap(BrowserUtils.exportPath(researchLine));
 
         // Compare the data from Data Base with Excel File
-        DatabaseDriver.createDBConnection();
+        // DatabaseDriver.createDBConnection();
         DashboardQueries dashboardQueries = new DashboardQueries();
         List<Map<String, Object>> dbEsgScoresInfo = dashboardQueries.getEsgAssessmentInfo(portfolioId, year, month);
 
