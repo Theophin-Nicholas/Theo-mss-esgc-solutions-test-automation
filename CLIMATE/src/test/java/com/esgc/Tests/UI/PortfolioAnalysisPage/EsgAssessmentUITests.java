@@ -7,8 +7,8 @@ import org.testng.annotations.Test;
 
 public class EsgAssessmentUITests extends UITestBase {
 
-     @Test(groups = {"regression", "ui", "smoke", "esg"})
-    @Xray(test = {8704, 9969})
+     @Test(enabled = false,groups = {"regression", "ui", "smoke", "esg"})
+    @Xray(test = {8704, 9969}) //TODO de-scoped , enable after scoped
     public void verifyESGGradeDistributionIsDisplayed() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         researchLinePage.navigateToResearchLine("ESG Assessments");
@@ -27,7 +27,7 @@ public class EsgAssessmentUITests extends UITestBase {
     }
 
     @Test(groups = {"regression", "ui", "esg"})
-    @Xray(test = {9967})
+    @Xray(test = {9967, 9898})
     public void verifyEsgAssessmentScoreLegend() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         researchLinePage.navigateToResearchLine("ESG Assessments");

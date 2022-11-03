@@ -2,6 +2,7 @@ package com.esgc.Tests.DataValidation.EntityClimateProfilePage;
 
 import com.esgc.APIModels.EntityProfilePageModels.EntityHeader;
 import com.esgc.Controllers.EntityPage.EntityProfileClimatePageAPIController;
+import com.esgc.TestBase.DataProviderClass;
 import com.esgc.Tests.TestBases.DataValidationTestBase;
 import com.esgc.Utilities.Xray;
 import org.testng.annotations.Test;
@@ -17,29 +18,33 @@ public class EntityClimateCompanyAbout extends DataValidationTestBase {
 
 
     @Xray(test = {10045,10046})
-    @Test(groups = {"regression", "ui", "smoke", "entity_climate_profile"},dataProvider = "Company With Orbis ID")
+    @Test(groups = {"regression", "ui", "smoke", "entity_climate_profile"},dataProvider = "Company With Orbis ID",
+            dataProviderClass = DataProviderClass.class)
     public void entityClimateCompanyAbout(String... dataprovider) {
 
         EntityProfileClimatePageAPIController entityClimateProfileApiController = new EntityProfileClimatePageAPIController();
 
-        List<EntityHeader> companyheaderAPIResponse = Arrays.asList(entityClimateProfileApiController
+        List<EntityHeader> companyHeaderAPIResponse = Arrays.asList(entityClimateProfileApiController
                 .geCompanyHeaderAPIResponse(dataprovider[1]).as(EntityHeader[].class));
-
+        System.out.println("dataprovider[1] = " + dataprovider[1]);
         Map<String,Object> dbResults = getEntityHeaderDetails(dataprovider[1]);
-
-        assertTestCase.assertTrue(dbResults.get("ORBIS_ID").toString().equals(companyheaderAPIResponse.get(0).getOrbis_id()));
+        System.out.println("dbResults.get(\"SECTOR\").toString() = " + dbResults.get("SECTOR").toString());
+        System.out.println("companyHeaderAPIResponse.get(0).getGeneric_sector() = " + companyHeaderAPIResponse.get(0).getGeneric_sector());
+        System.out.println("companyHeaderAPIResponse.get(0).getModel_version() = " + companyHeaderAPIResponse.get(0).getModel_version());
+        assertTestCase.assertTrue(dbResults.get("ORBIS_ID").toString().equals(companyHeaderAPIResponse.get(0).getOrbis_id()));
         if(dbResults.get("RESEARCH_LINE_ID").toString().equals("1008")) {
-            assertTestCase.assertTrue(dbResults.get("SECTOR").toString().equals(companyheaderAPIResponse.get(0).getGeneric_sector()));
-            assertTestCase.assertTrue(companyheaderAPIResponse.get(0).getModel_version().equals("1.0"));
-            assertTestCase.assertTrue(companyheaderAPIResponse.get(0).getMethodology().equals("VE"));
+            String modelVersion= String.valueOf(Double.parseDouble(companyHeaderAPIResponse.get(0).getModel_version()));
+            assertTestCase.assertTrue(dbResults.get("SECTOR").toString().equals(companyHeaderAPIResponse.get(0).getGeneric_sector()));
+            assertTestCase.assertTrue(modelVersion.equals("1.0"));
+            assertTestCase.assertTrue(companyHeaderAPIResponse.get(0).getMethodology().equals("VE"));
         }else if (dbResults.get("RESEARCH_LINE_ID").toString().equals("1015")){
-            assertTestCase.assertTrue(dbResults.get("SECTOR").toString().equals(companyheaderAPIResponse.get(0).getSector_l1()));
-            assertTestCase.assertTrue(companyheaderAPIResponse.get(0).getModel_version().equals("2.0"));
-            assertTestCase.assertTrue(companyheaderAPIResponse.get(0).getMethodology().equals("MESG"));
+            assertTestCase.assertTrue(dbResults.get("SECTOR").toString().equals(companyHeaderAPIResponse.get(0).getSector_l1()));
+            assertTestCase.assertTrue(companyHeaderAPIResponse.get(0).getModel_version().equals("2.0"));
+            assertTestCase.assertTrue(companyHeaderAPIResponse.get(0).getMethodology().equals("MESG"));
         }
         if(dbResults.get("LEI")!=null)
-            assertTestCase.assertTrue(dbResults.get("LEI").toString().equals(companyheaderAPIResponse.get(0).getLei()));
+            assertTestCase.assertTrue(dbResults.get("LEI").toString().equals(companyHeaderAPIResponse.get(0).getLei()));
         if(dbResults.get("ISIN")!=null)
-            assertTestCase.assertTrue(dbResults.get("ISIN").toString().equals(companyheaderAPIResponse.get(0).getPrimary_isin()));
+            assertTestCase.assertTrue(dbResults.get("ISIN").toString().equals(companyHeaderAPIResponse.get(0).getPrimary_isin()));
     }
 }
