@@ -161,6 +161,11 @@ public class ResearchLinePage extends UploadPage {
     @FindBy(xpath = "(//tr[@class='MuiTableRow-root MuiTableRow-head'])[5]/th")
     public List<WebElement> carbonFootprintHeaders;
 
+    @FindBy(xpath = "//h6[text()='Updates']/following-sibling::a")
+    public WebElement companiesCountFromUpdatesTable;
+
+
+
     //=============== Leaders and Laggards
 
     @FindBy(xpath = "//h6[text()='Laggards by Score']")
@@ -1235,6 +1240,13 @@ public class ResearchLinePage extends UploadPage {
         } catch (Exception e) {
             return updatesNoDataMessage.isDisplayed();
         }
+    }
+
+    public int getCompaniesCountFromUpdatesTable() {
+        int displayCompaniesCount=10;
+        String companiesCountText = companiesCountFromUpdatesTable.getText();
+        companiesCountText = companiesCountText.substring(0,companiesCountText.indexOf(" "));
+        return Integer.parseInt(companiesCountText)+displayCompaniesCount;
     }
 
     public boolean verifyUpdatesSortingOrder(String page) {
