@@ -3,6 +3,7 @@ package com.esgc.Tests.UI.DashboardPage;
 import com.esgc.Pages.DashboardPage;
 import com.esgc.TestBase.DataProviderClass;
 import com.esgc.Tests.TestBases.DashboardUITestBase;
+import com.esgc.Tests.TestBases.DataProvider;
 import com.esgc.Utilities.*;
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -258,7 +259,7 @@ public class ImportPortfolio extends DashboardUITestBase {
     }
 
     @Test(groups = {"regression", "ui", "errorMessages",  "robot_dependency", "dashboard"},
-            dataProviderClass = DataProviderClass.class, dataProvider = "ErrorMessages", singleThreaded = true)
+            dataProviderClass = DataProvider.class, dataProvider = "ErrorMessages", singleThreaded = true)
     public void importPortfolio_verifyErrorPopupMessages(String fileName, String errorMessage, Integer... testCaseNumber) {
         DashboardPage dashboardPage = new DashboardPage();
 
