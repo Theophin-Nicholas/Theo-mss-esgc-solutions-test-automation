@@ -355,6 +355,10 @@ public class ResearchLinePage extends UploadPage {
     @FindBy(xpath = "(//*[name()='rect'][@class='highcharts-point highcharts-color-0'])[1]")
     public WebElement historyChartUnmatched;
 
+    @FindBy(xpath = "//*[contains(text(),'Number of Companies')]/..")
+    public WebElement scoreCategoryTooltip;
+
+
     //=============== Impact Table/ Graph elements
 
     @FindBy(xpath = "//div[@id='impact-filter']")
@@ -619,6 +623,30 @@ public class ResearchLinePage extends UploadPage {
         } catch (Exception e) {
             return false;
         }
+    }
+
+    public boolean mouseHoverAndVerifyTooltipHistoryTable(String scoreCategory, String colorCode, String expColor) {
+        try {
+            String xpath = "//*[local-name()='rect' and contains(@class,'"+colorCode+"')]";
+            List<WebElement> elements = Driver.getDriver().findElements(By.xpath(xpath));
+            System.out.println(elements.size());
+            for(int i=0; i<3; i++){
+                String actColor = elements.get(i).getAttribute("fill");
+                System.out.println("Exp Color: "+expColor+", Actual Color: "+actColor);
+                BrowserUtils.hover(elements.get(i));
+                BrowserUtils.wait(1);
+                String tooltipText = scoreCategoryTooltip.getText();
+                System.out.println("Expected Tooltip Text: "+scoreCategory);
+                System.out.println("Actual Tooltip Text: "+tooltipText);
+                int numberOfCompanies = Integer.parseInt(tooltipText.substring(tooltipText.lastIndexOf(" ")+1));
+                boolean flag = actColor.equalsIgnoreCase(expColor) && tooltipText.contains(scoreCategory) && numberOfCompanies>=0;
+                if(!flag) return false;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
     }
 
     public boolean checkIfBenchMarkHistoryTableExists() {
