@@ -12,7 +12,7 @@ import java.util.List;
 
 public class RegulatoryReportingPage extends UploadPage {
     //LOCATORS
-    @FindBy(xpath = "//div[.='Moody's ESG360: Reporting Service']")
+    @FindBy(xpath = "//li[@heap_menu='Reporting Service']")
     public WebElement pageTitle;
 
     @FindBy(xpath = "//div[.='Select Reporting']")

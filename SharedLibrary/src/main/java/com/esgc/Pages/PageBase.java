@@ -66,6 +66,9 @@ public abstract class PageBase {
     @FindBy(xpath = "//li[text()='Portfolio Selection/Upload']")
     public WebElement portfolioSettings;
 
+    @FindBy(xpath = "//li[text()='Regulatory Reporting']")
+    public WebElement regulatoryReporting;
+
     @FindBy(xpath = "(//table[@id='table-id'])[1]/tbody/tr/td[1]")
     public List<WebElement> portfolioSettingsCompanies;
 
