@@ -3323,10 +3323,10 @@ public class ResearchLinePage extends UploadPage {
                 BrowserUtils.wait(2);
                 portfolioSettings.click();
             }
-            WebElement targetPortfolio = Driver.getDriver().findElement(By.xpath("//span[@title='"+portfolioName+"']"));
+            WebElement targetPortfolio = Driver.getDriver().findElement(By.xpath("//div[@id='portfolio-drawer-test-id']//span[@title='"+portfolioName+"']"));
+            System.out.println("Portfolio Located");
             BrowserUtils.scrollTo(targetPortfolio);
-            targetPortfolio.click();
-            BrowserUtils.wait(4);
+            BrowserUtils.waitForClickablility(targetPortfolio,10).click();
             System.out.println("Portfolio selected");
         } catch(Exception e){
             e.printStackTrace();
@@ -3337,7 +3337,6 @@ public class ResearchLinePage extends UploadPage {
         System.out.println("Deleting portfolio: " + portfolioName);
         selectPortfolio(portfolioName);
         try{
-
             BrowserUtils.waitForClickablility(deleteButton, 15).click();
             BrowserUtils.waitForVisibility(confirmPortfolioDeletePopupHeader,10);
             confirmPortfolioDeleteYesButton.click(); //clicking the Yes button and deleting the portfolio
@@ -3346,6 +3345,24 @@ public class ResearchLinePage extends UploadPage {
             System.out.println("Portfolio deleted");
         } catch (Exception e){
             e.printStackTrace();
+        }
+    }
+    public boolean verifyPortfolio(String portfolioName){
+        System.out.println("Verifying portfolio: " + portfolioName);
+        try{
+            if (menu.isDisplayed()) {
+                clickMenu();
+                BrowserUtils.wait(2);
+                portfolioSettings.click();
+            }
+            WebElement targetPortfolio = Driver.getDriver().findElement(By.xpath("//span[@title='"+portfolioName+"']"));
+            BrowserUtils.scrollTo(targetPortfolio);
+            System.out.println("Portfolio verified");
+            closeMenuByClickingOutSide();
+            return true;
+        } catch(Exception e){
+            e.printStackTrace();
+            return false;
         }
     }
 }
