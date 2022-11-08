@@ -9,12 +9,14 @@ import com.esgc.TestBase.DataProviderClass;
 import com.esgc.Tests.TestBases.UITestBase;
 import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.Database.DatabaseDriver;
+import com.esgc.Utilities.Database.EntityClimateProfilePageQueries;
 import com.esgc.Utilities.Driver;
 import com.esgc.Utilities.Xray;
 import io.restassured.response.Response;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.Color;
+import org.testng.SkipException;
 import org.testng.annotations.Test;
 
 import java.time.Year;
@@ -33,6 +35,25 @@ public class EntityClimateProfileSummaryTests extends UITestBase {
         //BrowserUtils.wait(5);
         researchLinePage.navigateToEntity(Entity);
         assertTestCase.assertTrue(entityClimateProfilePage.isPhysicalClimateHazardCardDisplayed(), "Physical Climate Hazards is displayed");
+    }
+
+    @Test(groups = {"regression", "ui"}, dataProviderClass = DataProviderClass.class, dataProvider = "Entity")
+    @Xray(test = {6248})
+    public void verifyGreenShareRange(String Entity) {
+        if(Entity.equals("Development Bank of Japan, Inc.")){
+            throw new SkipException("Skip this entity");
+        }
+        ResearchLinePage researchLinePage = new ResearchLinePage();
+        EntityClimateProfilePage entityClimateProfilePage = new EntityClimateProfilePage();
+        test.info("Navigate to Portfolio Analysis page");
+        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        //BrowserUtils.wait(5);
+        researchLinePage.navigateToEntity(Entity);
+        String orbisID = entityClimateProfilePage.getEntityOrbisId();
+        EntityClimateProfilePageQueries entityClimateProfilepagequeries = new EntityClimateProfilePageQueries();
+        Map<String, String> data = entityClimateProfilepagequeries.getGreenShareData(orbisID);
+        String scoreUI = entityClimateProfilePage.getGreenShareScoreRange();
+        assertTestCase.assertTrue(entityClimateProfilePage.verifyScoreAndRange(scoreUI, data.get("SCORE")));
     }
 
     @Test(groups = {"regression", "ui"}, dataProviderClass = DataProviderClass.class, dataProvider = "Entity")
