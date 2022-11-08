@@ -1,13 +1,12 @@
 package com.esgc.Tests.UI.RegulatoryReporting;
 
 import com.esgc.Pages.DashboardPage;
+import com.esgc.Pages.LoginPage;
 import com.esgc.Pages.PortfolioAnalysisPage.PhysicalRiskPages.PhysicalRiskManagementPages.PhysicalRiskManagementPage;
 import com.esgc.Pages.RegulatoryReportingPage;
 import com.esgc.Tests.TestBases.UITestBase;
-import com.esgc.Utilities.BrowserUtils;
-import com.esgc.Utilities.DateTimeUtilities;
-import com.esgc.Utilities.Driver;
-import com.esgc.Utilities.Xray;
+import com.esgc.Utilities.*;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.Color;
 import org.testng.annotations.Test;
@@ -19,21 +18,37 @@ public class RegulatoryReportingPageTests extends UITestBase {
     RegulatoryReportingPage reportingPage = new RegulatoryReportingPage();
 
     @Test(groups = {"regression", "ui", "smoke", "regulatoryReporting"}, description = "Verify that user can navigate to Regulatory Reporting page")
-    @Xray(test = {10693, 10694, 10709})
+    @Xray(test = {10693, 10694, 10709, 10710, 10743, 10744, 10745, 10865})
     public void verifyReportingListTest() {
         DashboardPage dashboardPage = new DashboardPage();
-        dashboardPage.navigateToPageFromMenu("Regulatory Reporting");
+        dashboardPage.clickMenu();
+        // Dynamic xpath - Helps us to pass page names "Dashboard", "Portfolio Analysis"
+        assertTestCase.assertTrue(dashboardPage.regulatoryReporting.isDisplayed(),
+                "Verify that user can navigate to Regulatory Reporting page");
+        dashboardPage.regulatoryReporting.click();
+        //dashboardPage.navigateToPageFromMenu("Regulatory Reporting");
         test.info("Navigated to Regulatory Reporting Page");
-        assertTestCase.assertTrue(reportingPage.pageTitle.isDisplayed(),"Regulatory Reporting page title is verified");
-        assertTestCase.assertEquals(reportingPage.reportingTitle.getText(),"Select Reporting","Regulatory Reporting Page - Reporting Title is verified");
-        assertTestCase.assertEquals(reportingPage.reportingSubtitle.getText(),"Reporting","Regulatory Reporting Page - Reporting SubTitle is verified");
-        assertTestCase.assertTrue(reportingPage.getReportingList().size()>0,"Regulatory Reporting Page - Reporting list is verified");
-        assertTestCase.assertTrue(reportingPage.portfolioList.size()>0,"Regulatory Reporting Page - Portfolio list is verified");
-        assertTestCase.assertTrue(reportingPage.getReportingList().contains("SFDR PAIs"),"Regulatory Reporting Page - Reporting list is verified");
-        assertTestCase.assertTrue(reportingPage.isSelectedReportingOptionByName("SFDR PAIs"),"SFDR PAIs is selected by default");
+        assertTestCase.assertTrue(reportingPage.pageTitle.isDisplayed(),
+                "Regulatory Reporting page title is verified");
+        assertTestCase.assertEquals(reportingPage.pageTitle.getText(), "Moody's ESG360: Reporting Service",
+                "Regulatory Reporting page title is verified");
+        assertTestCase.assertEquals(reportingPage.reportingTitle.getText(),"Select Reporting",
+                "Regulatory Reporting Page - Reporting Title is verified");
+        assertTestCase.assertEquals(reportingPage.reportingSubtitle.getText(),"Reporting",
+                "Regulatory Reporting Page - Reporting SubTitle is verified");
+        assertTestCase.assertTrue(reportingPage.getReportingList().size()>0,
+                "Regulatory Reporting Page - Reporting list is verified");
+        assertTestCase.assertTrue(reportingPage.portfolioNamesList.size()>0,
+                "Regulatory Reporting Page - Portfolio list is verified");
+        assertTestCase.assertTrue(reportingPage.getReportingList().contains("SFDR PAIs"),
+                "Regulatory Reporting Page - Reporting list is verified");
+        assertTestCase.assertTrue(reportingPage.isSelectedReportingOptionByName("SFDR PAIs"),
+                "SFDR PAIs is selected by default");
         reportingPage.selectReportingOptionByName("EU Taxonomy");
-        assertTestCase.assertFalse(reportingPage.isSelectedReportingOptionByName("SFDR PAIs"),"SFDR PAIs is not selected");
-        assertTestCase.assertTrue(reportingPage.isSelectedReportingOptionByName("EU Taxonomy"),"EU Taxonomy is selected");
+        assertTestCase.assertFalse(reportingPage.isSelectedReportingOptionByName("SFDR PAIs"),
+                "SFDR PAIs is not selected");
+        assertTestCase.assertTrue(reportingPage.isSelectedReportingOptionByName("EU Taxonomy"),
+                "EU Taxonomy is selected");
     }
 
     @Test(groups = {"regression", "ui", "regulatoryReporting"}, description = "Verify user portfolio list on regulatory reporting page")
@@ -311,5 +326,21 @@ public class RegulatoryReportingPageTests extends UITestBase {
         assertTestCase.assertFalse(reportingPage.isPortfolioSelected(portfolioName),"PredictedScoresPortfolio is not selected");
         assertTestCase.assertFalse(reportingPage.isPortfolioSelectionEnabled(portfolioName),"PredictedScoresPortfolio is disabled");
         assertTestCase.assertFalse(reportingPage.createReportsButton.isEnabled(),"Create report button is disabled");
+    }
+
+    @Test(groups = {"regression", "ui", "regulatoryReporting", "smoke"}, description = "Verify user can't see reporting page if is not entitled to SFDR")
+    @Xray(test = {10867})
+    public void verifyReportingPageWithoutSFDRUsertest() {
+        DashboardPage dashboardPage = new DashboardPage();
+        dashboardPage.clickMenu();
+        assertTestCase.assertTrue(dashboardPage.regulatoryReporting.isDisplayed(),"Reporting page is displayed");
+        LoginPage loginPage = new LoginPage();
+        loginPage.clickOnLogout();
+        loginPage.loginWithParams(Environment.PHYSICAL_RISK_USERNAME, Environment.PHYSICAL_RISK_PASSWORD);
+        dashboardPage.clickMenu();
+        assertTestCase.assertFalse(BrowserUtils.getElementsText(dashboardPage.menuList).contains("Regulatory Reporting"),"Reporting page is not displayed as expected");
+        loginPage.clickOnLogout();
+        loginPage.login();
+        BrowserUtils.wait(5);
     }
 }
