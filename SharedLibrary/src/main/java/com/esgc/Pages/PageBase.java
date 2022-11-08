@@ -617,6 +617,7 @@ public abstract class PageBase {
      */
     public void clickPortfolioSelectionButton() {
         wait.until(ExpectedConditions.elementToBeClickable(portfolioSelectionButton)).click();
+        BrowserUtils.waitFor(3);
     }
 
     public void clickResearchLineDropdown() {
