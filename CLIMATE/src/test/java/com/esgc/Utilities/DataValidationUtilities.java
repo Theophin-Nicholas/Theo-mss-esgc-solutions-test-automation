@@ -73,6 +73,8 @@ public class DataValidationUtilities {
         System.out.printf("%5s %s%n", portfolioToUpload.size(), " identifiers added");
 
         regionFilter = getRandomRegionInPortfolio(portfolioToUpload);
+        System.out.println("regionFilter = " + regionFilter);
+        System.out.println("Random portfolioToUpload = " + portfolioToUpload);
         sectorFilter = getRandomSectorInPortfolio(portfolioToUpload, regionFilter);
 
         return portfolioToUpload;
