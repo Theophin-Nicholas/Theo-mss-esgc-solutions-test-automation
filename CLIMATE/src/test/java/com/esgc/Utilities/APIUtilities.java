@@ -130,7 +130,7 @@ public class APIUtilities {
         System.out.println("File name:" + fileName);
 
         APIController controller = new APIController();
-        Response response = controller.importPortfolio(user_id, fileName + ".csv",
+        Response response = controller.importPortfolio(user_id, fileName,
                 PortfolioFilePaths.scorePortfolioPath());
         response.then().log().all().assertThat().body("portfolio_name", Matchers.notNullValue());
 
