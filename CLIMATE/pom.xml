@@ -17,6 +17,7 @@
         <dependency>
             <groupId>com.esgc.automation</groupId>
             <artifactId>SharedLibrary</artifactId>
+            <version>1.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -130,7 +131,53 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
+                <configuration>
+                    <source>8</source>
+                    <target>8</target>
+                </configuration>
             </plugin>
         </plugins>
     </build>
+    <profiles>
+        <profile>
+            <id>smoke-uat</id>
+            <build>
+                <pluginManagement>
+                    <plugins>
+                        <plugin>
+                            <groupId>org.apache.maven.plugins</groupId>
+                            <artifactId>maven-compiler-plugin</artifactId>
+                            <version>3.8.1</version>
+                            <configuration>
+                                <source>8</source>
+                                <target>8</target>
+                            </configuration>
+                        </plugin>
+
+                        <plugin>
+                            <groupId>org.apache.maven.plugins</groupId>
+                            <artifactId>maven-surefire-plugin</artifactId>
+                            <version>2.22.2</version>
+                            <configuration>
+                                <testFailureIgnore>true</testFailureIgnore>
+                                <suiteXmlFiles>
+                                    <!-- Path of smoke.xml file (right click + Copy Path + Path from Content Root)-->
+                                    <suiteXmlFile>src/test/java/com/esgc/Runners/smoke.xml</suiteXmlFile>
+                                </suiteXmlFiles>
+                                <properties>
+                                    <property>
+                                        <name>reporter</name>
+                                        <value>
+                                            org.testng.reporters.XMLReporter:generateTestResultAttributes=true,generateGroupsAttribute=true
+                                        </value>
+                                    </property>
+                                </properties>
+                            </configuration>
+                        </plugin>
+                    </plugins>
+                </pluginManagement>
+            </build>
+        </profile>
+    </profiles>
 </project>
