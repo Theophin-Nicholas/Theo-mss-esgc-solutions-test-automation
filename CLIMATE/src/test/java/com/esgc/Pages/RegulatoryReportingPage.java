@@ -52,13 +52,33 @@ public class RegulatoryReportingPage extends UploadPage {
     public WebElement createReportsButton;
 
     @FindBy(id = "interim")
-    public WebElement interimReportsToggle;
+    public WebElement interimReportsOption;
 
     @FindBy(id = "annual")
-    public WebElement annualReportsToggle;
+    public WebElement annualReportsOption;
 
     @FindBy(id = "latest")
-    public WebElement useLatestDataToggle;
+    public WebElement useLatestDataOption;
+
+    @FindBy(xpath = "//*[@id='interim']//input")
+    public WebElement interimReportsToggleButton;
+
+    @FindBy(xpath = "//*[@id='annual']//input")
+    public WebElement annualReportsToggleButton;
+
+    @FindBy(xpath = "//*[@id='latest']//input")
+    public WebElement useLatestDataToggleButton;
+
+    //Regulatory Reorting Status Page Elements
+    @FindBy(xpath = "//h3")
+    public WebElement rrStatusPage_ReportGeneratingMessage;
+
+    @FindBy(xpath = "//button/preceding-sibling::div//div")
+    public List<WebElement> rrStatusPage_PortfoliosList;
+
+    @FindBy(xpath = "//button[.='Download']")
+    public WebElement rrStatusPage_DownloadButton;
+
 
     //METHODS
     public List<String> getReportingList() {
@@ -164,73 +184,67 @@ public class RegulatoryReportingPage extends UploadPage {
     //select interim reports
     public void selectInterimReports() {
         if (!isInterimReportsSelected()) {
-            interimReportsToggle.click();
+            interimReportsOption.click();
         }
     }
 
     //select annual reports
     public void selectAnnualReports() {
         if (!isAnnualReportsSelected()) {
-            annualReportsToggle.click();
+            annualReportsOption.click();
         }
     }
 
     //select use latest data
     public void selectUseLatestData() {
         if (!isUseLatestDataSelected()) {
-            useLatestDataToggle.click();
+            useLatestDataOption.click();
         }
     }
 
     //deselect interim reports
     public void deselectInterimReports() {
         if (isInterimReportsSelected()) {
-            interimReportsToggle.click();
+            interimReportsOption.click();
         }
     }
 
     //deselect annual reports
     public void deselectAnnualReports() {
         if (isAnnualReportsSelected()) {
-            annualReportsToggle.click();
+            annualReportsOption.click();
         }
     }
 
     //deselect use latest data
     public void deselectUseLatestData() {
         if (isUseLatestDataSelected()) {
-            useLatestDataToggle.click();
+            useLatestDataOption.click();
         }
     }
 
     public boolean isInterimReportsSelected() {
-        WebElement interimReportsToggle = Driver.getDriver().findElement(By.xpath("//*[@id='interim']//input"));
-        System.out.println(interimReportsToggle.getAttribute("value"));
-        return interimReportsToggle.isSelected();
+        return interimReportsToggleButton.isSelected();
     }
 
     public boolean isAnnualReportsSelected() {
-        WebElement annualReportsToggle = Driver.getDriver().findElement(By.xpath("//*[@id='annual']//input"));
-        return annualReportsToggle.isSelected();
+        return annualReportsToggleButton.isSelected();
     }
 
     public boolean isUseLatestDataSelected() {
-        WebElement useLatestDataToggle = Driver.getDriver().findElement(By.xpath("//*[@id='latest']//input"));
-        return useLatestDataToggle.isSelected();
+        return useLatestDataToggleButton.isSelected();
     }
 
     public boolean isNewTabOpened() {
         BrowserUtils.wait(2);
-        String currentTab = Driver.getDriver().getWindowHandle();
-        for (String tab : Driver.getDriver().getWindowHandles()) {
+        String currentTab = BrowserUtils.getCurrentWindowHandle();
+        for (String tab : BrowserUtils.getWindowHandles()) {
             if (!tab.equals(currentTab)) {
-                Driver.getDriver().switchTo().window(tab);
-                WebElement message = Driver.getDriver().findElement(By.xpath("//h3"));
-                System.out.println(message.getText());
-                return message.isDisplayed();
+                BrowserUtils.switchWindowsTo(tab);
+                return rrStatusPage_ReportGeneratingMessage.isDisplayed();
             }
         }
-        System.out.println("Number of Windows = " + Driver.getDriver().getWindowHandles().size());
+        System.out.println("Number of Windows = " + BrowserUtils.getWindowHandles().size());
         return false;
     }
 
@@ -245,18 +259,16 @@ public class RegulatoryReportingPage extends UploadPage {
     }
 
     public boolean verifyReportsReadyToDownload(List<String> selectedPortfolios) {
-        List<WebElement> portfolioList = Driver.getDriver().findElements(By.xpath("//button/preceding-sibling::div//div"));
         for (int i = 0; i < 10; i++) {
-            if (portfolioList.size() == 0) BrowserUtils.wait(1);
+            if (rrStatusPage_PortfoliosList.size() == 0) BrowserUtils.wait(1);
             else break;
         }
         for (String element : selectedPortfolios) {
-            if (!isHave(element, portfolioList)) {
+            if (!isHave(element, rrStatusPage_PortfoliosList)) {
                 return false;
             }
         }
-        WebElement downloadButton = Driver.getDriver().findElement(By.xpath("//button[.='Download']"));
-        return downloadButton.isDisplayed();
+        return rrStatusPage_DownloadButton.isDisplayed();
     }
 
     public boolean isHave(String element, List<WebElement> list) {
@@ -271,8 +283,7 @@ public class RegulatoryReportingPage extends UploadPage {
     }
 
     public boolean verifyIfReportsDownloaded() {
-        WebElement downloadButton = Driver.getDriver().findElement(By.xpath("//button[.='Download']"));
-        downloadButton.click();
+        rrStatusPage_DownloadButton.click();
         BrowserUtils.wait(10);
         File dir = new File(BrowserUtils.downloadPath());
         File[] dir_contents = dir.listFiles();
@@ -289,5 +300,34 @@ public class RegulatoryReportingPage extends UploadPage {
 
     public boolean isPortfolioSelectionEnabled(String portfolioName) {
         return portfolioRadioButtonList.get(getPortfolioList().indexOf(portfolioName)).isEnabled();
+    }
+
+    public void selectReportingFor(String portfolioName, String reportingYear) {
+        //go through portfolios list
+        for (int i = 0; i < portfolioNamesList.size(); i++) {
+            //find the portfolio
+            if(portfolioNamesList.get(i).getText().equals(portfolioName)){
+                //verify if portfolio is selected
+                if(!isPortfolioSelected(portfolioName)){
+                    selectPortfolioOptionByName(portfolioName);
+                }
+                //click on reporting for dropdown
+                reportingForList.get(i).click();
+                //select reporting year
+                selectReportingYear(reportingYear);
+            }
+
+        }
+    }
+
+    public void selectReportingYear(String reportingYear) {
+        if(reportingForDropdownOptionsList.size()==0)
+            System.out.println("A reporting for option must be clicked before this");
+        for (WebElement element : reportingForDropdownOptionsList) {
+            if (element.getText().equals(reportingYear)) {
+                element.click();
+                break;
+            }
+        }
     }
 }
