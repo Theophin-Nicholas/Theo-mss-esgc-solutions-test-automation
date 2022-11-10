@@ -2,6 +2,7 @@ package com.esgc.Tests.UI.PortfolioAnalysisPage;
 
 import com.esgc.Controllers.APIController;
 import com.esgc.Pages.ResearchLinePage;
+import com.esgc.TestBase.DataProviderClass;
 import com.esgc.Tests.TestBases.UITestBase;
 import com.esgc.Tests.UI.DashboardPage.PortfolioSettings;
 import com.esgc.Utilities.*;
@@ -66,9 +67,10 @@ public class ImportPortfolio extends UITestBase {
   Successful message popup should be displayed when file is uploaded successfully
 */
 //1027
-    @Test(groups = {"regression", "ui", "smoke", "robot_dependency"})
-    @Xray(test = {1027, 3044})
-    public void VerifyFileUploadSuccessPopup() {
+    @Test(groups = {"regression", "ui", "smoke", "robot_dependency"},dataProviderClass = DataProviderClass.class,
+            dataProvider = "Valid Portfolios")
+    @Xray(test = {1027, 3044, 11069})
+    public void VerifyFileUploadSuccessPopup(String portfolio) {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
         test.info("Navigated to Portfolio Analysis Page");
@@ -84,7 +86,7 @@ public class ImportPortfolio extends UITestBase {
         researchLinePage.clickBrowseFile();
         BrowserUtils.wait(2);
 
-        String inputFile = System.getProperty("user.dir") + ConfigurationReader.getProperty("PortfolioWithValidData");
+        String inputFile = System.getProperty("user.dir") + ConfigurationReader.getProperty(portfolio);
         RobotRunner.selectFileToUpload(inputFile);
 
         BrowserUtils.wait(4);
@@ -113,7 +115,9 @@ public class ImportPortfolio extends UITestBase {
         assertTestCase.assertTrue(researchLinePage.CheckifClosebuttonIsDisplayed(), "Close button verified");
         test.pass("Verified:'X' button was displayed on the successful message popup");
 
-        String expectedPortfolioName = "Portfolio Upload updated_good";
+        String expectedPortfolioName = ConfigurationReader.getProperty(portfolio).substring(
+                ConfigurationReader.getProperty(portfolio).lastIndexOf("\\")
+        );//"Portfolio Upload updated_good";
         assertTestCase.assertEquals(researchLinePage.getPlaceholderInSuccessPopUp(), expectedPortfolioName, "Portfolio name in pop up");
 
         researchLinePage.waitForDataLoadCompletion();
