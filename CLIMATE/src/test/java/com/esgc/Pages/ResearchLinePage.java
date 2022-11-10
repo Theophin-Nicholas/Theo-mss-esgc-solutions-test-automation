@@ -161,6 +161,17 @@ public class ResearchLinePage extends UploadPage {
     @FindBy(xpath = "(//tr[@class='MuiTableRow-root MuiTableRow-head'])[5]/th")
     public List<WebElement> carbonFootprintHeaders;
 
+    @FindBy(xpath = "//div[@id='carbon_footprint_risk_categories']/div")
+    public WebElement carbonFootprintScopeHeader;
+
+    @FindBy(xpath = "//div[@id='carbon_footprint_risk_categories']/../../div//span//div/span")
+    public List<WebElement> carbonFootprintScopeHeaders;
+
+    @FindBy(xpath = "//div[@id='carbon_footprint_risk_categories']/../../div//span//div/div")
+    public List<WebElement> carbonFootprintScopeDetails;
+
+
+
     //=============== Leaders and Laggards
 
     @FindBy(xpath = "//h6[text()='Laggards by Score']")
