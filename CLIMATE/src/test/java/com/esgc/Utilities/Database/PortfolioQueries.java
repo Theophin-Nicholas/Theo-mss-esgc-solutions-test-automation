@@ -769,7 +769,7 @@ public class PortfolioQueries {
         return month_name;
     }
 
-    public int getCompanyUpdatesCount(String portfolioId, String researchLine, String year, String month){
+    public List<Map<String, Object>> getCompanyUpdates(String portfolioId, String researchLine, String year, String month){
         String query= "";
         if(researchLine.equals("Physical Risk Hazards")){
             query = "select * from entity_score where entity_id_bvd9 in \n" +
@@ -793,7 +793,7 @@ public class PortfolioQueries {
                     "and produced_date like'"+year+"-"+month+"-%' and year='"+year+"' and month ='"+month+"'";
         }
 
-        return getQueryResultMap(query).size();
+        return getQueryResultMap(query);
     }
 
     public List<Map<String, Object>> getESGModelWithPortfolioID(String month, String year, String portfolioId) {
