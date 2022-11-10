@@ -7,6 +7,7 @@ import com.esgc.DBModels.ESGLeaderANDLaggers;
 import com.esgc.DBModels.ResearchLineIdentifier;
 import com.esgc.Pages.ResearchLinePage;
 import com.esgc.Reporting.CustomAssertion;
+import com.esgc.TestBase.DataProviderClass;
 import com.esgc.Tests.TestBases.DataValidationTestBase;
 import com.esgc.Utilities.APIUtilities;
 import com.esgc.Utilities.Database.PortfolioQueries;
@@ -30,7 +31,7 @@ import static com.esgc.Utilities.PortfolioUtilities.distinctByKey;
 
 public class HeatMapTests extends DataValidationTestBase {
 
-    @Test(groups = {"regression", "heatmap"}, dataProvider = "Research Lines")
+    @Test(groups = {"regression", "heatmap"}, dataProviderClass = DataProviderClass.class, dataProvider = "Heat Map Research Lines")
     @Xray(test = {10030})
     public void verifyUpdatesTableForAllRLs(String portfolioId, String researchLine, String year, String month) {
         ResearchLinePage researchLinePage = new ResearchLinePage();
@@ -40,21 +41,9 @@ public class HeatMapTests extends DataValidationTestBase {
 
         researchLinePage.selectResearchLineFromDropdown(researchLine);
         int companiesCountInUpdatesTableUI = researchLinePage.getCompaniesCountFromUpdatesTable();
-        int companiesCountInUpdatesTableDB = portfolioQueries.getCompanyUpdatesCount(portfolioId, researchLine, year, month);
+        int companiesCountInUpdatesTableDB = portfolioQueries.getCompanyUpdates(portfolioId, researchLine, year, month).size();
         assertTestCase.assertEquals(companiesCountInUpdatesTableDB,companiesCountInUpdatesTableUI,"Verify "+researchLine+" updates count");
 
-    }
-
-    @DataProvider(name = "Research Lines")
-    public Object[][] availableResearchLinesForDashboard() {
-
-        return new Object[][]{
-                {"00000000-0000-0000-0000-000000000000","Physical Risk Hazards","2022","10"},
-                {"00000000-0000-0000-0000-000000000000","Physical Risk Management","2022","10"},
-                {"00000000-0000-0000-0000-000000000000","Carbon Footprint","2022","10"},
-                {"00000000-0000-0000-0000-000000000000","Brown Share Assessment","2022","10"},
-                {"00000000-0000-0000-0000-000000000000","Green Share Assessment","2022","10"},
-        };
     }
 
 
