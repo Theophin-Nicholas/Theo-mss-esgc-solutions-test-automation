@@ -394,4 +394,12 @@ public class DataProviderClass {
                         {"000002269"},//Exxon Mobil
                 };
     }
+
+    @DataProvider(name = "Valid Portfolios")
+    public Object[][] validPortfolios() {
+        return new Object[][]{
+                {"PortfolioWithValidData"},
+                {"PortfolioWithAllTypesIdentifiers"},
+        };
+    }
 }
