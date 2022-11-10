@@ -465,4 +465,17 @@ public class BrowserUtils {
         Actions act = new Actions(Driver.getDriver());
         act.sendKeys(key).build().perform();
     }
+
+    public static String getCurrentWindowHandle() {
+        return Driver.getDriver().getWindowHandle();
+    }
+
+    public static Set<String> getWindowHandles() {
+        Set<String> handles = Driver.getDriver().getWindowHandles();
+        return handles;
+    }
+
+    public static void switchWindowsTo(String tab) {
+        Driver.getDriver().switchTo().window(tab);
+    }
 }
