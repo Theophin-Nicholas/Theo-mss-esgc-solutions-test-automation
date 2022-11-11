@@ -23,7 +23,7 @@ public abstract class ClimatePageBase extends PageBase {
     @FindBy(xpath = "//input[@type='radio']")
     public List<WebElement> portfolioRadioButtonsList;
 
-    @FindBy(xpath = "div[@title='']")
+    @FindBy(xpath = "//div[@heap_id='portfolio-selection']//div[1]/span")
     public List<WebElement> portfolioNameList;
 
     @FindBy(xpath = "//div[@title='']")
