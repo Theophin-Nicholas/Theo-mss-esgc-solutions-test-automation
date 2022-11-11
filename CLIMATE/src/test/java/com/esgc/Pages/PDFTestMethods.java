@@ -24,32 +24,32 @@ public class PDFTestMethods extends PageBase {
         String companyName = entityProfilePage.searchAndLoadClimateProfilePage(company);
         System.out.println("companyName = " + companyName);
 
-      /*  // Temp code to remove ------------
+        // Temp code to remove ------------
         String actualFileName = "";
         if (entity.contains("Apple")) {
-            actualFileName = "Apple_ Inc_Profile27-Oct-2022_1666901863015.pdf"; // "Akero Therapeutics_ Inc_Profile3-Oct-2022_1664804963663.pdf";
+            actualFileName = "Apple_ Inc_Profile8-Nov-2022_1667923363753.pdf"; // "Akero Therapeutics_ Inc_Profile3-Oct-2022_1664804963663.pdf";
         } else if (entity.contains("Samsung")) {
-            actualFileName = "Samsung Securities Co__ Ltd_Profile27-Oct-2022_1666916628592.pdf";
+            actualFileName = "Samsung Securities Co__ Ltd_Profile8-Nov-2022_1667923793554.pdf";
         } else if (entity.contains("Alibaba")) {
-            actualFileName = "Alibaba Health Information Technology Ltd_Profile27-Oct-2022_1666916991607.pdf";
+            actualFileName = "Alibaba Health Information Technology Ltd_Profile8-Nov-2022_1667923948948.pdf";
         } else if (entity.contains("Development")) {
-            actualFileName = "Development Bank of Japan_ Inc_Profile27-Oct-2022_1666917187351.pdf";
+            actualFileName = "Development Bank of Japan_ Inc_Profile8-Nov-2022_1667924153787.pdf";
         }else if (entity.contains("NMI")) {
             actualFileName = "NMI Holdings_ Inc_Profile27-Oct-2022_1666881615951.pdf";
         }else if (entity.contains("Lexicon")) {
             actualFileName = "Lexicon Pharmaceuticals_ Inc_Profile27-Oct-2022_1666884413598.pdf";
-        }*/
+        }
 
         // Temp remove till here  and Uncomment below code after removal of temp code above ----- ----------
 
-         entityProfilePage.selectExportSourcesDocuments();
+       /*  entityProfilePage.selectExportSourcesDocuments();
         assertTestCase.assertTrue(entityProfilePage.verifyPopup(), "Verify Export Sources Documents popup");
         assertTestCase.assertTrue(entityProfilePage.verifyPopupTitle(companyName), "Verify Export Popup Title");
         FileDownloadUtilities.deleteDownloadFolder();
         entityProfilePage.selectPdfDownload();
         assertTestCase.assertTrue(entityProfilePage.verifyDownloadProgressMessage(), "Verify download progress message");
         assertTestCase.assertTrue(FileDownloadUtilities.waitUntilFileIsDownloaded(),"Verify download of export file");
-        String actualFileName = FileDownloadUtilities.getDownloadedFileName() ;
+        String actualFileName = FileDownloadUtilities.getDownloadedFileName() ;*/
 
         String filePath = BrowserUtils.downloadPath() + "/" + actualFileName;
         pdfFileText = PdfUtil.getPdfContent(filePath);
@@ -264,6 +264,20 @@ public class PDFTestMethods extends PageBase {
         assertTestCase.assertTrue(PdfUtil.ifMatchingWithRegex(pdfFileText, regex));
     }
 
+    public void ValidateUnderlyingDataTransitionRiskBROWNSHARE(){
+        EntityClimateProfilePage entityProfilePage = new EntityClimateProfilePage();
+        String UIValue = entityProfilePage.getunderlyingDataMetricsBrownShareAssessment();
+        String content = PdfUtil.extractPDFText(pdfFileText, UIValue);
+
+        if (content.equals("No ParaGraph Found")){
+            UIValue = UIValue.replace("BROWN SHARE", "BROWNSHARE");
+            content = PdfUtil.extractPDFText(pdfFileText, UIValue);
+        }
+        if (!UIValue.contains("No information available."))
+            assertTestCase.assertTrue(!content.equals("No ParaGraph Found"), "Validating Underlying DataMetrics Brown Share Assessment");
+
+
+    }
 
 
 }
