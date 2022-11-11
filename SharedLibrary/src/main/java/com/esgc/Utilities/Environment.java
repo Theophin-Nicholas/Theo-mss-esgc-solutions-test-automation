@@ -67,6 +67,15 @@ public class Environment {
     public static final String QA_TEST_ACCOUNT_ID;
     public static final String QA_TEST_APPLICATION_ID;
 
+    public static final String PDF_EXPORT_BUNDLE_USERNAME;
+    public static final String PDF_EXPORT_BUNDLE_PASSWORD;
+    public static final String PDF_EXPORT_ONLY_SOURCEDOCUMENTS_USERNAME;
+    public static final String PDF_EXPORT_ONLY_SOURCEDOCUMENTS_PASSWORD;
+    public static final String PDF_EXPORT_ONLY_PDF_USERNAME;
+    public static final String PDF_EXPORT_ONLY_PDF_PASSWORD;
+
+
+
 
     static String getPropertiesPath() {
         return System.getProperty("user.dir") + File.separator + "src" +
@@ -142,5 +151,13 @@ public class Environment {
         p3OrbisId = properties.getProperty("p3Orbisid");
         QA_TEST_ACCOUNT_ID = properties.getProperty("account_id");
         QA_TEST_APPLICATION_ID = properties.getProperty("application_id");
+
+        PDF_EXPORT_BUNDLE_USERNAME = properties.getProperty("PDFexport_bundle_username");
+        PDF_EXPORT_BUNDLE_PASSWORD = properties.getProperty("PDFexport_bundle_password");
+        PDF_EXPORT_ONLY_SOURCEDOCUMENTS_USERNAME = properties.getProperty("PDFexport_OnlySourceDocument_username");
+        PDF_EXPORT_ONLY_SOURCEDOCUMENTS_PASSWORD = properties.getProperty("PDFexport_OnlySourceDocument_password");
+        PDF_EXPORT_ONLY_PDF_USERNAME = properties.getProperty("PDFexport_OnlyPDF_username");
+        PDF_EXPORT_ONLY_PDF_PASSWORD = properties.getProperty("PDFexport_OnlyPDF_password");
+
     }
 }
