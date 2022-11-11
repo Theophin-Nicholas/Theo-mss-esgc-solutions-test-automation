@@ -76,9 +76,6 @@ public class HistoryTableTests extends UITestBase {
 
         researchLinePage.navigateToResearchLine(page);
         researchLinePage.waitForDataLoadCompletion();
-        if (page.equals("Physical Risk Hazards") || page.equals("Temperature Alignment")) {
-            throw new SkipException("History Table is not ready to test in " + page);
-        }
 
         assertTestCase.assertTrue(researchLinePage.checkIfHistoryTableExists(page), "History Table Validation");
 
