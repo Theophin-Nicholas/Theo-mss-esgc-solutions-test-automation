@@ -106,6 +106,9 @@ public class EntityClimateProfilePage extends ClimatePageBase {
     @FindBy(xpath = "//div[@id='brownClimate-test-id']")
     public WebElement brownShareCard;
 
+    @FindBy(xpath = "(//table[@id='table-id-1'])[2]")
+    public WebElement BrownShareTransitionRiskTable;
+
     @FindBy(xpath = "//div[@id='greenClimate-test-id']/div/div/div[1]/div")
     public List<WebElement> listOfGreenShareCardlabels;
 
@@ -2609,4 +2612,18 @@ public class EntityClimateProfilePage extends ClimatePageBase {
         return categoriesList;
 
     }*/
+
+    public String getunderlyingDataMetricsBrownShareAssessment() {
+        navigateToTransitionRisk();
+        BrowserUtils.scrollTo(wait.until(ExpectedConditions.visibilityOf(BrownShareTransitionRiskTable)));
+        String returnString = "";
+        if (!BrownShareTransitionRiskTable.getText().contains("No information available.")) {
+            returnString = BrownShareTransitionRiskTable.getText().replaceAll("\n", " ");
+            returnString = returnString.replace("Fossil Fuel Disclosures Investment in Category ",
+                    "Underlying Data Transition Risk BROWN SHARE FOSSIL FUEL DISCLOSURES INVESTMENT IN CATEGORY ");
+        } else
+            returnString = underlyingDataMetrics_GreenShareAssessmentCard.getText();
+        return returnString;
+
+    }
 }

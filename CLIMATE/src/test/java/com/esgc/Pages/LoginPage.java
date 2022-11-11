@@ -269,6 +269,18 @@ public class LoginPage extends ClimatePageBase {
                 wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.USER_WITH_ESG_ENTITLEMENT_USERNAME, Keys.ENTER);
                 wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.USER_WITH_ESG_ENTITLEMENT_PASSWORD);
                 break;
+            case PDF_EXPORT_BUNDLE_ENTITLEMENT:
+                wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.PDF_EXPORT_BUNDLE_USERNAME, Keys.ENTER);
+                wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.PDF_EXPORT_BUNDLE_PASSWORD);
+                break;
+            case PDF_EXPORT_ONLY_PDF_ENTITLEMENT:
+                wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.PDF_EXPORT_ONLY_PDF_USERNAME, Keys.ENTER);
+                wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.PDF_EXPORT_ONLY_PDF_PASSWORD);
+                break;
+            case PDF_EXPORT_ONLY_SOURCEDOCUMENTS_ENTITLEMENT:
+                wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.PDF_EXPORT_ONLY_SOURCEDOCUMENTS_USERNAME, Keys.ENTER);
+                wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.PDF_EXPORT_ONLY_SOURCEDOCUMENTS_PASSWORD);
+                break;
             default:
                 Assert.fail("Bundle not found!");
         }

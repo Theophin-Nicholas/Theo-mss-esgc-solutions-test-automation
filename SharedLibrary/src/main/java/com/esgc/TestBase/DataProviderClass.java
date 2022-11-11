@@ -376,10 +376,10 @@ public class DataProviderClass {
         return new Object[][]{
 
                 {"Apple, Inc.", "000411117"},  // VE scored company
-                {"FORD MOTOR CO","058618674"}, // MESG scored Company
+             //   {"FORD MOTOR CO","058618674"}, // MESG scored Company
                // {"FirstCash, Inc.","001668460"} // MESG scored Company
-                {"Lexicon Pharmaceuticals, Inc.","001769888"}, // MESG scored Company
-                {"NMI Holdings, Inc.","136042839"}, // MESG scored Company
+              //  {"Lexicon Pharmaceuticals, Inc.","001769888"}, // MESG scored Company
+               // {"NMI Holdings, Inc.","136042839"}, // MESG scored Company
                 {"Samsung Securities Co., Ltd.","065260686"}, // VE scored company
                 {"Alibaba Health Information Technology Ltd.","261851236"}, // VE scored company
                 {"Development Bank of Japan, Inc.","093009310"}, // VE scored company
@@ -393,5 +393,28 @@ public class DataProviderClass {
                 {
                         {"000002269"},//Exxon Mobil
                 };
+    }
+
+
+    @DataProvider(name = "PDFEntitlements")
+    public Object[][] PDFEntitlements() {
+
+        return new Object[][]{
+                {"esg-test5@outlook.com", "Helloworld25", "Physical Risk"},//
+                {"esg-test6@outlook.com", "Helloworld26", "Transition Risk"},//
+                {"esg-test1+export@outlook.com", "Moodys123", "Physical Risk and Transition Risk"},//
+                {"esg-test33@outlook.com", "Helloworld21", "ESG"},//
+        };
+    }
+
+    @DataProvider(name = "PDFExportEntitlements")
+    public Object[][] PDFExportEntitlements() {
+
+        return new Object[][]{
+                {EntitlementsBundles.PDF_EXPORT_BUNDLE_ENTITLEMENT},
+                {EntitlementsBundles.USER_WITH_OUT_EXPORT_ENTITLEMENT},
+                {EntitlementsBundles.PDF_EXPORT_ONLY_PDF_ENTITLEMENT},
+                {EntitlementsBundles.PDF_EXPORT_ONLY_SOURCEDOCUMENTS_ENTITLEMENT},
+        };
     }
 }
