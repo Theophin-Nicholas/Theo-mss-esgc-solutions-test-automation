@@ -40,9 +40,7 @@ public class EntityClimateProfileSummaryTests extends UITestBase {
     @Test(groups = {"regression", "ui"}, dataProviderClass = DataProviderClass.class, dataProvider = "Entity")
     @Xray(test = {6248})
     public void verifyGreenShareRange(String Entity) {
-        if(Entity.equals("Development Bank of Japan, Inc.")){
-            throw new SkipException("Skip this entity");
-        }
+
         ResearchLinePage researchLinePage = new ResearchLinePage();
         EntityClimateProfilePage entityClimateProfilePage = new EntityClimateProfilePage();
         test.info("Navigate to Portfolio Analysis page");
