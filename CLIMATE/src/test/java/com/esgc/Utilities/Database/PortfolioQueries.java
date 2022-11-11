@@ -769,6 +769,33 @@ public class PortfolioQueries {
         return month_name;
     }
 
+    public List<Map<String, Object>> getCompanyUpdates(String portfolioId, String researchLine, String year, String month){
+        String query= "";
+        if(researchLine.equals("Physical Risk Hazards")){
+            query = "select * from entity_score where entity_id_bvd9 in \n" +
+                    "(select bvd9_number from df_portfolio where portfolio_id='"+portfolioId+"') \n" +
+                    "and release_date = (select max(release_date) from entity_score where release_date < GETDATE())order by release_date desc";
+        } else if(researchLine.equals("Physical Risk Management")){
+            query = "select * from PHYSICAL_RISK_MANAGEMENT where bvd9_number in\n" +
+                    "(select bvd9_number from df_portfolio where portfolio_id='"+portfolioId+"')\n" +
+                    "and produced_date like'"+year+"-"+month+"-%' and year='"+year+"' and month ='"+month+"'";
+        } else if(researchLine.equals("Carbon Footprint")){
+            query = "select * from CARBON_FOOTPRINT where bvd9_number in \n" +
+                    "(select bvd9_number from df_portfolio where portfolio_id='"+portfolioId+"') \n" +
+                    "and produced_date like'"+year+"-"+month+"-%' and year='"+year+"' and month ='"+month+"'";
+        } else if(researchLine.equals("Green Share Assessment")){
+            query = "select * from GREEN_SHARE where bvd9_number in \n" +
+                    "(select bvd9_number from df_portfolio where portfolio_id='"+portfolioId+"') \n" +
+                    "and produced_date like'"+year+"-"+month+"-%' and year='"+year+"' and month ='"+month+"'";
+        } else if(researchLine.equals("Brown Share Assessment")){
+            query = "select * from BROWN_SHARE where bvd9_number in \n" +
+                    "(select bvd9_number from df_portfolio where portfolio_id='"+portfolioId+"') \n" +
+                    "and produced_date like'"+year+"-"+month+"-%' and year='"+year+"' and month ='"+month+"'";
+        }
+
+        return getQueryResultMap(query);
+    }
+
     public List<Map<String, Object>> getESGModelWithPortfolioID(String month, String year, String portfolioId) {
         String query = "select DISTINCT eos.ORBIS_ID, eos.RESEARCH_LINE_ID from df_portfolio  df\n" +
                 "join ESG_OVERALL_SCORES eos on eos.orbis_id=df.bvd9_number\n" +
