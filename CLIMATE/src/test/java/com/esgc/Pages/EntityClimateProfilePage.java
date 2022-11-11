@@ -172,6 +172,12 @@ public class EntityClimateProfilePage extends ClimatePageBase {
     @FindBy(id = "phyClimate-test-id")
     public WebElement physicalClimateHazards;
 
+    @FindBy(xpath = "//header//div/span/span[contains(text(),'Orbis ID:')]")
+    public WebElement orbisIdLabel;
+
+    @FindBy(xpath = "//div[text()='Green Share']/../following-sibling::div//div[2]/span")
+    public WebElement greenShareScoreRangeLabel;
+
     @FindBy(xpath = "//span[.='Transition Risk']")
     public WebElement transitionRiskPage;
 
@@ -997,6 +1003,29 @@ public class EntityClimateProfilePage extends ClimatePageBase {
 
     }
 
+    public String getEntityOrbisId(){
+        return orbisIdLabel.getText().replace("Orbis ID: ","");
+    }
+
+    public String getGreenShareScoreRange(){
+        return greenShareScoreRangeLabel.getText().replace("%","");
+    }
+
+    public boolean verifyScoreAndRange(String scoreRange, String score){
+        int iScore = Integer.parseInt(score);
+        if(scoreRange.contains("-")){
+            String range[] = scoreRange.split("-");
+            if(iScore>=Integer.parseInt(range[0].trim()) && iScore<=Integer.parseInt(range[1].trim())){
+                return true;
+            }else{
+                return false;
+            }
+        }
+        else{
+            return iScore==Integer.parseInt(scoreRange);
+        }
+    }
+
     public boolean isPhysicalClimateHazardCardDisplayed() {
         try {
             BrowserUtils.scrollTo(physicalClimateHazards);
@@ -1062,6 +1091,40 @@ public class EntityClimateProfilePage extends ClimatePageBase {
         }
     }
 
+    public void validateSubCategories() {
+
+        for(int i=1; i<=esgMaterialityColumns.size(); i++) {
+            String xpathCategories = "(//div/section//ul)["+i+"]//li";
+            int categoriesCount = Driver.getDriver().findElements(By.xpath(xpathCategories)).size();
+            int scores[] = new int[categoriesCount];
+            for(int j=1; j<=categoriesCount;j++){
+                String categoryBgColor = Driver.getDriver().findElement(By.xpath("(//div/section//ul)["+i+"]//li["+j+"]")).getCssValue("background-color");
+                System.out.println("BG Color: "+categoryBgColor);
+                if(i!=4) {
+                    String xpathCategoryScore = "(//div/section//ul)["+i+"]//li["+j+"]/section/span[1]/span[2]";
+                    String score = Driver.getDriver().findElement(By.xpath(xpathCategoryScore)).getText();
+                    int iScore = Integer.parseInt(score);
+                    scores[i-1]=iScore;
+                    System.out.println("Score: "+iScore);
+                    if (iScore >= 60) {
+                        assertTestCase.assertEquals(categoryBgColor, "rgba(219, 229, 163, 1)");
+                    } else if (iScore >= 50) {
+                        assertTestCase.assertEquals(categoryBgColor, "rgba(234, 197, 80, 1)");
+                    } else if (iScore >= 30) {
+                        assertTestCase.assertEquals(categoryBgColor, "rgba(232, 149, 28, 1)");
+                    } else {
+                        assertTestCase.assertEquals(categoryBgColor, "rgba(221, 88, 29, 1)");
+                    }
+                } else {
+                    assertTestCase.assertEquals(categoryBgColor, "rgba(255, 255, 255, 1)");
+                }
+            }
+            for(int k=0;k<(scores.length-1);k++){
+                assertTestCase.assertTrue(scores[i]>=scores[i+1], "Verify the order of categories");
+            }
+        }
+
+    }
 
 //    public void validateSubCategoriesButtonColorProperties() {
 //        List<WebElement> SubCategoriesPercentageLabels = Driver.getDriver().findElements(By.xpath("//section//li/section/span[2]"));
