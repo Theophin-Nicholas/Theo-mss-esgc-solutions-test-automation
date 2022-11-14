@@ -65,6 +65,22 @@ public class EsgMaterialityMatrixTests extends UITestBase {
         entityProfilePage.clickCloseIcon();
     }
 
+    @Test(groups = {"entity_climate_profile", "regression", "ui"})
+    @Xray(test = {8425})
+    public void validateEsgMaterialityMatrixOrderAndColors() {
+
+        String company = "Amazon.com, Inc.";
+        test.info("Searching and Selecting the company");
+        EntityClimateProfilePage entityProfilePage = new EntityClimateProfilePage();
+        String companyName = entityProfilePage.searchAndLoadClimateProfilePage(company);
+//        assertTestCase.assertTrue(entityProfilePage.validateGlobalHeader(companyName), companyName + " Header Verification");
+
+        entityProfilePage.selectEsgMaterialityTab();
+        entityProfilePage.validateSubCategories();
+
+        entityProfilePage.clickCloseIcon();
+    }
+
     @Test(groups = {"entity_climate_profile", "regression", "ui", "smoke"})
     @Xray(test = {8442})
     public void validateNoneForTheSector() {
