@@ -92,10 +92,11 @@ public abstract class TestBase {
         System.out.println("#########################################3");
         System.out.println("Test Cases:");
         testCasesList.forEach(System.out::println);
+        System.out.println("reportName = " + reportName);
         if (reportName == null) return;
         if (reportName.contains("Smoke") || reportName.contains("Regression")) {
-            XrayFileImporter xrayFileImporter = new XrayFileImporter();
-            xrayFileImporter.sendExecutionResultsToXray(reportName, testCasesList);
+            System.out.println("Results should be sent to Jira");
+            XrayFileImporter.sendExecutionResultsToXray(reportName, testCasesList);
         }
     }
 
@@ -120,10 +121,10 @@ public abstract class TestBase {
 
     public void getExistingUsersAccessTokenFromUI() {
         System.out.println("getting token");
-            String getAccessTokenScript = "return JSON.parse(localStorage.getItem('okta-token-storage')).accessToken.accessToken";
-            String accessToken = ((JavascriptExecutor) Driver.getDriver()).executeScript(getAccessTokenScript).toString();
-            System.setProperty("token", accessToken);
-            System.out.println("token = " + accessToken);
+        String getAccessTokenScript = "return JSON.parse(localStorage.getItem('okta-token-storage')).accessToken.accessToken";
+        String accessToken = ((JavascriptExecutor) Driver.getDriver()).executeScript(getAccessTokenScript).toString();
+        System.setProperty("token", accessToken);
+        System.out.println("token = " + accessToken);
     }
 
 }

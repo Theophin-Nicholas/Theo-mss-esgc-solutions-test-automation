@@ -2,6 +2,8 @@ package com.esgc.Utilities;
 
 public class ErrorMessages {
 
+    public static String INVALID_TEMPLATE_ERROR_MESSAGE = "Invalid template. Please download a new template and try again";
+    public static String INCOMPLETE_PORTFOLIO_ERROR_MESSAGE = "Import incomplete. Please enter all values as described in the template.";
     public static String INVALID_CURRENCY_ERROR_MESSAGE = "Import incomplete. Please enter all values as described in the template. Currency can be USD, GBP, or EUR.";
     public static String NO_IDENTIFIER_ERROR_MESSAGE = "Import incomplete. Please enter all values as described in the template.";
     public static String EMPTY_IDENTIFIER_ERROR_MESSAGE = "Import incomplete. Please enter all values as described in the template. Line 13: Value Missing. Line 15: Value Missing.";

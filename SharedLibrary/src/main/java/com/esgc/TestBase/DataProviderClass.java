@@ -394,4 +394,18 @@ public class DataProviderClass {
                         {"000002269"},//Exxon Mobil
                 };
     }
+
+
+
+    @DataProvider(name = "Heat Map Research Lines")
+    public Object[][] availableResearchLinesForDashboard() {
+
+        return new Object[][]{
+                {"00000000-0000-0000-0000-000000000000","Physical Risk Hazards","2022","10"},
+                {"00000000-0000-0000-0000-000000000000","Physical Risk Management","2022","10"},
+                {"00000000-0000-0000-0000-000000000000","Carbon Footprint","2022","10"},
+                {"00000000-0000-0000-0000-000000000000","Brown Share Assessment","2022","10"},
+                {"00000000-0000-0000-0000-000000000000","Green Share Assessment","2022","10"},
+        };
+    }
 }
