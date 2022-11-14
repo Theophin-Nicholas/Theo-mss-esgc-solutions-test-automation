@@ -40,9 +40,7 @@ public abstract class UITestBase extends TestBase {
         }
         isUITest = true;
         Driver.getDriver().manage().window().maximize();
-
         DatabaseDriver.createDBConnection();
-
     }
 
     @BeforeMethod(onlyForGroups = {"entitlements"}, groups = {"smoke", "regression", "entitlements"},alwaysRun = true)
