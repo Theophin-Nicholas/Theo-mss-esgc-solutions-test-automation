@@ -89,7 +89,7 @@ public class ImportPortfolio extends UITestBase {
         String inputFile = System.getProperty("user.dir") + ConfigurationReader.getProperty(portfolio);
         RobotRunner.selectFileToUpload(inputFile);
 
-        BrowserUtils.wait(4);
+        BrowserUtils.wait(10);
 
         String expectedFileName = "\"" + inputFile.substring(inputFile.lastIndexOf(File.separator) + 1) + "\"";
         String actualFileName = researchLinePage.selectedFileName.getText().substring(0, researchLinePage.selectedFileName.getText().indexOf("Remove") - 1);
@@ -116,7 +116,8 @@ public class ImportPortfolio extends UITestBase {
         test.pass("Verified:'X' button was displayed on the successful message popup");
 
         String expectedPortfolioName = ConfigurationReader.getProperty(portfolio).substring(
-                ConfigurationReader.getProperty(portfolio).lastIndexOf("\\")
+                ConfigurationReader.getProperty(portfolio).lastIndexOf("\\")+1,
+                ConfigurationReader.getProperty(portfolio).lastIndexOf(".")
         );//"Portfolio Upload updated_good";
         assertTestCase.assertEquals(researchLinePage.getPlaceholderInSuccessPopUp(), expectedPortfolioName, "Portfolio name in pop up");
 
