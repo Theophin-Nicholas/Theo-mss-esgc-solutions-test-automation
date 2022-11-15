@@ -87,7 +87,7 @@ public class EsgAssessmentUITests extends UITestBase {
         expColumnNames.add("Governance Score");
 
         for(int i=0;i<expColumnNames.size();i++){
-            assertTestCase.assertEquals(expColumnNames.get(i),excelColumnNames.get(i));
+            assertTestCase.assertEquals(expColumnNames.get(i),excelColumnNames.get(i), "Validating the order of ESG Columns in the Exported Excel");
         }
 
     }
@@ -119,7 +119,7 @@ public class EsgAssessmentUITests extends UITestBase {
         expColumnNames.add("Overall Score");
 
         for(int i=0;i<expColumnNames.size();i++){
-            assertTestCase.assertEquals(expColumnNames.get(i),excelColumnNames.get(i));
+            assertTestCase.assertEquals(expColumnNames.get(i),excelColumnNames.get(i), "Validating the order of ESG Columns in the Exported Excel");
         }
 
     }
