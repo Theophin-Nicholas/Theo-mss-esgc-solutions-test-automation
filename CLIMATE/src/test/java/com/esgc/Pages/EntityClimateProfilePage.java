@@ -73,7 +73,7 @@ public class EntityClimateProfilePage extends ClimatePageBase {
     @FindBy(id = "export_sources_doc_button")
     public WebElement exportSourcesDocumentsTab;
 
-    @FindBy(id = "export_pdf")
+    @FindBy(xpath = "//button [@id='export_pdf']")
     public WebElement pdfDownloadButton;
 
     @FindBy(id = "ref_Meth_button")
@@ -85,8 +85,13 @@ public class EntityClimateProfilePage extends ClimatePageBase {
     @FindBy(xpath = "//div[@role='dialog'][not(@aria-describedby)]/div[contains(@class,'Content')]/div/div")
     public WebElement exportPopupSubtitleElement;
 
+    @FindBy(xpath = "//div[@role='dialog'][not(@aria-describedby)]//div[contains(translate(text(), " +
+            "'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'),'source documents')]")
+    public WebElement sourceDocumentsDiv;
     @FindBy(xpath = "//div[@role='dialog'][not(@aria-describedby)]//div/ul/li/a")
     public List<WebElement> listSourceDocuments;
+
+
 
     @FindBy(xpath = "//div[@id='entitySourceDocuments']//div[contains(@class,'MuiGrid-item')]/div[1]")
     public WebElement sourceDocumentsMessage;
@@ -539,6 +544,21 @@ public class EntityClimateProfilePage extends ClimatePageBase {
     public boolean IsExportSourcesDocumentsButtonAvailable() {
         try{
             return exportSourcesDocumentsTab.isDisplayed();
+        }catch(Exception e){
+            return false;
+        }
+    }
+    public boolean IsSourceDocumentsDivAvailable() {
+        try{
+            return sourceDocumentsDiv.isDisplayed();
+        }catch(Exception e){
+            return false;
+        }
+    }
+
+    public boolean IsPDFButtonAvailable() {
+        try{
+            return pdfDownloadButton.isDisplayed();
         }catch(Exception e){
             return false;
         }
