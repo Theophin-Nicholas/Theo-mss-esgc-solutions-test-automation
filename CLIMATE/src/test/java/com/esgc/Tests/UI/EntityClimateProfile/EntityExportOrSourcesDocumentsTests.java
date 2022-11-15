@@ -187,7 +187,7 @@ public class EntityExportOrSourcesDocumentsTests extends UITestBase {
     }
 
     @Test(groups = {"entity_climate_profile", "regression", "ui"}, dataProviderClass = DataProviderClass.class, dataProvider = "exportEntitlements")
-    @Xray(test = {10178})
+    @Xray(test = {10178, 11041})
     public void validatePdfContentBasedOnEntitlement(String username, String password, String entitlement){
         LoginPage loginPage = new LoginPage();
         EntityClimateProfilePage entityProfilePage = new EntityClimateProfilePage();
