@@ -1,6 +1,7 @@
 package com.esgc.Tests.UI.PortfolioAnalysisPage;
 
 import com.esgc.Controllers.APIController;
+import com.esgc.Pages.LoginPage;
 import com.esgc.Pages.ResearchLinePage;
 import com.esgc.TestBase.DataProviderClass;
 import com.esgc.Tests.TestBases.UITestBase;
@@ -421,6 +422,7 @@ public class ImportPortfolio extends UITestBase {
     public Object[][] dpMethod() {
 
         return new Object[][]{
+                {"PredictedScoredEntityWithISIN.csv",PREDICTED_SCORED_ENTITY_WITH_ISIN,11071},
                {"InvalidCurrencyInPortfolio.csv", INVALID_CURRENCY_ERROR_MESSAGE, 498},//498
                 {"InvalidCurrencyCodeInPortfolio.csv", INVALID_CURRENCY_ERROR_MESSAGE, 498},//498
                  {"InvalidCurrencyCodeInPortfolio2.csv", INVALID_CURRENCY_ERROR_MESSAGE, 3047},
@@ -443,6 +445,7 @@ public class ImportPortfolio extends UITestBase {
                  {"MissingValue.csv", MISSING_VALUE_ERROR_MESSAGE, 840},//840 value missing
                  {"AllUnmatchedIdentifiers.csv", All_UNMATCHED_IDENTIFIERS_ERROR_MESSAGE, 984},//all value unmatched
                 {"MISSING_ISIN_OR_BBG_TICKER_IDENTIFIER.csv",MISSING_ISIN_OR_BBG_TICKER_IDENTIFIER,10102}
+
 
         };
     }
@@ -681,5 +684,75 @@ public class ImportPortfolio extends UITestBase {
         BrowserUtils.waitForVisibility(researchLinePage.uploadButton, 2);
         test.info("Waited for upload button's visibility");
         assertTestCase.assertTrue(researchLinePage.checkIfPortfolioUploadModalDescriptionIsDisplayedAsExpected(), "Portfolio Upload Modal Description is displayed as expected");
+    }
+
+    @Test(groups = {"regression", "ui", "errorMessages", "robot_dependency"})
+    @Xray(test = {11081})
+    public void importEntityWithPredictedScoreWithoutEntitlements() {
+
+        LoginPage login = new LoginPage();
+        login.clickOnLogout();
+        login.entitlementsLogin(EntitlementsBundles.USER_WITH_ESG_ENTITLEMENT);
+
+        ResearchLinePage researchLinePage = new ResearchLinePage();
+
+        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        test.info("Navigated to Portfolio Analysis Page");
+        test.info("Clicked on Upload button");
+
+        researchLinePage.clickUploadPortfolioButton();
+        test.info("Navigated to Upload Page");
+
+        test.info("Clicked on the Browse File button");
+        researchLinePage.clickBrowseFile();
+        BrowserUtils.wait(2);
+
+        String inputFile = PortfolioFilePaths.getFilePathForInvalidPortfolio("PortfolioWithPredictedScoredEntity.csv");
+        RobotRunner.selectFileToUpload(inputFile);
+
+        BrowserUtils.wait(4);
+        test.info("Import portfolio file was selected");
+        researchLinePage.clickUploadButton();
+        test.info("Clicked on the Upload button");
+        BrowserUtils.wait(2);
+
+        assertTestCase.assertTrue(researchLinePage.AlertMessage.getText().contains("unique identifiers matched; the system was unable to match"), "Verify error message");
+        assertTestCase.assertTrue(researchLinePage.AlertMessageMultipleTickersLists.size()>0, "List of tickers verified");
+        BrowserUtils.waitForClickablility(researchLinePage.closeAlert, 10).click();
+    }
+
+    @Test(groups = {"regression", "ui", "errorMessages", "robot_dependency"})
+    @Xray(test = {11075})
+    public void importPortfolioWithUnmatchedOrbisId() {
+
+        ResearchLinePage researchLinePage = new ResearchLinePage();
+
+        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        test.info("Navigated to Portfolio Analysis Page");
+        test.info("Clicked on Upload button");
+
+        researchLinePage.clickUploadPortfolioButton();
+        test.info("Navigated to Upload Page");
+
+        test.info("Clicked on the Browse File button");
+        researchLinePage.clickBrowseFile();
+        BrowserUtils.wait(2);
+
+        String inputFile = PortfolioFilePaths.getFilePathForInvalidPortfolio("PortfolioWithUnmatchedOrbisId.csv");
+        RobotRunner.selectFileToUpload(inputFile);
+
+        BrowserUtils.wait(4);
+        test.info("Import portfolio file was selected");
+        researchLinePage.clickUploadButton();
+        test.info("Clicked on the Upload button");
+        BrowserUtils.wait(2);
+
+        assertTestCase.assertTrue(researchLinePage.AlertMessage.getText().contains("Entities in your portfolio found in our coverage. Please upload a different portfolio or check your file to try again."), "Verify error message");
+        BrowserUtils.waitForClickablility(researchLinePage.closeAlert, 10).click();
+        researchLinePage.closeUploadModal();
+
+        PortfolioQueries portfolioQueries = new PortfolioQueries();
+        assertTestCase.assertEquals(portfolioQueries.getEntityDetailsWithOrbisId("111111111").size(),0, "Unmatched ornis id should not be available");
+
     }
 }
