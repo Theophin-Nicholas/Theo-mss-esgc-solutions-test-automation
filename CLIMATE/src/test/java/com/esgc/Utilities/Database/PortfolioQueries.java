@@ -11,8 +11,7 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-import static com.esgc.Utilities.Database.DatabaseDriver.getQueryResultList;
-import static com.esgc.Utilities.Database.DatabaseDriver.getQueryResultMap;
+import static com.esgc.Utilities.Database.DatabaseDriver.*;
 import static com.esgc.Utilities.PortfolioUtilities.randomBetween;
 
 public class PortfolioQueries {
@@ -114,6 +113,17 @@ public class PortfolioQueries {
                 "FROM ENTITY_SECURITY_IDENTIFIERS WHERE ENTITY_ID_BVD9 = %s ORDER BY random();";
 
         return getQueryResultMap(String.format(query, bvd9_number));
+    }
+
+    public List<Map<String, Object>> getEntityDetailsWithOrbisId(String orbisId) {
+        String query = "select * from esg_entity_master eem where orbis_id='"+orbisId+"';";
+        return getQueryResultMap(query);
+    }
+
+    public List<Map<String, Object>> getEntitiesFromPortfolio(String portfolioID) {
+        createDBConnection();
+        String query = "select * from DF_PORTFOLIO where PORTFOLIO_ID='"+portfolioID+"';";
+        return getQueryResultMap(query);
     }
 
     public List<PhysicalRiskManagementIdentifier> getPhysicalRiskManagementIdentifiers(String conditionClause) {
