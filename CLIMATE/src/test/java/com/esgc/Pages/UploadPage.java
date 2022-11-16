@@ -256,7 +256,7 @@ public class UploadPage extends ClimatePageBase {
         try {
             BrowserUtils.waitForVisibility(successMessagePopUP, 15);
             return successMessagePopUP.isDisplayed();
-        } catch (NoSuchElementException e) {
+        } catch (Exception e) {
             return false;
         }
     }
