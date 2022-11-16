@@ -5,6 +5,7 @@ import com.aventstack.extentreports.markuputils.MarkupHelper;
 import com.esgc.Controllers.APIController;
 import com.esgc.Tests.TestBases.APITestBase;
 import com.esgc.Utilities.APIUtilities;
+import com.esgc.Utilities.Database.PortfolioQueries;
 import com.esgc.Utilities.PortfolioFilePaths;
 import com.esgc.Utilities.Xray;
 import io.restassured.http.ContentType;
@@ -28,7 +29,7 @@ public class ImportPortfolioTests extends APITestBase {
 
      */
     @Test(groups = {"api", "regression", "smoke"})
-    @Xray(test = {492})
+    @Xray(test = {492, 11070})
     public void postValidPortfolio() {
         String filePath = PortfolioFilePaths.goodPortfolioPath();
         File file = new File(filePath);
@@ -66,6 +67,9 @@ public class ImportPortfolioTests extends APITestBase {
         String portfolioID = response.jsonPath().getString("portfolio_id");
 
         test.pass(portfolioName + " imported to database successfully");
+        PortfolioQueries portfolioQueries = new PortfolioQueries();
+        assertTestCase.assertEquals(portfolioQueries.getEntitiesFromPortfolio(portfolioID).size(),8, "Matched orbis id should be available");
+
 
     }
 
