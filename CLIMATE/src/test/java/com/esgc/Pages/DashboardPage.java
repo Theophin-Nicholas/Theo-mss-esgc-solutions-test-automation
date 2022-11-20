@@ -268,6 +268,9 @@ public class DashboardPage extends UploadPage {
     @FindBy(xpath = "(//div[@id='div-mainlayout']//table)[4]//thead//td")
     public WebElement heatMapXAxisIndicatorTitle;
 
+    @FindBy(xpath = "//div[@id='heatmapentity-test-id']//p[text()='Select two:']")
+    public WebElement selectTwoLabel;
+
     @FindBy(xpath = "//h3/following-sibling::p")
     public List<WebElement> heatMapActiveResearchLineInfo;
 
@@ -964,6 +967,14 @@ public class DashboardPage extends UploadPage {
         }
     }
 
+    public boolean validateSelectTwoStaticText(){
+        try{
+            return selectTwoLabel.isDisplayed();
+        }catch(Exception e){
+return false;
+        }
+    }
+
     public boolean verifyResearchLineDescriptionFromHeatmapSection(String section, String description) {
         //selectOrDeselectHeatMapSection(section);
         String actualDescription = Driver.getDriver().findElement(By.xpath("//h3[text()='" + section + "']/../p")).getText();
@@ -1454,6 +1465,16 @@ public class DashboardPage extends UploadPage {
         }
         System.out.println("Research line is not found");
         return false;
+    }
+
+    public boolean verifyHeatMapTitle(String title) {
+        String xpath = "//div[@id='heatmapentity-test-id']//div[text()='"+title+"']";
+        try{
+            BrowserUtils.waitForVisibility(Driver.getDriver().findElement(By.xpath(xpath)), 30);
+        }catch(Exception e){
+            return false;
+        }
+        return true;
     }
 
     public void selectRandomCell() {

@@ -557,7 +557,7 @@ public class DashboardHeatMapEntityListTests extends UITestBase {
     }
 
     @Test(groups = {"dashboard", "ui", "regression"})
-    @Xray(test = {9201, 9202})
+    @Xray(test = {9201, 9202, 11218})
     public void verifyOverallEsgScoreHeatMap() {
 
         DashboardPage dashboardPage = new DashboardPage();
@@ -567,6 +567,10 @@ public class DashboardHeatMapEntityListTests extends UITestBase {
             dashboardPage.selectPortfolioByNameFromPortfolioSelectionModal("Sample Portfolio");
 
         BrowserUtils.scrollTo(dashboardPage.heatMapResearchLines.get(0));
+
+        //Verify Heat Map Title
+        assertTestCase.assertTrue(dashboardPage.verifyHeatMapTitle("Analyze Companies by Range"),
+                "Verified the widget doesn't show anything before a cell is selected.");
 
         //Verify the entity list - Entity list should be displaying no records
         assertTestCase.assertTrue(dashboardPage.heatMapNoEntityWidget.isDisplayed(),
@@ -674,6 +678,30 @@ public class DashboardHeatMapEntityListTests extends UITestBase {
 
         // Verify esg score X-Axis categories
         assertTestCase.assertFalse(dashboardPage.heatmapXAxisIsAvailable(), "As only Overall ESG Score is in selected, others should not be available.");
+
+    }
+
+    @Test(groups = {"dashboard", "ui", "regression"})
+    @Xray(test = {11222})
+    public void verifySelectTwoStaticTextInHeatMap() {
+        DashboardPage dashboardPage = new DashboardPage();
+        BrowserUtils.waitForVisibility(dashboardPage.verifyPortfolioName, 20);
+
+        if (!dashboardPage.verifyPortfolioName.getText().equalsIgnoreCase("Sample Portfolio"))
+            dashboardPage.selectPortfolioByNameFromPortfolioSelectionModal("Sample Portfolio");
+
+        BrowserUtils.scrollTo(dashboardPage.heatMapResearchLines.get(0));
+        BrowserUtils.wait(3);
+        assertTestCase.assertTrue(dashboardPage.validateSelectTwoStaticText(), "Verify Select Two static text is present");
+
+        LoginPage login = new LoginPage();
+        login.clickOnLogout();
+        login.entitlementsLogin(EntitlementsBundles.PHYSICAL_RISK);
+
+        BrowserUtils.scrollTo(dashboardPage.heatMapResearchLines.get(0));
+        BrowserUtils.wait(3);
+        assertTestCase.assertFalse(dashboardPage.validateSelectTwoStaticText(), "Verify Select Two static text is present");
+
 
     }
 
