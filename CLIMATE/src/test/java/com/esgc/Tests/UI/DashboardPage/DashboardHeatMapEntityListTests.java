@@ -6,13 +6,11 @@ import com.esgc.Controllers.APIController;
 import com.esgc.Controllers.DashboardAPIController;
 import com.esgc.Pages.DashboardPage;
 import com.esgc.Pages.LoginPage;
+import com.esgc.Pages.ResearchLinePage;
 import com.esgc.Tests.TestBases.Descriptions;
 import com.esgc.Tests.TestBases.UITestBase;
-import com.esgc.Utilities.BrowserUtils;
+import com.esgc.Utilities.*;
 import com.esgc.Utilities.Database.PortfolioQueries;
-import com.esgc.Utilities.Driver;
-import com.esgc.Utilities.Environment;
-import com.esgc.Utilities.Xray;
 import io.restassured.response.Response;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
@@ -557,4 +555,126 @@ public class DashboardHeatMapEntityListTests extends UITestBase {
         System.out.println("expGroupTotal = " + expGroupTotal);
         assertTestCase.assertEquals(groupTotal+"",expGroupTotal,"Verified the group total in the widget matches the group total in the database.");
     }
+
+    @Test(groups = {"dashboard", "ui", "regression"})
+    @Xray(test = {9201, 9202})
+    public void verifyOverallEsgScoreHeatMap() {
+
+        DashboardPage dashboardPage = new DashboardPage();
+        BrowserUtils.waitForVisibility(dashboardPage.verifyPortfolioName, 20);
+
+        if (!dashboardPage.verifyPortfolioName.getText().equalsIgnoreCase("Sample Portfolio"))
+            dashboardPage.selectPortfolioByNameFromPortfolioSelectionModal("Sample Portfolio");
+
+        BrowserUtils.scrollTo(dashboardPage.heatMapResearchLines.get(0));
+
+        //Verify the entity list - Entity list should be displaying no records
+        assertTestCase.assertTrue(dashboardPage.heatMapNoEntityWidget.isDisplayed(),
+                "Verified the widget doesn't show anything before a cell is selected.");
+
+        //verify esg score research line is the first one in row
+        assertTestCase.assertEquals(dashboardPage.heatMapResearchLines.get(0).getText(),"Overall ESG Score",
+                "Verified ESG Score research line is first in row");
+
+        //verify esg score research line selected by default
+        assertTestCase.assertTrue(dashboardPage.verifySelectedResearchLineForHeatMap("Overall ESG Score"),
+                "Verified ESG Score research line is selected by default");
+
+        // Verify esg score Y-Axis categories
+        assertTestCase.assertEquals(dashboardPage.heatMapYAxisIndicators.get(0).getText(), "Weak", "Overall ESG Score Verified");
+        assertTestCase.assertEquals(dashboardPage.heatMapYAxisIndicators.get(1).getText(), "Limited", "Overall ESG Score Verified");
+        assertTestCase.assertEquals(dashboardPage.heatMapYAxisIndicators.get(2).getText(), "Robust", "Overall ESG Score Verified");
+        assertTestCase.assertEquals(dashboardPage.heatMapYAxisIndicators.get(3).getText(), "Advanced", "Overall ESG Score Verified");
+
+        dashboardPage.selectResearchLineForHeatMap("Physical Risk: Supply Chain Risk");
+        assertTestCase.assertFalse(dashboardPage.verifySelectedResearchLineForHeatMap("Overall ESG Score"),
+                "Verified ESG Score research line is selected by default");
+        BrowserUtils.wait(5);
+        dashboardPage.selectResearchLineForHeatMap("Overall ESG Score");
+        assertTestCase.assertTrue(dashboardPage.verifySelectedResearchLineForHeatMap("Overall ESG Score"),
+                "Verified ESG Score research line is selected");
+
+        // Verify esg score Y-Axis categories
+        assertTestCase.assertEquals(dashboardPage.heatMapYAxisIndicators.get(0).getText(), "Weak", "Overall ESG Score Verified");
+        assertTestCase.assertEquals(dashboardPage.heatMapYAxisIndicators.get(1).getText(), "Limited", "Overall ESG Score Verified");
+        assertTestCase.assertEquals(dashboardPage.heatMapYAxisIndicators.get(2).getText(), "Robust", "Overall ESG Score Verified");
+        assertTestCase.assertEquals(dashboardPage.heatMapYAxisIndicators.get(3).getText(), "Advanced", "Overall ESG Score Verified");
+
+    }
+
+    @Test(groups = {"dashboard", "ui", "regression"})
+    @Xray(test = {9204})
+    public void verifyCompareEsgScoreHeatMap() {
+
+        DashboardPage dashboardPage = new DashboardPage();
+        BrowserUtils.waitForVisibility(dashboardPage.verifyPortfolioName, 20);
+
+        if (!dashboardPage.verifyPortfolioName.getText().equalsIgnoreCase("Sample Portfolio"))
+            dashboardPage.selectPortfolioByNameFromPortfolioSelectionModal("Sample Portfolio");
+
+        String summaryEsgScoreValue = dashboardPage.esgScoreValue.getText();
+
+        BrowserUtils.scrollTo(dashboardPage.heatMapResearchLines.get(0));
+        assertTestCase.assertTrue(dashboardPage.heatMapNoEntityWidget.isDisplayed(),
+                "Verified the widget doesn't show anything before a cell is selected.");
+
+        String heatmapEsgScoreValue = dashboardPage.getHeatMapPortfolioAverage();
+        assertTestCase.assertEquals(summaryEsgScoreValue, heatmapEsgScoreValue,
+                "Verified ESG Score in Dashboard Summary Header and Heatmap");
+
+        dashboardPage.navigateToPageFromMenu("Portfolio Analysis");
+        dashboardPage.selectResearchLineFromDropdown("ESG Assessments");
+
+        ResearchLinePage researchLinePage = new ResearchLinePage();
+        BrowserUtils.wait(5);
+        String esgAssessmentEsgSore = researchLinePage.esgCardInfoBoxScore.getText();
+        assertTestCase.assertEquals(summaryEsgScoreValue, esgAssessmentEsgSore,
+                "Verified ESG Score in Dashboard Summary Header and ESG Assessments");
+
+    }
+
+    @Test(groups = {"dashboard", "ui", "regression"})
+    @Xray(test = {9205})
+    public void verifyOverallEsgScoreNotAvailableInHeatMap() {
+        LoginPage login = new LoginPage();
+        login.clickOnLogout();
+        login.entitlementsLogin(EntitlementsBundles.PHYSICAL_RISK);
+
+        DashboardPage dashboardPage = new DashboardPage();
+        BrowserUtils.waitForVisibility(dashboardPage.verifyPortfolioName, 20);
+
+        if (!dashboardPage.verifyPortfolioName.getText().equalsIgnoreCase("Sample Portfolio"))
+            dashboardPage.selectPortfolioByNameFromPortfolioSelectionModal("Sample Portfolio");
+
+        BrowserUtils.scrollTo(dashboardPage.heatMapResearchLines.get(0));
+        for(int i=0; i<dashboardPage.heatMapResearchLines.size(); i++) {
+            assertTestCase.assertNotEquals(dashboardPage.heatMapResearchLines.get(i).getText(), "Overall ESG Score", "Verified Overall ESG Score is not available in Heatmap");
+        }
+    }
+
+    @Test(groups = {"dashboard", "ui", "regression"})
+    @Xray(test = {9214})
+    public void verifyOnlyOverallEsgScoreInHeatMap() {
+        DashboardPage dashboardPage = new DashboardPage();
+        BrowserUtils.waitForVisibility(dashboardPage.verifyPortfolioName, 20);
+
+        if (!dashboardPage.verifyPortfolioName.getText().equalsIgnoreCase("Sample Portfolio"))
+            dashboardPage.selectPortfolioByNameFromPortfolioSelectionModal("Sample Portfolio");
+
+        BrowserUtils.scrollTo(dashboardPage.heatMapResearchLines.get(0));
+        BrowserUtils.wait(3);
+        dashboardPage.heatMapResearchLines.get(1).click();
+        BrowserUtils.wait(3);
+
+        // Verify esg score Y-Axis categories
+        assertTestCase.assertEquals(dashboardPage.heatMapYAxisIndicators.get(0).getText(), "Weak", "Overall ESG Score Verified");
+        assertTestCase.assertEquals(dashboardPage.heatMapYAxisIndicators.get(1).getText(), "Limited", "Overall ESG Score Verified");
+        assertTestCase.assertEquals(dashboardPage.heatMapYAxisIndicators.get(2).getText(), "Robust", "Overall ESG Score Verified");
+        assertTestCase.assertEquals(dashboardPage.heatMapYAxisIndicators.get(3).getText(), "Advanced", "Overall ESG Score Verified");
+
+        // Verify esg score X-Axis categories
+        assertTestCase.assertFalse(dashboardPage.heatmapXAxisIsAvailable(), "As only Overall ESG Score is in selected, others should not be available.");
+
+    }
+
 }
