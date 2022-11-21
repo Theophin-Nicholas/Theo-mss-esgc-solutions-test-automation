@@ -36,7 +36,7 @@ public class APIController {
     boolean isInvalidTest = false;
 
     RequestSpecification configSpec() {
-        if(System.getProperty("token")==null){
+        if (System.getProperty("token") == null) {
             String getAccessTokenScript = "return JSON.parse(localStorage.getItem('okta-token-storage')).accessToken.accessToken";
             String accessToken = ((JavascriptExecutor) Driver.getDriver()).executeScript(getAccessTokenScript).toString();
             System.setProperty("token", accessToken);
@@ -53,7 +53,7 @@ public class APIController {
                     .baseUri(Environment.URL)
                     .relaxedHTTPSValidation()
                     .header("Authorization", "Bearer " + System.getProperty("token"))
-                   // .header("Accept", "application/json")
+                    // .header("Accept", "application/json")
                     .header("Content-Type", "application/json")
                     .log().ifValidationFails();
         }
@@ -476,6 +476,7 @@ public class APIController {
 
         return response;
     }
+
     public Response getPhysicalRiskUnderlyingDataMetricsResponse(String portfolio_id, String researchLine, APIFilterPayload apiFilterPayload) {
         Response response = null;
         try {
@@ -551,10 +552,10 @@ public class APIController {
                 return rangesAndCategories;
 
             case "ESG":
-                rangesAndCategories.add(new RangeAndScoreCategory("Weak", 0d, 29.99999999d, "negative", 0d, 24.999999d));
-                rangesAndCategories.add(new RangeAndScoreCategory("Limited", 30d, 49.9999999d, "negative", 25d, 44.9999999d));
-                rangesAndCategories.add(new RangeAndScoreCategory("Robust", 50d, 59.99999d, "positive", 45d, 64.9999999d));
-                rangesAndCategories.add(new RangeAndScoreCategory("Advanced", 60d, 100d, "positive", 65d, 100d));
+                rangesAndCategories.add(new RangeAndScoreCategory("Weak", 0d, 29.99999999d, "negative", 0d, 24.999999d, 0d,1.499999d));
+                rangesAndCategories.add(new RangeAndScoreCategory("Limited", 30d, 49.9999999d, "negative", 25d, 44.9999999d, 1.5d,2.499999d));
+                rangesAndCategories.add(new RangeAndScoreCategory("Robust", 50d, 59.99999d, "positive", 45d, 64.9999999d, 2.5d,3.4999999d));
+                rangesAndCategories.add(new RangeAndScoreCategory("Advanced", 60d, 100d, "positive", 65d, 100d, 3.5d,4d));
                 return rangesAndCategories;
         }
         return null;
@@ -614,11 +615,6 @@ public class APIController {
         }
         return null;
     }
-
-
-
-
-
 
 
     public String apiResourceMapper(String researchLine) {
@@ -805,7 +801,7 @@ public class APIController {
     }
 
     public Response getCarbonFootprintEmissionAPIResponse(String portfolio_id, APIFilterPayload apiFilterPayload) {
-        return getPortfolioEmissionsResponse(portfolio_id,"carbonfootprint",apiFilterPayload);
+        return getPortfolioEmissionsResponse(portfolio_id, "carbonfootprint", apiFilterPayload);
     }
 
     public List<ResearchLineIdentifier> getfilteredData(List<ResearchLineIdentifier> portfolio, String filter) {
@@ -866,7 +862,8 @@ public class APIController {
                                         i1.getInvestmentPercentage() + i2.getInvestmentPercentage(),
                                         i1.getValue() + i2.getValue(),
                                         i1.getResearchLineIdForESGModel(),
-                                        i1.getEntityStatus())))
+                                        i1.getEntityStatus(),
+                                        i1.getScale())))
                 .map(java.util.Optional::get)
                 .collect(Collectors.toList()).stream()
                 .sorted(compareByValueThenName)
@@ -920,7 +917,6 @@ public class APIController {
         }
         return null;
     }
-
 
 
     public Response getPortfolioNameUpdateAPIResponse(String portfolio_id, String portfolio_name) {

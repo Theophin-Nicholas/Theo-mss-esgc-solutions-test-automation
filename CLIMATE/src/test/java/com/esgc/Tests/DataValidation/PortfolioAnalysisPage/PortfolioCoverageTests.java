@@ -20,7 +20,10 @@ import java.util.stream.Collectors;
 public class PortfolioCoverageTests extends DataValidationTestBase {
 
     @Test(groups = {"regression", "data_validation"}, dataProvider = "researchLines")
-    @Xray(test = {6372, 6726, 7242})
+    @Xray(test = {6372, 6726, 7242,
+            11244,//subs
+            10899//ESG predicted
+    })
     public void verifyPortfolioCoverageWithMixedIdentifiers(@Optional String sector, @Optional String region,
                                                             @Optional String researchLine, String month, String year) {
 
@@ -76,11 +79,11 @@ public class PortfolioCoverageTests extends DataValidationTestBase {
         String companiesResponse = portfolioCoverageWrapper.get(0).getPortfolioCoverage().getCompanies();
         String investmentResponse = portfolioCoverageWrapper.get(0).getPortfolioCoverage().getInvestment();
 
-        double actualPercentage = PortfolioUtilities.round(Double.parseDouble(investmentResponse),2);
-        double expectedPercentage = PortfolioUtilities.round(dataValidationUtilities.getTotalInvestmentPercentage(portfolioToUpload, totalValues),2);
+        double actualPercentage = PortfolioUtilities.round(Double.parseDouble(investmentResponse), 2);
+        double expectedPercentage = PortfolioUtilities.round(dataValidationUtilities.getTotalInvestmentPercentage(portfolioToUpload, totalValues), 2);
 
         if (researchLine.equals("Temperature Alignment")) {
-            expectedPercentage = PortfolioUtilities.round(dataValidationUtilities.getTotalInvestmentForTemperatureAlignment(portfolioToUpload, totalValues),2);
+            expectedPercentage = PortfolioUtilities.round(dataValidationUtilities.getTotalInvestmentForTemperatureAlignment(portfolioToUpload, totalValues), 2);
         }
         assertTestCase.assertEquals(companiesResponse, numberOfCoveredCompaniesInResearchLine + "/" + numberOfCompaniesInPortfolio, "companies in " + researchLine);
         assertTestCase.assertEquals(actualPercentage, expectedPercentage, "total investment in " + researchLine);
