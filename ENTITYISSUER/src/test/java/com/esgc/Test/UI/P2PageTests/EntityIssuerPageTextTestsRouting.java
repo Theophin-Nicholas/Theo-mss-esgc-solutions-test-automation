@@ -54,7 +54,7 @@ public class EntityIssuerPageTextTestsRouting extends EntityPageTestBase {
 
     @Xray(test = {6356})
     @Test(groups = {"regression", "ui", "smoke", "entity_issuer"},
-            dataProvider = "credentialsP2_back", dataProviderClass = DataProviderClass.class,
+            dataProvider = "credentialsP2", dataProviderClass = DataProviderClass.class,
             description = "Verify Banner")
     public void verifybanner(String UserID, String Password) {
         LoginPageIssuer LoginPageIssuer = new LoginPageIssuer();
@@ -67,7 +67,7 @@ public class EntityIssuerPageTextTestsRouting extends EntityPageTestBase {
 
     @Xray(test = {7298, 7902, 9070})
     @Test(groups = {"regression", "ui", "smoke", "entity_issuer"},
-            dataProvider = "credentialsP2_back", dataProviderClass = DataProviderClass.class,
+            dataProvider = "credentialsP2", dataProviderClass = DataProviderClass.class,
             description = "Verify Grade and Scores")
     public void verifyGradesAndScores(String UserID, String Password) {
         LoginPageIssuer LoginPageIssuer = new LoginPageIssuer();
