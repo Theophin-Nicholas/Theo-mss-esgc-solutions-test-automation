@@ -17,7 +17,7 @@ import java.time.Duration;
 public class EntityIssuerPageRoutingTest extends EntityPageTestBase {
     EntityIssuerPage entitypage = new EntityIssuerPage();
     @Xray(test = {7634, 7331})
-    @Test(groups = {"regression", "ui", "smoke", "entity_issuer"},
+    @Test(groups = {"regression", "ui", "entity_issuer"},
             dataProvider = "credentials11", dataProviderClass = DataProviderClass.class,
             description = "Verify if Landing page is routing correctly")
     public void validateRouting(String UserID, String Password, String coverage_status, String expectedPage ) {
