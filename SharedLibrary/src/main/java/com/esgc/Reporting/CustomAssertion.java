@@ -96,8 +96,10 @@ public class CustomAssertion extends SoftAssert {
 
     /**
      * This method checks if an assert statement is true for a given condition with Jira Test Case Ticket Numbers
-     *  @param condition
-     * @param ticketNumbers*/
+     *
+     * @param condition
+     * @param ticketNumbers
+     */
     public void assertTrue(boolean condition, String comment, Integer... ticketNumbers) {
         testCaseNumber = Arrays.asList(ticketNumbers);
         message = comment;
@@ -236,12 +238,13 @@ public class CustomAssertion extends SoftAssert {
             TakesScreenshot ts = (TakesScreenshot) Driver.getDriver();
             File source = ts.getScreenshotAs(OutputType.FILE);
             // full path to the screenshot location
-            String target = System.getProperty("user.dir") + "/test-output/Screenshots/" + name + date + ".png";
+            String target = System.getProperty("user.dir") + File.separator + "test-output"
+                    + File.separator + "Screenshots" + File.separator + name + date + ".png";
             File finalDestination = new File(target);
             // save the screenshot to the path given
             FileUtils.copyFile(source, finalDestination);
             return target;
-        }catch (UnreachableBrowserException e){
+        } catch (UnreachableBrowserException e) {
             System.out.println("BROWSER IS NOT OPENED");
             e.printStackTrace();
         }

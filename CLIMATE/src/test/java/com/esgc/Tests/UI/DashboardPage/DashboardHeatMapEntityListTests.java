@@ -9,6 +9,7 @@ import com.esgc.Pages.LoginPage;
 import com.esgc.Tests.TestBases.Descriptions;
 import com.esgc.Tests.TestBases.UITestBase;
 import com.esgc.Utilities.BrowserUtils;
+import com.esgc.Utilities.Database.PortfolioQueries;
 import com.esgc.Utilities.Driver;
 import com.esgc.Utilities.Environment;
 import com.esgc.Utilities.Xray;
@@ -488,5 +489,72 @@ public class DashboardHeatMapEntityListTests extends UITestBase {
             System.out.println("Expected Category Number for " + cat + " = " + expCategories.get(cat));
             return false;
         }
+    }
+
+    @Test(groups = {"dashboard", "ui"})
+    @Xray(test = {9394, 9400})
+    public void verifyUnderlyingDataForHeatMapCellsTest() {
+        DashboardPage dashboardPage = new DashboardPage();
+        BrowserUtils.waitForVisibility(dashboardPage.verifyPortfolioName, 20);
+        if (!dashboardPage.verifyPortfolioName.getText().equalsIgnoreCase("Sample Portfolio"))
+            dashboardPage.selectPortfolioByNameFromPortfolioSelectionModal("Sample Portfolio");
+        //Navigate to the heatmap section
+
+        BrowserUtils.scrollTo(dashboardPage.heatMapResearchLines.get(0));
+
+        //Verify the entity list - Entity list should be displaying no records
+        assertTestCase.assertTrue(dashboardPage.heatMapNoEntityWidget.isDisplayed(),
+                "Verified the widget doesn't show anything before a cell is selected.");
+        //verify esg score research line selected by default
+        //if(!dashboardPage.verifySelectedResearchLineForHeatMap("Overall ESG Score"))
+        dashboardPage.selectResearchLineForHeatMap("Overall ESG Score");
+        assertTestCase.assertTrue(dashboardPage.verifySelectedResearchLineForHeatMap("Overall ESG Score"),
+                "Verified ESG Score research line is selected by default");
+
+        System.out.println("heatMapNoEntityWidget displayed..");
+        while(dashboardPage.heatMapCells.size()<10){
+            BrowserUtils.wait(1);
+        }
+
+
+        //select random cell. if percentage equals 0% then skip the cell, if not just check for one cell
+        dashboardPage.selectRandomCell();
+        assertTestCase.assertTrue(dashboardPage.heatMapWidgetTitle.isDisplayed(),
+                "Verified the widget shows the title after a cell is selected.");
+        assertTestCase.assertTrue(dashboardPage.heatMapDrawerEntityNames.size() > 0,
+                "Verified the widget shows the entity names after a cell is selected.");
+        String portfolioId = "00000000-0000-0000-0000-000000000000";
+        PortfolioQueries portfolioQueries = new PortfolioQueries();
+        List<String> expEntityNames = portfolioQueries.getPortfolioEntityNames(portfolioId);
+        double getESGCategoryForPortfolio = portfolioQueries.getESGCategoryForPortfolio(portfolioId);
+        System.out.println("getESGCategoryForPortfolio = " + getESGCategoryForPortfolio);
+        int sumOfValues = portfolioQueries.getSumOfValues(portfolioId);
+        System.out.println("sumOfValues = " + sumOfValues);
+        double groupTotal = 0.0;
+        for (int i = 0; i < dashboardPage.heatMapDrawerEntityNames.size(); i++) {
+            //verify Entity names
+            String actEntityName = dashboardPage.heatMapDrawerEntityNames.get(i).getText();
+            assertTestCase.assertTrue(expEntityNames.contains(actEntityName),
+                    "Verified the entity names in the widget matches the entity names in the database.");
+            //verify investment percentages
+            String percentageText = dashboardPage.heatMapDrawerEntityPercentages.get(i).getText();
+            Double actPercentage = Double.parseDouble(percentageText.substring(0,percentageText.indexOf("%")));
+            Double expPercentage = portfolioQueries.getPortfolioEntityValue(portfolioId, actEntityName)*100/sumOfValues;
+            groupTotal += expPercentage;
+            //rounding off to 2 decimal places
+            expPercentage = Math.round(expPercentage*100.0)/100.0;
+            if(!expPercentage.equals(actPercentage)) {
+                System.out.println("expPercentage = " + expPercentage);
+                System.out.println("actPercentage = " + actPercentage);
+            }
+            assertTestCase.assertTrue(actPercentage.equals(expPercentage)||actPercentage.equals(expPercentage+0.01),
+                    "Verified the entity percentages in the widget matches the entity percentages in the database.");
+        }
+        groupTotal = Math.round(groupTotal*100.0)/100.0;
+        System.out.println("groupTotal = " + groupTotal);
+        String expGroupTotal = dashboardPage.heatMapWidgetTitle.getText();
+        expGroupTotal = expGroupTotal.substring(expGroupTotal.indexOf("\n")+1,expGroupTotal.indexOf("%"));
+        System.out.println("expGroupTotal = " + expGroupTotal);
+        assertTestCase.assertEquals(groupTotal+"",expGroupTotal,"Verified the group total in the widget matches the group total in the database.");
     }
 }

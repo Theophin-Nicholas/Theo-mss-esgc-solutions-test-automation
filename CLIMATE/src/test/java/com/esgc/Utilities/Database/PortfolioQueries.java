@@ -2,14 +2,16 @@ package com.esgc.Utilities.Database;
 
 import com.esgc.DBModels.*;
 import com.esgc.DBModels.EntityPage.PhysicalScore;
+import com.esgc.Utilities.DateTimeUtilities;
+import com.esgc.Utilities.ESGUtilities;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-import static com.esgc.Utilities.Database.DatabaseDriver.getQueryResultList;
-import static com.esgc.Utilities.Database.DatabaseDriver.getQueryResultMap;
+import static com.esgc.Utilities.Database.DatabaseDriver.*;
 import static com.esgc.Utilities.PortfolioUtilities.randomBetween;
 
 public class PortfolioQueries {
@@ -121,6 +123,17 @@ public class PortfolioQueries {
                 "FROM ENTITY_SECURITY_IDENTIFIERS WHERE ENTITY_ID_BVD9 = %s ORDER BY random();";
 
         return getQueryResultMap(String.format(query, bvd9_number));
+    }
+
+    public List<Map<String, Object>> getEntityDetailsWithOrbisId(String orbisId) {
+        String query = "select * from esg_entity_master eem where orbis_id='"+orbisId+"';";
+        return getQueryResultMap(query);
+    }
+
+    public List<Map<String, Object>> getEntitiesFromPortfolio(String portfolioID) {
+        createDBConnection();
+        String query = "select * from DF_PORTFOLIO where PORTFOLIO_ID='"+portfolioID+"';";
+        return getQueryResultMap(query);
     }
 
     public List<PhysicalRiskManagementIdentifier> getPhysicalRiskManagementIdentifiers(String conditionClause) {
@@ -781,6 +794,33 @@ public class PortfolioQueries {
         return month_name;
     }
 
+    public List<Map<String, Object>> getCompanyUpdates(String portfolioId, String researchLine, String year, String month){
+        String query= "";
+        if(researchLine.equals("Physical Risk Hazards")){
+            query = "select * from entity_score where entity_id_bvd9 in \n" +
+                    "(select bvd9_number from df_portfolio where portfolio_id='"+portfolioId+"') \n" +
+                    "and release_date = (select max(release_date) from entity_score where release_date < GETDATE())order by release_date desc";
+        } else if(researchLine.equals("Physical Risk Management")){
+            query = "select * from PHYSICAL_RISK_MANAGEMENT where bvd9_number in\n" +
+                    "(select bvd9_number from df_portfolio where portfolio_id='"+portfolioId+"')\n" +
+                    "and produced_date like'"+year+"-"+month+"-%' and year='"+year+"' and month ='"+month+"'";
+        } else if(researchLine.equals("Carbon Footprint")){
+            query = "select * from CARBON_FOOTPRINT where bvd9_number in \n" +
+                    "(select bvd9_number from df_portfolio where portfolio_id='"+portfolioId+"') \n" +
+                    "and produced_date like'"+year+"-"+month+"-%' and year='"+year+"' and month ='"+month+"'";
+        } else if(researchLine.equals("Green Share Assessment")){
+            query = "select * from GREEN_SHARE where bvd9_number in \n" +
+                    "(select bvd9_number from df_portfolio where portfolio_id='"+portfolioId+"') \n" +
+                    "and produced_date like'"+year+"-"+month+"-%' and year='"+year+"' and month ='"+month+"'";
+        } else if(researchLine.equals("Brown Share Assessment")){
+            query = "select * from BROWN_SHARE where bvd9_number in \n" +
+                    "(select bvd9_number from df_portfolio where portfolio_id='"+portfolioId+"') \n" +
+                    "and produced_date like'"+year+"-"+month+"-%' and year='"+year+"' and month ='"+month+"'";
+        }
+
+        return getQueryResultMap(query);
+    }
+
     public List<Map<String, Object>> getESGModelWithPortfolioID(String month, String year, String portfolioId) {
         String query = "select DISTINCT eos.ORBIS_ID, eos.RESEARCH_LINE_ID from df_portfolio  df\n" +
                 "join ESG_OVERALL_SCORES eos on eos.orbis_id=df.bvd9_number\n" +
@@ -887,5 +927,62 @@ public class PortfolioQueries {
         }
 
         return score;
+    }
+
+    public Map<String, Object> getPortfolioDetails(String portfolioid) {
+        String query = "SELECT * FROM df_target.df_portfolio WHERE 1=1 AND portfolio_id = '" + portfolioid +"'";
+        Map<String, Object> rs = getQueryResultMap(query).get(0);
+        return rs;
+    }
+
+    public List<Map<String, Object>> getHeatMapPortfolioScores(String portfolioid) {
+        String query = "select *, df.value as INVESTMENT_VALUE from df_portfolio df\n" +
+                "join entity_coverage_tracking ect on df.bvd9_number=ect.orbis_id and coverage_status = 'Published' and publish = 'yes'\n" +
+                "join ESG_OVERALL_SCORES eos on ect.orbis_id=eos.orbis_id and data_type in ('overall_alphanumeric_score' ) and sub_category = 'ESG'\n" +
+                "join ENTITY_SCORE es on df.bvd9_number = es.ENTITY_ID_BVD9 and es.release_year ='2021' and es.release_month = '12'\n" +
+                "where portfolio_id='"+portfolioid+"'\n" +
+                "and eos.year || eos.month <= '"+ DateTimeUtilities.getCurrentYear()+DateTimeUtilities.getCurrentMonthNumeric()+"'\n" +
+                //"and eos.value in('e.esg')\n" +
+                "qualify row_number() OVER (PARTITION BY eos.orbis_id ORDER BY eos.year DESC, eos.month DESC, eos.scored_date DESC) =1;";
+        List<Map<String, Object>> rs = getQueryResultMap(query);
+        return rs;
+    }
+    public List<String> getPortfolioEntityNames(String portfolioId){
+        List<Map<String, Object>> rs = getHeatMapPortfolioScores(portfolioId);
+        List<String> entityNames = new ArrayList<>();
+        for (Map<String, Object> r : rs) {
+            entityNames.add(r.get("COMPANY_NAME").toString());
+        }
+        System.out.println("entityNames.size() = " + entityNames.size());
+        return entityNames;
+    }
+
+    public double getESGCategoryForPortfolio(String portfolioId){
+        List<Map<String, Object>> rs = getHeatMapPortfolioScores(portfolioId);
+        int total=0;
+        for (Map<String, Object> r : rs) {
+            r.put("scale", ESGUtilities.getESGPillarsScale(r.get("RESEARCH_LINE_ID").toString(), (int) Double.parseDouble(r.get("ENTITY_SCORE_TOTAL").toString())));
+            total += (Integer) r.get("scale");
+        }
+        return Math.round(total*100.0)/rs.size();
+    }
+
+    public int getSumOfValues(String portfolioId) {
+        String query = "select sum(value) as sum from df_portfolio where portfolio_id='"+portfolioId+"'";
+        List<Map<String, Object>> rs = getQueryResultMap(query);
+        return Integer.parseInt(rs.get(0).get("SUM").toString());
+    }
+
+    public Double getPortfolioEntityValue(String portfolioId, String actEntityName) {
+        List<Map<String, Object>> rs = getHeatMapPortfolioScores(portfolioId);
+        double entityValue = 0.0;
+        for (Map<String, Object> r : rs) {
+            if (r.get("COMPANY_NAME").toString().equals(actEntityName)) {
+                entityValue = Double.parseDouble(r.get("INVESTMENT_VALUE").toString());
+                break;
+            }
+        }
+        System.out.println("entityValue = " + entityValue);
+        return entityValue;
     }
 }
