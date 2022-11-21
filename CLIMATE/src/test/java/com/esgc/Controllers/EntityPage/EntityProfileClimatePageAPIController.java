@@ -267,4 +267,24 @@ public class EntityProfileClimatePageAPIController {
         System.out.println(response.prettyPrint());
         return response;
     }
+
+    public Response getControversiesAPI(String payload) {
+        Response response = null;
+        try {
+            response = given().accept(ContentType.JSON)
+                    .baseUri(Environment.URL)
+                    .relaxedHTTPSValidation()
+                    .header("Authorization", "Bearer " + System.getProperty("token"))
+                    .header("Accept", "application/json")
+                    .header("Content-Type", "application/json")
+                    .body(payload)
+                    .when()
+                    .post(EntityProfilePageEndpoints.POST_ENTITY_CONTROVERSIES);
+
+        } catch (Exception e) {
+            System.out.println("Inside exception " + e.getMessage());
+        }
+
+        return response;
+    }
 }
