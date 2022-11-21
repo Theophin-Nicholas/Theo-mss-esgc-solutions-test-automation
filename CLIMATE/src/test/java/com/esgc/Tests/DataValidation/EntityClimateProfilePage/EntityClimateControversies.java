@@ -1,6 +1,7 @@
 package com.esgc.Tests.DataValidation.EntityClimateProfilePage;
 
 import com.esgc.APIModels.EntityProfilePageModels.EntityControversies.Controversies;
+import com.esgc.Controllers.EntityPage.EntityProfileClimatePageAPIController;
 import com.esgc.Tests.TestBases.DataValidationTestBase;
 import com.esgc.Utilities.EndPoints.EntityProfilePageEndpoints;
 import com.esgc.Utilities.Environment;
@@ -25,7 +26,8 @@ public class EntityClimateControversies extends DataValidationTestBase {
             description = "Verify the Subcategories data for the entity is matching with the snowflake db")
     public void entityClimateControversies() {
         // Get the api response
-        Controversies contList = getControversies("{\"orbis_id\":\"000411117\"}").as(Controversies.class);
+        EntityProfileClimatePageAPIController apiContoller = new EntityProfileClimatePageAPIController();
+        Controversies contList = apiContoller.getControversiesAPI("{\"orbis_id\":\"000411117\"}").as(Controversies.class);
 
         Map<String, Integer> subCategoryDetails = new HashMap<>();
         for (int i = 0; i < contList.getSub_categories().size(); i++) {

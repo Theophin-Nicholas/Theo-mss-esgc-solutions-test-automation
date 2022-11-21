@@ -313,5 +313,4 @@ public class DatabaseDriver {
         int rowCount = resultSet.getRow();
         return rowCount;
     }
-
 }

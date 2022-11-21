@@ -18,7 +18,9 @@ public class EsgAssessment extends DataValidationTestBase {
     public void verifyEsgAssessment(String researchLine, String portfolioId, String year, String month) {
 
         DashboardPage dashboardPage = new DashboardPage();
-        List<Map<String,String>> excelResults = utils.convertExcelToNestedMap(BrowserUtils.exportPath(researchLine));
+        String filePath = BrowserUtils.exportPath(researchLine);
+        assertTestCase.assertTrue(validateEsgAssessmentExportedFileName(filePath), "File name should be in the format of ESG Assessment_26-Jul-2022_T12_24_53.xls");
+        List<Map<String,String>> excelResults = utils.convertExcelToNestedMap(filePath);
 
         // Compare the data from Data Base with Excel File
         // DatabaseDriver.createDBConnection();
@@ -64,6 +66,10 @@ public class EsgAssessment extends DataValidationTestBase {
                 utils.compare(dbResult.get("Governance Score"),excelResult.get("Governance Score"));
 
         return result;
+    }
+
+    public boolean validateEsgAssessmentExportedFileName(String filePath){
+        return filePath.substring(filePath.indexOf("_T")).length()==14;
     }
 
 }

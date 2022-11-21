@@ -66,6 +66,9 @@ public abstract class PageBase {
     @FindBy(xpath = "//li[text()='Portfolio Selection/Upload']")
     public WebElement portfolioSettings;
 
+    @FindBy(xpath = "//li[text()='Regulatory Reporting']")
+    public WebElement regulatoryReporting;
+
     @FindBy(xpath = "(//table[@id='table-id'])[1]/tbody/tr/td[1]")
     public List<WebElement> portfolioSettingsCompanies;
 
@@ -90,7 +93,7 @@ public abstract class PageBase {
     @FindBy(xpath = "//span[@title='SamplePortfolioToDelete']")
     public WebElement samplePortfolioToDelete;
 
-    @FindBy(xpath = "(//button[@id='button-button-test-id-1'])[2]")
+    @FindBy(xpath = "(//button[@id='button-button-test-id-1'])")//ferhat: I removed [2] from end of the locator since there was no 2nd on the test page
     public WebElement deleteButton;
 
     @FindBy(xpath = "//div[@role='dialog']/div[2]/div/div")
@@ -617,6 +620,7 @@ public abstract class PageBase {
      */
     public void clickPortfolioSelectionButton() {
         wait.until(ExpectedConditions.elementToBeClickable(portfolioSelectionButton)).click();
+        BrowserUtils.waitFor(3);
     }
 
     public void clickResearchLineDropdown() {
@@ -1209,6 +1213,43 @@ public abstract class PageBase {
         return Driver.getDriver().findElements(By.xpath(xpath)).size() == 3; //For 3 regions
     }
 
+    public void verifyCompanyNameInCoveragePopup(String subsidiaryCompanyName, String parentCompanyName) {
+        String xpath = "//span[@heap_id='view-panel'][text()='"+subsidiaryCompanyName+"']/following-sibling::span/span[text()='"+parentCompanyName+"']";
+        assertTestCase.assertEquals(Driver.getDriver().findElements(By.xpath(xpath)).size(), 1);
+    }
+
+    public void verifyCompanyIsNotClickableInCoveragePopup(String companyName) {
+        String xpath = "//span[@heap_id='view-panel'][text()='"+companyName+"']";
+        WebElement element = Driver.getDriver().findElement(By.xpath(xpath));
+        assertTestCase.assertFalse(isElementClickable(element));
+    }
+
+    public void verifyCompanyIsClickableInCoveragePopup(String companyName) {
+        String xpath = "//span[@heap_id='view-panel'][text()='"+companyName+"']";
+        WebElement element = Driver.getDriver().findElement(By.xpath(xpath));
+        assertTestCase.assertTrue(element.getCssValue("text-decoration").contains("underline"));
+    }
+
+    public void verifyCompanyNameInTables(String subsidiaryCompanyName, String parentCompanyName) {
+        String xpath = "//span[text()='"+subsidiaryCompanyName+"']/following-sibling::span/span[text()='"+parentCompanyName+"']";
+        assertTestCase.assertEquals(Driver.getDriver().findElements(By.xpath(xpath)).size(), 1);
+    }
+
+    public void verifyCompanyIsNotClickable(String companyName) {
+        String xpath = "//span[text()='"+companyName+"']";
+        WebElement element = Driver.getDriver().findElement(By.xpath(xpath));
+        assertTestCase.assertFalse(isElementClickable(element));
+    }
+
+    public void verifyCompanyIsClickable(String companyName) {
+        String xpath = "//span[text()='"+companyName+"']";
+        WebElement element = Driver.getDriver().findElement(By.xpath(xpath));
+        assertTestCase.assertTrue(element.getCssValue("text-decoration").contains("underline"));
+    }
+
+    public boolean isElementClickable(WebElement element) {
+        return element.getCssValue("text-decoration").contains("underline");
+    }
 
     public boolean verifyViewByRegionTableSectorColumnsValues(ArrayList<String> expectedSectorValues) {
         String columnValue = "";
