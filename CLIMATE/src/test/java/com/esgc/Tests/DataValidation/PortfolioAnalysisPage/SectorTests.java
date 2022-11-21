@@ -24,7 +24,7 @@ import java.util.stream.Stream;
 public class SectorTests extends DataValidationTestBase {
 
     @Test(groups = {"regression", "data_validation"}, dataProvider = "researchLines")
-    @Xray(test = {1750, 2140, 2213, 2218, 2575, 3687, 3686, 4991, 3691, 1383, 1384, 5143})
+    @Xray(test = {1750, 2140, 2213, 2218, 2575, 3687, 3686, 4991, 3691, 1383, 1384, 5143, 11247})
     public void verifySectorSummaryAndDetails(@Optional String sector, @Optional String region,
                                               @Optional String researchLine, @Optional String month, @Optional String year) {
 

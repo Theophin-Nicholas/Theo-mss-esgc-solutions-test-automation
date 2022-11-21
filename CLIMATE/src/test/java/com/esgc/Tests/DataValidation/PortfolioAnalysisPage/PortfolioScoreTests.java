@@ -5,8 +5,10 @@ import com.esgc.APIModels.PortoflioAnalysisModels.PortfolioPhysicalHazard;
 import com.esgc.APIModels.PortoflioAnalysisModels.RangeAndScoreCategory;
 import com.esgc.DBModels.EntityPage.PhysicalScore;
 import com.esgc.DBModels.ResearchLineIdentifier;
+import com.esgc.TestBase.TestBase;
 import com.esgc.Tests.TestBases.DataValidationTestBase;
 import com.esgc.Utilities.APIUtilities;
+import com.esgc.Utilities.DataProviderUtilities;
 import com.esgc.Utilities.Database.PortfolioQueries;
 import com.esgc.Utilities.PortfolioUtilities;
 import com.esgc.Utilities.Xray;
@@ -16,8 +18,11 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Test;
 
+import java.text.SimpleDateFormat;
+import java.time.Month;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,7 +33,10 @@ public class PortfolioScoreTests extends DataValidationTestBase {
     @Test(groups = {"regression", "data_validation"}, dataProvider = "researchLines")
     @Xray(test = {2259, 2256, 2255, 2692, 2691, 3019, 2257, 2511, 2510, 2693, 2512, 3024, 2258, 2694,
             2513, 2695, 2514, 2192, 4430, 6593, 6596,
-            6725})
+            6725,
+            11235,//Subs
+            10898, 11400//ESG predicted
+    })
     //TCFD 1992
     //Energy Transition 3027, 3029, 3020, 3019, 3024
     public void verifyPortfolioScoreWithMixedIdentifiers(
@@ -88,10 +96,12 @@ public class PortfolioScoreTests extends DataValidationTestBase {
             //calculate total weighted average
             Double totalWeightedAverage = portfolioUtilities.weightedAverageScore(portfolio);
             System.out.println("Calculated totalWeighted Average is :" + totalWeightedAverage);
-
+            if (researchLine.equals("ESG")) {
+                totalWeightedAverage = portfolioUtilities.ESGWeightedAverageScore(portfolio);
+            }
 
             //calculate portfolio score according to the filters given
-            Double expectedScore = totalWeightedAverage == null ? null : researchLine.endsWith("Share") || researchLine.equals("Temperature Alignment") ?
+            Double expectedScore = totalWeightedAverage == null ? null : researchLine.endsWith("Share") || researchLine.equals("Temperature Alignment") || researchLine.equals("ESG") ?
                     PortfolioUtilities.round(totalWeightedAverage, 2) : Math.round(totalWeightedAverage);
             System.out.println("Calculated score is :" + expectedScore);
 
@@ -99,6 +109,11 @@ public class PortfolioScoreTests extends DataValidationTestBase {
 
             String expectedScoreCategory = expectedScore == null ? null : rangeAndCategoryList.stream()
                     .filter(e -> e.getMin() <= expectedScore && e.getMax() >= expectedScore).findFirst().orElse(null).getCategory();
+
+            if (researchLine.equals("ESG")) {
+                expectedScoreCategory = rangeAndCategoryList.stream()
+                        .filter(e -> e.getMinScale() <= expectedScore && e.getMaxScale() >= expectedScore).findFirst().orElse(null).getCategory();
+            }
 
             response = controller.getPortfolioScoreResponse(portfolioId, researchLine, apiFilterPayload).prettyPeek();
 
@@ -195,6 +210,16 @@ public class PortfolioScoreTests extends DataValidationTestBase {
         assertTestCase.assertTrue(score.getHighest_risk_hazard().equals(apiResponse.get(0).getHighest_risk_hazard()));
         assertTestCase.assertTrue(score.getFacilities_exposed().equals(apiResponse.get(0).getFacilities_exposed()));
         assertTestCase.assertTrue(score.getHrh_risk_category().equals(apiResponse.get(0).getHrh_risk_category()));
+    }
+
+    @DataProvider(name = "rs")
+    public Object[][] research() {
+        return DataProviderUtilities.getDataProvider();
+    }
+
+    @Test(dataProvider = "rs")
+    public void v(String rl, String month, String year) {
+        System.out.println(rl + " " + month + " " + year + " ");
     }
 
     @DataProvider(name = "researchLines")
