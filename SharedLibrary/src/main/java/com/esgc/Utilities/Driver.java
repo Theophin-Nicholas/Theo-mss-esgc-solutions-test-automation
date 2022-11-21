@@ -14,6 +14,7 @@ import org.openqa.selenium.firefox.FirefoxProfile;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.remote.BrowserType;
 import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.remote.LocalFileDetector;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.safari.SafariDriver;
 
@@ -99,7 +100,9 @@ public class Driver {
                         chromeOptions.addArguments("--start-maximized");
                         chromeOptions.addArguments("--disable-notifications");
                         desiredCapabilities.setCapability(ChromeOptions.CAPABILITY, chromeOptions);
-                        driverPool.set(new RemoteWebDriver(url, desiredCapabilities));
+                        RemoteWebDriver driver = new RemoteWebDriver(url, desiredCapabilities);
+                        driver.setFileDetector(new LocalFileDetector());
+                        driverPool.set(driver);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -251,7 +254,9 @@ public class Driver {
                         chromeOptions.addArguments("--start-maximized");
                         chromeOptions.addArguments("--disable-notifications");
                         desiredCapabilities.setCapability(ChromeOptions.CAPABILITY, chromeOptions);
-                        driverPool.set(new RemoteWebDriver(url, desiredCapabilities));
+                        RemoteWebDriver driver = new RemoteWebDriver(url, desiredCapabilities);
+                        driver.setFileDetector(new LocalFileDetector());
+                        driverPool.set(driver);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
