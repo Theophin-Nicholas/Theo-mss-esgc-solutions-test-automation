@@ -412,6 +412,13 @@ public class DataProviderClass {
                 };
     }
 
+    @DataProvider(name = "Valid Portfolios")
+    public Object[][] validPortfolios() {
+        return new Object[][]{
+                {"PortfolioWithValidData"},
+                {"PortfolioWithAllTypesIdentifiers"},
+        };
+    }
 
 
     @DataProvider(name = "Heat Map Research Lines")
