@@ -106,7 +106,7 @@ public class EntityPageTestRouting extends EntityPageTestBase {
     @Test(groups = {"ui", "smoke", "regression", "entity_issuer"},
             dataProvider = "credentialsP2", dataProviderClass = DataProviderClass.class,
             description = "ESGCA-5861-UI | ESG Issuer - Entity Page | Verify Methodology Details (Titles, Text)")
-    @Xray(test = {5861})
+    @Xray(test = {5861,9694})
     public void testMethodologyDetails(String UserID, String Password) {
         LoginPageIssuer loginPage = new LoginPageIssuer();
         loginPage.loginWithParams(UserID, Password);

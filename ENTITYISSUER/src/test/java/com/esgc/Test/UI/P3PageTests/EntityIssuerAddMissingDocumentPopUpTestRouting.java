@@ -22,7 +22,7 @@ public class EntityIssuerAddMissingDocumentPopUpTestRouting extends EntityPageTe
         BrowserUtils.wait(1);
         entitypage.ClickOnaddMissingDocuments();
         entitypage.validateopupWindowOpenStatus();
-        entitypage.addURL("Google.com");
+        entitypage.addURL("Google.com",true);
         entitypage.validateAssignedCategories();
         entitypage.validateWrongURL();
         entitypage.validatePageNoBox();
