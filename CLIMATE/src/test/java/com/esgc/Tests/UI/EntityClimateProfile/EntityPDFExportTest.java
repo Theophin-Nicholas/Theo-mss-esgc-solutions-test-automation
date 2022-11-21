@@ -7,12 +7,13 @@ import com.esgc.Utilities.*;
 import org.testng.annotations.Test;
 
 public class EntityPDFExportTest extends UITestBase {
-    @Test(groups = {"PDF Export", "regression", "ui"}, dataProviderClass = DataProviderClass.class, dataProvider = "Entity")
-    @Xray(test = {9401, 9402, 9403, 9404, 9417,9475, 9476, 9755, 9465, 9929, 9930, 10139})
-    public void validatePDFExportedfile(String entity) {
+    @Test(groups = {"PDF Export", "regression", "ui"}, dataProviderClass = DataProviderClass.class, dataProvider = "Company With Orbis ID")
+    @Xray(test = {9401, 9402, 9403, 9404, 9417,9475, 9476, 9755, 9465, 9929, 9930, 10139, 9907,9908,10146,10155,10157,10206
+    ,10535,10536, 10671, 10678, 10681, 10191, 11152, 11154, 11442 })
+    public void validatePDFExportedfile(String... entity) {
 
         PDFTestMethods pdfTest = new PDFTestMethods();
-        pdfTest.DownloadPDFPAndGetFileContent(entity);
+        pdfTest.DownloadPDFPAndGetFileContent(entity[0]);
 
         pdfTest.ValidateUnderlineTransitionRisk_CarbonFootprintWidget();
         pdfTest.ValidatePhysicalClimateHazard();
@@ -25,10 +26,15 @@ public class EntityPDFExportTest extends UITestBase {
         pdfTest.ValidatePhysicalRiskMarketRisk();
         pdfTest.ValidatePhysicalRiskSupplyChainRisk();
         pdfTest.ValidateUnderlyingDataMetricsGreenShareAssessment();
-        pdfTest.ValidateHeader(entity);
+        pdfTest.ValidateHeader(entity[0]);
         pdfTest.ValidateFooter();
         pdfTest.ValidateESGSummaryData();
+        pdfTest.ValidateEsgMaterlity(entity[1]);
 
+        pdfTest.ValidateUnderlyingDataTransitionRiskBROWNSHARE();
+        pdfTest.ValidateCompanyIntroductionText(entity[0]);
+
+        pdfTest.ValidateControversies(entity[1]);
 
     }
 

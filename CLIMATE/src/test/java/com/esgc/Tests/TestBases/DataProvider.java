@@ -8,6 +8,8 @@ public class DataProvider {
     public Object[][] dpMethod2() {
 
         return new Object[][]{
+                {"InvalidTemplate.csv", INVALID_TEMPLATE_ERROR_MESSAGE, 10606},//498
+                {"IncompletePortfolio.csv", INCOMPLETE_PORTFOLIO_ERROR_MESSAGE, 10606},//498
                 {"InvalidCurrencyInPortfolio.csv", INVALID_CURRENCY_ERROR_MESSAGE, 498},//498
                 {"InvalidCurrencyCodeInPortfolio.csv", INVALID_CURRENCY_ERROR_MESSAGE, 498},//498
                 {"InvalidCurrencyCodeInPortfolio2.csv", INVALID_CURRENCY_ERROR_MESSAGE, 3047},

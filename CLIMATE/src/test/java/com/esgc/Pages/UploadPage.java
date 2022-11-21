@@ -1,9 +1,6 @@
 package com.esgc.Pages;
 
-import com.esgc.Utilities.BrowserUtils;
-import com.esgc.Utilities.Driver;
-import com.esgc.Utilities.PortfolioFilePaths;
-import com.esgc.Utilities.RobotRunner;
+import com.esgc.Utilities.*;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
@@ -47,6 +44,9 @@ public class UploadPage extends ClimatePageBase {
 
     @FindBy(xpath = "//*[@class='MuiAlert-message']/div[1]")
     public WebElement AlertMessage;
+
+    @FindBy(xpath = "//*[@class='MuiAlert-message']//b")
+    public List<WebElement> AlertMessageMultipleTickersLists;
 
     @FindBy(xpath = "//*[text()='Portfolio Upload Successfully Saved']/following-sibling::div")
     public WebElement closeButtonIcon;
@@ -107,7 +107,6 @@ public class UploadPage extends ClimatePageBase {
     }
 
     public void clickUploadButton() {
-
         wait.until(ExpectedConditions.elementToBeClickable(uploadButton));
         uploadButton.click();
     }
@@ -157,7 +156,7 @@ public class UploadPage extends ClimatePageBase {
         try {
             System.out.println("Uploading Mask Check");
             boolean loadMaskIsDisplayed = wait.until(ExpectedConditions.visibilityOf(uploadingLoadMask)).isDisplayed();
-            wait.until(ExpectedConditions.invisibilityOf(uploadingLoadMask));
+            //wait.until(ExpectedConditions.invisibilityOf(uploadingLoadMask));
             System.out.println("Uploading Completed!");
             return loadMaskIsDisplayed;
         } catch (Exception e) {
@@ -255,8 +254,9 @@ public class UploadPage extends ClimatePageBase {
      */
     public boolean checkifSuccessPopUpIsDisplyed() {
         try {
+            BrowserUtils.waitForVisibility(successMessagePopUP, 15);
             return successMessagePopUP.isDisplayed();
-        } catch (NoSuchElementException e) {
+        } catch (Exception e) {
             return false;
         }
     }
@@ -430,5 +430,4 @@ public class UploadPage extends ClimatePageBase {
         uploadPage.clickUploadButton();
 
     }
-
 }

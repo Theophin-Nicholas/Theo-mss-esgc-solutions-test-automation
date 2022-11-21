@@ -2,6 +2,8 @@ package com.esgc.Utilities;
 
 public class ErrorMessages {
 
+    public static String INVALID_TEMPLATE_ERROR_MESSAGE = "Invalid template. Please download a new template and try again";
+    public static String INCOMPLETE_PORTFOLIO_ERROR_MESSAGE = "Import incomplete. Please enter all values as described in the template.";
     public static String INVALID_CURRENCY_ERROR_MESSAGE = "Import incomplete. Please enter all values as described in the template. Currency can be USD, GBP, or EUR.";
     public static String NO_IDENTIFIER_ERROR_MESSAGE = "Import incomplete. Please enter all values as described in the template.";
     public static String EMPTY_IDENTIFIER_ERROR_MESSAGE = "Import incomplete. Please enter all values as described in the template. Line 13: Value Missing. Line 15: Value Missing.";
@@ -20,6 +22,6 @@ public class ErrorMessages {
     public static String MISSING_VALUE_ERROR_MESSAGE = "Import incomplete. Please enter all values as described in the template. Line 13: Value Missing. Line 15: Value Missing.";
     public static String All_UNMATCHED_IDENTIFIERS_ERROR_MESSAGE =  "0/5 Entities in your portfolio found in our coverage. Please upload a different portfolio or check your file to try again.";
     public static String MISSING_ISIN_OR_BBG_TICKER_IDENTIFIER =  "Import incomplete. Please use ISIN or BBG_TICKER or ORBIS_ID identifiers.";
-
+    public static String PREDICTED_SCORED_ENTITY_WITH_ISIN = "import should not completed since portfolio has a predicted score entity";
 
 }
