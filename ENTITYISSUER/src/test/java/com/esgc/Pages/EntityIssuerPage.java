@@ -74,6 +74,9 @@ public class EntityIssuerPage extends PageBase {
     @FindBy(xpath = "//div[contains(@class,'MuiGrid-root MuiGrid-container MuiGrid-spacing')]/div/div/div[1]")
     public List<WebElement> subHeaders;
 
+    @FindBy(xpath="//div[contains(@class,'MuiGrid-root MuiGrid-container MuiGrid-spacing')]/div")
+    public List<WebElement> subHeadersDIVs;
+
     @FindBy(xpath = "//div/main/div/div/div/div[1]/div/div[1]")
     public WebElement midTopHeader;
 
@@ -320,7 +323,7 @@ public class EntityIssuerPage extends PageBase {
     public WebElement CloseAddMissingDocumentMessage;
 
     @FindBy(xpath = "//span[contains(text(),'Overall Disclosure Ratio')]")
-    public WebElement P3OverallDisclosureRatio;
+    public WebElement   P3OverallDisclosureRatio;
 
     @FindBy(xpath = "//button[@heap_perfchart_id='Materiality']")
     public static WebElement esgMaterialityTab;
@@ -472,6 +475,17 @@ public class EntityIssuerPage extends PageBase {
             actualSubHeaders[i] = subHeaders.get(i).getText();
             // BrowserUtils.wait(1);
         }
+        for(int j=0; j<subHeadersDIVs.size(); j++){
+            List<WebElement> a = subHeadersDIVs.get(0).findElements(By.xpath("div"));
+            if (j==0){
+                assertTestCase.assertTrue(a.size()==3);
+            }else{
+                assertTestCase.assertTrue(a.size()==2);
+            }
+
+        }
+
+
         return Arrays.equals(expectedSubHeaders, actualSubHeaders);
     }
 
@@ -641,7 +655,7 @@ public class EntityIssuerPage extends PageBase {
     }
 
 
-    public void addURL(String url) {
+    public void addURL(String url, Boolean disclosureRatioAvailable) {
         PopUpWindowURL.sendKeys(url);
         System.out.println(DocumentType.getText());
         BrowserUtils.wait(1);
@@ -655,7 +669,8 @@ public class EntityIssuerPage extends PageBase {
         }
         Boolean selectorDiv = false ;
         try{
-            selectorDiv= SelectDisclosureDiv.isDisplayed();
+            if (disclosureRatioAvailable) selectorDiv= SelectDisclosureDiv.isDisplayed();
+            else selectorDiv = disclosureRatioAvailable ;
         }catch(Exception e){
             selectorDiv = false ;
 
@@ -1045,7 +1060,7 @@ public class EntityIssuerPage extends PageBase {
                         break;
                     case 8:
                         System.out.println("IdentifierSpans.get(i).getText().split(\":\")[0] " + IdentifierSpans.get(i).getText());
-                        assertTestCase.assertEquals(IdentifierSpans.get(i).getText().split(":")[1], "Industry");
+                        assertTestCase.assertEquals(IdentifierSpans.get(i).getText().split(":")[0], "Industry");
                         validateLinksOpenedInNewTab(IdentifierSpans.get(i), "sector");
                         break;
                 }
@@ -1097,9 +1112,9 @@ public class EntityIssuerPage extends PageBase {
 
     public void validateCopyFunctionlity() {
         wait.until(ExpectedConditions.visibilityOf(linkDocuments.get(0))).isDisplayed();
-        for (int i = 0; i < linkDocuments.size(); i++) {//linkDocuments.size()
+        for (int i = 0; i < 2; i++) {//linkDocuments.size()
             assertTestCase.assertTrue(svgCopyURLbutton.get(i).isDisplayed(), "Validate if copy button is available");
-            svgCopyURLbutton.get(i + 1).click();
+            svgCopyURLbutton.get(i+1).click();
             try {
                 Thread.sleep(2000);
             } catch (InterruptedException e) {
