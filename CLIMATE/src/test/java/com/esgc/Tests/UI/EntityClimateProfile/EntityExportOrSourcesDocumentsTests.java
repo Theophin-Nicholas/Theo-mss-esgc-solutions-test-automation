@@ -187,7 +187,7 @@ public class EntityExportOrSourcesDocumentsTests extends UITestBase {
     }
 
     @Test(groups = {"entity_climate_profile", "regression", "ui"}, dataProviderClass = DataProviderClass.class, dataProvider = "exportEntitlements")
-    @Xray(test = {10178, 11041})
+    @Xray(test = {10178, 11041,11153})
     public void validatePdfContentBasedOnEntitlement(String username, String password, String entitlement){
         LoginPage loginPage = new LoginPage();
         EntityClimateProfilePage entityProfilePage = new EntityClimateProfilePage();
@@ -251,6 +251,13 @@ public class EntityExportOrSourcesDocumentsTests extends UITestBase {
             assertTestCase.assertTrue(content.contains("Low Materiality"));
             assertTestCase.assertTrue(!content.contains("Physical Risk "));
             assertTestCase.assertTrue(!content.contains("Transition Risk "));
+
+        } else if (entitlement.equals("Controversey entitlement")) {
+            assertTestCase.assertTrue(content.contains("Controversies as of "));
+            assertTestCase.assertTrue(content.contains("CRITICAL AND HIGH SEVERITY CONTROVERSIES SEVERITY"));
+        } else if (entitlement.equals("No Controversey")) {
+            assertTestCase.assertTrue(!content.contains("Controversies as of "));
+            assertTestCase.assertTrue(!content.contains("CRITICAL AND HIGH SEVERITY CONTROVERSIES SEVERITY"));
         }
         loginPage.clickOnLogout();
 
