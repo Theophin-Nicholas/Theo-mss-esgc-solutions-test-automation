@@ -1,6 +1,7 @@
 package com.esgc.Pages;
 
 import com.esgc.Reporting.CustomAssertion;
+import com.esgc.Tests.UI.DashboardPage.PortfolioSettings;
 import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.Driver;
 import com.esgc.Utilities.EntitlementsBundles;
@@ -159,6 +160,19 @@ public class ResearchLinePage extends UploadPage {
 
     @FindBy(xpath = "(//tr[@class='MuiTableRow-root MuiTableRow-head'])[5]/th")
     public List<WebElement> carbonFootprintHeaders;
+
+    @FindBy(xpath = "//div[@id='carbon_footprint_risk_categories']/div")
+    public WebElement carbonFootprintScopeHeader;
+
+    @FindBy(xpath = "//div[@id='carbon_footprint_risk_categories']/../../div//span//div/span")
+    public List<WebElement> carbonFootprintScopeHeaders;
+
+    @FindBy(xpath = "//div[@id='carbon_footprint_risk_categories']/../../div//span//div/div")
+    public List<WebElement> carbonFootprintScopeDetails;
+
+    @FindBy(xpath = "//h6[text()='Updates']/following-sibling::a")
+    public WebElement companiesCountFromUpdatesTable;
+
 
     //=============== Leaders and Laggards
 
@@ -348,6 +362,10 @@ public class ResearchLinePage extends UploadPage {
 
     @FindBy(xpath = "(//*[name()='rect'][@class='highcharts-point highcharts-color-0'])[1]")
     public WebElement historyChartUnmatched;
+
+    @FindBy(xpath = "//*[contains(text(),'Number of Companies')]/..")
+    public WebElement scoreCategoryTooltip;
+
 
     //=============== Impact Table/ Graph elements
 
@@ -613,6 +631,30 @@ public class ResearchLinePage extends UploadPage {
         } catch (Exception e) {
             return false;
         }
+    }
+
+    public boolean mouseHoverAndVerifyTooltipHistoryTable(String scoreCategory, String colorCode, String expColor) {
+        try {
+            String xpath = "//*[local-name()='rect' and contains(@class,'"+colorCode+"')]";
+            List<WebElement> elements = Driver.getDriver().findElements(By.xpath(xpath));
+            System.out.println(elements.size());
+            for(int i=0; i<3; i++){
+                String actColor = elements.get(i).getAttribute("fill");
+                System.out.println("Exp Color: "+expColor+", Actual Color: "+actColor);
+                BrowserUtils.hover(elements.get(i));
+                BrowserUtils.wait(1);
+                String tooltipText = scoreCategoryTooltip.getText();
+                System.out.println("Expected Tooltip Text: "+scoreCategory);
+                System.out.println("Actual Tooltip Text: "+tooltipText);
+                int numberOfCompanies = Integer.parseInt(tooltipText.substring(tooltipText.lastIndexOf(" ")+1));
+                boolean flag = actColor.equalsIgnoreCase(expColor) && tooltipText.contains(scoreCategory) && numberOfCompanies>=0;
+                if(!flag) return false;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
     }
 
     public boolean checkIfBenchMarkHistoryTableExists() {
@@ -1234,6 +1276,13 @@ public class ResearchLinePage extends UploadPage {
         } catch (Exception e) {
             return updatesNoDataMessage.isDisplayed();
         }
+    }
+
+    public int getCompaniesCountFromUpdatesTable() {
+        int displayCompaniesCount=10;
+        String companiesCountText = companiesCountFromUpdatesTable.getText();
+        companiesCountText = companiesCountText.substring(0,companiesCountText.indexOf(" "));
+        return Integer.parseInt(companiesCountText)+displayCompaniesCount;
     }
 
     public boolean verifyUpdatesSortingOrder(String page) {
@@ -3314,5 +3363,55 @@ public class ResearchLinePage extends UploadPage {
         }
     }
 
+    public void selectPortfolio(String portfolioName){
+        System.out.println("Selecting portfolio: " + portfolioName);
+        try{
+            if (menu.isDisplayed()) {
+                clickMenu();
+                BrowserUtils.wait(2);
+                portfolioSettings.click();
+            }
+            WebElement targetPortfolio = Driver.getDriver().findElement(By.xpath("//div[@id='portfolio-drawer-test-id']//span[@title='"+portfolioName+"']"));
+            System.out.println("Portfolio Located");
+            BrowserUtils.scrollTo(targetPortfolio);
+            BrowserUtils.waitForClickablility(targetPortfolio,10).click();
+            System.out.println("Portfolio selected");
+        } catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    public void deletePortfolio(String portfolioName) {
+        System.out.println("Deleting portfolio: " + portfolioName);
+        selectPortfolio(portfolioName);
+        try{
+            BrowserUtils.waitForClickablility(deleteButton, 15).click();
+            BrowserUtils.waitForVisibility(confirmPortfolioDeletePopupHeader,10);
+            confirmPortfolioDeleteYesButton.click(); //clicking the Yes button and deleting the portfolio
+            BrowserUtils.wait(6);
+            pressESCKey();
+            System.out.println("Portfolio deleted");
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+    public boolean verifyPortfolio(String portfolioName){
+        System.out.println("Verifying portfolio: " + portfolioName);
+        try{
+            if (menu.isDisplayed()) {
+                clickMenu();
+                BrowserUtils.wait(2);
+                portfolioSettings.click();
+            }
+            WebElement targetPortfolio = Driver.getDriver().findElement(By.xpath("//span[@title='"+portfolioName+"']"));
+            BrowserUtils.scrollTo(targetPortfolio);
+            System.out.println("Portfolio verified");
+            closeMenuByClickingOutSide();
+            return true;
+        } catch(Exception e){
+            e.printStackTrace();
+            return false;
+        }
+    }
 }
 

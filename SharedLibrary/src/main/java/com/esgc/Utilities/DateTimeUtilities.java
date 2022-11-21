@@ -121,6 +121,18 @@ public class DateTimeUtilities {
     public static String getCurrentMonthNumeric() {
         return LocalDate.now().format(DateTimeFormatter.ofPattern("MM"));
     }
+
+    /**
+     * get a date of a given date plus/minus days
+     */
+    public static String getDatePlusMinusDays(String date, int days, String format) {
+        date = getFormattedDate(date, format);
+        System.out.println("date = " + date);
+        //increase date by days
+        LocalDate localDate = LocalDate.parse(date, DateTimeFormatter.ofPattern(format));
+        localDate = localDate.plusDays(days);
+        return localDate.format(DateTimeFormatter.ofPattern(format));
+    }
 }
 
 
