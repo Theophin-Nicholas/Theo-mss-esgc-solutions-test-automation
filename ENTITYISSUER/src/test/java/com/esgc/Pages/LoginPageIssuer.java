@@ -36,8 +36,11 @@ public class LoginPageIssuer extends PageBase{
         }
 
         wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.ISSUER_PASSWORD);
-      /*  if (!termsAndConditionsCheckBox.isSelected())
-            wait.until(ExpectedConditions.visibilityOf(termsAndConditionsLabel)).click();*/
+        String env = ConfigurationReader.getProperty("environment");
+       /* if  (env.equals("prod")) {
+        if (!termsAndConditionsCheckBox.isSelected())
+            wait.until(ExpectedConditions.visibilityOf(termsAndConditionsLabel)).click();
+        }*/
         wait.until(ExpectedConditions.visibilityOf(loginButton)).click();
     }
 
@@ -45,10 +48,10 @@ public class LoginPageIssuer extends PageBase{
         wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(userName, Keys.ENTER);
         wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(password);
         String env = ConfigurationReader.getProperty("environment");
-        if (!(env.equals("qa") || env.equals("qa2"))) {
+        /*if (env.equals("prod")) {
             if (!termsAndConditionsCheckBox.isSelected())
                 wait.until(ExpectedConditions.visibilityOf(termsAndConditionsLabel)).click();
-        }
+        }*/
       /*  if (!termsAndConditionsCheckBox.isSelected())
             wait.until(ExpectedConditions.visibilityOf(termsAndConditionsLabel)).click();*/
         wait.until(ExpectedConditions.visibilityOf(loginButton)).click();
