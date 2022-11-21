@@ -124,19 +124,46 @@ public class SubsidiaryTests extends UITestBase {
     }
 
     @Test(groups = {"regression", "ui", "search_entity"})
-    @Xray(test = {11059})
+    @Xray(test = {11059, 11242})
     public void searchWithInactiveSubsidiaryCompanyName() {
 
         DashboardPage dashboardPage = new DashboardPage();
         dashboardPage.navigateToPageFromMenu("Dashboard");
         dashboardPage.selectPortfolioByNameFromPortfolioSelectionModal("PortfolioWithInactiveSubsidiaryCompany");
 
-        String subsidiaryCompanyName = "XTO ENERGY INC";
+        String subsidiaryCompanyName = "ZAMBIAN";
         ResearchLinePage researchLinePage = new ResearchLinePage();
 
         // Search with subsidiary company name
         researchLinePage.searchIconPortfolioPage.click();
         assertTestCase.assertTrue(researchLinePage.checkWarningWhenNoMatchEntry(subsidiaryCompanyName), "No results found message appeared as warning");
+
+    }
+
+    @Test(groups = {"regression", "ui"})
+    @Xray(test = {11541})
+    public void verifySubsidiaryCompanyInPortfolioManagement() {
+        String portfolioName = "PortfolioWithSubsidiaryCompany1";
+        String subsidiaryCompanyName = "National Grid North America, Inc.";
+        String parentCompanyName = "National Grid Plc";
+
+        ResearchLinePage researchLinePage = new ResearchLinePage();
+        DashboardPage dashboardPage = new DashboardPage();
+        researchLinePage.selectPortfolioByNameFromPortfolioSelectionModal(portfolioName);
+        researchLinePage.clickMenu();
+        researchLinePage.portfolioSettings.click();
+        researchLinePage.selectPortfolioFromPortfolioSettings(portfolioName);
+
+        dashboardPage.verifyCompanyIsClickable(subsidiaryCompanyName);
+
+        researchLinePage.portfolioDropDownMenu.click();
+        researchLinePage.portfolioSettingsLargest20Investment.click();
+        dashboardPage.verifyCompanyIsClickable(subsidiaryCompanyName);
+        researchLinePage.clickTheCompany(subsidiaryCompanyName);
+        EntityClimateProfilePage entityClimateProfilePage = new EntityClimateProfilePage();
+        assertTestCase.assertTrue(entityClimateProfilePage.validateGlobalHeader(parentCompanyName),"Verify Parent Company page is displayed");;
+        entityClimateProfilePage.closeEntityProfilePage();
+        researchLinePage.closeMenuByClickingOutSide();
 
     }
 
