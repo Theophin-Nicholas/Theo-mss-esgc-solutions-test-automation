@@ -100,7 +100,7 @@ public class PortfolioQueries {
         IdentifierQueryModel queryModel = IdentifierQueryModelFactory.getIdentifierQueryModel("ESG Predicted", month, year);
         assert queryModel != null;
 
-        String query = getQueryForResearchline(queryModel,"SCORE>=0");
+        String query = getQueryForResearchline(queryModel, "SCORE>=0");
         System.out.println(query);
 
         return serializeResearchLines(getQueryResultMap(query));
@@ -110,7 +110,7 @@ public class PortfolioQueries {
         IdentifierQueryModel queryModel = IdentifierQueryModelFactory.getIdentifierQueryModel("ESG Subsidiary", month, year);
         assert queryModel != null;
 
-        String query = getQueryForResearchline(queryModel,"SCORE>=0");
+        String query = getQueryForResearchline(queryModel, "SCORE>=0");
         System.out.println(query);
 
         return serializeResearchLines(getQueryResultMap(query));
@@ -211,14 +211,14 @@ public class PortfolioQueries {
         List<ResearchLineIdentifier> list = new ArrayList<>();
         for (Map<String, Object> each : resultSet) {
             ResearchLineIdentifier researchLineIdentifier = new ResearchLineIdentifier();
-            researchLineIdentifier.setISIN(each.get("ISIN").toString());
-            researchLineIdentifier.setBBG_Ticker(each.get("BBG_TICKER").toString());
+            researchLineIdentifier.setISIN(each.get("ISIN") == null ? null : each.get("ISIN").toString());
+            researchLineIdentifier.setBBG_Ticker(each.get("BBG_TICKER") == null ? null : each.get("BBG_TICKER").toString());
             researchLineIdentifier.setSCORE(Double.valueOf(each.get("SCORE").toString()));
-            researchLineIdentifier.setCOUNTRY_CODE(each.get("COUNTRY_ISO_CODE").toString());
-            researchLineIdentifier.setWORLD_REGION(each.get("WORLD_REGION").toString());
+            researchLineIdentifier.setCOUNTRY_CODE(each.get("COUNTRY_ISO_CODE") == null ? null : each.get("COUNTRY_ISO_CODE").toString());
+            researchLineIdentifier.setWORLD_REGION(each.get("WORLD_REGION") == null ? null : each.get("WORLD_REGION").toString());
             researchLineIdentifier.setBVD9_NUMBER(each.get("BVD9_NUMBER").toString());
-            researchLineIdentifier.setPLATFORM_SECTOR(each.get("SECTOR_NAME").toString());
-            researchLineIdentifier.setCOMPANY_NAME(each.get("COMPANY_NAME").toString());
+            researchLineIdentifier.setPLATFORM_SECTOR(each.get("SECTOR_NAME") == null ? null : each.get("SECTOR_NAME").toString());
+            researchLineIdentifier.setCOMPANY_NAME(each.get("COMPANY_NAME") == null ? null : each.get("COMPANY_NAME").toString());
             researchLineIdentifier.setPREVIOUS_PRODUCED_DATE(Optional.ofNullable(each.get("PREVIOUS_PRODUCED_DATE")).orElse("").toString());
             researchLineIdentifier.setPREVIOUS_SCORE(Double.valueOf(Optional.ofNullable(each.get("PREVIOUS_SCORE")).orElse("0").toString()));
             researchLineIdentifier.setValue(randomBetween(1000, 10000000));
@@ -268,8 +268,13 @@ public class PortfolioQueries {
     //return queries that can get the right table names with a given value
     private String getQueryForResearchline(IdentifierQueryModel queryModel, String scoreModifier) {
         String model = "";
-        if (queryModel.getTableName().contains("ESG")) {
-            model = "          rl.Research_line_id,";
+        if (queryModel.getTableName().contains("Predicted")) {
+            return
+                    "       SELECT " + queryModel.getEntityIdColumnName() + " AS bvd9_number,\n" +
+                            "              " + queryModel.getPreviousScoreColumnName() + "             AS previous_score,\n" +
+                            "              " + queryModel.getPreviusProducedDateColumnName() + "             AS previous_produced_date,\n" +
+                            "              " + queryModel.getScoreColumnName() + "             AS score\n" +
+                            "       FROM   " + queryModel.getTableName() + " \n;";
         }
         return "WITH rl AS\n" +
                 "(\n" +
@@ -724,7 +729,7 @@ public class PortfolioQueries {
 
     public List<List<Object>> getEsgInfoFromDB() {
         String queryForLatestMonthAndYear = "select * from ESG_OVERALL_SCORES order by year desc, month desc limit 1;";
-        Map<String,Object> monthAndYear = getQueryResultMap(queryForLatestMonthAndYear).get(0);
+        Map<String, Object> monthAndYear = getQueryResultMap(queryForLatestMonthAndYear).get(0);
 
         String query1 = "select sum(value) from df_portfolio where portfolio_id='00000000-0000-0000-0000-000000000000'";
         String total = getQueryResultList(query1).get(0).get(0).toString();
@@ -733,7 +738,7 @@ public class PortfolioQueries {
                 " join entity_coverage_tracking ect on ect.orbis_id=df.bvd9_number and coverage_status = 'Published' and publish = 'yes'\n" +
                 " join ESG_OVERALL_SCORES eos on ect.orbis_id=eos.orbis_id and data_type = 'overall_alphanumeric_score' and sub_category = 'ESG'\n" +
                 " where portfolio_id='00000000-0000-0000-0000-000000000000'\n" +
-                " and eos.year || eos.month <= '"+monthAndYear.get("YEAR_MONTH").toString()+"'\n" +
+                " and eos.year || eos.month <= '" + monthAndYear.get("YEAR_MONTH").toString() + "'\n" +
                 " qualify row_number() OVER (PARTITION BY eos.orbis_id ORDER BY eos.year DESC, eos.month DESC, eos.scored_date DESC) =1";
 
         return getQueryResultList(query2);
