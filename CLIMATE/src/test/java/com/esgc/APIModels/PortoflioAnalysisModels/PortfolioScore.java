@@ -14,6 +14,7 @@ public class PortfolioScore {
     private String name;
 
     @JsonProperty(value="ranking")
+    @JsonAlias({"category"})
     private String ranking;
 
     @JsonProperty(value="score")
