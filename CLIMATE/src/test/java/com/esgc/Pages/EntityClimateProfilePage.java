@@ -53,8 +53,12 @@ public class EntityClimateProfilePage extends ClimatePageBase {
     @FindBy(xpath = "//div[@id='tempAlignErr']")
     public List<WebElement> noInfoElement;
 
+    @FindBy(xpath = "//li[@role='menuitem']/../../../div[2]//*[local-name()='svg']")
+    public WebElement entityProfileCloseIcon;
+
     @FindBy(xpath = "//div[@id='carbonClimate-test-id']/div/div/div/div/div/div")
     public List<WebElement> carbonFootprintNoInfo;
+
     @FindBy(xpath = "(//div[@id='carbonClimate-test-id'])[2]/div[2]/div/div/span[1]")
     public List<WebElement> carbonFootprintValueUnderlying;
 
@@ -502,8 +506,13 @@ public class EntityClimateProfilePage extends ClimatePageBase {
         return companyName;
     }
 
-    public boolean validateGlobalHeader(String CompanyName) {
-        return Driver.getDriver().findElement(By.xpath("//li[normalize-space()='Profile for " + CompanyName + "']")).isDisplayed();
+    public boolean validateGlobalHeader(String companyName) {
+        try{
+            return Driver.getDriver().findElement(By.xpath("//li[@role='menuitem']/span[text()='"+companyName+"']")).isDisplayed();
+        }catch(Exception e){
+            return false;
+        }
+
     }
 
     public boolean isProvidedFilterClickableInMaterialityMatrixFooter(String filterName) {
@@ -578,7 +587,7 @@ public class EntityClimateProfilePage extends ClimatePageBase {
     }
 
     public void closeEntityProfilePage() {
-        Driver.getDriver().findElement(By.xpath("//li[starts-with(text(),'Profile')]/../../div[2]")).click();
+        entityProfileCloseIcon.click();
     }
 
     public void closeDownloadProgressBar() {
