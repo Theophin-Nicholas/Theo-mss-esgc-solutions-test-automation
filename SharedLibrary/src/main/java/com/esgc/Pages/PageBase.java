@@ -1540,7 +1540,6 @@ public abstract class PageBase {
         try {
             return searchIconPortfolioPage.isDisplayed();
         } catch (Exception e) {
-            e.printStackTrace();
             return false;
         }
     }

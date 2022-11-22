@@ -31,4 +31,11 @@ public class TestCaseMapping extends TestBase {
                 .map(testCase -> new Object[]{testCase})
                 .toArray(Object[][]::new);
     }
+
+    @DataProvider(name = "rs")
+    public Object[][] research() {
+        return TestBase.testCasesList.stream()
+                .map(testCase -> new Object[]{testCase})
+                .toArray(Object[][]::new);
+    }
 }

@@ -36,8 +36,7 @@ public class XrayFileImporter {
         try {
             String current = new java.io.File(".").getCanonicalPath();
             System.out.println("current = " + current);
-            if(System.getProperty("os.name").contains("Windows")) current = current.substring(0,current.lastIndexOf("\\"));
-            else current = current.substring(0,current.lastIndexOf("/"));
+            current = current.substring(0,current.lastIndexOf(File.separator));
             System.out.println("current = " + current);
 
             //provides access to the file
