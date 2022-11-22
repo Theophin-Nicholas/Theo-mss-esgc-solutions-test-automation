@@ -16,6 +16,7 @@ import java.time.Duration;
 
 public abstract class UITestBase extends TestBase {
     String accessToken;
+
     @BeforeClass(alwaysRun = true)
     @Parameters("browser")
     public synchronized void setupUIForTests(@Optional String browser) {
@@ -35,10 +36,12 @@ public abstract class UITestBase extends TestBase {
 
         boolean isPampaTest = this.getClass().getName().contains("Pampa");
         boolean isEntitlementsTest = this.getClass().getName().contains("Bundle") || this.getClass().getName().contains("Entitlements");
-
-        if (!isPampaTest && !isEntitlementsTest) {
-            loginPage.login();
+        if (!loginPage.isSearchIconDisplayed()) {
+            if (!isPampaTest && !isEntitlementsTest) {
+                loginPage.login();
+            }
         }
+
         isUITest = true;
         Driver.getDriver().manage().window().maximize();
         DatabaseDriver.createDBConnection();
@@ -47,7 +50,7 @@ public abstract class UITestBase extends TestBase {
         System.setProperty("token", accessToken);
     }
 
-    @BeforeMethod(onlyForGroups = {"entitlements"}, groups = {"smoke", "regression", "entitlements"},alwaysRun = true)
+    @BeforeMethod(onlyForGroups = {"entitlements"}, groups = {"smoke", "regression", "entitlements"}, alwaysRun = true)
     public synchronized void setupEntitlementsForUITesting(@Optional String browser) {
         System.out.println("Before method called");
         String URL = Environment.URL;
