@@ -971,7 +971,7 @@ public class DashboardPage extends UploadPage {
         try{
             return selectTwoLabel.isDisplayed();
         }catch(Exception e){
-return false;
+            return false;
         }
     }
 

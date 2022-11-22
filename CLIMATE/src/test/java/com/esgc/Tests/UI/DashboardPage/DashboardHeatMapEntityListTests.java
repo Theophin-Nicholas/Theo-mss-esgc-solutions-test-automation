@@ -696,10 +696,13 @@ public class DashboardHeatMapEntityListTests extends UITestBase {
 
         LoginPage login = new LoginPage();
         login.clickOnLogout();
-        login.entitlementsLogin(EntitlementsBundles.PHYSICAL_RISK);
+        login.entitlementsLogin(EntitlementsBundles.CLIMATE_GOVERNANCE);
+        BrowserUtils.waitForVisibility(dashboardPage.verifyPortfolioName, 20);
 
-        BrowserUtils.scrollTo(dashboardPage.heatMapResearchLines.get(0));
-        BrowserUtils.wait(3);
+        if (!dashboardPage.verifyPortfolioName.getText().equalsIgnoreCase("Sample Portfolio"))
+            dashboardPage.selectPortfolioByNameFromPortfolioSelectionModal("Sample Portfolio");
+
+        BrowserUtils.wait(5);
         assertTestCase.assertFalse(dashboardPage.validateSelectTwoStaticText(), "Verify Select Two static text is present");
 
 
