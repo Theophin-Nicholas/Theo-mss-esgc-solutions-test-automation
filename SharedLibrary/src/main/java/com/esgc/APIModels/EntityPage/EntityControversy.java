@@ -37,6 +37,8 @@ public class EntityControversy {
     @JsonProperty(value = "controversy_events")
     String controversyEvents;
 
+    @JsonProperty(value = "managed_type")
+    String managed_type;
 
     @Override
     public boolean equals(Object o) {
