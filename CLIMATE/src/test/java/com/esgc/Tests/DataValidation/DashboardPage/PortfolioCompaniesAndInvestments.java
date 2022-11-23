@@ -18,7 +18,7 @@ import java.util.Map;
 public class PortfolioCompaniesAndInvestments extends DataValidationTestBase {
     // TODO: update queries (db methods should take month and year)
     @Test(groups = {"regression", "dashboard"})
-    @Xray(test = {6218, 6385, 6386})
+    @Xray(test = {6218, 6385, 6386, 11049})
     public void verifyInvestmentsAndControversies() throws ParseException {
         Response portfoliosResponse = APIUtilities.getAvailablePortfoliosForUser();
         JsonPath jsonPathEvaluator = portfoliosResponse.jsonPath();

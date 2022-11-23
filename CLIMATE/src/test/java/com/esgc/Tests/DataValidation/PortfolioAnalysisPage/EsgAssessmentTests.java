@@ -12,9 +12,12 @@ import java.util.List;
 
 public class EsgAssessmentTests extends DataValidationTestBase {
 
-    @Test(enabled = false,groups = {"regression", "ui", "smoke", "esg"},
+    @Test(enabled = false, groups = {"regression", "ui", "smoke", "esg"},
             description = "Verify ESG Summary Coverage section")
-    @Xray(test = {8373, 8374, 8375, 8376, 8377, 8378, 9968, 10910})
+    @Xray(test = {8373, 8374, 8375, 8376, 8377, 8378, 9968, 10910,
+            11245,//Subs
+            10900//ESG Predicted
+    })
     public void verifyEsgAssessmentCoverage() {//TODO disabled due to de-scoped
         ResearchLinePage researchLinePage = new ResearchLinePage();
 
@@ -57,7 +60,7 @@ public class EsgAssessmentTests extends DataValidationTestBase {
                         esgInfoUI.get(3).contains(esgInfoDB.get(3).toString())
                 ) {
                     found = true;
-                   break;
+                    break;
                 }
             }
             assertTestCase.assertTrue(found, esgInfoUI.get(0) + " Record Verification: " + found);

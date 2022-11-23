@@ -18,7 +18,7 @@ public class TestBaseClimate extends TestBase {
         String URL = Environment.URL;
         BrowserUtils.wait(1);
         Driver.closeDriver();
-        Driver.getDriver("chromeheadless").get(URL);
+        Driver.getDriver().get(URL);
         Driver.getDriver().manage().window().maximize();
         Driver.getDriver().manage().timeouts().implicitlyWait(Duration.ofSeconds(30));
         LoginPage loginPage = new LoginPage();
@@ -38,7 +38,7 @@ public class TestBaseClimate extends TestBase {
         String URL = Environment.URL;
         BrowserUtils.wait(1);
         Driver.closeDriver();
-        Driver.getDriver("chromeheadless").get(URL);
+        Driver.getDriver().get(URL);
         Driver.getDriver().manage().window().maximize();
         Driver.getDriver().manage().timeouts().implicitlyWait(Duration.ofSeconds(30));
         LoginPage loginPage = new LoginPage();
@@ -55,7 +55,7 @@ public class TestBaseClimate extends TestBase {
         String URL = Environment.URL;
         BrowserUtils.wait(1);
         Driver.closeDriver();
-        Driver.getDriver("chromeheadless").get(URL);
+        Driver.getDriver().get(URL);
         Driver.getDriver().manage().window().maximize();
         Driver.getDriver().manage().timeouts().implicitlyWait(Duration.ofSeconds(30));
         LoginPage loginPage = new LoginPage();
@@ -71,41 +71,41 @@ public class TestBaseClimate extends TestBase {
     }
 
     public void getAccessTokenDataValidation() {
-        System.out.println("getting token");
-        String URL = Environment.URL;
-        BrowserUtils.wait(1);
-        Driver.getDriver("chrome").get(URL);
-        //Driver.getDriver().get(URL);
-        Driver.getDriver().manage().window().maximize();
-        Driver.getDriver().manage().timeouts().implicitlyWait(Duration.ofSeconds(30));
+
         LoginPage loginPage = new LoginPage();
-        loginPage.dataValidationLogin();
-        BrowserUtils.wait(20);
-        String getAccessTokenScript = "return JSON.parse(localStorage.getItem('okta-token-storage')).accessToken.accessToken";
-        accessToken = ((JavascriptExecutor) Driver.getDriver()).executeScript(getAccessTokenScript).toString();
-        System.setProperty("token", accessToken);
-        System.out.println("token = " + accessToken);
+        System.out.println("getting token");
+        if (!loginPage.isSearchIconDisplayed()) {
+            String URL = Environment.URL;
+            BrowserUtils.wait(1);
+            //Driver.getDriver("chrome").get(URL);
+            Driver.getDriver().get(URL);
+            Driver.getDriver().manage().window().maximize();
+            Driver.getDriver().manage().timeouts().implicitlyWait(Duration.ofSeconds(30));
+            loginPage.dataValidationLogin();
+            BrowserUtils.wait(20);
+        }
+        setAccessTokenFromUI();
         try {
             stopWatch.start();
         } catch (Exception e) {
 
         }
     }
+
     public void getAccessTokenDataValidations() {
-        System.out.println("getting token");
-        String URL = Environment.URL;
-        BrowserUtils.wait(1);
-        Driver.getDriver("chromeheadless").get(URL);
-        //Driver.getDriver().get(URL);
-        Driver.getDriver().manage().window().maximize();
-        Driver.getDriver().manage().timeouts().implicitlyWait(Duration.ofSeconds(30));
         LoginPage loginPage = new LoginPage();
-        loginPage.dataValidationLogin();
-        BrowserUtils.wait(20);
-        String getAccessTokenScript = "return JSON.parse(localStorage.getItem('okta-token-storage')).accessToken.accessToken";
-        accessToken = ((JavascriptExecutor) Driver.getDriver()).executeScript(getAccessTokenScript).toString();
-        System.setProperty("token", accessToken);
-        System.out.println("token = " + accessToken);
+        System.out.println("getting token");
+        if (!loginPage.isSearchIconDisplayed()) {
+            String URL = Environment.URL;
+            BrowserUtils.wait(1);
+            //Driver.getDriver("chromeheadless").get(URL);
+            Driver.getDriver().get(URL);
+            Driver.getDriver().manage().window().maximize();
+            Driver.getDriver().manage().timeouts().implicitlyWait(Duration.ofSeconds(30));
+            loginPage.dataValidationLogin();
+            BrowserUtils.wait(20);
+        }
+        setAccessTokenFromUI();
         try {
             stopWatch.start();
         } catch (Exception e) {
@@ -116,7 +116,7 @@ public class TestBaseClimate extends TestBase {
     public void refreshToken() {
         if (stopWatch.getTime() > 3600000) {
             LoginPage loginPage = new LoginPage();
-            if(loginPage.isSearchIconDisplayed()){
+            if (loginPage.isSearchIconDisplayed()) {
                 loginPage.clickOnLogout();
                 BrowserUtils.wait(5);
             }
@@ -136,7 +136,7 @@ public class TestBaseClimate extends TestBase {
         System.out.println("getting token");
         String URL = Environment.URL;
         BrowserUtils.wait(1);
-        Driver.getDriver(ConfigurationReader.getProperty("browser")).get(URL);
+        Driver.getDriver().get(URL);
         Driver.getDriver().manage().window().maximize();
         Driver.getDriver().manage().timeouts().implicitlyWait(Duration.ofSeconds(30));
         LoginPage loginPage = new LoginPage();
@@ -148,5 +148,11 @@ public class TestBaseClimate extends TestBase {
         System.out.println("token = " + accessToken);
     }
 
+    public void setAccessTokenFromUI() {
+        String getAccessTokenScript = "return JSON.parse(localStorage.getItem('okta-token-storage')).accessToken.accessToken";
+        accessToken = ((JavascriptExecutor) Driver.getDriver()).executeScript(getAccessTokenScript).toString();
+        System.setProperty("token", accessToken);
+        System.out.println("token = " + accessToken);
+    }
 
 }
