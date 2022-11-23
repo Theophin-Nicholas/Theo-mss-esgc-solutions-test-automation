@@ -6,8 +6,11 @@ import com.opencsv.CSVWriter;
 
 import java.io.File;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -78,6 +81,13 @@ public class PortfolioUtilities extends DatabaseDriver {
         String portfolioRepository = PortfolioFilePaths.portfolioRepositoryPath();
 
         File directory = new File(portfolioRepository);
+        if (!directory.exists()) {
+            try {
+                Files.createDirectories(Paths.get(portfolioRepository));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
         int count = 0;
         try {
             count = directory.list().length + 1;
@@ -115,10 +125,16 @@ public class PortfolioUtilities extends DatabaseDriver {
             write.writeNext(header);
 
             for (ResearchLineIdentifier identifier : identifiers) {
-                int selectIdentifier = randomBetween(0, 1);
-                String identifierType = selectIdentifier == 1 ? "BBG_TICKER" : "ISIN";
-                String[] data = {identifierType, identifier.getRandomIdentifier(selectIdentifier), identifier.getValue() + ""};
-                write.writeNext(data);
+                if (identifier.getResearchLineIdForESGModel() != null && identifier.getResearchLineIdForESGModel().equals("9999")) {
+                    String identifierType = "ORBIS_ID";
+                    String[] data = {identifierType, identifier.getRandomIdentifier(2), identifier.getValue() + ""};
+                    write.writeNext(data);
+                } else {
+                    int selectIdentifier = randomBetween(0, 2);
+                    String identifierType = selectIdentifier == 1 ? "BBG_TICKER" : selectIdentifier == 2 ? "ORBIS_ID" : "ISIN";
+                    String[] data = {identifierType, identifier.getRandomIdentifier(selectIdentifier), identifier.getValue() + ""};
+                    write.writeNext(data);
+                }
             }
             write.close();
         } catch (Exception e) {
@@ -129,7 +145,6 @@ public class PortfolioUtilities extends DatabaseDriver {
         }
         return file.getAbsolutePath();
     }
-
 
 
     public double calculateTotalSumOfInvestment(List<ResearchLineIdentifier> list) {
@@ -147,6 +162,24 @@ public class PortfolioUtilities extends DatabaseDriver {
         for (ResearchLineIdentifier each : list) {
             if (each.getSCORE() >= 0) {
                 BigDecimal bd = BigDecimal.valueOf((each.getValue() * each.getSCORE()) / total).setScale(6, RoundingMode.HALF_UP);
+                if (tf == null) {
+                    tf = 0d;
+                }
+                tf += bd.doubleValue();
+            }
+        }
+        return tf;
+
+    }
+
+    public Double ESGWeightedAverageScore(List<ResearchLineIdentifier> list) {
+        double total = calculateTotalSumOfInvestmentWithoutNulls(list);//calculateTotalSumOfInvestment(list);
+        Double tf = null;
+        for (ResearchLineIdentifier each : list) {
+            if (each.getSCORE() >= 0) {
+                int scale;
+                scale = ESGUtilities.getESGPillarsScale(each.getResearchLineIdForESGModel(), each.getSCORE().intValue());
+                BigDecimal bd = BigDecimal.valueOf((each.getValue() * scale) / total).setScale(6, RoundingMode.HALF_UP);
                 if (tf == null) {
                     tf = 0d;
                 }
