@@ -38,8 +38,10 @@ public abstract class DashboardUITestBase extends TestBase {
 
         boolean isPampaTest = method.getName().contains("Pampa");
         boolean isEntitlementsTest = method.getName().contains("Bundle");
-        if (!isPampaTest && !isEntitlementsTest) {
-            loginPage.login();
+        if (!loginPage.isSearchIconDisplayed()) {
+            if (!isPampaTest && !isEntitlementsTest) {
+                loginPage.login();
+            }
         }
     }
 

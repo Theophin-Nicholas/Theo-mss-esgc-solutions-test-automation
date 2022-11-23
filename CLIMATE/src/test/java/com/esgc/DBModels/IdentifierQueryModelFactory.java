@@ -90,12 +90,30 @@ public class IdentifierQueryModelFactory {
                 return identifierQueryModel;
             case "ESG":
                 identifierQueryModel.setEntityIdColumnName("eos.ORBIS_ID");
-                identifierQueryModel.setPreviousScoreColumnName("EOS.RESEARCH_LINE_ID, NULL");
+                identifierQueryModel.setPreviousScoreColumnName("EOS.RESEARCH_LINE_ID, EOS.SCORE_QUALITY, NULL");
                 identifierQueryModel.setScoreColumnName("eos.VALUE");
                 identifierQueryModel.setTableName(" entity_coverage_tracking ect  \n" +
                         "join ESG_OVERALL_SCORES eos on ect.orbis_id=eos.orbis_id and data_type = 'esg_pillar_score'  " +
                         "and sub_category = 'ESG' and eos.year || eos.month <= '" + year + month + "' \n" +
                         " where  coverage_status = 'Published' and publish = 'yes'\n" +
+                        " qualify row_number() OVER (PARTITION BY eos.orbis_id ORDER BY eos.year DESC, eos.month DESC, eos.scored_date DESC) =1");
+                return identifierQueryModel;
+            case "ESG Predicted":
+                identifierQueryModel.setEntityIdColumnName("eos.ORBIS_ID");
+                identifierQueryModel.setPreviousScoreColumnName("EOS.RESEARCH_LINE_ID, EOS.SCORE_QUALITY,NULL");
+                identifierQueryModel.setScoreColumnName("eos.VALUE");
+                identifierQueryModel.setTableName(" ESG_OVERALL_SCORES eos where data_type = 'esg_pillar_score'  " +
+                        "and sub_category = 'ESG' and eos.year || eos.month <= '" + year + month + "' \n" +
+                        " and  score_quality='Predicted'\n" +
+                        " qualify row_number() OVER (PARTITION BY eos.orbis_id ORDER BY eos.year DESC, eos.month DESC, eos.scored_date DESC) =1" +
+                        " limit 10");
+                return identifierQueryModel;
+            case "ESG Subsidiary":
+                identifierQueryModel.setEntityIdColumnName("eos.ORBIS_ID");
+                identifierQueryModel.setPreviousScoreColumnName("EOS.RESEARCH_LINE_ID, EOS.SCORE_QUALITY, NULL");
+                identifierQueryModel.setScoreColumnName("eos.VALUE");
+                identifierQueryModel.setTableName("ESG_OVERALL_SCORES EOS where data_type = 'esg_pillar_score'  and score_quality='Subsidiary' " +
+                        "and sub_category = 'ESG' and eos.year || eos.month <= '" + year + month + "' \n" +
                         " qualify row_number() OVER (PARTITION BY eos.orbis_id ORDER BY eos.year DESC, eos.month DESC, eos.scored_date DESC) =1");
                 return identifierQueryModel;
         }
