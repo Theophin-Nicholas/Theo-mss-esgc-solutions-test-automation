@@ -17,11 +17,12 @@ import java.util.Collections;
 import java.util.List;
 
 public class EntityClimateProfileControversies extends UITestBase {
-    EntityClimateProfilePage entityProfilePage = new EntityClimateProfilePage();
+
 
     @Test(groups = {"entity_climate_profile", "regression", "ui", "smoke"})
     @Xray(test = {8402, 8403, 8404, 8405, 8406,8407,8408,8409,8411})
     public void validateEntityControversiesWidget() {
+        EntityClimateProfilePage entityProfilePage = new EntityClimateProfilePage();
         ResearchLinePage researchLinePage = new ResearchLinePage();
         BrowserUtils.wait(3);
         researchLinePage.navigateToFirstEntity("000411117");//apple
