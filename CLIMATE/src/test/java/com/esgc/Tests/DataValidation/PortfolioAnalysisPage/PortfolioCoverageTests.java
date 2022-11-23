@@ -5,6 +5,7 @@ import com.esgc.APIModels.PortoflioAnalysisModels.PortfolioCoverageWrapper;
 import com.esgc.DBModels.ResearchLineIdentifier;
 import com.esgc.Tests.TestBases.DataValidationTestBase;
 import com.esgc.Utilities.APIUtilities;
+import com.esgc.Utilities.PortfolioUtilities;
 import com.esgc.Utilities.Xray;
 import io.restassured.response.Response;
 import org.hamcrest.Matchers;
@@ -19,7 +20,10 @@ import java.util.stream.Collectors;
 public class PortfolioCoverageTests extends DataValidationTestBase {
 
     @Test(groups = {"regression", "data_validation"}, dataProvider = "researchLines")
-    @Xray(test = {6372, 6726, 7242})
+    @Xray(test = {6372, 6726, 7242,
+            11244,//subs
+            10899//ESG predicted
+    })
     public void verifyPortfolioCoverageWithMixedIdentifiers(@Optional String sector, @Optional String region,
                                                             @Optional String researchLine, String month, String year) {
 
@@ -75,11 +79,11 @@ public class PortfolioCoverageTests extends DataValidationTestBase {
         String companiesResponse = portfolioCoverageWrapper.get(0).getPortfolioCoverage().getCompanies();
         String investmentResponse = portfolioCoverageWrapper.get(0).getPortfolioCoverage().getInvestment();
 
-        int actualPercentage = (int) Math.round(Double.parseDouble(investmentResponse));
-        int expectedPercentage = (int) Math.round(dataValidationUtilities.getTotalInvestmentPercentage(portfolioToUpload, totalValues));
+        double actualPercentage = PortfolioUtilities.round(Double.parseDouble(investmentResponse), 2);
+        double expectedPercentage = PortfolioUtilities.round(dataValidationUtilities.getTotalInvestmentPercentage(portfolioToUpload, totalValues), 2);
 
         if (researchLine.equals("Temperature Alignment")) {
-            expectedPercentage = (int) Math.round(dataValidationUtilities.getTotalInvestmentForTemperatureAlignment(portfolioToUpload, totalValues));
+            expectedPercentage = PortfolioUtilities.round(dataValidationUtilities.getTotalInvestmentForTemperatureAlignment(portfolioToUpload, totalValues), 2);
         }
         assertTestCase.assertEquals(companiesResponse, numberOfCoveredCompaniesInResearchLine + "/" + numberOfCompaniesInPortfolio, "companies in " + researchLine);
         assertTestCase.assertEquals(actualPercentage, expectedPercentage, "total investment in " + researchLine);
@@ -90,6 +94,11 @@ public class PortfolioCoverageTests extends DataValidationTestBase {
 
         return new Object[][]
                 {
+                        {"all", "AMER", "ESG", "09", "2022"},
+                        {"all", "EMEA", "ESG", "09", "2022"},
+                        {"all", "APAC", "ESG", "09", "2022"},
+                        {"all", "all", "ESG", "09", "2022"},
+
                         {"all", "AMER", "Physical Risk Management", "12", "2020"},
                         {"all", "EMEA", "Physical Risk Management", "12", "2020"},
                         {"all", "APAC", "Physical Risk Management", "12", "2020"},
