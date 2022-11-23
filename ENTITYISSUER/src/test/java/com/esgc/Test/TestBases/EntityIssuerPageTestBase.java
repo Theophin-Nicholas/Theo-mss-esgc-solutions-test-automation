@@ -25,7 +25,7 @@ public abstract class EntityIssuerPageTestBase extends TestBase {
 
         String URL = Environment.ENTITY_URL;
         BrowserUtils.wait(1);
-        Driver.getDriver("chromeheadless").get(URL);
+        Driver.getDriver().get(URL);
         Driver.getDriver().manage().deleteAllCookies();
         System.out.println("userId = " + userId);
         Driver.getDriver().manage().timeouts().implicitlyWait(Duration.ofSeconds(30));

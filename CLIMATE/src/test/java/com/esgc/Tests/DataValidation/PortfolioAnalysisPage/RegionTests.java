@@ -26,8 +26,11 @@ public class RegionTests extends DataValidationTestBase {
     @Test(groups = {"regression", "data_validation"}, dataProvider = "researchLines")
     @Xray(test = {1750, 2140, 2490, 2723, 3688, 3689, 2724, 2726, 2725, 2634, 2633, 2959, 2948, 3690,
             4991, 3685, 5142, 5143, 1383, 1384,
-            6785, 6787})
-    public void verifyRegionSummaryAndDetails(@Optional String sector, @Optional String region, @Optional String researchLine, @Optional String month, @Optional String year) {
+            6785, 6787,
+            11248,//Subs
+
+            })
+            public void verifyRegionSummaryAndDetails(@Optional String sector, @Optional String region, @Optional String researchLine, @Optional String month, @Optional String year) {
 
         List<ResearchLineIdentifier> portfolioToUpload = dataValidationUtilities.getPortfolioToUpload(researchLine, month, year);
         double totalValuesInPortfolio = portfolioUtilities.calculateTotalSumOfInvestment(portfolioToUpload);
