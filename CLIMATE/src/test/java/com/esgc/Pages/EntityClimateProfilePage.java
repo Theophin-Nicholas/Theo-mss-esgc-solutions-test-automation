@@ -502,8 +502,12 @@ public class EntityClimateProfilePage extends ClimatePageBase {
         return companyName;
     }
 
-    public boolean validateGlobalHeader(String CompanyName) {
-        return Driver.getDriver().findElement(By.xpath("//li[normalize-space()='Profile for " + CompanyName + "']")).isDisplayed();
+    public boolean validateGlobalCompanyNameHeader(String CompanyName) {
+        try {
+            return Driver.getDriver().findElement(By.xpath("//li/span[text()='" + CompanyName + "']")).isDisplayed();
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     public boolean isProvidedFilterClickableInMaterialityMatrixFooter(String filterName) {
