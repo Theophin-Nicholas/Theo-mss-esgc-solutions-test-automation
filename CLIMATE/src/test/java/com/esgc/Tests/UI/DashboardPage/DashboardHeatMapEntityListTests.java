@@ -27,15 +27,8 @@ public class DashboardHeatMapEntityListTests extends UITestBase {
     @Test(groups = {"dashboard", "ui", "smoke"})
     @Xray(test = {4843, 4844, 4829, 7475, 7943, 9268, 9269, 9270, 6221})
     public void verifyEntityListTest() {
-        BrowserUtils.wait(4);
-        //This login is required in case, previous test case logged out
-        LoginPage loginPage = new LoginPage();
-        if (loginPage.usernameBoxs.size() > 0)
-            loginPage.login();
         DashboardPage dashboardPage = new DashboardPage();
-        if (!dashboardPage.verifyPortfolioName.getText().equalsIgnoreCase("Sample Portfolio"))
-            dashboardPage.selectPortfolioByNameFromPortfolioSelectionModal("Sample Portfolio");
-        BrowserUtils.wait(5);
+        dashboardPage.selectSamplePortfolioFromPortfolioSelectionModal();
         //Navigate to the heatmap section
         BrowserUtils.scrollTo(dashboardPage.heatMapResearchLines.get(0));
         BrowserUtils.wait(2);
@@ -254,17 +247,30 @@ public class DashboardHeatMapEntityListTests extends UITestBase {
             BrowserUtils.wait(2);
             String color = Color.fromString(dashboardPage.heatMapResearchLines.get(i).getCssValue("background-color")).asHex();
             String researchLine = dashboardPage.heatMapResearchLines.get(i).getText();
+            String selectedResearchLine = researchLine;
+            String expectedAxisTitle = dashboardPage.heatMapYAxisIndicatorTitle.getText();
+
+            if (researchLine.startsWith("Physical Risk: ")) {
+                selectedResearchLine = selectedResearchLine.substring(selectedResearchLine.indexOf(":") + 2);
+            }
+            assertTestCase.assertEquals(selectedResearchLine, expectedAxisTitle, "Heat Map Research Line Title Verification");
+
             switch (researchLine) {
                 case "Overall ESG Score":
-                    assertTestCase.assertEquals(dashboardPage.heatMapYAxisIndicators.get(0).getText(), "Weak", "Overall ESG Score Verified");
-                    assertTestCase.assertEquals(dashboardPage.heatMapYAxisIndicators.get(3).getText(), "Advanced", "Overall ESG Score Verified");
+                    assertTestCase.assertEquals(dashboardPage.heatMapYAxisIndicators.get(0).getText(), "Weak", "Overall ESG Score Category Verified");
+                    assertTestCase.assertEquals(dashboardPage.heatMapYAxisIndicators.get(1).getText(), "Limited", "Overall ESG Score Category Verified");
+                    assertTestCase.assertEquals(dashboardPage.heatMapYAxisIndicators.get(2).getText(), "Robust", "Overall ESG Score Category Verified");
+                    assertTestCase.assertEquals(dashboardPage.heatMapYAxisIndicators.get(3).getText(), "Advanced", "Overall ESG Score Category Verified");
                     assertTestCase.assertEquals(dashboardPage.overallESGDescription.getText(), Descriptions.OVERALL_ESG_SCORE_HEATMAP);
                     break;
                 case "Physical Risk: Operations Risk":
                 case "Physical Risk: Market Risk":
                 case "Physical Risk: Supply Chain Risk":
-                    assertTestCase.assertEquals(dashboardPage.heatMapYAxisIndicators.get(0).getText(), "80-100", "Physical Risk verified");
-                    assertTestCase.assertEquals(dashboardPage.heatMapYAxisIndicators.get(4).getText(), "0-19", "Physical Risk verified");
+                    assertTestCase.assertEquals(dashboardPage.heatMapYAxisIndicators.get(0).getText(), "80-100", "Physical Risk Category Verified");
+                    assertTestCase.assertEquals(dashboardPage.heatMapYAxisIndicators.get(1).getText(), "60-79", "Physical Risk Category Verified");
+                    assertTestCase.assertEquals(dashboardPage.heatMapYAxisIndicators.get(2).getText(), "40-59", "Physical Risk Category Verified");
+                    assertTestCase.assertEquals(dashboardPage.heatMapYAxisIndicators.get(3).getText(), "20-39", "Physical Risk Category Verified");
+                    assertTestCase.assertEquals(dashboardPage.heatMapYAxisIndicators.get(4).getText(), "0-19", "Physical Risk Category Verified");
                     if (researchLine.equals("Physical Risk: Operations Risk"))
                         assertTestCase.assertEquals(dashboardPage.operationRiskDescription.getText(), Descriptions.OPERATIONS_RISK_DESCRIPTION_HEATMAP);
                     else if (researchLine.equals("Physical Risk: Market Risk"))
@@ -274,32 +280,42 @@ public class DashboardHeatMapEntityListTests extends UITestBase {
                     break;
                 case "Physical Risk Management":
                     BrowserUtils.wait(5);
-                    assertTestCase.assertEquals(dashboardPage.heatMapYAxisIndicators.get(0).getText(), "Weak", "Physical Risk Management verified");
-                    assertTestCase.assertEquals(dashboardPage.heatMapYAxisIndicators.get(3).getText(), "Advanced", "Physical Risk Management verified");
+                    assertTestCase.assertEquals(dashboardPage.heatMapYAxisIndicators.get(0).getText(), "Weak", "Physical Risk Management Category Verified");
+                    assertTestCase.assertEquals(dashboardPage.heatMapYAxisIndicators.get(1).getText(), "Limited", "Physical Risk Management Category Verified");
+                    assertTestCase.assertEquals(dashboardPage.heatMapYAxisIndicators.get(2).getText(), "Robust", "Physical Risk Management Category Verified");
+                    assertTestCase.assertEquals(dashboardPage.heatMapYAxisIndicators.get(3).getText(), "Advanced", "Physical Risk Management Category Verified");
                     assertTestCase.assertEquals(dashboardPage.physicalRiskManagementDescription.getText(), Descriptions.PHYSICAL_RISK_MANAGEMENT_DESCRIPTION_HEATMAP);
                     break;
                 case "Temperature Alignment":
                     BrowserUtils.wait(5);
-                    assertTestCase.assertEquals(dashboardPage.heatMapYAxisIndicators.get(0).getText(), "Above 2°C", "Temperature Alignment verified");
-                    assertTestCase.assertEquals(dashboardPage.heatMapYAxisIndicators.get(4).getText(), "No Info", "Temperature Alignment verfied");
+                    assertTestCase.assertEquals(dashboardPage.heatMapYAxisIndicators.get(0).getText(), "Above 2°C", "Temperature Alignment Category Verified");
+                    assertTestCase.assertEquals(dashboardPage.heatMapYAxisIndicators.get(1).getText(), "2°C", "Temperature Alignment Category Verified");
+                    assertTestCase.assertEquals(dashboardPage.heatMapYAxisIndicators.get(2).getText(), "Below 2°C", "Temperature Alignment Category Verified");
+                    assertTestCase.assertEquals(dashboardPage.heatMapYAxisIndicators.get(3).getText(), "Well Below 2°C", "Temperature Alignment Category Verified");
+                    assertTestCase.assertEquals(dashboardPage.heatMapYAxisIndicators.get(4).getText(), "No Info", "Temperature Alignment Category Verified");
                     assertTestCase.assertEquals(dashboardPage.temperatureAlignmentDescription.getText(), Descriptions.TEMPERATURE_ALIGNMENTS_DESCRIPTION_HEATMAP);
                     break;
                 case "Carbon Footprint":
                     BrowserUtils.wait(8);
-                    assertTestCase.assertEquals(dashboardPage.heatMapYAxisIndicators.get(0).getText(), "Intense", "Carbon Footprint verified");
-                    assertTestCase.assertEquals(dashboardPage.heatMapYAxisIndicators.get(3).getText(), "Moderate", "Carbon Footprint verified");
+                    assertTestCase.assertEquals(dashboardPage.heatMapYAxisIndicators.get(0).getText(), "Intense", "Carbon Footprint Category Verified");
+                    assertTestCase.assertEquals(dashboardPage.heatMapYAxisIndicators.get(1).getText(), "High", "Carbon Footprint Category Verified");
+                    assertTestCase.assertEquals(dashboardPage.heatMapYAxisIndicators.get(2).getText(), "Significant", "Carbon Footprint Category Verified");
+                    assertTestCase.assertEquals(dashboardPage.heatMapYAxisIndicators.get(3).getText(), "Moderate", "Carbon Footprint Category Verified");
                     assertTestCase.assertEquals(dashboardPage.carbonFootprintDescription.getText(), Descriptions.CARBON_FOOTPRINT_DESCRIPTION_HEATMAP);
                     break;
                 case "Green Share Assessment":
                     BrowserUtils.wait(8);
-                    assertTestCase.assertEquals(dashboardPage.heatMapYAxisIndicators.get(0).getText(), "None", "Green Share Assessment verified");
-                    assertTestCase.assertEquals(dashboardPage.heatMapYAxisIndicators.get(3).getText(), "Major", "Green Share Assessment verified");
+                    assertTestCase.assertEquals(dashboardPage.heatMapYAxisIndicators.get(0).getText(), "None", "Green Share Assessment Category Verified");
+                    assertTestCase.assertEquals(dashboardPage.heatMapYAxisIndicators.get(1).getText(), "Minor", "Green Share Assessment Category Verified");
+                    assertTestCase.assertEquals(dashboardPage.heatMapYAxisIndicators.get(2).getText(), "Significant", "Green Share Assessment Category Verified");
+                    assertTestCase.assertEquals(dashboardPage.heatMapYAxisIndicators.get(3).getText(), "Major", "Green Share Assessment Category Verified");
                     assertTestCase.assertEquals(dashboardPage.greenShareAssessmentDescription.getText(), Descriptions.GREEN_SHARE_ASSESSMENT_DESCRIPTION_HEATMAP);
                     break;
                 case "Brown Share Assessment":
                     BrowserUtils.wait(8);
-                    assertTestCase.assertEquals(dashboardPage.heatMapYAxisIndicators.get(0).getText(), "20-100%", "Brown Share Assessment verified");
-                    assertTestCase.assertEquals(dashboardPage.heatMapYAxisIndicators.get(2).getText(), "0%", "Brown Share Assessment verified");
+                    assertTestCase.assertEquals(dashboardPage.heatMapYAxisIndicators.get(0).getText(), "20-100%", "Brown Share Assessment Category Verified");
+                    assertTestCase.assertEquals(dashboardPage.heatMapYAxisIndicators.get(1).getText(), "0-20%", "Brown Share Assessment Category Verified");
+                    assertTestCase.assertEquals(dashboardPage.heatMapYAxisIndicators.get(2).getText(), "0%", "Brown Share Assessment Category Verified");
                     assertTestCase.assertEquals(dashboardPage.brownShareAssessmentDescription.getText(), Descriptions.BROWN_SHARE_ASSESSMENT_DESCRIPTION_HEATMAP);
                     break;
             }
@@ -512,7 +528,7 @@ public class DashboardHeatMapEntityListTests extends UITestBase {
                 "Verified ESG Score research line is selected by default");
 
         System.out.println("heatMapNoEntityWidget displayed..");
-        while(dashboardPage.heatMapCells.size()<10){
+        while (dashboardPage.heatMapCells.size() < 10) {
             BrowserUtils.wait(1);
         }
 
@@ -538,23 +554,23 @@ public class DashboardHeatMapEntityListTests extends UITestBase {
                     "Verified the entity names in the widget matches the entity names in the database.");
             //verify investment percentages
             String percentageText = dashboardPage.heatMapDrawerEntityPercentages.get(i).getText();
-            Double actPercentage = Double.parseDouble(percentageText.substring(0,percentageText.indexOf("%")));
-            Double expPercentage = portfolioQueries.getPortfolioEntityValue(portfolioId, actEntityName)*100/sumOfValues;
+            Double actPercentage = Double.parseDouble(percentageText.substring(0, percentageText.indexOf("%")));
+            Double expPercentage = portfolioQueries.getPortfolioEntityValue(portfolioId, actEntityName) * 100 / sumOfValues;
             groupTotal += expPercentage;
             //rounding off to 2 decimal places
-            expPercentage = Math.round(expPercentage*100.0)/100.0;
-            if(!expPercentage.equals(actPercentage)) {
+            expPercentage = Math.round(expPercentage * 100.0) / 100.0;
+            if (!expPercentage.equals(actPercentage)) {
                 System.out.println("expPercentage = " + expPercentage);
                 System.out.println("actPercentage = " + actPercentage);
             }
-            assertTestCase.assertTrue(actPercentage.equals(expPercentage)||actPercentage.equals(expPercentage+0.01),
+            assertTestCase.assertTrue(actPercentage.equals(expPercentage) || actPercentage.equals(expPercentage + 0.01),
                     "Verified the entity percentages in the widget matches the entity percentages in the database.");
         }
-        groupTotal = Math.round(groupTotal*100.0)/100.0;
+        groupTotal = Math.round(groupTotal * 100.0) / 100.0;
         System.out.println("groupTotal = " + groupTotal);
         String expGroupTotal = dashboardPage.heatMapWidgetTitle.getText();
-        expGroupTotal = expGroupTotal.substring(expGroupTotal.indexOf("\n")+1,expGroupTotal.indexOf("%"));
+        expGroupTotal = expGroupTotal.substring(expGroupTotal.indexOf("\n") + 1, expGroupTotal.indexOf("%"));
         System.out.println("expGroupTotal = " + expGroupTotal);
-        assertTestCase.assertEquals(groupTotal+"",expGroupTotal,"Verified the group total in the widget matches the group total in the database.");
+        assertTestCase.assertEquals(groupTotal + "", expGroupTotal, "Verified the group total in the widget matches the group total in the database.");
     }
 }
