@@ -22,7 +22,7 @@ public class EsgMaterialityDataValidation extends DataValidationTestBase {
         test.info("Searching and Selecting the company");
         EntityClimateProfilePage entityProfilePage = new EntityClimateProfilePage();
         String companyName = entityProfilePage.searchAndLoadClimateProfilePage(company);
-        assertTestCase.assertTrue(entityProfilePage.validateGlobalHeader(companyName), companyName + " Header Verification");
+        assertTestCase.assertTrue(entityProfilePage.validateGlobalCompanyNameHeader(companyName), companyName + " Header Verification");
         assertTestCase.assertTrue(entityProfilePage.verifyOverallEsgScoreWidget(), "Verify overall ESG Score widget");
         assertTestCase.assertTrue(entityProfilePage.verifySectorComparisonChart(), "Verify Sector Comparison widget ");
 
