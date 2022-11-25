@@ -241,7 +241,7 @@ public class DashboardPage extends UploadPage {
     @FindBy(xpath = "(//div[@id='div-mainlayout']//table)[3]//tbody//td")
     public List<WebElement> heatMapCells;
 
-    @FindBy(xpath = "(//div[@id='div-mainlayout']//table)[2]//tbody//td//span[1]")
+    @FindBy(xpath = "(//table[.//thead//div[text()]])[1]//*[@heap_id='heatmap']//span")
     public List<WebElement> heatMapYAxisIndicators;
 
     @FindBy(xpath = "(//div[@id='div-mainlayout']//table)[1]//tbody//td//span[1]")
@@ -253,7 +253,7 @@ public class DashboardPage extends UploadPage {
     @FindBy(xpath = "(//div[@id='div-mainlayout']//table)[2]//tbody//td//span[2]")
     public List<WebElement> heatMapYAxisIndicatorPercentages;
 
-    @FindBy(xpath = "(//div[@id='div-mainlayout']//table)[4]//tbody//td//span[1]")
+    @FindBy(xpath = "(//table[.//thead//div[text()]])[2]//*[@heap_id='heatmap']//span")
     public List<WebElement> heatMapXAxisIndicators;
 
     @FindBy(xpath = "(//div[@id='div-mainlayout']//table)[4]//tbody//td//span[2]")
@@ -276,7 +276,6 @@ public class DashboardPage extends UploadPage {
 
     @FindBy(xpath = "//div[@id='heatmapentity-test-id']//li//h4")
     public List<WebElement> heatMapDrawerEntityPercentages;
-
 
 
     //Other locators
@@ -313,7 +312,6 @@ public class DashboardPage extends UploadPage {
 
     @FindBy(xpath = "//p[contains(text(),'Brown Share Assessment contains a dedicated screen')]")
     public WebElement brownShareAssessmentDescription;
-
 
 
     //div[@class='entityList']//br/../following-sibling::div/div[2]
@@ -375,7 +373,7 @@ public class DashboardPage extends UploadPage {
             System.out.println("Sticky4");
             // Verify portfolio name in sticky header
             //assertTestCase.assertTrue(Driver.getDriver().findElement(By.xpath("//header[contains(@class,'Sticky')]//div[contains(text(),'Viewing " + portfolio + ": All Regions, All Sectors')]")).isDisplayed(), "Portfolio name is not displayed in sticky header");
-           // assertTestCase.assertTrue(Driver.getDriver().findElements(By.xpath("//header[contains(@class,'Sticky')]//div[contains(text(),'Viewing " + portfolio + "')]")).get(0).isDisplayed(), "Portfolio name is not displayed in sticky header");
+            // assertTestCase.assertTrue(Driver.getDriver().findElements(By.xpath("//header[contains(@class,'Sticky')]//div[contains(text(),'Viewing " + portfolio + "')]")).get(0).isDisplayed(), "Portfolio name is not displayed in sticky header");
 
             System.out.println("Sticky5");
             // Verify physical risk climate tile details in sticky header
@@ -433,7 +431,7 @@ public class DashboardPage extends UploadPage {
         expectedValues.add("Weak");
 
         String actualEsgScore = esgScoreValue.getText();
-        System.out.println("ESG Score on UI: "+actualEsgScore);
+        System.out.println("ESG Score on UI: " + actualEsgScore);
         return expectedValues.contains(actualEsgScore);
     }
 
@@ -442,16 +440,16 @@ public class DashboardPage extends UploadPage {
             WebElement highestRiskValue = Driver.getDriver().findElement(By.xpath("//div[@id='Highest_Risk_Hazard_id']//span[2]"));
             return physicalRiskCard.isDisplayed() &&
                     highestRiskHazard.isDisplayed() &&
-                    highestRiskValue.getText()!="";
+                    highestRiskValue.getText() != "";
         } catch (Exception e) {
             return false;
         }
     }
 
-    public boolean isScoreQualityButtonAvailable(){
-        try{
+    public boolean isScoreQualityButtonAvailable() {
+        try {
             return scoreQualityButton.isDisplayed();
-        }catch (Exception e){
+        } catch (Exception e) {
             return false;
         }
     }
@@ -466,47 +464,47 @@ public class DashboardPage extends UploadPage {
         return scoreQualityStyle.equals("transform: translate(0px, 3px) scale(1.2);");
     }
 
-    public boolean verifyScoreQualityIconWithEntitiesInPerformanceTable(){
-        return scoreQualityIconsPerformanceTable.size()==10;
+    public boolean verifyScoreQualityIconWithEntitiesInPerformanceTable() {
+        return scoreQualityIconsPerformanceTable.size() == 10;
     }
 
-    public boolean verifyScoreQualityIconWithEntitiesInCoveragePopup(){
-        return scoreQualityIconsCoveragePopup.size()>0;
+    public boolean verifyScoreQualityIconWithEntitiesInCoveragePopup() {
+        return scoreQualityIconsCoveragePopup.size() > 0;
     }
 
-    public void verifyScoreQualityLevelsInIconInCoveragePopup(){
+    public void verifyScoreQualityLevelsInIconInCoveragePopup() {
         int companiesCount = rowsInCoveragePopup.size();
 
-        for(int i=1; i<=companiesCount; i++){
-            System.out.println("Record: "+i);
-            String xpath = "(//tr//td[contains(@id,'viewcomapnies')][1])["+i+"]//*[local-name()='svg']/*[local-name()='rect'][@fill='#26415E']";
+        for (int i = 1; i <= companiesCount; i++) {
+            System.out.println("Record: " + i);
+            String xpath = "(//tr//td[contains(@id,'viewcomapnies')][1])[" + i + "]//*[local-name()='svg']/*[local-name()='rect'][@fill='#26415E']";
             int levels = Driver.getDriver().findElements(By.xpath(xpath)).size();
             String levelName = "";
             String level = "";
-            if(levels==4){
+            if (levels == 4) {
                 level = "Score Level 1";
                 levelName = "Analyst Verified";
-            } else if(levels==3){
+            } else if (levels == 3) {
                 level = "Score Level 2";
                 levelName = "Subsidiary";
-            } else if(levels==2){
+            } else if (levels == 2) {
                 level = "Score Level 3";
                 levelName = "On-Demand";
-            } else if(levels==1){
+            } else if (levels == 1) {
                 level = "Score Level 4";
                 levelName = "Predicted Score";
             }
-            BrowserUtils.scrollTo(Driver.getDriver().findElement(By.xpath("(//tr//td[contains(@id,'viewcomapnies')][1])["+i+"]//*[local-name()='svg']/*[local-name()='rect']")));
-            BrowserUtils.hover(Driver.getDriver().findElement(By.xpath("(//tr//td[contains(@id,'viewcomapnies')][1])["+i+"]//*[local-name()='svg']/*[local-name()='rect']")));
-            assertTestCase.assertTrue(Driver.getDriver().findElement(By.xpath("//p/strong[text()='"+level+"']")).isDisplayed());
-            assertTestCase.assertTrue(Driver.getDriver().findElement(By.xpath("//p[text()='"+levelName+"']")).isDisplayed());
+            BrowserUtils.scrollTo(Driver.getDriver().findElement(By.xpath("(//tr//td[contains(@id,'viewcomapnies')][1])[" + i + "]//*[local-name()='svg']/*[local-name()='rect']")));
+            BrowserUtils.hover(Driver.getDriver().findElement(By.xpath("(//tr//td[contains(@id,'viewcomapnies')][1])[" + i + "]//*[local-name()='svg']/*[local-name()='rect']")));
+            assertTestCase.assertTrue(Driver.getDriver().findElement(By.xpath("//p/strong[text()='" + level + "']")).isDisplayed());
+            assertTestCase.assertTrue(Driver.getDriver().findElement(By.xpath("//p[text()='" + levelName + "']")).isDisplayed());
 
         }
 
     }
 
-    public boolean verifyScoreQualityIconWithEntitiesUnderCompareResearchLines(){
-        return scoreQualityIconsInCompareRLs.size()>0;
+    public boolean verifyScoreQualityIconWithEntitiesUnderCompareResearchLines() {
+        return scoreQualityIconsInCompareRLs.size() > 0;
     }
 
     public boolean verifyFacilitiesExposedWidget() {
@@ -514,29 +512,29 @@ public class DashboardPage extends UploadPage {
             WebElement facilitiesExposedValue = Driver.getDriver().findElement(By.xpath("//div[contains(@id,'Facilities_Exposed_to_')]//span[1]"));
             WebElement facilitiesExposedFlag = Driver.getDriver().findElement(By.xpath("//div[contains(@id,'Facilities_Exposed_to_')]//span[2]"));
             return facilitiesExposed.isDisplayed() &&
-                    facilitiesExposedValue.getText()!="" &&
-                    facilitiesExposedFlag.getText()!="";
+                    facilitiesExposedValue.getText() != "" &&
+                    facilitiesExposedFlag.getText() != "";
         } catch (Exception e) {
             return false;
         }
     }
 
     public boolean verifyEsgInfo() {
-        String portfolioId="00000000-0000-0000-0000-000000000000";
+        String portfolioId = "00000000-0000-0000-0000-000000000000";
         DashboardQueries dashboardQueries = new DashboardQueries();
         String latestMonthAndYearWithData = dashboardQueries.getLatestMonthAndYearWithData(portfolioId);
         String month = latestMonthAndYearWithData.split(":")[0];
         String year = latestMonthAndYearWithData.split(":")[1];
-        System.out.println(month+year);
+        System.out.println(month + year);
         List<Map<String, Object>> dbEsgInfo = dashboardQueries.getEsgInfo(portfolioId, year, month);
         List<WebElement> uiRecords = Driver.getDriver().findElements(By.xpath("//table[contains(@id, 'viewcomapnies')]/tbody/tr"));
 
-        for(int i=1; i<=uiRecords.size(); i++){
-            String companyName = Driver.getDriver().findElement(By.xpath("(//table[contains(@id, 'viewcomapnies')]/tbody/tr)["+i+"]/td[1]/span")).getText();
-            String esgScore = Driver.getDriver().findElement(By.xpath("(//table[contains(@id, 'viewcomapnies')]/tbody/tr)["+i+"]/td[2]/span")).getText();
+        for (int i = 1; i <= uiRecords.size(); i++) {
+            String companyName = Driver.getDriver().findElement(By.xpath("(//table[contains(@id, 'viewcomapnies')]/tbody/tr)[" + i + "]/td[1]/span")).getText();
+            String esgScore = Driver.getDriver().findElement(By.xpath("(//table[contains(@id, 'viewcomapnies')]/tbody/tr)[" + i + "]/td[2]/span")).getText();
             System.out.println("companyName = " + companyName);
             System.out.println("esgScore = " + esgScore);
-            if(!esgScore.equals("-")) {
+            if (!esgScore.equals("-")) {
                 boolean match = false;
                 System.out.print("UI Info:" + companyName + "--" + esgScore);
                 for (Map<String, Object> dbRecord : dbEsgInfo) {
@@ -556,32 +554,32 @@ public class DashboardPage extends UploadPage {
         return true;
     }
 
-    public void selectViewMethodologies(){
-      //  BrowserUtils.waitForInvisibility(btnViewMethodologies, 50);
+    public void selectViewMethodologies() {
+        //  BrowserUtils.waitForInvisibility(btnViewMethodologies, 50);
         btnViewMethodologies.click();
     }
 
-    public boolean verifyMethodologiesPopup(){
+    public boolean verifyMethodologiesPopup() {
         try {
             wait.until(ExpectedConditions.visibilityOf(methodologiesPopup));
             return true;
-        }catch(Exception e){
+        } catch (Exception e) {
             return false;
         }
     }
 
-    public void downloadDashboardExportFile(){
+    public void downloadDashboardExportFile() {
         navigateToPageFromMenu("Dashboard");
         clickViewCompaniesAndInvestments();
         selectViewBySector();
         deleteDownloadFolder();
         clickExportCompaniesButton();
         closePortfolioExportDrawer();
-        assertTestCase.assertEquals(filesCountInDownloadsFolder(),1,"Verify download of export file");
+        assertTestCase.assertEquals(filesCountInDownloadsFolder(), 1, "Verify download of export file");
     }
 
 
-    public void clickHideLink(){
+    public void clickHideLink() {
         hideLink.click();
     }
 
@@ -653,7 +651,7 @@ public class DashboardPage extends UploadPage {
         wait.until(ExpectedConditions.elementToBeClickable(performanceChartDropdown)).click();
         BrowserUtils.wait(2);
         wait.until(ExpectedConditions.visibilityOfAllElements(performanceChartDropdownOptions));
-        System.out.println("performanceChartDropdownOptions "+performanceChartDropdownOptions.size());
+        System.out.println("performanceChartDropdownOptions " + performanceChartDropdownOptions.size());
         List<String> optionsList = performanceChartDropdownOptions.stream().map(WebElement::getText).collect(Collectors.toList());
         closeFilterByKeyboard();
         return optionsList;
@@ -744,7 +742,7 @@ public class DashboardPage extends UploadPage {
 
     public boolean verifyResearchLines() {
         List<String> availableResearchLines = getAvailableResearchLinesFromHeatMapResearchLineSelection();
-        List<String> expResearchLines = Arrays.asList("Overall ESG Score","Physical Risk: Operations Risk", "Physical Risk: Market Risk", "Physical Risk: Supply Chain Risk", "Physical Risk Management", "Temperature Alignment","Carbon Footprint", "Green Share Assessment","Brown Share Assessment");
+        List<String> expResearchLines = Arrays.asList("Overall ESG Score", "Physical Risk: Operations Risk", "Physical Risk: Market Risk", "Physical Risk: Supply Chain Risk", "Physical Risk Management", "Temperature Alignment", "Carbon Footprint", "Green Share Assessment", "Brown Share Assessment");
         for (String line : availableResearchLines) {
             if (!expResearchLines.contains(line)) {
                 System.out.println("Unverified Research Line = " + line);
@@ -816,7 +814,7 @@ public class DashboardPage extends UploadPage {
     public List<String> getExpectedListOfPerformanceChartColumnNames(EntitlementsBundles bundles) {
         switch (bundles) {
             case PHYSICAL_RISK:
-                return Arrays.asList("Company", "% Investment", "Highest Risk Hazard", "Facilities Exposed to High Risk/Red Flag","Physical Risk Management");
+                return Arrays.asList("Company", "% Investment", "Highest Risk Hazard", "Facilities Exposed to High Risk/Red Flag", "Physical Risk Management");
             case TRANSITION_RISK:
                 return Arrays.asList("Company", "% Investment",
                         "Temperature Alignment",
@@ -824,7 +822,7 @@ public class DashboardPage extends UploadPage {
             case ALL:
             case PHYSICAL_RISK_TRANSITION_RISK:
                 return Arrays.asList("Company", "% Investment", "Highest Risk Hazard", "Facilities Exposed to High Risk/Red Flag",
-                       "Physical Risk Management", "Temperature Alignment",
+                        "Physical Risk Management", "Temperature Alignment",
                         "Carbon Footprint (tCO2eq)", "Green Share Assessment", "Brown Share Assessment");
             default:
                 Assert.fail("Bundle not found");
@@ -917,7 +915,7 @@ public class DashboardPage extends UploadPage {
     }
 
     public void selectOrDeselectResearchLineUnderAnalysisSection(String researchLine) {
-        WebElement element = Driver.getDriver().findElement(By.xpath("//div[@heap_heatmap_id='researchline'][text()='"+researchLine+"']"));
+        WebElement element = Driver.getDriver().findElement(By.xpath("//div[@heap_heatmap_id='researchline'][text()='" + researchLine + "']"));
 
         BrowserUtils.scrollTo(element);
         wait.until(ExpectedConditions.elementToBeClickable(element));
@@ -956,7 +954,7 @@ public class DashboardPage extends UploadPage {
     public boolean verifyResearchLineDescriptionFromHeatmapSection(String section, String description) {
         //selectOrDeselectHeatMapSection(section);
         String actualDescription = Driver.getDriver().findElement(By.xpath("//h3[text()='" + section + "']/../p")).getText();
-       // selectOrDeselectHeatMapSection(section);
+        // selectOrDeselectHeatMapSection(section);
         return description.equals(actualDescription);
     }
 
@@ -1029,7 +1027,7 @@ public class DashboardPage extends UploadPage {
     public List<String> getExpectedListOfGeoMapResearchLines(EntitlementsBundles bundles) {
         switch (bundles) {
             case PHYSICAL_RISK:
-                return Arrays.asList("Operations Risk", "Market Risk", "Supply Chain Risk","Physical Risk Management");
+                return Arrays.asList("Operations Risk", "Market Risk", "Supply Chain Risk", "Physical Risk Management");
             //JULY, "Physical Risk Management");
             case TRANSITION_RISK:
                 return Arrays.asList("Temperature Alignment",
@@ -1048,7 +1046,7 @@ public class DashboardPage extends UploadPage {
     public List<String> getExpectedListOfHeatMapResearchLines(EntitlementsBundles bundles) {
         switch (bundles) {
             case PHYSICAL_RISK:
-                return Arrays.asList("Physical Risk: Operations Risk", "Physical Risk: Market Risk", "Physical Risk: Supply Chain Risk","Physical Risk Management");
+                return Arrays.asList("Physical Risk: Operations Risk", "Physical Risk: Market Risk", "Physical Risk: Supply Chain Risk", "Physical Risk Management");
             case TRANSITION_RISK:
                 return Arrays.asList("Temperature Alignment",
                         "Carbon Footprint", "Green Share Assessment", "Brown Share Assessment");
@@ -1228,7 +1226,7 @@ public class DashboardPage extends UploadPage {
         controversiesTableDates.forEach(e -> {
             String date = e.getText();
             assertTestCase.assertTrue(
-                    DateTimeUtilities.getDayDifference(date, todayDate,"MMMM d, yyyy")<60,
+                    DateTimeUtilities.getDayDifference(date, todayDate, "MMMM d, yyyy") < 60,
                     "Verify Controversies are displayed by last 60 days");
 
         });
@@ -1358,7 +1356,12 @@ public class DashboardPage extends UploadPage {
             //check if it is selected and it is not our targeted button
             if (i != selection && color.equals("#355b85")) {
                 //then click to deselect it
-                BrowserUtils.wait(2);
+                wait.until(ExpectedConditions.attributeToBe(heatMapResearchLines.get(i),"cursor","pointer"));
+//                String cursor = .getCssValue("cursor");
+//                while(!cursor.equals("pointer")){
+//                    BrowserUtils.wait(2);
+//                    cursor = heatMapResearchLines.get(i).getCssValue("cursor");
+//                }
                 heatMapResearchLines.get(i).click();
                 BrowserUtils.wait(1);
                 System.out.println(heatMapResearchLines.get(i).getText() + " is de-selected");
@@ -1412,10 +1415,10 @@ public class DashboardPage extends UploadPage {
     }
 
     public boolean verifySelectedResearchLineForHeatMap(String researchLine) {
-        for(WebElement line: heatMapResearchLines){
-            if(line.getText().equalsIgnoreCase(researchLine)){
+        for (WebElement line : heatMapResearchLines) {
+            if (line.getText().equalsIgnoreCase(researchLine)) {
                 String color = Color.fromString(line.getCssValue("background-color")).asHex();
-                if(color.equalsIgnoreCase("#355b85")){
+                if (color.equalsIgnoreCase("#355b85")) {
                     return true;
                 }
             }
@@ -1424,9 +1427,9 @@ public class DashboardPage extends UploadPage {
     }
 
     public boolean selectResearchLineForHeatMap(String researchLine) {
-        for(WebElement line: heatMapResearchLines){
-            if(line.getText().equalsIgnoreCase(researchLine)){
-                if(!verifySelectedResearchLineForHeatMap(researchLine)){
+        for (WebElement line : heatMapResearchLines) {
+            if (line.getText().equalsIgnoreCase(researchLine)) {
+                if (!verifySelectedResearchLineForHeatMap(researchLine)) {
                     line.click();
                     return true;
                 } else {
@@ -1442,8 +1445,8 @@ public class DashboardPage extends UploadPage {
     public void selectRandomCell() {
         Random random = new Random();
         int randomCell;
-        do{
-             randomCell = random.nextInt(heatMapCells.size());
+        do {
+            randomCell = random.nextInt(heatMapCells.size());
         } while (heatMapCells.get(randomCell).getText().equals("0%"));
         BrowserUtils.scrollTo(heatMapCells.get(randomCell)).click();
     }
