@@ -226,8 +226,8 @@ public class DashboardPage extends UploadPage {
     @FindBy(xpath = "//*[text()='Select two:']/following-sibling::div/div")
     public List<WebElement> heatMapResearchLines;
 
-    @FindBy(xpath = "//h3[normalize-space()='Overall ESG Score']")
-    public WebElement heatMapNoEntityWidget;
+    @FindBy(xpath = "//div[@class='entityList' and .//div[contains(text(),'Companies')]]")
+    public WebElement heatMapEntityDrawerWidget;
 
     @FindBy(xpath = "//div[@class='entityList']//br/..")
     public WebElement heatMapWidgetTitle;
@@ -1339,10 +1339,24 @@ public class DashboardPage extends UploadPage {
         BrowserUtils.waitForVisibility(heatMapCells.get(0), 10);
         BrowserUtils.waitForVisibility(heatMapActiveResearchLineInfo.get(0), 10);
         BrowserUtils.wait(2);
+        waitUntilHeatMapResearchLinesAreClickable();
+    }
+
+    public void waitUntilHeatMapResearchLinesAreClickable() {
+        heatMapResearchLines.forEach(each ->
+                wait.until(ExpectedConditions.attributeToBe(each, "cursor", "pointer")));
+    }
+
+    public boolean isHeatMapEntityListDrawerDisplayed() {
+        try {
+            return heatMapEntityDrawerWidget.isDisplayed();
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     //this method deselects all other heat map research lines and selects only one research line by index
-    public void selectOneResearchLine(int selection) {
+    public void selectOneResearchLineOnHeatMap(int selection) {
         //First make sure targeted line is selected
         BrowserUtils.wait(2);
         String color = Color.fromString(heatMapResearchLines.get(selection).getCssValue("background-color")).asHex();
@@ -1356,12 +1370,7 @@ public class DashboardPage extends UploadPage {
             //check if it is selected and it is not our targeted button
             if (i != selection && color.equals("#355b85")) {
                 //then click to deselect it
-                wait.until(ExpectedConditions.attributeToBe(heatMapResearchLines.get(i),"cursor","pointer"));
-//                String cursor = .getCssValue("cursor");
-//                while(!cursor.equals("pointer")){
-//                    BrowserUtils.wait(2);
-//                    cursor = heatMapResearchLines.get(i).getCssValue("cursor");
-//                }
+                waitUntilHeatMapResearchLinesAreClickable();
                 heatMapResearchLines.get(i).click();
                 BrowserUtils.wait(1);
                 System.out.println(heatMapResearchLines.get(i).getText() + " is de-selected");
