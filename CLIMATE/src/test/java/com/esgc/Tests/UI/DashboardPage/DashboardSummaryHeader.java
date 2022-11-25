@@ -23,9 +23,7 @@ public class DashboardSummaryHeader extends DashboardUITestBase {
 
         String dateFilter = CaseUtils.toCamelCase(Month.of(Integer.valueOf(month)).name(), true, ' ') + " " + year;
 
-        researchLinePage.clickFiltersDropdown();
         researchLinePage.selectOptionFromFiltersDropdown("regions", region);
-        researchLinePage.clickFiltersDropdown();
         researchLinePage.selectOptionFromFiltersDropdown("as_of_date", dateFilter);
         BrowserUtils.wait(5);
 

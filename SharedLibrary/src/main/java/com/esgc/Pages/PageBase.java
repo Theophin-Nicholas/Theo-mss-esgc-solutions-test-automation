@@ -173,7 +173,7 @@ public abstract class PageBase {
     @FindBy(tagName = "//*[@aria-busy]")
     public List<WebElement> allLoadMasks;
 
-    @FindBy(xpath = "(//button[@id='button-holdings']/../../../../../div/div/div/div/div/div)[2]")
+    @FindBy(xpath = "//div[@title and ./following-sibling::div/span[contains(text(),'Coverage:')]]")
     public WebElement summaryPortfolioName;
 
     @FindBy(xpath = "//span[text()='About Climate Risk']")
