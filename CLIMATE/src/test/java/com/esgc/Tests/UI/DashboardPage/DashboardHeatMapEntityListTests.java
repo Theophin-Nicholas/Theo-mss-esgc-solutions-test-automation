@@ -9,6 +9,7 @@ import com.esgc.Pages.LoginPage;
 import com.esgc.Tests.TestBases.Descriptions;
 import com.esgc.Tests.TestBases.UITestBase;
 import com.esgc.Utilities.BrowserUtils;
+import com.esgc.Utilities.Database.DatabaseDriver;
 import com.esgc.Utilities.Database.PortfolioQueries;
 import com.esgc.Utilities.Driver;
 import com.esgc.Utilities.Environment;
@@ -33,7 +34,7 @@ public class DashboardHeatMapEntityListTests extends UITestBase {
         BrowserUtils.scrollTo(dashboardPage.heatMapResearchLines.get(0));
         BrowserUtils.wait(2);
         //Verify the entity list - Entity list should be displaying no records
-        // assertTestCase.assertTrue(dashboardPage.heatMapNoEntityWidget.isDisplayed(),
+        assertTestCase.assertFalse(dashboardPage.isHeatMapEntityListDrawerDisplayed(), "Check if Entity List is not displayed");
         //        "Verified the widget doesn't show anything before a cell is selected.");
         System.out.println("heatMapNoEntityWidget displayed..");
         // dashboardPage.heatMapResearchLines.get(0).click();
@@ -41,14 +42,14 @@ public class DashboardHeatMapEntityListTests extends UITestBase {
         /*The entity list is updated and the records (companies) which meet the criteria are now displayed in descending
         order based on percentage of investment on the same.*/
         BrowserUtils.wait(5);
-        verifyCells();
+        verifyHeatMapCells();
         System.out.println("verifyCells(); passed");
 
         for (int i = 2; i < dashboardPage.heatMapResearchLines.size(); i++) {
             //De-select a research line from the heatmap section
             dashboardPage.heatMapResearchLines.get(i).click();
             //Click on any cell from the heatmap
-            verifyCells();
+            verifyHeatMapCells();
         }
     }
 
@@ -57,8 +58,7 @@ public class DashboardHeatMapEntityListTests extends UITestBase {
     public void verifyHeatMapDrawer() {
         //Verify that user is able to close drawer by clicking outside of drawer
         DashboardPage dashboardPage = new DashboardPage();
-        if (!dashboardPage.verifyPortfolioName.getText().equalsIgnoreCase("Sample Portfolio"))
-            dashboardPage.selectPortfolioByNameFromPortfolioSelectionModal("Sample Portfolio");
+        dashboardPage.selectSamplePortfolioFromPortfolioSelectionModal();
         //Navigate to the heatmap section
         BrowserUtils.scrollTo(dashboardPage.heatMapResearchLines.get(0));
         BrowserUtils.wait(3);
@@ -156,7 +156,7 @@ public class DashboardHeatMapEntityListTests extends UITestBase {
 
         //Verify the chart's selectable research lines
         for (int i = 0; i < dashboardPage.heatMapResearchLines.size(); i++) {
-            dashboardPage.selectOneResearchLine(i);
+            dashboardPage.selectOneResearchLineOnHeatMap(i);
             assertTestCase.assertTrue(verifyResearchLineDistributionCategories(
                             dashboardPage.heatMapYAxisIndicatorTitle.getText(),
                             dashboardPage.heatMapYAxisIndicators.size()),
@@ -237,13 +237,12 @@ public class DashboardHeatMapEntityListTests extends UITestBase {
     @Xray(test = {7942, 7944, 5115})
     public void getSelectedResearchLineNameFromHeatMap() {
         DashboardPage dashboardPage = new DashboardPage();
-        if (!dashboardPage.verifyPortfolioName.getText().equalsIgnoreCase("Sample Portfolio"))
-            dashboardPage.selectPortfolioByNameFromPortfolioSelectionModal("Sample Portfolio");
+        dashboardPage.selectSamplePortfolioFromPortfolioSelectionModal();
 
         BrowserUtils.wait(2);
         BrowserUtils.scrollTo(dashboardPage.heatMapResearchLines.get(0));
         for (int i = 0; i < dashboardPage.heatMapResearchLines.size(); i++) {
-            dashboardPage.selectOneResearchLine(i);
+            dashboardPage.selectOneResearchLineOnHeatMap(i);
             BrowserUtils.wait(2);
             String color = Color.fromString(dashboardPage.heatMapResearchLines.get(i).getCssValue("background-color")).asHex();
             String researchLine = dashboardPage.heatMapResearchLines.get(i).getText();
@@ -322,6 +321,7 @@ public class DashboardHeatMapEntityListTests extends UITestBase {
         }
     }
 
+    //Entitlements
     @Test(groups = {"dashboard", "ui", "regression", "smoke"})
     @Xray(test = {8185, 7973,})
     public void heatMapAPIUIVerification() {
@@ -343,18 +343,14 @@ public class DashboardHeatMapEntityListTests extends UITestBase {
         APIController apiController = new APIController();
         DashboardAPIController dashboardAPIController = new DashboardAPIController();
         DashboardPage dashboardPage = new DashboardPage();
-        if (!dashboardPage.verifyPortfolioName.getText().equalsIgnoreCase("Sample Portfolio"))
-            dashboardPage.selectPortfolioByNameFromPortfolioSelectionModal("Sample Portfolio");
+        dashboardPage.selectSamplePortfolioFromPortfolioSelectionModal();
 
         //Getting access token for API connection and setting as token.
-        String getAccessTokenScript = "return JSON.parse(localStorage.getItem('okta-token-storage')).accessToken.accessToken";
-        String accessToken = ((JavascriptExecutor) Driver.getDriver()).executeScript(getAccessTokenScript).toString();
-        System.setProperty("token", accessToken);
+        getExistingUsersAccessTokenFromUI();
 
-        BrowserUtils.wait(2);
         BrowserUtils.scrollTo(dashboardPage.heatMapResearchLines.get(0));
         for (int i = 0; i < dashboardPage.heatMapResearchLines.size(); i++) {
-            dashboardPage.selectOneResearchLine(i);
+            dashboardPage.selectOneResearchLineOnHeatMap(i);
             BrowserUtils.wait(7);
             String color = Color.fromString(dashboardPage.heatMapResearchLines.get(i).getCssValue("background-color")).asHex();
             String researchLine = dashboardPage.heatMapResearchLines.get(i).getText();
@@ -431,7 +427,8 @@ public class DashboardHeatMapEntityListTests extends UITestBase {
         }
     }
 
-    public void verifyCells() {
+
+    public void verifyHeatMapCells() {
         DashboardPage dashboardPage = new DashboardPage();
         int counter = 0;
         for (int i = 0; i < dashboardPage.heatMapYAxisIndicators.size(); i++) {
@@ -511,6 +508,7 @@ public class DashboardHeatMapEntityListTests extends UITestBase {
     @Xray(test = {9394, 9400})
     public void verifyUnderlyingDataForHeatMapCellsTest() {
         DashboardPage dashboardPage = new DashboardPage();
+        DatabaseDriver.createDBConnection();
         BrowserUtils.waitForVisibility(dashboardPage.verifyPortfolioName, 20);
         if (!dashboardPage.verifyPortfolioName.getText().equalsIgnoreCase("Sample Portfolio"))
             dashboardPage.selectPortfolioByNameFromPortfolioSelectionModal("Sample Portfolio");
@@ -519,7 +517,7 @@ public class DashboardHeatMapEntityListTests extends UITestBase {
         BrowserUtils.scrollTo(dashboardPage.heatMapResearchLines.get(0));
 
         //Verify the entity list - Entity list should be displaying no records
-        assertTestCase.assertTrue(dashboardPage.heatMapNoEntityWidget.isDisplayed(),
+        assertTestCase.assertFalse(dashboardPage.isHeatMapEntityListDrawerDisplayed(),
                 "Verified the widget doesn't show anything before a cell is selected.");
         //verify esg score research line selected by default
         //if(!dashboardPage.verifySelectedResearchLineForHeatMap("Overall ESG Score"))
