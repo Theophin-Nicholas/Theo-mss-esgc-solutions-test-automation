@@ -77,7 +77,7 @@ public class PortfolioSettings extends UITestBase {
         BrowserUtils.scrollTo(researchLinePage.samplePortfolio);
         researchLinePage.samplePortfolio.click();
         BrowserUtils.scrollTo(researchLinePage.deleteButton);
-        assertTestCase.assertFalse(researchLinePage.deleteButton.isEnabled());
+        assertTestCase.assertFalse(researchLinePage.isDeletePortfolioButtonActive());
         researchLinePage.pressESCKey();
 
 
