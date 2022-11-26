@@ -9,7 +9,7 @@ import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
@@ -104,7 +104,7 @@ public abstract class PageBase {
 
     @FindBy(xpath = "//div[contains(text(),'No, Cancel')]")
     public WebElement confirmPortfolioDeleteCancelButton;
-    @FindBy(xpath = "//div[text()='Portfolio Management']")
+    @FindBy(xpath = "//*[text()='Portfolio Selection/Upload']")
     public WebElement header_portfolioManagement;
 
     @FindBy(xpath = " (//button[@id='button-holdings'])[1]/span/div")
@@ -920,7 +920,6 @@ public abstract class PageBase {
     }
 
 
-
     public void clickAwayinBlankArea() {
         Driver.getDriver().findElement(By.xpath("//body")).click();
         BrowserUtils.wait(2);
@@ -941,7 +940,6 @@ public abstract class PageBase {
 //        JavascriptExecutor executor = (JavascriptExecutor) Driver.getDriver();
 //        executor.executeScript("document.elementFromPoint(" + x + "," + y + ").click();");
     }
-
 
 
     public boolean checkIfLoadMaskIsDisplayed() {
@@ -972,7 +970,6 @@ public abstract class PageBase {
     public void refreshCurrentWindow() {
         Driver.getDriver().navigate().refresh();
     }
-
 
 
     public String getClimateEntitlementBundleName(String researchLine) {
@@ -1214,35 +1211,35 @@ public abstract class PageBase {
     }
 
     public void verifyCompanyNameInCoveragePopup(String subsidiaryCompanyName, String parentCompanyName) {
-        String xpath = "//span[@heap_id='view-panel'][text()='"+subsidiaryCompanyName+"']/following-sibling::span/span[text()='"+parentCompanyName+"']";
+        String xpath = "//span[@heap_id='view-panel'][text()='" + subsidiaryCompanyName + "']/following-sibling::span/span[text()='" + parentCompanyName + "']";
         assertTestCase.assertEquals(Driver.getDriver().findElements(By.xpath(xpath)).size(), 1);
     }
 
     public void verifyCompanyIsNotClickableInCoveragePopup(String companyName) {
-        String xpath = "//span[@heap_id='view-panel'][text()='"+companyName+"']";
+        String xpath = "//span[@heap_id='view-panel'][text()='" + companyName + "']";
         WebElement element = Driver.getDriver().findElement(By.xpath(xpath));
         assertTestCase.assertFalse(isElementClickable(element));
     }
 
     public void verifyCompanyIsClickableInCoveragePopup(String companyName) {
-        String xpath = "//span[@heap_id='view-panel'][text()='"+companyName+"']";
+        String xpath = "//span[@heap_id='view-panel'][text()='" + companyName + "']";
         WebElement element = Driver.getDriver().findElement(By.xpath(xpath));
         assertTestCase.assertTrue(element.getCssValue("text-decoration").contains("underline"));
     }
 
     public void verifyCompanyNameInTables(String subsidiaryCompanyName, String parentCompanyName) {
-        String xpath = "//span[text()='"+subsidiaryCompanyName+"']/following-sibling::span/span[text()='"+parentCompanyName+"']";
+        String xpath = "//span[text()='" + subsidiaryCompanyName + "']/following-sibling::span/span[text()='" + parentCompanyName + "']";
         assertTestCase.assertEquals(Driver.getDriver().findElements(By.xpath(xpath)).size(), 1);
     }
 
     public void verifyCompanyIsNotClickable(String companyName) {
-        String xpath = "//span[text()='"+companyName+"']";
+        String xpath = "//span[text()='" + companyName + "']";
         WebElement element = Driver.getDriver().findElement(By.xpath(xpath));
         assertTestCase.assertFalse(isElementClickable(element));
     }
 
     public void verifyCompanyIsClickable(String companyName) {
-        String xpath = "//span[text()='"+companyName+"']";
+        String xpath = "//span[text()='" + companyName + "']";
         WebElement element = Driver.getDriver().findElement(By.xpath(xpath));
         assertTestCase.assertTrue(element.getCssValue("text-decoration").contains("underline"));
     }
@@ -1297,8 +1294,10 @@ public abstract class PageBase {
             //Validate if Menu is available
             Assert.assertTrue(menu.isDisplayed(), "Menu Item is not displayed");
             clickMenu();
-            List<String> menuItemsArray = Arrays.asList("Moody's ESG360", "Dashboard", "Portfolio Analysis", "Portfolio Settings", "Contact Us", "Log Out",
-                    "Switch Application", "Climate on Demand", "Company Portal", "DataLab");
+            List<String> menuItemsArray = Arrays.asList("Moody's ESG360", "Dashboard", "Portfolio Analysis",
+                    "Portfolio Selection/Upload", "Regulatory Reporting",
+                    "Contact Us", "Terms & Conditions", "Log Out",
+                    "Switch Application", "Climate on Demand", "Company Portal", "Datalab");
 
             //Validate if all menu items are available
             for (String m : menuItemsArray)
@@ -1324,7 +1323,7 @@ public abstract class PageBase {
                     .findFirst().get().getCssValue("background-color").equalsIgnoreCase("rgba(215, 237, 250, 1)"), "Open page menu is not selected");
 
             //Click on cross button
-            Driver.getDriver().findElement(By.xpath("(//*[name()='svg'][@class='MuiSvgIcon-root'])[2]")).click();
+            Driver.getDriver().findElement(By.xpath("//li[text()=\"Moody's ESG360\"]/span//*[name()='svg']")).click();
             // menuList.get(0).findElement(By.xpath("span")).click();
             //Validating that menu list is closed and background page is still on
             waitForDataLoadCompletion();
@@ -1693,7 +1692,6 @@ public abstract class PageBase {
     String entityName;
 
 
-
     public boolean checkIfUserIsOnRightPage(String entityName) {
         this.entityName = entityName;
         BrowserUtils.isElementVisible(Driver.getDriver().findElement(By.xpath("//div[.='" + entityName + "']")), 3);
@@ -1948,12 +1946,20 @@ public abstract class PageBase {
         BrowserUtils.wait(5);
     }
 
-    public boolean validatePOrtfolioManagementHeaderIsAvailable() {
-        return header_portfolioManagement.isDisplayed();
+    public boolean validatePortfolioManagementTitleIsDisplayed() {
+        try {
+            return header_portfolioManagement.isDisplayed();
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     public boolean validateUploadNewLinkIsAvailable() {
-        return link_UploadNew.isDisplayed();
+        try {
+            return wait.until(ExpectedConditions.visibilityOf(link_UploadNew)).isDisplayed();
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     public boolean validateSideArrowIsAvailable() {
@@ -2108,7 +2114,6 @@ public abstract class PageBase {
             input_PortfolioName.sendKeys(Keys.CONTROL + "z");
         assertTestCase.assertTrue(getPortfolioDrawerHeader(OriginalPortFolioName).isDisplayed(), "Validate that portfolio name is reverted by Ctrl / Command + Z ");
     }
-
 
 
     public void validateblankPortfolioName(String OriginalPortFolioName) {
