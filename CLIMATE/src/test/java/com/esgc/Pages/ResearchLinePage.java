@@ -3399,7 +3399,7 @@ public class ResearchLinePage extends UploadPage {
 
     public boolean isDeletePortfolioButtonActive() {
         try {
-            String cursor = wait.until(ExpectedConditions.visibilityOf(deleteButton)).getAttribute("cursor");
+            String cursor = wait.until(ExpectedConditions.visibilityOf(deleteButton)).getCssValue("cursor");
             System.out.println("Deleting portfolio cursor: " + cursor);
             if (cursor.equals("not-allowed")) {
                 return false;
