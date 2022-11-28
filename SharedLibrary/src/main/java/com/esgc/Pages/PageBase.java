@@ -1213,8 +1213,8 @@ public abstract class PageBase {
         return Driver.getDriver().findElements(By.xpath(xpath)).size() == 3; //For 3 regions
     }
 
-    public void verifyCompanyNameInCoveragePopup(String subsidiaryCompanyName, String parentCompanyName) {
-        String xpath = "//span[@heap_id='view-panel'][text()='"+subsidiaryCompanyName+"']/following-sibling::span/span[text()='"+parentCompanyName+"']";
+    public void verifyCompanyNameInCoveragePopup(String subsidiaryCompanyName) {
+        String xpath = "//span[@heap_id='view-panel'][text()='"+subsidiaryCompanyName+"']";
         assertTestCase.assertEquals(Driver.getDriver().findElements(By.xpath(xpath)).size(), 1);
     }
 
@@ -1230,8 +1230,8 @@ public abstract class PageBase {
         assertTestCase.assertTrue(element.getCssValue("text-decoration").contains("underline"));
     }
 
-    public void verifyCompanyNameInTables(String subsidiaryCompanyName, String parentCompanyName) {
-        String xpath = "//span[text()='"+subsidiaryCompanyName+"']/following-sibling::span/span[text()='"+parentCompanyName+"']";
+    public void verifyCompanyNameInTables(String subsidiaryCompanyName) {
+        String xpath = "//span[text()='"+subsidiaryCompanyName+"']";
         assertTestCase.assertEquals(Driver.getDriver().findElements(By.xpath(xpath)).size(), 1);
     }
 
