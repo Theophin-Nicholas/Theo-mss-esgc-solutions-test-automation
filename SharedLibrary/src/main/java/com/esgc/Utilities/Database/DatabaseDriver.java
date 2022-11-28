@@ -44,6 +44,7 @@ public class DatabaseDriver {
         props.put("warehouse", DB_WAREHOUSE);
         props.put("schema", DB_SCHEMA);
         props.put("role", DB_ROLE);
+        props.put("TIMEZONE", "America/New_York");
         try {
             connection = DriverManager.getConnection(DB_HOST, props);
         } catch (SQLException e) {
@@ -102,7 +103,6 @@ public class DatabaseDriver {
                 rowList.add(row);
             }
         } catch (SQLException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         return rowList;
@@ -121,7 +121,6 @@ public class DatabaseDriver {
                 rowList.add(resultSet.getObject(column));
             }
         } catch (SQLException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         return rowList;
@@ -147,7 +146,6 @@ public class DatabaseDriver {
                 rowList.add(colNameValueMap);
             }
         } catch (SQLException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         return rowList;
@@ -164,11 +162,88 @@ public class DatabaseDriver {
                 colNameValueList.add((String) resultSet.getObject("RELATED_DOMAIN"));
             }
         } catch (SQLException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         return colNameValueList;
     }
+
+    public synchronized static List<String> getQueryResultListUnderlyingData(String query) {
+        executeQuery(query);
+        List<String> colNameValueList = new ArrayList<>();
+
+        /**
+         * When getting a date field from snowflake, try to use resultSet.getDate
+         * when you use getObject, then you may get different date due to difference between
+         * JVM local date snowflake local date.
+         */
+        try {
+            while (resultSet.next()) {
+                colNameValueList.add((resultSet.getDate("UPDATEDATE")).toString());
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return colNameValueList;
+    }
+
+    public synchronized static List<String> getQueryResultListUDGreenShare(String query) {
+        executeQuery(query);
+        List<String> colNameValueList = new ArrayList<>();
+
+        /**
+         * When getting a date field from snowflake, try to use resultSet.getDate
+         * when you use getObject, then you may get different date due to difference between
+         * JVM local date snowflake local date.
+         */
+        try {
+            while (resultSet.next()) {
+                colNameValueList.add((resultSet.getObject("SOURCE")).toString());
+                colNameValueList.add((resultSet.getObject("MAIN")).toString());
+                colNameValueList.add((resultSet.getObject("SCALE")).toString());
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return colNameValueList;
+    }
+
+    public synchronized static List<String> getQueryResultListUDBrownShare(String query) {
+        executeQuery(query);
+        List<String> colNameValueList = new ArrayList<>();
+
+        /**
+         * When getting a date field from snowflake, try to use resultSet.getDate
+         * when you use getObject, then you may get different date due to difference between
+         * JVM local date snowflake local date.
+         */
+        try {
+            while (resultSet.next()) {
+                colNameValueList.add((resultSet.getObject("THRESHOLD")).toString());
+                colNameValueList.add((resultSet.getObject("SOURCE")).toString());
+                colNameValueList.add((resultSet.getObject("SERVICES")).toString());
+                colNameValueList.add((resultSet.getObject("METHANE_HYDRATES")).toString());
+                colNameValueList.add((resultSet.getObject("LIQUEFIED_NATURAL_GAS")).toString());
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return colNameValueList;
+    }
+
+    public synchronized static List<String> getQueryResultListUnderlyingDataTempAligment(String query) {
+        executeQuery(query);
+        List<String> colNameValueList = new ArrayList<>();
+
+        try {
+            while (resultSet.next()) {
+                colNameValueList.add((resultSet.getObject("UPDATEDATE")).toString());
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return colNameValueList;
+    }
+
 
     public synchronized static List<String> getQueryResultLisDisclosure(String query) {
         executeQuery(query);
@@ -214,7 +289,6 @@ public class DatabaseDriver {
                 columns.add(rsmd.getColumnName(i));
             }
         } catch (SQLException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         return columns;
@@ -224,6 +298,7 @@ public class DatabaseDriver {
         try {
             statement = connection.createStatement(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
             statement.executeQuery("ALTER SESSION SET JDBC_QUERY_RESULT_FORMAT='JSON'");
+            statement.executeQuery("ALTER USER SET TIMEZONE='America/Los_Angeles'");
             resultSet = statement.executeQuery(query);
 
         } catch (SQLException e) {
@@ -238,5 +313,4 @@ public class DatabaseDriver {
         int rowCount = resultSet.getRow();
         return rowCount;
     }
-
 }

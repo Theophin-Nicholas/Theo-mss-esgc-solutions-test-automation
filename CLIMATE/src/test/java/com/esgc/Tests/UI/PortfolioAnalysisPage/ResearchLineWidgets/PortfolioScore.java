@@ -1,8 +1,8 @@
 package com.esgc.Tests.UI.PortfolioAnalysisPage.ResearchLineWidgets;
 
 import com.esgc.Pages.PortfolioAnalysisPage.PhysicalRiskPages.PhysicalRiskManagementPages.PhysicalRiskManagementPage;
-import com.esgc.Pages.UploadPage;
 import com.esgc.Pages.ResearchLinePage;
+import com.esgc.Pages.UploadPage;
 import com.esgc.TestBase.DataProviderClass;
 import com.esgc.Tests.TestBases.UITestBase;
 import com.esgc.Utilities.BrowserUtils;
@@ -72,7 +72,7 @@ public class PortfolioScore extends UITestBase {
     @Test(groups = {"regression", "ui", "smoke"},
             description = "Verify Score Widget for risk research lines",
             dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
-    @Xray(test = {551, 2506, 2657, 2253, 6712,2504})
+    @Xray(test = {551, 2506, 2657, 2253, 6712, 2504, 2655})
     public void verifyPortfolioScore(String page) {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         if (page.equals("Physical Risk Management")) {
@@ -108,6 +108,8 @@ public class PortfolioScore extends UITestBase {
                     portfolioPortfolioScoreTexts.add(researchLinePage.greenSharePortfolioScoreTexts.get(i).getText());
                     assertTestCase.assertTrue(researchLinePage.greenSharePortfolioScoreTexts.get(i).isDisplayed(), "Portfolio Score: Text and Value Displayed");
                 }
+                assertTestCase.assertTrue(researchLinePage.greenSharePortfolioScoreTexts.get(0).getText().contentEquals("Of Investments In Companies Offering Green Solutions"), "Portfolio Score: Text Displayed");
+
                 assertTestCase.assertTrue(researchLinePage.portfolioScoreGreenShareValue.isDisplayed(), "Portfolio Coverage: Value Displayed");
                 assertTestCase.assertTrue(researchLinePage.portfolioScoreGreenShareInvestmentValue.isDisplayed(), "Portfolio Coverage: Investment Score Displayed");
                 assertTestCase.assertTrue(researchLinePage.portfolioScoreGreenShareCompaniesValue.isDisplayed(), "Portfolio Coverage: Company Score Displayed");

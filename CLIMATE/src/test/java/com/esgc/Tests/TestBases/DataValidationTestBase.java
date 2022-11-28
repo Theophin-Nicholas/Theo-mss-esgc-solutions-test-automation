@@ -33,4 +33,15 @@ public abstract class DataValidationTestBase extends TestBaseClimate {
         refreshToken();
     }
 
+   /* @DataProvider(name = "Company With Orbis ID")
+    public Object[][] companyWithOrbisID() {
+
+        return new Object[][]{
+
+                {"Apple, Inc.", "000411117"},  // VE scored company
+                {"FirstCash, Inc.","001668460"} // MESG scored Company
+
+        };
+    }
+*/
 }

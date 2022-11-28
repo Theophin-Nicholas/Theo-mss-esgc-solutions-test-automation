@@ -7,9 +7,8 @@ import com.esgc.Controllers.EntityIssuerPageController.EntityIssuerPageAPIContro
 import com.esgc.DBModels.EntityIssuerPageDBModels.P3ControversiesDBModel;
 import com.esgc.DBModels.EntityIssuerPageDBModels.P3HeaderIdentifiersDBModel;
 import com.esgc.DBModels.EntityIssuerPageDBModels.SourceDocumentDBModel;
-import com.esgc.Test.TestBases.EntityPageDataValidationTestBase;
+import com.esgc.Test.TestBases.EntityIssuerPageDataValidationTestBase;
 import com.esgc.Utilities.Database.EntityIssuerQueries;
-import com.esgc.Utilities.Database.EntityPageQueries;
 import com.esgc.Utilities.Environment;
 import com.esgc.Utilities.Xray;
 import io.restassured.response.Response;
@@ -20,7 +19,7 @@ import java.util.List;
 
 
 
-public class EntityIssuerP3PageValidation extends EntityPageDataValidationTestBase {
+public class EntityIssuerP3PageValidation extends EntityIssuerPageDataValidationTestBase {
 
 
     @Xray(test = {7352})
@@ -47,7 +46,7 @@ public class EntityIssuerP3PageValidation extends EntityPageDataValidationTestBa
         String orbisID = Environment.OrbisId;
         List<SourceDocumentDBModel> sourceDocumentDBData = EntityIssuerQueries.getSourceDocumentDBData(orbisID);
         EntityIssuerPageAPIController entityIssuerPageAPIController = new EntityIssuerPageAPIController();
-        Response response = entityIssuerPageAPIController.getSouceDocument(orbisID);
+        Response response = entityIssuerPageAPIController.getSourceDocument(orbisID);
         List<SourceDocument> sourceDocumentAPIResponse = Arrays.asList(response.getBody().as(SourceDocument[].class));
         assertTestCase.assertTrue(sourceDocumentAPIResponse.size()==(sourceDocumentDBData.size()));
         for  (SourceDocument item : sourceDocumentAPIResponse) {
@@ -86,7 +85,7 @@ public class EntityIssuerP3PageValidation extends EntityPageDataValidationTestBa
     @Test(groups = {"regression", "entity_issuer"})
     public void ValidateP3PageHeaderOverallDisclosureRatio() {
         String orbisID = Environment.p3OrbisId;
-        int OverallDisclosureRatio = EntityPageQueries.getOverallDisclosureRatio(orbisID);
+        int OverallDisclosureRatio = EntityIssuerQueries.getOverallDisclosureRatio(orbisID);
 
         EntityIssuerPageAPIController entityIssuerPageAPIController = new EntityIssuerPageAPIController();
         Response response = entityIssuerPageAPIController.getHeaderDetails();

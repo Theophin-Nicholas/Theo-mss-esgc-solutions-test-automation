@@ -1,8 +1,9 @@
 package com.esgc.Tests.DataValidation.EntityClimateProfilePage;
 
-import com.esgc.APIModels.EntityControversies.Controversies;
+import com.esgc.APIModels.EntityProfilePageModels.EntityControversies.Controversies;
+import com.esgc.Controllers.EntityPage.EntityProfileClimatePageAPIController;
 import com.esgc.Tests.TestBases.DataValidationTestBase;
-import com.esgc.Utilities.API.EntityPageEndpoints;
+import com.esgc.Utilities.EndPoints.EntityProfilePageEndpoints;
 import com.esgc.Utilities.Environment;
 import com.esgc.Utilities.Xray;
 import io.restassured.http.ContentType;
@@ -20,12 +21,13 @@ import static io.restassured.RestAssured.given;
 public class EntityClimateControversies extends DataValidationTestBase {
 
     //Verify the Subcategories data for the entity is matching with the snowflake db
-    @Xray(test = {8418})
+    @Xray(test = {8418,8419})
     @Test(groups = {"regression", "ui", "smoke", "entity_climate_profile"},
             description = "Verify the Subcategories data for the entity is matching with the snowflake db")
     public void entityClimateControversies() {
         // Get the api response
-        Controversies contList = getControversies("{\"orbis_id\":\"000411117\"}").as(Controversies.class);
+        EntityProfileClimatePageAPIController apiContoller = new EntityProfileClimatePageAPIController();
+        Controversies contList = apiContoller.getControversiesAPI("{\"orbis_id\":\"000411117\"}").as(Controversies.class);
 
         Map<String, Integer> subCategoryDetails = new HashMap<>();
         for (int i = 0; i < contList.getSub_categories().size(); i++) {
@@ -95,7 +97,7 @@ public class EntityClimateControversies extends DataValidationTestBase {
                     .header("Content-Type", "application/json")
                     .body(payload)
                     .when()
-                    .post(EntityPageEndpoints.POST_ENTITY_CONTROVERSIES);
+                    .post(EntityProfilePageEndpoints.POST_ENTITY_CONTROVERSIES);
 
         } catch (Exception e) {
             System.out.println("Inside exception " + e.getMessage());

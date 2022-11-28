@@ -1,8 +1,8 @@
 package com.esgc.Tests.DataValidation.PortfolioAnalysisPage;
 
 import com.esgc.APIModels.APIFilterPayload;
-import com.esgc.APIModels.LeadersAndLaggards;
-import com.esgc.APIModels.LeadersAndLaggardsWrapper;
+import com.esgc.APIModels.PortoflioAnalysisModels.LeadersAndLaggards;
+import com.esgc.APIModels.PortoflioAnalysisModels.LeadersAndLaggardsWrapper;
 import com.esgc.DBModels.ESGLeaderANDLaggers;
 import com.esgc.DBModels.ResearchLineIdentifier;
 import com.esgc.Reporting.CustomAssertion;
@@ -34,7 +34,10 @@ public class LeadersAndLaggardsTests extends DataValidationTestBase {
             2893, 2497, 2480, 1287, 2132, 2131, 2896, 2897, 2128,
             2894, 2483, 2482, 3836, 3885, 2481, 2890, 3889, 3882,
             3886, 2895, 2123, 2496, 2479, 4156, 4155, 4162, 4165, 4160, 4161, 4164,
-            4163, 4166, 1174, 3032, 2121, 1188, 828, 1286, 1179, 2884, 2498, 3098, 2081, 1285})
+            4163, 4166, 1174, 3032, 2121, 1188, 828, 1286, 1179, 2884, 2498, 3098, 2081, 1285,
+            11246,//Subs
+            11073//Predicted
+    })
     public void validateResearchLineLeadersAndLaggardsData(@Optional String sector, @Optional String region,
                                                            @Optional String researchLine, @Optional String month, @Optional String year) {
 
@@ -301,7 +304,7 @@ public class LeadersAndLaggardsTests extends DataValidationTestBase {
     }
 
     @Test(groups = {"regression", "data_validation"})
-    @Xray(test = {8452,9873})
+    @Xray(test = {8452, 9873})
     public void validateESGLeadersAndLaggardsData() {
 
         String sector = "all";
@@ -340,16 +343,16 @@ public class LeadersAndLaggardsTests extends DataValidationTestBase {
         List<LeadersAndLaggards> apiLeaders = leadersAndLaggardsWrapper.getLeaders().stream()
                 .collect(Collectors.toList());
 
-        List<LeadersAndLaggards>  apiLaggards = leadersAndLaggardsWrapper.getLaggards().stream()
+        List<LeadersAndLaggards> apiLaggards = leadersAndLaggardsWrapper.getLaggards().stream()
                 .collect(Collectors.toList());
 
-        for(int i =0 ; i<leaders.size();i++){
-           // ESGLeaderANDLaggers each = leaders.get(i);
+        for (int i = 0; i < leaders.size(); i++) {
+            // ESGLeaderANDLaggers each = leaders.get(i);
             try {
                 if (apiLeaders != null || !leaders.get(i).getCOMPANY_NAME().isEmpty() || leaders.get(i).getCOMPANY_NAME() != null || apiLeaders.get(i).getCompanyName() != null) {
                     assertTestCase.assertEquals(apiLeaders.get(i).getRank(), leaders.get(i).getRANK(), "Validating company rank " + leaders.get(i).getCOMPANY_NAME());
                     assertTestCase.assertEquals((int) apiLeaders.get(i).getScore(), leaders.get(i).getSCORE(), "Validating company score " + leaders.get(i).getCOMPANY_NAME());
-                    assertTestCase.assertEquals(PortfolioUtilities.round(apiLeaders.get(i).getInvestmentPct(), 2), PortfolioUtilities.round(leaders.get(i).getInvestmentPercentage(),2), "Validating company investment pct " + leaders.get(i).getCOMPANY_NAME());
+                    assertTestCase.assertEquals(PortfolioUtilities.round(apiLeaders.get(i).getInvestmentPct(), 2), PortfolioUtilities.round(leaders.get(i).getInvestmentPercentage(), 2), "Validating company investment pct " + leaders.get(i).getCOMPANY_NAME());
                     assertTestCase.assertEquals(apiLeaders.get(i).getMethodologyversion().toString(), leaders.get(i).getMETHODOLOGY_VERSION(), "Validating company Methodology version " + leaders.get(i).getCOMPANY_NAME());
                 }
             } catch (Exception e) {
@@ -358,13 +361,13 @@ public class LeadersAndLaggardsTests extends DataValidationTestBase {
         }
 
 
-        for(int i =0 ; i<laggards.size();i++){
-           // ESGLeaderANDLaggers laggards.get(i) = laggards.get(i);
+        for (int i = 0; i < laggards.size(); i++) {
+            // ESGLeaderANDLaggers laggards.get(i) = laggards.get(i);
             try {
                 if (apiLeaders != null || !laggards.get(i).getCOMPANY_NAME().isEmpty() || laggards.get(i).getCOMPANY_NAME() != null || apiLaggards.get(i).getCompanyName() != null) {
                     assertTestCase.assertEquals(apiLaggards.get(i).getRank(), laggards.get(i).getRANK(), "Validating company rank " + laggards.get(i).getCOMPANY_NAME());
                     assertTestCase.assertEquals((int) apiLaggards.get(i).getScore(), laggards.get(i).getSCORE(), "Validating company score " + laggards.get(i).getCOMPANY_NAME());
-                    assertTestCase.assertEquals(PortfolioUtilities.round(apiLaggards.get(i).getInvestmentPct(), 2), PortfolioUtilities.round(laggards.get(i).getInvestmentPercentage(),2), "Validating company investment pct " + laggards.get(i).getCOMPANY_NAME());
+                    assertTestCase.assertEquals(PortfolioUtilities.round(apiLaggards.get(i).getInvestmentPct(), 2), PortfolioUtilities.round(laggards.get(i).getInvestmentPercentage(), 2), "Validating company investment pct " + laggards.get(i).getCOMPANY_NAME());
                     assertTestCase.assertEquals(apiLaggards.get(i).getMethodologyversion().toString(), laggards.get(i).getMETHODOLOGY_VERSION(), "Validating company Methodology version " + laggards.get(i).getCOMPANY_NAME());
                 }
             } catch (Exception e) {
@@ -374,7 +377,6 @@ public class LeadersAndLaggardsTests extends DataValidationTestBase {
 
 
     }
-
 
 
     @DataProvider(name = "researchLines")

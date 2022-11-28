@@ -1,6 +1,8 @@
 package com.esgc.Tests.UI.PortfolioAnalysisPage.ExcelComparison;
 
-import com.esgc.APIModels.*;
+import com.esgc.APIModels.APIFilterPayload;
+import com.esgc.APIModels.APIFilterPayloadWithImpactFilter;
+import com.esgc.APIModels.PortoflioAnalysisModels.*;
 import com.esgc.Controllers.APIController;
 import com.esgc.Pages.ResearchLinePage;
 import com.esgc.Reporting.CustomAssertion;
@@ -324,13 +326,8 @@ public class GreenShareAssessment extends UITestBase {
         //Asserting the headers
         System.out.println("Excel Headers " + excelHeaders);
         System.out.println("UI Headers " + updatesUIHeaders);
-        try {
-            assertTestCase.assertTrue(CollectionUtils.isEqualCollection(updatesUIHeaders, excelHeaders),"Headers are Matching");
-        } catch (AssertionError ae) {
-           ae.printStackTrace();
-            System.out.println("Headers Not Matching");
-        }
 
+            assertTestCase.assertTrue(CollectionUtils.isEqualCollection(updatesUIHeaders, excelHeaders),"Headers are Matching");
 
         int updatesListStartsFrom = updatesHeadersRow + 1;
         List<List<Object>> excelUpdateList = new ArrayList<>();
