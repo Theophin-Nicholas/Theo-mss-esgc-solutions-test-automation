@@ -433,6 +433,26 @@ public class DataProviderClass {
         };
     }
 
+    @DataProvider(name = "SubsidiaryCompanies")
+    public Object[][] subsidiaryCompanies() {
+        return new Object[][]{
+                {"National Grid North America, Inc.","National Grid Plc"},
+        };
+    }
+
+    @DataProvider(name = "InactiveSubsidiaryCompanyISIN")
+    public Object[][] inactiveSubsidiaryCompanyISIN() {
+        return new Object[][]{
+                {"XS0054748412"},
+        };
+    }
+
+    @DataProvider(name = "InactiveSubsidiaryCompanies")
+    public Object[][] inactiveSubsidiaryCompanies() {
+        return new Object[][]{
+                {"ZAMBIAN"},
+        };
+    }
 
     @DataProvider(name = "PDFEntitlements")
     public Object[][] PDFEntitlements() {
