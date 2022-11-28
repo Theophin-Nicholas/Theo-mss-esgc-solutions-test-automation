@@ -89,6 +89,30 @@ public class EsgPredictedScoreTests extends UITestBase {
     }
 
     @Test(groups = {"esg", "regression", "ui"})
+    @Xray(test = {11399})
+    public void verifyEntitiesWithPredictedScoresInHeatMap_Dashboard() {
+        DashboardPage dashboardPage = new DashboardPage();
+        ResearchLinePage researchLine =new ResearchLinePage();
+
+        dashboardPage.selectPortfolioByNameFromPortfolioSelectionModal("EsgWithPredictedScores");
+        dashboardPage.navigateToPageFromMenu("Dashboard");
+        BrowserUtils.wait(5);
+        dashboardPage.waitForHeatMap();
+        BrowserUtils.scrollTo(dashboardPage.heatMapResearchLines.get(0));
+        dashboardPage.waitForHeatMap();
+        BrowserUtils.wait(5);
+        dashboardPage.heatMapResearchLines.get(1).click();
+        dashboardPage.waitForHeatMap();
+        dashboardPage.heatMapEsgScoreCells.get(0).click();
+        BrowserUtils.waitForVisibility(dashboardPage.heatMapWidgetTitle, 10);
+
+        assertTestCase.assertTrue(researchLine.verifyEntitiesWithPredictedScoresInYellow_PA(dashboardPage.heatmapPopupRows),"Verify Entities with Predicted Scores are displaying in Yellow color in Coverage popup");
+        assertTestCase.assertTrue(researchLine.verifyEntitiesWithPredictedScoresAreNotClickable_PA(dashboardPage.heatmapPopupCompanyNames),"Verify Entities with Predicted Scores are not clickable in Coverage popup");
+
+        dashboardPage.heatMapResearchLines.get(1).click();
+    }
+
+    @Test(groups = {"esg", "regression", "ui"})
     @Xray(test = {11466})
     public void verifyEntitiesWithPredictedScoresInLeadersAndLaggardsTables_Dashboard() {
         DashboardPage dashboardPage = new DashboardPage();
@@ -145,19 +169,7 @@ public class EsgPredictedScoreTests extends UITestBase {
         DashboardPage dashboardPage = new DashboardPage();
         ExportUtils utils = new ExportUtils();
 
-        BrowserUtils.wait(5);
-        dashboardPage.clickUploadPortfolioButton();
-        dashboardPage.clickBrowseFile();
-        BrowserUtils.wait(2);
-        String inputFile = PortfolioFilePaths.portfolioWithPredictedScores();
-        RobotRunner.selectFileToUpload(inputFile);
-        BrowserUtils.wait(4);
-        dashboardPage.clickUploadButton();
-        dashboardPage.waitForDataLoadCompletion();
-        BrowserUtils.wait(10);
-        dashboardPage.closePopUp();
-
-        dashboardPage.selectPortfolioByNameFromPortfolioSelectionModal("EsgWithPredictedScores");
+        dashboardPage.selectPortfolioByNameFromPortfolioSelectionModal("Sample Portfolio");
         dashboardPage.downloadDashboardExportFile();
 
         // Read the data from Excel File
@@ -167,7 +179,7 @@ public class EsgPredictedScoreTests extends UITestBase {
         for(Map<String, String> excelResult:excelResults){
             String actualScoreType = String.valueOf(excelResult.get("Score Type"));
             System.out.println("**** Record: "+(++i)+" -- Orbis Id: "+excelResult.get("ORBIS_ID")+" -- Score Type: "+actualScoreType);
-            assertTestCase.assertTrue(actualScoreType.trim().isEmpty(),"Score Type should be empty when no Predicted Score entitlement");
+            assertTestCase.assertFalse(actualScoreType.equals("Predicted"),"Score Type should be empty when no Predicted Score entitlement");
         }
         dashboardPage.deleteDownloadFolder();
     }
