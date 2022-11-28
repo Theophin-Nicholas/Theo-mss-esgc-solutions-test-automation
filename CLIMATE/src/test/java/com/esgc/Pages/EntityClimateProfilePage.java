@@ -1,14 +1,15 @@
 package com.esgc.Pages;
 
 
-import com.esgc.APIModels.RangeAndScoreCategory;
+import com.esgc.APIModels.PortoflioAnalysisModels.RangeAndScoreCategory;
 import com.esgc.Controllers.APIController;
-import com.esgc.Utilities.BrowserUtils;
-import com.esgc.Utilities.ConfigurationReader;
+import com.esgc.Utilities.*;
 import com.esgc.Utilities.Database.DatabaseDriver;
-import com.esgc.Utilities.Driver;
+import com.esgc.Utilities.Database.EntityClimateProfilePageQueries;
+import com.google.common.collect.Iterables;
 import com.google.common.collect.Ordering;
 import org.apache.commons.lang3.math.NumberUtils;
+import org.jetbrains.annotations.NotNull;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
@@ -32,9 +33,10 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import static com.esgc.Utilities.Database.DatabaseDriver.getQueryResultMap;
+import static com.esgc.Utilities.DateTimeUtilities.getFormattedDate;
 
 
-public class EntityClimateProfilePage extends PageBase {
+public class EntityClimateProfilePage extends ClimatePageBase {
     public List<String> sectorsList = Arrays.asList("Automobiles", "ARA - all sectors", "Oil&Gas", "Electric & Gas Utilities",
             "Shipping", "Airlines", "Cement", "Steel", "Aluminium");
 
@@ -71,6 +73,9 @@ public class EntityClimateProfilePage extends PageBase {
     @FindBy(id = "export_sources_doc_button")
     public WebElement exportSourcesDocumentsTab;
 
+    @FindBy(xpath = "//button [@id='export_pdf']")
+    public WebElement pdfDownloadButton;
+
     @FindBy(id = "ref_Meth_button")
     public WebElement referenceAndMethodologiesTab;
 
@@ -80,8 +85,12 @@ public class EntityClimateProfilePage extends PageBase {
     @FindBy(xpath = "//div[@role='dialog'][not(@aria-describedby)]/div[contains(@class,'Content')]/div/div")
     public WebElement exportPopupSubtitleElement;
 
+    @FindBy(xpath = "//div[@role='dialog'][not(@aria-describedby)]//div[contains(translate(text(), " +
+            "'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'),'source documents')]")
+    public WebElement sourceDocumentsDiv;
     @FindBy(xpath = "//div[@role='dialog'][not(@aria-describedby)]//div/ul/li/a")
     public List<WebElement> listSourceDocuments;
+
 
     @FindBy(xpath = "//div[@id='entitySourceDocuments']//div[contains(@class,'MuiGrid-item')]/div[1]")
     public WebElement sourceDocumentsMessage;
@@ -101,11 +110,20 @@ public class EntityClimateProfilePage extends PageBase {
     @FindBy(xpath = "//div[@id='brownClimate-test-id']")
     public WebElement brownShareCard;
 
+    @FindBy(xpath = "(//table[@id='table-id-1'])[2]")
+    public WebElement BrownShareTransitionRiskTable;
+
     @FindBy(xpath = "//div[@id='greenClimate-test-id']/div/div/div[1]/div")
     public List<WebElement> listOfGreenShareCardlabels;
 
     @FindBy(xpath = "//div[@id='brownClimate-test-id']/div/div/div[1]/div")
     public List<WebElement> listOfBrownShareCardlabels;
+
+    @FindBy(xpath = "(//div[@id='greenClimate-test-id'])[2]")
+    public WebElement underlyingDataMetrics_GreenShareAssessmentCard;
+
+    @FindBy(xpath = "(//div[@id='greenClimate-test-id'])[2]//table")
+    public WebElement underlyingDataMetrics_GreenShareAssessment_Table;
 
     @FindBy(xpath = "(//*[name()='path'][@class='highcharts-point highcharts-color-0'])")
     public List<WebElement> pieCharts;
@@ -158,6 +176,12 @@ public class EntityClimateProfilePage extends PageBase {
     @FindBy(id = "phyClimate-test-id")
     public WebElement physicalClimateHazards;
 
+    @FindBy(xpath = "//header//div/span/span[contains(text(),'Orbis ID:')]")
+    public WebElement orbisIdLabel;
+
+    @FindBy(xpath = "//div[text()='Green Share']/../following-sibling::div//div[2]/span")
+    public WebElement greenShareScoreRangeLabel;
+
     @FindBy(xpath = "//span[.='Transition Risk']")
     public WebElement transitionRiskPage;
 
@@ -173,7 +197,7 @@ public class EntityClimateProfilePage extends PageBase {
     @FindBy(xpath = "//button[@heap_perfchart_id='Materiality']")
     public WebElement esgMaterialityTab;
 
-    @FindBy(xpath = "//section//li/section/span[1]")
+    @FindBy(xpath = "//section//li/section/span[1]/span[1]")
     public List<WebElement> esgSections;
 
     @FindBy(xpath = "//section//div/p")
@@ -228,9 +252,11 @@ public class EntityClimateProfilePage extends PageBase {
     @FindBy(xpath = "//span[text()='Transition Risk']/../../..//div[@id='carbonClimate-test-id']")
     public WebElement transitionRiskCarbonFootprintWidget;
 
+    @FindBy(xpath = "(//div[@id='carbonClimate-test-id']//div[@id='innerBox00'])[2]")
+    public WebElement transitionRiskCarbonFootprintCategory;
+
     @FindBy(xpath = "//span[text()='Transition Risk']/../../..//div[text()='Green Share Assessment']")
     public WebElement transitionRiskGreenShareWidget;
-
 
     @FindBy(xpath = "//span[text()='Transition Risk']/../../..//div[text()='Green Share Assessment']/../../../following-sibling::div//table/tbody/tr/td[1]")
     public List<WebElement> transitionRiskGreenShareTableBody;
@@ -249,6 +275,9 @@ public class EntityClimateProfilePage extends PageBase {
 
     @FindBy(xpath = "//span[text()='Transition Risk']/../../..//div[text()='Brown Share Assessment']/../../../following-sibling::div//table/tbody/tr/td[1]")
     public List<WebElement> transitionRiskBrownShareTableBody;
+
+    @FindBy(xpath = "//span[text()='Transition Risk']/../../..//div[text()='Brown Share Assessment']/../../../following-sibling::div//table/tbody/tr/td[2]")
+    public List<WebElement> transitionRiskBrownShareTableValues;
 
     @FindBy(xpath = "//span[text()='Transition Risk']/../../..//div[text()='Brown Share Assessment']/../../../following-sibling::div//table/thead/tr/th")
     public List<WebElement> transitionRiskBrownShareTableHeadings;
@@ -313,6 +342,10 @@ public class EntityClimateProfilePage extends PageBase {
     public List<WebElement> transitionRiskCarbonFootprintWidgetValues;
 
     //Operations Risk Table Columns
+
+    @FindBy(xpath = "//table[@id='table-id-1']")
+    public WebElement physicalRiskOperationRisk;
+
     @FindBy(xpath = "(//*[@id='table-id-1'])[2]//td[1]")
     public List<WebElement> physicalClimateHazardsItems;
 
@@ -324,6 +357,9 @@ public class EntityClimateProfilePage extends PageBase {
 
 
     //Market Risk Table
+    @FindBy(xpath = "(//*[@id='table-id-2'])")
+    public List<WebElement> marketRiskTable;
+
     @FindBy(xpath = "(//*[@id='table-id-2'])[2]//td[1]")
     public List<WebElement> marketRiskIndicators;
 
@@ -332,6 +368,9 @@ public class EntityClimateProfilePage extends PageBase {
 
 
     //Supply CHain Risk Table
+    @FindBy(xpath = "(//*[@id='table-id-3'])")
+    public List<WebElement> supplyChainRiskTable;
+
     @FindBy(xpath = "(//*[@id='table-id-3'])//td[1]")
     public List<WebElement> supplyChainRiskIndicators;
 
@@ -396,6 +435,49 @@ public class EntityClimateProfilePage extends PageBase {
     @FindBy(xpath = " //span[contains(text(),'Overall Disclosure Score')]")
     public WebElement entityDisclosureScore;
 
+    @FindBy(xpath = "//div[contains(text(),'About')]/ancestor::div[contains(@class,'MuiPaper-root MuiDrawer')]")
+    public WebElement aboutDrawerMainDiv;
+
+    @FindBy(xpath = "//table[@id='table-id-3']/../../../following-sibling::div[1]/span")
+    public WebElement PhysicalRisk_ClimateHazard_UpdatedDate_Span;
+
+    @FindBy(xpath = "//table[@id='table-id-3']/../../../following-sibling::div[3]/span")
+    public WebElement PhysicalRisk_PhysicalRiskManagement_UpdatedDate_Span;
+
+    // Entity Page
+    @FindBy(xpath = "//*[@id=\"controversyError\"]/div/div/div[1] ")
+    public WebElement noControversies;
+
+    @FindBy(xpath = "//span[normalize-space()='Controversies'] ")
+    public List<WebElement> controversiesTitle;
+
+    //return WebElement
+
+    public WebElement getCompanyHeader(String companyName) {
+        return Driver.getDriver().findElement(By.xpath("//header//span[contains(text(),'" + companyName + "')]"));
+    }
+
+    @FindBy(xpath = "// div[normalize-space()='Filter by most impacted categories of ESG:']")
+    public WebElement controversiesStaticText;
+
+    @FindBy(xpath = "//div[normalize-space()='Filter by most impacted categories of ESG:']//following-sibling::div")
+    public List<WebElement> subCategoryList;
+
+    @FindBy(xpath = "//div[@id='div-mainlayout']//div//div//main//header/following-sibling::div/div[3]/div/div/div/div/div/div/div/following-sibling::div[2]/div/table/tbody/tr")
+    public List<WebElement> controversiesTableRow;
+
+    @FindBy(xpath = "//div[@id='methodologies_modal']//div[@role='dialog']/div[2]/div/div/div/span")
+    //main/div/div/div/div/div/div/div/div/div/div/span[1]")
+    public WebElement controversiesPopUpClose;
+
+    @FindBy(xpath = "(//div[contains(text(),'Controversies')])")
+    public WebElement controversiesPopUpVerify;
+
+    @FindBy(xpath = " //*[@id=\"div-mainlayout\"]/div/div/main/header/div/div/div/div[2]/span[4]/span")
+    public WebElement sectorInHeader;
+
+    @FindBy(xpath = " //body/div[@id='company-summary-panel']/div/div/div[5]")
+    public WebElement companyDrawerSector;
 
 
     ///============= Methods
@@ -446,7 +528,7 @@ public class EntityClimateProfilePage extends PageBase {
 
     public void validateCompanyHeader(String CompanyName) {
         List<String> headerList = Arrays.asList("LEI", "Orbis ID", "ISIN");
-        WebElement companyNameHeader = Driver.getDriver().findElement(By.xpath("//header//span[contains(text(),'" + CompanyName + "')]"));
+        WebElement companyNameHeader = getCompanyHeader(CompanyName);
         List<WebElement> companySummary = companyNameHeader.findElements(By.xpath("parent::span/parent::div/following-sibling::div/span"));
         Assert.assertTrue(headerList.stream().anyMatch(a -> Arrays.asList(companySummary.get(0).getText().split(":|,")).contains(a)));
         System.out.println("companySummary.get(3).getText() = " + companySummary.get(2).getText());
@@ -457,6 +539,66 @@ public class EntityClimateProfilePage extends PageBase {
 
     public void selectExportSourcesDocuments() {
         BrowserUtils.waitForClickablility(exportSourcesDocumentsTab, 30).click();
+    }
+
+    public boolean IsExportSourcesDocumentsButtonAvailable() {
+        try {
+            return exportSourcesDocumentsTab.isDisplayed();
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public boolean IsSourceDocumentsDivAvailable() {
+        try {
+            return sourceDocumentsDiv.isDisplayed();
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public boolean IsPDFButtonAvailable() {
+        try {
+            return pdfDownloadButton.isDisplayed();
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public void selectPdfDownload() {
+        BrowserUtils.waitForClickablility(pdfDownloadButton, 30).click();
+    }
+
+    public boolean checkDownloadProgressBarIsPresent() {
+        try {
+            return Driver.getDriver().findElement(By.xpath("//div[text()='Download in progress!']")).isDisplayed();
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public void closeEntityProfilePage() {
+        Driver.getDriver().findElement(By.xpath("//li[starts-with(text(),'Profile')]/../../div[2]")).click();
+    }
+
+    public void closeDownloadProgressBar() {
+        Driver.getDriver().findElement(By.xpath("//div[text()='Download in progress!']/following-sibling::div/button/span")).click();
+
+    }
+
+    public boolean verifyDownloadProgressMessage() {
+        try {
+            WebElement progressMessage = Driver.getDriver().findElement(By.xpath("//div[text()='Download in progress!']"));
+            BrowserUtils.waitForVisibility(progressMessage, 30);
+            BrowserUtils.waitForInvisibility(progressMessage, 60);
+        } catch (Exception e) {
+            return false;
+        }
+        return true;
+    }
+
+    public boolean verifyDownloadPdfButtonIsDisabled() {
+        return pdfDownloadButton.getAttribute("class").contains("disable");
     }
 
     public boolean verifyMethodologiesTabIsDisplayed() {
@@ -488,7 +630,7 @@ public class EntityClimateProfilePage extends PageBase {
 
     public boolean verifyPopup() {
         try {
-            return exportPopupTitleElement.isDisplayed();
+            return wait.until(ExpectedConditions.visibilityOf(exportPopupTitleElement)).isDisplayed();
         } catch (Exception e) {
             return false;
         }
@@ -754,7 +896,9 @@ public class EntityClimateProfilePage extends PageBase {
     }
 
     public void navigateToTransitionRisk() {
-        BrowserUtils.waitForClickablility(transitionRiskPage, 3).click();
+        JavascriptExecutor js = (JavascriptExecutor) Driver.getDriver();
+        js.executeScript("arguments[0].click()", transitionRiskPage);
+        //  BrowserUtils.waitForClickablility(transitionRiskPage, 30).click();
     }
 
     public void navigateToPhysicalRisk() {
@@ -880,6 +1024,28 @@ public class EntityClimateProfilePage extends PageBase {
 
     }
 
+    public String getEntityOrbisId() {
+        return orbisIdLabel.getText().replace("Orbis ID: ", "");
+    }
+
+    public String getGreenShareScoreRange() {
+        return greenShareScoreRangeLabel.getText().replace("%", "");
+    }
+
+    public boolean verifyScoreAndRange(String scoreRange, String score) {
+        int iScore = Integer.parseInt(score);
+        if (scoreRange.contains("-")) {
+            String range[] = scoreRange.split("-");
+            if (iScore >= Integer.parseInt(range[0].trim()) && iScore <= Integer.parseInt(range[1].trim())) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return iScore == Integer.parseInt(scoreRange);
+        }
+    }
+
     public boolean isPhysicalClimateHazardCardDisplayed() {
         try {
             BrowserUtils.scrollTo(physicalClimateHazards);
@@ -945,6 +1111,40 @@ public class EntityClimateProfilePage extends PageBase {
         }
     }
 
+    public void validateSubCategories() {
+
+        for (int i = 1; i <= esgMaterialityColumns.size(); i++) {
+            String xpathCategories = "(//div/section//ul)[" + i + "]//li";
+            int categoriesCount = Driver.getDriver().findElements(By.xpath(xpathCategories)).size();
+            int scores[] = new int[categoriesCount];
+            for (int j = 1; j <= categoriesCount; j++) {
+                String categoryBgColor = Driver.getDriver().findElement(By.xpath("(//div/section//ul)[" + i + "]//li[" + j + "]")).getCssValue("background-color");
+                System.out.println("BG Color: " + categoryBgColor);
+                if (i != 4) {
+                    String xpathCategoryScore = "(//div/section//ul)[" + i + "]//li[" + j + "]/section/span[1]/span[2]";
+                    String score = Driver.getDriver().findElement(By.xpath(xpathCategoryScore)).getText();
+                    int iScore = Integer.parseInt(score);
+                    scores[i - 1] = iScore;
+                    System.out.println("Score: " + iScore);
+                    if (iScore >= 60) {
+                        assertTestCase.assertEquals(categoryBgColor, "rgba(219, 229, 163, 1)");
+                    } else if (iScore >= 50) {
+                        assertTestCase.assertEquals(categoryBgColor, "rgba(234, 197, 80, 1)");
+                    } else if (iScore >= 30) {
+                        assertTestCase.assertEquals(categoryBgColor, "rgba(232, 149, 28, 1)");
+                    } else {
+                        assertTestCase.assertEquals(categoryBgColor, "rgba(221, 88, 29, 1)");
+                    }
+                } else {
+                    assertTestCase.assertEquals(categoryBgColor, "rgba(255, 255, 255, 1)");
+                }
+            }
+            for (int k = 0; k < (scores.length - 1); k++) {
+                assertTestCase.assertTrue(scores[i] >= scores[i + 1], "Verify the order of categories");
+            }
+        }
+
+    }
 
 //    public void validateSubCategoriesButtonColorProperties() {
 //        List<WebElement> SubCategoriesPercentageLabels = Driver.getDriver().findElements(By.xpath("//section//li/section/span[2]"));
@@ -965,38 +1165,38 @@ public class EntityClimateProfilePage extends PageBase {
 //        }
 //    }
 
-    public void validateNoneForTheSectorButton(){
+    public void validateNoneForTheSectorButton() {
         // Based on the xpath - can say element is not clickable
-        List <WebElement> sectors = Driver.getDriver().findElements(By.xpath("//ul/li/section/span[text()='None for the sector']"));
-        Assert.assertTrue(sectors.size()!=0, "Check 'None for the Sector' button");
+        List<WebElement> sectors = Driver.getDriver().findElements(By.xpath("//ul/li/section/span[text()='None for the sector']"));
+        Assert.assertTrue(sectors.size() != 0, "Check 'None for the Sector' button");
     }
 
-    public void validateEsgMaterialityLegends(){
+    public void validateEsgMaterialityLegends() {
 
         String labelXpath = "//button[@heap_perfchart_id='Materiality']/../../..//div[contains(@class,'MuiPaper-elevation1')]//span";
 
-        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("("+labelXpath+")[1]")).getText(),"Weak");
-        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("("+labelXpath+"/div)[1]")).getAttribute("style"),"background: rgb(221, 88, 29);");
+        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("(" + labelXpath + ")[1]")).getText(), "Weak");
+        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("(" + labelXpath + "/div)[1]")).getAttribute("style"), "background: rgb(221, 88, 29);");
 
-        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("("+labelXpath+")[2]")).getText(),"Limited");
-        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("("+labelXpath+"/div)[2]")).getAttribute("style"),"background: rgb(232, 149, 28);");
+        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("(" + labelXpath + ")[2]")).getText(), "Limited");
+        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("(" + labelXpath + "/div)[2]")).getAttribute("style"), "background: rgb(232, 149, 28);");
 
-        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("("+labelXpath+")[3]")).getText(),"Robust");
-        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("("+labelXpath+"/div)[3]")).getAttribute("style"),"background: rgb(234, 197, 80);");
+        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("(" + labelXpath + ")[3]")).getText(), "Robust");
+        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("(" + labelXpath + "/div)[3]")).getAttribute("style"), "background: rgb(234, 197, 80);");
 
-        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("("+labelXpath+")[4]")).getText(),"Advanced");
-        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("("+labelXpath+"/div)[4]")).getAttribute("style"),"background: rgb(219, 229, 163);");
+        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("(" + labelXpath + ")[4]")).getText(), "Advanced");
+        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("(" + labelXpath + "/div)[4]")).getAttribute("style"), "background: rgb(219, 229, 163);");
 
         String criticalControversiesXpath = "//button[@heap_perfchart_id='Materiality']/../../..//div[text()='Critical controversies']";
         assertTestCase.assertTrue(Driver.getDriver().findElement(By.xpath(criticalControversiesXpath)).isDisplayed());
 
     }
 
-    public boolean validateNoPopupIsDisplayedWhenClickedOnSubCategories(){
+    public boolean validateNoPopupIsDisplayedWhenClickedOnSubCategories() {
         Driver.getDriver().findElement(By.xpath("(//ul/li/section)[1]")).click();
-        try{
+        try {
             return !Driver.getDriver().findElement(By.xpath("//h2[@class='MuiTypography-root MuiTypography-h6']")).isDisplayed();
-        }catch(Exception e){
+        } catch (Exception e) {
             return true;
         }
     }
@@ -1008,8 +1208,8 @@ public class EntityClimateProfilePage extends PageBase {
         return highScore && lowScore;
     }
 
-    public void verifyLowMaterialityMatrixColumnProperties(){
-        for(WebElement element: lowMaterialityElements) {
+    public void verifyLowMaterialityMatrixColumnProperties() {
+        for (WebElement element : lowMaterialityElements) {
             Assert.assertTrue(Color.fromString(element.getCssValue("background-color")).asHex().equals("#ffffff"));
         }
     }
@@ -1071,6 +1271,7 @@ public class EntityClimateProfilePage extends PageBase {
             String dateDB = dbRecordControversies.get(i).get("CONTROVERSY_EVENTS").toString();
             String month_name = "";
             try {
+                System.out.println("dateDB = " + dateDB);
                 Date date = sdf.parse(dateDB);
                 month_name = month_date.format(date);
             } catch (Exception e) {
@@ -1297,6 +1498,14 @@ public class EntityClimateProfilePage extends PageBase {
             }
 
         }
+
+        //verify carbon footprint category color is true
+        String actColor = Color.fromString(transitionRiskCarbonFootprintCategory.getCssValue("background-color")).asHex();
+        System.out.println("TR - Carbon Footprint - actColor = " + actColor);
+        String expColor = new ResearchLineColors().getColorForScoreCategory(transitionRiskCarbonFootprintCategory.getText());
+        System.out.println("TR - Carbon Footprint - expColor = " + expColor);
+        check = check && actColor.equalsIgnoreCase(expColor);
+        if (!check) System.out.println("TR - Carbon Footprint - Category color is not verified");
         return check;
     }
 
@@ -1332,7 +1541,12 @@ public class EntityClimateProfilePage extends PageBase {
             }
 
         }
+        //verify if carbon footprint category displayed
+        check = check && transitionRiskCarbonFootprintCategory.isDisplayed();
+        //verify if carbon footprint category true
+        check = check && transitionRiskCarbonFootprintCategory.getText().equalsIgnoreCase(ESGUtilities.getCarbonFootprintCategory((Long) result.get("CARBON_FOOTPRINT_VALUE_TOTAL")));
         return check;
+
     }
 
     public boolean verifyTempratureAlignmentForNoInfoValue(String entityID) {
@@ -2145,7 +2359,7 @@ public class EntityClimateProfilePage extends PageBase {
     }
 
     public void verifyBrownShareFootPrintTable(List<String> metrics) {
-        navigateToTransitionRisk();
+//        navigateToTransitionRisk();
         Assert.assertTrue(transitionRiskBrownShareTableHeadings.get(0).getText().equals("Fossil Fuel Disclosures"), "Validating Table Heading");
         Assert.assertTrue(transitionRiskBrownShareTableHeadings.get(1).getText().equals("Investment in Category"), "Validating Table Heading");
         BrowserUtils.scrollTo(transitionRiskBrownShareTableBody.get(0));
@@ -2179,6 +2393,7 @@ public class EntityClimateProfilePage extends PageBase {
 
     public void verifyBrownShareWidget() {
         navigateToTransitionRisk();
+        BrowserUtils.scrollTo(transitionRiskBrownShareWidgetUpdatedDate);
         assertTestCase.assertTrue(transitionRiskBrownShareWidget.getText().contains("Brown Share Assessment"), "Validating Brown Share heading");
         assertTestCase.assertTrue(transitionRiskBrownShareWidgetSubHeading.getText().contains("% of Overall Revenue derived from Fossil Fuel\n" +
                 "Activities:"), "Validating Brown Share Sub heading");
@@ -2186,7 +2401,6 @@ public class EntityClimateProfilePage extends PageBase {
         String updatedDateText = transitionRiskBrownShareWidgetUpdatedDate.getText();
         assertTestCase.assertTrue(updatedDateText.contains("Updated on"), "Validating Date ");
         assertTestCase.assertTrue(isValidFormat("MMMM d, yyyy", updatedDateText.split("on ")[1]), "Validating Date format");
-
 
     }
 
@@ -2213,4 +2427,282 @@ public class EntityClimateProfilePage extends PageBase {
         assertTestCase.assertTrue(NumberUtils.isParsable(Para_comparisonChartLegends.get(1).getText().split(":")[1].trim()), "Validate Legend has Numeric value");
     }
 
+    public Boolean validateInfoIcon(String comapnyName) {
+        return getCompanyHeader(comapnyName).findElement(By.xpath("../*[name()='svg']")).isDisplayed();
+    }
+
+    public void openAboutDrawer(String comapnyName) {
+        getCompanyHeader(comapnyName).click();
+    }
+
+    public Boolean isAboutDrawerAvailable() {
+        return wait.until(ExpectedConditions.visibilityOf(aboutDrawerMainDiv)).isDisplayed();
+    }
+
+    public Boolean validateAboutHeader(String comapnyName) {
+        WebElement header = aboutDrawerMainDiv.findElement(By.xpath("header"));
+        return header.getText().split("\n")[0].equals("About " + comapnyName);
+    }
+
+    public void validateAboutDrawerDetails(String comapnyName) {
+        List<String> expectedsections = Arrays.asList("ISIN", "Orbis ID", "LEI", "Region", "Sector", "Model", "Company's Description - Coming Soon");
+        List<WebElement> detailDiv = aboutDrawerMainDiv.findElements(By.xpath("div/div"));
+        for (WebElement e : detailDiv) {
+            assertTestCase.assertTrue(expectedsections.contains(e.getText().split(":")[0]), "Validate " + e.getText() + " text");
+        }
+    }
+
+    public void validateCompanyNameHoverFunctionality(String CompanyName) {
+        WebElement Company = getCompanyHeader(CompanyName);
+        BrowserUtils.hover(Company);
+        BrowserUtils.wait(1);
+        String color = Color.fromString(Company.findElement(By.xpath(".."))
+                .getCssValue("background-color")).asHex().toUpperCase();
+        System.out.println(color);
+        assertTestCase.assertTrue(color.equals("#EBF4FA")
+                , "Validate Company Name hover functionality");
+    }
+
+    public void validatePhysicalClimateHazardUpdatedDate(String orbisID) {
+        EntityClimateProfilePageQueries entityClimateProfilepagequeries = new EntityClimateProfilePageQueries();
+        // DatabaseDriver.createDBConnection();
+        String dbDate = getFormattedDate(entityClimateProfilepagequeries.getUpdatedDateforPhysicalClimateHazard(orbisID).substring(0, 10), "MMMM d, yyyy");
+        if (!dbDate.equals("")) {
+            BrowserUtils.scrollTo(physicalClimateHazards);
+            validateUpdatedOndate(physicalClimateHazards.getText().split("\n")[3], dbDate);
+            navigateToPhysicalRisk();
+            BrowserUtils.scrollTo(PhysicalRisk_ClimateHazard_UpdatedDate_Span);
+            validateUpdatedOndate(PhysicalRisk_ClimateHazard_UpdatedDate_Span.getText(), dbDate);
+        }
+
+    }
+
+    public void validatePhysicalRiskManagementUpdatedDate(String orbisID) {
+        EntityClimateProfilePageQueries entityClimateProfilepagequeries = new EntityClimateProfilePageQueries();
+        String dbDate = getFormattedDate(entityClimateProfilepagequeries.getUpdatedDateforPhysicalRiskManagement(orbisID), "MMMM d, yyyy");
+        if (!dbDate.equals("")) {
+            BrowserUtils.scrollTo(physicalRiskManagementWidgetDescription);
+            validateUpdatedOndate(physicalRiskManagementWidgetDescription.getText().split("\n")[1], dbDate);
+            navigateToPhysicalRisk();
+            BrowserUtils.scrollTo(PhysicalRisk_PhysicalRiskManagement_UpdatedDate_Span);
+            validateUpdatedOndate(PhysicalRisk_PhysicalRiskManagement_UpdatedDate_Span.getText(), dbDate);
+        }
+    }
+
+    public void validateUpdatedOndate(String updatedDateText, String dbDate) {
+        assertTestCase.assertTrue(updatedDateText.contains("Updated on"), "Validating Date ");
+        String UIUpdateDate = updatedDateText.split("on ")[1];
+        assertTestCase.assertTrue(isValidFormat("MMMM d, yyyy", UIUpdateDate), "Validating Date format");
+        assertTestCase.assertTrue(dbDate.equals(UIUpdateDate), "Validate Date from Database");
+
+    }
+
+    public String getUnderlyingCarbonPrintDetails() {
+        navigateToTransitionRisk();
+        BrowserUtils.scrollTo(transitionRiskCarbonFootprintWidget);
+        List<WebElement> elements = transitionRiskCarbonFootprintWidget.findElements(By.xpath("div/div/div"));
+        List<String> returnList = new ArrayList<>();
+        for (WebElement e : Iterables.skip(elements, 1)) {
+            if (e.getText().contains("Updated on")) {
+                break;
+            } else {
+                List<WebElement> spans = e.findElements(By.xpath("span"));
+                String divValue = e.getText();
+                if (spans.size() > 0) {
+                    for (WebElement span : spans) divValue = divValue.replace(span.getText(), " " + span.getText());
+                }
+
+
+                if (divValue.contains("Reporting Year"))
+                    returnList.addAll(Arrays.stream(divValue.split("((?=Reporting Year)|(?<=Reporting Year))"))
+                            .map(String::trim).collect(Collectors.toList()));
+                else if (divValue.contains("(tCO2eq/M revenue)"))
+                    returnList.addAll(Arrays.stream(divValue.split("((?=\\(tCO2eq/M revenue\\))|(?<=\\(tCO2eq/M revenue\\)))"))
+                            .map(String::trim).collect(Collectors.toList()));
+                else
+                    returnList.add(divValue);
+            }
+        }
+
+        return returnList.stream().collect(Collectors.joining(" "));
+    }
+
+    public String getPhysicalClimateHazards() {
+        BrowserUtils.scrollTo(wait.until(ExpectedConditions.visibilityOf(physicalClimateHazards)));
+        String str = physicalClimateHazards.getText().replaceAll("\n", " ");
+        str = str.replace("HIGHEST RISK HAZARD: ", "HIGHEST RISK HAZARD : ");
+        String[] values = str.split(("((?= \\d+%)|(?<=\\d% ))").toString());
+        return values[0] + " " + values[2].split("Update")[0] + values[1].trim();
+    }
+
+    public String getPhysicalRiskManagement() {
+        BrowserUtils.scrollTo(wait.until(ExpectedConditions.visibilityOf(physicalRiskManagementWidget)));
+        String str = physicalRiskManagementWidget.getText().replaceAll("\n", " ");
+        String Values[] = str.split((" "));
+        str = str.replace("Physical Risk Management Anticipation", "Physical Risk Management " + Values[Values.length - 1] + " Anticipation").split("Updated")[0].trim();
+        return str;
+    }
+
+    public String getTempratureAlignmentWidget() {
+        BrowserUtils.scrollTo(wait.until(ExpectedConditions.visibilityOf(temperatureAlignmentWidget)));
+        String str = temperatureAlignmentWidget.getText().replaceAll("\n", " ");
+        String climateText = temperatureAlignmentStatus.getText();
+        str = str.replace(climateText, climateText.toUpperCase(Locale.ROOT));
+        str = str.replace(":", " ");
+        str = str.replace(" °C Emissions Reduction Target Year ", " oC Emissions Reduction Target Year ");
+        return str.split(". Updated")[0];
+    }
+
+
+    public String getGreenShareWidget() {
+        BrowserUtils.scrollTo(wait.until(ExpectedConditions.visibilityOf(greenShareCard)));
+        String returnString = "";
+        if (!greenShareCard.getText().contains("No information available."))
+            returnString = "Offering Green Solutions " + GreenShareWidgetValue.getText();
+        else
+            returnString = greenShareCard.getText();
+        return returnString;
+    }
+
+    public String getBrownShareWidget() {
+        BrowserUtils.scrollTo(wait.until(ExpectedConditions.visibilityOf(brownShareCard)));
+        String returnString = "";
+        if (!brownShareCard.getText().contains("No information available."))
+            returnString = "Brown Share Overall Fossil Fuels Industry Revenues " + BrownShareWidgetValue.getText();
+        else
+            returnString = brownShareCard.getText();
+        return returnString;
+    }
+
+    public String getPhysicalRiskOperationRisk() {
+        navigateToPhysicalRisk();
+        String str = physicalRiskOperationRisk.getText().replaceAll("\n", " ");
+        str = str.replace("Physical Climate Hazards Risk Level Facilities Exposed ", "Physical Risk OPERATIONS RISK PHYSICAL CLIMATE HAZARDS RISK LEVEL FACILITIES EXPOSED ");
+        return str;
+
+    }
+
+
+    public String getPhysicalRiskMarketRisk() {
+        navigateToPhysicalRisk();
+        WebElement e = marketRiskTable.get(marketRiskTable.size() - 1);
+        BrowserUtils.scrollTo(e);
+        String str = e.getText().replaceAll("\n", " ");
+        str = str.replace("Indicator Score", "MARKET RISK INDICATOR SCORE");
+        return str;
+
+    }
+
+    public String getPhysicalRiskSupplyChainRisk() {
+        navigateToPhysicalRisk();
+        WebElement e = supplyChainRiskTable.get(supplyChainRiskTable.size() - 1);
+        BrowserUtils.scrollTo(e);
+        String str = e.getText().replaceAll("\n", " ");
+        str = str.replace("Indicator Score", "SUPPLY CHAIN RISK INDICATOR SCORE");
+        return str;
+
+    }
+
+    public String getunderlyingDataMetricsGreenShareAssessment() {
+        navigateToTransitionRisk();
+        BrowserUtils.scrollTo(wait.until(ExpectedConditions.visibilityOf(underlyingDataMetrics_GreenShareAssessmentCard)));
+        String returnString = "";
+        if (!underlyingDataMetrics_GreenShareAssessmentCard.getText().contains("No information available.")) {
+            returnString = underlyingDataMetrics_GreenShareAssessment_Table.getText().replaceAll("\n", " ");
+            returnString = returnString.replace("Products and Technologies Investment in Category",
+                    "Underlying Data Transition Risk GREEN SHARE PRODUCTS AND TECHNOLOGIES INVESTMENT IN CATEGORY");
+        } else
+            returnString = underlyingDataMetrics_GreenShareAssessmentCard.getText();
+        return returnString;
+
+    }
+
+    public List<String> getHederValues(String CompanyName) {
+        List<String> returnList = new ArrayList<>();
+        WebElement companyNameHeader = getCompanyHeader(CompanyName);
+        List<WebElement> companySummary = companyNameHeader.findElements(By.xpath("parent::span/parent::div/following-sibling::div/span"));
+        returnList.add(CompanyName);
+        String identifiers = companySummary.get(0).getText().split("\\|")[0].trim();
+
+        //TODO : Change includeEmptyIdentifier parameter in below line to false after implementation of ESGCA-10987
+        returnList.add(getIdentifiers(identifiers, false));
+
+        return returnList;
+    }
+
+    //This method os to get List of identifiers,
+    // includeEmptyIdentifier : True will provide all 3 identifiers (ISIN, LEI, Orbis ID) eeven though their values are not available on UI.
+    // includeEmptyIdentifier : false will provide only identifiers which are available on UI.
+    public String getIdentifiers(String listOfIdentifiers, @NotNull Boolean includeEmptyIdentifier) {
+        String returnString = "";
+        if (includeEmptyIdentifier) {
+            Map<Object, Object> map =
+                    Arrays.stream(listOfIdentifiers.split(","))
+                            .map(s -> s.split(":", 2))
+                            .collect(Collectors.toMap(f -> f[0].trim(), f -> f.length > 1 ? f[1].trim() : ""));
+            returnString = new StringBuilder().append("ISIN: " + (map.get("ISIN") != null ? map.get("ISIN").toString() : ""))
+                    .append(", LEI: " + (map.get("LEI") != null ? map.get("LEI").toString() : ""))
+                    .append(", Orbis ID: " + (map.get("Orbis ID") != null ? map.get("Orbis ID").toString() : "")).toString();
+        } else if (!(includeEmptyIdentifier)) {
+            returnString = listOfIdentifiers;
+        }
+        return returnString;
+    }
+
+    public List<String> getESGSummaryDetails() {
+        BrowserUtils.scrollTo(esgScores.get(0));
+        List<String> returnList = new ArrayList<>();
+        for (WebElement e : esgScores) {
+            if (e.getText().contains("ESG Score")) {
+                returnList.add(e.getText().replace("\n", " "));
+            } else {
+                String[] a = e.getText().split("\n");
+                returnList.add(a[1] + " " + (a[0].contains("Environment") ? "Environmental" : a[0]));
+            }
+
+        }
+        return returnList;
+
+    }
+
+    public void verifyUnderlyingDataForBrownShareWidget(String orbisID) {
+        //navigateToTransitionRisk();
+        BrowserUtils.scrollTo(transitionRiskBrownShareWidgetUpdatedDate);
+        EntityClimateProfilePageQueries entityCPPQueries = new EntityClimateProfilePageQueries();
+        Map<String, Object> result = entityCPPQueries.getBrownShareAssessmentDataForEntity(orbisID);
+
+        assertTestCase.assertTrue(transitionRiskBrownShareWidgetSubHeading.getText().contains(result.get("BS_FOSF_INDUSTRY_REVENUES").toString()),
+                "Brown Share Widget Sub Heading is verified matching with Database");
+
+        String expDate = result.get("PRODUCED_DATE").toString();
+        System.out.println("expDate = " + expDate);
+        //
+        expDate = DateTimeUtilities.getDatePlusMinusDays(expDate, 1, "MMMM d, yyyy");
+        System.out.println("expDate = " + expDate);
+        String actDate = transitionRiskBrownShareWidgetUpdatedDate.getText();
+        System.out.println("actDate = " + actDate);
+        assertTestCase.assertTrue(actDate.contains(expDate),
+                "Brown Share Widget Updated Date is verified matching with Database");
+    }
+
+
+    public String getunderlyingDataMetricsBrownShareAssessment() {
+        navigateToTransitionRisk();
+        BrowserUtils.scrollTo(wait.until(ExpectedConditions.visibilityOf(BrownShareTransitionRiskTable)));
+        String returnString = "";
+        if (!BrownShareTransitionRiskTable.getText().contains("No information available.")) {
+            returnString = BrownShareTransitionRiskTable.getText().replaceAll("\n", " ");
+            returnString = returnString.replace("Fossil Fuel Disclosures Investment in Category ",
+                    "Underlying Data Transition Risk BROWN SHARE FOSSIL FUEL DISCLOSURES INVESTMENT IN CATEGORY ");
+        } else
+            returnString = underlyingDataMetrics_GreenShareAssessmentCard.getText();
+        return returnString;
+
+    }
+
+    /*public String getControversiesData() {
+
+
+
+    }*/
 }

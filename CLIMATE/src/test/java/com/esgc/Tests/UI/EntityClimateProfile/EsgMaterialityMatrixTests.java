@@ -1,16 +1,12 @@
 package com.esgc.Tests.UI.EntityClimateProfile;
 
 import com.esgc.Pages.EntityClimateProfilePage;
-import com.esgc.Tests.TestBases.DataValidationTestBase;
 import com.esgc.Tests.TestBases.UITestBase;
-import com.esgc.Utilities.Database.EntityPageQueries;
 import com.esgc.Utilities.Xray;
 import org.testng.annotations.Test;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 public class EsgMaterialityMatrixTests extends UITestBase {
 
@@ -65,6 +61,22 @@ public class EsgMaterialityMatrixTests extends UITestBase {
 
         entityProfilePage.selectEsgMaterialityTab();
         entityProfilePage.validateSubCategoriesButtonProperties();
+
+        entityProfilePage.clickCloseIcon();
+    }
+
+    @Test(groups = {"entity_climate_profile", "regression", "ui"})
+    @Xray(test = {8425})
+    public void validateEsgMaterialityMatrixOrderAndColors() {
+
+        String company = "Amazon.com, Inc.";
+        test.info("Searching and Selecting the company");
+        EntityClimateProfilePage entityProfilePage = new EntityClimateProfilePage();
+        String companyName = entityProfilePage.searchAndLoadClimateProfilePage(company);
+//        assertTestCase.assertTrue(entityProfilePage.validateGlobalHeader(companyName), companyName + " Header Verification");
+
+        entityProfilePage.selectEsgMaterialityTab();
+        entityProfilePage.validateSubCategories();
 
         entityProfilePage.clickCloseIcon();
     }

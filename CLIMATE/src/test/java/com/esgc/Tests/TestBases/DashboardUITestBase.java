@@ -1,10 +1,14 @@
 package com.esgc.Tests.TestBases;
 
 import com.esgc.Pages.LoginPage;
-import com.esgc.Utilities.*;
 import com.esgc.TestBase.TestBase;
+import com.esgc.Utilities.BrowserUtils;
+import com.esgc.Utilities.ConfigurationReader;
+import com.esgc.Utilities.Driver;
+import com.esgc.Utilities.Environment;
 import org.testng.ITestResult;
 import org.testng.annotations.*;
+import org.testng.annotations.DataProvider;
 
 import java.lang.reflect.Method;
 import java.time.Duration;
@@ -34,8 +38,10 @@ public abstract class DashboardUITestBase extends TestBase {
 
         boolean isPampaTest = method.getName().contains("Pampa");
         boolean isEntitlementsTest = method.getName().contains("Bundle");
-        if (!isPampaTest && !isEntitlementsTest) {
-            loginPage.login();
+        if (!loginPage.isSearchIconDisplayed()) {
+            if (!isPampaTest && !isEntitlementsTest) {
+                loginPage.login();
+            }
         }
     }
 
@@ -59,5 +65,18 @@ public abstract class DashboardUITestBase extends TestBase {
                 {"Brown Share Assessment"},
                 {"Green Share Assessment"},
         };
+    }
+
+    @DataProvider(name = "filters")
+    public Object[][] provideFilterParameters() {
+
+        return new Object[][]
+                {
+                        {"all", "all", "03", "2022"},
+                        {"all", "APAC", "03", "2021"},
+                        {"all", "EMEA",  "09", "2022"},
+                        {"all", "AMER", "03", "2022"}
+
+                };
     }
 }

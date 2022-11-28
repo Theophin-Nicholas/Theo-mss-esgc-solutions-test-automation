@@ -8,7 +8,6 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 
 
-
 public abstract class APITestBase extends TestBaseClimate {
 
     public static String portfolioID = null;
@@ -35,7 +34,21 @@ public abstract class APITestBase extends TestBaseClimate {
     public Object[][] availableResearchLinesForAPITests() {
 
         return new Object[][]{
-                {"ESG Assessments"},
+              /*  {"ESG Assessments"},*/ //TODO de-scoped
+                {"operationsrisk"},
+                {"marketrisk"},
+                {"supplychainrisk"},
+                {"physicalriskmgmt"},
+                {"carbonfootprint"},
+                {"brownshareasmt"},
+                {"greenshareasmt"},
+        };
+    }
+
+    @DataProvider(name = "No ESG API Research Lines")
+    public Object[][] availableResearchLinesForAPITestsWithoutESG() {
+
+        return new Object[][]{
                 {"operationsrisk"},
                 {"marketrisk"},
                 {"supplychainrisk"},
@@ -51,15 +64,12 @@ public abstract class APITestBase extends TestBaseClimate {
     public Object[][] availableResearchLinesForAPITests2() {
 
         return new Object[][]{
-//                {"operationsrisk"},
-//                {"marketrisk"},
-//                {"supplychainrisk"},
-                //{"physicalriskmgmt"},
+                {"esgasmt"},
+                {"physicalriskhazard"},
+                {"physicalriskmgmt"},
                 {"temperaturealgmt"},
                 {"carbonfootprint"},
                 {"brownshareasmt"},
-                //{"energytransmgmt"},
-                //{"tcfdstrategy"},
                 {"greenshareasmt"},
         };
     }

@@ -1,11 +1,8 @@
 package com.esgc.Tests.UI.DashboardPage.Export;
 
 import com.esgc.Controllers.APIController;
-import com.esgc.Controllers.EntityPage.EntityProfileClimatePageAPIController;
 import com.esgc.Pages.DashboardPage;
 import com.esgc.Tests.TestBases.APITestBase;
-import com.esgc.Tests.TestBases.DataValidationTestBase;
-import com.esgc.Utilities.Database.DashboardQueries;
 import com.esgc.Utilities.ExcelUtil;
 import com.esgc.Utilities.Xray;
 import io.restassured.path.json.JsonPath;
@@ -13,7 +10,6 @@ import io.restassured.response.Response;
 import org.testng.annotations.Test;
 
 import java.util.List;
-import java.util.Map;
 
 
 public class ExportExcelColumnOrderTests extends APITestBase {

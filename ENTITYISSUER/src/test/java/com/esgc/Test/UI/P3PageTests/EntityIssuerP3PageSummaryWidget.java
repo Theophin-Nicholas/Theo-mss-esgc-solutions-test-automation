@@ -12,7 +12,7 @@ import java.util.List;
 
 public class EntityIssuerP3PageSummaryWidget extends EntityPageTestBase {
 
-    @Xray(test = {7438,7442,7443,8993})
+    @Xray(test = {7438,7442,7443,8993,9721})
     @Test(groups = {"regression", "ui", "smoke","entity_issuer"},
             dataProvider = "credentials",dataProviderClass = DataProviderClass.class,
             description = "Verify Summary Widget")
@@ -23,13 +23,14 @@ public class EntityIssuerP3PageSummaryWidget extends EntityPageTestBase {
         LoginPageIssuer.loginWithParams(userId,password);
         EntityIssuerPage entitypage = new EntityIssuerPage();
         entitypage.validateSummaryWidgetISVAvailable();
+        assertTestCase.assertTrue(entitypage.verifyOverallEsgScoreWidget(), "Verify overall ESG Score widget");
         List<String> summarySections = Arrays.asList(new String[]{"ESG Score", "Environment", "Social", "Governance"});
         for (String ss : summarySections) entitypage.validateESGScoresAsNumericalValues(ss);
 
         /*Removing as the functionality has changed
         entitypage.validateESGScoreRatingList() ;*/
         entitypage.validateEsgScoredateFormat();
-
+        assertTestCase.assertTrue(entitypage.NoSectorComparisionChart.isDisplayed(),"No Comparision Chart is available");
         entitypage.logout.click();
     }
 }

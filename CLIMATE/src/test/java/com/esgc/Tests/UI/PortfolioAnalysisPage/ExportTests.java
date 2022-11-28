@@ -7,6 +7,7 @@ import com.esgc.TestBase.DataProviderClass;
 import com.esgc.Tests.TestBases.UITestBase;
 import com.esgc.Tests.UI.PortfolioAnalysisPage.ExcelComparison.BrownShareAssessment;
 import com.esgc.Tests.UI.PortfolioAnalysisPage.ExcelComparison.CarbonFootprint;
+import com.esgc.Tests.UI.PortfolioAnalysisPage.ExcelComparison.EsgAssessment;
 import com.esgc.Tests.UI.PortfolioAnalysisPage.ExcelComparison.GreenShareAssessment;
 import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.ExcelUtil;
@@ -14,7 +15,7 @@ import com.esgc.Utilities.Xray;
 import org.apache.commons.io.FileUtils;
 import org.testng.Assert;
 import org.testng.SkipException;
-import org.testng.annotations.AfterTest;
+import org.testng.annotations.AfterClass;
 import org.testng.annotations.Test;
 
 import java.io.File;
@@ -25,7 +26,7 @@ public class ExportTests extends UITestBase {
 //TODO Needs attention. Tests are failing.
     @Test(groups = {"regression", "smoke", "export"},
             dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
-    @Xray(test = {2092, 2093, 2110, 2112, 2113, 2625, 3004, 3396, 3403, 3405, 3406, 4648, 5169, 3621})
+    @Xray(test = {2092, 2093, 2108, 2110, 2112, 2113, 2625, 3004, 3396, 3403, 3405, 3406, 4648, 5169, 3621, 8953, 9656, 9657, 9658, 10679 })
     public void verifyExportFunctionalityandExcelFieldsWithUI(String researchLine) {
 
         ResearchLinePage researchLinePage = new ResearchLinePage();
@@ -50,10 +51,15 @@ public class ExportTests extends UITestBase {
         researchLine = researchLine.replaceAll("Management", "Mgmt");
         String expectedTitle = String.format("Portfolio Analysis - %s", researchLine);
         BrowserUtils.wait(5);
+        String sheetName = String.format("Summary %s", researchLine);
+
+        if(researchLine.equals("ESG Assessments")) {
+            sheetName = "Data - ESG";
+            researchLine = "ESG Assessment";
+            expectedTitle = "Entity Name";
+        }
         Assert.assertEquals(researchLinePage.getDataFromExportedFile(0, 0, researchLine), expectedTitle,
                 "Exported Document verified by title for " + researchLinePage + " page");
-
-        String sheetName = String.format("Summary %s", researchLine);
 
         ExcelUtil exportedDocument = new ExcelUtil(BrowserUtils.exportPath(researchLine), sheetName);
 
@@ -79,6 +85,11 @@ public class ExportTests extends UITestBase {
                 test.info("BROWN SHARE ASSESSMENT TESTING STARTED");
                 new BrownShareAssessment().verifyBrownShareAssessment(researchLine, portfolio_id, controller, payload, exportedDocument);
                 break;
+            case "ESG Assessment":
+                System.out.println("ESG Assessment TESTING STARTED");
+                test.info("ESG Assessment TESTING STARTED");
+                new EsgAssessment().verifyEsgAssessment(researchLine, portfolio_id, "2022","05");
+                break;
             default:
                 test.fail("Failed to get any Research line");
                 System.out.println("Failed to get any Research line");
@@ -92,7 +103,7 @@ public class ExportTests extends UITestBase {
         System.out.println("PDF Download test for " + researchLine);
         ResearchLinePage researchLinePage = new ResearchLinePage();
 
-        if (researchLine.equals("Physical Risk Hazards") || researchLine.equals("Temperature Alignment")) {
+        if (researchLine.equals("ESG Assessments") || researchLine.equals("Physical Risk Hazards") || researchLine.equals("Temperature Alignment")) {
             throw new SkipException("Physical Risk Hazards - Export is not ready to test in " + researchLine);
         }
 
@@ -131,12 +142,12 @@ public class ExportTests extends UITestBase {
 
     @Test(groups = {"regression", "smoke", "export"},
             dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
-    @Xray(test = {2883})
+    @Xray(test = {2883, 2962})
     public void verifyBenchMarkExportFunctionalityandExcelFieldsWithUI(String researchLine) {
 
         ResearchLinePage researchLinePage = new ResearchLinePage();
 
-        if (researchLine.equals("Physical Risk Hazards") || researchLine.equals("Temperature Alignment")
+        if (researchLine.equals("ESG Assessments") || researchLine.equals("Physical Risk Hazards") || researchLine.equals("Temperature Alignment")
                 || researchLine.equals("Physical Risk Management")) {
             throw new SkipException("Export is not ready to test in " + researchLine);
         }
@@ -194,7 +205,7 @@ public class ExportTests extends UITestBase {
         }
     }
 
-    @AfterTest
+    @AfterClass
     public void deleteDownloadFolder() {
         File dir = new File(BrowserUtils.downloadPath());
         File[] dir_contents = dir.listFiles();
@@ -215,5 +226,25 @@ public class ExportTests extends UITestBase {
             dir.delete();
         }else
             System.out.println("There is no Directory to DELETE");
+    }
+
+    @Test(groups = {"regression", "export"},
+            dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
+    @Xray(test = {7253})
+    public void verifyResearchLinesExportOptions(String researchLine) {
+
+        ResearchLinePage researchLinePage = new ResearchLinePage();
+
+        if (researchLine.equals("Physical Risk Hazards") || researchLine.equals("Temperature Alignment")
+                || researchLine.equals("Physical Risk Management")) {
+            throw new SkipException("Export is not ready to test in " + researchLine);
+        }
+
+        researchLinePage.navigateToResearchLine(researchLine);
+        researchLinePage.selectSamplePortfolioFromPortfolioSelectionModal();
+
+        researchLinePage.clickExportDropdown();
+        researchLinePage.verifyExportOptions(researchLine);
+        researchLinePage.clickOutsideOfDrillDownPanel();
     }
 }

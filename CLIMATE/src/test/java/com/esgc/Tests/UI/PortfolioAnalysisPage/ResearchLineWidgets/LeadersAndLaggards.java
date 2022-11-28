@@ -28,7 +28,7 @@ public class LeadersAndLaggards extends UITestBase {
         }
         String title = "Updates as of June 2021 and Current Leaders/Laggards";
         String commonWidgetsID = "updates_and_current_leaders_laggards";
-
+        researchLinePage.selectSamplePortfolioFromPortfolioSelectionModal();
         researchLinePage.navigateToResearchLine(page);
         BrowserUtils.wait(5);
         test.info("Navigated to " + page + " Page");
@@ -81,7 +81,7 @@ public class LeadersAndLaggards extends UITestBase {
     @Test(groups = {"regression", "ui"},
             description = "Verify the ScoreLogic for Leaders And Laggards Section",
             dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
-    @Xray(test = {2124, 3034, 3159, 2080})
+    @Xray(test = {2124, 3034, 3159, 2080, 3848, 3849, 11077})
     public void verifyScoreLogicForLeaderAndLaggards(String page){
         ResearchLinePage researchLinePage = new ResearchLinePage();
         if ( page.equals("Temperature Alignment")) {
@@ -96,6 +96,9 @@ public class LeadersAndLaggards extends UITestBase {
 
         assertTestCase.assertTrue(researchLinePage.VerifyIfScoreLogicIsCorrectForLeaders(page), "Entities were not ordered in correct order for Leaders");
         assertTestCase.assertTrue(researchLinePage.VerifyIfScoreLogicIsCorrectForLaggards(page), "Entities were not ordered in correct order for Laggards");
+
+        assertTestCase.assertTrue(researchLinePage.VerifySortingOrderForLeaders(), "Sorting order for Leaders");
+        assertTestCase.assertTrue(researchLinePage.VerifySortingOrderForLaggards(), "Sorting order for Laggards");
 
     }
 
@@ -123,7 +126,7 @@ public class LeadersAndLaggards extends UITestBase {
         test.info("Verified that the More companies ranked in link is working as expected");
     }
     //TODO De-Scoped as of now
-    @Test(enabled = false,groups = {"regression", "ui", "smoke"})
+    @Test(enabled = true,groups = {"regression", "ui", "smoke"})
     @Xray(test = {9871})
     public void VerifyESGLeadersAndLaggersTable() {
         ResearchLinePage researchLinePage = new ResearchLinePage();

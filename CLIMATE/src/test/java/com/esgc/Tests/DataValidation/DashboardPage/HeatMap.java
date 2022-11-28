@@ -1,18 +1,18 @@
 package com.esgc.Tests.DataValidation.DashboardPage;
 
 import com.esgc.APIModels.APIFilterPayload;
-import com.esgc.APIModels.Dashboard.APIHeatMapPayload;
-import com.esgc.APIModels.Dashboard.HeatMapAxisData;
-import com.esgc.APIModels.Dashboard.HeatMapData;
-import com.esgc.APIModels.Dashboard.HeatMapWrapper;
-import com.esgc.APIModels.PortfolioDistribution;
-import com.esgc.APIModels.PortfolioDistributionWrapper;
-import com.esgc.APIModels.RangeAndScoreCategory;
+import com.esgc.APIModels.DashboardModels.APIHeatMapPayload;
+import com.esgc.APIModels.DashboardModels.HeatMapAxisData;
+import com.esgc.APIModels.DashboardModels.HeatMapData;
+import com.esgc.APIModels.DashboardModels.HeatMapWrapper;
+import com.esgc.APIModels.PortoflioAnalysisModels.PortfolioDistribution;
+import com.esgc.APIModels.PortoflioAnalysisModels.PortfolioDistributionWrapper;
+import com.esgc.APIModels.PortoflioAnalysisModels.RangeAndScoreCategory;
 import com.esgc.Controllers.DashboardAPIController;
 import com.esgc.DBModels.ResearchLineIdentifier;
 import com.esgc.Tests.TestBases.DataValidationTestBase;
-import com.esgc.Utilities.Xray;
 import com.esgc.Utilities.APIUtilities;
+import com.esgc.Utilities.Xray;
 import io.restassured.response.Response;
 import org.hamcrest.Matchers;
 import org.testng.annotations.DataProvider;
@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
 public class HeatMap extends DataValidationTestBase {
 
     @Test(groups = {"regression", "data_validation", "dashboard"}, dataProvider = "researchLines")
-    @Xray(test = {4918, 4919, 4920, 4922, 4923, 4926, 5116, 7476, 7484, 7620, 7621, 9216  })
+    @Xray(test = {4918, 4919, 4920, 4922, 4923, 4926, 5116, 7476, 7484, 7620, 7621, 9216, 11049  })
     public void verifyHeatMapWithMixedIdentifiers(@Optional String sector, @Optional String region, @Optional String researchLine1, @Optional String month, @Optional String year) {
         SoftAssert softAssert = new SoftAssert();
         List<String> researchLines = Arrays.asList("ESG", "operationsrisk", "marketrisk", "supplychainrisk", "Physical Risk Management",

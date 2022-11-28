@@ -1,7 +1,7 @@
 package com.esgc.Tests.DataValidation.PortfolioAnalysisPage;
 
 import com.esgc.APIModels.APIFilterPayload;
-import com.esgc.APIModels.carbonFootprintEmissionWrapper;
+import com.esgc.APIModels.PortoflioAnalysisModels.carbonFootprintEmissionWrapper;
 import com.esgc.DBModels.ResearchLineIdentifier;
 import com.esgc.DBModels.carbonFootPrintEmissionDBModel;
 import com.esgc.Tests.TestBases.DataValidationTestBase;
@@ -50,7 +50,7 @@ public class CarbonFootprintEmmisionTest extends DataValidationTestBase {
         apiFilterPayload.setYear(year);
         apiFilterPayload.setMonth(month);
 
-       List<carbonFootprintEmissionWrapper> emmissionAPIResponse = Arrays.asList(controller.getCarbonFootprintEmmissionAPIResponse(portfolioId, apiFilterPayload)
+       List<carbonFootprintEmissionWrapper> emmissionAPIResponse = Arrays.asList(controller.getCarbonFootprintEmissionAPIResponse(portfolioId, apiFilterPayload)
                 .as(carbonFootprintEmissionWrapper[].class));
         List<carbonFootPrintEmissionDBModel> emmissionDBData = portfolioQueries.getCarbonFootPrintEmimmisionTest(portfolioId, month, year);
         for(carbonFootprintEmissionWrapper apiEntity :emmissionAPIResponse){
