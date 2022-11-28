@@ -423,8 +423,8 @@ public class AccountsPageTests extends EMCUITestBase {
             Driver.getDriver().switchTo().window(windows.toArray()[1].toString());
             BrowserUtils.waitForClickablility(loginPage.loginButton, 5).click();
             System.out.println("Login successful");
-            DashboardPage dashboardPage = new DashboardPage();
-            assertTestCase.assertTrue(dashboardPage.portfolioSelectionButton.isDisplayed(),
+           // DashboardPage dashboardPage = new DashboardPage();
+            assertTestCase.assertTrue(editUserPage.portfolioSelectionButton.isDisplayed(),
                     "Login sucessfull for account suspended and unsuspended");
             System.out.println("Login successful");
 

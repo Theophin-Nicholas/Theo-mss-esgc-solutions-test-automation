@@ -24,9 +24,9 @@ import java.util.Map;
 
 public class EsgAssessmentTests extends UITestBase {
 
-    @Test(groups = {"regression", "ui", "smoke", "esg"},
+    @Test(enabled = false,groups = {"regression", "ui", "smoke", "esg"},
             description = "Verify ESG Weighted Average Score Data Validation")
-    @Xray(test = {8176})
+    @Xray(test = {8176}) //TODO de-scoped , enable after scoped
     public void verifyESGWeightedAverageScoreDataValidationTest() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
 
@@ -145,7 +145,7 @@ public class EsgAssessmentTests extends UITestBase {
 
     @Test(groups = {"regression", "ui", "esg"},
             description = "Verify ESG Weighted Average Score Data Validation")
-    @Xray(test = {9084,9086})
+    @Xray(test = {9084,9086,9083})
     public void verifyGeographicAndSectorDistributionSectionComponentsTest() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
 
@@ -162,6 +162,7 @@ public class EsgAssessmentTests extends UITestBase {
         BrowserUtils.scrollTo(researchLinePage.geoSectionTitle);
         assertTestCase.assertEquals(researchLinePage.geoSectionTitle.getText(), "Sector and Geographic Distribution", "Sector and Geographic Distribution Section Title is verified");
 
+        assertTestCase.assertTrue(researchLinePage.IsGeoSectionTreeMapAvailable(),"Validate if Tree map section is available");
         //verify Geo Table Headers
         assertTestCase.assertEquals(researchLinePage.geoTableHeaders.size(), 3, "Verify Geo Table Headers");
         assertTestCase.assertEquals(researchLinePage.geoTableHeaders.get(0).getText(), "Country", "Verify Geo Table Headers");
@@ -191,8 +192,8 @@ public class EsgAssessmentTests extends UITestBase {
         }
     }
 
-    @Test(groups = {"regression", "ui", "smoke", "esg"})
-    @Xray(test = {8704})
+    @Test(enabled = false,groups = {"regression", "ui", "smoke", "esg"})
+    @Xray(test = {8704}) //TODO de-scoped , enable after scoped
     public void verifyESGGradeDistributionIsDisplayed() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         researchLinePage.navigateToResearchLine("ESG Assessments");

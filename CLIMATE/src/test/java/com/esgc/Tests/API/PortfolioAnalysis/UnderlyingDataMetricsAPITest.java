@@ -1,9 +1,9 @@
 package com.esgc.Tests.API.PortfolioAnalysis;
 
 import com.esgc.APIModels.APIFilterPayload;
-import com.esgc.APIModels.PhysicalRiskEntities;
-import com.esgc.APIModels.UnderlyingDataMetricsWrapper;
-import com.esgc.APIModels.UnderlyingDataMetricsWrapperNew;
+import com.esgc.APIModels.PortoflioAnalysisModels.PhysicalRiskEntities;
+import com.esgc.APIModels.PortoflioAnalysisModels.UnderlyingDataMetricsWrapper;
+import com.esgc.APIModels.PortoflioAnalysisModels.UnderlyingDataMetricsWrapperNew;
 import com.esgc.Controllers.APIController;
 import com.esgc.Tests.TestBases.APITestBase;
 import com.esgc.Utilities.APIUtilities;
@@ -21,8 +21,10 @@ import static org.hamcrest.Matchers.*;
  */
 public class UnderlyingDataMetricsAPITest extends APITestBase {
     //1178
-    @Test(groups = {"api", "regression"}, dataProvider = "API Research Lines")
-    @Xray(test = {1178, 2378, 3117, 3852})
+    @Test(groups = {"api", "regression"}, dataProvider = "No ESG API Research Lines")
+    @Xray(test = {1178, 2378})
+    // 3852 TCFD
+    // 3117 Energy Transition
     public void UnderlyingDataMetricsAPI_Success(@Optional String researchLine) {
         APIController apiController = new APIController();
 
@@ -58,9 +60,9 @@ public class UnderlyingDataMetricsAPITest extends APITestBase {
         test.pass("UnderLying Data Metrics Call Completed Successfully");
     }
 
-    //3118
+    //3118 Energy Transition
     @Test(groups = {"api", "regression"}, dataProvider = "API Research Lines")
-    @Xray(test = {3118, 2379, 1248, 2763, 2945})
+    @Xray(test = { 2379, 1248, 2763, 2945})
     public void UnderlyingDataMetricsAPI_InvalidPayload(@Optional String researchLine) {
         APIController apiController = new APIController();
 

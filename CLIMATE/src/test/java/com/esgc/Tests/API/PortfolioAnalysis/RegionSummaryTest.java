@@ -1,11 +1,11 @@
 package com.esgc.Tests.API.PortfolioAnalysis;
 
 import com.esgc.APIModels.APIFilterPayload;
-import com.esgc.APIModels.RegionSummary;
+import com.esgc.APIModels.PortoflioAnalysisModels.RegionSummary;
 import com.esgc.Controllers.APIController;
 import com.esgc.Tests.TestBases.APITestBase;
-import com.esgc.Utilities.Xray;
 import com.esgc.Utilities.APIUtilities;
+import com.esgc.Utilities.Xray;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import org.testng.annotations.Optional;
@@ -14,8 +14,9 @@ import org.testng.annotations.Test;
 public class RegionSummaryTest extends APITestBase {
 //868,1190
 
-    @Test(groups = {"api", "regression"}, dataProvider = "API Research Lines")
-    @Xray(test = {868, 2147, 1710, 1190,})
+    @Test(groups = {"api", "regression"}, dataProvider = "No ESG API Research Lines")
+    @Xray(test = {868, 2147,  1190,})
+    //1710 Energy Transition
     public void RegionSummary(@Optional String researchLine) {
 
         APIController apiController = new APIController();

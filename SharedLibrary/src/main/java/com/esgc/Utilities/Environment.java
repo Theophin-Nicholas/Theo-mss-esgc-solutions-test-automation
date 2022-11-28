@@ -58,10 +58,23 @@ public class Environment {
     public static final String USER_WITH_OUT_ESG_ENTITLEMENT_PASSWORD;
     public static final String USER_WITH_OUT_EXPORT_ENTITLEMENT_USERNAME;
     public static final String USER_WITH_OUT_EXPORT_ENTITLEMENT_PASSWORD;
+    public static final String USER_WITH_ESG_PS_ENTITLEMENT_USERNAME;
+    public static final String USER_WITH_ESG_PS_ENTITLEMENT_PASSWORD;
+    public static final String USER_WITH_ESG_ENTITLEMENT_USERNAME;
+    public static final String USER_WITH_ESG_ENTITLEMENT_PASSWORD;
     public static final String USER_WITH_EXPORT_ENTITLEMENT_USERNAME;
     public static final String USER_WITH_EXPORT_ENTITLEMENT_PASSWORD;
     public static final String QA_TEST_ACCOUNT_ID;
     public static final String QA_TEST_APPLICATION_ID;
+
+    public static final String PDF_EXPORT_BUNDLE_USERNAME;
+    public static final String PDF_EXPORT_BUNDLE_PASSWORD;
+    public static final String PDF_EXPORT_ONLY_SOURCEDOCUMENTS_USERNAME;
+    public static final String PDF_EXPORT_ONLY_SOURCEDOCUMENTS_PASSWORD;
+    public static final String PDF_EXPORT_ONLY_PDF_USERNAME;
+    public static final String PDF_EXPORT_ONLY_PDF_PASSWORD;
+
+
 
 
     static String getPropertiesPath() {
@@ -124,15 +137,27 @@ public class Environment {
         USER_WITH_CONTROVERSIES_ENTITLEMENT_PASSWORD = properties.getProperty("controversies_bundle_password");
         USER_WITH_OUT_CONTROVERSIES_ENTITLEMENT_USERNAME = properties.getProperty("no_controversies_bundle_username");
         USER_WITH_OUT_CONTROVERSIES_ENTITLEMENT_PASSWORD = properties.getProperty("no_controversies_bundle_password");
-        USER_WITH_OUT_ESG_ENTITLEMENT_USERNAME = properties.getProperty("no_esg_bundle_username");
-        USER_WITH_OUT_ESG_ENTITLEMENT_PASSWORD = properties.getProperty("no_esg_bundle_password");
+        USER_WITH_OUT_ESG_ENTITLEMENT_USERNAME = properties.getProperty("tr_bundle_username");
+        USER_WITH_OUT_ESG_ENTITLEMENT_PASSWORD = properties.getProperty("tr_bundle_password");
         USER_WITH_EXPORT_ENTITLEMENT_USERNAME = properties.getProperty("export_bundle_username");
         USER_WITH_EXPORT_ENTITLEMENT_PASSWORD = properties.getProperty("export_bundle_password");
         USER_WITH_OUT_EXPORT_ENTITLEMENT_USERNAME = properties.getProperty("no_export_bundle_username");
         USER_WITH_OUT_EXPORT_ENTITLEMENT_PASSWORD = properties.getProperty("no_export_bundle_password");
+        USER_WITH_ESG_PS_ENTITLEMENT_USERNAME = properties.getProperty("esg_ps_bundle_username");
+        USER_WITH_ESG_PS_ENTITLEMENT_PASSWORD = properties.getProperty("esg_ps_bundle_password");
+        USER_WITH_ESG_ENTITLEMENT_USERNAME = properties.getProperty("esg_bundle_username");
+        USER_WITH_ESG_ENTITLEMENT_PASSWORD = properties.getProperty("esg_bundle_password");
         OrbisId = properties.getProperty("orbis_id");
         p3OrbisId = properties.getProperty("p3Orbisid");
         QA_TEST_ACCOUNT_ID = properties.getProperty("account_id");
         QA_TEST_APPLICATION_ID = properties.getProperty("application_id");
+
+        PDF_EXPORT_BUNDLE_USERNAME = properties.getProperty("PDFexport_bundle_username");
+        PDF_EXPORT_BUNDLE_PASSWORD = properties.getProperty("PDFexport_bundle_password");
+        PDF_EXPORT_ONLY_SOURCEDOCUMENTS_USERNAME = properties.getProperty("PDFexport_OnlySourceDocument_username");
+        PDF_EXPORT_ONLY_SOURCEDOCUMENTS_PASSWORD = properties.getProperty("PDFexport_OnlySourceDocument_password");
+        PDF_EXPORT_ONLY_PDF_USERNAME = properties.getProperty("PDFexport_OnlyPDF_username");
+        PDF_EXPORT_ONLY_PDF_PASSWORD = properties.getProperty("PDFexport_OnlyPDF_password");
+
     }
 }

@@ -16,7 +16,7 @@ import java.util.List;
 public class EntityIssuerAddMissingDocumentPopUpTestRouting extends EntityPageTestBase {
 
 
-    @Xray(test = {6430, 6471, 6468,8795})
+    @Xray(test = {6430, 6471, 6468,8795, 9821})
     @Test(groups = {"regression", "ui", "smoke", "entity_issuer"},
             dataProvider = "credentialsP2", dataProviderClass = DataProviderClass.class,
             description = "Verify Add missing document functionlity")
@@ -27,11 +27,12 @@ public class EntityIssuerAddMissingDocumentPopUpTestRouting extends EntityPageTe
         BrowserUtils.wait(1);
         entitypage.ClickOnaddMissingDocuments();
         entitypage.validateopupWindowOpenStatus();
-        entitypage.addURL("Google.com");
+        entitypage.addURL("Google.com", false);
         entitypage.validateAssignedCategories();
         entitypage.validateWrongURL();
+        entitypage.validatePageNoBox();
         entitypage.saveMissingDocuments();
-        entitypage.P2SectorPageCloseAddMissingDocument.click();
+        entitypage.CloseAddMissingDocumentMessage.click();
         entitypage.logout.click();
     }
 
@@ -45,7 +46,7 @@ public class EntityIssuerAddMissingDocumentPopUpTestRouting extends EntityPageTe
         EntityIssuerPage entitypage = new EntityIssuerPage();
         entitypage.ClickOnaddMissingDocuments();
         entitypage.validateopupWindowOpenStatus();
-        entitypage.addURL("Google.com");
+        entitypage.addURL("Google.com", false);
         BrowserUtils.wait(2);
         entitypage.validatePopupClose();
         entitypage.logout.click();
@@ -61,10 +62,11 @@ public class EntityIssuerAddMissingDocumentPopUpTestRouting extends EntityPageTe
         EntityIssuerPage entitypage = new EntityIssuerPage();
         entitypage.ClickOnaddMissingDocuments();
         entitypage.validateopupWindowOpenStatus();
-        entitypage.addURL("Google.com");
+        entitypage.addURL("Google.com",false);
         BrowserUtils.wait(2);
         entitypage.pressESCKey();
         entitypage.buttonContinueWithoutSaving.click();
+        BrowserUtils.wait(2);
         entitypage.logout.click();
     }
 
@@ -79,12 +81,13 @@ public class EntityIssuerAddMissingDocumentPopUpTestRouting extends EntityPageTe
         entitypage.ClickOnaddMissingDocuments();
         entitypage.validateopupWindowOpenStatus();
         String url = "Google.com";
-        entitypage.addURL(url);
+        entitypage.addURL(url,false);
         BrowserUtils.wait(2);
         entitypage.validateURLDelete(url);
         entitypage.pressESCKey();
         BrowserUtils.wait(1);
         entitypage.pressESCKey();
+        BrowserUtils.wait(2);
         entitypage.logout.click();
     }
 
@@ -99,12 +102,13 @@ public class EntityIssuerAddMissingDocumentPopUpTestRouting extends EntityPageTe
         entitypage.ClickOnaddMissingDocuments();
         entitypage.validateopupWindowOpenStatus();
         String url = "Google.com";
-        entitypage.addURL(url);
+        entitypage.addURL(url,false);
         BrowserUtils.wait(2);
         entitypage.PopUpWindowURL.sendKeys(url);
         assertTestCase.assertTrue(entitypage.errorMessage.getText().equals("URL already added"), "Validate duplicate url error message");
         entitypage.pressESCKey();
         entitypage.buttonContinueWithoutSaving.click();
+        BrowserUtils.wait(2);
         entitypage.logout.click();
     }
 
@@ -119,12 +123,13 @@ public class EntityIssuerAddMissingDocumentPopUpTestRouting extends EntityPageTe
         entitypage.ClickOnaddMissingDocuments();
         entitypage.validateopupWindowOpenStatus();
         String url = "Google.com";
-        entitypage.addURL(url);
+        entitypage.addURL(url,false);
         BrowserUtils.wait(2);
         entitypage.validateSaveWithoutAssignedCategories();
         BrowserUtils.wait(1);
         entitypage.pressESCKey();
         entitypage.buttonContinueWithoutSaving.click();
+        BrowserUtils.wait(2);
         entitypage.logout.click();
     }
 
@@ -144,6 +149,7 @@ public class EntityIssuerAddMissingDocumentPopUpTestRouting extends EntityPageTe
                 "contribute to the overall score of a company. More information on Moody’s ESG materiality " +
                 "methodology can be found in the methodology guide.";
         assertTestCase.assertTrue(AssementData.equals(entitypage.paraAssessmentFramewok.getText()), "Validate Assessment Data paragragh");
+        BrowserUtils.wait(2);
         entitypage.logout.click();
     }
 
@@ -166,6 +172,7 @@ public class EntityIssuerAddMissingDocumentPopUpTestRouting extends EntityPageTe
                 "contribute to the overall score of a company. More information on Moody’s ESG materiality " +
                 "methodology can be found in the methodology guide.";
         assertTestCase.assertTrue(AssementData.equals(entitypage.paraAssessmentFramewok.getText()), "Validate Assessment Data paragragh");
+        BrowserUtils.wait(2);
         entitypage.logout.click();
     }
 
@@ -181,6 +188,7 @@ public class EntityIssuerAddMissingDocumentPopUpTestRouting extends EntityPageTe
         for (WebElement e : entitypage.weightColumn) {
             assertTestCase.assertTrue(weightList.contains(e.getText()), "Validate Weight is in " + weightList);
         }
+        BrowserUtils.wait(2);
         entitypage.logout.click();
     }
 
@@ -193,6 +201,7 @@ public class EntityIssuerAddMissingDocumentPopUpTestRouting extends EntityPageTe
         LoginPageIssuer.loginWithParams(UserID, Password);
         EntityIssuerPage entitypage = new EntityIssuerPage();
         entitypage.validateIssuerPageBanner();
+        BrowserUtils.wait(2);
         entitypage.logout.click();
     }
 
@@ -205,10 +214,11 @@ public class EntityIssuerAddMissingDocumentPopUpTestRouting extends EntityPageTe
         LoginPageIssuer.loginWithParams(UserID, Password);
         EntityIssuerPage entitypage = new EntityIssuerPage();
         entitypage.validateScoringMethodologyStaticText();
+        BrowserUtils.wait(2);
         entitypage.logout.click();
     }
 
-    @Xray(test = {8087, 8088})
+    @Xray(test = {8087, 8088,10250})
     @Test(groups = {"regression", "ui", "smoke", "entity_issuer"},
             dataProvider = "credentialsP2", dataProviderClass = DataProviderClass.class,
             description = "Verify Methodology Links")
@@ -218,11 +228,12 @@ public class EntityIssuerAddMissingDocumentPopUpTestRouting extends EntityPageTe
             LoginPageIssuer LoginPageIssuer = new LoginPageIssuer();
             LoginPageIssuer.loginWithParams(UserID, Password);
 
-            entitypage.validateLinksOpenedInNewTab(entitypage.linkSeeMethodologyGuide, "Methodology%202.0_Moodys%20ESG");
+            entitypage.validateLinksOpenedInNewTab(entitypage.linkSeeMethodologyGuide, "Methodology%202.0%20ESG%20Assessment");
             entitypage.validateLinksOpenedInNewTab(entitypage.linkSeeSeeControversyMethodology, "Controversy%20Risk%20Assessment%20-%20Methodology");
             entitypage.validateLinksOpenedInNewTab(entitypage.linkSeeSubcategoryDefinitions, "ESG%20Assessment_Subcategory%20Definitions_FINAL");
             entitypage.validateLinksOpenedInNewTab(entitypage.linkSeeSeeESGMetricDefinitions, "ESGAssessmentMetrics_DefinitionsHandbook");
             entitypage.validateLinksOpenedInNewTab(entitypage.linkSeeFAQ, "FAQ_Moodys%20ESG%20Assessment");
+            BrowserUtils.wait(2);
             entitypage.logout.click();
         } catch (Exception e) {
             e.printStackTrace();

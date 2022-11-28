@@ -1,6 +1,8 @@
 package com.esgc.Tests.UI.PortfolioAnalysisPage.ExcelComparison;
 
-import com.esgc.APIModels.*;
+import com.esgc.APIModels.APIFilterPayload;
+import com.esgc.APIModels.APIFilterPayloadWithImpactFilter;
+import com.esgc.APIModels.PortoflioAnalysisModels.*;
 import com.esgc.Controllers.APIController;
 import com.esgc.Pages.ResearchLinePage;
 import com.esgc.Reporting.CustomAssertion;
@@ -392,13 +394,9 @@ public class CarbonFootprint extends UITestBase {
             test.fail("Carbon Foot print Emission emissionsMarketCapitalization value verified as " + emissionsMarketCapitalizationUI + " : " + emissionsMarketCapitalization + " (tCO2eq)");
             e.printStackTrace();
         }
-        try {
-            assertTestCase.assertEquals(emissionFinancedPerMillionInvested + " (tCO2eq)", emissionFinancedPerMillionInvestedUI,
-                    "Carbon Foot print Emission emissionFinancedPerMillionInvested value verified as " + emissionFinancedPerMillionInvestedUI + " : " + emissionFinancedPerMillionInvested + " (tCO2eq)");
-        } catch (AssertionError e) {
-            test.fail("Carbon Foot print Emission emissionFinancedPerMillionInvested value verified as " + emissionFinancedPerMillionInvestedUI + " : " + emissionFinancedPerMillionInvested + " (tCO2eq)");
-            e.printStackTrace();
-        }
+
+        assertTestCase.assertEquals(emissionFinancedPerMillionInvested, emissionFinancedPerMillionInvestedUI,
+                "Carbon Foot print Emission emissionFinancedPerMillionInvested value verified as " + emissionFinancedPerMillionInvestedUI + " : " + emissionFinancedPerMillionInvested + " (tCO2eq)");
         try {
             assertTestCase.assertEquals(emissionFinancedPerMillionInvestedTotal, emissionFinancedPerMillionInvestedTotalUI,
                     "Carbon Foot print Emission emissionFinancedPerMillionInvestedTotal value verified as " + emissionFinancedPerMillionInvestedTotalUI + " : " + emissionFinancedPerMillionInvestedTotal);
@@ -489,13 +487,8 @@ public class CarbonFootprint extends UITestBase {
         //Asserting the headers
         System.out.println("Excel Headers " + excelHeaders);
         System.out.println("UI Headers " + updatesUIHeaders);
-        try {
-            assertTestCase.assertTrue(CollectionUtils.isEqualCollection(updatesUIHeaders, excelHeaders), "Headers are Matching");
-        } catch (AssertionError ae) {
-            ae.printStackTrace();
-            System.out.println("Headers Not Matching");
-        }
-
+        //TODO There is header difference between UI and excel Previous Score Category vs Previous Score and Score Category vs Score
+       //--assertTestCase.assertTrue(CollectionUtils.isEqualCollection(updatesUIHeaders, excelHeaders), "Headers are Matching");
 
         int updatesListStartsFrom = updatesHeadersRow + 1;
         List<List<Object>> excelUpdateList = new ArrayList<>();
@@ -928,6 +921,39 @@ public class CarbonFootprint extends UITestBase {
 
         }
 
+        Cell carbonFootPrintScopeCell = exportedDocument.searchCellData("Carbon Footprint Scope");
+        int i = carbonFootPrintScopeCell.getRowIndex();
+        assertTestCase.assertEquals(researchLinePage.carbonFootprintScopeHeader.getText(), exportedDocument.getCellData(i, 0),
+                "Verify Carbon Footprint Scope Header");
+
+        assertTestCase.assertEquals(researchLinePage.carbonFootprintScopeHeaders.get(0).getText(), exportedDocument.getCellData(i+1, 0),
+                "Verify Scope1 title in UI vs Excel");
+        assertTestCase.assertEquals(researchLinePage.carbonFootprintScopeHeaders.get(1).getText(), exportedDocument.getCellData(i+1, 1),
+                "Verify Total Scope 1 Emissions in UI vs Excel");
+        assertTestCase.assertTrue(researchLinePage.carbonFootprintScopeDetails.get(0).getText().contains(exportedDocument.getCellData(i+2, 0)),
+                "Verify Scope 1 Description in UI vs Excel");
+        assertTestCase.assertTrue(researchLinePage.carbonFootprintScopeDetails.get(1).getText().contains(exportedDocument.getCellData(i+2, 1)),
+                "Verify Total Scope 1 Value in UI vs Excel");
+
+        assertTestCase.assertEquals(researchLinePage.carbonFootprintScopeHeaders.get(2).getText(), exportedDocument.getCellData(i+3, 0),
+                "Verify Scope2 title in UI vs Excel");
+        assertTestCase.assertEquals(researchLinePage.carbonFootprintScopeHeaders.get(3).getText(), exportedDocument.getCellData(i+3, 1),
+                "Verify Total Scope 2 Emissions in UI vs Excel");
+        assertTestCase.assertTrue(researchLinePage.carbonFootprintScopeDetails.get(2).getText().contains(exportedDocument.getCellData(i+4, 0)),
+                "Verify Scope 2 Description in UI vs Excel");
+        assertTestCase.assertTrue(researchLinePage.carbonFootprintScopeDetails.get(3).getText().contains(exportedDocument.getCellData(i+4, 1)),
+                "Verify Total Scope 2 Value in UI vs Excel");
+
+        assertTestCase.assertEquals(researchLinePage.carbonFootprintScopeHeaders.get(4).getText(), exportedDocument.getCellData(i+5, 0),
+                "Verify Scope3 title in UI vs Excel");
+        assertTestCase.assertEquals(researchLinePage.carbonFootprintScopeHeaders.get(5).getText(), exportedDocument.getCellData(i+5, 1),
+                "Verify Total Scope 3 Emissions in UI vs Excel");
+        assertTestCase.assertTrue(researchLinePage.carbonFootprintScopeDetails.get(4).getText().contains(exportedDocument.getCellData(i+6, 0)),
+                "Verify Scope 3 Description in UI vs Excel");
+        assertTestCase.assertTrue(researchLinePage.carbonFootprintScopeDetails.get(5).getText().contains(exportedDocument.getCellData(i+6, 1)),
+                "Verify Total Scope 3 Value in UI vs Excel");
+
+
     }
 
     /**
@@ -1255,7 +1281,7 @@ public class CarbonFootprint extends UITestBase {
     }
 
 
-    public void verifyCarbonFootPrintSectors(String researchLine, String portfolioId, APIController controller, APIFilterPayload payload, ExcelUtil exportedDocument){
+    public void verifyCarbonFootPrintSectors(String researchLine, String portfolioId, APIController controller, APIFilterPayload payload, ExcelUtil exportedDocument) {
 
         /**
          * Getting Summary values from API instead of UI
@@ -1275,34 +1301,35 @@ public class CarbonFootprint extends UITestBase {
         int sectorsHeadersRow = sectorsTitleRow + 1;
         int sectorsListStartsFrom = sectorsHeadersRow + 1;
         for (int i = 0; i < 12; i++) {
-            String headerInExcel = exportedDocument.getCellData(sectorsHeadersRow , i*5);
+            String headerInExcel = exportedDocument.getCellData(sectorsHeadersRow, i * 5);
             System.out.println("\n==========================");
             System.out.println("Getting Summary Info for = " + headerInExcel);
             SectorSummary rsExcel = getSectorSummary(sectorsListStartsFrom, i * 5 + 1, exportedDocument);
             System.out.println("Summary data loaded from Excel to sectorSummary object. Time to compare with API");
             for (int j = 0; j < rsAPI.size(); j++) {
-                if(rsAPI.get(j).getSectorName().equals(headerInExcel)){
-                    softAssert(rsAPI.get(j).getCategory(),rsExcel.getCategory(), "Sector Summary - Category Type");
+                if (rsAPI.get(j).getSectorName().equals(headerInExcel)) {
+                    softAssert(rsAPI.get(j).getCategory(), rsExcel.getCategory(), "Sector Summary - Category Type");
                     softAssert(Math.round(rsAPI.get(j).getWeighted_average_score()), Math.round(rsExcel.getWeighted_average_score()), "Sector Summary - Weighted Average Score");
-                    softAssert(rsAPI.get(j).getCountOfCompanies(),rsExcel.getCountOfCompanies(), "Sector Summary - Count of Companies");
-                    softAssert(Math.round(rsAPI.get(j).getInvestment_pct())+".0",rsExcel.getInvestment_pct()+"", "Sector Summary - Investment %");
+                    softAssert(rsAPI.get(j).getCountOfCompanies(), rsExcel.getCountOfCompanies(), "Sector Summary - Count of Companies");
+                    softAssert(Math.round(rsAPI.get(j).getInvestment_pct()) + ".0", rsExcel.getInvestment_pct() + "", "Sector Summary - Investment %");
                     for (int k = 0; k < rsExcel.getPortfolioDistributionList().size(); k++) {
-                        softAssert(rsAPI.get(j).getPortfolioDistributionList().get(k).getCategory(),rsExcel.getPortfolioDistributionList().get(k).getCategory(), "Sector Summary - Portfolio Distribution table - Category Type");
-                        softAssert(rsAPI.get(j).getPortfolioDistributionList().get(k).getCompanies(),rsExcel.getPortfolioDistributionList().get(k).getCompanies(), "Sector Summary - Portfolio Distribution table - Number of Companies");
-                        softAssert(Math.round(rsAPI.get(j).getPortfolioDistributionList().get(k).getInvestment_pct()*100)/100D,rsExcel.getPortfolioDistributionList().get(k).getInvestment_pct(), "Sector Summary - Portfolio Distribution table - Investment %");
+                        softAssert(rsAPI.get(j).getPortfolioDistributionList().get(k).getCategory(), rsExcel.getPortfolioDistributionList().get(k).getCategory(), "Sector Summary - Portfolio Distribution table - Category Type");
+                        softAssert(rsAPI.get(j).getPortfolioDistributionList().get(k).getCompanies(), rsExcel.getPortfolioDistributionList().get(k).getCompanies(), "Sector Summary - Portfolio Distribution table - Number of Companies");
+                        softAssert(Math.round(rsAPI.get(j).getPortfolioDistributionList().get(k).getInvestment_pct() * 100) / 100D, rsExcel.getPortfolioDistributionList().get(k).getInvestment_pct(), "Sector Summary - Portfolio Distribution table - Investment %");
                     }
                 }
             }
             System.out.println("++++++++++++++++++++++++++++\n");
         }
     }
-    public SectorSummary getSectorSummary(int row, int column, ExcelUtil exportedDocument){
+
+    public SectorSummary getSectorSummary(int row, int column, ExcelUtil exportedDocument) {
         SectorSummary sectorSummary = new SectorSummary();
         sectorSummary.setCategory(exportedDocument.getCellData(row++, ++column));
-        sectorSummary.setWeighted_average_score(Double.parseDouble(exportedDocument.getCellData(row++, column).replaceAll(",","")));
-        sectorSummary.setCountOfCompanies(Integer.parseInt(exportedDocument.getCellData(row++, column).replaceAll("\\D",""))/10);
-        sectorSummary.setInvestment_pct(Double.parseDouble(exportedDocument.getCellData(row++, column).replaceAll("%","")));
-        sectorSummary.setPortfolioDistributionList(getPortfolioDistributionList(row+1, column, exportedDocument));
+        sectorSummary.setWeighted_average_score(Double.parseDouble(exportedDocument.getCellData(row++, column).replaceAll(",", "")));
+        sectorSummary.setCountOfCompanies(Integer.parseInt(exportedDocument.getCellData(row++, column).replaceAll("\\D", "")) / 10);
+        sectorSummary.setInvestment_pct(Double.parseDouble(exportedDocument.getCellData(row++, column).replaceAll("%", "")));
+        sectorSummary.setPortfolioDistributionList(getPortfolioDistributionList(row + 1, column, exportedDocument));
         return sectorSummary;
     }
 
@@ -1354,7 +1381,7 @@ public class CarbonFootprint extends UITestBase {
             benchmarkPortfolioDistributionList.add(Arrays.asList(researchLinePage.BenchMarkDistributionTableRow.get(i).getText().split(" ")));
         }
 
-   //----- Excel Reading For BenchMark
+        //----- Excel Reading For BenchMark
         //BenchMark Portfolio Score
         String benchmarkPortfolioScore = researchLinePage.getDataFromExportedFile(4, 3, researchLine);
         String benchmarkCarbonFootprint = researchLinePage.getDataFromExportedFile(6, 3, researchLine);
@@ -1600,8 +1627,7 @@ public class CarbonFootprint extends UITestBase {
         }
 
 
-
-        }
+    }
 
 
 }

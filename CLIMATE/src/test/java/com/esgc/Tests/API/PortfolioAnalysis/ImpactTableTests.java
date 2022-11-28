@@ -1,7 +1,7 @@
 package com.esgc.Tests.API.PortfolioAnalysis;
 
 import com.esgc.APIModels.APIFilterPayloadWithImpactFilter;
-import com.esgc.APIModels.ImpactDistributionWrappers;
+import com.esgc.APIModels.PortoflioAnalysisModels.ImpactDistributionWrappers;
 import com.esgc.Controllers.APIController;
 import com.esgc.Tests.TestBases.APITestBase;
 import com.esgc.Utilities.Xray;
@@ -14,7 +14,7 @@ import java.util.List;
 
 public class ImpactTableTests extends APITestBase {
 
-    @Test(groups = {"api", "regression"}, dataProvider = "API Research Lines")
+    @Test(groups = {"api", "regression"}, dataProvider = "No ESG API Research Lines")
     @Xray(test = {4957})
     public void getImpactDistributionSuccess(String researchLine) {
         test.info("Tests ESGCA-4957");
@@ -37,7 +37,7 @@ public class ImpactTableTests extends APITestBase {
         System.out.println("STatus Code" + response.statusCode());
     }
 
-    @Test(groups = {"api", "regression"}, dataProvider = "API Research Lines")
+    @Test(groups = {"api", "regression"}, dataProvider = "No ESG API Research Lines")
     @Xray(test = {5010})
     public void getImpactDistributionInvalidToken(String researchLine) {
         test.info("Tests ESGCA-5010");

@@ -1,15 +1,14 @@
 package com.esgc.Tests.DataValidation.PortfolioAnalysisPage;
 
-import com.esgc.APIModels.*;
-import com.esgc.DBModels.ESGLeaderANDLaggers;
 import com.esgc.APIModels.APIFilterPayload;
-import com.esgc.APIModels.PortfolioDistribution;
-import com.esgc.APIModels.PortfolioDistributionWrapper;
-import com.esgc.APIModels.RangeAndScoreCategory;
+import com.esgc.APIModels.PortoflioAnalysisModels.PortfolioDistribution;
+import com.esgc.APIModels.PortoflioAnalysisModels.PortfolioDistributionWrapper;
+import com.esgc.APIModels.PortoflioAnalysisModels.RangeAndScoreCategory;
+import com.esgc.DBModels.ESGLeaderANDLaggers;
 import com.esgc.DBModels.ResearchLineIdentifier;
 import com.esgc.Tests.TestBases.DataValidationTestBase;
-import com.esgc.Utilities.PortfolioUtilities;
 import com.esgc.Utilities.APIUtilities;
+import com.esgc.Utilities.PortfolioUtilities;
 import com.esgc.Utilities.Xray;
 import io.restassured.response.Response;
 import org.hamcrest.Matchers;
@@ -17,7 +16,10 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Test;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.DoubleSummaryStatistics;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 
@@ -26,16 +28,18 @@ public class PortfolioDistributionTests extends DataValidationTestBase {
     @Test(groups = {"regression", "data_validation"}, dataProvider = "researchLines")
     @Xray(test = {2704, 2703, 2558, 2557, 2188, 2189, 2559,
             2705, 2190, 2192, 2315, 2308, 2309, 2560, 2706, 2191, 2310, 2561, 2707,
-             4217,   4216,  4218, 4221,
-            6744})
+            4217, 4216, 4218, 4221,
+            6744,
+            11060,11061 //ESG Predicted
+    })
     //Operations risk 4212, 2306, 2310, 2308, 2309, 2315
     //Market risk 4214, 4211
-//supply chain risk 4215
+    //supply chain risk 4215
     //TCFD 4220
     //Energy Transition 4219
     public void verifyPortfolioDistributionWithMixedIdentifiers(@Optional String sector, @Optional String region,
                                                                 @Optional String researchLine, @Optional String month, @Optional String year) {
-        
+
 
         List<ResearchLineIdentifier> portfolioToUpload = dataValidationUtilities.getPortfolioToUpload(researchLine, month, year);
         double totalValues = portfolioUtilities.calculateTotalSumOfInvestment(portfolioToUpload);
@@ -62,7 +66,7 @@ public class PortfolioDistributionTests extends DataValidationTestBase {
 
         int countOfDistinctCompaniesInPortfolio = (int) portfolioToUpload.stream().filter(e -> e.getSCORE() >= 0).count();
 
-        if(researchLine.equals("Temperature Alignment")){
+        if (researchLine.equals("Temperature Alignment")) {
             countOfDistinctCompaniesInPortfolio = (int) portfolioToUpload.stream().filter(e -> e.getSCORE() >= -2).count();
         }
 
@@ -141,7 +145,7 @@ public class PortfolioDistributionTests extends DataValidationTestBase {
 
     @Test(groups = {"regression", "data_validation"})
     @Xray(test = {8727})
-    public void verifyESGDistribution(){
+    public void verifyESGDistribution() {
         String sector = "all";
         String region = "all";
         String researchLine = "ESG Assessments";
@@ -153,7 +157,7 @@ public class PortfolioDistributionTests extends DataValidationTestBase {
         List<ESGLeaderANDLaggers> dbData = portfolioQueries.getESGLeadersAndLaggersData(portfolioId, year + month);
         Map<Integer, DoubleSummaryStatistics> groupedData = dbData.stream().collect(
                 Collectors.groupingBy(ESGLeaderANDLaggers::getScale,
-                Collectors.summarizingDouble(ESGLeaderANDLaggers::getInvestmentPercentage))
+                        Collectors.summarizingDouble(ESGLeaderANDLaggers::getInvestmentPercentage))
         );
         APIFilterPayload apiFilterPayload = new APIFilterPayload();
         apiFilterPayload.setSector(sector);
@@ -166,27 +170,28 @@ public class PortfolioDistributionTests extends DataValidationTestBase {
                 controller.getPortfolioDistributionResponse(portfolioId, researchLine, apiFilterPayload)
                         .as(PortfolioDistributionWrapper[].class));
 
-        for(int i=1; i<=4;i++){
+        for (int i = 1; i <= 4; i++) {
             String tempcat = "";
-            switch (i){
-                case 1 :
+            switch (i) {
+                case 1:
                     tempcat = "Weak";
                     break;
-                case 2 :
+                case 2:
                     tempcat = "Limited";
                     break;
-                case 3 :
+                case 3:
                     tempcat = "Robust";
                     break;
-                case 4 :
+                case 4:
                     tempcat = "Advanced";
                     break;
-            };
+            }
+            ;
             String category = tempcat;
-            PortfolioDistribution entity =  esgDistributionList.get(0).getPortfolio_distribution().stream().filter(f -> f.getCategory().equals(category)).findFirst().get();
-            assertTestCase.assertTrue(PortfolioUtilities.round(entity.getInvestment_pct(),0)==
-                    PortfolioUtilities.round(groupedData.get(i).getSum(),0));
-            assertTestCase.assertTrue(entity.getCompanies()==
+            PortfolioDistribution entity = esgDistributionList.get(0).getPortfolio_distribution().stream().filter(f -> f.getCategory().equals(category)).findFirst().get();
+            assertTestCase.assertTrue(PortfolioUtilities.round(entity.getInvestment_pct(), 0) ==
+                    PortfolioUtilities.round(groupedData.get(i).getSum(), 0));
+            assertTestCase.assertTrue(entity.getCompanies() ==
                     groupedData.get(i).getCount());
         }
     }
