@@ -118,6 +118,12 @@ public class DashboardPage extends UploadPage {
     @FindBy(xpath = "//td[contains(@id,'viewcomapnies')]/span/span")
     public List<WebElement> coveragePopupCompanyNames;
 
+    @FindBy(xpath = "//h3[@heap_id='heatmap']/../../..")
+    public List<WebElement> heatmapPopupRows;
+
+    @FindBy(xpath = "//h3[@heap_id='heatmap']//span[@title]")
+    public List<WebElement> heatmapPopupCompanyNames;
+
     @FindBy(xpath = "//div[contains(@class, 'MuiTableContainer-root')]/parent::div[@id]/div[1]")
     public List<WebElement> panelClassNames;
     @FindBy(xpath = "//div[contains(@class, 'MuiTableContainer-root')]/parent::div[@id]//tbody/tr/td[1]")
@@ -254,6 +260,9 @@ public class DashboardPage extends UploadPage {
 
     @FindBy(xpath = "(//div[@id='div-mainlayout']//table)[3]//tbody//td")
     public List<WebElement> heatMapCells;
+
+    @FindBy(xpath = "//td//div[@heap_id='heatmap']/span[2]")
+    public List<WebElement> heatMapEsgScoreCells;
 
     @FindBy(xpath = "(//div[@id='div-mainlayout']//table)[2]//tbody//td//span[1]")
     public List<WebElement> heatMapYAxisIndicators;
