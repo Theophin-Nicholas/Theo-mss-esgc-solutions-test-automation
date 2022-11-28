@@ -112,6 +112,12 @@ public class DashboardPage extends UploadPage {
     @FindBy(xpath = "//button[.='View By Region']")
     public WebElement viewByRegionBtn;
 
+    @FindBy(xpath = "//td[contains(@id,'viewcomapnies')]/parent::tr")
+    public List<WebElement> coveragePopupRows;
+
+    @FindBy(xpath = "//td[contains(@id,'viewcomapnies')]/span/span")
+    public List<WebElement> coveragePopupCompanyNames;
+
     @FindBy(xpath = "//div[contains(@class, 'MuiTableContainer-root')]/parent::div[@id]/div[1]")
     public List<WebElement> panelClassNames;
     @FindBy(xpath = "//div[contains(@class, 'MuiTableContainer-root')]/parent::div[@id]//tbody/tr/td[1]")
@@ -197,6 +203,11 @@ public class DashboardPage extends UploadPage {
     @FindBy(xpath = "//ul[@role='listbox']//span[text()]")
     public List<WebElement> performanceChartDropdownOptions;
 
+    @FindBy(xpath = "//td[@heap_id='perfchart']/parent::tr")
+    public List<WebElement> performanceRows;
+
+    @FindBy(xpath = "//td[@heap_id='perfchart']//span[@title]")
+    public List<WebElement> performanceChartCompanyNames;
 
     //=========== Geographic Risk Map
 
