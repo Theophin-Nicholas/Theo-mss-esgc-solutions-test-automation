@@ -2,6 +2,7 @@ package com.esgc.Utilities;
 
 import com.esgc.APIModels.JiraTestCase;
 import com.esgc.APIModels.TestCase;
+import com.esgc.APIModels.TestEvidence;
 import com.github.seratch.jslack.Slack;
 import com.github.seratch.jslack.api.webhook.Payload;
 import com.github.seratch.jslack.api.webhook.WebhookResponse;
@@ -9,13 +10,14 @@ import com.google.gson.Gson;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.io.FileUtils;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Properties;
-import java.util.Set;
+import java.nio.charset.StandardCharsets;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static io.restassured.RestAssured.given;
@@ -23,30 +25,35 @@ import static io.restassured.RestAssured.given;
 public class XrayFileImporter {
 
     //Responsible for loading properties fileand will provide access, based on keys we will read values.
-    private static Properties properties = new Properties();
-    private static String urlSlackWebHook = "https://hooks.slack.com/services/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";
-    private static String channelName = "#platform-ui-smoke-test-execution";
+    private static final Properties properties = new Properties();
+    private static final String urlSlackWebHook = "https://hooks.slack.com/services/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";
+    private static final String channelName = "#platform-ui-smoke-test-execution";
 
-    String url = "https://esjira/rest/";
+    private static final String url = "https://esjira/rest/";
 
     static {
 
         try {
             String current = new java.io.File(".").getCanonicalPath();
             System.out.println("current = " + current);
-            current = current.substring(0,current.lastIndexOf("/"));
+            current = current.substring(0,current.lastIndexOf(File.separator));
             System.out.println("current = " + current);
 
             //provides access to the file
-            FileInputStream fileInputStream = new FileInputStream(current + "/configuration.properties");
+            FileInputStream fileInputStream = new FileInputStream(current + File.separator + "configuration.properties");
 
             //loads properties file
             properties.load(fileInputStream);
             fileInputStream.close();
 
         } catch (IOException e) {
+            System.out.println("XRAY Process cannot be started");
             e.printStackTrace();
         }
+    }
+
+    private XrayFileImporter() {
+
     }
 
   /*  public Response sendExecutionTestNGResultsToXray(String reportName) {
@@ -63,12 +70,28 @@ public class XrayFileImporter {
     }*/
 
 
-    public void sendExecutionResultsToXray(String reportName, List<TestCase> testCaseList) {
+    public static void sendExecutionResultsToXray(String reportName, List<TestCase> testCaseList) {
+        System.out.println("Xray Process Started");
         Set<String> allTestCases = findTestCases(testCaseList);
         Set<String> failedTestCases = findFailedTestCases(testCaseList);
 
         List<JiraTestCase> tclist = allTestCases.stream()
-                .map(e -> new JiraTestCase(e, failedTestCases.contains(e) ? "FAIL" : "PASS")).collect(Collectors.toList());
+                .map(testCaseNumber -> {
+                    String status = "PASS";
+                    if (failedTestCases.contains(testCaseNumber)) {
+                        status = "FAIL";
+                        String screenshotLocation = "";
+                        screenshotLocation = findFailedScreenshot(testCaseList, testCaseNumber);
+                        if (screenshotLocation != null) {
+                            String screenshot = screenshot = encodeFileToBase64Binary(screenshotLocation);
+                            List<TestEvidence> evidences = new ArrayList<>();
+                            TestEvidence testEvidence = new TestEvidence(screenshot);
+                            evidences.add(testEvidence);
+                            return new JiraTestCase(testCaseNumber, status, evidences);
+                        }
+                    }
+                    return new JiraTestCase(testCaseNumber, status);
+                }).collect(Collectors.toList());
 
         String tcs = new Gson().toJson(tclist);
 
@@ -129,7 +152,12 @@ public class XrayFileImporter {
                 }
             }
 
-            System.out.println(removeTestCaseList);
+            System.out.println("###################");
+            System.out.println("SOME TICKET NUMBERS TYPE IS NOT TEST CASE");
+            System.out.println("THOSE TICKET NUMBERS ARE REMOVED FROM THE LIST");
+            System.out.println("REMOVED TICKET NUMBERS WHICH ARE NOT TEST CASES:");
+            removeTestCaseList.forEach(System.out::println);
+            System.out.println("###################");
 
             for (String testCaseTicketNumber : removeTestCaseList) {
                 tclist.removeIf(e -> e.getTestKey().equals(testCaseTicketNumber));
@@ -219,7 +247,7 @@ public class XrayFileImporter {
 
     }
 
-    private Response createTestExecution(String reportName) {
+    private static Response createTestExecution(String reportName) {
         System.out.println("creating test execution");
         return configSpec()
                 .contentType(ContentType.JSON)
@@ -242,8 +270,8 @@ public class XrayFileImporter {
                 .post("api/2/issue/").prettyPeek();
     }
 
-    private RequestSpecification configSpec() {
-        String auth_token=Encryption.decrypt(ConfigurationReader.getProperty("auth_tokens"),
+    private static RequestSpecification configSpec() {
+        String auth_token = Encryption.decrypt(ConfigurationReader.getProperty("auth_tokens"),
                 Encryption.convertStringToSecretKeyTo(ConfigurationReader.getProperty("secretKey")));
         //properties.getProperty(auth_token)
         return given().header("Authorization", auth_token).log().all()
@@ -252,21 +280,33 @@ public class XrayFileImporter {
     }
 
     //To verify the token
-    public synchronized void test(){
+    public synchronized void test() {
 
-        String auth_token=Encryption.decrypt(ConfigurationReader.getProperty("auth_tokens"),
+        String auth_token = Encryption.decrypt(ConfigurationReader.getProperty("auth_tokens"),
                 Encryption.convertStringToSecretKeyTo(ConfigurationReader.getProperty("secretKey")));
         System.out.println(auth_token);
     }
-    private Set<String> findTestCases(List<TestCase> testCaseList) {
+
+    private static Set<String> findTestCases(List<TestCase> testCaseList) {
         return testCaseList.stream().map(TestCase::getTestCaseNumber).flatMap(List::stream).collect(Collectors.toSet());
     }
 
-    private Set<String> findFailedTestCases(List<TestCase> testCaseList) {
+    private static Set<String> findFailedTestCases(List<TestCase> testCaseList) {
         return testCaseList.stream().filter(t -> !t.getPassOrFail()).map(TestCase::getTestCaseNumber).flatMap(List::stream).collect(Collectors.toSet());
     }
 
-    public void sendTestExecutionStatusToSlack(String message) throws Exception {
+    private static String findFailedScreenshot(List<TestCase> testCaseList, String testCaseTicketNumber) {
+        TestCase testCase = testCaseList.stream().filter(t -> !t.getPassOrFail())
+                .filter(x -> x.getFailedScreenShot() != null)
+                .filter(x -> x.getTestCaseNumber().contains(testCaseTicketNumber))
+                .findFirst().orElse(null);
+        if (testCase != null) {
+            return testCase.getFailedScreenShot();
+        }
+        return null;
+    }
+
+    public static void sendTestExecutionStatusToSlack(String message) throws Exception {
         try {
             Payload payload = Payload.builder().channel(channelName).text(message).build();
 
@@ -276,6 +316,18 @@ public class XrayFileImporter {
                 IOException e) {
             System.out.println("Unexpected Error! WebHook:" + urlSlackWebHook);
         }
+    }
+
+    private static String encodeFileToBase64Binary(String fileName) {
+        File file = new File(fileName);
+        byte[] encoded = new byte[0];
+        try {
+            encoded = Base64.encodeBase64(FileUtils.readFileToByteArray(file));
+        } catch (IOException e) {
+            System.out.println("SCREEN SHOT FILE NOT FOUND");
+            e.printStackTrace();
+        }
+        return new String(encoded, StandardCharsets.US_ASCII);
     }
 
 }
