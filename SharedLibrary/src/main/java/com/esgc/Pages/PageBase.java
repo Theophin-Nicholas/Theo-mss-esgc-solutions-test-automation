@@ -1247,6 +1247,12 @@ public abstract class PageBase {
         assertTestCase.assertTrue(element.getCssValue("text-decoration").contains("underline"));
     }
 
+    public void clickTheCompany(String companyName) {
+        String xpath = "//span[text()='"+companyName+"']";
+        WebElement element = Driver.getDriver().findElement(By.xpath(xpath));
+        element.click();
+    }
+
     public boolean isElementClickable(WebElement element) {
         return element.getCssValue("text-decoration").contains("underline");
     }
