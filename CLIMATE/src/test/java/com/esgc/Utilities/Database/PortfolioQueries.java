@@ -11,8 +11,7 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-import static com.esgc.Utilities.Database.DatabaseDriver.getQueryResultList;
-import static com.esgc.Utilities.Database.DatabaseDriver.getQueryResultMap;
+import static com.esgc.Utilities.Database.DatabaseDriver.*;
 import static com.esgc.Utilities.PortfolioUtilities.randomBetween;
 
 public class PortfolioQueries {
@@ -100,10 +99,20 @@ public class PortfolioQueries {
 
     //TODO For now, predicted scores are only for ESG
     public List<ResearchLineIdentifier> getIdentifiersWithPredictedScores(String researchLine, String month, String year) {
-        IdentifierQueryModel queryModel = IdentifierQueryModelFactory.getIdentifierQueryModel("ESG", month, year);
+        IdentifierQueryModel queryModel = IdentifierQueryModelFactory.getIdentifierQueryModel("ESG Predicted", month, year);
         assert queryModel != null;
 
-        String query = getQueryForIdentifiersNotInResearchline(queryModel);
+        String query = getQueryForResearchline(queryModel, "SCORE>=0");
+        System.out.println(query);
+
+        return serializeResearchLines(getQueryResultMap(query));
+    }
+
+    public List<ResearchLineIdentifier> getSubsidiaryIdentifiersScores(String researchLine, String month, String year) {
+        IdentifierQueryModel queryModel = IdentifierQueryModelFactory.getIdentifierQueryModel("ESG Subsidiary", month, year);
+        assert queryModel != null;
+
+        String query = getQueryForResearchline(queryModel, "SCORE>=0");
         System.out.println(query);
 
         return serializeResearchLines(getQueryResultMap(query));
@@ -114,6 +123,17 @@ public class PortfolioQueries {
                 "FROM ENTITY_SECURITY_IDENTIFIERS WHERE ENTITY_ID_BVD9 = %s ORDER BY random();";
 
         return getQueryResultMap(String.format(query, bvd9_number));
+    }
+
+    public List<Map<String, Object>> getEntityDetailsWithOrbisId(String orbisId) {
+        String query = "select * from esg_entity_master eem where orbis_id='"+orbisId+"';";
+        return getQueryResultMap(query);
+    }
+
+    public List<Map<String, Object>> getEntitiesFromPortfolio(String portfolioID) {
+        createDBConnection();
+        String query = "select * from DF_PORTFOLIO where PORTFOLIO_ID='"+portfolioID+"';";
+        return getQueryResultMap(query);
     }
 
     public List<PhysicalRiskManagementIdentifier> getPhysicalRiskManagementIdentifiers(String conditionClause) {
@@ -204,20 +224,20 @@ public class PortfolioQueries {
         List<ResearchLineIdentifier> list = new ArrayList<>();
         for (Map<String, Object> each : resultSet) {
             ResearchLineIdentifier researchLineIdentifier = new ResearchLineIdentifier();
-            researchLineIdentifier.setISIN(each.get("ISIN").toString());
-            researchLineIdentifier.setBBG_Ticker(each.get("BBG_TICKER").toString());
+            researchLineIdentifier.setISIN(each.get("ISIN") == null ? null : each.get("ISIN").toString());
+            researchLineIdentifier.setBBG_Ticker(each.get("BBG_TICKER") == null ? null : each.get("BBG_TICKER").toString());
             researchLineIdentifier.setSCORE(Double.valueOf(each.get("SCORE").toString()));
-            researchLineIdentifier.setCOUNTRY_CODE(each.get("COUNTRY_ISO_CODE").toString());
-            researchLineIdentifier.setWORLD_REGION(each.get("WORLD_REGION").toString());
+            researchLineIdentifier.setCOUNTRY_CODE(each.get("COUNTRY_ISO_CODE") == null ? null : each.get("COUNTRY_ISO_CODE").toString());
+            researchLineIdentifier.setWORLD_REGION(each.get("WORLD_REGION") == null ? null : each.get("WORLD_REGION").toString());
             researchLineIdentifier.setBVD9_NUMBER(each.get("BVD9_NUMBER").toString());
-            researchLineIdentifier.setPLATFORM_SECTOR(each.get("SECTOR_NAME").toString());
-            researchLineIdentifier.setCOMPANY_NAME(each.get("COMPANY_NAME").toString());
+            researchLineIdentifier.setPLATFORM_SECTOR(each.get("SECTOR_NAME") == null ? null : each.get("SECTOR_NAME").toString());
+            researchLineIdentifier.setCOMPANY_NAME(each.get("COMPANY_NAME") == null ? null : each.get("COMPANY_NAME").toString());
             researchLineIdentifier.setPREVIOUS_PRODUCED_DATE(Optional.ofNullable(each.get("PREVIOUS_PRODUCED_DATE")).orElse("").toString());
             researchLineIdentifier.setPREVIOUS_SCORE(Double.valueOf(Optional.ofNullable(each.get("PREVIOUS_SCORE")).orElse("0").toString()));
             researchLineIdentifier.setValue(randomBetween(1000, 10000000));
-
             try {
                 researchLineIdentifier.setResearchLineIdForESGModel(each.get("RESEARCH_LINE_ID").toString());
+                researchLineIdentifier.setEntityStatus(each.get("SCORE_QUALITY").toString());
             } catch (Exception e) {
 
             }
@@ -261,8 +281,13 @@ public class PortfolioQueries {
     //return queries that can get the right table names with a given value
     private String getQueryForResearchline(IdentifierQueryModel queryModel, String scoreModifier) {
         String model = "";
-        if(queryModel.getTableName().contains("ESG")){
-            model = "          rl.Research_line_id,";
+        if (queryModel.getTableName().contains("Predicted")) {
+            return
+                    "       SELECT " + queryModel.getEntityIdColumnName() + " AS bvd9_number,\n" +
+                            "              " + queryModel.getPreviousScoreColumnName() + "             AS previous_score,\n" +
+                            "              " + queryModel.getPreviusProducedDateColumnName() + "             AS previous_produced_date,\n" +
+                            "              " + queryModel.getScoreColumnName() + "             AS score\n" +
+                            "       FROM   " + queryModel.getTableName() + " \n;";
         }
         return "WITH rl AS\n" +
                 "(\n" +
@@ -332,7 +357,7 @@ public class PortfolioQueries {
                 "AND       bbg_ticker NOT LIKE '%*%'\n" +
                 "AND       bbg_ticker NOT LIKE '%@%'\n" +
                 "AND       bbg_ticker NOT LIKE '%-%'\n" +
-                "ORDER BY  random() limit 100;";
+                "ORDER BY  random() limit 10;";
     }
 
     private String getQueryForIdentifiersNotInResearchline(IdentifierQueryModel queryModel) {
@@ -366,7 +391,7 @@ public class PortfolioQueries {
                 "    AND BBG_TICKER NOT LIKE '%/%' AND BBG_TICKER NOT LIKE '%-%' AND BBG_TICKER NOT LIKE '%#%' AND BBG_TICKER NOT LIKE '%*%' AND BBG_TICKER NOT LIKE '%@%'" +
                 "    AND       e.ENTITY_STATUS='Active'\n" +
                 "    AND       sc.active_flag = 'True'\n" +
-                "    LIMIT 50;";
+                "    LIMIT 5;";
 
     }
 
@@ -477,7 +502,7 @@ public class PortfolioQueries {
 
         IdentifierQueryModel queryModel = IdentifierQueryModelFactory.getIdentifierQueryModel(researchLine, month, year);
         assert queryModel != null;
-        if(researchLine.equals("ESG")){
+        if (researchLine.equals("ESG")) {
             String query = " with p as (\n" +
                     "     select * from df_portfolio df where portfolio_id='00000000-0000-0000-0000-000000000000'\n" +
                     " ),\n" +
@@ -717,7 +742,7 @@ public class PortfolioQueries {
 
     public List<List<Object>> getEsgInfoFromDB() {
         String queryForLatestMonthAndYear = "select * from ESG_OVERALL_SCORES order by year desc, month desc limit 1;";
-        Map<String,Object> monthAndYear = getQueryResultMap(queryForLatestMonthAndYear).get(0);
+        Map<String, Object> monthAndYear = getQueryResultMap(queryForLatestMonthAndYear).get(0);
 
         String query1 = "select sum(value) from df_portfolio where portfolio_id='00000000-0000-0000-0000-000000000000'";
         String total = getQueryResultList(query1).get(0).get(0).toString();
@@ -726,7 +751,7 @@ public class PortfolioQueries {
                 " join entity_coverage_tracking ect on ect.orbis_id=df.bvd9_number and coverage_status = 'Published' and publish = 'yes'\n" +
                 " join ESG_OVERALL_SCORES eos on ect.orbis_id=eos.orbis_id and data_type = 'overall_alphanumeric_score' and sub_category = 'ESG'\n" +
                 " where portfolio_id='00000000-0000-0000-0000-000000000000'\n" +
-                " and eos.year || eos.month <= '"+monthAndYear.get("YEAR_MONTH").toString()+"'\n" +
+                " and eos.year || eos.month <= '" + monthAndYear.get("YEAR_MONTH").toString() + "'\n" +
                 " qualify row_number() OVER (PARTITION BY eos.orbis_id ORDER BY eos.year DESC, eos.month DESC, eos.scored_date DESC) =1";
 
         return getQueryResultList(query2);
@@ -746,17 +771,17 @@ public class PortfolioQueries {
         List<Map<String, Object>> esgInfo = getQueryResultMap(query2);
         int totalCompanies = esgInfo.size();
         int sum = 0;
-        for(Map<String, Object> entityEsgInfo: esgInfo){
-            sum= sum+Integer.valueOf(entityEsgInfo.get("VALUE").toString());
+        for (Map<String, Object> entityEsgInfo : esgInfo) {
+            sum = sum + Integer.valueOf(entityEsgInfo.get("VALUE").toString());
         }
 
-        return sum/totalCompanies;
+        return sum / totalCompanies;
 
     }
 
     public String getLastUpdatedDateOfEntity(String entityName) {
-        String query = "Select UPDATED_DATE from DF_TARGET.ENTITY_SEARCH_FEED where entity_proper_name like ('"+entityName+"')";
-        String dateDB = getQueryResultList(query).get(0).get(0).toString().substring(0,10);
+        String query = "Select UPDATED_DATE from DF_TARGET.ENTITY_SEARCH_FEED where entity_proper_name like ('" + entityName + "')";
+        String dateDB = getQueryResultList(query).get(0).get(0).toString().substring(0, 10);
 
         SimpleDateFormat month_date = new SimpleDateFormat("MMMM d, yyyy", Locale.ENGLISH);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -767,6 +792,33 @@ public class PortfolioQueries {
         } catch (Exception e) {
         }
         return month_name;
+    }
+
+    public List<Map<String, Object>> getCompanyUpdates(String portfolioId, String researchLine, String year, String month){
+        String query= "";
+        if(researchLine.equals("Physical Risk Hazards")){
+            query = "select * from entity_score where entity_id_bvd9 in \n" +
+                    "(select bvd9_number from df_portfolio where portfolio_id='"+portfolioId+"') \n" +
+                    "and release_date = (select max(release_date) from entity_score where release_date < GETDATE())order by release_date desc";
+        } else if(researchLine.equals("Physical Risk Management")){
+            query = "select * from PHYSICAL_RISK_MANAGEMENT where bvd9_number in\n" +
+                    "(select bvd9_number from df_portfolio where portfolio_id='"+portfolioId+"')\n" +
+                    "and produced_date like'"+year+"-"+month+"-%' and year='"+year+"' and month ='"+month+"'";
+        } else if(researchLine.equals("Carbon Footprint")){
+            query = "select * from CARBON_FOOTPRINT where bvd9_number in \n" +
+                    "(select bvd9_number from df_portfolio where portfolio_id='"+portfolioId+"') \n" +
+                    "and produced_date like'"+year+"-"+month+"-%' and year='"+year+"' and month ='"+month+"'";
+        } else if(researchLine.equals("Green Share Assessment")){
+            query = "select * from GREEN_SHARE where bvd9_number in \n" +
+                    "(select bvd9_number from df_portfolio where portfolio_id='"+portfolioId+"') \n" +
+                    "and produced_date like'"+year+"-"+month+"-%' and year='"+year+"' and month ='"+month+"'";
+        } else if(researchLine.equals("Brown Share Assessment")){
+            query = "select * from BROWN_SHARE where bvd9_number in \n" +
+                    "(select bvd9_number from df_portfolio where portfolio_id='"+portfolioId+"') \n" +
+                    "and produced_date like'"+year+"-"+month+"-%' and year='"+year+"' and month ='"+month+"'";
+        }
+
+        return getQueryResultMap(query);
     }
 
     public List<Map<String, Object>> getESGModelWithPortfolioID(String month, String year, String portfolioId) {
@@ -788,7 +840,8 @@ public class PortfolioQueries {
                 "and company_name is not null order by value desc";
         return getQueryResultList(query1);
     }
-    public List<List<Object>>  getPortfolioCompaniesTotalValuesFromDB() {
+
+    public List<List<Object>> getPortfolioCompaniesTotalValuesFromDB() {
         String query1 = "select  sum(value)\n" +
                 "from df_portfolio df\n" +
                 "where portfolio_id='00000000-0000-0000-0000-000000000000'";
@@ -825,7 +878,7 @@ public class PortfolioQueries {
 
         String query = "with p as (SELECT bvd9_number, COMPANY_NAME " +
                 ",region, sector, SUM(value) as invvalue, COUNT(*) OVER() total_companies, SUM(SUM(value)) OVER() AS total_value " +
-                "FROM df_target.df_portfolio WHERE 1=1 AND portfolio_id = '" + portfolioid +"' " +
+                "FROM df_target.df_portfolio WHERE 1=1 AND portfolio_id = '" + portfolioid + "' " +
                 "  GROUP BY bvd9_number, COMPANY_NAME, region, sector), " +
                 "e as (select p.*,ect.RESEARCH_LINE_ID, floor(eos.VALUE) as score, METHODOLOGY_VERSION " +
                 ",case " +
@@ -847,28 +900,30 @@ public class PortfolioQueries {
                 "from p " +
                 "join entity_coverage_tracking ect on ect.orbis_id=p.bvd9_number and coverage_status = 'Published' and publish = 'yes' " +
                 "left join ESG_OVERALL_SCORES eos on ect.orbis_id=eos.orbis_id and data_type in ('esg_pillar_score' ) and sub_category = 'ESG' " +
-                "where ect.RESEARCH_LINE_ID in (1008,1015) and score and eos.year || eos.month <= '" + yearmonth +"' " +
+                "where ect.RESEARCH_LINE_ID in (1008,1015) and score and eos.year || eos.month <= '" + yearmonth + "' " +
                 "qualify row_number() OVER (PARTITION BY eos.orbis_id ORDER BY eos.year DESC, eos.month DESC, eos.scored_date DESC) =1) " +
                 "select BVD9_Number, Company_name, RANK() OVER(ORDER BY Score desc NULLS LAST) AS Rank, " +
                 "round((100*(e.invvalue/e.total_value)),6) AS investment_pct, SCORE,RESEARCH_LINE_ID as SCORING_RLID, Scale, METHODOLOGY_VERSION from e " +
                 "order by scale desc, Score desc, INVESTMENT_PCT desc, Company_name";
 
         List<ESGLeaderANDLaggers> score = new ArrayList<>();
-        try{
-        for (Map<String, Object> rs : getQueryResultMap(query)) {
-            ESGLeaderANDLaggers entity= new ESGLeaderANDLaggers();
-            entity.setBVD9_NUMBER(rs.get("BVD9_NUMBER").toString());
-            if (rs.get("COMPANY_NAME")!=null) entity.setCOMPANY_NAME(rs.get("COMPANY_NAME").toString()); else entity.setCOMPANY_NAME("");
-            entity.setRANK(Integer.valueOf(rs.get("RANK").toString()));
-            entity.setInvestmentPercentage(Double.valueOf(rs.get("INVESTMENT_PCT").toString()));
-            entity.setSCORE((int) Math.round(Double.valueOf(rs.get("SCORE").toString())));
-            entity.setSCORING_RLID(Integer.valueOf(rs.get("SCORING_RLID").toString()));
-            entity.setScale(Integer.valueOf(rs.get("SCALE").toString()));
-            entity.setMETHODOLOGY_VERSION((rs.get("METHODOLOGY_VERSION").toString()));
-            score.add(entity);
-        }}catch(Exception e){
+        try {
+            for (Map<String, Object> rs : getQueryResultMap(query)) {
+                ESGLeaderANDLaggers entity = new ESGLeaderANDLaggers();
+                entity.setBVD9_NUMBER(rs.get("BVD9_NUMBER").toString());
+                if (rs.get("COMPANY_NAME") != null) entity.setCOMPANY_NAME(rs.get("COMPANY_NAME").toString());
+                else entity.setCOMPANY_NAME("");
+                entity.setRANK(Integer.valueOf(rs.get("RANK").toString()));
+                entity.setInvestmentPercentage(Double.valueOf(rs.get("INVESTMENT_PCT").toString()));
+                entity.setSCORE((int) Math.round(Double.valueOf(rs.get("SCORE").toString())));
+                entity.setSCORING_RLID(Integer.valueOf(rs.get("SCORING_RLID").toString()));
+                entity.setScale(Integer.valueOf(rs.get("SCALE").toString()));
+                entity.setMETHODOLOGY_VERSION((rs.get("METHODOLOGY_VERSION").toString()));
+                score.add(entity);
+            }
+        } catch (Exception e) {
             System.out.println(e.toString());
-            System.out.println("Failed at recored Number " +  score.size());
+            System.out.println("Failed at recored Number " + score.size());
         }
 
         return score;
