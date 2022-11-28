@@ -42,10 +42,15 @@ public class DataProviderClass {
                          {"mesg-platform-issuer-qa+test33@outlook.com", "Moodys123", "50777504"},
                          {"mesg-platform-issuer-qa+test33@outlook.com", "Moodys123", "314938025"},
                          {"mesg-platform-issuer-qa+test34@outlook.com", "Moodys123", "737015"},
-                         {"mesg-platform-issuer-qa+test36@outlook.com", "Moodys123", "50015536"},*/
+                         {"mesg-platform-issuer-qa+test36@outlook.com", "Moodys123", "50015536"},
                         {"mesg-platform-issuer-qa+test38@outlook.com", "Moodys123", "160065949"},
                         {"mesg-platform-issuer-qa+test45@outlook.com", "Moodys123", "1742838"},
-                        {"mesg-platform-issuer-qa+test46@outlook.com", "Moodys123", "51059044"},
+                        {"mesg-platform-issuer-qa+test46@outlook.com", "Moodys123", "51059044"}, */
+                        //Production
+                        {"mesg360-testing+issuer59@outlook.com","Test12345"}
+                       // {"mesg360-testing+issuer35@outlook.com", "Test12345"},
+                      /*  {"mesg-platform-testing+metrics6@outlook.com", "Moodys123"},
+                        {"mesg360-testing+issuer26@outlook.com", "Test12345"}*/
                 };
 
 
@@ -68,9 +73,13 @@ public class DataProviderClass {
 
         return new Object[][]
                 {
+                        //Production Accounts
                         {"mesg360-testing+issuer105@outlook.com", "Test12345"},
-                        /*   {"mesg360-testing+issuer30@outlook.com", "Test12345"},*/
-                        /*    {"mesg360-testing+issuer70@outlook.com", "Test12345"}*/
+                       /* {"mesg360-testing+issuer30@outlook.com", "Test12345"},*/
+                        /*{"mesg360-testing+issuer70@outlook.com", "Test12345"}*/
+                        //UAT Accounts
+                        //QA Accounts
+                        //QA2 Accounts
                 };
     }
 
@@ -80,18 +89,18 @@ public class DataProviderClass {
         return new Object[][]
                 {
                         {"mesg-platform-issuer-qa@outlook.com", "Moodys123"},
-                        {" mesg-platform-testing+qa1@outlook.com", "Moodys123"},
-                        {"  mesg-platform-testing+qa2@outlook.com", "Moodys123"},
-                        {" mesg-platform-testing+qa3@outlook.com", "Moodys123"},
+                        {"mesg-platform-testing+qa1@outlook.com", "Moodys123"},
+                        {"mesg-platform-testing+qa2@outlook.com", "Moodys123"},
+                        {"mesg-platform-testing+qa3@outlook.com", "Moodys123"},
                         /*   {"  mesg-platform-testing+qa4@outlook.com", "Moodys123"},*/ //P3
                         /*  {"  mesg-platform-testing+metrics1@outlook.com", "Moodys123"},*/
                         /*   {"  mesg-platform-testing+metrics2@outlook.com", "Moodys123"},*/
-                        {"  mesg-platform-testing+metrics3@outlook.com", "Moodys123"},
+                        {"mesg-platform-testing+metrics3@outlook.com", "Moodys123"},
                         {"  mesg-platform-testing+metrics4@outlook.com", "Moodys123"},
                         /* {" mesg-platform-testing+metrics5@outlook.com", "Moodys123"},*/
                         /*   {" mesg-platform-testing+metrics6@outlook.com", "Moodys123"},*/
                         /* {" mesg-platform-testing+metrics7@outlook.com", "Moodys123"},*/
-                        {" mesg-platform-testing+metrics8@outlook.com", "Moodys123"},
+                        {"mesg-platform-testing+metrics8@outlook.com", "Moodys123"},
                         /* {" mesg-platform-testing+metrics9@outlook.com", "Moodys123"},*/
                         /* {" mesg-platform-testing+metrics10@outlook.com", "Moodys123"},*/
                         /*  {" mesg-platform-testing+metrics11@outlook.com", "Moodys123"},*/
@@ -218,6 +227,8 @@ public class DataProviderClass {
                 {"esg-test6@outlook.com", "Helloworld26", "Transition Risk"},//
                 {"esg-test1+export@outlook.com", "Moodys123", "Physical Risk and Transition Risk"},//
                 {"esg-test33@outlook.com", "Helloworld21", "ESG"},//
+                {"esg-test1+controversyandexport@outlook.com", "Helloworld21", "Controversey entitlement"},
+                {"esg-test1+no-controversy@outlook.com", "Moodys123","No Controversey"}
         };
     }
 
@@ -301,8 +312,10 @@ public class DataProviderClass {
 
         return new Object[][]
                 {
-                        {"mesg-platform-issuer-qa+test40@outlook.com", "Moodys123", "007091964"}
+                        /*{"mesg-platform-issuer-qa+test40@outlook.com", "Moodys123", "007091964"}*/
 
+                        // production
+                        {"mesg-platform-testing+metrics6@outlook.com", "Moodys123", "000100504"}
                 };
 
     }
@@ -366,7 +379,11 @@ public class DataProviderClass {
 
         return new Object[][]
                 {
-                        {"mesg-platform-issuer-qa+test1@outlook.com", "Moodys123"}
+                        //Production
+                        {"mesg360-testing+issuer35@outlook.com", "Test12345"},
+                       // {"mesg-platform-issuer-qa@outlook.com","Moodys123"}
+                        //qa
+                        /*{"mesg-platform-issuer-qa+test1@outlook.com", "Moodys123"}*/
                 };
     }
 
@@ -376,13 +393,13 @@ public class DataProviderClass {
         return new Object[][]{
 
                 {"Apple, Inc.", "000411117"},  // VE scored company
-                {"FORD MOTOR CO","058618674"}, // MESG scored Company
+             //   {"FORD MOTOR CO","058618674"}, // MESG scored Company
                // {"FirstCash, Inc.","001668460"} // MESG scored Company
-                {"Lexicon Pharmaceuticals, Inc.","001769888"}, // MESG scored Company
-                {"NMI Holdings, Inc.","136042839"}, // MESG scored Company
-                {"Samsung Securities Co., Ltd.","065260686"}, // VE scored company
-                {"Alibaba Health Information Technology Ltd.","261851236"}, // VE scored company
-                {"Development Bank of Japan, Inc.","093009310"}, // VE scored company
+              //  {"Lexicon Pharmaceuticals, Inc.","001769888"}, // MESG scored Company
+               // {"NMI Holdings, Inc.","136042839"}, // MESG scored Company
+              //  {"Samsung Securities Co., Ltd.","065260686"}, // VE scored company
+           //     {"Alibaba Health Information Technology Ltd.","261851236"}, // VE scored company
+           //     {"Development Bank of Japan, Inc.","093009310"}, // VE scored company
 
         };
     }
@@ -393,5 +410,49 @@ public class DataProviderClass {
                 {
                         {"000002269"},//Exxon Mobil
                 };
+    }
+
+    @DataProvider(name = "Valid Portfolios")
+    public Object[][] validPortfolios() {
+        return new Object[][]{
+                {"PortfolioWithValidData"},
+                {"PortfolioWithAllTypesIdentifiers"},
+        };
+    }
+
+
+    @DataProvider(name = "Heat Map Research Lines")
+    public Object[][] availableResearchLinesForDashboard() {
+
+        return new Object[][]{
+                {"00000000-0000-0000-0000-000000000000","Physical Risk Hazards","2022","10"},
+                {"00000000-0000-0000-0000-000000000000","Physical Risk Management","2022","10"},
+                {"00000000-0000-0000-0000-000000000000","Carbon Footprint","2022","10"},
+                {"00000000-0000-0000-0000-000000000000","Brown Share Assessment","2022","10"},
+                {"00000000-0000-0000-0000-000000000000","Green Share Assessment","2022","10"},
+        };
+    }
+
+
+    @DataProvider(name = "PDFEntitlements")
+    public Object[][] PDFEntitlements() {
+
+        return new Object[][]{
+                {"esg-test5@outlook.com", "Helloworld25", "Physical Risk"},//
+                {"esg-test6@outlook.com", "Helloworld26", "Transition Risk"},//
+                {"esg-test1+export@outlook.com", "Moodys123", "Physical Risk and Transition Risk"},//
+                {"esg-test33@outlook.com", "Helloworld21", "ESG"},//
+        };
+    }
+
+    @DataProvider(name = "PDFExportEntitlements")
+    public Object[][] PDFExportEntitlements() {
+
+        return new Object[][]{
+                {EntitlementsBundles.PDF_EXPORT_BUNDLE_ENTITLEMENT},
+                {EntitlementsBundles.USER_WITH_OUT_EXPORT_ENTITLEMENT},
+                {EntitlementsBundles.PDF_EXPORT_ONLY_PDF_ENTITLEMENT},
+                {EntitlementsBundles.PDF_EXPORT_ONLY_SOURCEDOCUMENTS_ENTITLEMENT},
+        };
     }
 }

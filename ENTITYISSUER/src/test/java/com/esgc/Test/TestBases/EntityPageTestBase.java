@@ -47,7 +47,7 @@ public abstract class EntityPageTestBase extends TestBase {
         System.out.println("getting token");
         String URL = Environment.ENTITY_URL;
         BrowserUtils.wait(1);
-        Driver.getDriver("chromeheadless").get(URL);
+        Driver.getDriver().get(URL);
         Driver.getDriver().manage().window().maximize();
         Driver.getDriver().manage().timeouts().implicitlyWait(Duration.ofSeconds(30));
         LoginPageIssuer loginPage = new LoginPageIssuer();

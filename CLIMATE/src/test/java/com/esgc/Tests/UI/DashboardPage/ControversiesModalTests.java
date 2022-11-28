@@ -37,7 +37,7 @@ public class ControversiesModalTests extends DashboardUITestBase {
     @Xray(test = 6954)
     public void controversiesFilterTest() {
         DashboardPage dashboardPage = new DashboardPage();
-        dashboardPage.selectPortfolioByNameFromPortfolioSelectionModal("Sample Portfolio");
+        dashboardPage.selectSamplePortfolioFromPortfolioSelectionModal();
 
         dashboardPage.clickLast60DaysFilterButton();
         assertTestCase.assertTrue(dashboardPage.verifyLast60DaysControversies(), "Event is not falling in last 60 days");
