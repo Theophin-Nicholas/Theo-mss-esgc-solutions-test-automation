@@ -61,7 +61,7 @@ public class DownloadTemplate extends UITestBase {
         assertTestCase.assertTrue(researchLinePage.isTemplateDownloaded(), "Template is saved to user machine", 248);
 
         assertTestCase.assertTrue(ExcelUtil.checkIf2CSVFilesAreSame(BrowserUtils.templatePath(), BrowserUtils.expectedPortfolioTemplateDocumentPath()),
-                "Download template content check", 299, 317);
+                "Download template content check", 299, 317, 11079);
 
         Assert.assertEquals(researchLinePage.getDataFromCSV(0, 0), "Currency: Please only enter in values of USD or GBP or EUR. Platform values will be converted into USD. Only one currency is allowed per portfolio");
         test.pass("Excel was launched and this action was verified by reading a data from excel");
