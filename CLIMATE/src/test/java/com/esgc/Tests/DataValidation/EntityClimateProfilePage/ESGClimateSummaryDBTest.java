@@ -1,14 +1,14 @@
 package com.esgc.Tests.DataValidation.EntityClimateProfilePage;
 
 
-import com.esgc.APIModels.EntityHeader;
-import com.esgc.APIModels.EntityProfileClimatePage.SummarySection.BrownShareAndGreenShareClimateSummary;
-import com.esgc.APIModels.EntityProfileClimatePage.SummarySection.CarbonFootprintSummary;
-import com.esgc.APIModels.EntityProfileClimatePage.SummarySection.PhysicalRiskHazardsSummary;
-import com.esgc.APIModels.EntityProfileClimatePage.SummarySection.TemperatureAlignmentSummary;
-import com.esgc.APIModels.EntityProfileClimatePage.UnderlyingDataMetrics.PhysicalRiskHazardsDetails;
-import com.esgc.APIModels.EntityProfileClimatePage.UnderlyingDataMetrics.PhysicalRiskHazardsWrapper;
-import com.esgc.APIModels.EntityScoreCategory.ESGScores;
+import com.esgc.APIModels.EntityProfilePageModels.EntityHeader;
+import com.esgc.APIModels.EntityProfilePageModels.EntityScoreCategory.ESGScores;
+import com.esgc.APIModels.EntityProfilePageModels.SummarySection.BrownShareAndGreenShareClimateSummary;
+import com.esgc.APIModels.EntityProfilePageModels.SummarySection.CarbonFootprintSummary;
+import com.esgc.APIModels.EntityProfilePageModels.SummarySection.PhysicalRiskHazardsSummary;
+import com.esgc.APIModels.EntityProfilePageModels.SummarySection.TemperatureAlignmentSummary;
+import com.esgc.APIModels.EntityProfilePageModels.UnderlyingDataMetrics.PhysicalRiskHazardsDetails;
+import com.esgc.APIModels.EntityProfilePageModels.UnderlyingDataMetrics.PhysicalRiskHazardsWrapper;
 import com.esgc.Controllers.EntityPage.EntityProfileClimatePageAPIController;
 import com.esgc.TestBase.DataProviderClass;
 import com.esgc.Tests.TestBases.EntityClimateProfileDataValidationTestBase;
@@ -56,7 +56,7 @@ public class ESGClimateSummaryDBTest extends EntityClimateProfileDataValidationT
     }
 
     @Test(groups = {"data_validation", "regression"}, dataProvider = "orbisID")
-    @Xray(test = {6052})
+    @Xray(test = {6052, 6344})
     public void validateTemperatureAlignmentData(@Optional String orbisID) {
 
         Map<String, String> data = entityClimateProfilepagequeries.getTempratureAlignmentData(orbisID);
@@ -194,7 +194,7 @@ public class ESGClimateSummaryDBTest extends EntityClimateProfileDataValidationT
     public void validatePhysicalRiskManagement(@Optional String orbisID) {
         Map<String, String> data = entityClimateProfilepagequeries.getPhysicalRiskData(orbisID);
         if (data.size() > 0) {
-            PhysicalRiskHazardsWrapper climateSummaryGreenShareAPIResponse = controller.getEntityUnderLyingPhysicalHazardAPIResponse(orbisID)
+            PhysicalRiskHazardsWrapper climateSummaryGreenShareAPIResponse = controller.getEntityUnderLyingDataMetricsAPIResponse(orbisID, "physicalriskmgmt")
                     .as(PhysicalRiskHazardsWrapper.class);
 
             assertTestCase.assertTrue(data.get("SCORE_CATEGORY").equals(climateSummaryGreenShareAPIResponse.getScore_category()), "Validating Score Category");
@@ -230,13 +230,15 @@ public class ESGClimateSummaryDBTest extends EntityClimateProfileDataValidationT
         }
     }
 
-    @Test(groups = {"regression","smoke", "data_validation"},
+    @Test(enabled = false,groups = {"regression","smoke", "data_validation"},
             dataProviderClass = DataProviderClass.class, dataProvider = "orbisIDWithDisclosureScore")
-    @Xray(test = {8750})
+    @Xray(test = {8750}) //TODO disabled de-scoped. Entities dont have Disclosure rate
     public void validateDisclosureRatio(@Optional String orbisID) {
         //Get the header details via API
-        List<EntityHeader> entityHeader = Arrays.asList(controller.getHeaderDetailsWithPayload("{\"orbis_id\":\"" + orbisID + "\"}").getBody().as(EntityHeader[].class));
-        int disclosureRate = entityHeader.get(0).getOverall_disclosure_score();
+        EntityProfileClimatePageAPIController apiController = new EntityProfileClimatePageAPIController();
+        List<EntityHeader> entityHeader =
+                Arrays.asList(controller.getHeaderDetailsWithPayload(orbisID).getBody().as(EntityHeader[].class));
+        int disclosureRate = Integer.parseInt(entityHeader.get(0).getOverall_disclosure_score());
         System.out.println("list = " + entityHeader.get(0).getOverall_disclosure_score());
 
         //Get the entity details which has Overall Disclosure rate from DB
@@ -248,9 +250,9 @@ public class ESGClimateSummaryDBTest extends EntityClimateProfileDataValidationT
 
     }
 
-    @Test(groups = {"regression", "smoke","data_validation"},
+    @Test(enabled = false, groups = {"regression", "smoke","data_validation"},
             dataProviderClass = DataProviderClass.class, dataProvider = "orbisIDWithDisclosureScore")
-    @Xray(test = {9841})
+    @Xray(test = {9841}) //TODO ESG assessments de-scopped
     public void verifyAPIForOverallESGScoreWidget(String orbis_id) {
         EntityProfileClimatePageAPIController entityClimateProfileApiController = new EntityProfileClimatePageAPIController();
         test.info("ESG Score widget API validation for " + orbis_id);

@@ -1,16 +1,16 @@
 package com.esgc.Tests.UI.DashboardPage;
 
-import com.esgc.APIModels.Dashboard.APIHeatMapResponse;
-import com.esgc.APIModels.Dashboard.APIHeatMapSinglePayload;
+import com.esgc.APIModels.DashboardModels.APIHeatMapResponse;
+import com.esgc.APIModels.DashboardModels.APIHeatMapSinglePayload;
 import com.esgc.Controllers.APIController;
+import com.esgc.Controllers.DashboardAPIController;
 import com.esgc.Pages.DashboardPage;
 import com.esgc.Pages.LoginPage;
+import com.esgc.Pages.ResearchLinePage;
 import com.esgc.Tests.TestBases.Descriptions;
 import com.esgc.Tests.TestBases.UITestBase;
-import com.esgc.Utilities.BrowserUtils;
-import com.esgc.Utilities.Driver;
-import com.esgc.Utilities.Environment;
-import com.esgc.Utilities.Xray;
+import com.esgc.Utilities.*;
+import com.esgc.Utilities.Database.PortfolioQueries;
 import io.restassured.response.Response;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
@@ -26,27 +26,48 @@ public class DashboardHeatMapEntityListTests extends UITestBase {
     @Xray(test = {4843, 4844, 4829, 7475, 7943, 9268, 9269, 9270, 6221})
     public void verifyEntityListTest() {
         BrowserUtils.wait(4);
+        //This login is required in case, previous test case logged out
+        LoginPage loginPage = new LoginPage();
+        if (loginPage.usernameBoxs.size() > 0)
+            loginPage.login();
         DashboardPage dashboardPage = new DashboardPage();
         if (!dashboardPage.verifyPortfolioName.getText().equalsIgnoreCase("Sample Portfolio"))
             dashboardPage.selectPortfolioByNameFromPortfolioSelectionModal("Sample Portfolio");
+        BrowserUtils.wait(5);
         //Navigate to the heatmap section
         BrowserUtils.scrollTo(dashboardPage.heatMapResearchLines.get(0));
         BrowserUtils.wait(2);
         //Verify the entity list - Entity list should be displaying no records
-        assertTestCase.assertTrue(dashboardPage.heatMapNoEntityWidget.isDisplayed(),
-                "Verified the widget doesn't show anything before a cell is selected.");
+        // assertTestCase.assertTrue(dashboardPage.heatMapNoEntityWidget.isDisplayed(),
+        //        "Verified the widget doesn't show anything before a cell is selected.");
         System.out.println("heatMapNoEntityWidget displayed..");
+        // dashboardPage.heatMapResearchLines.get(0).click();
         //Click on any cell from the heatmap
         /*The entity list is updated and the records (companies) which meet the criteria are now displayed in descending
         order based on percentage of investment on the same.*/
+        BrowserUtils.wait(5);
         verifyCells();
         System.out.println("verifyCells(); passed");
+
         for (int i = 2; i < dashboardPage.heatMapResearchLines.size(); i++) {
             //De-select a research line from the heatmap section
             dashboardPage.heatMapResearchLines.get(i).click();
             //Click on any cell from the heatmap
             verifyCells();
         }
+    }
+
+    @Test(groups = {"dashboard", "ui", "smoke"})
+    @Xray(test = {9271})
+    public void verifyHeatMapDrawer() {
+        //Verify that user is able to close drawer by clicking outside of drawer
+        DashboardPage dashboardPage = new DashboardPage();
+        if (!dashboardPage.verifyPortfolioName.getText().equalsIgnoreCase("Sample Portfolio"))
+            dashboardPage.selectPortfolioByNameFromPortfolioSelectionModal("Sample Portfolio");
+        //Navigate to the heatmap section
+        BrowserUtils.scrollTo(dashboardPage.heatMapResearchLines.get(0));
+        BrowserUtils.wait(3);
+        verifyDrawer();
     }
 
     @Test(groups = {"dashboard", "ui", "regression"})
@@ -205,7 +226,7 @@ public class DashboardHeatMapEntityListTests extends UITestBase {
             int x = 0, y = 0;
             x = dashboardPage.heatMapXAxisIndicators.size();
             y = dashboardPage.heatMapYAxisIndicators.size();
-            System.out.println("x value: "+x+ " and y value: "+y);
+            System.out.println("x value: " + x + " and y value: " + y);
             int expMatrixSize = x * y;
             int actMatrixSize = dashboardPage.heatMapCells.size();
             assertTestCase.assertEquals(actMatrixSize, expMatrixSize, "Heat Map Matrix Size verified for X and Y axis");
@@ -228,7 +249,7 @@ public class DashboardHeatMapEntityListTests extends UITestBase {
         BrowserUtils.scrollTo(dashboardPage.heatMapResearchLines.get(0));
         for (int i = 0; i < dashboardPage.heatMapResearchLines.size(); i++) {
             dashboardPage.selectOneResearchLine(i);
-
+            BrowserUtils.wait(2);
             String color = Color.fromString(dashboardPage.heatMapResearchLines.get(i).getCssValue("background-color")).asHex();
             String researchLine = dashboardPage.heatMapResearchLines.get(i).getText();
             switch (researchLine) {
@@ -287,7 +308,7 @@ public class DashboardHeatMapEntityListTests extends UITestBase {
     @Xray(test = {8185, 7973,})
     public void heatMapAPIUIVerification() {
         LoginPage loginPage = new LoginPage();
-        //Trying to login with only Physical Risk Entitilment User
+        //Trying to log in with only Physical Risk Entitlement User
         WebElement portfolioSelectionButton = Driver.getDriver().findElement(By.id("button-holdings"));
         BrowserUtils.wait(3);
         if (portfolioSelectionButton.getAttribute("title").equals("Sample Portfolio"))
@@ -302,6 +323,7 @@ public class DashboardHeatMapEntityListTests extends UITestBase {
 
 
         APIController apiController = new APIController();
+        DashboardAPIController dashboardAPIController = new DashboardAPIController();
         DashboardPage dashboardPage = new DashboardPage();
         if (!dashboardPage.verifyPortfolioName.getText().equalsIgnoreCase("Sample Portfolio"))
             dashboardPage.selectPortfolioByNameFromPortfolioSelectionModal("Sample Portfolio");
@@ -324,7 +346,7 @@ public class DashboardHeatMapEntityListTests extends UITestBase {
             //Api connection for verification
             APIHeatMapSinglePayload apiHeatMapSinglePayload = new APIHeatMapSinglePayload("all", "all", "06", "2022", apiController.apiResourceMapperWithoutphysicalriskinit(researchLine.trim()));
             String portfolio_id = "00000000-0000-0000-0000-000000000000";
-            Response response = apiController.getHeatMapResponse(portfolio_id, researchLine, apiHeatMapSinglePayload);
+            Response response = dashboardAPIController.getHeatMapResponse(portfolio_id, researchLine, apiHeatMapSinglePayload);
             List<APIHeatMapResponse> list = Arrays.asList(response.getBody().as(APIHeatMapResponse[].class));
             System.out.println("dashboardPage.heatMapYAxisIndicatorsAPI.size() = " + dashboardPage.heatMapYAxisIndicatorsAPI.size());
             switch (researchLine) {
@@ -345,7 +367,7 @@ public class DashboardHeatMapEntityListTests extends UITestBase {
                         String totalInvestmentAPI = String.valueOf(list.get(0).getY_axis_total_invct_pct().get(y).getTotal_investment()) + "%"; //14.59%
                         APIValues.add(Arrays.asList(scoreRangeAPI, totalInvestmentAPI));
                     }
-                    BrowserUtils.wait(3);
+                    //BrowserUtils.wait(3);
                     System.out.println("UIValues = " + UIValues);
                     System.out.println("APIValues = " + APIValues);
                     assertTestCase.assertTrue(UIValues.containsAll(APIValues));
@@ -353,6 +375,7 @@ public class DashboardHeatMapEntityListTests extends UITestBase {
                     break;
             }
         }
+        loginPage.clickOnLogout();
     }
 
     public void selectOptionFromFiltersDropdown(String dropdown, String option) {
@@ -404,7 +427,7 @@ public class DashboardHeatMapEntityListTests extends UITestBase {
                 counter++;
                 if (expPercentage.equals("0%")) continue;
 
-                BrowserUtils.waitForVisibility(dashboardPage.heatMapWidgetTitle,10);
+                BrowserUtils.waitForVisibility(dashboardPage.heatMapWidgetTitle, 10);
                 String actPercentage = dashboardPage.heatMapWidgetTitle.getText();
                 actPercentage = actPercentage.substring(actPercentage.indexOf("\n") + 1);
                 actPercentage = actPercentage.substring(0, actPercentage.indexOf(" "));
@@ -416,6 +439,31 @@ public class DashboardHeatMapEntityListTests extends UITestBase {
                 assertTestCase.assertEquals(dashboardPage.heatMapWidgetXIndicator.getText()
                         , dashboardPage.heatMapXAxisIndicators.get(j).getText(),
                         "Cell X Axis indicator vs Widget X axis indicator verified");
+            }
+        }
+    }
+
+    public void verifyDrawer() {
+        DashboardPage dashboardPage = new DashboardPage();
+        int counter = 0;
+        for (int i = 0; i < dashboardPage.heatMapYAxisIndicators.size(); i++) {
+            for (int j = 0; j < dashboardPage.heatMapXAxisIndicators.size(); j++) {
+                System.out.println(counter);
+                System.out.println("j " + j);
+                BrowserUtils.scrollTo(dashboardPage.heatMapCells.get(counter));
+                System.out.println("#1");
+                String expPercentage = dashboardPage.heatMapCells.get(counter).getText();
+                System.out.println("#2");
+                BrowserUtils.wait(1);
+                System.out.println("dashboardPage.heatMapCells.get(counter).getText() = " + dashboardPage.heatMapCells.get(counter).getText());
+                dashboardPage.heatMapCells.get(counter).click();
+                System.out.println("#3");
+                counter++;
+                if (expPercentage.equals("0%")) continue;
+                BrowserUtils.waitForVisibility(dashboardPage.heatMapWidgetTitle, 10);
+                System.out.println("#4");
+                Driver.getDriver().findElement(By.xpath("//div[normalize-space()='Analyze Companies by Range']")).click();
+                System.out.println("#5");
             }
         }
     }
@@ -440,4 +488,203 @@ public class DashboardHeatMapEntityListTests extends UITestBase {
             return false;
         }
     }
+
+    @Test(groups = {"dashboard", "ui"})
+    @Xray(test = {9394, 9400})
+    public void verifyUnderlyingDataForHeatMapCellsTest() {
+        DashboardPage dashboardPage = new DashboardPage();
+        BrowserUtils.waitForVisibility(dashboardPage.verifyPortfolioName, 20);
+        if (!dashboardPage.verifyPortfolioName.getText().equalsIgnoreCase("Sample Portfolio"))
+            dashboardPage.selectPortfolioByNameFromPortfolioSelectionModal("Sample Portfolio");
+        //Navigate to the heatmap section
+
+        BrowserUtils.scrollTo(dashboardPage.heatMapResearchLines.get(0));
+
+        //Verify the entity list - Entity list should be displaying no records
+        assertTestCase.assertTrue(dashboardPage.heatMapNoEntityWidget.isDisplayed(),
+                "Verified the widget doesn't show anything before a cell is selected.");
+        //verify esg score research line selected by default
+        //if(!dashboardPage.verifySelectedResearchLineForHeatMap("Overall ESG Score"))
+        dashboardPage.selectResearchLineForHeatMap("Overall ESG Score");
+        assertTestCase.assertTrue(dashboardPage.verifySelectedResearchLineForHeatMap("Overall ESG Score"),
+                "Verified ESG Score research line is selected by default");
+
+        System.out.println("heatMapNoEntityWidget displayed..");
+        while(dashboardPage.heatMapCells.size()<10){
+            BrowserUtils.wait(1);
+        }
+
+
+        //select random cell. if percentage equals 0% then skip the cell, if not just check for one cell
+        dashboardPage.selectRandomCell();
+        assertTestCase.assertTrue(dashboardPage.heatMapWidgetTitle.isDisplayed(),
+                "Verified the widget shows the title after a cell is selected.");
+        assertTestCase.assertTrue(dashboardPage.heatMapDrawerEntityNames.size() > 0,
+                "Verified the widget shows the entity names after a cell is selected.");
+        String portfolioId = "00000000-0000-0000-0000-000000000000";
+        PortfolioQueries portfolioQueries = new PortfolioQueries();
+        List<String> expEntityNames = portfolioQueries.getPortfolioEntityNames(portfolioId);
+        double getESGCategoryForPortfolio = portfolioQueries.getESGCategoryForPortfolio(portfolioId);
+        System.out.println("getESGCategoryForPortfolio = " + getESGCategoryForPortfolio);
+        int sumOfValues = portfolioQueries.getSumOfValues(portfolioId);
+        System.out.println("sumOfValues = " + sumOfValues);
+        double groupTotal = 0.0;
+        for (int i = 0; i < dashboardPage.heatMapDrawerEntityNames.size(); i++) {
+            //verify Entity names
+            String actEntityName = dashboardPage.heatMapDrawerEntityNames.get(i).getText();
+            assertTestCase.assertTrue(expEntityNames.contains(actEntityName),
+                    "Verified the entity names in the widget matches the entity names in the database.");
+            //verify investment percentages
+            String percentageText = dashboardPage.heatMapDrawerEntityPercentages.get(i).getText();
+            Double actPercentage = Double.parseDouble(percentageText.substring(0,percentageText.indexOf("%")));
+            Double expPercentage = portfolioQueries.getPortfolioEntityValue(portfolioId, actEntityName)*100/sumOfValues;
+            groupTotal += expPercentage;
+            //rounding off to 2 decimal places
+            expPercentage = Math.round(expPercentage*100.0)/100.0;
+            if(!expPercentage.equals(actPercentage)) {
+                System.out.println("expPercentage = " + expPercentage);
+                System.out.println("actPercentage = " + actPercentage);
+            }
+            assertTestCase.assertTrue(actPercentage.equals(expPercentage)||actPercentage.equals(expPercentage+0.01),
+                    "Verified the entity percentages in the widget matches the entity percentages in the database.");
+        }
+        groupTotal = Math.round(groupTotal*100.0)/100.0;
+        System.out.println("groupTotal = " + groupTotal);
+        String expGroupTotal = dashboardPage.heatMapWidgetTitle.getText();
+        expGroupTotal = expGroupTotal.substring(expGroupTotal.indexOf("\n")+1,expGroupTotal.indexOf("%"));
+        System.out.println("expGroupTotal = " + expGroupTotal);
+        assertTestCase.assertEquals(groupTotal+"",expGroupTotal,"Verified the group total in the widget matches the group total in the database.");
+    }
+
+    @Test(groups = {"dashboard", "ui", "regression"})
+    @Xray(test = {9201, 9202})
+    public void verifyOverallEsgScoreHeatMap() {
+
+        DashboardPage dashboardPage = new DashboardPage();
+        BrowserUtils.waitForVisibility(dashboardPage.verifyPortfolioName, 20);
+
+        if (!dashboardPage.verifyPortfolioName.getText().equalsIgnoreCase("Sample Portfolio"))
+            dashboardPage.selectPortfolioByNameFromPortfolioSelectionModal("Sample Portfolio");
+
+        BrowserUtils.wait(5);
+        BrowserUtils.scrollTo(dashboardPage.heatMapResearchLines.get(0));
+
+        //Verify the entity list - Entity list should be displaying no records
+        assertTestCase.assertTrue(dashboardPage.heatMapNoEntityWidget.isDisplayed(),
+                "Verified the widget doesn't show anything before a cell is selected.");
+
+        //verify esg score research line is the first one in row
+        assertTestCase.assertEquals(dashboardPage.heatMapResearchLines.get(0).getText(),"Overall ESG Score",
+                "Verified ESG Score research line is first in row");
+
+        //verify esg score research line selected by default
+        assertTestCase.assertTrue(dashboardPage.verifySelectedResearchLineForHeatMap("Overall ESG Score"),
+                "Verified ESG Score research line is selected by default");
+
+        //Verify esg score categories when it is on Y-Axis in Heat Map
+        ArrayList<String> categories = new ArrayList<String>();
+        categories.add("Weak");
+        categories.add("Limited");
+        categories.add("Robust");
+        categories.add("Advanced");
+        for(int i=0; i<categories.size();i++){
+            assertTestCase.assertEquals(dashboardPage.heatMapYAxisIndicators.get(i).getText(), categories.get(i), "Y-Axis Categories verification");
+        }
+
+        //Verify esg score categories when it is on X-Axis in Heat Map
+        dashboardPage.selectResearchLineForHeatMap("Physical Risk: Supply Chain Risk");
+        assertTestCase.assertFalse(dashboardPage.verifySelectedResearchLineForHeatMap("Overall ESG Score"),
+                "Verified ESG Score research line is selected by default");
+        BrowserUtils.wait(5);
+        dashboardPage.selectResearchLineForHeatMap("Overall ESG Score");
+        assertTestCase.assertTrue(dashboardPage.verifySelectedResearchLineForHeatMap("Overall ESG Score"),
+                "Verified ESG Score research line is selected");
+
+        //Verify esg score X-Axis categories
+        BrowserUtils.wait(5);
+        for(int i=0; i<categories.size();i++){
+            assertTestCase.assertEquals(dashboardPage.heatMapXAxisIndicators.get(i).getText(), categories.get(categories.size()-i-1), "X-Axis Categories verification");
+        }
+    }
+
+    @Test(groups = {"dashboard", "ui", "regression"})
+    @Xray(test = {9204})
+    public void verifyCompareEsgScoreHeatMap() {
+
+        DashboardPage dashboardPage = new DashboardPage();
+        BrowserUtils.waitForVisibility(dashboardPage.verifyPortfolioName, 20);
+
+        if (!dashboardPage.verifyPortfolioName.getText().equalsIgnoreCase("Sample Portfolio"))
+            dashboardPage.selectPortfolioByNameFromPortfolioSelectionModal("Sample Portfolio");
+
+        String summaryEsgScoreValue = dashboardPage.esgScoreValue.getText();
+
+        BrowserUtils.scrollTo(dashboardPage.heatMapResearchLines.get(0));
+        assertTestCase.assertTrue(dashboardPage.heatMapNoEntityWidget.isDisplayed(),
+                "Verified the widget doesn't show anything before a cell is selected.");
+
+        String heatmapEsgScoreValue = dashboardPage.getHeatMapPortfolioAverage();
+        assertTestCase.assertEquals(summaryEsgScoreValue, heatmapEsgScoreValue,
+                "Verified ESG Score in Dashboard Summary Header and Heatmap");
+
+        dashboardPage.navigateToPageFromMenu("Portfolio Analysis");
+        dashboardPage.selectResearchLineFromDropdown("ESG Assessments");
+
+        ResearchLinePage researchLinePage = new ResearchLinePage();
+        BrowserUtils.wait(5);
+        String esgAssessmentEsgSore = researchLinePage.esgCardInfoBoxScore.getText();
+        assertTestCase.assertEquals(summaryEsgScoreValue, esgAssessmentEsgSore,
+                "Verified ESG Score in Dashboard Summary Header and ESG Assessments");
+
+    }
+
+    @Test(groups = {"dashboard", "ui", "regression"})
+    @Xray(test = {9205})
+    public void verifyOverallEsgScoreNotAvailableInHeatMap() {
+        LoginPage login = new LoginPage();
+        login.clickOnLogout();
+        login.entitlementsLogin(EntitlementsBundles.PHYSICAL_RISK);
+
+        DashboardPage dashboardPage = new DashboardPage();
+        BrowserUtils.waitForVisibility(dashboardPage.verifyPortfolioName, 20);
+
+        if (!dashboardPage.verifyPortfolioName.getText().equalsIgnoreCase("Sample Portfolio"))
+            dashboardPage.selectPortfolioByNameFromPortfolioSelectionModal("Sample Portfolio");
+
+        BrowserUtils.scrollTo(dashboardPage.heatMapResearchLines.get(0));
+        for(int i=0; i<dashboardPage.heatMapResearchLines.size(); i++) {
+            assertTestCase.assertNotEquals(dashboardPage.heatMapResearchLines.get(i).getText(), "Overall ESG Score", "Verified Overall ESG Score is not available in Heatmap");
+        }
+    }
+
+    @Test(groups = {"dashboard", "ui", "regression"})
+    @Xray(test = {9214})
+    public void verifyOnlyOverallEsgScoreInHeatMap() {
+        DashboardPage dashboardPage = new DashboardPage();
+        BrowserUtils.waitForVisibility(dashboardPage.verifyPortfolioName, 20);
+
+        if (!dashboardPage.verifyPortfolioName.getText().equalsIgnoreCase("Sample Portfolio"))
+            dashboardPage.selectPortfolioByNameFromPortfolioSelectionModal("Sample Portfolio");
+
+        //Verify esg categories when only Overall ESG Scores is selected
+        BrowserUtils.scrollTo(dashboardPage.heatMapResearchLines.get(0));
+        BrowserUtils.wait(5);
+        BrowserUtils.waitForClickablility(dashboardPage.heatMapResearchLines.get(1),30).click();
+        BrowserUtils.wait(3);
+
+        // Verify esg score Y-Axis categories
+        ArrayList<String> categories = new ArrayList<String>();
+        categories.add("Weak");
+        categories.add("Limited");
+        categories.add("Robust");
+        categories.add("Advanced");
+        for(int i=0; i<categories.size();i++){
+            assertTestCase.assertEquals(dashboardPage.heatMapYAxisIndicators.get(i).getText(), categories.get(i), "Y-Axis Categories verification");
+        }
+
+        // Verify esg score X-Axis categories
+        assertTestCase.assertFalse(dashboardPage.heatmapXAxisIsAvailable(), "As only Overall ESG Score is in selected, others should not be available.");
+
+    }
+
 }

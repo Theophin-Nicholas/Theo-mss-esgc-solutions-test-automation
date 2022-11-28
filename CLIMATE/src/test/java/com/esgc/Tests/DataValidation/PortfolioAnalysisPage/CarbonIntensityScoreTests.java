@@ -1,7 +1,7 @@
 package com.esgc.Tests.DataValidation.PortfolioAnalysisPage;
 
 import com.esgc.APIModels.APIFilterPayload;
-import com.esgc.APIModels.PortfolioScoreWrapper;
+import com.esgc.APIModels.PortoflioAnalysisModels.PortfolioScoreWrapper;
 import com.esgc.DBModels.ResearchLineIdentifier;
 import com.esgc.Tests.TestBases.DataValidationTestBase;
 import com.esgc.Utilities.APIUtilities;
@@ -54,6 +54,7 @@ public class CarbonIntensityScoreTests extends DataValidationTestBase {
         String score = portfolioScore.get(0).portfolioScore.stream().filter(c -> c.getName().equals("Carbon Intensity")).findFirst().get().getScore();
         int scoreFromDB = portfolioQueries.getCarbonFootPrintIntensityScore(portfolioId, month, year);
         assertTestCase.assertEquals(Integer.parseInt(score), scoreFromDB, "Intensity Score Validation");
+        //TODO choosing random portfolio and some time causing fail.
     }
 
     @DataProvider(name = "researchLines")

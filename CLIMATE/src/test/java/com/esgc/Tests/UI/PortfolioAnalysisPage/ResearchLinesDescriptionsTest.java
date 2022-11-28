@@ -19,7 +19,7 @@ public class ResearchLinesDescriptionsTest extends UITestBase {
  */
 
     @Test(groups = {"regression", "ui", "smoke", "esg"}, dataProvider = "Descriptions")
-    @Xray(test = 3918)
+    @Xray(test = {3918,6934,6502})
     public void verifyDescriptions(String page, String description, Integer... testCases) {
 
         ResearchLinePage researchLinePage = new ResearchLinePage();
@@ -41,11 +41,12 @@ public class ResearchLinesDescriptionsTest extends UITestBase {
     public Object[][] dpMethod() {
 
         return new Object[][]{
-                //{"Physical Risk Management", PHYSICAL_RISK_MANAGEMENT_DESCRIPTION, 717},
+                {"Physical Risk Management", PHYSICAL_RISK_MANAGEMENT_DESCRIPTION, 717,7994},
                 //{"Operations Risk", OPERATIONS_RISK_DESCRIPTION, 724},
                 //{"Market Risk", MARKET_RISK_DESCRIPTION, 725},
                 //{"Supply Chain Risk", SUPPLY_CHAIN_RISK_DESCRIPTION, 727},
                 {"Physical Risk Hazards", PHYSICAL_RISK_HAZARDS_DESCRIPTION, 724},
+                {"Temperature Alignment", TEMPERATURE_ALIGNMENTS_DESCRIPTION, 6934},
                 {"Carbon Footprint", CARBON_FOOTPRINT_DESCRIPTION, 549, 726},
                 {"Brown Share Assessment", BROWN_SHARE_ASSESSMENT_DESCRIPTION, 2266},
                 // {"Energy Transition Management",ENERGY_TRANSITION_MANAGEMENT_DESCRIPTION},
@@ -79,8 +80,8 @@ public class ResearchLinesDescriptionsTest extends UITestBase {
 
     }
 
-    @Test(groups = {"regression", "ui", "smoke", "esg"},
-            description = "Verify  ESG Summary Section")
+    @Test(enabled = false, groups = {"regression", "ui", "smoke", "esg"},
+            description = "Verify  ESG Summary Section") //TODO De-scoped as of now.
     @Xray(test = {8283, 8285})
     public void verifyESGAssessmentBoxAndDescription() {
         ResearchLinePage researchLinePage = new ResearchLinePage();

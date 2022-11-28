@@ -1,6 +1,8 @@
 package com.esgc.Tests.UI.PortfolioAnalysisPage.ExcelComparison;
 
-import com.esgc.APIModels.*;
+import com.esgc.APIModels.APIFilterPayload;
+import com.esgc.APIModels.APIFilterPayloadWithImpactFilter;
+import com.esgc.APIModels.PortoflioAnalysisModels.*;
 import com.esgc.Controllers.APIController;
 import com.esgc.Pages.ResearchLinePage;
 import com.esgc.Reporting.CustomAssertion;
@@ -807,7 +809,7 @@ public class BrownShareAssessment extends UITestBase {
                 Integer category4ValueInExcel = Integer.parseInt(
                         exportedDocument.getCellData(underlyingDataStartsFrom + 5, (i * 4) + 2).replace("%", ""));
                 Integer category4ValueInUI = 100 - (category1ValueInUI + category2ValueInUI + category3ValueInUI);
-
+                //TODO Need to check the cause. Skipping as of now.
                 assertTestCase.assertEquals(category4ValueInUI, category4ValueInExcel,
                         "4th Category Value in UI vs Excel field verified " + category4ValueInUI + " : " + category4ValueInExcel);
 

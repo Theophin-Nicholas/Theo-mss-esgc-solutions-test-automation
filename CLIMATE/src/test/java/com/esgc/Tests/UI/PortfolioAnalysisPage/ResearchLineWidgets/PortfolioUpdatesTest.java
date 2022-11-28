@@ -16,7 +16,7 @@ public class PortfolioUpdatesTest extends UITestBase {
     @Test(groups = {"regression", "ui", "smoke"},
             description = "Verify if Portfolio Updates Table is Displayed as Expected",
             dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
-    @Xray(test = {1243, 2027})
+    @Xray(test = {1243, 2027, 2291})
     public void verifyPortfolioUpdates(String page) {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         if (page.equals("Temperature Alignment") ) {
@@ -51,6 +51,7 @@ public class PortfolioUpdatesTest extends UITestBase {
         assertTestCase.assertTrue(updatesTableColumns.get(8).getText().equalsIgnoreCase("Region"), "Column name verified: Region", 473, 1017, 1253, 1764);
 
         assertTestCase.assertTrue(researchLinePage.verifyUpdatesHasMax10Companies(), "Updates has Max 10 companies", 476, 1518);
+        assertTestCase.assertTrue(researchLinePage.verifyUpdatesSortingOrder(page), "Updates sorting order of companies", 2291);
 
     }
 
@@ -97,6 +98,7 @@ public class PortfolioUpdatesTest extends UITestBase {
     public void verifyPortfolioUpdatesHeader(String page) {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         researchLinePage.navigateToResearchLine(page);
+        researchLinePage.selectSamplePortfolioFromPortfolioSelectionModal();
         test.info("Navigated to Research Line page");
 
         test.info("Navigated to " + page + " Page");

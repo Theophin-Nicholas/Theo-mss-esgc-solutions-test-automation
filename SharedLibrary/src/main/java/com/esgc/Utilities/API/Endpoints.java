@@ -3,7 +3,6 @@ package com.esgc.Utilities.API;
 /**
  * This utility class created to store all Endpoints for API calls
  */
-
 public class Endpoints {
     public static String EMC_USER = "api/users";
     public static String EMC_APPS = "api/applications";

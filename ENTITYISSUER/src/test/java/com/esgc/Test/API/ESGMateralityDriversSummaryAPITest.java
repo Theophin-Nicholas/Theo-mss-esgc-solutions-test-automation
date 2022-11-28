@@ -1,11 +1,9 @@
 package com.esgc.Test.API;
 
 import com.esgc.APIModels.EntityIssuerPage.DriverDetailPayload;
-import com.esgc.APIModels.EntityIssuerPage.DriverDetailsAPIWrapper;
 import com.esgc.APIModels.EntityIssuerPage.ESGMaterlityDriverSummaryAPIWrapper;
 import com.esgc.APIModels.EntityIssuerPage.ESGMaterlityDriverSummaryDetails;
-import com.esgc.Controllers.EntityIssuerPageController.EntityPageAPIController;
-import com.esgc.DBModels.EntityIssuerPageDBModels.ESGMaterlityDBModel;
+import com.esgc.Controllers.EntityIssuerPageController.EntityIssuerPageAPIController;
 import com.esgc.Test.TestBases.EntityIssuerPageTestBase;
 import com.esgc.TestBase.DataProviderClass;
 import com.esgc.Utilities.Xray;
@@ -13,12 +11,8 @@ import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import org.testng.annotations.Test;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import static com.esgc.Utilities.PortfolioUtilities.distinctByKey;
-import static org.hamcrest.Matchers.*;
 
 public class ESGMateralityDriversSummaryAPITest extends EntityIssuerPageTestBase {
 
@@ -31,7 +25,7 @@ public class ESGMateralityDriversSummaryAPITest extends EntityIssuerPageTestBase
         String userId = dataProvider[0];
         String password = dataProvider[1];
         getEntityPageAccessTokenLoginWithParameter(userId, password);
-        EntityPageAPIController controller = new EntityPageAPIController();
+        EntityIssuerPageAPIController controller = new EntityIssuerPageAPIController();
 
         Response response = controller.getDriverSummary();
 
@@ -52,7 +46,7 @@ public class ESGMateralityDriversSummaryAPITest extends EntityIssuerPageTestBase
         String userId = dataProvider[0];
         String password = dataProvider[1];
         getEntityPageAccessTokenLoginWithParameter(userId, password);
-        EntityPageAPIController controller = new EntityPageAPIController();
+        EntityIssuerPageAPIController controller = new EntityIssuerPageAPIController();
         ESGMaterlityDriverSummaryAPIWrapper driverSummaryPIResponse = controller.getDriverSummary().as(ESGMaterlityDriverSummaryAPIWrapper.class);
 
         List<String> eachCriteria = driverSummaryPIResponse.getDrivers().stream().map(ESGMaterlityDriverSummaryDetails::getCriteria_id).
