@@ -1,9 +1,9 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
-<suite name="ESGC Smoke Suite" verbose="2" parallel="classes" thread-count="8">
+<suite name="ESGC Smoke Suite" verbose="2" parallel="classes" thread-count="4">
 <!--<suite name="ESGC Smoke Suite" verbose="2">-->
     <listeners>
-        <listener class-name="com.esgc.Utilities.XrayListener"/>
-        <listener class-name="com.esgc.Reporting.Listeners"/>
+        <listener class-name="mss-esgc-solutions-test-automation.SharedLibrary.src.main.java.com.esgc.Utilities.XrayListener"/>
+        <listener class-name="SharedLibrary.src.main.java.com.esgc.Reporting.Listeners"/>
     </listeners>
     <test name="ESGC Smoke Test Results" >
 
@@ -20,6 +20,7 @@
             <package name="com.esgc.Tests.UI.*"/>
             <package name="com.esgc.Tests.API.*"/>
             <package name="com.esgc.Tests.DataValidation.*"/>
+            <package name="EMC.src.test.java.com.esgc.Tests.*"/>
         </packages>
 
 

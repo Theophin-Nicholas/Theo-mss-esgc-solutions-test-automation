@@ -34,6 +34,18 @@ public class ExcelUtil {
         }
     }
 
+    public ExcelUtil(String path, int sheetIndex) {
+        this.path = path;
+        try {
+            FileInputStream ExcelFile = new FileInputStream(path);
+            workBook = WorkbookFactory.create(ExcelFile);
+            workSheet = workBook.getSheetAt(sheetIndex);
+            Assert.assertNotNull(workSheet, String.format("Sheet: '%s' does not exist", sheetIndex));
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     /**
      * Get the data of specific cell
      *
@@ -212,6 +224,19 @@ public class ExcelUtil {
         for (Sheet sheet : workBook) {
             if (sheet.getSheetName().equals(sheetName)) {
                 return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean searchData(String data) {
+        for (Row row : workSheet) {
+            for (Cell cell : row) {
+                if (cell.getCellType() == CellType.STRING) {
+                    if (cell.getStringCellValue().equals(data)) {
+                        return true;
+                    }
+                }
             }
         }
         return false;

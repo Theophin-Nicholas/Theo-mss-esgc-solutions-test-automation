@@ -138,7 +138,7 @@ public class UsersPageTests extends EMCUITestBase {
         EMCUserDetailsPage detailsPage = new EMCUserDetailsPage();
         detailsPage.clickOnApplicationRolesTab();
         detailsPage.deleteAllRoles();
-        detailsPage.assignApplicationRoles("MESG Platform - DEV - QA", "Investor");
+        detailsPage.assignApplicationRoles("MESG Platform", "Investor");
         Driver.closeDriver();
         Driver.getDriver().get(Environment.EMC_URL);
         BrowserUtils.waitForPageToLoad(10);
@@ -171,7 +171,7 @@ public class UsersPageTests extends EMCUITestBase {
         EMCUserDetailsPage detailsPage = new EMCUserDetailsPage();
         detailsPage.clickOnApplicationRolesTab();
         detailsPage.deleteAllRoles();
-        detailsPage.assignApplicationRoles("MESG Platform - DEV - QA", "Issuer");
+        detailsPage.assignApplicationRoles("MESG Platform", "Issuer");
         Driver.closeDriver();
         Driver.getDriver().get(Environment.EMC_URL);
         BrowserUtils.waitForPageToLoad(10);
@@ -184,10 +184,7 @@ public class UsersPageTests extends EMCUITestBase {
         System.out.println("result = " + result);
         String environment = ConfigurationReader.getProperty("environment");
         System.out.println("environment = " + environment);
-        if (environment.equals("qa")) assertTestCase.assertTrue(result.contains("mesg-platform-investor-qa"), "Investor Role is available for QA Environment");
-        else if (environment.equals("prod")) assertTestCase.assertTrue(result.contains("mesg-platform-investor-dev"), "Investor Role is available for PROD Environment");
-        else if (environment.equals("uat")) assertTestCase.assertTrue(result.contains("mesg-platform-investor-uat"), "Investor Role is available for UAT Environment");
-        else if (environment.equals("qa2")) assertTestCase.assertTrue(result.contains("mesg-platform-investor-qatwo"), "Investor Role is available for QA2 Environment");
+        assertTestCase.assertTrue(result.contains("mesg-platform-investor"), "Investor Role is available for QA Environment");
         Driver.closeDriver();
         Driver.getDriver().get(Environment.EMC_URL);
         BrowserUtils.waitForPageToLoad(10);
