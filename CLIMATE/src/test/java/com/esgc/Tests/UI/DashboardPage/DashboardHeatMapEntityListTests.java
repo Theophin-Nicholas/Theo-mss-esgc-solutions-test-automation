@@ -25,7 +25,7 @@ import java.util.*;
 
 public class DashboardHeatMapEntityListTests extends UITestBase {
     @Test(groups = {"dashboard", "ui", "smoke"})
-    @Xray(test = {4843, 4844, 4829, 7475, 7943, 9268, 9269, 9270, 6221})
+    @Xray(test = {4843, 4844, 4829, 6221, 7475, 7943, 9268, 9269, 9270})
     public void verifyEntityListTest() {
         BrowserUtils.wait(4);
         //This login is required in case, previous test case logged out
@@ -54,6 +54,7 @@ public class DashboardHeatMapEntityListTests extends UITestBase {
         for (int i = 2; i < dashboardPage.heatMapResearchLines.size(); i++) {
             //De-select a research line from the heatmap section
             dashboardPage.heatMapResearchLines.get(i).click();
+            System.out.println("Checking for = " + dashboardPage.heatMapResearchLines.get(i).getText());
             //Click on any cell from the heatmap
             verifyCells();
         }
@@ -254,6 +255,7 @@ public class DashboardHeatMapEntityListTests extends UITestBase {
             BrowserUtils.wait(2);
             String color = Color.fromString(dashboardPage.heatMapResearchLines.get(i).getCssValue("background-color")).asHex();
             String researchLine = dashboardPage.heatMapResearchLines.get(i).getText();
+            System.out.println("researchLine = " + researchLine);
             switch (researchLine) {
                 case "Overall ESG Score":
                     assertTestCase.assertEquals(dashboardPage.heatMapYAxisIndicators.get(0).getText(), "Weak", "Overall ESG Score Verified");
@@ -273,7 +275,6 @@ public class DashboardHeatMapEntityListTests extends UITestBase {
                         assertTestCase.assertEquals(dashboardPage.supplyChainRiskDescription.getText(), Descriptions.SUPPLY_CHAIN_RISK_DESCRIPTION_HEATMAP);
                     break;
                 case "Physical Risk Management":
-                    BrowserUtils.wait(5);
                     assertTestCase.assertEquals(dashboardPage.heatMapYAxisIndicators.get(0).getText(), "Weak", "Physical Risk Management verified");
                     assertTestCase.assertEquals(dashboardPage.heatMapYAxisIndicators.get(3).getText(), "Advanced", "Physical Risk Management verified");
                     assertTestCase.assertEquals(dashboardPage.physicalRiskManagementDescription.getText(), Descriptions.PHYSICAL_RISK_MANAGEMENT_DESCRIPTION_HEATMAP);
@@ -307,14 +308,14 @@ public class DashboardHeatMapEntityListTests extends UITestBase {
     }
 
     @Test(groups = {"dashboard", "ui", "regression", "smoke"})
-    @Xray(test = {8185, 7973,})
+    @Xray(test = {8185, 7973})
     public void heatMapAPIUIVerification() {
         LoginPage loginPage = new LoginPage();
         //Trying to log in with only Physical Risk Entitlement User
-        WebElement portfolioSelectionButton = Driver.getDriver().findElement(By.id("button-holdings"));
+       //WebElement portfolioSelectionButton = Driver.getDriver().findElement(By.id("button-holdings"));
         BrowserUtils.wait(3);
-        if (portfolioSelectionButton.getAttribute("title").equals("Sample Portfolio"))
-            loginPage.clickOnLogout();
+        //if (portfolioSelectionButton.getAttribute("title").equals("Sample Portfolio"))
+        loginPage.clickOnLogout();
         Driver.getDriver().manage().deleteAllCookies();
         Driver.getDriver().navigate().refresh();
 
@@ -330,18 +331,13 @@ public class DashboardHeatMapEntityListTests extends UITestBase {
         if (!dashboardPage.verifyPortfolioName.getText().equalsIgnoreCase("Sample Portfolio"))
             dashboardPage.selectPortfolioByNameFromPortfolioSelectionModal("Sample Portfolio");
 
-        //Getting access token for API connection and setting as token.
-        String getAccessTokenScript = "return JSON.parse(localStorage.getItem('okta-token-storage')).accessToken.accessToken";
-        String accessToken = ((JavascriptExecutor) Driver.getDriver()).executeScript(getAccessTokenScript).toString();
-        System.setProperty("token", accessToken);
-
         BrowserUtils.wait(2);
         BrowserUtils.scrollTo(dashboardPage.heatMapResearchLines.get(0));
         for (int i = 0; i < dashboardPage.heatMapResearchLines.size(); i++) {
             dashboardPage.selectOneResearchLine(i);
             BrowserUtils.wait(7);
-            String color = Color.fromString(dashboardPage.heatMapResearchLines.get(i).getCssValue("background-color")).asHex();
             String researchLine = dashboardPage.heatMapResearchLines.get(i).getText();
+            assertTestCase.assertTrue(dashboardPage.verifySelectedResearchLineForHeatMap(researchLine), researchLine+" is selected alone");
             researchLine = researchLine.substring(researchLine.indexOf(":") + 1).trim();
             System.out.println("researchLine = " + researchLine);
 
@@ -420,8 +416,7 @@ public class DashboardHeatMapEntityListTests extends UITestBase {
         int counter = 0;
         for (int i = 0; i < dashboardPage.heatMapYAxisIndicators.size(); i++) {
             for (int j = 0; j < dashboardPage.heatMapXAxisIndicators.size(); j++) {
-                System.out.println(counter);
-                System.out.println("j " + j);
+                System.out.println("Checking cell: " + (i+1)+":"+(j+1));
                 BrowserUtils.scrollTo(dashboardPage.heatMapCells.get(counter));
                 String expPercentage = dashboardPage.heatMapCells.get(counter).getText();
                 BrowserUtils.wait(1);
