@@ -35,6 +35,9 @@ public class DashboardPage extends UploadPage {
     @FindBy(xpath = "//div[text()='ESG score']/following-sibling::div/div")
     public WebElement esgScoreValue;
 
+    @FindBy(xpath = "//h3[contains(text(),'Portfolio Average')]")
+    public WebElement heatmapPortfolioAverage;
+
     @FindBy(xpath = "//div[text()='Physical Risk']")
     public WebElement physicalRiskCard;
 
@@ -108,6 +111,18 @@ public class DashboardPage extends UploadPage {
     public WebElement viewBySectorBtn;
     @FindBy(xpath = "//button[.='View By Region']")
     public WebElement viewByRegionBtn;
+
+    @FindBy(xpath = "//td[contains(@id,'viewcomapnies')]/parent::tr")
+    public List<WebElement> coveragePopupRows;
+
+    @FindBy(xpath = "//td[contains(@id,'viewcomapnies')]/span/span")
+    public List<WebElement> coveragePopupCompanyNames;
+
+    @FindBy(xpath = "//h3[@heap_id='heatmap']/../../..")
+    public List<WebElement> heatmapPopupRows;
+
+    @FindBy(xpath = "//h3[@heap_id='heatmap']//span[@title]")
+    public List<WebElement> heatmapPopupCompanyNames;
 
     @FindBy(xpath = "//div[contains(@class, 'MuiTableContainer-root')]/parent::div[@id]/div[1]")
     public List<WebElement> panelClassNames;
@@ -194,6 +209,11 @@ public class DashboardPage extends UploadPage {
     @FindBy(xpath = "//ul[@role='listbox']//span[text()]")
     public List<WebElement> performanceChartDropdownOptions;
 
+    @FindBy(xpath = "//td[@heap_id='perfchart']/parent::tr")
+    public List<WebElement> performanceRows;
+
+    @FindBy(xpath = "//td[@heap_id='perfchart']//span[@title]")
+    public List<WebElement> performanceChartCompanyNames;
 
     //=========== Geographic Risk Map
 
@@ -241,6 +261,9 @@ public class DashboardPage extends UploadPage {
     @FindBy(xpath = "(//div[@id='div-mainlayout']//table)[3]//tbody//td")
     public List<WebElement> heatMapCells;
 
+    @FindBy(xpath = "//td//div[@heap_id='heatmap']/span[2]")
+    public List<WebElement> heatMapEsgScoreCells;
+
     @FindBy(xpath = "(//div[@id='div-mainlayout']//table)[2]//tbody//td//span[1]")
     public List<WebElement> heatMapYAxisIndicators;
 
@@ -264,6 +287,9 @@ public class DashboardPage extends UploadPage {
 
     @FindBy(xpath = "(//div[@id='div-mainlayout']//table)[4]//thead//td")
     public WebElement heatMapXAxisIndicatorTitle;
+
+    @FindBy(xpath = "//div[@id='heatmapentity-test-id']//p[text()='Select two:']")
+    public WebElement selectTwoLabel;
 
     @FindBy(xpath = "//h3/following-sibling::p")
     public List<WebElement> heatMapActiveResearchLineInfo;
@@ -951,6 +977,22 @@ public class DashboardPage extends UploadPage {
         return false;
     }
 
+    public boolean heatmapXAxisIsAvailable(){
+        try{
+            return heatMapXAxisIndicatorTitle.isDisplayed();
+        }catch(Exception e){
+            return false;
+        }
+    }
+
+    public boolean validateSelectTwoStaticText(){
+        try{
+            return selectTwoLabel.isDisplayed();
+        }catch(Exception e){
+            return false;
+        }
+    }
+
     public boolean verifyResearchLineDescriptionFromHeatmapSection(String section, String description) {
         //selectOrDeselectHeatMapSection(section);
         String actualDescription = Driver.getDriver().findElement(By.xpath("//h3[text()='" + section + "']/../p")).getText();
@@ -1418,6 +1460,12 @@ public class DashboardPage extends UploadPage {
         return false;
     }
 
+    public String getHeatMapPortfolioAverage(){
+        String portfolioAverage = heatmapPortfolioAverage.getText();
+        return portfolioAverage.substring(portfolioAverage.lastIndexOf(":")+1).trim();
+
+    }
+
     public boolean selectResearchLineForHeatMap(String researchLine) {
         for (WebElement line : heatMapResearchLines) {
             if (line.getText().equalsIgnoreCase(researchLine)) {
@@ -1435,6 +1483,7 @@ public class DashboardPage extends UploadPage {
         return false;
     }
 
+
     public boolean deselectResearchLineForHeatMap(String researchLine) {
         for (WebElement line : heatMapResearchLines) {
             if (line.getText().equalsIgnoreCase(researchLine)) {
@@ -1449,6 +1498,16 @@ public class DashboardPage extends UploadPage {
         }
         System.out.println("Research line is not found");
         return false;
+    }
+    
+    public boolean verifyHeatMapTitle(String title) {
+        String xpath = "//div[@id='heatmapentity-test-id']//div[text()='"+title+"']";
+        try{
+            BrowserUtils.waitForVisibility(Driver.getDriver().findElement(By.xpath(xpath)), 30);
+        }catch(Exception e){
+            return false;
+        }
+        return true;
     }
 
     public void selectRandomCell() {

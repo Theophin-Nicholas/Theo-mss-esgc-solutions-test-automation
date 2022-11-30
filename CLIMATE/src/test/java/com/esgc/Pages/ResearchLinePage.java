@@ -2827,27 +2827,29 @@ public class ResearchLinePage extends UploadPage {
     }
 
     public boolean verifyEntitiesWithPredictedScoresInYellow_PA(List<WebElement> rows){
+        BrowserUtils.waitForVisibility(rows.get(0),30);
         int i=1;
         for(WebElement row:rows){
             System.out.println("Record: "+(i++));
             BrowserUtils.scrollTo(row);
-            if(row.getCssValue("background-color").equals("rgba(253, 247, 218, 1)")){
-                return true;
+            if(!row.getCssValue("background-color").equals("rgba(253, 247, 218, 1)")){
+                return false;
             }
         }
-        return false;
+        return true;
     }
 
     public boolean verifyEntitiesWithPredictedScoresAreNotClickable_PA(List<WebElement> rows){
+        BrowserUtils.waitForVisibility(rows.get(0),30);
         int i=1;
         for(WebElement row:rows){
             System.out.println("Record: "+(i++));
             BrowserUtils.scrollTo(row);
-            if(!row.getCssValue("text-decoration").contains("underline")){
-                return true;
+            if(row.getCssValue("text-decoration").contains("underline")){
+                return false;
             }
         }
-        return false;
+        return true;
     }
 
     public void validatePhysicalRiskMgmtLegend(){
