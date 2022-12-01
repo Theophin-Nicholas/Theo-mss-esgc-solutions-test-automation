@@ -62,7 +62,7 @@ public class SubsidiaryTests extends UITestBase {
         assertTestCase.assertFalse(dashboardPage.isSearchBoxDisplayed(), "User is on expected page");
 
         // Verify subsidiary company in Coverage popup
-        dashboardPage.clickCoverageLink();
+        dashboardPage.viewAllCompaniesButton.click();
         BrowserUtils.wait(5);
         dashboardPage.verifyCompanyNameInCoveragePopup(subsidiaryCompanyName);
         dashboardPage.verifyCompanyIsClickableInCoveragePopup(subsidiaryCompanyName);
