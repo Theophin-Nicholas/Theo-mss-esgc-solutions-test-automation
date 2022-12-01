@@ -34,4 +34,10 @@ public class RegulatoryReportingAPIController extends APIController{
         System.out.println("Portfolio name not found");
         return "";
     }
+
+    public List<String> getPortfolioNames() {
+        Response response = getPortfolioDetails();
+        List<String> portfolioNames = response.jsonPath().getList("portfolio_name");
+        return portfolioNames;
+    }
 }
