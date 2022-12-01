@@ -436,7 +436,7 @@ public class DataProviderClass {
     @DataProvider(name = "SubsidiaryCompanies")
     public Object[][] subsidiaryCompanies() {
         return new Object[][]{
-                {"National Grid North America, Inc.","National Grid Plc"},
+                {"BAE Systems Holdings, Inc.","BAE Systems Plc"},
         };
     }
 
