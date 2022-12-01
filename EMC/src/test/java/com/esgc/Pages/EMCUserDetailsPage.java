@@ -98,16 +98,17 @@ public class EMCUserDetailsPage extends EMCBasePage {
                 System.out.println(newApplicationRolesAssignButtons.size() + " new application roles will be assigned");
                 BrowserUtils.waitForClickablility(newApplicationRolesAssignButtons.get(0), 10).click();
                 System.out.println("application assign button clicked");
-                BrowserUtils.scrollTo(doneButton);
-                BrowserUtils.waitForClickablility(doneButton, 15).click();
-                System.out.println("done button clicked");
-                BrowserUtils.waitForClickablility(detailsTab, 10).click();
-                BrowserUtils.wait(3);
-                BrowserUtils.waitForClickablility(applicationRolesTab, 10).click();
-                BrowserUtils.wait(5);
+
                 break;
             }
         }
+        BrowserUtils.scrollTo(doneButton);
+        BrowserUtils.waitForClickablility(doneButton, 15).click();
+        System.out.println("done button clicked");
+        BrowserUtils.waitForClickablility(detailsTab, 10).click();
+        BrowserUtils.wait(3);
+        BrowserUtils.waitForClickablility(applicationRolesTab, 10).click();
+        BrowserUtils.wait(5);
         System.out.println("application role not found in available applications list");
     }
 
@@ -199,7 +200,7 @@ public class EMCUserDetailsPage extends EMCBasePage {
         System.out.println("Assigning application roles");
         BrowserUtils.waitForClickablility(assignApplicationRolesButton, 15).click();
         for (WebElement applicationRole : newApplicationRolesList) {
-            if (applicationRole.getText().equals(applicationName)) {
+            if (applicationRole.getText().contains(applicationName)) {
                 System.out.println("Application Found");
                 applicationRole.click();
                 BrowserUtils.wait(5);
