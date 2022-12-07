@@ -146,4 +146,115 @@ public class RegulatoryReportingPageExcelValidation extends DataValidationTestBa
             BrowserUtils.switchWindowsTo(currentWindow);
         }
     }
+
+    @Test(groups = {"regression", "DataValidation", "regulatoryReporting"}, description = "Data Validation | SFDR | Regulatory Reporting | Verify the portfolio coverage for the portfolio when SFDR reporting is selected")
+    @Xray(test = {11730})
+    public void verifyPortfolioCoverageForSFDRReportingTest() {
+        DashboardPage dashboardPage = new DashboardPage();
+        dashboardPage.navigateToPageFromMenu("Regulatory Reporting");
+        test.info("Navigated to Regulatory Reporting Page");
+        //verify portfolio upload modal
+        assertTestCase.assertTrue(reportingPage.uploadAnotherPortfolioLink.isDisplayed(), "Portfolio Upload button is displayed");
+
+        //upload a portfolio
+        String portfolioName = "SFDRPortfolio";
+        if (!reportingPage.verifyPortfolio(portfolioName)) reportingPage.uploadPortfolio(portfolioName);
+
+        String currentWindow = BrowserUtils.getCurrentWindowHandle();
+        reportingPage.selectPortfolioOptionByName(portfolioName);
+
+        assertTestCase.assertTrue(reportingPage.verifySFDRPortfolioCoverageForUI(portfolioName),
+                "SFDR portfolio coverage is verified for UI vs DB");
+        List<String> selectedPortfolios = reportingPage.getSelectedPortfolioOptions();
+        reportingPage.selectReportingFor(portfolioName,"2021");
+        //verify create reports button before clicking
+        assertTestCase.assertTrue(reportingPage.createReportsButton.isEnabled(), "Create report button is enabled");
+        reportingPage.createReportsButton.click();
+        BrowserUtils.wait(2);
+        String newTab1 = "";
+        for (String tab : BrowserUtils.getWindowHandles()) {
+            if (!tab.equals(currentWindow)) {
+                newTab1 = tab;
+            }
+        }
+
+        try {
+            //New tab should be opened and empty state message should be displayed as in the screenshot
+            assertTestCase.assertTrue(reportingPage.verifyNewTabOpened(newTab1), "New tab is opened");
+            System.out.println("New tab is opened");
+            assertTestCase.assertTrue(reportingPage.verifyReportsReadyToDownload(selectedPortfolios), "Reports are ready to download");
+            System.out.println("Reports are ready to download");
+            reportingPage.deleteFilesInDownloadsFolder();
+            assertTestCase.assertTrue(reportingPage.verifyIfReportsDownloaded(), "Reports are downloaded");
+            System.out.println("Reports are downloaded");
+            assertTestCase.assertTrue(reportingPage.unzipReports(), "Reports are extracted");
+            System.out.println("Reports are extracted");
+            assertTestCase.assertTrue(reportingPage.verifyPortfolioCoverageForExcel(portfolioName),
+                    "SFDR portfolio coverage is verified for Excel vs DB");
+            System.out.println("SFDR portfolio coverage is verified for Excel vs DB");
+        } catch (Exception e) {
+            e.printStackTrace();
+            assertTestCase.assertTrue(false, "New tab verification failed");
+        } finally {
+            BrowserUtils.switchWindowsTo(currentWindow);
+            System.out.println("=============================");
+        }
+    }
+
+    @Test(groups = {"regression", "DataValidation", "regulatoryReporting"},
+            description = "Data Validation | EU Taxonomy | Regulatory Reporting | Verify the portfolio coverage for the portfolio when EU Taxonomy reporting is selected")
+    @Xray(test = {11731})
+    public void verifyPortfolioCoverageForEUTaxonomyReportingTest() {
+        DashboardPage dashboardPage = new DashboardPage();
+        dashboardPage.navigateToPageFromMenu("Regulatory Reporting");
+        test.info("Navigated to Regulatory Reporting Page");
+        //verify portfolio upload modal
+        assertTestCase.assertTrue(reportingPage.uploadAnotherPortfolioLink.isDisplayed(), "Portfolio Upload button is displayed");
+
+        //upload a portfolio
+        String portfolioName = "SFDRPortfolio";
+        if (!reportingPage.verifyPortfolio(portfolioName)) reportingPage.uploadPortfolio(portfolioName);
+
+        String currentWindow = BrowserUtils.getCurrentWindowHandle();
+        reportingPage.selectReportingOptionByName("EU Taxonomy");
+        assertTestCase.assertEquals(reportingPage.getSelectedReportingOption(),"EU Taxonomy",
+                "EU Taxonomy is selected");
+        reportingPage.selectPortfolioOptionByName(portfolioName);
+
+        assertTestCase.assertTrue(reportingPage.verifyEUTaxonomyPortfolioCoverageForUI(portfolioName),
+                "EU Taxonomy portfolio coverage is verified for UI vs DB");
+        List<String> selectedPortfolios = reportingPage.getSelectedPortfolioOptions();
+        //verify create reports button before clicking
+        assertTestCase.assertTrue(reportingPage.createReportsButton.isEnabled(), "Create report button is enabled");
+        reportingPage.createReportsButton.click();
+        BrowserUtils.wait(2);
+        String newTab1 = "";
+        for (String tab : BrowserUtils.getWindowHandles()) {
+            if (!tab.equals(currentWindow)) {
+                newTab1 = tab;
+            }
+        }
+
+        try {
+            //New tab should be opened and empty state message should be displayed as in the screenshot
+            assertTestCase.assertTrue(reportingPage.verifyNewTabOpened(newTab1), "New tab is opened");
+            System.out.println("New tab is opened");
+            assertTestCase.assertTrue(reportingPage.verifyReportsReadyToDownload(selectedPortfolios), "Reports are ready to download");
+            System.out.println("Reports are ready to download");
+            reportingPage.deleteFilesInDownloadsFolder();
+            assertTestCase.assertTrue(reportingPage.verifyIfReportsDownloaded(), "Reports are downloaded");
+            System.out.println("Reports are downloaded");
+            assertTestCase.assertTrue(reportingPage.unzipReports(), "Reports are extracted");
+            System.out.println("Reports are extracted");
+            assertTestCase.assertTrue(reportingPage.verifyPortfolioCoverageForExcel(portfolioName),
+                    "EU Taxonomy portfolio coverage is verified for Excel vs DB");
+            System.out.println("EU Taxonomy portfolio coverage is verified for Excel vs DB");
+        } catch (Exception e) {
+            e.printStackTrace();
+            assertTestCase.assertTrue(false, "New tab verification failed");
+        } finally {
+            BrowserUtils.switchWindowsTo(currentWindow);
+            System.out.println("=============================");
+        }
+    }
 }
