@@ -1,6 +1,5 @@
 package com.esgc.Tests.UI.RegulatoryReporting;
 
-import com.esgc.Controllers.RegulatoryReportingAPIController;
 import com.esgc.Pages.DashboardPage;
 import com.esgc.Pages.LoginPage;
 import com.esgc.Pages.PortfolioAnalysisPage.PhysicalRiskPages.PhysicalRiskManagementPages.PhysicalRiskManagementPage;
@@ -38,7 +37,7 @@ public class RegulatoryReportingPageTests extends UITestBase {
                 "Regulatory Reporting Page - Reporting SubTitle is verified");
         assertTestCase.assertTrue(reportingPage.getReportingList().size() > 0,
                 "Regulatory Reporting Page - Reporting list is verified");
-        assertTestCase.assertTrue(reportingPage.portfolioNamesList.size() > 0,
+        assertTestCase.assertTrue(reportingPage.rrPage_portfolioNamesList.size() > 0,
                 "Regulatory Reporting Page - Portfolio list is verified");
         assertTestCase.assertTrue(reportingPage.getReportingList().contains("SFDR PAIs"),
                 "Regulatory Reporting Page - Reporting list is verified");
@@ -120,7 +119,7 @@ public class RegulatoryReportingPageTests extends UITestBase {
         }
         assertTestCase.assertTrue(reportingPage.portfolioRadioButtonList.get(0).isSelected(), "Portfolio 1 is selected");
 //        System.out.println("Font-Family = " + regulatoryReportingPage.portfolioNamesList.get(0).getCssValue("font-family"));
-        assertTestCase.assertTrue(reportingPage.portfolioNamesList.get(0).getCssValue("font-family").contains("WhitneyNarrSemiBold"), "Portfolio is bolded");
+        assertTestCase.assertTrue(reportingPage.rrPage_portfolioNamesList.get(0).getCssValue("font-family").contains("WhitneyNarrSemiBold"), "Portfolio is bolded");
         assertTestCase.assertTrue(reportingPage.lastUploadedList.get(0).getCssValue("font-family").contains("WhitneyNarrSemiBold"), "Upload date is bolded");
         assertTestCase.assertTrue(reportingPage.coverageList.get(0).getCssValue("font-family").contains("WhitneyNarrSemiBold"), "Coverage is bolded");
         assertTestCase.assertTrue(reportingPage.reportingForList.get(0).getCssValue("font-family").contains("WhitneyNarrSemiBold"), "Reporting for year is bolded");
