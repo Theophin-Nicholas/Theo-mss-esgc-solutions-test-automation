@@ -1,10 +1,10 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
-<suite name="ESGC Smoke Suite" verbose="10">
+<suite name="ESGC Smoke Suite" >
     <listeners>
         <listener class-name="com.esgc.Utilities.XrayListener"/>
     </listeners>
     <test name="ESGC Smoke Test via Module">
-        <parameter name="reportName" value="Issuer Test Automation Report"/>
+        <parameter name="reportName" value="Smoke Issuer Test Automation Report"/>
         <groups>
             <run>
                 <include name="smoke"/>

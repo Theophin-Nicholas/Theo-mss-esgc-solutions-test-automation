@@ -27,10 +27,14 @@ public class ResearchLineIdentifier {
     private Integer value;
     private String ResearchLineIdForESGModel;
     private String entityStatus;
+    private int scale;
 
     public String getRandomIdentifier(int randomNum) {
         if (randomNum == 1 & getBBG_Ticker() != null) {
             return getBBG_Ticker();
+        }
+        if (randomNum == 2) {
+            return getBVD9_NUMBER();
         } else {
             return getISIN();
         }
@@ -53,6 +57,7 @@ public class ResearchLineIdentifier {
         this.investmentPercentage = identifier.getInvestmentPercentage();
         this.ResearchLineIdForESGModel = identifier.getResearchLineIdForESGModel();
         this.entityStatus = identifier.getEntityStatus();
+        this.scale = identifier.getScale();
     }
 
     public ResearchLineIdentifier(String ISIN, Integer value) {
@@ -72,6 +77,7 @@ public class ResearchLineIdentifier {
         this.investmentPercentage = null;
         this.ResearchLineIdForESGModel = null;
         this.entityStatus = null;
+        this.scale = 0;
     }
 
     @Override

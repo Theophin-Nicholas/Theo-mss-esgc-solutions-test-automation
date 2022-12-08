@@ -66,6 +66,9 @@ public abstract class PageBase {
     @FindBy(xpath = "//li[text()='Portfolio Selection/Upload']")
     public WebElement portfolioSettings;
 
+    @FindBy(xpath = "//li[text()='Regulatory Reporting']")
+    public WebElement regulatoryReporting;
+
     @FindBy(xpath = "(//table[@id='table-id'])[1]/tbody/tr/td[1]")
     public List<WebElement> portfolioSettingsCompanies;
 
@@ -617,6 +620,7 @@ public abstract class PageBase {
      */
     public void clickPortfolioSelectionButton() {
         wait.until(ExpectedConditions.elementToBeClickable(portfolioSelectionButton)).click();
+        BrowserUtils.waitFor(3);
     }
 
     public void clickResearchLineDropdown() {
@@ -1243,6 +1247,12 @@ public abstract class PageBase {
         assertTestCase.assertTrue(element.getCssValue("text-decoration").contains("underline"));
     }
 
+    public void clickTheCompany(String companyName) {
+        String xpath = "//span[text()='"+companyName+"']";
+        WebElement element = Driver.getDriver().findElement(By.xpath(xpath));
+        element.click();
+    }
+
     public boolean isElementClickable(WebElement element) {
         return element.getCssValue("text-decoration").contains("underline");
     }
@@ -1536,7 +1546,6 @@ public abstract class PageBase {
         try {
             return searchIconPortfolioPage.isDisplayed();
         } catch (Exception e) {
-            e.printStackTrace();
             return false;
         }
     }
