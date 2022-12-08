@@ -83,7 +83,7 @@ public class XrayFileImporter {
                         String screenshotLocation = "";
                         screenshotLocation = findFailedScreenshot(testCaseList, testCaseNumber);
                         if (screenshotLocation != null) {
-                            String screenshot = screenshot = encodeFileToBase64Binary(screenshotLocation);
+                            String screenshot = encodeFileToBase64Binary(screenshotLocation);
                             List<TestEvidence> evidences = new ArrayList<>();
                             TestEvidence testEvidence = new TestEvidence(screenshot);
                             evidences.add(testEvidence);
@@ -211,6 +211,8 @@ public class XrayFileImporter {
                     .log().ifError();
         }
 
+        attachHTMLReportToTestExecutionTicket(testExecutionKey,reportName);
+
         int totalTCsCount = allTestCases.size();
         int failedTCsCount = failedTestCases.size();
         int passedTCsCount = totalTCsCount - failedTCsCount;
@@ -328,6 +330,23 @@ public class XrayFileImporter {
             e.printStackTrace();
         }
         return new String(encoded, StandardCharsets.US_ASCII);
+    }
+
+    public static void attachHTMLReportToTestExecutionTicket(String tickedNumber, String reportName) {
+        System.out.println("File Attachment Started");
+        try {
+            //String filepath = TestBase.reportPath + File.separator + reportName;
+            String filepath = "D:\\Users\\TanF1\\OneDrive - moodys.com\\Desktop\\automation report" + File.separator + reportName;
+
+            configSpec()
+                    .header("Content-Type", "multipart/form-data")
+                    .multiPart("file", "Execution Report", FileUtils.readFileToByteArray(new File(filepath)), "text/csv")
+                    .when().log().all()
+                    .post("api/2/issue/" + tickedNumber + "/attachments");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
 }
