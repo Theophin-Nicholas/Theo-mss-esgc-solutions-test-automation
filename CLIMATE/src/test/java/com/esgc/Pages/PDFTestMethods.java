@@ -3,15 +3,17 @@ package com.esgc.Pages;
 
 import com.esgc.APIModels.EntityProfilePageModels.ESGMateriality.ESGMaterlityDriverSummaryAPIWrapper;
 import com.esgc.APIModels.EntityProfilePageModels.ESGMateriality.ESGMaterlityDriverSummaryDetails;
+import com.esgc.APIModels.EntityProfilePageModels.EntityControversies.Controversies;
+import com.esgc.APIModels.EntityProfilePageModels.EntityControversies.ControversiesList;
+import com.esgc.APIModels.EntityProfilePageModels.EntityControversies.SubCategory;
 import com.esgc.Controllers.EntityPage.EntityProfileClimatePageAPIController;
-import com.esgc.Utilities.BrowserUtils;
-import com.esgc.Utilities.Driver;
-import com.esgc.Utilities.FileDownloadUtilities;
-import com.esgc.Utilities.PdfUtil;
+import com.esgc.Utilities.*;
+
 import org.jetbrains.annotations.NotNull;
 import org.openqa.selenium.JavascriptExecutor;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 public class PDFTestMethods extends PageBase {
@@ -24,16 +26,16 @@ public class PDFTestMethods extends PageBase {
         String companyName = entityProfilePage.searchAndLoadClimateProfilePage(company);
         System.out.println("companyName = " + companyName);
 
-      /*  // Temp code to remove ------------
-        String actualFileName = "";
+        // Temp code to remove ------------
+       /* String actualFileName = "";
         if (entity.contains("Apple")) {
-            actualFileName = "Apple_ Inc_Profile27-Oct-2022_1666901863015.pdf"; // "Akero Therapeutics_ Inc_Profile3-Oct-2022_1664804963663.pdf";
+            actualFileName = "Apple_ Inc_Profile20-Nov-2022_1668992725855.pdf"; // "Akero Therapeutics_ Inc_Profile3-Oct-2022_1664804963663.pdf";
         } else if (entity.contains("Samsung")) {
-            actualFileName = "Samsung Securities Co__ Ltd_Profile27-Oct-2022_1666916628592.pdf";
+            actualFileName = "Samsung Securities Co__ Ltd_Profile8-Nov-2022_1667923793554.pdf";
         } else if (entity.contains("Alibaba")) {
-            actualFileName = "Alibaba Health Information Technology Ltd_Profile27-Oct-2022_1666916991607.pdf";
+            actualFileName = "Alibaba Health Information Technology Ltd_Profile8-Nov-2022_1667923948948.pdf";
         } else if (entity.contains("Development")) {
-            actualFileName = "Development Bank of Japan_ Inc_Profile27-Oct-2022_1666917187351.pdf";
+            actualFileName = "Development Bank of Japan_ Inc_Profile8-Nov-2022_1667924153787.pdf";
         }else if (entity.contains("NMI")) {
             actualFileName = "NMI Holdings_ Inc_Profile27-Oct-2022_1666881615951.pdf";
         }else if (entity.contains("Lexicon")) {
@@ -264,6 +266,61 @@ public class PDFTestMethods extends PageBase {
         assertTestCase.assertTrue(PdfUtil.ifMatchingWithRegex(pdfFileText, regex));
     }
 
+    public void ValidateUnderlyingDataTransitionRiskBROWNSHARE(){
+        EntityClimateProfilePage entityProfilePage = new EntityClimateProfilePage();
+        String UIValue = entityProfilePage.getunderlyingDataMetricsBrownShareAssessment();
+        String content = PdfUtil.extractPDFText(pdfFileText, UIValue);
 
+        if (content.equals("No ParaGraph Found")){
+            UIValue = UIValue.replace("BROWN SHARE", "BROWNSHARE");
+            content = PdfUtil.extractPDFText(pdfFileText, UIValue);
+        }
+        if (!UIValue.contains("No information available."))
+            assertTestCase.assertTrue(!content.equals("No ParaGraph Found"), "Validating Underlying DataMetrics Brown Share Assessment");
+
+
+    }
+
+
+    public void ValidateCompanyIntroductionText(String entity){
+        EntityClimateProfilePage entityProfilePage = new EntityClimateProfilePage();
+        String UIValue = "This is an ESG assessment report for "+ entity + " which is assessed in the";
+        String content = PdfUtil.extractPDFText(pdfFileText, UIValue);
+        assertTestCase.assertTrue(!content.equals("No ParaGraph Found"), "Validating Comapny Introduction part 1");
+        UIValue = "Moody’s Corporate ESG Assessments measure the extent to which a company effectively integrates industry-relevant " +
+                "ESG factors into its management and operational practices. ESG Assessments are distinct from the credit rating agency, which rates entities based on their creditworthiness." ;
+        content = PdfUtil.extractPDFText(pdfFileText, UIValue);
+        assertTestCase.assertTrue(!content.equals("No ParaGraph Found"), "Validating Comapny Introduction part2");
+    }
+
+    public void ValidateControversies(String orbisId){
+        EntityClimateProfilePage entityProfilePage = new EntityClimateProfilePage();
+        String contrverseyAsofDate = "Controversies as of " ;//+ DateTimeUtilities.getFormattedDate(java.time.LocalDate.now().toString(),"MMMM dd, yyy");
+        String content = PdfUtil.extractPDFText(pdfFileText, contrverseyAsofDate);
+        assertTestCase.assertTrue(!content.equals("No ParaGraph Found"), "Validating Controversey As of Date");
+        String ControverseiesTableHeaders = "CRITICAL AND HIGH SEVERITY CONTROVERSIES SEVERITY";
+         content = PdfUtil.extractPDFText(pdfFileText, ControverseiesTableHeaders);
+        assertTestCase.assertTrue(!content.equals("No ParaGraph Found"), "Validating Controversey Headers");
+
+        EntityProfileClimatePageAPIController apiContoller = new EntityProfileClimatePageAPIController();
+
+        Controversies controversiesAPI = apiContoller.getControversiesAPI("{\"orbis_id\":\""+orbisId+"\"}").as(Controversies.class);
+        List<ControversiesList> Controlist = controversiesAPI.getControversies_list().stream().filter(i -> i.getSeverity().equals("High") || i.getSeverity().equals("Critical")).collect(Collectors.toList());
+        String subCategory = controversiesAPI.getSub_categories().stream().map(SubCategory::getSub_category).collect(Collectors.joining(", "));
+        String summary = "Involved in " + Controlist.size() + " critical or high severity controversies, out of " + controversiesAPI.getControversies_list().size()  +
+                " total controversies as of " + DateTimeUtilities.getFormattedDate(Controlist.stream().min(Comparator.comparing(ControversiesList::getControversy_events)).get().getControversy_events(),"MMMM dd, yyyy")
+                +". Criteria impacted: " ;//+ subCategory;
+        String PDFExtractedValue = PdfUtil.extractPDFText(pdfFileText, summary);
+        assertTestCase.assertTrue(!PDFExtractedValue.equals("No ParaGraph Found"), "Validating Controversey Data");
+        for(ControversiesList e : Controlist)  {
+            String date = DateTimeUtilities.getFormattedDate(e.getControversy_events(),"MMMM dd, yyyy");
+            String contTitle = e.getControversy_title();
+            String CriteriaImpacted= "Criteria impacted: " + e.getRelated_domain().toString().substring(1,e.getRelated_domain().toString().indexOf("]"));
+            String Severity = e.getSeverity();
+            String expectedValue = date + " " + contTitle + " " + CriteriaImpacted + " " + Severity;
+            PDFExtractedValue = PdfUtil.extractPDFText(pdfFileText.replaceAll("\\s+",""), expectedValue.replaceAll("\\s+",""));
+            assertTestCase.assertTrue(!PDFExtractedValue.equals("No ParaGraph Found"), "Validating Controversey Data");
+        }
+    }
 
 }

@@ -14,6 +14,9 @@ public class RangeAndScoreCategory {
     private String impact;
     private Double min2;
     private Double max2;
+    private Double minScale;
+    private Double maxScale;
+
 
     public RangeAndScoreCategory(String category, Double min, Double max, String impact) {
         this.category = category;

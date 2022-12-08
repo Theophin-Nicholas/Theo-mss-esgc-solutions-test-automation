@@ -53,8 +53,12 @@ public class EntityClimateProfilePage extends ClimatePageBase {
     @FindBy(xpath = "//div[@id='tempAlignErr']")
     public List<WebElement> noInfoElement;
 
+    @FindBy(xpath = "//li[@role='menuitem']/../../../div[2]//*[local-name()='svg']")
+    public WebElement entityProfileCloseIcon;
+
     @FindBy(xpath = "//div[@id='carbonClimate-test-id']/div/div/div/div/div/div")
     public List<WebElement> carbonFootprintNoInfo;
+
     @FindBy(xpath = "(//div[@id='carbonClimate-test-id'])[2]/div[2]/div/div/span[1]")
     public List<WebElement> carbonFootprintValueUnderlying;
 
@@ -73,7 +77,7 @@ public class EntityClimateProfilePage extends ClimatePageBase {
     @FindBy(id = "export_sources_doc_button")
     public WebElement exportSourcesDocumentsTab;
 
-    @FindBy(id = "export_pdf")
+    @FindBy(xpath = "//button [@id='export_pdf']")
     public WebElement pdfDownloadButton;
 
     @FindBy(id = "ref_Meth_button")
@@ -85,8 +89,12 @@ public class EntityClimateProfilePage extends ClimatePageBase {
     @FindBy(xpath = "//div[@role='dialog'][not(@aria-describedby)]/div[contains(@class,'Content')]/div/div")
     public WebElement exportPopupSubtitleElement;
 
+    @FindBy(xpath = "//div[@role='dialog'][not(@aria-describedby)]//div[contains(translate(text(), " +
+            "'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'),'source documents')]")
+    public WebElement sourceDocumentsDiv;
     @FindBy(xpath = "//div[@role='dialog'][not(@aria-describedby)]//div/ul/li/a")
     public List<WebElement> listSourceDocuments;
+
 
     @FindBy(xpath = "//div[@id='entitySourceDocuments']//div[contains(@class,'MuiGrid-item')]/div[1]")
     public WebElement sourceDocumentsMessage;
@@ -105,6 +113,9 @@ public class EntityClimateProfilePage extends ClimatePageBase {
 
     @FindBy(xpath = "//div[@id='brownClimate-test-id']")
     public WebElement brownShareCard;
+
+    @FindBy(xpath = "(//table[@id='table-id-1'])[2]")
+    public WebElement BrownShareTransitionRiskTable;
 
     @FindBy(xpath = "//div[@id='greenClimate-test-id']/div/div/div[1]/div")
     public List<WebElement> listOfGreenShareCardlabels;
@@ -168,6 +179,12 @@ public class EntityClimateProfilePage extends ClimatePageBase {
 
     @FindBy(id = "phyClimate-test-id")
     public WebElement physicalClimateHazards;
+
+    @FindBy(xpath = "//header//div/span/span[contains(text(),'Orbis ID:')]")
+    public WebElement orbisIdLabel;
+
+    @FindBy(xpath = "//div[text()='Green Share']/../following-sibling::div//div[2]/span")
+    public WebElement greenShareScoreRangeLabel;
 
     @FindBy(xpath = "//span[.='Transition Risk']")
     public WebElement transitionRiskPage;
@@ -453,7 +470,8 @@ public class EntityClimateProfilePage extends ClimatePageBase {
     @FindBy(xpath = "//div[@id='div-mainlayout']//div//div//main//header/following-sibling::div/div[3]/div/div/div/div/div/div/div/following-sibling::div[2]/div/table/tbody/tr")
     public List<WebElement> controversiesTableRow;
 
-    @FindBy(xpath = "//div[@id='methodologies_modal']//div[@role='dialog']/div[2]/div/div/div/span") //main/div/div/div/div/div/div/div/div/div/div/span[1]")
+    @FindBy(xpath = "//div[@id='methodologies_modal']//div[@role='dialog']/div[2]/div/div/div/span")
+    //main/div/div/div/div/div/div/div/div/div/div/span[1]")
     public WebElement controversiesPopUpClose;
 
     @FindBy(xpath = "(//div[contains(text(),'Controversies')])")
@@ -488,8 +506,13 @@ public class EntityClimateProfilePage extends ClimatePageBase {
         return companyName;
     }
 
-    public boolean validateGlobalHeader(String CompanyName) {
-        return Driver.getDriver().findElement(By.xpath("//li[normalize-space()='Profile for " + CompanyName + "']")).isDisplayed();
+    public boolean validateGlobalHeader(String companyName) {
+        try{
+            return Driver.getDriver().findElement(By.xpath("//li[@role='menuitem']/span[text()='"+companyName+"']")).isDisplayed();
+        }catch(Exception e){
+            return false;
+        }
+
     }
 
     public boolean isProvidedFilterClickableInMaterialityMatrixFooter(String filterName) {
@@ -528,9 +551,25 @@ public class EntityClimateProfilePage extends ClimatePageBase {
     }
 
     public boolean IsExportSourcesDocumentsButtonAvailable() {
-        try{
+        try {
             return exportSourcesDocumentsTab.isDisplayed();
-        }catch(Exception e){
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public boolean IsSourceDocumentsDivAvailable() {
+        try {
+            return sourceDocumentsDiv.isDisplayed();
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public boolean IsPDFButtonAvailable() {
+        try {
+            return pdfDownloadButton.isDisplayed();
+        } catch (Exception e) {
             return false;
         }
     }
@@ -548,7 +587,7 @@ public class EntityClimateProfilePage extends ClimatePageBase {
     }
 
     public void closeEntityProfilePage() {
-        Driver.getDriver().findElement(By.xpath("//li[starts-with(text(),'Profile')]/../../div[2]")).click();
+        entityProfileCloseIcon.click();
     }
 
     public void closeDownloadProgressBar() {
@@ -866,9 +905,9 @@ public class EntityClimateProfilePage extends ClimatePageBase {
     }
 
     public void navigateToTransitionRisk() {
-        JavascriptExecutor js  = (JavascriptExecutor) Driver.getDriver();
+        JavascriptExecutor js = (JavascriptExecutor) Driver.getDriver();
         js.executeScript("arguments[0].click()", transitionRiskPage);
-      //  BrowserUtils.waitForClickablility(transitionRiskPage, 30).click();
+        //  BrowserUtils.waitForClickablility(transitionRiskPage, 30).click();
     }
 
     public void navigateToPhysicalRisk() {
@@ -994,6 +1033,28 @@ public class EntityClimateProfilePage extends ClimatePageBase {
 
     }
 
+    public String getEntityOrbisId() {
+        return orbisIdLabel.getText().replace("Orbis ID: ", "");
+    }
+
+    public String getGreenShareScoreRange() {
+        return greenShareScoreRangeLabel.getText().replace("%", "");
+    }
+
+    public boolean verifyScoreAndRange(String scoreRange, String score) {
+        int iScore = Integer.parseInt(score);
+        if (scoreRange.contains("-")) {
+            String range[] = scoreRange.split("-");
+            if (iScore >= Integer.parseInt(range[0].trim()) && iScore <= Integer.parseInt(range[1].trim())) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return iScore == Integer.parseInt(scoreRange);
+        }
+    }
+
     public boolean isPhysicalClimateHazardCardDisplayed() {
         try {
             BrowserUtils.scrollTo(physicalClimateHazards);
@@ -1059,6 +1120,40 @@ public class EntityClimateProfilePage extends ClimatePageBase {
         }
     }
 
+    public void validateSubCategories() {
+
+        for (int i = 1; i <= esgMaterialityColumns.size(); i++) {
+            String xpathCategories = "(//div/section//ul)[" + i + "]//li";
+            int categoriesCount = Driver.getDriver().findElements(By.xpath(xpathCategories)).size();
+            int scores[] = new int[categoriesCount];
+            for (int j = 1; j <= categoriesCount; j++) {
+                String categoryBgColor = Driver.getDriver().findElement(By.xpath("(//div/section//ul)[" + i + "]//li[" + j + "]")).getCssValue("background-color");
+                System.out.println("BG Color: " + categoryBgColor);
+                if (i != 4) {
+                    String xpathCategoryScore = "(//div/section//ul)[" + i + "]//li[" + j + "]/section/span[1]/span[2]";
+                    String score = Driver.getDriver().findElement(By.xpath(xpathCategoryScore)).getText();
+                    int iScore = Integer.parseInt(score);
+                    scores[i - 1] = iScore;
+                    System.out.println("Score: " + iScore);
+                    if (iScore >= 60) {
+                        assertTestCase.assertEquals(categoryBgColor, "rgba(219, 229, 163, 1)");
+                    } else if (iScore >= 50) {
+                        assertTestCase.assertEquals(categoryBgColor, "rgba(234, 197, 80, 1)");
+                    } else if (iScore >= 30) {
+                        assertTestCase.assertEquals(categoryBgColor, "rgba(232, 149, 28, 1)");
+                    } else {
+                        assertTestCase.assertEquals(categoryBgColor, "rgba(221, 88, 29, 1)");
+                    }
+                } else {
+                    assertTestCase.assertEquals(categoryBgColor, "rgba(255, 255, 255, 1)");
+                }
+            }
+            for (int k = 0; k < (scores.length - 1); k++) {
+                assertTestCase.assertTrue(scores[i] >= scores[i + 1], "Verify the order of categories");
+            }
+        }
+
+    }
 
 //    public void validateSubCategoriesButtonColorProperties() {
 //        List<WebElement> SubCategoriesPercentageLabels = Driver.getDriver().findElements(By.xpath("//section//li/section/span[2]"));
@@ -1414,9 +1509,9 @@ public class EntityClimateProfilePage extends ClimatePageBase {
         }
 
         //verify carbon footprint category color is true
-        String actColor= Color.fromString(transitionRiskCarbonFootprintCategory.getCssValue("background-color")).asHex();
+        String actColor = Color.fromString(transitionRiskCarbonFootprintCategory.getCssValue("background-color")).asHex();
         System.out.println("TR - Carbon Footprint - actColor = " + actColor);
-        String expColor= new ResearchLineColors().getColorForScoreCategory(transitionRiskCarbonFootprintCategory.getText());
+        String expColor = new ResearchLineColors().getColorForScoreCategory(transitionRiskCarbonFootprintCategory.getText());
         System.out.println("TR - Carbon Footprint - expColor = " + expColor);
         check = check && actColor.equalsIgnoreCase(expColor);
         if (!check) System.out.println("TR - Carbon Footprint - Category color is not verified");
@@ -2427,7 +2522,6 @@ public class EntityClimateProfilePage extends ClimatePageBase {
                 }
 
 
-
                 if (divValue.contains("Reporting Year"))
                     returnList.addAll(Arrays.stream(divValue.split("((?=Reporting Year)|(?<=Reporting Year))"))
                             .map(String::trim).collect(Collectors.toList()));
@@ -2566,11 +2660,11 @@ public class EntityClimateProfilePage extends ClimatePageBase {
 
     public List<String> getESGSummaryDetails() {
         BrowserUtils.scrollTo(esgScores.get(0));
-        List<String> returnList= new ArrayList<>();
-        for (WebElement e : esgScores){
-            if(e.getText().contains("ESG Score")){
-                returnList.add(e.getText().replace("\n"," "));
-            }else {
+        List<String> returnList = new ArrayList<>();
+        for (WebElement e : esgScores) {
+            if (e.getText().contains("ESG Score")) {
+                returnList.add(e.getText().replace("\n", " "));
+            } else {
                 String[] a = e.getText().split("\n");
                 returnList.add(a[1] + " " + (a[0].contains("Environment") ? "Environmental" : a[0]));
             }
@@ -2599,14 +2693,25 @@ public class EntityClimateProfilePage extends ClimatePageBase {
         assertTestCase.assertTrue(actDate.contains(expDate),
                 "Brown Share Widget Updated Date is verified matching with Database");
     }
-    
-    /*public String getESGMaterlityData() {
-        BrowserUtils.scrollTo(esgScores.get(0));
-       // String categoriesList = readEsgMaterialityCategories().stream().collect(Collectors.joining(" "))
-        //        .replaceAll("\\d+","");
 
 
-        return categoriesList;
+    public String getunderlyingDataMetricsBrownShareAssessment() {
+        navigateToTransitionRisk();
+        BrowserUtils.scrollTo(wait.until(ExpectedConditions.visibilityOf(BrownShareTransitionRiskTable)));
+        String returnString = "";
+        if (!BrownShareTransitionRiskTable.getText().contains("No information available.")) {
+            returnString = BrownShareTransitionRiskTable.getText().replaceAll("\n", " ");
+            returnString = returnString.replace("Fossil Fuel Disclosures Investment in Category ",
+                    "Underlying Data Transition Risk BROWN SHARE FOSSIL FUEL DISCLOSURES INVESTMENT IN CATEGORY ");
+        } else
+            returnString = underlyingDataMetrics_GreenShareAssessmentCard.getText();
+        return returnString;
+
+    }
+
+    /*public String getControversiesData() {
+
+
 
     }*/
 }

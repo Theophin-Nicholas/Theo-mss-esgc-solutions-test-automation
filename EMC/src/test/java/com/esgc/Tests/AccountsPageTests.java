@@ -1437,16 +1437,18 @@ public class AccountsPageTests extends EMCUITestBase {
     public void verifyRemoveApplicationRoleProductUserLoginTest() {
         navigateToAccountsPage(accountName, "applications");
         EMCAccountDetailsPage detailsPage = new EMCAccountDetailsPage();
-        if (!detailsPage.verifyApplication("MESG Platform - DEV - QA"))
-            detailsPage.assignApplication("MESG Platform - DEV - QA");
+        String mesgAppName = Environment.MESG_APPLICATION_NAME;
+        System.out.println("mesgAppName = " + mesgAppName);
+        if (!detailsPage.verifyApplication(mesgAppName))
+            detailsPage.assignApplication(mesgAppName);
         detailsPage.clickOnUsersTab();
-        assertTestCase.assertTrue(detailsPage.verifyUser("Active User"), "Active User is displayed");
-        detailsPage.searchUser("Active User");
+        assertTestCase.assertTrue(detailsPage.verifyUser(activeUserName), "Active User is displayed");
+        detailsPage.searchUser(activeUserName);
         EMCUserDetailsPage userPage = new EMCUserDetailsPage();
         assertTestCase.assertEquals(userPage.userStatus.getText(), "Active", "User status is Active");
-        if (userPage.verifyApplicationRole("MESG Platform - DEV - QA"))
-            userPage.deleteApplicationRole("MESG Platform - DEV - QA");
-        assertTestCase.assertFalse(userPage.verifyApplicationRole("MESG Platform - DEV - QA"), "Application role is assigned");
+        if (userPage.verifyApplicationRole(mesgAppName))
+            userPage.deleteApplicationRole(mesgAppName);
+        assertTestCase.assertFalse(userPage.verifyApplicationRole(mesgAppName), "Application role is assigned");
         assertTestCase.assertFalse(loginAndVerify(), "User is logged in");
     }
 
