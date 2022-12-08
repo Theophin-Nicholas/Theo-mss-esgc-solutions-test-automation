@@ -26,7 +26,7 @@ public class ExportTests extends UITestBase {
 //TODO Needs attention. Tests are failing.
     @Test(groups = {"regression", "smoke", "export"},
             dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
-    @Xray(test = {2092, 2093, 2108, 2110, 2112, 2113, 2625, 3004, 3396, 3403, 3405, 3406, 4648, 5169, 3621, 9656, 9657, 9658})
+    @Xray(test = {2092, 2093, 2108, 2110, 2112, 2113, 2625, 3004, 3396, 3403, 3405, 3406, 4648, 5169, 3621, 8953, 9656, 9657, 9658, 10679 })
     public void verifyExportFunctionalityandExcelFieldsWithUI(String researchLine) {
 
         ResearchLinePage researchLinePage = new ResearchLinePage();

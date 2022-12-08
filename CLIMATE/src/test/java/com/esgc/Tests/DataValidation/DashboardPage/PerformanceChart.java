@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 public class PerformanceChart extends DataValidationTestBase {
 
     @Test(groups = {"regression", "data_validation", "dashboard"}, dataProvider = "researchLines")
-    @Xray(test = {4988, 7989, 6416, 6415})
+    @Xray(test = {4988, 7989, 6416, 6415, 11049})
     public void verifyPerformanceChartWithMixedIdentifiers(
             @Optional String sector, @Optional String region,
             @Optional String researchLine, @Optional String month, @Optional String year) {

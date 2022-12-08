@@ -46,16 +46,13 @@ public class SubsidiaryTests extends UITestBase {
         assertTestCase.assertTrue(dbSubsidiaryCompanyInfo.size()==1, "Verifying subsidiary company");
     }
 
-    @Test(groups = {"regression", "ui", "search_entity"})
+    @Test(groups = {"regression", "ui", "search_entity"}, dataProviderClass = DataProviderClass.class, dataProvider = "SubsidiaryCompanies")
     @Xray(test = {11051, 11052, 11053, 11054, 11237})
-    public void searchWithSubsidiaryCompanyName() {
+    public void searchWithSubsidiaryCompanyName(String subsidiaryCompanyName, String parentCompanyName) {
 
         DashboardPage dashboardPage = new DashboardPage();
         dashboardPage.navigateToPageFromMenu("Dashboard");
         dashboardPage.selectPortfolioByNameFromPortfolioSelectionModal("PortfolioWithSubsidiaryCompany1");
-
-        String subsidiaryCompanyName = "National Grid North America, Inc.";
-        String parentCompanyName = "National Grid Plc";
 
         EntityClimateProfilePage entityProfilePage = new EntityClimateProfilePage();
 
@@ -98,7 +95,7 @@ public class SubsidiaryTests extends UITestBase {
 
     }
 
-    @Test(groups = {"regression", "ui", "search_entity"}, dataProvider = "InactiveSubsidiaryCompany")
+    @Test(groups = {"regression", "ui", "search_entity"}, dataProviderClass = DataProviderClass.class, dataProvider = "InactiveSubsidiaryCompanyISIN")
     @Xray(test = {11058, 11242})
     public void VerifyFileUploadWithInactiveSubsidiaryCompany(String inactiveSubsidiaryCompany) {
         DashboardPage dashboardPage = new DashboardPage();
@@ -123,15 +120,14 @@ public class SubsidiaryTests extends UITestBase {
 
     }
 
-    @Test(groups = {"regression", "ui", "search_entity"})
-    @Xray(test = {11059})
-    public void searchWithInactiveSubsidiaryCompanyName() {
+    @Test(groups = {"regression", "ui", "search_entity"}, dataProviderClass = DataProviderClass.class, dataProvider = "InactiveSubsidiaryCompanies")
+    @Xray(test = {11059, 11242})
+    public void searchWithInactiveSubsidiaryCompanyName(String subsidiaryCompanyName) {
 
         DashboardPage dashboardPage = new DashboardPage();
         dashboardPage.navigateToPageFromMenu("Dashboard");
         dashboardPage.selectPortfolioByNameFromPortfolioSelectionModal("PortfolioWithInactiveSubsidiaryCompany");
 
-        String subsidiaryCompanyName = "XTO ENERGY INC";
         ResearchLinePage researchLinePage = new ResearchLinePage();
 
         // Search with subsidiary company name
@@ -140,12 +136,29 @@ public class SubsidiaryTests extends UITestBase {
 
     }
 
-    @DataProvider(name = "InactiveSubsidiaryCompany")
-    public Object[][] dpMethod() {
+    @Test(groups = {"regression", "ui"}, dataProviderClass = DataProviderClass.class, dataProvider = "SubsidiaryCompanies")
+    @Xray(test = {11541})
+    public void verifySubsidiaryCompanyInPortfolioManagement(String subsidiaryCompanyName, String parentCompanyName) {
+        String portfolioName = "PortfolioWithSubsidiaryCompany1";
 
-        return new Object[][]{
-                {"XS0054748412"},
-        };
+        ResearchLinePage researchLinePage = new ResearchLinePage();
+        DashboardPage dashboardPage = new DashboardPage();
+        researchLinePage.selectPortfolioByNameFromPortfolioSelectionModal(portfolioName);
+        researchLinePage.clickMenu();
+        researchLinePage.portfolioSettings.click();
+        researchLinePage.selectPortfolioFromPortfolioSettings(portfolioName);
+
+        dashboardPage.verifyCompanyIsClickable(subsidiaryCompanyName);
+
+        researchLinePage.portfolioDropDownMenu.click();
+        researchLinePage.portfolioSettingsLargest20Investment.click();
+        dashboardPage.verifyCompanyIsClickable(subsidiaryCompanyName);
+        researchLinePage.clickTheCompany(subsidiaryCompanyName);
+        EntityClimateProfilePage entityClimateProfilePage = new EntityClimateProfilePage();
+        assertTestCase.assertTrue(entityClimateProfilePage.validateGlobalHeader(parentCompanyName),"Verify Parent Company page is displayed");;
+        entityClimateProfilePage.closeEntityProfilePage();
+        researchLinePage.closeMenuByClickingOutSide();
+
     }
 
 }

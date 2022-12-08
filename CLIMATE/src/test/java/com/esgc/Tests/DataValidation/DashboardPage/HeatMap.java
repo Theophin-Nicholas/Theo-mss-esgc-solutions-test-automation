@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
 public class HeatMap extends DataValidationTestBase {
 
     @Test(groups = {"regression", "data_validation", "dashboard"}, dataProvider = "researchLines")
-    @Xray(test = {4918, 4919, 4920, 4922, 4923, 4926, 5116, 7476, 7484, 7620, 7621, 9216  })
+    @Xray(test = {4918, 4919, 4920, 4922, 4923, 4926, 5116, 7476, 7484, 7620, 7621, 9216, 11049  })
     public void verifyHeatMapWithMixedIdentifiers(@Optional String sector, @Optional String region, @Optional String researchLine1, @Optional String month, @Optional String year) {
         SoftAssert softAssert = new SoftAssert();
         List<String> researchLines = Arrays.asList("ESG", "operationsrisk", "marketrisk", "supplychainrisk", "Physical Risk Management",

@@ -45,6 +45,7 @@ public class ExportDashboardDataDictionary extends DashboardUITestBase {
 
         // ESGCA-9185: Validate Export Excel has Physical Risk Management Rows in 'Data Mappings' Sheet
         Map<String,String> dataDictionary = new HashMap<>();
+        dataDictionary.put("Score Type","Type of score produced - Analyst-verified or Predicted Score ");
         dataDictionary.put("Physical Risk Management Produced Date","Year, month, day at which Physical Risk Management research was published in the dataset");
         dataDictionary.put("Physical Risk Management Score Category","Physical Risk Management Category mapping to the overall Physical Risk Management Global Score. The Categories are Advanced (60-100), Robust (50-59), Limited (30-49), and Weak (0-29)");
         dataDictionary.put("Physical Risk Management Score","The Global Score - Physical Risk Management assesses how issuers are acting to anticipate, prevent and manage the risks associated with the physical impacts of climate change");
