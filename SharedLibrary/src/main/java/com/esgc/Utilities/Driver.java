@@ -99,6 +99,9 @@ public class Driver {
                         chromeOptions.setExperimentalOption("prefs", prefs);
                         chromeOptions.addArguments("--start-maximized");
                         chromeOptions.addArguments("--disable-notifications");
+                        chromeOptions.addArguments("--diable-gpu");
+                        chrome_options.add_argument("--disable-extensions")
+                        chrome_options.add_argument("--no-sandbox")
                         desiredCapabilities.setCapability(ChromeOptions.CAPABILITY, chromeOptions);
                         RemoteWebDriver driver = new RemoteWebDriver(url, desiredCapabilities);
                         driver.setFileDetector(new LocalFileDetector());
