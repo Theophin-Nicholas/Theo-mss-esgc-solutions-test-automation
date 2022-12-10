@@ -80,13 +80,13 @@ public class EntityBrownShareTests extends UITestBase {
 
         EntityClimateProfilePageQueries entityClimateProfilepagequeries = new EntityClimateProfilePageQueries();
         String sectorName = entityClimateProfilepagequeries.getEntitySectorInfo(orbisID).get(0).get("MESG_SECTOR").toString();
-
+        int sectorCompaniesCount = entityClimateProfilepagequeries.getSectorCompanies(sectorName).size();
         EntityClimateProfilePage entityProfilePage = new EntityClimateProfilePage();
         String companyName = entityProfilePage.searchAndLoadClimateProfilePage(orbisID);
         entityProfilePage.verifyBrownShareWidget();
-        entityProfilePage.verifyBrownShareComparisonChartSectorDesc(sectorName,companyName);
         entityProfilePage.verifyBrownShareComparisonChartLegends(sectorName,companyName);
         entityProfilePage.verifyBrownShareComparisonChartAxes();
+        entityProfilePage.verifyBrownShareComparisonChartSectorDesc(sectorName,sectorCompaniesCount,companyName);
     }
 
 }
