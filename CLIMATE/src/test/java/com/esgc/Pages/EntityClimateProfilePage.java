@@ -2439,10 +2439,10 @@ public class EntityClimateProfilePage extends ClimatePageBase {
         assertTestCase.assertEquals(brownShareComparisonChartAxes.get(4).getText(),">=50%", "Brown Share Comparison Chart - Verify X-Axis Label");
     }
 
-    public void verifyBrownShareComparisonChartSectorDesc(String sectorName, String companyName) {
-        String expDescription = companyName+" compared to 234 companies in "+sectorName;
-        String xpath = "//span[text()='Transition Risk']/../../..//div[text()='Brown Share Assessment']/../../../../../following-sibling::div//div[text()='"+expDescription+"']";
-        assertTestCase.assertTrue(Driver.getDriver().findElement(By.xpath(xpath)).isDisplayed(), "Brown Share Comparison Chart - Verify first legend label");
+    public void verifyBrownShareComparisonChartSectorDesc(String sectorName, int sectorCompaniesCount, String companyName) {
+        String expDescription = companyName+" compared to "+sectorCompaniesCount+" companies in "+sectorName;
+        String actualDescription = brownShareComparisonChartAxes.get(0).getText();
+        assertTestCase.assertEquals(actualDescription, expDescription, "Brown Share Comparison Chart - Verify entity description");
     }
 
     public String getBrownShareSummaryValue() {
