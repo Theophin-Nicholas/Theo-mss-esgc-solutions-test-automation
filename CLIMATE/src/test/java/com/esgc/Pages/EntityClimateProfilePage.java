@@ -53,6 +53,12 @@ public class EntityClimateProfilePage extends ClimatePageBase {
     @FindBy(xpath = "//div[@id='tempAlignErr']")
     public List<WebElement> noInfoElement;
 
+    @FindBy(xpath = "//span[text()='Transition Risk']/../../..//div[text()='Brown Share Assessment']/../../../following-sibling::div//div[text()='No information available.']")
+    public WebElement trBrownShareAssessmentNoInfo;
+
+    @FindBy(xpath = "//span[text()='Transition Risk']/../../..//div[text()='Brown Share Assessment']/../../../../../following-sibling::div//div[text()='No sector comparison chart available.']")
+    public WebElement trBrownShareAssessmentSectorChartNoInfo;
+
     @FindBy(xpath = "//li[@role='menuitem']/../../../div[2]//*[local-name()='svg']")
     public WebElement entityProfileCloseIcon;
 
@@ -221,6 +227,12 @@ public class EntityClimateProfilePage extends ClimatePageBase {
 
     @FindBy(xpath = "//span[@variant='outlined']/../*")
     public List<WebElement> comparisonChartLegends;
+
+    @FindBy(xpath = "//span[text()='Transition Risk']/../../..//div[text()='Brown Share Assessment']/../../../../../following-sibling::div//span[@variant='outlined']/../*")
+    public List<WebElement> brownShareComparisonChartLegends;
+
+    @FindBy(xpath = "//span[text()='Transition Risk']/../../..//div[text()='Brown Share Assessment']/../../../../../following-sibling::div//div[text()]")
+    public List<WebElement> brownShareComparisonChartAxes;
 
     @FindBy(xpath = "//span[@variant='outlined']/../p")
     public List<WebElement> Para_comparisonChartLegends;
@@ -2411,6 +2423,26 @@ public class EntityClimateProfilePage extends ClimatePageBase {
         assertTestCase.assertTrue(updatedDateText.contains("Updated on"), "Validating Date ");
         assertTestCase.assertTrue(isValidFormat("MMMM d, yyyy", updatedDateText.split("on ")[1]), "Validating Date format");
 
+    }
+
+    public void verifyBrownShareComparisonChartLegends(String sectorName, String companyName) {
+        assertTestCase.assertEquals(brownShareComparisonChartLegends.get(0).getAttribute("style"),"background: rgb(178, 133, 89);", "Brown Share Comparison Chart - Verify first legend color");
+        assertTestCase.assertTrue(brownShareComparisonChartLegends.get(1).getText().contains(sectorName), "Brown Share Comparison Chart - Verify first legend label");
+        assertTestCase.assertEquals(brownShareComparisonChartLegends.get(2).getAttribute("style"),"background: rgb(31, 140, 255);", "Brown Share Comparison Chart - Verify second legend color");
+        assertTestCase.assertTrue(brownShareComparisonChartLegends.get(3).getText().contains(companyName), "Brown Share Comparison Chart - Verify second legend label");
+    }
+
+    public void verifyBrownShareComparisonChartAxes() {
+        assertTestCase.assertEquals(brownShareComparisonChartAxes.get(1).getText(),"Major", "Brown Share Comparison Chart - Verify X-Axis Label");
+        assertTestCase.assertEquals(brownShareComparisonChartAxes.get(2).getText(),"None", "Brown Share Comparison Chart - Verify X-Axis Label");
+        assertTestCase.assertEquals(brownShareComparisonChartAxes.get(3).getText(),"0%", "Brown Share Comparison Chart - Verify X-Axis Label");
+        assertTestCase.assertEquals(brownShareComparisonChartAxes.get(4).getText(),">=50%", "Brown Share Comparison Chart - Verify X-Axis Label");
+    }
+
+    public void verifyBrownShareComparisonChartSectorDesc(String sectorName, String companyName) {
+        String expDescription = companyName+" compared to 234 companies in "+sectorName;
+        String xpath = "//span[text()='Transition Risk']/../../..//div[text()='Brown Share Assessment']/../../../../../following-sibling::div//div[text()='"+expDescription+"']";
+        assertTestCase.assertTrue(Driver.getDriver().findElement(By.xpath(xpath)).isDisplayed(), "Brown Share Comparison Chart - Verify first legend label");
     }
 
     public String getBrownShareSummaryValue() {
