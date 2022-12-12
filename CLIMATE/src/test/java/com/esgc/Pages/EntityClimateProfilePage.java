@@ -26,6 +26,7 @@ import java.awt.datatransfer.StringSelection;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.time.Duration;
 import java.time.Year;
 import java.util.List;
 import java.util.*;
@@ -668,7 +669,7 @@ public class EntityClimateProfilePage extends ClimatePageBase {
     }
 
     public boolean verifyExportPopupSubTitle(String subTitle) {
-        WebDriverWait wait = new WebDriverWait(Driver.getDriver(), 30);
+        WebDriverWait wait = new WebDriverWait(Driver.getDriver(), Duration.ofSeconds(30));
         wait.until(ExpectedConditions.textToBePresentInElement(exportPopupSubtitleElement, subTitle));
         String exportPopupSubtitle = exportPopupSubtitleElement.getText();
         return exportPopupSubtitle.equals(subTitle);
