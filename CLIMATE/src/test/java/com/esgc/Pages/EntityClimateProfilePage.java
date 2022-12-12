@@ -132,6 +132,9 @@ public class EntityClimateProfilePage extends ClimatePageBase {
     @FindBy(xpath = "(//*[name()='path'][@class='highcharts-point highcharts-color-0'])")
     public List<WebElement> pieCharts;
 
+    @FindBy(xpath = "//div[@id='phyRskMgmClimate-test-id']//div[@id='chiclet-id']/child::div[2]/span")
+    public WebElement PhysicalRiskMgmtWidgetValue;
+
     @FindBy(xpath = "//div[@id='greenClimate-test-id']//div[@id='chiclet-id']/child::div[2]/span")
     public WebElement GreenShareWidgetValue;
 
