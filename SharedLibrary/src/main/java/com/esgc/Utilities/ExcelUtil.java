@@ -1,8 +1,11 @@
 package com.esgc.Utilities;
 
 
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.opencsv.CSVReader;
 import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+
 import org.testng.Assert;
 
 import java.io.FileInputStream;
@@ -21,6 +24,17 @@ public class ExcelUtil {
     private Sheet workSheet;
     private Workbook workBook;
     private String path;
+
+    public ExcelUtil(String path) {
+        this.path = path;
+        try {
+            FileInputStream ExcelFile = new FileInputStream(path);
+            workBook = WorkbookFactory.create(ExcelFile);
+            workSheet = workBook.getSheetAt(0);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     public ExcelUtil(String path, String sheetName) {
         this.path = path;
@@ -160,6 +174,15 @@ public class ExcelUtil {
 
     public int columnCount() {
         return workSheet.getRow(0).getLastCellNum();
+    }
+
+    public int getColumnNum (String colName){
+        Row row = workSheet.getRow(0);
+        for (int i = 0; i < row.getLastCellNum(); i++){
+            if (row.getCell(i).getStringCellValue().trim().equals(colName))
+                return i;
+        }
+        return -1 ;
     }
 
     public int rowCount() {
