@@ -49,6 +49,29 @@ public class EntityClimateProfilePageQueries {
         return data;
     }
 
+
+    public List<Map<String, Object>> getEntityWithNoBrownShareInfo() {
+        String query = "select eem.* from esg_entity_master eem\n" +
+                "       join ENTITY_COVERAGE_TRACKING ect on ect.orbis_id=eem.orbis_id\n" +
+                "       left join brown_share bs on bs.bvd9_number=eem.orbis_id \n" +
+                "       where bvd9_number is null and eem.managed_type='Covered' and eem.ENTITY_STATUS='Active'; ";
+
+        return DatabaseDriver.getQueryResultMap(query);
+    }
+
+    public List<Map<String, Object>> getEntitySectorInfo(String orbisId) {
+        String query = "select distinct(MESG_SECTOR),MESG_SECTOR_ID from DF_TARGET.SECTOR_HIERARCHY where MESG_SECTOR_ID in " +
+                "(select MESG_SECTOR_ID from DF_TARGET.ESG_ENTITY_MASTER where ORBIS_ID ='"+orbisId+"');";
+
+        return DatabaseDriver.getQueryResultMap(query);
+    }
+
+    public List<Map<String, Object>> getSectorCompanies(String sectorName) {
+        String query = "select * from DF_TARGET.ESG_ENTITY_MASTER where MESG_SECTOR_ID in (select MESG_SECTOR_ID from DF_TARGET.SECTOR_HIERARCHY where MESG_SECTOR='"+sectorName+"') and ENTITY_STATUS ='Active';";
+
+        return DatabaseDriver.getQueryResultMap(query);
+    }
+
     public Map<String, String> getTempratureAlignmentData(String orbisID) {
         String query = "\n" +
                 "with p as (select BVD9_NUMBER,em.entity_name, SCORE_CATEGORY,TEMPERATURE_SCORE as Implied_Temperature_Rise,TARGET_YEAR as Emissions_Reduction_Target_Year,\n" +
