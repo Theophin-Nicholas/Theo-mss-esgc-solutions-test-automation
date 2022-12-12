@@ -16,15 +16,17 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import static com.esgc.Pages.LoginPageIssuer.OrbisID;
 import static com.esgc.Utilities.DateTimeUtilities.getFormattedDate;
 
 
 public class ESGScoreTest extends EntityIssuerPageDataValidationTestBase {
 
+    // TODO This feature is no more in use
     @Test(groups = {"entity_page"})
     @Xray(test = {3778, 3779, 3780, 3781, 3782, 3783,8341})
     public void validateScoreRange() {
-        String orbisID = Environment.OrbisId;
+        String orbisID = OrbisID;
         SoftAssert softAssert = new SoftAssert();
         List<ESGScoreSummaryDBModel> ESGScoreSummaryDbModel = EntityIssuerQueries.getEsgScore(orbisID);
         System.out.println(ESGScoreSummaryDbModel.size());
@@ -59,14 +61,5 @@ public class ESGScoreTest extends EntityIssuerPageDataValidationTestBase {
 
     }
 
-
-    @DataProvider(name = "orbisID")
-    public Object[][] provideFilterParameters() {
-
-        return new Object[][]
-                {
-                     {"000002959"}
-                };
-    }
 
 }
