@@ -30,16 +30,16 @@ public class RegulatoryReportingPage extends UploadPage {
     @FindBy(xpath = "//div[.='Reporting']/following-sibling::div//input")
     public List<WebElement> reportingRadioButtonList;
 
-    @FindBy(xpath = "//div[.='Select Portfolios']/following-sibling::div//label")
-    public List<WebElement> portfolioNamesList;
+    @FindBy(xpath = "//div[.='Select Portfolios']/../div[2]/following-sibling::div/div[1]")
+    public List<WebElement> rrPage_portfolioNamesList;
 
-    @FindBy(xpath = "//div[.='Select Portfolios']/following-sibling::div//label//input")
+    @FindBy(xpath = "//div[.='Select Portfolios']/../div[2]/following-sibling::div/div[1]//input")
     public List<WebElement> portfolioRadioButtonList;
 
     @FindBy(xpath = "//div[.='Reporting for']/../following-sibling::div/div[2]/span")
     public List<WebElement> lastUploadedList;
 
-    @FindBy(xpath = "//div[.='Reporting for']/../following-sibling::div/div[3]/span")
+    @FindBy(xpath = "//div[.='Select Portfolios']/../div[2]/following-sibling::div/div[3]")
     public List<WebElement> coverageList;
 
     @FindBy(xpath = "//div[.='Reporting for']/../following-sibling::div/div[4]")
@@ -105,7 +105,7 @@ public class RegulatoryReportingPage extends UploadPage {
     }
 
     public List<String> getPortfolioList() {
-        return BrowserUtils.getElementsText(portfolioNamesList);
+        return BrowserUtils.getElementsText(rrPage_portfolioNamesList);
     }
 
     //return number of selected reporting options
@@ -286,7 +286,7 @@ public class RegulatoryReportingPage extends UploadPage {
         List<String> selectedPortfolioOptions = new ArrayList<>();
         for (int i = 0; i < portfolioRadioButtonList.size(); i++) {
             if (portfolioRadioButtonList.get(i).isSelected()) {
-                selectedPortfolioOptions.add(portfolioNamesList.get(i).getText());
+                selectedPortfolioOptions.add(rrPage_portfolioNamesList.get(i).getText());
             }
         }
         System.out.println("selectedPortfolioOptions = " + selectedPortfolioOptions);
@@ -341,9 +341,18 @@ public class RegulatoryReportingPage extends UploadPage {
             System.out.println("No files in the directory");
             return false;
         }
-        return Arrays.stream(dir_contents).anyMatch(e -> (e.getName().startsWith("SFDR") &&
+        return Arrays.stream(dir_contents).anyMatch(e -> ((e.getName().startsWith("SFDR") || e.getName().startsWith("EUT")) &&
                 e.getName().contains(DateTimeUtilities.getCurrentDate("MM_dd_yyyy")) &&
                 e.getName().endsWith(".zip")));
+//        if (check) {
+//            System.out.println("Reports downloaded successfully");
+//            return true;
+//        } else {
+//            System.out.println("Reports are not downloaded");
+//            return check = Arrays.stream(dir_contents).anyMatch(e -> (e.getName().startsWith("EUT") &&
+//                    e.getName().contains(DateTimeUtilities.getCurrentDate("MM_dd_yyyy")) &&
+//                    e.getName().endsWith(".zip")));
+//        }
     }
 
     public boolean verifyPortfolio(String portfolioName) {
@@ -361,9 +370,9 @@ public class RegulatoryReportingPage extends UploadPage {
     public void selectReportingFor(String portfolioName, String reportingYear) {
         if (isUseLatestDataSelected()) deselectUseLatestData();
         //go through portfolios list
-        for (int i = 0; i < portfolioNamesList.size(); i++) {
+        for (int i = 0; i < rrPage_portfolioNamesList.size(); i++) {
             //find the portfolio
-            if (portfolioNamesList.get(i).getText().equals(portfolioName)) {
+            if (rrPage_portfolioNamesList.get(i).getText().equals(portfolioName)) {
                 //verify if portfolio is selected
                 if (!isPortfolioSelected(portfolioName)) {
                     System.out.println("Selecting portfolio " + portfolioName);
@@ -381,7 +390,7 @@ public class RegulatoryReportingPage extends UploadPage {
         if (reportingForDropdownOptionsList.size() == 0)
             System.out.println("A reporting for option must be clicked before this");
         for (WebElement element : reportingForDropdownOptionsList) {
-            System.out.println("element.getText() = " + element.getText());
+//            System.out.println("element.getText() = " + element.getText());
             if (element.getText().equals(reportingYear)) {
                 System.out.println("Year for selected portfolio found");
                 element.click();
@@ -395,7 +404,7 @@ public class RegulatoryReportingPage extends UploadPage {
         verifyIfReportsDownloaded(false);
         File dir = new File(BrowserUtils.downloadPath());
         File[] dir_contents = dir.listFiles();
-        String zipFilePath = Arrays.asList(dir_contents).stream().filter(e -> (e.getName().startsWith("SFDR") &&
+        String zipFilePath = Arrays.asList(dir_contents).stream().filter(e -> ((e.getName().startsWith("SFDR") ||e.getName().startsWith("EUT")) &&
                 e.getName().contains(DateTimeUtilities.getCurrentDate("MM_dd_yyyy")) &&
                 e.getName().endsWith(".zip"))).findAny().get().getAbsolutePath();
         System.out.println("zipFilePath = " + zipFilePath);
@@ -443,10 +452,10 @@ public class RegulatoryReportingPage extends UploadPage {
             List<Map<String, Object>> dbData = queries.getCompanyLevelOutput(portfolioId, "latest_data");
             for (Map<String, Object> row : dbData) {
                 List<String> checkValues = new ArrayList<>(Arrays.asList("COMPANY_NAME", "VE_ID", "FACTSET_ID", "HIGH_IMPACT_CHK",
-                       //column names
-                       "Adverse sustainability indicator","Average Impact Q1-Q2-Q3-Q4","Impact Portfolio 1","Scope of Disclosure Portfolio 1",
-                        "Impact Portfolio 2","Scope of Disclosure Portfolio 2","Impact Portfolio 3","Scope of Disclosure Portfolio 3",
-                        "Impact Portfolio 4","Scope of Disclosure Portfolio 4"));
+                        //column names
+                        "Adverse sustainability indicator", "Average Impact Q1-Q2-Q3-Q4", "Impact Portfolio 1", "Scope of Disclosure Portfolio 1",
+                        "Impact Portfolio 2", "Scope of Disclosure Portfolio 2", "Impact Portfolio 3", "Scope of Disclosure Portfolio 3",
+                        "Impact Portfolio 4", "Scope of Disclosure Portfolio 4"));
                 for (String data : checkValues) {
                     if (data == null) continue;
                     if (!excelData.searchData((row.get(data).toString()))) {
@@ -506,5 +515,80 @@ public class RegulatoryReportingPage extends UploadPage {
             System.out.println("Data " + data + " is not found in the excel");
         }
         return excelData.searchData(data);
+    }
+
+    public boolean verifySFDRPortfolioCoverageForUI(String portfolioName) {
+        RegulatoryReportingAPIController apiController = new RegulatoryReportingAPIController();
+        String portfolioId = apiController.getPortfolioId(portfolioName);
+        RegulatoryReportingQueries queries = new RegulatoryReportingQueries();
+        List<Map<String, Object>> dbData = queries.getReportingYearDetails(portfolioId);
+        System.out.println("dbData.size() = " + dbData.size());
+        for (Map<String, Object> row : dbData) {
+            if (Integer.parseInt(row.get("YEAR").toString()) > 2018) {
+                System.out.println("Validating for year " + row.get("YEAR").toString());
+                selectReportingFor(portfolioName, row.get("YEAR").toString());
+                BrowserUtils.wait(2);
+                String uiCoverage = getCoveragePercentage(portfolioName);
+                String dbCoverage = row.get("SFDR_COVERAGE").toString();
+                if (!uiCoverage.contains(dbCoverage)) {
+                    System.out.println("Coverage is not matching for " + uiCoverage + " : " + dbCoverage);
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    private String getCoveragePercentage(String portfolioName) {
+        System.out.println("Number of Portfolios = " + rrPage_portfolioNamesList.size());
+        for (WebElement portfolio : rrPage_portfolioNamesList) {
+            if (portfolio.getText().contains(portfolioName)) {
+                System.out.println("Portfolio found");
+                System.out.println("Index of portfolio = " + rrPage_portfolioNamesList.indexOf(portfolio));
+                return coverageList.get(rrPage_portfolioNamesList.indexOf(portfolio)).getText();
+            }
+        }
+        System.out.println("Portfolio not found");
+        return "";
+    }
+
+    public boolean verifyPortfolioCoverageForExcel(String portfolioName) {
+        RegulatoryReportingAPIController apiController = new RegulatoryReportingAPIController();
+        String portfolioId = apiController.getPortfolioId(portfolioName);
+        RegulatoryReportingQueries queries = new RegulatoryReportingQueries();
+        Map<String, Object> dbData = queries.getReportingYearDetails(portfolioId).get(0);
+        System.out.println("dbData.size() = " + dbData.size());
+        int countOfAllEntities = queries.getNumberOfCompanies(portfolioId);
+        System.out.println("countOfAllEntities = " + countOfAllEntities);
+        //open Excel file
+        String excelName = rrStatusPage_PortfoliosList.get(0).getText().replaceAll("ready", "").trim();
+        System.out.println("Verifying reports content for " + excelName);
+        ExcelUtil excelData = getExcelData(excelName, 1);
+        int countOfEntitiesInExcel = excelData.rowCount() - 1;
+        System.out.println("countOfEntitiesInExcel = " + countOfEntitiesInExcel);
+        //find coverage percentage by rounding up
+        int excelCoverage = (int) Math.ceil((double) countOfEntitiesInExcel / countOfAllEntities * 100);
+        System.out.println("excelCoverage = " + excelCoverage);
+        int dbCoverage = Integer.parseInt(dbData.get("SFDR_COVERAGE").toString());
+        if (dbCoverage != excelCoverage) {
+            System.out.println("Coverage is not matching for " + excelCoverage + " : " + dbCoverage);
+            return false;
+        }
+        return true;
+    }
+
+    public boolean verifyEUTaxonomyPortfolioCoverageForUI(String portfolioName) {
+        RegulatoryReportingAPIController apiController = new RegulatoryReportingAPIController();
+        String portfolioId = apiController.getPortfolioId(portfolioName);
+        RegulatoryReportingQueries queries = new RegulatoryReportingQueries();
+        Map<String, Object> dbData = queries.getReportingYearDetails(portfolioId).get(0);
+        System.out.println("dbData.size() = " + dbData.size());
+        String uiCoverage = getCoveragePercentage(portfolioName);
+        String dbCoverage = dbData.get("TAXONOMY_COVERAGE").toString();
+        if (!uiCoverage.contains(dbCoverage)) {
+            System.out.println("Coverage is not matching for " + uiCoverage + " : " + dbCoverage);
+            return false;
+        }
+        return true;
     }
 }

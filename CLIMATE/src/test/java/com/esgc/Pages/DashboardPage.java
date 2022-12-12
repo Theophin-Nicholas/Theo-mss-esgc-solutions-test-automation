@@ -62,8 +62,14 @@ public class DashboardPage extends UploadPage {
     public WebElement methodologyPopup_Link_Methodology20;
     @FindBy(xpath = "//a[@id='link-link-test-id-3']")
     public WebElement methodologyPopup_Link_RiskAssessmentts;
+
+    @FindBy(xpath = "//a[@id='link-link-test-id-3']")
+    public List<WebElement> methodologyPopup_Links;
+
     @FindBy(xpath = "//div[contains(text(),'Viewing')]")
     public WebElement regionTitleInStickyHeader;
+    @FindBy(xpath = "//div[contains(@class,'Drawer-paper')]//h2")
+    public List<WebElement> methodologySectionNames;
 
     @FindBy(xpath = "//a[text()='hide']")
     public WebElement hideLink;
@@ -582,6 +588,7 @@ public class DashboardPage extends UploadPage {
 
     public void selectViewMethodologies() {
         //  BrowserUtils.waitForInvisibility(btnViewMethodologies, 50);
+        BrowserUtils.waitForClickablility(btnViewMethodologies, 50);
         btnViewMethodologies.click();
     }
 
@@ -1432,7 +1439,17 @@ public class DashboardPage extends UploadPage {
         }
     }
 
+    public List<String> getMethodologiesSections() {
+        List<String> methodologySections = new ArrayList<>();
+        for(WebElement element: methodologySectionNames){
+            methodologySections.add(element.getText());
+        }
+        return methodologySections;
+    }
+
     public boolean verifyMethodologiesLinks() {
+
+
         try {
             assertTestCase.assertTrue(methodologyPopup_Link_Methodology10.getText().equals("Read more about ESG Assessment Methodology 1.0"), "Validate link as 'Read more about ESG Assessment Methodology 1.0'");
             assertTestCase.assertTrue(methodologyPopup_Link_Methodology20.getText().equals("Read more about ESG Assessment Methodology 2.0"), "Validate link as 'Read more about ESG Assessment Methodology 2.0'");
