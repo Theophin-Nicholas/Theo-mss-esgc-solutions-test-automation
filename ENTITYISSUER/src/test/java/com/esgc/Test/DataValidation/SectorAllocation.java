@@ -15,7 +15,7 @@ public class SectorAllocation extends EntityIssuerPageDataValidationTestBase {
     List<String> criteria = new ArrayList<>();
 
     @Xray(test = 6267)
-    @Test(groups = {"entity_issuer"})
+    @Test(groups = {"regression","entity_issuer"})
     public void verifySectorHeaderDescription() {
 
         Response response = controller.getHeaderAPI();
