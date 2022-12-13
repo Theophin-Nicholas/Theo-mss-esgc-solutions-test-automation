@@ -7,7 +7,7 @@ on:
 jobs:
   build:
 
-    runs-on: app-delivery-ec2
+    runs-on: app-delivery-ec2-windows
 
     steps:
     - uses: actions/checkout@v3
@@ -18,6 +18,6 @@ jobs:
         distribution: 'temurin'
         cache: maven
     - name: Build with Maven
-      run: mvn test -Dtest=PortfolioNameUpdateAPITest -DfailIfNoTests=false -Dbrowser=chromeheadless
+      run: mvn test -Dtest=PortfolioNameUpdateAPITest -DfailIfNoTests=false -Dbrowser=edge
     - name: Surefire Report
       uses: ScaCap/action-surefire-report@v1
