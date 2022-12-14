@@ -503,6 +503,9 @@ public class ResearchLinePage extends UploadPage {
     @FindBy(xpath = "//td[@heap_id='coverage']//*[local-name()='svg']/*[local-name()='rect'][1]")
     public List<WebElement> scoreQualityIconsInCoveragePopup;
 
+    @FindBy(xpath = "//td[@heap_id='leadlag']")
+    public List<WebElement> recordsInLeadersAndLaggardsTable;
+
     @FindBy(xpath = "//td[@heap_id='leadlag']//*[local-name()='svg']/*[local-name()='rect'][1]")
     public List<WebElement> scoreQualityIconsInLeadersAndLaggardsTable;
 
@@ -2815,7 +2818,9 @@ public class ResearchLinePage extends UploadPage {
     }
 
     public boolean verifyScoreQualityIconWithEntitiesInLeadersAndLaggardsTables_PA(){
-        return scoreQualityIconsInLeadersAndLaggardsTable.size()==20;
+        int recordsCountInTable = recordsInLeadersAndLaggardsTable.size();
+        int scoreQualityIconsCountInTable = scoreQualityIconsInLeadersAndLaggardsTable.size();
+        return scoreQualityIconsCountInTable==recordsCountInTable;
     }
 
     public boolean verifyScoreQualityIconWithEntitiesInLeadersPopup_PA(){
@@ -3006,6 +3011,17 @@ public class ResearchLinePage extends UploadPage {
     public void selectEsgPortfolioCoverage() {
         BrowserUtils.wait(5);
         wait.until(ExpectedConditions.elementToBeClickable(esgPortfolioCoverageLink)).click();
+    }
+
+    public void verifyCompanyNameInCoveragePopup(String subsidiaryCompanyName) {
+        String xpath = "//td[@heap_id='coverage']//span[@title][text()='"+subsidiaryCompanyName+"']";
+        assertTestCase.assertEquals(Driver.getDriver().findElements(By.xpath(xpath)).size(), 1);
+    }
+
+    public void verifyCompanyIsClickableInCoveragePopup(String companyName) {
+        String xpath = "//td[@heap_id='coverage']//span[@title][text()='"+companyName+"']";
+        WebElement element = Driver.getDriver().findElement(By.xpath(xpath));
+        assertTestCase.assertTrue(element.getCssValue("text-decoration").contains("underline"));
     }
 
     public void validateLinksOpenedInNewTab(WebElement element, String whatToValidate) {

@@ -128,4 +128,56 @@ public class ScoreQualityTests extends UITestBase {
         assertTestCase.assertTrue(!researchLine.verifyScoreQualityIconWithEntitiesInLeadersAndLaggardsTables_PA(),"Verify Score Quality icon with Entity Names in Leaders and Laggards tables in Portfolio Analysis Page");
 
     }
+
+    @Test(groups = {"esg", "regression", "ui"})
+    @Xray(test = {12069})
+    public void verifyScoreQualityIconWithSubsidiaryCompanies_Dashboard() {
+        DashboardPage dashboardPage = new DashboardPage();
+        dashboardPage.selectPortfolioByNameFromPortfolioSelectionModal("PortfolioWithSubsidiaryCompany1");
+
+        assertTestCase.assertTrue(dashboardPage.scoreQualityButton.isDisplayed(),"Verify Score Quality Button in Dashboard Page");
+        dashboardPage.scoreQualityButton.click();
+        BrowserUtils.wait(5);
+        assertTestCase.assertTrue(dashboardPage.verifyScoreQualityToggleIsOn(),"Verify Score Quality Button is on in Dashboard Page");
+
+        dashboardPage.clickCoverageLink();
+        assertTestCase.assertTrue(dashboardPage.verifyScoreQualityIconWithEntitiesInCoveragePopup(),"Verify Score Quality icon with Entity Names in Coverage popup in Dashboard Page");
+        dashboardPage.verifyScoreQualityLevelsInIconInCoveragePopup();
+        dashboardPage.pressESCKey();
+
+        //TODO ESGCA-12069 Step4:  Dashboard - Portfolio Monitoring - Verify Score Quality icons for the subsidiary companies
+        //TODO ESGCA-12069 Step5:  Dashboard - Geographic Risk Section - Verify Score Quality icons for the subsidiary companies
+        //TODO ESGCA-12069 Step6:  Dashboard - Heat Map Section - Verify Score Quality icons for the subsidiary companies
+
+        assertTestCase.assertTrue(dashboardPage.verifyScoreQualityIconWithEntitiesInPerformanceTable(),"Verify Score Quality icon with Entity Names in Performance Larger Holdings table in Dashboard Page");
+
+        dashboardPage.tabPerformanceLeaders.click();
+        assertTestCase.assertTrue(dashboardPage.verifyScoreQualityIconWithEntitiesInPerformanceTable(),"Verify Score Quality icon with Entity Names in Performance Leaders table in Dashboard Page");
+
+        dashboardPage.tabPerformanceLaggards.click();
+        assertTestCase.assertTrue(dashboardPage.verifyScoreQualityIconWithEntitiesInPerformanceTable(),"Verify Score Quality icon with Entity Names in Performance Laggards table in Dashboard Page");
+
+    }
+
+    @Test(groups = {"esg", "regression", "ui"})
+    @Xray(test = {12071})
+    public void verifyScoreQualityIconWithSubsidiaryCompanies_PortfolioAnalysis() {
+        DashboardPage dashboardPage = new DashboardPage();
+        ResearchLinePage researchLine =new ResearchLinePage();
+
+        dashboardPage.selectPortfolioByNameFromPortfolioSelectionModal("PortfolioWithSubsidiaryCompany1");
+        dashboardPage.navigateToPageFromMenu("Portfolio Analysis");
+        dashboardPage.selectResearchLineFromDropdown("ESG Assessments");
+
+        dashboardPage.scoreQualityButton.click();
+        BrowserUtils.wait(5);
+        assertTestCase.assertTrue(dashboardPage.verifyScoreQualityToggleIsOn(),"Verify Score Quality Button is on in Dashboard Page");
+
+        assertTestCase.assertTrue(researchLine.verifyScoreQualityIconWithEntitiesInLeadersAndLaggardsTables_PA(),"Verify Score Quality icon with Entity Names in Leaders and Laggards tables in Portfolio Analysis Page");
+
+        BrowserUtils.scrollTo(researchLine.portfolioCoverage);
+        researchLine.portfolioCoverage.click();
+        assertTestCase.assertTrue(researchLine.verifyScoreQualityIconWithEntitiesInCoveragePopup_PA(),"Verify Score Quality icon with Entity Names in Coverage popup in Portfolio Analysis Page");
+        researchLine.hideButton.click();
+    }
 }
