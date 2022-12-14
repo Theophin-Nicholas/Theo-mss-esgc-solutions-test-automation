@@ -15,15 +15,15 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.esgc.Pages.LoginPageIssuer.OrbisID;
 import static com.esgc.Utilities.DateTimeUtilities.getFormattedDate;
 
-public class ESGScoreSummaryWidgetDBValidation extends EntityIssuerPageDataValidationTestBase {
-    List<String> criteria = new ArrayList<>();
+public class ESGScoreSummaryWidgetDBValidationP3 extends EntityIssuerPageDataValidationTestBase {
 
-    @Xray(test = {7439, 7440,7441,7444})
+    @Xray(test = {7439,7441,7444})
     @Test(groups = {"regression", "entity_issuer"})
     public void SummaryWidgetTest() {
-        String orbisID = Environment.OrbisId;
+        String orbisID = OrbisID;
         List<SummaryWidgetDBModel> summaryWidgetDBResult = EntityIssuerQueries.getESGScoreSummaryWidgetData(orbisID);
         EntityIssuerPageAPIController entityIssuerPageAPIController = new EntityIssuerPageAPIController();
         Response response = entityIssuerPageAPIController.getSummaryWidget(orbisID);
