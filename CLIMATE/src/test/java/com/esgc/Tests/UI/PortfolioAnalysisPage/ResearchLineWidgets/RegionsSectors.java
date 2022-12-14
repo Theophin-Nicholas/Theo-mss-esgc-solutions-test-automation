@@ -21,8 +21,8 @@ public class RegionsSectors extends UITestBase {
         researchLinePage.navigateToResearchLine(page);
         BrowserUtils.wait(5);
         test.info("Navigated to " + page + " Page");
-        if (page.equals("Temperature Alignment") || page.equals("Physical Risk Management")) {
-            throw new SkipException("Research Line is not having required widgets " + page);
+        if (page.equals("ESG Assessments")) {
+            throw new SkipException("not ready to test in " + page);
         }
         assertTestCase.assertTrue(researchLinePage.checkIfPageTitleIsDisplayed(page), "check if page title is displayed");
         test.pass("User is on " + page + " Page");
@@ -41,7 +41,7 @@ public class RegionsSectors extends UITestBase {
     public void verifyRegionSectorDrillDowns(String page) {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         researchLinePage.selectSamplePortfolioFromPortfolioSelectionModal();
-        if (page.equals("ESG Assessments") || page.equals("Physical Risk Management") || page.equals("Temperature Alignment")) {
+        if (page.equals("ESG Assessments")) {
             throw new SkipException("not ready to test in " + page);
         }
         researchLinePage.navigateToResearchLine(page);

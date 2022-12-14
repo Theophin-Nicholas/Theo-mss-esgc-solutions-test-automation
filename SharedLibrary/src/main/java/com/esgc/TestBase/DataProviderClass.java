@@ -299,6 +299,8 @@ public class DataProviderClass {
 
         return new Object[][]{
                /* {"ESG Assessments"},*/ //De-scoped as of now
+
+                {"Physical Risk Hazards"},
                 {"Carbon Footprint"},
                 {"Physical Risk Management"},
                 {"Temperature Alignment"},
@@ -439,7 +441,14 @@ public class DataProviderClass {
     @DataProvider(name = "SubsidiaryCompanies")
     public Object[][] subsidiaryCompanies() {
         return new Object[][]{
-                {"National Grid North America, Inc.","National Grid Plc"},
+                {"Oriental Bank","OFG Bancorp"},
+        };
+    }
+
+    @DataProvider(name = "CompaniesWithNoSubsidiaryCompanies")
+    public Object[][] NoSubsidiaryCompanies() {
+        return new Object[][]{
+                {"Amazon.com, Inc."},
         };
     }
 

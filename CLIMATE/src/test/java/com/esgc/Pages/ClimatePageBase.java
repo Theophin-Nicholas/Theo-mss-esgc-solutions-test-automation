@@ -489,7 +489,7 @@ public abstract class ClimatePageBase extends PageBase {
 
     public void validatePortfolioNameUpdatedInAllLocations(String OriginalPortFolioName) {
         String newPortfolioName = "Automation Change in All Locations";
-        updatePortfolio(newPortfolioName);
+        updatePortfolioNameInPortfolioManagementDrawer(newPortfolioName);
         BrowserUtils.wait(2);
         assertTestCase.assertTrue(wait.until(ExpectedConditions.visibilityOf(successMessageForNameSaved)).isDisplayed(), "Validate Succee message is displayd after save");
         assertTestCase.assertTrue(getPortfolioDrawerHeader(newPortfolioName).isDisplayed(), "Validate that chnaged portfolio name is displayed in header ");

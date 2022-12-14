@@ -3,7 +3,7 @@ package com.esgc.Test.API;
 import com.esgc.APIModels.EntityIssuerPage.SectorDriversWrapper;
 import com.esgc.Controllers.EntityIssuerPageController.EntityIssuerPageAPIController;
 import com.esgc.Test.TestBases.EntityIssuerPageTestBase;
-import com.esgc.TestBase.DataProviderClass;
+import com.esgc.Test.TestBases.IssuerDataProviderClass;
 import com.esgc.Utilities.Xray;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
@@ -11,10 +11,10 @@ import org.testng.annotations.Test;
 
 import static org.hamcrest.Matchers.*;
 
-public class SectorDriversAPITestP3 extends EntityIssuerPageTestBase {
+public class SectorDriversAPITestP2 extends EntityIssuerPageTestBase {
 
     @Test (groups ={"regression", "api"},
-            dataProvider = "credentials",dataProviderClass = DataProviderClass.class,
+            dataProvider = "credentialsP2",dataProviderClass = IssuerDataProviderClass.class,
             description = "ESGCA-5867-API | ESG Issuer - Entity Page | Verify API Response")
     @Xray(test = {5867})
     public void validateSectorDriversAPIResponse(String userId, String password,String orbisId){

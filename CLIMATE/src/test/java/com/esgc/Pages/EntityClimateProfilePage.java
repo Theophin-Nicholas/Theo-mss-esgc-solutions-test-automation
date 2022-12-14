@@ -26,6 +26,7 @@ import java.awt.datatransfer.StringSelection;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.time.Duration;
 import java.time.Year;
 import java.util.List;
 import java.util.*;
@@ -52,6 +53,12 @@ public class EntityClimateProfilePage extends ClimatePageBase {
 
     @FindBy(xpath = "//div[@id='tempAlignErr']")
     public List<WebElement> noInfoElement;
+
+    @FindBy(xpath = "//span[text()='Transition Risk']/../../..//div[text()='Brown Share Assessment']/../../../following-sibling::div//div[text()='No information available.']")
+    public WebElement trBrownShareAssessmentNoInfo;
+
+    @FindBy(xpath = "//span[text()='Transition Risk']/../../..//div[text()='Brown Share Assessment']/../../../../../following-sibling::div//div[text()='No sector comparison chart available.']")
+    public WebElement trBrownShareAssessmentSectorChartNoInfo;
 
     @FindBy(xpath = "//li[@role='menuitem']/../../../div[2]//*[local-name()='svg']")
     public WebElement entityProfileCloseIcon;
@@ -95,6 +102,20 @@ public class EntityClimateProfilePage extends ClimatePageBase {
     @FindBy(xpath = "//div[@role='dialog'][not(@aria-describedby)]//div/ul/li/a")
     public List<WebElement> listSourceDocuments;
 
+    @FindBy(xpath = "//div[text()='This company has ']/span")
+    public WebElement subsidiaryLink;
+
+    @FindBy(xpath = "//li[@role='menuitem']/span[text()]")
+    public WebElement globalHeaderLabel;
+
+    @FindBy(xpath = "//header/..//div[starts-with(text(),'Subsidiar')]")
+    public WebElement subsidiaryCompaniesHeader;
+
+    @FindBy(xpath = "//header/..//div[starts-with(text(),'Subsidiar')]/following-sibling::div")
+    public WebElement subsidiaryCompaniesPopupDescription;
+
+    @FindBy(xpath = "//table[@id='subsidiaries-table-id']//th")
+    public List<WebElement> subsidiaryCompaniesTableColumns;
 
     @FindBy(xpath = "//div[@id='entitySourceDocuments']//div[contains(@class,'MuiGrid-item')]/div[1]")
     public WebElement sourceDocumentsMessage;
@@ -131,6 +152,9 @@ public class EntityClimateProfilePage extends ClimatePageBase {
 
     @FindBy(xpath = "(//*[name()='path'][@class='highcharts-point highcharts-color-0'])")
     public List<WebElement> pieCharts;
+
+    @FindBy(xpath = "//div[@id='phyRskMgmClimate-test-id']//div[@id='chiclet-id']/child::div[2]/span")
+    public WebElement PhysicalRiskMgmtWidgetValue;
 
     @FindBy(xpath = "//div[@id='greenClimate-test-id']//div[@id='chiclet-id']/child::div[2]/span")
     public WebElement GreenShareWidgetValue;
@@ -183,6 +207,9 @@ public class EntityClimateProfilePage extends ClimatePageBase {
     @FindBy(xpath = "//header//div/span/span[contains(text(),'Orbis ID:')]")
     public WebElement orbisIdLabel;
 
+    @FindBy(xpath = "//div/span[contains(text(),'Orbis ID:')]/following-sibling::span")
+    public WebElement orbisIdValue;
+
     @FindBy(xpath = "//div[text()='Green Share']/../following-sibling::div//div[2]/span")
     public WebElement greenShareScoreRangeLabel;
 
@@ -221,6 +248,12 @@ public class EntityClimateProfilePage extends ClimatePageBase {
 
     @FindBy(xpath = "//span[@variant='outlined']/../*")
     public List<WebElement> comparisonChartLegends;
+
+    @FindBy(xpath = "//span[text()='Transition Risk']/../../..//div[text()='Brown Share Assessment']/../../../../../following-sibling::div//span[@variant='outlined']/../*")
+    public List<WebElement> brownShareComparisonChartLegends;
+
+    @FindBy(xpath = "//span[text()='Transition Risk']/../../..//div[text()='Brown Share Assessment']/../../../../../following-sibling::div//div[text()]")
+    public List<WebElement> brownShareComparisonChartAxes;
 
     @FindBy(xpath = "//span[@variant='outlined']/../p")
     public List<WebElement> Para_comparisonChartLegends;
@@ -506,14 +539,69 @@ public class EntityClimateProfilePage extends ClimatePageBase {
         return companyName;
     }
 
-    public boolean validateGlobalHeader(String companyName) {
+    public boolean validateGlobalCompanyNameHeader(String companyName) {
         try{
             return Driver.getDriver().findElement(By.xpath("//li[@role='menuitem']/span[text()='"+companyName+"']")).isDisplayed();
         }catch(Exception e){
             return false;
         }
-
     }
+
+    public void clickGlobalHeader() {
+        globalHeaderLabel.click();
+    }
+
+    public void clickSubsidiaryCompaniesLink() {
+        subsidiaryLink.click();
+    }
+
+    public void verifySubsidiaryCompaniesCount(int count) {
+        String subsidiaryText = subsidiaryLink.getText();
+        subsidiaryText = subsidiaryText.substring(0,subsidiaryText.indexOf(" "));
+        assertTestCase.assertEquals(count, Integer.parseInt(subsidiaryText),"Verification of Subsidiary Companies Count");
+    }
+
+    public boolean verifySubsidiaryCompaniesLink() {
+        try {
+            BrowserUtils.waitForVisibility(subsidiaryLink,30);
+            return true;
+        }catch(Exception e){
+            return false;
+        }
+    }
+
+    public void verifySubsidiaryCompaniesPopup(String companyName) {
+        verifyCompanyNameInCoveragePopup(companyName);
+        verifyCompanyIsClickableInCoveragePopup(companyName);
+        assertTestCase.assertTrue(subsidiaryCompaniesHeader.isDisplayed(),"Verify Subsidiary Companies popup header");
+
+        String expDescription="Unless assessed, subsidiaries have the same score as their parent company";
+        String actDescription=subsidiaryCompaniesPopupDescription.getText();
+        assertTestCase.assertEquals(actDescription,expDescription,"Verify Subsidiary Companies popup description");
+
+        assertTestCase.assertEquals(subsidiaryCompaniesTableColumns.get(0).getText(),"Company Name","Verify Subsidiary Companies Table columns");
+        assertTestCase.assertEquals(subsidiaryCompaniesTableColumns.get(1).getText(),"ESG Score","Verify Subsidiary Companies Table columns");
+    }
+
+    public boolean verifySubsidiaryCompaniesSectionInCoveragePopup() {
+        try{
+            return subsidiaryCompaniesHeader.isDisplayed();
+        }catch(Exception e){
+            return false;
+        }
+    }
+
+    public void verifyCompanyNameInCoveragePopup(String subsidiaryCompanyName) {
+        String xpath = "//div[contains(@class,'CompanyNameWrapper')]//span[@title][text()='"+subsidiaryCompanyName+"']";
+        assertTestCase.assertEquals(Driver.getDriver().findElements(By.xpath(xpath)).size(), 1);
+    }
+
+    public void verifyCompanyIsClickableInCoveragePopup(String companyName) {
+        String xpath = "//div[contains(@class,'CompanyNameWrapper')]//span[@title][text()='"+companyName+"']";
+        WebElement element = Driver.getDriver().findElement(By.xpath(xpath));
+        assertTestCase.assertTrue(element.getCssValue("text-decoration").contains("underline"));
+    }
+
 
     public boolean isProvidedFilterClickableInMaterialityMatrixFooter(String filterName) {
         try {
@@ -653,7 +741,7 @@ public class EntityClimateProfilePage extends ClimatePageBase {
     }
 
     public boolean verifyExportPopupSubTitle(String subTitle) {
-        WebDriverWait wait = new WebDriverWait(Driver.getDriver(), 30);
+        WebDriverWait wait = new WebDriverWait(Driver.getDriver(), Duration.ofSeconds(30));
         wait.until(ExpectedConditions.textToBePresentInElement(exportPopupSubtitleElement, subTitle));
         String exportPopupSubtitle = exportPopupSubtitleElement.getText();
         return exportPopupSubtitle.equals(subTitle);
@@ -2413,6 +2501,26 @@ public class EntityClimateProfilePage extends ClimatePageBase {
 
     }
 
+    public void verifyBrownShareComparisonChartLegends(String sectorName, String companyName) {
+        assertTestCase.assertEquals(brownShareComparisonChartLegends.get(0).getAttribute("style"),"background: rgb(178, 133, 89);", "Brown Share Comparison Chart - Verify first legend color");
+        assertTestCase.assertTrue(brownShareComparisonChartLegends.get(1).getText().contains(sectorName), "Brown Share Comparison Chart - Verify first legend label");
+        assertTestCase.assertEquals(brownShareComparisonChartLegends.get(2).getAttribute("style"),"background: rgb(31, 140, 255);", "Brown Share Comparison Chart - Verify second legend color");
+        assertTestCase.assertTrue(brownShareComparisonChartLegends.get(3).getText().contains(companyName), "Brown Share Comparison Chart - Verify second legend label");
+    }
+
+    public void verifyBrownShareComparisonChartAxes() {
+        assertTestCase.assertEquals(brownShareComparisonChartAxes.get(1).getText(),"Major", "Brown Share Comparison Chart - Verify X-Axis Label");
+        assertTestCase.assertEquals(brownShareComparisonChartAxes.get(2).getText(),"None", "Brown Share Comparison Chart - Verify X-Axis Label");
+        assertTestCase.assertEquals(brownShareComparisonChartAxes.get(3).getText(),"0%", "Brown Share Comparison Chart - Verify X-Axis Label");
+        assertTestCase.assertEquals(brownShareComparisonChartAxes.get(4).getText(),">=50%", "Brown Share Comparison Chart - Verify X-Axis Label");
+    }
+
+    public void verifyBrownShareComparisonChartSectorDesc(String sectorName, int sectorCompaniesCount, String companyName) {
+        String expDescription = companyName+" compared to "+sectorCompaniesCount+" companies in "+sectorName;
+        String actualDescription = brownShareComparisonChartAxes.get(0).getText();
+        assertTestCase.assertEquals(actualDescription, expDescription, "Brown Share Comparison Chart - Verify entity description");
+    }
+
     public String getBrownShareSummaryValue() {
         navigateToTransitionRisk();
         return transitionRiskBrownShareWidget.findElement(By.xpath("div")).getText();
@@ -2466,8 +2574,10 @@ public class EntityClimateProfilePage extends ClimatePageBase {
         BrowserUtils.hover(Company);
         BrowserUtils.wait(1);
         String color = Color.fromString(Company.findElement(By.xpath(".."))
-                .getCssValue("background-color")).toString();//.asHex().toUpperCase();
-        assertTestCase.assertEquals(color, "Color: rgba(0, 0, 0, 0.04)", "Validate Company Name hover functionality");
+                .getCssValue("background-color")).asHex().toUpperCase();
+        System.out.println(color);
+        assertTestCase.assertTrue(color.equals("#EBF4FA")
+                , "Validate Company Name hover functionality");
     }
 
     public void validatePhysicalClimateHazardUpdatedDate(String orbisID) {

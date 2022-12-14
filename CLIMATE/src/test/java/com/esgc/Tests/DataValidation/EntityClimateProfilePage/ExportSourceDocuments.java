@@ -20,7 +20,7 @@ public class ExportSourceDocuments extends EntityClimateProfileDataValidationTes
         String orbisId = "000001484";
         EntityClimateProfilePage entityProfilePage = new EntityClimateProfilePage();
         String companyName = entityProfilePage.searchAndLoadClimateProfilePage(company);
-        assertTestCase.assertTrue(entityProfilePage.validateGlobalHeader(companyName),companyName+" Header Verification");
+        assertTestCase.assertTrue(entityProfilePage.validateGlobalCompanyNameHeader(companyName),companyName+" Header Verification");
         System.out.println("companyName = " + companyName);
         entityProfilePage.selectExportSourcesDocuments();
         assertTestCase.assertTrue(entityProfilePage.verifyPopup(), "Verify Export Sources Documents popup");

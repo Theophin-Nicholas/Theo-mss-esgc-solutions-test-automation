@@ -122,6 +122,14 @@ public class LoginPage extends ClimatePageBase {
     public WebElement userDropdown;
     //===================================================================================
 
+    public boolean isUsernameBoxDisplayed() {
+        try {
+            return usernameBox.isDisplayed();
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
     /**
      * *Method for login - version #1
      * Reusable login method that provides username & password as parameters
