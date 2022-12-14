@@ -474,7 +474,7 @@ public class EntityClimateProfilePage extends ClimatePageBase {
     //return WebElement
 
     public WebElement getCompanyHeader(String companyName) {
-        return Driver.getDriver().findElement(By.xpath("//header//span[contains(text(),'" + companyName + "')]"));
+        return Driver.getDriver().findElement(By.xpath("//span[contains(text(),'" + companyName + "')]"));
     }
 
     @FindBy(xpath = "// div[normalize-space()='Filter by most impacted categories of ESG:']")
@@ -493,10 +493,10 @@ public class EntityClimateProfilePage extends ClimatePageBase {
     @FindBy(xpath = "(//div[contains(text(),'Controversies')])")
     public WebElement controversiesPopUpVerify;
 
-    @FindBy(xpath = " //*[@id=\"div-mainlayout\"]/div/div/main/header/div/div/div/div[2]/span[4]/span")
+    @FindBy(xpath = "//*[@id=\"div-mainlayout\"]/div/div/main/header/div/div/div/div[2]/span[4]/span")
     public WebElement sectorInHeader;
 
-    @FindBy(xpath = " //body/div[@id='company-summary-panel']/div/div/div[5]")
+    @FindBy(xpath = "//body/div[@id='company-summary-panel']/div/div/div[5]")
     public WebElement companyDrawerSector;
 
 
@@ -2502,10 +2502,8 @@ public class EntityClimateProfilePage extends ClimatePageBase {
         BrowserUtils.hover(Company);
         BrowserUtils.wait(1);
         String color = Color.fromString(Company.findElement(By.xpath(".."))
-                .getCssValue("background-color")).asHex().toUpperCase();
-        System.out.println(color);
-        assertTestCase.assertTrue(color.equals("#EBF4FA")
-                , "Validate Company Name hover functionality");
+                .getCssValue("background-color")).toString();//.asHex().toUpperCase();
+        assertTestCase.assertEquals(color, "Color: rgba(0, 0, 0, 0.04)", "Validate Company Name hover functionality");
     }
 
     public void validatePhysicalClimateHazardUpdatedDate(String orbisID) {

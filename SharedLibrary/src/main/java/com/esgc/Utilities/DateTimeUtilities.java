@@ -118,6 +118,10 @@ public class DateTimeUtilities {
         return LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy"));
     }
 
+    public static String getCurrentYear(int year) {
+        return LocalDate.now().plusYears(year).format(DateTimeFormatter.ofPattern("yyyy"));
+    }
+
     public static String getCurrentMonthNumeric() {
         return LocalDate.now().format(DateTimeFormatter.ofPattern("MM"));
     }
