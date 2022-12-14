@@ -24,7 +24,7 @@ import java.util.*;
 
 public class DashboardHeatMapEntityListTests extends UITestBase {
     @Test(groups = {"dashboard", "ui", "smoke"})
-    @Xray(test = {4843, 4844, 4829, 7475, 7943, 9268, 9269, 9270, 6221})
+    @Xray(test = {4843, 4844, 4829, 6221, 7475, 7943, 9268, 9269, 9270})
     public void verifyEntityListTest() {
         DashboardPage dashboardPage = new DashboardPage();
         dashboardPage.selectSamplePortfolioFromPortfolioSelectionModal();
@@ -46,6 +46,7 @@ public class DashboardHeatMapEntityListTests extends UITestBase {
         for (int i = 2; i < dashboardPage.heatMapResearchLines.size(); i++) {
             //De-select a research line from the heatmap section
             dashboardPage.heatMapResearchLines.get(i).click();
+            System.out.println("Checking for = " + dashboardPage.heatMapResearchLines.get(i).getText());
             //Click on any cell from the heatmap
             verifyHeatMapCells();
         }
@@ -252,6 +253,7 @@ public class DashboardHeatMapEntityListTests extends UITestBase {
             }
             assertTestCase.assertEquals(selectedResearchLine, expectedAxisTitle, "Heat Map Research Line Title Verification");
 
+            System.out.println("researchLine = " + researchLine);
             switch (researchLine) {
                 case "Overall ESG Score":
                     assertTestCase.assertEquals(dashboardPage.heatMapYAxisIndicators.get(0).getText(), "Weak", "Overall ESG Score Category Verified");
@@ -321,14 +323,14 @@ public class DashboardHeatMapEntityListTests extends UITestBase {
 
     //Entitlements
     @Test(groups = {"dashboard", "ui", "regression", "smoke"})
-    @Xray(test = {8185, 7973,})
+    @Xray(test = {8185, 7973})
     public void heatMapAPIUIVerification() {
         LoginPage loginPage = new LoginPage();
         //Trying to log in with only Physical Risk Entitlement User
-        WebElement portfolioSelectionButton = Driver.getDriver().findElement(By.id("button-holdings"));
+       //WebElement portfolioSelectionButton = Driver.getDriver().findElement(By.id("button-holdings"));
         BrowserUtils.wait(3);
-        if (portfolioSelectionButton.getAttribute("title").equals("Sample Portfolio"))
-            loginPage.clickOnLogout();
+        //if (portfolioSelectionButton.getAttribute("title").equals("Sample Portfolio"))
+        loginPage.clickOnLogout();
         Driver.getDriver().manage().deleteAllCookies();
         Driver.getDriver().navigate().refresh();
 
@@ -350,8 +352,8 @@ public class DashboardHeatMapEntityListTests extends UITestBase {
         for (int i = 0; i < dashboardPage.heatMapResearchLines.size(); i++) {
             dashboardPage.selectOneResearchLineOnHeatMap(i);
             BrowserUtils.wait(7);
-            String color = Color.fromString(dashboardPage.heatMapResearchLines.get(i).getCssValue("background-color")).asHex();
             String researchLine = dashboardPage.heatMapResearchLines.get(i).getText();
+            assertTestCase.assertTrue(dashboardPage.verifySelectedResearchLineForHeatMap(researchLine), researchLine+" is selected alone");
             researchLine = researchLine.substring(researchLine.indexOf(":") + 1).trim();
             System.out.println("researchLine = " + researchLine);
 
@@ -431,8 +433,7 @@ public class DashboardHeatMapEntityListTests extends UITestBase {
         int counter = 0;
         for (int i = 0; i < dashboardPage.heatMapYAxisIndicators.size(); i++) {
             for (int j = 0; j < dashboardPage.heatMapXAxisIndicators.size(); j++) {
-                System.out.println(counter);
-                System.out.println("j " + j);
+                System.out.println("Checking cell: " + (i+1)+":"+(j+1));
                 BrowserUtils.scrollTo(dashboardPage.heatMapCells.get(counter));
                 String expPercentage = dashboardPage.heatMapCells.get(counter).getText();
                 BrowserUtils.wait(1);
@@ -571,7 +572,7 @@ public class DashboardHeatMapEntityListTests extends UITestBase {
     }
 
     @Test(groups = {"dashboard", "ui", "regression"})
-    @Xray(test = {9201, 9202})
+    @Xray(test = {9201, 9202, 11218})
     public void verifyOverallEsgScoreHeatMap() {
 
         DashboardPage dashboardPage = new DashboardPage();
@@ -582,6 +583,10 @@ public class DashboardHeatMapEntityListTests extends UITestBase {
 
         BrowserUtils.wait(5);
         BrowserUtils.scrollTo(dashboardPage.heatMapResearchLines.get(0));
+
+        //Verify Heat Map Title
+        assertTestCase.assertTrue(dashboardPage.verifyHeatMapTitle("Analyze Companies by Range"),
+                "Verified the widget doesn't show anything before a cell is selected.");
 
         //Verify the entity list - Entity list should be displaying no records
         assertTestCase.assertFalse(dashboardPage.isHeatMapEntityListDrawerDisplayed(),
@@ -697,6 +702,33 @@ public class DashboardHeatMapEntityListTests extends UITestBase {
 
         // Verify esg score X-Axis categories
         assertTestCase.assertFalse(dashboardPage.heatmapXAxisIsAvailable(), "As only Overall ESG Score is in selected, others should not be available.");
+
+    }
+
+    @Test(groups = {"dashboard", "ui", "regression"})
+    @Xray(test = {11222})
+    public void verifySelectTwoStaticTextInHeatMap() {
+        DashboardPage dashboardPage = new DashboardPage();
+        BrowserUtils.waitForVisibility(dashboardPage.verifyPortfolioName, 20);
+
+        if (!dashboardPage.verifyPortfolioName.getText().equalsIgnoreCase("Sample Portfolio"))
+            dashboardPage.selectPortfolioByNameFromPortfolioSelectionModal("Sample Portfolio");
+
+        BrowserUtils.scrollTo(dashboardPage.heatMapResearchLines.get(0));
+        BrowserUtils.wait(3);
+        assertTestCase.assertTrue(dashboardPage.validateSelectTwoStaticText(), "Verify Select Two static text is present");
+
+        LoginPage login = new LoginPage();
+        login.clickOnLogout();
+        login.entitlementsLogin(EntitlementsBundles.CLIMATE_GOVERNANCE);
+        BrowserUtils.waitForVisibility(dashboardPage.verifyPortfolioName, 20);
+
+        if (!dashboardPage.verifyPortfolioName.getText().equalsIgnoreCase("Sample Portfolio"))
+            dashboardPage.selectPortfolioByNameFromPortfolioSelectionModal("Sample Portfolio");
+
+        BrowserUtils.wait(5);
+        assertTestCase.assertFalse(dashboardPage.validateSelectTwoStaticText(), "Verify Select Two static text is present");
+
 
     }
 
