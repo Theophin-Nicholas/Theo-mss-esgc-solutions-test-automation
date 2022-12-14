@@ -5,20 +5,22 @@
     </listeners>
     <test name="ESGC Regression Test">
 
-        <parameter name="reportName" value="Regression Test Report"/>
+        <parameter name="reportName" value="Test Report"/>
 
         <groups>
             <run>
                 <include name="regression"/>
+                <include name="entity_issuer"/>
+                <include name="smoke"/>
             </run>
 
         </groups>
 
         <packages>
 
-            <package name="com.esgc.Tests.UI.*"/>
-            <package name="com.esgc.Tests.API.*"/>
-            <package name="com.esgc.Tests.DataValidation.*"/>
+            <package name="com.esgc.Test.UI.*"/>
+            <package name="com.esgc.Test.API.*"/>
+            <package name="com.esgc.Test.DataValidation.*"/>
 
         </packages>
 

@@ -282,7 +282,7 @@ public class Driver {
 
                     chromeOptions.addArguments("--start-maximized");
                     chromeOptions.addArguments("--disable-notifications");
-                  //  chromeOptions.addArguments("--disable-dev-shm-usage");
+                    //  chromeOptions.addArguments("--disable-dev-shm-usage");
 
                     driverPool.set(new ChromeDriver(chromeOptions));
 

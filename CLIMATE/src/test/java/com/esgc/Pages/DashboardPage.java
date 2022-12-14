@@ -62,8 +62,14 @@ public class DashboardPage extends UploadPage {
     public WebElement methodologyPopup_Link_Methodology20;
     @FindBy(xpath = "//a[@id='link-link-test-id-3']")
     public WebElement methodologyPopup_Link_RiskAssessmentts;
+
+    @FindBy(xpath = "//a[@id='link-link-test-id-3']")
+    public List<WebElement> methodologyPopup_Links;
+
     @FindBy(xpath = "//div[contains(text(),'Viewing')]")
     public WebElement regionTitleInStickyHeader;
+    @FindBy(xpath = "//div[contains(@class,'Drawer-paper')]//h2")
+    public List<WebElement> methodologySectionNames;
 
     @FindBy(xpath = "//a[text()='hide']")
     public WebElement hideLink;
@@ -79,6 +85,9 @@ public class DashboardPage extends UploadPage {
 
     @FindBy(xpath = "//button[@id='score-qualty-btn']//*[local-name()='svg']/*[local-name()='path']")
     public WebElement scoreQualityStatus;
+
+    @FindBy(xpath = "//td[@heap_id='perfchart']")
+    public List<WebElement> performanceTableRecords;
 
     @FindBy(xpath = "//td[@heap_id='perfchart']//*[local-name()='svg']/*[local-name()='rect'][1]")
     public List<WebElement> scoreQualityIconsPerformanceTable;
@@ -111,6 +120,18 @@ public class DashboardPage extends UploadPage {
     public WebElement viewBySectorBtn;
     @FindBy(xpath = "//button[.='View By Region']")
     public WebElement viewByRegionBtn;
+
+    @FindBy(xpath = "//td[contains(@id,'viewcomapnies')]/parent::tr")
+    public List<WebElement> coveragePopupRows;
+
+    @FindBy(xpath = "//td[contains(@id,'viewcomapnies')]/span/span")
+    public List<WebElement> coveragePopupCompanyNames;
+
+    @FindBy(xpath = "//h3[@heap_id='heatmap']/../../..")
+    public List<WebElement> heatmapPopupRows;
+
+    @FindBy(xpath = "//h3[@heap_id='heatmap']//span[@title]")
+    public List<WebElement> heatmapPopupCompanyNames;
 
     @FindBy(xpath = "//div[contains(@class, 'MuiTableContainer-root')]/parent::div[@id]/div[1]")
     public List<WebElement> panelClassNames;
@@ -197,6 +218,11 @@ public class DashboardPage extends UploadPage {
     @FindBy(xpath = "//ul[@role='listbox']//span[text()]")
     public List<WebElement> performanceChartDropdownOptions;
 
+    @FindBy(xpath = "//td[@heap_id='perfchart']/parent::tr")
+    public List<WebElement> performanceRows;
+
+    @FindBy(xpath = "//td[@heap_id='perfchart']//span[@title]")
+    public List<WebElement> performanceChartCompanyNames;
 
     //=========== Geographic Risk Map
 
@@ -244,6 +270,9 @@ public class DashboardPage extends UploadPage {
     @FindBy(xpath = "(//div[@id='div-mainlayout']//table)[3]//tbody//td")
     public List<WebElement> heatMapCells;
 
+    @FindBy(xpath = "//td//div[@heap_id='heatmap']/span[2]")
+    public List<WebElement> heatMapEsgScoreCells;
+
     @FindBy(xpath = "(//table[.//thead//div[text()]])[1]//*[@heap_id='heatmap']//span")
     public List<WebElement> heatMapYAxisIndicators;
 
@@ -267,6 +296,9 @@ public class DashboardPage extends UploadPage {
 
     @FindBy(xpath = "(//thead//div[text()])[2]")
     public WebElement heatMapXAxisIndicatorTitle;
+
+    @FindBy(xpath = "//div[@id='heatmapentity-test-id']//p[text()='Select two:']")
+    public WebElement selectTwoLabel;
 
     @FindBy(xpath = "//h3/following-sibling::p")
     public List<WebElement> heatMapActiveResearchLineInfo;
@@ -468,7 +500,9 @@ public class DashboardPage extends UploadPage {
     }
 
     public boolean verifyScoreQualityIconWithEntitiesInPerformanceTable() {
-        return scoreQualityIconsPerformanceTable.size() == 10;
+        int performanceTableRecordsCount = performanceTableRecords.size();
+        int recordsWithScoreQualityIcons = scoreQualityIconsPerformanceTable.size();
+        return performanceTableRecordsCount == recordsWithScoreQualityIcons;
     }
 
     public boolean verifyScoreQualityIconWithEntitiesInCoveragePopup() {
@@ -559,6 +593,7 @@ public class DashboardPage extends UploadPage {
 
     public void selectViewMethodologies() {
         //  BrowserUtils.waitForInvisibility(btnViewMethodologies, 50);
+        BrowserUtils.waitForClickablility(btnViewMethodologies, 50);
         btnViewMethodologies.click();
     }
 
@@ -958,6 +993,14 @@ public class DashboardPage extends UploadPage {
     public boolean heatmapXAxisIsAvailable(){
         try{
             return heatMapXAxisIndicatorTitle.isDisplayed();
+        }catch(Exception e){
+            return false;
+        }
+    }
+
+    public boolean validateSelectTwoStaticText(){
+        try{
+            return selectTwoLabel.isDisplayed();
         }catch(Exception e){
             return false;
         }
@@ -1373,24 +1416,16 @@ public class DashboardPage extends UploadPage {
     public void selectOneResearchLineOnHeatMap(int selection) {
         //First make sure targeted line is selected
         BrowserUtils.wait(2);
-        String color = Color.fromString(heatMapResearchLines.get(selection).getCssValue("background-color")).asHex();
-        if (!color.equals("#355b85")) heatMapResearchLines.get(selection).click();
-        System.out.println("heatMapResearchLines.size() = " + heatMapResearchLines.size());
+        selectResearchLineForHeatMap(heatMapResearchLines.get(selection).getText());
         //Then go through each button
         for (int i = 0; i < heatMapResearchLines.size(); i++) {
-            System.out.println("i = " + i);
-            //get is color
-            color = Color.fromString(heatMapResearchLines.get(i).getCssValue("background-color")).asHex();
-            //check if it is selected and it is not our targeted button
-            if (i != selection && color.equals("#355b85")) {
-                //then click to deselect it
-                waitUntilHeatMapResearchLinesAreClickable();
-                heatMapResearchLines.get(i).click();
-                BrowserUtils.wait(1);
-                System.out.println(heatMapResearchLines.get(i).getText() + " is de-selected");
+            if (heatMapResearchLines.get(i).getText().equals(heatMapResearchLines.get(selection).getText())) {
+                continue;
+            }
+            if (verifySelectedResearchLineForHeatMap(heatMapResearchLines.get(i).getText())) {
+                deselectResearchLineForHeatMap(heatMapResearchLines.get(i).getText());
             }
         }
-
     }
 
 
@@ -1426,7 +1461,17 @@ public class DashboardPage extends UploadPage {
         }
     }
 
+    public List<String> getMethodologiesSections() {
+        List<String> methodologySections = new ArrayList<>();
+        for(WebElement element: methodologySectionNames){
+            methodologySections.add(element.getText());
+        }
+        return methodologySections;
+    }
+
     public boolean verifyMethodologiesLinks() {
+
+
         try {
             assertTestCase.assertTrue(methodologyPopup_Link_Methodology10.getText().equals("Read more about ESG Assessment Methodology 1.0"), "Validate link as 'Read more about ESG Assessment Methodology 1.0'");
             assertTestCase.assertTrue(methodologyPopup_Link_Methodology20.getText().equals("Read more about ESG Assessment Methodology 2.0"), "Validate link as 'Read more about ESG Assessment Methodology 2.0'");
@@ -1442,10 +1487,15 @@ public class DashboardPage extends UploadPage {
             if (line.getText().equalsIgnoreCase(researchLine)) {
                 String color = Color.fromString(line.getCssValue("background-color")).asHex();
                 if (color.equalsIgnoreCase("#355b85")) {
+                    System.out.println("Research Line is selected: " + researchLine);
                     return true;
+                } else {
+                    System.out.println("Research Line is not selected: " + researchLine);
+                    return false;
                 }
             }
         }
+        System.out.println("Research Line not found: " + researchLine);
         return false;
     }
 
@@ -1460,6 +1510,7 @@ public class DashboardPage extends UploadPage {
             if (line.getText().equalsIgnoreCase(researchLine)) {
                 if (!verifySelectedResearchLineForHeatMap(researchLine)) {
                     line.click();
+                    System.out.println("Research line selected: " + researchLine);
                     return true;
                 } else {
                     System.out.println("Research line is already selected");
@@ -1469,6 +1520,33 @@ public class DashboardPage extends UploadPage {
         }
         System.out.println("Research line is not found");
         return false;
+    }
+
+
+    public boolean deselectResearchLineForHeatMap(String researchLine) {
+        for (WebElement line : heatMapResearchLines) {
+            if (line.getText().equalsIgnoreCase(researchLine)) {
+                while (verifySelectedResearchLineForHeatMap(researchLine)) {
+                    System.out.println("Deselecting research line : " + researchLine);
+                    line.click();
+                    BrowserUtils.wait(1);
+                }
+                System.out.println("Research line is already deselected");
+                return true;
+            }
+        }
+        System.out.println("Research line is not found");
+        return false;
+    }
+
+    public boolean verifyHeatMapTitle(String title) {
+        String xpath = "//div[@id='heatmapentity-test-id']//div[text()='"+title+"']";
+        try{
+            BrowserUtils.waitForVisibility(Driver.getDriver().findElement(By.xpath(xpath)), 30);
+        }catch(Exception e){
+            return false;
+        }
+        return true;
     }
 
     public void selectRandomCell() {

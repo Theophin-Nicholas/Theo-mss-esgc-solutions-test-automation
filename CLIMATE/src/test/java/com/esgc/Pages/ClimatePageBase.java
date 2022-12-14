@@ -132,6 +132,7 @@ public abstract class ClimatePageBase extends PageBase {
      * Selects sample portfolio (default portfolio for all users) from portfolio selection modal
      */
     public void selectSamplePortfolioFromPortfolioSelectionModal() {
+        System.out.println("Selecting Sample Portfolio");
         wait.until(ExpectedConditions.visibilityOfAllElements(portfolioSelectionButton));
         if (portfolioSelectionButton.getAttribute("title").equals("Sample Portfolio")) return;
         clickPortfolioSelectionButton();
@@ -285,7 +286,7 @@ public abstract class ClimatePageBase extends PageBase {
      * @param option   - should be a presented option under dropdown
      */
     public void selectOptionFromFiltersDropdown(String dropdown, String option) {
-
+        System.out.println("Selecting " + option + " from " + dropdown + " dropdown");
         WebElement element = null;
         String elementTitle = null;
         switch (dropdown) {
