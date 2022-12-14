@@ -86,6 +86,9 @@ public class DashboardPage extends UploadPage {
     @FindBy(xpath = "//button[@id='score-qualty-btn']//*[local-name()='svg']/*[local-name()='path']")
     public WebElement scoreQualityStatus;
 
+    @FindBy(xpath = "//td[@heap_id='perfchart']")
+    public List<WebElement> performanceTableRecords;
+
     @FindBy(xpath = "//td[@heap_id='perfchart']//*[local-name()='svg']/*[local-name()='rect'][1]")
     public List<WebElement> scoreQualityIconsPerformanceTable;
 
@@ -497,7 +500,9 @@ public class DashboardPage extends UploadPage {
     }
 
     public boolean verifyScoreQualityIconWithEntitiesInPerformanceTable() {
-        return scoreQualityIconsPerformanceTable.size() == 10;
+        int performanceTableRecordsCount = performanceTableRecords.size();
+        int recordsWithScoreQualityIcons = scoreQualityIconsPerformanceTable.size();
+        return performanceTableRecordsCount == recordsWithScoreQualityIcons;
     }
 
     public boolean verifyScoreQualityIconWithEntitiesInCoveragePopup() {
