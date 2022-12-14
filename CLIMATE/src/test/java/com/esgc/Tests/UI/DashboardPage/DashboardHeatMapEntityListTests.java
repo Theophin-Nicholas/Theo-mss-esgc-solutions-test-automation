@@ -10,6 +10,7 @@ import com.esgc.Pages.ResearchLinePage;
 import com.esgc.Tests.TestBases.Descriptions;
 import com.esgc.Tests.TestBases.UITestBase;
 import com.esgc.Utilities.*;
+import com.esgc.Utilities.Database.DatabaseDriver;
 import com.esgc.Utilities.Database.PortfolioQueries;
 import io.restassured.response.Response;
 import org.openqa.selenium.By;
@@ -501,7 +502,7 @@ public class DashboardHeatMapEntityListTests extends UITestBase {
         }
     }
 
-    @Test(groups = {"dashboard", "ui"})
+    @Test(groups = {"dashboard", "ui", "regression"})
     @Xray(test = {9394, 9400})
     public void verifyUnderlyingDataForHeatMapCellsTest() {
         DashboardPage dashboardPage = new DashboardPage();
@@ -583,7 +584,7 @@ public class DashboardHeatMapEntityListTests extends UITestBase {
         BrowserUtils.scrollTo(dashboardPage.heatMapResearchLines.get(0));
 
         //Verify the entity list - Entity list should be displaying no records
-        assertTestCase.assertTrue(dashboardPage.heatMapNoEntityWidget.isDisplayed(),
+        assertTestCase.assertFalse(dashboardPage.isHeatMapEntityListDrawerDisplayed(),
                 "Verified the widget doesn't show anything before a cell is selected.");
 
         //verify esg score research line is the first one in row
@@ -627,13 +628,12 @@ public class DashboardHeatMapEntityListTests extends UITestBase {
         DashboardPage dashboardPage = new DashboardPage();
         BrowserUtils.waitForVisibility(dashboardPage.verifyPortfolioName, 20);
 
-        if (!dashboardPage.verifyPortfolioName.getText().equalsIgnoreCase("Sample Portfolio"))
-            dashboardPage.selectPortfolioByNameFromPortfolioSelectionModal("Sample Portfolio");
+        dashboardPage.selectSamplePortfolioFromPortfolioSelectionModal();
 
         String summaryEsgScoreValue = dashboardPage.esgScoreValue.getText();
 
         BrowserUtils.scrollTo(dashboardPage.heatMapResearchLines.get(0));
-        assertTestCase.assertTrue(dashboardPage.heatMapNoEntityWidget.isDisplayed(),
+        assertTestCase.assertFalse(dashboardPage.isHeatMapEntityListDrawerDisplayed(),
                 "Verified the widget doesn't show anything before a cell is selected.");
 
         String heatmapEsgScoreValue = dashboardPage.getHeatMapPortfolioAverage();
