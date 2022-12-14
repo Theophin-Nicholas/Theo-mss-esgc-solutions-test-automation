@@ -11,7 +11,7 @@ import java.util.Map;
 
 public class EsgMaterialityDataValidation extends DataValidationTestBase {
 
-    @Test(groups = {"entity_climate_profile", "regression", "ui", "smoke"})
+    @Test(groups = {"entity_climate_profile", "regression", "ui"})
     @Xray(test = {9367, 9368, 9375, 8451, 8428, 8869})
     public void validateEsgMaterialityMatrix() {
 

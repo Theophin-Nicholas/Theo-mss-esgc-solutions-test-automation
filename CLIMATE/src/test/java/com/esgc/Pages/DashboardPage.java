@@ -259,10 +259,10 @@ public class DashboardPage extends UploadPage {
     @FindBy(xpath = "(//div[@id='div-mainlayout']//table)[4]//tbody//td//span[2]")
     public List<WebElement> heatMapXAxisIndicatorPercentages;
 
-    @FindBy(xpath = "(//div[@id='div-mainlayout']//table)[2]//thead//td")
+    @FindBy(xpath = "(//thead//div[text()])[1]")
     public WebElement heatMapYAxisIndicatorTitle;
 
-    @FindBy(xpath = "(//div[@id='div-mainlayout']//table)[4]//thead//td")
+    @FindBy(xpath = "(//thead//div[text()])[2]")
     public WebElement heatMapXAxisIndicatorTitle;
 
     @FindBy(xpath = "//h3/following-sibling::p")
@@ -648,7 +648,8 @@ public class DashboardPage extends UploadPage {
 
     public List<String> getPerformanceChartDropdownOptions() {
         BrowserUtils.scrollTo(performanceChartDropdown);
-        wait.until(ExpectedConditions.elementToBeClickable(performanceChartDropdown)).click();
+        wait.until(ExpectedConditions.elementToBeClickable(performanceChartDropdown));
+        new Actions(Driver.getDriver()).moveToElement(performanceChartDropdown).pause(2000).click(performanceChartDropdown).pause(2000).build().perform();
         BrowserUtils.wait(2);
         wait.until(ExpectedConditions.visibilityOfAllElements(performanceChartDropdownOptions));
         System.out.println("performanceChartDropdownOptions " + performanceChartDropdownOptions.size());
@@ -1069,9 +1070,10 @@ public class DashboardPage extends UploadPage {
             WebElement element = Driver.getDriver().findElement(By.xpath(xpath));
             String colText = BrowserUtils.waitForClickablility(element, 30).getText();
             element.click();
-
-            BrowserUtils.waitForVisibility(Driver.getDriver().findElement(By.xpath("//*[contains(text(),'" + colText + "')]")), 30);
-            Driver.getDriver().findElement(By.xpath("//span[text()='X'] | //span[@class='close'] | //div[@role='dialog']/div/div[2]")).click();
+//TODO better approach needed
+            BrowserUtils.waitForVisibility(Driver.getDriver().findElement(By.xpath("//*[contains(text(),\"" + colText + "\")]")), 30);
+            Driver.getDriver().findElement(By.xpath("//*[text()='ESC']/following-sibling::* | //span[text()='X'] | //span[@class='close'] | //div[@role='dialog']/div/div[2]")).click();
+                    //""//"//span[text()='X'] | //span[@class='close'] | //div[@role='dialog']/div/div[2]")).click();
             return true;
         } catch (Exception e) {
             e.printStackTrace();
@@ -1263,7 +1265,8 @@ public class DashboardPage extends UploadPage {
 
             assertTestCase.assertTrue(DateTimeUtilities.isValidDate(controversiesTableDates.get(i).getText()), "Validate Date in table");
 
-            assertTestCase.assertTrue(SectorUtilities.isMESGSector(controversiesTableSectors.get(i).getText()), "Verify Sector");
+            String controversySector = controversiesTableSectors.get(i).getText();
+            assertTestCase.assertTrue(SectorUtilities.isMESGSector(controversySector), "Verify Sector=" + controversySector);
 
             assertTestCase.assertFalse(controversiesTableCompanyNames.get(i).getText().isEmpty(), "Verify Company Name");
 
