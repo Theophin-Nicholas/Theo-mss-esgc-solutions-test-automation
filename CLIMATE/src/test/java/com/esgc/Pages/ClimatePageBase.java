@@ -125,6 +125,11 @@ public abstract class ClimatePageBase extends PageBase {
         List<WebElement> list =
                 portfolioCards.stream().filter(e -> e.getText().substring(0, e.getText().length() - 11).equals(portfolioName))
                         .collect(Collectors.toList());
+        if(list.size() == 0) {
+            System.out.println("Portfolio with name " + portfolioName + " is not found");
+            clickAwayinBlankArea();
+            return;
+        }
         list.get(list.size() - 1).click();
     }
 

@@ -8,6 +8,8 @@ public class Investment {
     double investment_pct;
     String orbis_id;
     int order;
+    String parent_company_name;
+    String parent_orbis_id;
     int rank;
-
+    String score_quality;
 }

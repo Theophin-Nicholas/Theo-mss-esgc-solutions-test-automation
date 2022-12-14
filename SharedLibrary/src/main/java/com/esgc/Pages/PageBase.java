@@ -145,7 +145,7 @@ public abstract class PageBase {
     @FindBy(xpath = "(//table[@id='table-id'])/tbody/tr/td[1]/div/span")
     public List<WebElement> portfolioEntityList;
 
-    @FindBy(xpath = "//div[@role='dialog']/div/div/li")
+    @FindBy(xpath = "//div[@role='dialog']//li/span[1]")
     public WebElement portfolioEntityName;
 
     @FindBy(css = "svg > path[fill-rule='evenodd'][fill='#b8b8b8']")
