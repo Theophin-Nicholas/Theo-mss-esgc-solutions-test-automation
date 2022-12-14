@@ -16,9 +16,8 @@ import java.util.Set;
 public class RegulatoryReportingPageTests extends UITestBase {
     RegulatoryReportingPage reportingPage = new RegulatoryReportingPage();
 
-    @Test(groups = {"regression", "ui", "regulatoryReporting"}, description = "Verify that user can navigate to Regulatory Reporting page")
-//, "smoke"
-    @Xray(test = {10693, 10694, 10709, 10710, 10743, 10744, 10745, 10865})
+    @Test(groups = {"regression", "ui", "regulatoryReporting", "smoke"}, description = "Verify that user can navigate to Regulatory Reporting page")
+    @Xray(test = {10693, 10694, 10709, 10710, 10743, 10744, 10745, 10851, 10865})
     public void verifyReportingListTest() {
         DashboardPage dashboardPage = new DashboardPage();
         dashboardPage.clickMenu();
@@ -49,6 +48,9 @@ public class RegulatoryReportingPageTests extends UITestBase {
                 "SFDR PAIs is not selected");
         assertTestCase.assertTrue(reportingPage.isSelectedReportingOptionByName("EU Taxonomy"),
                 "EU Taxonomy is selected");
+        assertTestCase.assertTrue(reportingPage.interimReportsOption.isDisplayed(),"Interim Reports option is displayed");
+        assertTestCase.assertTrue(reportingPage.annualReportsOption.isEnabled(),"Annual Reports option is enabled");
+        assertTestCase.assertTrue(reportingPage.useLatestDataOption.isDisplayed(),"Use Latest Data option is displayed");
     }
 
     @Test(groups = {"regression", "ui", "regulatoryReporting"}, description = "Verify user portfolio list on regulatory reporting page")
@@ -269,8 +271,8 @@ public class RegulatoryReportingPageTests extends UITestBase {
         assertTestCase.assertTrue(reportingPage.isAnnualReportsSelected(), "Annual reports toggle is selected");
     }
 
-    @Test(groups = {"regression", "ui", "regulatoryReporting"}, description = "UI | Regulatory Reporting | Download | Verify Create Reports Button is Clickable")
-    @Xray(test = {11333, 11334, 11350, 11370, 11402})
+    @Test(groups = {"regression", "ui", "regulatoryReporting", "smoke"}, description = "UI | Regulatory Reporting | Download | Verify Create Reports Button is Clickable")
+    @Xray(test = {10849, 11333, 11334, 11350, 11370, 11402})
     public void verifyCreateReportsButtonWorksTest() {
         DashboardPage dashboardPage = new DashboardPage();
         dashboardPage.navigateToPageFromMenu("Regulatory Reporting");
