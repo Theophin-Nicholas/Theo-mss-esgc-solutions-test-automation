@@ -1,13 +1,16 @@
 package com.esgc.Pages;
 
+import com.esgc.Controllers.RegulatoryReportingAPIController;
 import com.esgc.Utilities.*;
-import org.openqa.selenium.By;
+import com.esgc.Utilities.Database.RegulatoryReportingQueries;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 
 public class RegulatoryReportingPage extends UploadPage {
@@ -27,7 +30,7 @@ public class RegulatoryReportingPage extends UploadPage {
     @FindBy(xpath = "//div[.='Reporting']/following-sibling::div//input")
     public List<WebElement> reportingRadioButtonList;
 
-    @FindBy(xpath = "//div[.='Select Portfolios']/following-sibling::div//span[2]")
+    @FindBy(xpath = "//div[.='Select Portfolios']/following-sibling::div//label")
     public List<WebElement> portfolioNamesList;
 
     @FindBy(xpath = "//div[.='Select Portfolios']/following-sibling::div//label//input")
@@ -42,6 +45,9 @@ public class RegulatoryReportingPage extends UploadPage {
     @FindBy(xpath = "//div[.='Reporting for']/../following-sibling::div/div[4]")
     public List<WebElement> reportingForList;
 
+    @FindBy(xpath = "//div[.='Reporting for']/../following-sibling::div//button")
+    public List<WebElement> reportingForListButtons;
+
     @FindBy(xpath = "//ul[@role='listbox']//li")
     public List<WebElement> reportingForDropdownOptionsList;
 
@@ -50,6 +56,9 @@ public class RegulatoryReportingPage extends UploadPage {
 
     @FindBy(id = "button-download-test-id-1")
     public WebElement createReportsButton;
+
+    @FindBy(xpath = "//div[.='Reporting Options']")
+    public WebElement reportingOptionsTitle;
 
     @FindBy(id = "interim")
     public WebElement interimReportsOption;
@@ -68,6 +77,16 @@ public class RegulatoryReportingPage extends UploadPage {
 
     @FindBy(xpath = "//*[@id='latest']//input")
     public WebElement useLatestDataToggleButton;
+
+    @FindBy(xpath = "//*[@id='interim']/../following-sibling::div")
+    public WebElement interimOptionSubtitle;
+
+    @FindBy(xpath = "//*[@id='annual']/../following-sibling::div")
+    public WebElement annualOptionSubtitle;
+
+    @FindBy(xpath = "//*[@id='latest']/../following-sibling::div")
+    public WebElement useLatestDataOptionSubtitle;
+
 
     //Regulatory Reorting Status Page Elements
     @FindBy(xpath = "//h3")
@@ -130,6 +149,7 @@ public class RegulatoryReportingPage extends UploadPage {
 
     //select portfolio option by name
     public void selectPortfolioOptionByName(String name) {
+        System.out.println("Index = " + getPortfolioList().indexOf(name));
         portfolioRadioButtonList.get(getPortfolioList().indexOf(name)).click();
     }
 
@@ -195,6 +215,13 @@ public class RegulatoryReportingPage extends UploadPage {
         }
     }
 
+    public void selectAnnualReports(String Year) {
+        for (String element : getSelectedPortfolioOptions()) {
+            selectReportingFor(element, Year);
+        }
+        selectAnnualReports();
+    }
+
     //select use latest data
     public void selectUseLatestData() {
         if (!isUseLatestDataSelected()) {
@@ -235,17 +262,24 @@ public class RegulatoryReportingPage extends UploadPage {
         return useLatestDataToggleButton.isSelected();
     }
 
-    public boolean isNewTabOpened() {
+    public boolean verifyNewTabOpened(String currentWindowHandle) {
         BrowserUtils.wait(2);
-        String currentTab = BrowserUtils.getCurrentWindowHandle();
-        for (String tab : BrowserUtils.getWindowHandles()) {
-            if (!tab.equals(currentTab)) {
-                BrowserUtils.switchWindowsTo(tab);
-                return rrStatusPage_ReportGeneratingMessage.isDisplayed();
-            }
-        }
-        System.out.println("Number of Windows = " + BrowserUtils.getWindowHandles().size());
-        return false;
+        BrowserUtils.switchWindowsTo(currentWindowHandle);
+        return rrStatusPage_ReportGeneratingMessage.isDisplayed();
+
+//        for(String tab:BrowserUtils.getWindowHandles()){
+//            if(tab.equals(currentWindowHandle)) {
+//
+//            }
+//            BrowserUtils.switchWindowsTo(tab);
+//            System.out.println("Switched to new tab");
+////            try {
+//                return rrStatusPage_ReportGeneratingMessage.isDisplayed();
+////            } catch (Exception e) {
+////                continue;
+////            }
+//        }
+//        return false;
     }
 
     public List<String> getSelectedPortfolioOptions() {
@@ -255,6 +289,7 @@ public class RegulatoryReportingPage extends UploadPage {
                 selectedPortfolioOptions.add(portfolioNamesList.get(i).getText());
             }
         }
+        System.out.println("selectedPortfolioOptions = " + selectedPortfolioOptions);
         return selectedPortfolioOptions;
     }
 
@@ -263,31 +298,52 @@ public class RegulatoryReportingPage extends UploadPage {
             if (rrStatusPage_PortfoliosList.size() == 0) BrowserUtils.wait(1);
             else break;
         }
-        for (String element : selectedPortfolios) {
-            if (!isHave(element, rrStatusPage_PortfoliosList)) {
-                return false;
-            }
-        }
+        List<String> readyToDownloadPortfolios = BrowserUtils.getElementsText(rrStatusPage_PortfoliosList);
+        if (readyToDownloadPortfolios.get(0).contains("SFDR_Annual_" + DateTimeUtilities.getCurrentDate("MM_dd_yyyy")))
+            return true;
+        isContainsElements(readyToDownloadPortfolios, selectedPortfolios);
         return rrStatusPage_DownloadButton.isDisplayed();
     }
 
-    public boolean isHave(String element, List<WebElement> list) {
-        for (WebElement webElement : list) {
-            if (webElement.getText().contains(element)) {
-                System.out.println("Element is present");
-                return true;
+    public boolean verifyReportsReadyToDownload() {//This method is used for if annual reports option is selected
+        List<String> list = new ArrayList<>(Arrays.asList("SFDR_Annual_" + DateTimeUtilities.getCurrentDate("MM_dd_yyyy")));
+        return verifyReportsReadyToDownload(list);
+    }
+
+    public boolean isContainsElements(List<String> list1, List<String> list2) {
+        for (String element2 : list2) {
+            boolean check = false;
+            for (String element1 : list1) {
+                if (element1.contains(element2)) {
+                    check = true;
+                    break;
+                }
+            }
+            if (!check) {
+                System.out.println("Element " + element2 + " is not found in the list");
+                System.out.println("list1 = " + list1);
+                return false;
             }
         }
-        System.out.println("Element is not present");
-        return false;
+        return true;
     }
 
     public boolean verifyIfReportsDownloaded() {
-        rrStatusPage_DownloadButton.click();
+        return verifyIfReportsDownloaded(true);
+    }
+
+    public boolean verifyIfReportsDownloaded(boolean clickDownload) {
+        if (clickDownload) rrStatusPage_DownloadButton.click();
         BrowserUtils.wait(10);
         File dir = new File(BrowserUtils.downloadPath());
         File[] dir_contents = dir.listFiles();
-        return Arrays.asList(dir_contents).stream().filter(e -> (e.getName().startsWith("SFDR")&&e.getName().contains(DateTimeUtilities.getCurrentDate("MM_dd_yyyy")))).findAny().isPresent();
+        if (dir_contents == null) {
+            System.out.println("No files in the directory");
+            return false;
+        }
+        return Arrays.stream(dir_contents).anyMatch(e -> (e.getName().startsWith("SFDR") &&
+                e.getName().contains(DateTimeUtilities.getCurrentDate("MM_dd_yyyy")) &&
+                e.getName().endsWith(".zip")));
     }
 
     public boolean verifyPortfolio(String portfolioName) {
@@ -303,12 +359,14 @@ public class RegulatoryReportingPage extends UploadPage {
     }
 
     public void selectReportingFor(String portfolioName, String reportingYear) {
+        if (isUseLatestDataSelected()) deselectUseLatestData();
         //go through portfolios list
         for (int i = 0; i < portfolioNamesList.size(); i++) {
             //find the portfolio
-            if(portfolioNamesList.get(i).getText().equals(portfolioName)){
+            if (portfolioNamesList.get(i).getText().equals(portfolioName)) {
                 //verify if portfolio is selected
-                if(!isPortfolioSelected(portfolioName)){
+                if (!isPortfolioSelected(portfolioName)) {
+                    System.out.println("Selecting portfolio " + portfolioName);
                     selectPortfolioOptionByName(portfolioName);
                 }
                 //click on reporting for dropdown
@@ -316,18 +374,137 @@ public class RegulatoryReportingPage extends UploadPage {
                 //select reporting year
                 selectReportingYear(reportingYear);
             }
-
         }
     }
 
     public void selectReportingYear(String reportingYear) {
-        if(reportingForDropdownOptionsList.size()==0)
+        if (reportingForDropdownOptionsList.size() == 0)
             System.out.println("A reporting for option must be clicked before this");
         for (WebElement element : reportingForDropdownOptionsList) {
+            System.out.println("element.getText() = " + element.getText());
             if (element.getText().equals(reportingYear)) {
+                System.out.println("Year for selected portfolio found");
                 element.click();
-                break;
+                return;
             }
         }
+        System.out.println("Year for selected portfolio not found");
+    }
+
+    public boolean unzipReports() {
+        verifyIfReportsDownloaded(false);
+        File dir = new File(BrowserUtils.downloadPath());
+        File[] dir_contents = dir.listFiles();
+        String zipFilePath = Arrays.asList(dir_contents).stream().filter(e -> (e.getName().startsWith("SFDR") &&
+                e.getName().contains(DateTimeUtilities.getCurrentDate("MM_dd_yyyy")) &&
+                e.getName().endsWith(".zip"))).findAny().get().getAbsolutePath();
+        System.out.println("zipFilePath = " + zipFilePath);
+        String destDirectory = BrowserUtils.downloadPath();
+        System.out.println("destDirectory = " + destDirectory);
+        UnzipUtil unZipper = new UnzipUtil();
+        try {
+            unZipper.unzip(zipFilePath, destDirectory);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        for (String file : BrowserUtils.getElementsText(rrStatusPage_PortfoliosList)) {
+            String excelName = file.replaceAll("ready", "").trim();
+            System.out.println("excelName = " + excelName);
+            File excelFile = new File(destDirectory + "/" + excelName);
+            System.out.println("excelFile = " + excelFile.getAbsolutePath());
+            if (!excelFile.exists()) return false;
+        }
+        return true;
+    }
+
+    public void deleteFilesInDownloadsFolder() {
+        File dir = new File(BrowserUtils.downloadPath());
+        File[] dir_contents = dir.listFiles();
+        if (dir_contents == null) {
+            System.out.println("No files in the directory");
+            return;
+        }
+        for (File file : dir_contents) {
+            file.delete();
+        }
+        System.out.println("All files in the directory are deleted");
+    }
+
+    public boolean verifyReportsContent(List<String> selectedPortfolios) {
+        for (String portfolio : selectedPortfolios) {
+            String excelName = portfolio.replaceAll("ready", "").trim();
+            System.out.println("Verifying reports content for " + excelName);
+            ExcelUtil excelData = getExcelData(excelName, 1);
+//            System.out.println("excelData = " + excelData.getColumnsNames());
+            RegulatoryReportingAPIController apiController = new RegulatoryReportingAPIController();
+            String portfolioId = apiController.getPortfolioId(excelName);
+            System.out.println("portfolioId = " + portfolioId);
+            RegulatoryReportingQueries queries = new RegulatoryReportingQueries();
+            List<Map<String, Object>> dbData = queries.getCompanyLevelOutput(portfolioId, "latest_data");
+            for (Map<String, Object> row : dbData) {
+                List<String> checkValues = new ArrayList<>(Arrays.asList("COMPANY_NAME", "VE_ID", "FACTSET_ID", "HIGH_IMPACT_CHK",
+                       //column names
+                       "Adverse sustainability indicator","Average Impact Q1-Q2-Q3-Q4","Impact Portfolio 1","Scope of Disclosure Portfolio 1",
+                        "Impact Portfolio 2","Scope of Disclosure Portfolio 2","Impact Portfolio 3","Scope of Disclosure Portfolio 3",
+                        "Impact Portfolio 4","Scope of Disclosure Portfolio 4"));
+                for (String data : checkValues) {
+                    if (data == null) continue;
+                    if (!excelData.searchData((row.get(data).toString()))) {
+                        System.out.println("Data " + row.get(data).toString() + " is not found in the excel");
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
+    }
+
+    public boolean verifyReportsContentForAnnualReports(List<String> selectedPortfolios) {
+        String excelName = rrStatusPage_PortfoliosList.get(0).getText().replaceAll("ready", "").trim();
+        for (int i = 0; i < selectedPortfolios.size(); i++) {
+            ExcelUtil excelData = getExcelData(excelName, i + 1);
+            RegulatoryReportingAPIController apiController = new RegulatoryReportingAPIController();
+            String portfolioId = apiController.getPortfolioId(selectedPortfolios.get(i));
+            System.out.println("portfolioId = " + portfolioId);
+            RegulatoryReportingQueries queries = new RegulatoryReportingQueries();
+            List<Map<String, Object>> dbData = queries.getCompanyLevelOutput(portfolioId, "latest_data");
+            for (Map<String, Object> row : dbData) {
+                List<String> checkValues = new ArrayList<>(Arrays.asList("COMPANY_NAME", "VE_ID", "FACTSET_ID", "HIGH_IMPACT_CHK"));
+                for (String data : checkValues) {
+                    if (data == null) continue;
+                    if (!excelData.searchData((row.get(data).toString()))) {
+                        System.out.println("Data " + row.get(data).toString() + " is not found in the excel");
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
+    }
+
+    public ExcelUtil getExcelData(String excelName, int sheetIndex) {
+        File dir = new File(BrowserUtils.downloadPath());
+        File[] dir_contents = dir.listFiles();
+        assert dir_contents != null;
+        File excelFile = Arrays.stream(dir_contents).filter(e -> (e.getName().contains(excelName))).findAny().get();
+        System.out.println("excelFile = " + excelFile.getAbsolutePath());
+        if (!excelFile.exists()) {
+            System.out.println(excelName + " file does not exist");
+            return null;
+        }
+        System.out.println(excelName + " file found");
+        System.out.println("excelFile = " + excelFile.getAbsolutePath());
+        ExcelUtil excelUtil = new ExcelUtil(excelFile.getAbsolutePath(), sheetIndex);
+        return excelUtil;
+    }
+
+    public boolean verifyReportsContentForData(List<String> selectedPortfolios, int sheetIndex, String data) {
+        String excelName = rrStatusPage_PortfoliosList.get(0).getText().replaceAll("ready", "").trim();
+        System.out.println("Verifying reports content for " + excelName);
+        ExcelUtil excelData = getExcelData(excelName, sheetIndex);
+        if (!excelData.searchData(data)) {
+            System.out.println("Data " + data + " is not found in the excel");
+        }
+        return excelData.searchData(data);
     }
 }
