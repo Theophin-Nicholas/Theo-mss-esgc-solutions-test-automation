@@ -2,12 +2,18 @@ package com.esgc.Pages;
 
 import com.esgc.Test.TestBases.EntityIssuerPageDataValidationTestBase;
 import com.esgc.Test.TestBases.EntityPageTestBase;
+import com.esgc.Test.TestBases.IssuerDataProviderClass;
 import com.esgc.Utilities.ConfigurationReader;
 import com.esgc.Utilities.Environment;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class LoginPageIssuer extends PageBase{
     @FindBy(id = "input-termsandconditions")
@@ -25,22 +31,22 @@ public class LoginPageIssuer extends PageBase{
     @FindBy(id = "okta-signin-submit")
     public WebElement loginButton;
 
+    public static String OrbisID = "";
+
     public void entityIssuerLogin() {
+        IssuerDataProviderClass credentials = new IssuerDataProviderClass();
+        Map<String,String> params = new HashMap<>();
         System.out.println("entityIssuerLogin started");
         if ( EntityPageTestBase.isP3Test || EntityIssuerPageDataValidationTestBase.isP3Test) {
-            System.out.println("Environment.ISSUER_USERNAMEP3 = " + Environment.ISSUER_USERNAMEP3);
-            wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.ISSUER_USERNAMEP3, Keys.ENTER);
+            params.put("Page","P3");
         } else {
-            System.out.println("Environment.ISSUER_USERNAME = " + Environment.ISSUER_USERNAME);
-            wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.ISSUER_USERNAME, Keys.ENTER);
+            params.put("Page","P2");
         }
-
-        wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.ISSUER_PASSWORD);
-        String env = ConfigurationReader.getProperty("environment");
-       /* if  (env.equals("prod")) {
-        if (!termsAndConditionsCheckBox.isSelected())
-            wait.until(ExpectedConditions.visibilityOf(termsAndConditionsLabel)).click();
-        }*/
+        params.put("Entitlement","Login");
+        Object[][] credntial = credentials.getData(params,Arrays.asList(new String[]{"UserName","Password","OrbisID"}));
+        wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(credntial[0][0].toString(), Keys.ENTER);
+        wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(credntial[0][1].toString());
+        OrbisID = credntial[0][2].toString() ;
         wait.until(ExpectedConditions.visibilityOf(loginButton)).click();
     }
 
@@ -56,4 +62,6 @@ public class LoginPageIssuer extends PageBase{
             wait.until(ExpectedConditions.visibilityOf(termsAndConditionsLabel)).click();*/
         wait.until(ExpectedConditions.visibilityOf(loginButton)).click();
     }
+
+
 }

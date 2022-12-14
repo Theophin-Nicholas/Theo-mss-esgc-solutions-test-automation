@@ -124,6 +124,9 @@ public class EntityIssuerPage extends PageBase {
     @FindBy(xpath = "//button//div[contains(text(),'Add a URL')]")
     public WebElement buttonAddURL;
 
+    @FindBy (xpath = "//p[@id='name-helper-text']")
+    public WebElement wrongURLMessage;
+
     @FindBy(xpath = "//div[@role='button']")
     public WebElement DocumentType;
 
@@ -235,6 +238,9 @@ public class EntityIssuerPage extends PageBase {
 
     @FindBy(xpath = "//div[normalize-space()='Scoring Methodology']/following-sibling::div")
     public WebElement ScoringMethodologyText;
+
+    @FindBy(xpath="//div[@id='sourceDocErrors']")
+    public WebElement sourceDocErrors ;
 
     //esgSubCategory
     @FindBy(xpath = "//span[normalize-space()='ESG Materiality']")
@@ -476,7 +482,7 @@ public class EntityIssuerPage extends PageBase {
             // BrowserUtils.wait(1);
         }
         for(int j=0; j<subHeadersDIVs.size(); j++){
-            List<WebElement> a = subHeadersDIVs.get(0).findElements(By.xpath("div"));
+            List<WebElement> a = subHeadersDIVs.get(j).findElements(By.xpath("div"));
             if (j==0){
                 assertTestCase.assertTrue(a.size()==3);
             }else{
@@ -601,8 +607,8 @@ public class EntityIssuerPage extends PageBase {
         boolean ModalPopUpCheck = true;
         List<WebElement> SubcategoriesSectors = Driver.getDriver().findElements(By.xpath("//table/thead//th[text()='" + Subcategories + "']//..//..//../tbody//tr"));
         Actions action = new Actions(Driver.getDriver());
-        boolean checkData = Driver.getDriver().findElements(By.xpath("//table/thead//th[text()='" + Subcategories + "']//..//..//../tbody//tr[0]//td[1]")).size() > 0;
-        System.out.println("checkData = " + checkData);
+       // boolean checkData = Driver.getDriver().findElements(By.xpath("//table/thead//th[text()='" + Subcategories + "']//..//..//../tbody//tr[0]//td[1]")).size() > 0;
+        //System.out.println("checkData = " + checkData);
 
         for (int i = 1; i <= SubcategoriesSectors.size(); i++) {
             WebElement SubcategoriesSector = Driver.getDriver().findElement(By.xpath("//table/thead//th[text()='" + Subcategories + "']//..//..//../tbody//tr[" + i + "]//td[1]"));
@@ -611,7 +617,9 @@ public class EntityIssuerPage extends PageBase {
 
             action.moveToElement(SubcategoriesSector).click().perform();
             BrowserUtils.wait(2);
-            if (checkData) {
+
+
+            if (Driver.getDriver().findElements(By.xpath("//div[text()='No information available.']")).size()==0) {
 
                 if (modalDialog.isDisplayed()) {
                     String t = modalDialogTitle.getText();
@@ -633,8 +641,8 @@ public class EntityIssuerPage extends PageBase {
             } else {
                 ModalPopUpCheck = true;
                 pressESCKey();
-               /* logout.click();
-                throw new SkipException("No Data available");*/
+               //* logout.click();
+                throw new SkipException("No Data available");//*
             }
         }
         return ModalPopUpCheck;
@@ -644,7 +652,7 @@ public class EntityIssuerPage extends PageBase {
     public void ClickOnaddMissingDocuments() {
         System.out.println("addMissingdDocumentsButton.isDisplayed() = " + addMissingdDocumentsButton.isDisplayed());
         assertTestCase.assertTrue(addMissingdDocumentsButton.getText().equals("Add Information"), "Validating Add Information Button text");
-        addMissingdDocumentsButton.click();
+        BrowserUtils.waitForVisibility(addMissingdDocumentsButton,5).click();
     }
 
     public void validateopupWindowOpenStatus() {
@@ -655,10 +663,11 @@ public class EntityIssuerPage extends PageBase {
     }
 
 
+
     public void addURL(String url, Boolean disclosureRatioAvailable) {
         PopUpWindowURL.sendKeys(url);
         System.out.println(DocumentType.getText());
-        BrowserUtils.wait(1);
+        BrowserUtils.wait(5);
         DocumentType.click();
         List<WebElement> options = listofDocumentType.findElements(By.tagName("li"));
         for (WebElement option : options) {
@@ -684,6 +693,8 @@ public class EntityIssuerPage extends PageBase {
 
 
     }
+
+
 
     public void validateAssignedCategories() {
         List<String> listofAssignedcategories = new ArrayList(Arrays.asList(
@@ -742,10 +753,14 @@ public class EntityIssuerPage extends PageBase {
     public void validateWrongURL() {
         String wrongURL = "xyz";
         PopUpWindowURL.sendKeys(wrongURL);
-        assertTestCase.assertTrue(errorMessage.getText().equals("URL invalid"), "Validate the URL");
+        assertTestCase.assertTrue(wrongURLMessage.getText().equals("URL invalid"), "Validate the URL");
         for (int i = 0; i < wrongURL.length(); i++) {
             PopUpWindowURL.sendKeys(Keys.BACK_SPACE);
         }
+    }
+
+    public void validateURL() {
+        assertTestCase.assertTrue(wrongURLMessage.getText().equals("URL should be valid and publicly accessible"), "Validate the URL");
     }
 
     public void validatePopupClose() {
@@ -772,7 +787,7 @@ public class EntityIssuerPage extends PageBase {
 
     public void validateURLDelete(String url) {
         buttonUrlDelete.click();
-        assertTestCase.assertTrue(headerDeleteDocument.isDisplayed(), "Validate if Header is available in Delete document window");
+        assertTestCase.assertTrue(BrowserUtils.waitForVisibility(headerDeleteDocument,5).isDisplayed(), "Validate if Header is available in Delete document window");
         buttonNokeepThisDocument.click();
         WebElement gridItem = Driver.getDriver().findElement(By.xpath("//div[normalize-space()='" + url + "']"));
         assertTestCase.assertTrue(gridItem.isDisplayed(), "Validate if added URL is still available in list");
@@ -811,6 +826,11 @@ public class EntityIssuerPage extends PageBase {
     }
 
     public void validateSourceDocumentWidgetIsAvailable() {
+        boolean noDocument = Driver.getDriver().findElements(xpath("//*[contains(text(),'No source documents available.')]")).size() > 0;
+        if (noDocument) {
+            logout.click();
+            throw new SkipException("No source documents available.");
+        }
         assertTestCase.assertTrue(wait.until(ExpectedConditions.visibilityOf(headingSourceDocuments)).isDisplayed(),
                 "Validate if 'header 2020 Source Documents' is displayed");
         assertTestCase.assertTrue(wait.until(ExpectedConditions.visibilityOf(linkDocuments.get(0))).isDisplayed(), "Validate if document links are available");
@@ -828,7 +848,7 @@ public class EntityIssuerPage extends PageBase {
         WebDriver driver = Driver.getDriver();
         wait.until(ExpectedConditions.visibilityOf(element)).isDisplayed();
         String mainWindowHandler = driver.getWindowHandle();
-        element.click();
+        BrowserUtils.waitForVisibility(element,5).click();
         Set<String> allWindowHandles = driver.getWindowHandles();
         Iterator<String> iterator = allWindowHandles.iterator();
         while (iterator.hasNext()) {
