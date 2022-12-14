@@ -3,18 +3,12 @@ package com.esgc.Tests.UI.DashboardPage;
 import com.esgc.Pages.DashboardPage;
 import com.esgc.Pages.EntityClimateProfilePage;
 import com.esgc.Pages.ResearchLinePage;
-import com.esgc.TestBase.DataProviderClass;
-import com.esgc.Tests.TestBases.DashboardUITestBase;
 import com.esgc.Tests.TestBases.UITestBase;
 import com.esgc.Utilities.*;
 import com.esgc.Utilities.Database.DashboardQueries;
-import com.esgc.Utilities.Database.EntityPageQueries;
-import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import java.io.File;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -63,7 +57,7 @@ public class SubsidiaryTests extends UITestBase {
         entityProfilePage.searchAndLoadClimateProfilePage(subsidiaryCompanyName);
 
         // Parent company should be opened
-        assertTestCase.assertTrue(entityProfilePage.validateGlobalHeader(parentCompanyName), "Global header verification");
+        assertTestCase.assertTrue(entityProfilePage.validateGlobalCompanyNameHeader(parentCompanyName), "Global header verification");
 
         EntityClimateProfilePage entityClimateProfilePage = new EntityClimateProfilePage();
         entityClimateProfilePage.closeEntityProfilePage();
