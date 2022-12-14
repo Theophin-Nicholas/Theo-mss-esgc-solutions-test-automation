@@ -299,6 +299,8 @@ public class DataProviderClass {
 
         return new Object[][]{
                /* {"ESG Assessments"},*/ //De-scoped as of now
+
+                {"Physical Risk Hazards"},
                 {"Carbon Footprint"},
                 {"Physical Risk Management"},
                 {"Temperature Alignment"},

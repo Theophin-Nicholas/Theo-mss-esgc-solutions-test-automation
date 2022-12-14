@@ -121,8 +121,9 @@ public class EntitySearchFunctionTests extends UITestBase {
         //BrowserUtils.wait(5);
         researchLinePage.searchIconPortfolioPage.click();
         //BrowserUtils.wait(3);
-        assertTestCase.assertFalse(researchLinePage.checkClickingOnEntityName("App"), "Clicking on entity name on search worked");
-        assertTestCase.assertTrue(researchLinePage.checkIfUserIsOnRightPage(), "User is on expected page");
+        String searchKeyword = "App";
+        assertTestCase.assertFalse(researchLinePage.checkClickingOnEntityName(searchKeyword), "Clicking on entity name on search worked");
+        assertTestCase.assertTrue(researchLinePage.checkIfUserIsOnEntityPageBySearchedKeyword(searchKeyword), "User is on expected page");
 
     }
 

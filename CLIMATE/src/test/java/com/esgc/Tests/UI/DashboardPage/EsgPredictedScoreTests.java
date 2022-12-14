@@ -35,6 +35,7 @@ public class EsgPredictedScoreTests extends UITestBase {
         dashboardPage.navigateToPageFromMenu("Portfolio Analysis");
         dashboardPage.selectResearchLineFromDropdown("ESG Assessments");
         assertTestCase.assertTrue(dashboardPage.scoreQualityButton.isDisplayed(),"Verify Score Quality Button in Dashboard Page");
+
     }
 
     @Test(groups = {"esg", "regression", "ui"})
@@ -79,7 +80,7 @@ public class EsgPredictedScoreTests extends UITestBase {
 
     }
 
-    @Test(groups = {"esg", "regression", "ui"})
+    @Test(enabled = false, groups = {"esg", "regression", "ui"})
     @Xray(test = {11163, 11175})
     public void verifyScoreQualityIconWithEntities_PortfolioAnalysis() {
         DashboardPage dashboardPage = new DashboardPage();
@@ -131,7 +132,7 @@ public class EsgPredictedScoreTests extends UITestBase {
 
     }
 
-    @Test(groups = {"esg", "regression", "ui"})
+    @Test(enabled = false, groups = {"esg", "regression", "ui"})
     @Xray(test = {11074, 11078})
     public void verifyEntitiesWithPredictedScoresInLeadersAndLaggardsTables_PortfolioAnalysis() {
         DashboardPage dashboardPage = new DashboardPage();
@@ -156,7 +157,7 @@ public class EsgPredictedScoreTests extends UITestBase {
         researchLine.hideButton.click();
     }
 
-    @Test(groups = {"esg", "regression", "ui"})
+    @Test(enabled = false, groups = {"esg", "regression", "ui"})
     @Xray(test = {10901, 10903})
     public void verifyEntitiesWithPredictedScoresInCoveragePopup_PortfolioAnalysis() {
         DashboardPage dashboardPage = new DashboardPage();

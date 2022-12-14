@@ -15,6 +15,10 @@ import java.time.Duration;
 
 public abstract class DashboardUITestBase extends TestBase {
 
+    boolean isPampaTest;
+    boolean isEntitlementsTest;
+    boolean userOnLoginPage;
+
     @BeforeMethod(onlyForGroups = {"ui", "dashboard"}, groups = {"smoke", "regression", "ui", "dashboard"})
     @Parameters("browser")
     public synchronized void setupDashboardUI(@Optional String browser, Method method) {
@@ -36,10 +40,18 @@ public abstract class DashboardUITestBase extends TestBase {
         Driver.getDriver().manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
         LoginPage loginPage = new LoginPage();
 
-        boolean isPampaTest = method.getName().contains("Pampa");
-        boolean isEntitlementsTest = method.getName().contains("Bundle");
-        if (!loginPage.isSearchIconDisplayed()) {
-            if (!isPampaTest && !isEntitlementsTest) {
+        isPampaTest = method.getName().contains("Pampa");
+        isEntitlementsTest = method.getName().contains("Bundle");
+        userOnLoginPage = Driver.getDriver().getCurrentUrl().endsWith("login");
+
+        //For entitlements tests, automation should be logged out from default user
+        //If it is not an entitlements test, keep user logged in
+        if (isPampaTest || isEntitlementsTest) {
+            if (!userOnLoginPage) {
+                loginPage.clickOnLogout();
+            }
+        } else {
+            if (userOnLoginPage) {
                 loginPage.login();
             }
         }
@@ -49,7 +61,10 @@ public abstract class DashboardUITestBase extends TestBase {
     @AfterMethod(onlyForGroups = {"ui"}, groups = {"smoke", "regression", "ui"})
     public synchronized void teardownDashboard(ITestResult iTestResult) {
         getScreenshot(iTestResult);
-        Driver.closeDriver();
+        if (isPampaTest || isEntitlementsTest) {
+            LoginPage loginPage = new LoginPage();
+            loginPage.clickOnLogout();
+        }
     }
 
     @DataProvider(name = "Research Lines")
@@ -74,7 +89,7 @@ public abstract class DashboardUITestBase extends TestBase {
                 {
                         {"all", "all", "03", "2022"},
                         {"all", "APAC", "03", "2021"},
-                        {"all", "EMEA",  "09", "2022"},
+                        {"all", "EMEA", "09", "2022"},
                         {"all", "AMER", "03", "2022"}
 
                 };
