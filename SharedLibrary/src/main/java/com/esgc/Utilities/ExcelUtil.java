@@ -1,8 +1,11 @@
 package com.esgc.Utilities;
 
 
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.opencsv.CSVReader;
 import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+
 import org.testng.Assert;
 
 import java.io.FileInputStream;
@@ -22,6 +25,17 @@ public class ExcelUtil {
     private Workbook workBook;
     private String path;
 
+    public ExcelUtil(String path) {
+        this.path = path;
+        try {
+            FileInputStream ExcelFile = new FileInputStream(path);
+            workBook = WorkbookFactory.create(ExcelFile);
+            workSheet = workBook.getSheetAt(0);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public ExcelUtil(String path, String sheetName) {
         this.path = path;
         try {
@@ -29,6 +43,18 @@ public class ExcelUtil {
             workBook = WorkbookFactory.create(ExcelFile);
             workSheet = workBook.getSheet(sheetName);
             Assert.assertNotNull(workSheet, String.format("Sheet: '%s' does not exist", sheetName));
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public ExcelUtil(String path, int sheetIndex) {
+        this.path = path;
+        try {
+            FileInputStream ExcelFile = new FileInputStream(path);
+            workBook = WorkbookFactory.create(ExcelFile);
+            workSheet = workBook.getSheetAt(sheetIndex);
+            Assert.assertNotNull(workSheet, String.format("Sheet: '%s' does not exist", sheetIndex));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -140,18 +166,29 @@ public class ExcelUtil {
         List<String> columns = new ArrayList<>();
 
         for (Cell cell : workSheet.getRow(0)) {
-            columns.add(cell.toString());
+            columns.add(cell.toString().trim());
         }
         return columns;
     }
-
 
     public int columnCount() {
         return workSheet.getRow(0).getLastCellNum();
     }
 
-    public int rowCount() {
+    public int columnCount(int columnIndex) {
+        return workSheet.getRow(columnIndex).getLastCellNum();
+    }
 
+    public int getColumnNum (String colName){
+        Row row = workSheet.getRow(0);
+        for (int i = 0; i < row.getLastCellNum(); i++){
+            if (row.getCell(i).getStringCellValue().trim().equals(colName))
+                return i;
+        }
+        return -1 ;
+    }
+
+    public int rowCount() {
         return workSheet.getPhysicalNumberOfRows();
     }
 
@@ -215,5 +252,29 @@ public class ExcelUtil {
             }
         }
         return false;
+    }
+
+    public boolean searchData(String data) {
+        for (Row row : workSheet) {
+            for (Cell cell : row) {
+//                if (cell.getCellType() == CellType.STRING) {
+//                    if (cell.getStringCellValue().equals(data)) {
+//                        return true;
+//                    }
+//                }
+                if(cell.getStringCellValue().equals(data)){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public void removeRow(int index) {
+        workSheet.removeRow(workSheet.getRow(index));
+    }
+
+    public int getLastRowNum() {
+        return workSheet.getLastRowNum();
     }
 }

@@ -1216,8 +1216,8 @@ public abstract class PageBase {
         return Driver.getDriver().findElements(By.xpath(xpath)).size() == 3; //For 3 regions
     }
 
-    public void verifyCompanyNameInCoveragePopup(String subsidiaryCompanyName, String parentCompanyName) {
-        String xpath = "//span[@heap_id='view-panel'][text()='" + subsidiaryCompanyName + "']/following-sibling::span/span[text()='" + parentCompanyName + "']";
+    public void verifyCompanyNameInCoveragePopup(String subsidiaryCompanyName) {
+        String xpath = "//span[@heap_id='view-panel'][text()='"+subsidiaryCompanyName+"']";
         assertTestCase.assertEquals(Driver.getDriver().findElements(By.xpath(xpath)).size(), 1);
     }
 
@@ -1233,8 +1233,8 @@ public abstract class PageBase {
         assertTestCase.assertTrue(element.getCssValue("text-decoration").contains("underline"));
     }
 
-    public void verifyCompanyNameInTables(String subsidiaryCompanyName, String parentCompanyName) {
-        String xpath = "//span[text()='" + subsidiaryCompanyName + "']/following-sibling::span/span[text()='" + parentCompanyName + "']";
+    public void verifyCompanyNameInTables(String subsidiaryCompanyName) {
+        String xpath = "//span[text()='"+subsidiaryCompanyName+"']";
         assertTestCase.assertEquals(Driver.getDriver().findElements(By.xpath(xpath)).size(), 1);
     }
 
@@ -1248,6 +1248,13 @@ public abstract class PageBase {
         String xpath = "//span[text()='" + companyName + "']";
         WebElement element = Driver.getDriver().findElement(By.xpath(xpath));
         assertTestCase.assertTrue(element.getCssValue("text-decoration").contains("underline"));
+    }
+
+    public void clickTheCompany(String companyName) {
+        String xpath = "//span[text()='"+companyName+"']";
+        List<WebElement> elements = Driver.getDriver().findElements(By.xpath(xpath));
+        BrowserUtils.scrollTo(elements.get(elements.size()-1));
+        elements.get(elements.size()-1).click();
     }
 
     public boolean isElementClickable(WebElement element) {
@@ -1753,7 +1760,7 @@ public abstract class PageBase {
     }
 
     public void navigateToFirstEntity(String nameOfEntity) {
-        BrowserUtils.isElementVisible(searchIconPortfolioPage, 5);
+        BrowserUtils.isElementVisible(searchIconPortfolioPage, 10);
         searchIconPortfolioPage.click();
         searchBarOfPortfolio.sendKeys(nameOfEntity);
         BrowserUtils.wait(3);

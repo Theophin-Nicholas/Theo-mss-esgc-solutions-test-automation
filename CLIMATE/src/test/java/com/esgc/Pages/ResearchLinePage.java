@@ -503,6 +503,9 @@ public class ResearchLinePage extends UploadPage {
     @FindBy(xpath = "//td[@heap_id='coverage']//*[local-name()='svg']/*[local-name()='rect'][1]")
     public List<WebElement> scoreQualityIconsInCoveragePopup;
 
+    @FindBy(xpath = "//td[@heap_id='leadlag']")
+    public List<WebElement> recordsInLeadersAndLaggardsTable;
+
     @FindBy(xpath = "//td[@heap_id='leadlag']//*[local-name()='svg']/*[local-name()='rect'][1]")
     public List<WebElement> scoreQualityIconsInLeadersAndLaggardsTable;
 
@@ -2078,6 +2081,33 @@ public class ResearchLinePage extends UploadPage {
         return false;
     }
 
+    public boolean verifyMethodologyLink(String expectedUrl) {
+        try {
+            //Switch to the new tab
+            Set<String> handles = Driver.getDriver().getWindowHandles();
+            if (handles.size() == 2) {
+                String currentWindowHandle = Driver.getDriver().getWindowHandle();
+                for (String handle : handles) {
+                    if (!handle.equals(currentWindowHandle)) {
+                        Driver.getDriver().switchTo().window(handle);
+                        String url = Driver.getDriver().getCurrentUrl();
+                        url = url.replaceAll("%20", "");
+                        System.out.println("Methodology URL is:" + url);
+                        Driver.getDriver().close();
+                        BrowserUtils.wait(2);
+                        Driver.getDriver().switchTo().window(currentWindowHandle);
+                        return url.contains(expectedUrl);
+                    }
+                }
+            } else {
+                System.out.println("Multiple tabs open. Cannot validate! ");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
     public void Is_MoM_QoQ_TextAvailable(String page) {
         try {
             String whatToValidate = "";
@@ -2814,8 +2844,10 @@ public class ResearchLinePage extends UploadPage {
         return scoreQualityIconsInCoveragePopup.size() > 0;
     }
 
-    public boolean verifyScoreQualityIconWithEntitiesInLeadersAndLaggardsTables_PA() {
-        return scoreQualityIconsInLeadersAndLaggardsTable.size() == 20;
+    public boolean verifyScoreQualityIconWithEntitiesInLeadersAndLaggardsTables_PA(){
+        int recordsCountInTable = recordsInLeadersAndLaggardsTable.size();
+        int scoreQualityIconsCountInTable = scoreQualityIconsInLeadersAndLaggardsTable.size();
+        return scoreQualityIconsCountInTable==recordsCountInTable;
     }
 
     public boolean verifyScoreQualityIconWithEntitiesInLeadersPopup_PA() {
@@ -2826,28 +2858,30 @@ public class ResearchLinePage extends UploadPage {
         return scoreQualityIconsInLaggardsPopup.size() > 0;
     }
 
-    public boolean verifyEntitiesWithPredictedScoresInYellow_PA(List<WebElement> rows) {
-        int i = 1;
-        for (WebElement row : rows) {
-            System.out.println("Record: " + (i++));
+    public boolean verifyEntitiesWithPredictedScoresInYellow_PA(List<WebElement> rows){
+        BrowserUtils.waitForVisibility(rows.get(0),30);
+        int i=1;
+        for(WebElement row:rows){
+            System.out.println("Record: "+(i++));
             BrowserUtils.scrollTo(row);
-            if (row.getCssValue("background-color").equals("rgba(253, 247, 218, 1)")) {
-                return true;
+            if(!row.getCssValue("background-color").equals("rgba(253, 247, 218, 1)")){
+                return false;
             }
         }
-        return false;
+        return true;
     }
 
-    public boolean verifyEntitiesWithPredictedScoresAreNotClickable_PA(List<WebElement> rows) {
-        int i = 1;
-        for (WebElement row : rows) {
-            System.out.println("Record: " + (i++));
+    public boolean verifyEntitiesWithPredictedScoresAreNotClickable_PA(List<WebElement> rows){
+        BrowserUtils.waitForVisibility(rows.get(0),30);
+        int i=1;
+        for(WebElement row:rows){
+            System.out.println("Record: "+(i++));
             BrowserUtils.scrollTo(row);
-            if (!row.getCssValue("text-decoration").contains("underline")) {
-                return true;
+            if(row.getCssValue("text-decoration").contains("underline")){
+                return false;
             }
         }
-        return false;
+        return true;
     }
 
     public void validatePhysicalRiskMgmtLegend() {
@@ -3004,6 +3038,17 @@ public class ResearchLinePage extends UploadPage {
     public void selectEsgPortfolioCoverage() {
         BrowserUtils.wait(5);
         wait.until(ExpectedConditions.elementToBeClickable(esgPortfolioCoverageLink)).click();
+    }
+
+    public void verifyCompanyNameInCoveragePopup(String subsidiaryCompanyName) {
+        String xpath = "//td[@heap_id='coverage']//span[@title][text()='"+subsidiaryCompanyName+"']";
+        assertTestCase.assertEquals(Driver.getDriver().findElements(By.xpath(xpath)).size(), 1);
+    }
+
+    public void verifyCompanyIsClickableInCoveragePopup(String companyName) {
+        String xpath = "//td[@heap_id='coverage']//span[@title][text()='"+companyName+"']";
+        WebElement element = Driver.getDriver().findElement(By.xpath(xpath));
+        assertTestCase.assertTrue(element.getCssValue("text-decoration").contains("underline"));
     }
 
     public void validateLinksOpenedInNewTab(WebElement element, String whatToValidate) {
