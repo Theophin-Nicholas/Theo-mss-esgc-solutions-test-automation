@@ -12,7 +12,7 @@ public class InvestmentsPercentageTest extends UITestBase {
     @Test(groups = {"regression", "ui"},
     dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines Investments")
     @Xray(test = 5719)
-    public void verifyInestmentPercentageLessthanOne(String... dataProvider) {
+    public void verifyInvestmentPercentageLessThanOne(String... dataProvider) {
 
         String portfolio = dataProvider[0];
         String researchLine = dataProvider[1];

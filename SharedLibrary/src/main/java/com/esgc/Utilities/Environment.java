@@ -73,8 +73,8 @@ public class Environment {
     public static final String PDF_EXPORT_ONLY_SOURCEDOCUMENTS_PASSWORD;
     public static final String PDF_EXPORT_ONLY_PDF_USERNAME;
     public static final String PDF_EXPORT_ONLY_PDF_PASSWORD;
-
-
+    public static final String MESG_APPLICATION_NAME;
+    public static  String environment ;
 
 
     static String getPropertiesPath() {
@@ -85,7 +85,7 @@ public class Environment {
 
     static {
         Properties properties = null;
-        String environment = ConfigurationReader.getProperty("environment");
+        environment = ConfigurationReader.getProperty("environment");
         if (System.getProperty("environment")!=null){
             environment=System.getProperty("environment");
 
@@ -151,7 +151,7 @@ public class Environment {
         p3OrbisId = properties.getProperty("p3Orbisid");
         QA_TEST_ACCOUNT_ID = properties.getProperty("account_id");
         QA_TEST_APPLICATION_ID = properties.getProperty("application_id");
-
+        MESG_APPLICATION_NAME = properties.getProperty("mesg_application_name");
         PDF_EXPORT_BUNDLE_USERNAME = properties.getProperty("PDFexport_bundle_username");
         PDF_EXPORT_BUNDLE_PASSWORD = properties.getProperty("PDFexport_bundle_password");
         PDF_EXPORT_ONLY_SOURCEDOCUMENTS_USERNAME = properties.getProperty("PDFexport_OnlySourceDocument_username");

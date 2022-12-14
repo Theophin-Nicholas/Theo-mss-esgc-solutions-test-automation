@@ -5,7 +5,7 @@ import com.esgc.APIModels.EntityIssuerPage.ESGMaterlityDriverSummaryAPIWrapper;
 import com.esgc.APIModels.EntityIssuerPage.ESGMaterlityDriverSummaryDetails;
 import com.esgc.Controllers.EntityIssuerPageController.EntityIssuerPageAPIController;
 import com.esgc.Test.TestBases.EntityIssuerPageTestBase;
-import com.esgc.TestBase.DataProviderClass;
+import com.esgc.Test.TestBases.IssuerDataProviderClass;
 import com.esgc.Utilities.Xray;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
@@ -18,7 +18,7 @@ public class ESGMateralityDriversSummaryAPITest extends EntityIssuerPageTestBase
 
 
     @Test(groups = {"regression", "api"},
-            dataProvider = "credentials", dataProviderClass = DataProviderClass.class,
+            dataProvider = "credentialsP3", dataProviderClass = IssuerDataProviderClass.class,
             description = "Verify API Response")
     @Xray(test = {9951})
     public void validateDriverSummaryAPIResponse(String... dataProvider) {
@@ -39,7 +39,7 @@ public class ESGMateralityDriversSummaryAPITest extends EntityIssuerPageTestBase
     }
 
     @Test(groups = {"regression", "api"},
-            dataProvider = "credentials", dataProviderClass = DataProviderClass.class,
+            dataProvider = "credentialsP3", dataProviderClass = IssuerDataProviderClass.class,
             description = "Verify API Response")
     @Xray(test = {9948})
     public void validateDriverSummaryDetailsAPIResponse(String... dataProvider) {

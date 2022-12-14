@@ -18,7 +18,7 @@ public class EsgScoresInfoTests extends DataValidationTestBase {
     ExportUtils utils = new ExportUtils();
 
     @Test(groups = {"dashboard", "regression", "ui"})
-    @Xray(test = {9788, 9820})
+    @Xray(test = {9788, 9820, 11396})
     public void compareEsgScoresInfoFromExcelToDB() {
         DashboardPage dashboardPage = new DashboardPage();
         dashboardPage.downloadDashboardExportFile();
@@ -50,7 +50,7 @@ public class EsgScoresInfoTests extends DataValidationTestBase {
     }
 
     @Test(groups = {"dashboard", "regression", "ui"})
-    @Xray(test = {11266, 11315})
+    @Xray(test = {11266, 11315, 11396})
     public void verifyScoreTypeOfEntitiesWhenEsgPredEntitlement_Bundle() {
         LoginPage login = new LoginPage();
         login.entitlementsLogin(EntitlementsBundles.USER_WITH_ESG_PS_ENTITLEMENT);

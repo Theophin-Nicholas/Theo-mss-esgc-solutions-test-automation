@@ -276,9 +276,9 @@ public class DataProviderClass {
     public Object[][] orbisIDWithoutTempAlignment() {
 
         return new Object[][]{
-                {"012146622"},
-                {"058618674"},
-                {"037507363"},//
+                {"012146622"},//Huawei Technologies Co., Ltd.
+                {"058618674"},//Ford Motor Co.
+                {"037507363"},//Ayala Corp.
         };
     }
 
@@ -350,7 +350,10 @@ public class DataProviderClass {
     @DataProvider(name = "CompanyNames")
     public Object[][] provideParameters() {
         return new Object[][]
-                {{"Apple, Inc."}, {"Black Hills Corp."}, {"SEEK Ltd."}
+                {
+                        {"Apple, Inc."},
+                        {"Twitter, Inc."},
+                        {"SEEK Ltd."}
                 };
     }
 
@@ -435,6 +438,33 @@ public class DataProviderClass {
         };
     }
 
+    @DataProvider(name = "SubsidiaryCompanies")
+    public Object[][] subsidiaryCompanies() {
+        return new Object[][]{
+                {"Oriental Bank","OFG Bancorp"},
+        };
+    }
+
+    @DataProvider(name = "CompaniesWithNoSubsidiaryCompanies")
+    public Object[][] NoSubsidiaryCompanies() {
+        return new Object[][]{
+                {"Amazon.com, Inc."},
+        };
+    }
+
+    @DataProvider(name = "InactiveSubsidiaryCompanyISIN")
+    public Object[][] inactiveSubsidiaryCompanyISIN() {
+        return new Object[][]{
+                {"XS0054748412"},
+        };
+    }
+
+    @DataProvider(name = "InactiveSubsidiaryCompanies")
+    public Object[][] inactiveSubsidiaryCompanies() {
+        return new Object[][]{
+                {"ZAMBIAN"},
+        };
+    }
 
     @DataProvider(name = "PDFEntitlements")
     public Object[][] PDFEntitlements() {

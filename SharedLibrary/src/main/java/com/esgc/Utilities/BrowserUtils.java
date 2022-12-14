@@ -2,6 +2,7 @@ package com.esgc.Utilities;
 
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.*;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -11,12 +12,10 @@ import org.testng.Assert;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.text.BreakIterator;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class BrowserUtils {
 
@@ -31,7 +30,18 @@ public class BrowserUtils {
         String path = System.getProperty("user.dir") + File.separator + "src" +
                 File.separator + "test" + File.separator + "resources" + File.separator + "download";
 
-             return path;
+        return path;
+    }
+    /**
+     * path to upload folder - all upload files here
+     * @return path
+     */
+    public static String uploadPath (){
+
+        String path = System.getProperty("user.dir") + File.separator + "src" +
+                File.separator + "test" + File.separator + "resources" + File.separator + "upload";
+
+        return path;
     }
     /**
      * path to downloaded template -ESGCA-317
@@ -415,7 +425,6 @@ public class BrowserUtils {
         }
     }
 
-
     /**
      * Verifies whether the element is displayed on page
      *
@@ -456,7 +465,6 @@ public class BrowserUtils {
         return target;
     }
 
-
     public static void waitFor(int seconds) {
         wait(seconds);
     }
@@ -477,5 +485,40 @@ public class BrowserUtils {
 
     public static void switchWindowsTo(String tab) {
         Driver.getDriver().switchTo().window(tab);
+    }
+
+    public static List<String> splitToSentences(String text) {
+        BreakIterator iterator = BreakIterator.getSentenceInstance(Locale.US);
+        List<String> sentences = new ArrayList<>();
+        iterator.setText(text);
+        int start = iterator.first();
+        for (int end = iterator.next();
+             end != BreakIterator.DONE;
+             start = end, end = iterator.next()) {
+            if(text.substring(start,end).replaceAll("\\W","").length()>0){
+                sentences.add(text.substring(start,end));
+            }
+        }
+        return sentences;
+    }
+    
+    public static String DataSourcePath (){
+
+        String path = System.getProperty("user.dir") + File.separator + "src" +
+                File.separator + "test" + File.separator + "resources" + File.separator + "DataSource";
+
+        return path;
+    }
+
+    public static Object[][] appendedArrays(Object[][] array1, Object[][] array2) {
+        Object[][] ret = new Object[array1.length + array2.length][];
+        int i = 0;
+        for (;i<array1.length;i++) {
+            ret[i] = array1[i];
+        }
+        for (int j = 0;j<array2.length;j++) {
+            ret[i++] = array2[j];
+        }
+        return ret;
     }
 }
