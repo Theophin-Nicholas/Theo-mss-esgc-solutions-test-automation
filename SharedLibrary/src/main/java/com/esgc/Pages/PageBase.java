@@ -1754,7 +1754,7 @@ public abstract class PageBase {
     }
 
     public void navigateToFirstEntity(String nameOfEntity) {
-        BrowserUtils.isElementVisible(searchIconPortfolioPage, 5);
+        BrowserUtils.isElementVisible(searchIconPortfolioPage, 10);
         searchIconPortfolioPage.click();
         searchBarOfPortfolio.sendKeys(nameOfEntity);
         BrowserUtils.wait(3);

@@ -7,10 +7,8 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.text.BreakIterator;
+import java.util.*;
 
 
 public class RegulatoryReportingPage extends UploadPage {
@@ -266,22 +264,18 @@ public class RegulatoryReportingPage extends UploadPage {
         BrowserUtils.wait(2);
         BrowserUtils.switchWindowsTo(currentWindowHandle);
         return rrStatusPage_ReportGeneratingMessage.isDisplayed();
-
-//        for(String tab:BrowserUtils.getWindowHandles()){
-//            if(tab.equals(currentWindowHandle)) {
-//
-//            }
-//            BrowserUtils.switchWindowsTo(tab);
-//            System.out.println("Switched to new tab");
-////            try {
-//                return rrStatusPage_ReportGeneratingMessage.isDisplayed();
-////            } catch (Exception e) {
-////                continue;
-////            }
-//        }
-//        return false;
     }
-
+    public boolean verifyNewTabOpened(Set<String> windowHandles) {
+        BrowserUtils.wait(2);
+        Set<String> currentTabs = BrowserUtils.getWindowHandles();
+        for(String handle:currentTabs){
+            if(!windowHandles.contains(handle)){
+                return verifyNewTabOpened(handle);
+            }
+        }
+        System.out.println("No new tab opened");
+        return false;
+    }
     public List<String> getSelectedPortfolioOptions() {
         List<String> selectedPortfolioOptions = new ArrayList<>();
         for (int i = 0; i < portfolioRadioButtonList.size(); i++) {
@@ -344,15 +338,6 @@ public class RegulatoryReportingPage extends UploadPage {
         return Arrays.stream(dir_contents).anyMatch(e -> ((e.getName().startsWith("SFDR") || e.getName().startsWith("EUT")) &&
                 e.getName().contains(DateTimeUtilities.getCurrentDate("MM_dd_yyyy")) &&
                 e.getName().endsWith(".zip")));
-//        if (check) {
-//            System.out.println("Reports downloaded successfully");
-//            return true;
-//        } else {
-//            System.out.println("Reports are not downloaded");
-//            return check = Arrays.stream(dir_contents).anyMatch(e -> (e.getName().startsWith("EUT") &&
-//                    e.getName().contains(DateTimeUtilities.getCurrentDate("MM_dd_yyyy")) &&
-//                    e.getName().endsWith(".zip")));
-//        }
     }
 
     public boolean verifyPortfolio(String portfolioName) {
@@ -416,12 +401,16 @@ public class RegulatoryReportingPage extends UploadPage {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        System.out.println("Unzipping is done");
         for (String file : BrowserUtils.getElementsText(rrStatusPage_PortfoliosList)) {
             String excelName = file.replaceAll("ready", "").trim();
             System.out.println("excelName = " + excelName);
             File excelFile = new File(destDirectory + "/" + excelName);
-            System.out.println("excelFile = " + excelFile.getAbsolutePath());
-            if (!excelFile.exists()) return false;
+            //System.out.println("excelFile = " + excelFile.getAbsolutePath());
+            if (!excelFile.exists()) {
+                System.out.println("File " + excelName + " is not found");
+                return false;
+            }
         }
         return true;
     }
@@ -496,20 +485,81 @@ public class RegulatoryReportingPage extends UploadPage {
         File[] dir_contents = dir.listFiles();
         assert dir_contents != null;
         File excelFile = Arrays.stream(dir_contents).filter(e -> (e.getName().contains(excelName))).findAny().get();
-        System.out.println("excelFile = " + excelFile.getAbsolutePath());
+        //System.out.println("excelFile = " + excelFile.getAbsolutePath());
         if (!excelFile.exists()) {
             System.out.println(excelName + " file does not exist");
             return null;
         }
-        System.out.println(excelName + " file found");
-        System.out.println("excelFile = " + excelFile.getAbsolutePath());
+        //System.out.println(excelName + " file found");
+        //System.out.println("excelFile = " + excelFile.getAbsolutePath());
         ExcelUtil excelUtil = new ExcelUtil(excelFile.getAbsolutePath(), sheetIndex);
+        return excelUtil;
+    }
+
+    public ExcelUtil getExcelData(String excelName, String sheetName) {
+        File dir = new File(BrowserUtils.downloadPath());
+        File[] dir_contents = dir.listFiles();
+        assert dir_contents != null;
+        File excelFile = Arrays.stream(dir_contents).filter(e -> (e.getName().contains(excelName))).findAny().get();
+        //System.out.println("excelFile = " + excelFile.getAbsolutePath());
+        if (!excelFile.exists()) {
+            System.out.println(excelName + " file does not exist");
+            return null;
+        }
+        //System.out.println(excelName + " file found");
+        //System.out.println("excelFile = " + excelFile.getAbsolutePath());
+        ExcelUtil excelUtil = new ExcelUtil(excelFile.getAbsolutePath(), sheetName);
+        return excelUtil;
+    }
+    //column index is for highest column index in the excel file
+    public List<String> getExcelDataList(String excelName, String sheetName, int columnIndex) {
+        File dir = new File(BrowserUtils.downloadPath());
+        File[] dir_contents = dir.listFiles();
+        assert dir_contents != null;
+        File excelFile = Arrays.stream(dir_contents).filter(e -> (e.getName().contains(excelName))).findAny().get();
+        //System.out.println("excelFile = " + excelFile.getAbsolutePath());
+        if (!excelFile.exists()) {
+            System.out.println(excelName + " file does not exist");
+            return null;
+        }
+        //System.out.println(excelName + " file found");
+        //System.out.println("excelFile = " + excelFile.getAbsolutePath());
+        ExcelUtil excelUtil = new ExcelUtil(excelFile.getAbsolutePath(), sheetName);
+        System.out.println("Verifying sheet " + sheetName);
+        System.out.println("Sheet Loaded "+excelUtil.getLastRowNum()+" vs. "+excelUtil.columnCount(columnIndex));
+        List<String> list = new ArrayList<>();
+        for (int i = 0; i <= excelUtil.getLastRowNum(); i++) {
+            for (int j = 0; j <= excelUtil.columnCount(columnIndex); j++) {
+                if(excelUtil.getCellData(i,j) == null || excelUtil.getCellData(i,j).equals("")) continue;
+                list.add(excelUtil.getCellData(i, j).trim());
+            }
+        }
+        System.out.println("list = " + list.size());
+        return list;
+    }
+
+    public List<String> getExcelDataList(String excelName, String sheetName) {
+        return getExcelDataList(excelName, sheetName, 0);
+    }
+
+    public ExcelUtil getEUTaxonomyTemplate(String sheetName) {
+        File dir = new File(BrowserUtils.uploadPath());
+        File[] dir_contents = dir.listFiles();
+        assert dir_contents != null;
+        File excelFile = Arrays.stream(dir_contents).filter(e -> (e.getName().contains("taxonomy_reporting_deliverable_template.xlsx"))).findAny().get();
+        //System.out.println("excelFile = " + excelFile.getAbsolutePath());
+        if (!excelFile.exists()) {
+            System.out.println("Template file does not exist");
+            return null;
+        }
+        //System.out.println("excelFile = " + excelFile.getAbsolutePath());
+        ExcelUtil excelUtil = new ExcelUtil(excelFile.getAbsolutePath(), sheetName);
         return excelUtil;
     }
 
     public boolean verifyReportsContentForData(List<String> selectedPortfolios, int sheetIndex, String data) {
         String excelName = rrStatusPage_PortfoliosList.get(0).getText().replaceAll("ready", "").trim();
-        System.out.println("Verifying reports content for " + excelName);
+        System.out.println("Verifying reports content for sheet " + sheetIndex);
         ExcelUtil excelData = getExcelData(excelName, sheetIndex);
         if (!excelData.searchData(data)) {
             System.out.println("Data " + data + " is not found in the excel");
@@ -562,7 +612,7 @@ public class RegulatoryReportingPage extends UploadPage {
         System.out.println("countOfAllEntities = " + countOfAllEntities);
         //open Excel file
         String excelName = rrStatusPage_PortfoliosList.get(0).getText().replaceAll("ready", "").trim();
-        System.out.println("Verifying reports content for " + excelName);
+        System.out.println("Verifying reports content for sheet 1");
         ExcelUtil excelData = getExcelData(excelName, 1);
         int countOfEntitiesInExcel = excelData.rowCount() - 1;
         System.out.println("countOfEntitiesInExcel = " + countOfEntitiesInExcel);
@@ -588,6 +638,136 @@ public class RegulatoryReportingPage extends UploadPage {
         if (!uiCoverage.contains(dbCoverage)) {
             System.out.println("Coverage is not matching for " + uiCoverage + " : " + dbCoverage);
             return false;
+        }
+        return true;
+    }
+
+    public boolean verifyEUTaxonomySheets() {
+        String excelName = rrStatusPage_PortfoliosList.get(0).getText().replaceAll("ready", "").trim();
+        System.out.println("Verifying reports content for " + excelName);
+        String[] sheets = {"Green Investment Ratio Template","Underlying Data - Overview","Underlying Data - Activities","Definitions","Disclaimer"};
+        for (String sheet : sheets) {
+            ExcelUtil excelData = getExcelData(excelName, sheet);
+            if (excelData == null) {
+                System.out.println("Sheet " + sheet + " is not found in the excel");
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean verifyGreenInvestmentRatioTemplate() {
+        ExcelUtil template = getEUTaxonomyTemplate("Green Investment Ratio Template");
+        String excelName = rrStatusPage_PortfoliosList.get(0).getText().replaceAll("ready", "").trim();
+        System.out.println("Verifying reports content for " + excelName);
+        List<String> excelData = getExcelDataList(excelName, "Green Investment Ratio Template", 3);
+        for (int i = 4; i < template.rowCount(); i++) {
+            for (int j = 1; j < template.columnCount(); j++) {
+                if(template.getCellData(i,j).equals("")||template.getCellData(i,j).equals("FUTURE RELEASE")){
+                    continue;
+                } else if (!excelData.contains(template.getCellData(i,j).trim())) {
+                    System.out.println(template.getCellData(i,j));
+                    //System.out.println("Row = " + (i+1) + " Column = " + (j+1));
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    public boolean verifyUnderlyingDataOverview() {
+        ExcelUtil template = getEUTaxonomyTemplate("Underlying Data - Overview");
+        String excelName = rrStatusPage_PortfoliosList.get(0).getText().replaceAll("ready", "").trim();
+        System.out.println("Verifying reports content for " + excelName);
+        ExcelUtil excelData = getExcelData(excelName, "Underlying Data - Overview");
+        for(String title: template.getColumnsNames()){
+            if(!excelData.getColumnsNames().contains(title)){
+                System.out.println(title);
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean verifyUnderlyingDataActivities() {
+        ExcelUtil template = getEUTaxonomyTemplate("Underlying Data - Activities");
+        String excelName = rrStatusPage_PortfoliosList.get(0).getText().replaceAll("ready", "").trim();
+        System.out.println("Verifying reports content for " + excelName);
+        ExcelUtil excelData = getExcelData(excelName, "Underlying Data - Activities");
+        for(String title: template.getColumnsNames()){
+            if(!excelData.getColumnsNames().contains(title)){
+                System.out.println(title);
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean verifyDefinitions() {
+        ExcelUtil template = getEUTaxonomyTemplate("Definitions");
+        String excelName = rrStatusPage_PortfoliosList.get(0).getText().replaceAll("ready", "").trim();
+        System.out.println("Verifying reports content for " + excelName);
+        List<String> excelData = getExcelDataList(excelName, "Definitions");
+        for (int i = 0; i < template.rowCount(); i++) {
+            for (int j = 0; j < template.columnCount(1); j++) {
+                if(template.getCellData(i,j)==null||template.getCellData(i,j).equals("")){
+                    continue;
+                } else if (!excelData.contains(template.getCellData(i,j).trim())) {
+                    System.out.println(template.getCellData(i,j));
+                    System.out.println("Row = " + (i+1) + " Column = " + (j+1));
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    public boolean verifyDisclaimer() {
+        ExcelUtil template = getEUTaxonomyTemplate("Disclaimer");
+        String excelName = rrStatusPage_PortfoliosList.get(0).getText().replaceAll("ready", "").trim();
+        System.out.println("Verifying reports content for Disclaimer Sheet");
+        List<String> excelData = new ArrayList<>();
+        for(String data: getExcelDataList(excelName, "Disclaimer")){
+            excelData.addAll(BrowserUtils.splitToSentences(data));
+        }
+//        excelData.forEach(System.out::println);
+        List<String> templateData = new ArrayList<>();
+        for (int i = 0; i < template.rowCount(); i++) {
+            for (int j = 0; j < template.columnCount(); j++) {
+                templateData.addAll(BrowserUtils.splitToSentences(template.getCellData(i, j)));
+            }
+        }
+//        System.out.println("\n===================================\n");
+//        templateData.forEach(System.out::println);
+        for(String sentence: templateData){
+            if (!excelData.contains(sentence)) {
+                System.out.println(sentence);
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean verifySFDRCompanyOutput(List<String> selectedPortfolios) {
+        for(String portfolioName: selectedPortfolios){
+            RegulatoryReportingAPIController apiController = new RegulatoryReportingAPIController();
+            String portfolioId = apiController.getPortfolioId(portfolioName);
+            RegulatoryReportingQueries queries = new RegulatoryReportingQueries();
+            List<Map<String, Object>> dbData = queries.getSFDRCompanyOutput(portfolioId, DateTimeUtilities.getCurrentYear(-1));
+            System.out.println("dbData.size() = " + dbData.size());
+
+            //open Excel file
+            String excelName = rrStatusPage_PortfoliosList.get(0).getText().replaceAll("ready", "").trim();
+            List<String> excelData = getExcelDataList(excelName, (selectedPortfolios.indexOf(portfolioName)+1)+"_"+portfolioName);
+            for(Map<String, Object> row: dbData){
+                for(String key: row.keySet()){
+                    if(row.get(key)==null)continue;
+                    if(!excelData.contains(row.get(key).toString())){
+                        System.out.println(row.get(key));
+//                        return false;
+                    }
+                }
+            }
         }
         return true;
     }

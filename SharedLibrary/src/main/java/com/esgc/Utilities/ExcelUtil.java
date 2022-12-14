@@ -152,18 +152,20 @@ public class ExcelUtil {
         List<String> columns = new ArrayList<>();
 
         for (Cell cell : workSheet.getRow(0)) {
-            columns.add(cell.toString());
+            columns.add(cell.toString().trim());
         }
         return columns;
     }
-
 
     public int columnCount() {
         return workSheet.getRow(0).getLastCellNum();
     }
 
-    public int rowCount() {
+    public int columnCount(int columnIndex) {
+        return workSheet.getRow(columnIndex).getLastCellNum();
+    }
 
+    public int rowCount() {
         return workSheet.getPhysicalNumberOfRows();
     }
 
@@ -232,13 +234,24 @@ public class ExcelUtil {
     public boolean searchData(String data) {
         for (Row row : workSheet) {
             for (Cell cell : row) {
-                if (cell.getCellType() == CellType.STRING) {
-                    if (cell.getStringCellValue().equals(data)) {
-                        return true;
-                    }
+//                if (cell.getCellType() == CellType.STRING) {
+//                    if (cell.getStringCellValue().equals(data)) {
+//                        return true;
+//                    }
+//                }
+                if(cell.getStringCellValue().equals(data)){
+                    return true;
                 }
             }
         }
         return false;
+    }
+
+    public void removeRow(int index) {
+        workSheet.removeRow(workSheet.getRow(index));
+    }
+
+    public int getLastRowNum() {
+        return workSheet.getLastRowNum();
     }
 }
