@@ -205,6 +205,12 @@ public class DashboardQueries {
         return result;
     }
 
+    public List<Map<String, Object>> getSubsidiaryCompanies(String orbisId) {
+        String query = "select * from esg_entity_master where entity_status='Active' and orbis_id='"+orbisId+"';";
+        List<Map<String, Object>> result = getQueryResultMap(query);
+        return result;
+    }
+
     public Object getResearchData(String bvd9Number, String month, String year, String rdID, String dataPointId) {
         String query = "select rd.DATA_VALUE from RESEARCH_DATA rd\n" +
                 " where rd.bvd9_number='" + bvd9Number + "'\n" +

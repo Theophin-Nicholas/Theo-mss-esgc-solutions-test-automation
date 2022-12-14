@@ -60,7 +60,6 @@ public abstract class UITestBase extends TestBase {
             }
         }
 
-
     }
 
     @BeforeMethod(onlyForGroups = {"entitlements"}, groups = {"smoke", "regression", "entitlements"}, alwaysRun = true)
