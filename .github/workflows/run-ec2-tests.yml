@@ -23,11 +23,11 @@ jobs:
     
     - name: Set Path
       run: |
-        echo "C:\Users\Administrator\Downloads\apache-maven-3.8.6-bin\apache-maven-3.8.6\bin" >> $GITHUB_ENV
+        echo "{MAVEN_HOME}={C:\Users\Administrator\Downloads\apache-maven-3.8.6-bin\apache-maven-3.8.6\bin}" >> $GITHUB_ENV
 
     - name: Build with Maven
       run: |
-        echo $MAVEN_HOME
+        echo $GITHUB_ENV
         mvn --version
         mvn test -Dtest=PortfolioNameUpdateAPITest -DfailIfNoTests=false -Dbrowser=edge
     
