@@ -36,7 +36,7 @@ public class APIController {
 
     boolean isInvalidTest = false;
 
-    RequestSpecification configSpec() {
+    synchronized RequestSpecification configSpec() {
         if (System.getProperty("token") == null) {
             String getAccessTokenScript = "return JSON.parse(localStorage.getItem('okta-token-storage')).accessToken.accessToken";
             String accessToken = ((JavascriptExecutor) Driver.getDriver()).executeScript(getAccessTokenScript).toString();
@@ -60,15 +60,15 @@ public class APIController {
         }
     }
 
-    public void setInvalid() {
+    public synchronized void setInvalid() {
         this.isInvalidTest = true;
     }
 
-    public void resetInvalid() {
+    public synchronized void resetInvalid() {
         this.isInvalidTest = false;
     }
 
-    public Response importPortfolio(String user_id, String fileName, String filepath) {
+    public synchronized Response importPortfolio(String user_id, String fileName, String filepath) {
         try {
             return configSpec()
                     .header("Content-Type", "multipart/form-data")
@@ -83,7 +83,7 @@ public class APIController {
         return null;
     }
 
-    public Response deletePortfolio(String portfolioId) {
+    public synchronized Response deletePortfolio(String portfolioId) {
         return configSpec()
                 .header("Content-Type", "application/json, text/plain, */*")
                 .pathParam("portfolio_id", portfolioId)
@@ -99,7 +99,7 @@ public class APIController {
      * <p>
      * Response Example:
      */
-    public Response getFilterOptions(String portfolio_id, String region, String sector) {
+    public synchronized Response getFilterOptions(String portfolio_id, String region, String sector) {
         Response response = null;
         try {
 
@@ -114,6 +114,7 @@ public class APIController {
 
         } catch (Exception e) {
             System.out.println("Inside exception " + e.getMessage());
+            e.printStackTrace();
         }
 
         return response;
@@ -128,7 +129,7 @@ public class APIController {
      * <p>
      * Response Example:
      */
-    public Response getPortfolioScoreResponse(String portfolio_id, String research_line, APIFilterPayload apiFilterPayload) {
+    public synchronized Response getPortfolioScoreResponse(String portfolio_id, String research_line, APIFilterPayload apiFilterPayload) {
         Response response = null;
         try {
 
@@ -140,6 +141,7 @@ public class APIController {
                     .post(PortfolioAnalysisEndpoints.POST_PORTFOLIO_SCORE).prettyPeek();
         } catch (Exception e) {
             System.out.println("Inside exception " + e.getMessage());
+            e.printStackTrace();
         }
 
         return response;
@@ -155,7 +157,7 @@ public class APIController {
      * <p>
      * Response Example:
      */
-    public Response getPortfolioDistributionResponse(String portfolio_id, String research_line, APIFilterPayload apiFilterPayload) {
+    public synchronized Response getPortfolioDistributionResponse(String portfolio_id, String research_line, APIFilterPayload apiFilterPayload) {
         Response response = null;
         try {
             response = configSpec()
@@ -167,12 +169,13 @@ public class APIController {
 
         } catch (Exception e) {
             System.out.println("Inside exception " + e.getMessage());
+            e.printStackTrace();
         }
 
         return response;
     }
 
-    public Response getHistoryTablesResponse(String portfolio_id, String research_line, APIFilterPayload apiFilterPayload) {
+    public synchronized Response getHistoryTablesResponse(String portfolio_id, String research_line, APIFilterPayload apiFilterPayload) {
         Response response = null;
         try {
             response = configSpec()
@@ -184,6 +187,7 @@ public class APIController {
 
         } catch (Exception e) {
             System.out.println("Inside exception " + e.getMessage());
+            e.printStackTrace();
         }
 
         return response;
@@ -198,7 +202,7 @@ public class APIController {
      * <p>
      * Response Example:
      */
-    public Response getPortfolioCoverageResponse(String portfolio_id, String research_line, APIFilterPayload apiFilterPayload) {
+    public synchronized Response getPortfolioCoverageResponse(String portfolio_id, String research_line, APIFilterPayload apiFilterPayload) {
         Response response = null;
         try {
 
@@ -211,6 +215,7 @@ public class APIController {
 
         } catch (Exception e) {
             System.out.println("Inside exception " + e.getMessage());
+            e.printStackTrace();
         }
 
         return response;
@@ -225,7 +230,7 @@ public class APIController {
      * <p>
      * Response Example:
      */
-    public Response getPortfolioUpdatesResponse(String portfolio_id, String research_line, APIFilterPayload apiFilterPayload) {
+    public synchronized Response getPortfolioUpdatesResponse(String portfolio_id, String research_line, APIFilterPayload apiFilterPayload) {
         Response response = null;
         try {
 
@@ -238,6 +243,7 @@ public class APIController {
 
         } catch (Exception e) {
             System.out.println("Inside exception " + e.getMessage());
+            e.printStackTrace();
         }
 
         return response;
@@ -252,7 +258,7 @@ public class APIController {
      * <p>
      * Response Example:
      */
-    public Response getPortfolioEmissionsResponse(String portfolio_id, String research_line, APIFilterPayload apiFilterPayload) {
+    public synchronized Response getPortfolioEmissionsResponse(String portfolio_id, String research_line, APIFilterPayload apiFilterPayload) {
         Response response = null;
         try {
 
@@ -265,6 +271,7 @@ public class APIController {
 
         } catch (Exception e) {
             System.out.println("Inside exception " + e.getMessage());
+            e.printStackTrace();
         }
 
         return response;
@@ -279,7 +286,7 @@ public class APIController {
      * <p>
      * Response Example:
      */
-    public Response getPortfolioLeadersAndLaggardsResponse(String portfolio_id, String research_line, APIFilterPayload apiFilterPayload) {
+    public synchronized Response getPortfolioLeadersAndLaggardsResponse(String portfolio_id, String research_line, APIFilterPayload apiFilterPayload) {
         Response response = null;
         try {
 
@@ -294,6 +301,7 @@ public class APIController {
 
         } catch (Exception e) {
             System.out.println("Inside exception " + e.getMessage());
+            e.printStackTrace();
         }
 
         return response;
@@ -308,7 +316,7 @@ public class APIController {
      * <p>
      * Response Example:
      */
-    public Response getPortfolioRegionSummaryResponse(String portfolio_id, String research_line, APIFilterPayload apiFilterPayload) {
+    public synchronized Response getPortfolioRegionSummaryResponse(String portfolio_id, String research_line, APIFilterPayload apiFilterPayload) {
         Response response = null;
         try {
 
@@ -321,6 +329,7 @@ public class APIController {
 
         } catch (Exception e) {
             System.out.println("Inside exception " + e.getMessage());
+            e.printStackTrace();
         }
 
         return response;
@@ -335,7 +344,7 @@ public class APIController {
      * <p>
      * Response Example:
      */
-    public Response getPortfolioRegionDetailsResponse(String portfolio_id, String research_line, APIFilterPayload apiFilterPayload) {
+    public synchronized Response getPortfolioRegionDetailsResponse(String portfolio_id, String research_line, APIFilterPayload apiFilterPayload) {
         Response response = null;
         try {
 
@@ -348,6 +357,7 @@ public class APIController {
 
         } catch (Exception e) {
             System.out.println("Inside exception " + e.getMessage());
+            e.printStackTrace();
         }
 
         return response;
@@ -362,7 +372,7 @@ public class APIController {
      * <p>
      * Response Example:
      */
-    public Response getPortfolioSectorSummaryResponse(String portfolio_id, String research_line, APIFilterPayload apiFilterPayload) {
+    public synchronized Response getPortfolioSectorSummaryResponse(String portfolio_id, String research_line, APIFilterPayload apiFilterPayload) {
         Response response = null;
         try {
 
@@ -375,6 +385,7 @@ public class APIController {
 
         } catch (Exception e) {
             System.out.println("Inside exception " + e.getMessage());
+            e.printStackTrace();
         }
 
         return response;
@@ -389,7 +400,7 @@ public class APIController {
      * <p>
      * Response Example:
      */
-    public Response getPortfolioSectorDetailsResponse(String portfolio_id, String research_line, APIFilterPayload apiFilterPayload) {
+    public synchronized Response getPortfolioSectorDetailsResponse(String portfolio_id, String research_line, APIFilterPayload apiFilterPayload) {
         Response response = null;
         try {
 
@@ -402,6 +413,7 @@ public class APIController {
 
         } catch (Exception e) {
             System.out.println("Inside exception " + e.getMessage());
+            e.printStackTrace();
         }
 
         return response;
@@ -416,7 +428,7 @@ public class APIController {
      * <p>
      * Response Example:
      */
-    public Response getPortfolioRegionMapResponse(String portfolio_id, String research_line, APIFilterPayload apiFilterPayload) {
+    public synchronized Response getPortfolioRegionMapResponse(String portfolio_id, String research_line, APIFilterPayload apiFilterPayload) {
         Response response = null;
         try {
 
@@ -429,6 +441,7 @@ public class APIController {
 
         } catch (Exception e) {
             System.out.println("Inside exception " + e.getMessage());
+            e.printStackTrace();
         }
 
         return response;
@@ -443,7 +456,7 @@ public class APIController {
      * <p>
      * Response Example:
      */
-    public Response getPortfolioUnderlyingDataMetricsResponse(String portfolio_id, String research_line, APIFilterPayload apiFilterPayload) {
+    public synchronized Response getPortfolioUnderlyingDataMetricsResponse(String portfolio_id, String research_line, APIFilterPayload apiFilterPayload) {
         Response response = null;
         try {
 
@@ -456,12 +469,13 @@ public class APIController {
 
         } catch (Exception e) {
             System.out.println("Inside exception " + e.getMessage());
+            e.printStackTrace();
         }
 
         return response;
     }
 
-    public Response getPhysicalRiskUnderlyingDataMetricsResponse(String portfolio_id, String physical_risk) {
+    public synchronized Response getPhysicalRiskUnderlyingDataMetricsResponse(String portfolio_id, String physical_risk) {
         Response response = null;
         try {
             response = configSpec()
@@ -473,12 +487,13 @@ public class APIController {
 
         } catch (Exception e) {
             System.out.println("Inside exception " + e.getMessage());
+            e.printStackTrace();
         }
 
         return response;
     }
 
-    public Response getPhysicalRiskUnderlyingDataMetricsResponse(String portfolio_id, String researchLine, APIFilterPayload apiFilterPayload) {
+    public synchronized Response getPhysicalRiskUnderlyingDataMetricsResponse(String portfolio_id, String researchLine, APIFilterPayload apiFilterPayload) {
         Response response = null;
         try {
             response = configSpec()
@@ -490,12 +505,13 @@ public class APIController {
 
         } catch (Exception e) {
             System.out.println("Inside exception " + e.getMessage());
+            e.printStackTrace();
         }
 
         return response;
     }
 
-    public List<RangeAndScoreCategory> getResearchLineRangesAndScoreCategories(String researchLine) {
+    public synchronized List<RangeAndScoreCategory> getResearchLineRangesAndScoreCategories(String researchLine) {
 
         List<RangeAndScoreCategory> rangesAndCategories = new ArrayList<>();
 
@@ -553,17 +569,17 @@ public class APIController {
                 return rangesAndCategories;
 
             case "ESG":
-                rangesAndCategories.add(new RangeAndScoreCategory("Weak", 0d, 29.99999999d, "negative", 0d, 24.999999d, 0d,1.499999d));
-                rangesAndCategories.add(new RangeAndScoreCategory("Limited", 30d, 49.9999999d, "negative", 25d, 44.9999999d, 1.5d,2.499999d));
-                rangesAndCategories.add(new RangeAndScoreCategory("Robust", 50d, 59.99999d, "positive", 45d, 64.9999999d, 2.5d,3.4999999d));
-                rangesAndCategories.add(new RangeAndScoreCategory("Advanced", 60d, 100d, "positive", 65d, 100d, 3.5d,4d));
+                rangesAndCategories.add(new RangeAndScoreCategory("Weak", 0d, 29.99999999d, "negative", 0d, 24.999999d, 0d, 1.499999d));
+                rangesAndCategories.add(new RangeAndScoreCategory("Limited", 30d, 49.9999999d, "negative", 25d, 44.9999999d, 1.5d, 2.499999d));
+                rangesAndCategories.add(new RangeAndScoreCategory("Robust", 50d, 59.99999d, "positive", 45d, 64.9999999d, 2.5d, 3.4999999d));
+                rangesAndCategories.add(new RangeAndScoreCategory("Advanced", 60d, 100d, "positive", 65d, 100d, 3.5d, 4d));
                 return rangesAndCategories;
         }
         return null;
     }
 
 
-    public List<RangeAndScoreCategory> getResearchLineRangesAndScoreCategoriesForUpdates(String researchLine) {
+    public synchronized List<RangeAndScoreCategory> getResearchLineRangesAndScoreCategoriesForUpdates(String researchLine) {
 
         List<RangeAndScoreCategory> rangesAndCategories = new ArrayList<>();
 
@@ -618,7 +634,7 @@ public class APIController {
     }
 
 
-    public String apiResourceMapper(String researchLine) {
+    public synchronized String apiResourceMapper(String researchLine) {
         switch (researchLine) {
             case "tcfdstrategy":
             case "TCFD":
@@ -719,7 +735,7 @@ public class APIController {
         return "";
     }
 
-    public String apiResourceMapperWithoutphysicalriskinit(String researchLine) {
+    public synchronized String apiResourceMapperWithoutphysicalriskinit(String researchLine) {
         switch (researchLine) {
             case "tcfdstrategy":
             case "TCFD":
@@ -782,7 +798,7 @@ public class APIController {
      * <p>
      * Response Example:
      */
-    public Response getImpactDistributionResponse(String portfolio_id, String research_line, APIFilterPayloadWithImpactFilter apiFilterPayloadWithImpactFilter) {
+    public synchronized Response getImpactDistributionResponse(String portfolio_id, String research_line, APIFilterPayloadWithImpactFilter apiFilterPayloadWithImpactFilter) {
         Response response = null;
         try {
             response = configSpec()
@@ -796,16 +812,17 @@ public class APIController {
 
         } catch (Exception e) {
             System.out.println("Inside exception " + e.getMessage());
+            e.printStackTrace();
         }
 
         return response;
     }
 
-    public Response getCarbonFootprintEmissionAPIResponse(String portfolio_id, APIFilterPayload apiFilterPayload) {
+    public synchronized Response getCarbonFootprintEmissionAPIResponse(String portfolio_id, APIFilterPayload apiFilterPayload) {
         return getPortfolioEmissionsResponse(portfolio_id, "carbonfootprint", apiFilterPayload);
     }
 
-    public List<ResearchLineIdentifier> getfilteredData(List<ResearchLineIdentifier> portfolio, String filter) {
+    public synchronized List<ResearchLineIdentifier> getfilteredData(List<ResearchLineIdentifier> portfolio, String filter) {
         int limit = 0;
         String orderType = "";
         switch (filter) {
@@ -895,7 +912,7 @@ public class APIController {
 
     }
 
-    public String getScoreCategory(int min, int max, String researchline, List<RangeAndScoreCategory> rangeAndCategoryList) {
+    public synchronized String getScoreCategory(int min, int max, String researchline, List<RangeAndScoreCategory> rangeAndCategoryList) {
         String category = "";
         switch (researchline) {
             case "operationsrisk":
@@ -920,7 +937,7 @@ public class APIController {
     }
 
 
-    public Response getPortfolioNameUpdateAPIResponse(String portfolio_id, String portfolio_name) {
+    public synchronized Response getPortfolioNameUpdateAPIResponse(String portfolio_id, String portfolio_name) {
         Response response = null;
         try {
 
@@ -933,25 +950,27 @@ public class APIController {
 
         } catch (Exception e) {
             System.out.println("Inside exception " + e.getMessage());
+            e.printStackTrace();
         }
 
         return response;
     }
 
-    public Response getEntitlementHandlerResponse() {
+    public synchronized Response getEntitlementHandlerResponse() {
         Response response = null;
         try {
             response = configSpec()
                     .get(CommonEndPoints.GET_ENTITLEMENT_HANDLER);
         } catch (Exception e) {
             System.out.println("Inside exception " + e.getMessage());
+            e.printStackTrace();
         }
 
         return response;
     }
 
 
-    public Response getPortfolioSettingsAPIResponse(String portfolio_id) {
+    public synchronized Response getPortfolioSettingsAPIResponse(String portfolio_id) {
         Response response = null;
         try {
 
@@ -961,11 +980,12 @@ public class APIController {
                     .post(PortfolioSettingsEndPoints.POST_PORTFOLIO_SETTINGS);
         } catch (Exception e) {
             System.out.println("Inside exception " + e.getMessage());
+            e.printStackTrace();
         }
         return response;
     }
 
-    public Response getSearchResults(String searchItem) {
+    public synchronized Response getSearchResults(String searchItem) {
         Response response = null;
         try {
 
@@ -978,12 +998,13 @@ public class APIController {
 
         } catch (Exception e) {
             System.out.println("Inside exception " + e.getMessage());
+            e.printStackTrace();
         }
 
         return response;
     }
 
-    public String postValidPortfolio(String portfolioNameToDelete) {
+    public synchronized String postValidPortfolio(String portfolioNameToDelete) {
         String filePath = System.getProperty("user.dir") + File.separator + "src" +
                 File.separator + "test" + File.separator + "resources" +
                 File.separator + "upload" + File.separator + portfolioNameToDelete;
@@ -1000,6 +1021,7 @@ public class APIController {
         } catch (IOException e) {
             System.out.println("FILE NOT FOUND!!!");
             System.out.println(e.getMessage());
+            e.printStackTrace();
         }
 
         System.out.println("Importing Portfolio:" + fileName);
@@ -1025,7 +1047,7 @@ public class APIController {
         return portfolioID;
     }
 
-    public String getCurrentPortfolioId() {
+    public synchronized String getCurrentPortfolioId() {
         Response response = null;
         try {
             response = configSpec()
@@ -1033,6 +1055,7 @@ public class APIController {
                     .get(PortfolioSettingsEndPoints.GET_PORTFOLIO_ID);
         } catch (Exception e) {
             System.out.println("Inside exception " + e.getMessage());
+            e.printStackTrace();
         }
         response.then().log().ifError();
         return response.path("last-viewed-portfolio");

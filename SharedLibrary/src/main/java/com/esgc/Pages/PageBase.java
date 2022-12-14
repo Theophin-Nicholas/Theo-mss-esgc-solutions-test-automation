@@ -93,7 +93,7 @@ public abstract class PageBase {
     @FindBy(xpath = "//span[@title='SamplePortfolioToDelete']")
     public WebElement samplePortfolioToDelete;
 
-    @FindBy(xpath = "(//button[@id='button-button-test-id-1'])")//ferhat: I removed [2] from end of the locator since there was no 2nd on the test page
+    @FindBy(xpath = "//button[.//text()='Delete Portfolio']")
     public WebElement deleteButton;
 
     @FindBy(xpath = "//div[@role='dialog']/div[2]/div/div")
@@ -139,13 +139,13 @@ public abstract class PageBase {
     @FindBy(xpath = "//table[@id='table-id']/thead/tr")
     public WebElement portfolioCompanyColumnNames;
 
-    @FindBy(xpath = " //table[@id='table-id-1']/tbody/tr")
+    @FindBy(xpath = "//*[contains(text(),'investments not matched')]")
     public WebElement portfolioFooterText;
 
     @FindBy(xpath = "(//table[@id='table-id'])/tbody/tr/td[1]/div/span")
     public List<WebElement> portfolioEntityList;
 
-    @FindBy(xpath = "//div[@role='dialog']/div/div/li")
+    @FindBy(xpath = "//li/span[text()]")
     public WebElement portfolioEntityName;
 
     @FindBy(css = "svg > path[fill-rule='evenodd'][fill='#b8b8b8']")
@@ -276,6 +276,12 @@ public abstract class PageBase {
 
     @FindBy(xpath = "//div[@class=\"MuiToolbar-root MuiToolbar-regular\"]//*[local-name()='svg' and @class=\"MuiSvgIcon-root\"]")
     public WebElement closeIcon;
+
+    @FindBy(xpath = "//*[text()='Entities:']//div[starts-with(@id,'mini')]")
+    public List<WebElement> searchItems;
+
+    @FindBy(xpath = "//mark")
+    public List<WebElement> highlightedWordsInSearch;
 
     @FindBy(xpath = "//button/span[text()='View By Sector']")
     public WebElement viewBySectorButton;
@@ -1633,37 +1639,38 @@ public abstract class PageBase {
 
     }
 
-    String searchKeyword;
+
 
     public boolean checkClickingOnEntityName(String searchKeyword) {
-        this.searchKeyword = searchKeyword;
 
         searchBarOfPortfolio.sendKeys(searchKeyword);
-        BrowserUtils.wait(3);
         try {
-            BrowserUtils.isElementVisible(Driver.getDriver().findElement(By.xpath("//header[@id='prop-search']/following-sibling::*/DIV/div/div/div[3]")), 3);
-            String text = Driver.getDriver().findElement(By.xpath("//header[@id='prop-search']/following-sibling::*/DIV/div/div/div[3]")).getText();
-            System.out.println(text);
-            Driver.getDriver().findElement(By.xpath("//header[@id='prop-search']/following-sibling::*/DIV/div/div/div[3]")).click();
-            //BrowserUtils.isElementVisible(Driver.getDriver().findElement(By.xpath("//header[@id='prop-search']/following-sibling::*/DIV/div/div/div[3]")),3);
-            //searchIconPortfolioPages.get(0).click();
-            //return isSearchBoxAppearonDashboardPage();
-            List<WebElement> check = Driver.getDriver().findElements(By.xpath("//input[@id='platform-search-test-id']"));
-            if (check.size() == 0)
-                return false;
-            else
-                return true;
+            wait.until(ExpectedConditions.visibilityOfAllElements(searchItems));
+            searchItems.stream().map(WebElement::getText).forEach(System.out::println);
+            Collections.shuffle(searchItems);
+            searchItems.get(0).click();
+            BrowserUtils.wait(3);
+            return isSearchBoxDisplayed();
         } catch (Exception e) {
             e.printStackTrace();
-            return false;
+            return true;
         }
 
     }
 
-    public boolean checkIfUserIsOnRightPage() {
+    public boolean isSearchBoxAppearonDashboardPage() {
+        try {
+            List<WebElement> check = Driver.getDriver().findElements(By.xpath("//input[@id='platform-search-test-id']"));
+            return check.size() != 0;
+        } catch (Exception e) {
+            return false;
+        }
+    }
 
-        BrowserUtils.isElementVisible(Driver.getDriver().findElement(By.xpath("//div[.='Apple, Inc.']")), 3);
-        String text = Driver.getDriver().findElement(By.xpath("//div[.='Apple, Inc.']")).getText();
+    public boolean checkIfUserIsOnEntityPageBySearchedKeyword(String searchKeyword) {
+        String dynamicXpath = "//li[contains(.,'" + searchKeyword + "')]";
+        BrowserUtils.isElementVisible(Driver.getDriver().findElement(By.xpath(dynamicXpath)), 3);
+        String text = Driver.getDriver().findElement(By.xpath(dynamicXpath)).getText();
         System.out.println(text);
         return text.contains(searchKeyword);
     }
@@ -1692,13 +1699,13 @@ public abstract class PageBase {
     String entityName;
 
 
-    public boolean checkIfUserIsOnRightPage(String entityName) {
-        this.entityName = entityName;
-        BrowserUtils.isElementVisible(Driver.getDriver().findElement(By.xpath("//div[.='" + entityName + "']")), 3);
-        String text = Driver.getDriver().findElement(By.xpath("//div[.='" + entityName + "']")).getText();
-        System.out.println(text);
-        return text.contains(entityName);
-    }
+//    public boolean checkIfUserIsOnRightPage(String entityName) {
+//        this.entityName = entityName;
+//        BrowserUtils.isElementVisible(Driver.getDriver().findElement(By.xpath("//div[.='" + entityName + "']")), 3);
+//        String text = Driver.getDriver().findElement(By.xpath("//div[.='" + entityName + "']")).getText();
+//        System.out.println(text);
+//        return text.contains(entityName);
+//    }
 
     public boolean validateCarbonFootPrintAndSubLabels() {
 
@@ -2054,11 +2061,14 @@ public abstract class PageBase {
         return input_PortfolioName.isEnabled();
     }
 
-    public void updatePortfolio(String newName) {
-        while (!StringUtils.isEmpty(input_PortfolioName.getAttribute("value"))) {
-            input_PortfolioName.sendKeys("\u0008");
-        }
+    public void updatePortfolioNameInPortfolioManagementDrawer(String newName) {
+        clearPortfolioNameInputBox();
         input_PortfolioName.sendKeys(newName);
+    }
+
+    public void clearPortfolioNameInputBox() {
+        input_PortfolioName.sendKeys(Keys.CONTROL + "a");
+        input_PortfolioName.sendKeys(Keys.DELETE);
     }
 
     public void closeMenuByClickingOutSide() {
@@ -2066,7 +2076,7 @@ public abstract class PageBase {
     }
 
     public void validatePortfolioNameNotChangedAfterUpdateAndClickOutside(String OriginalPortFolioName) {
-        updatePortfolio(OriginalPortFolioName + "111");
+        updatePortfolioNameInPortfolioManagementDrawer(OriginalPortFolioName + "111");
         // BrowserUtils.wait(10);
         closeMenuByClickingOutSide();
         clickMenu();
@@ -2086,7 +2096,7 @@ public abstract class PageBase {
 
     public void validatePortfolioNameChangedAfterUpdateAndClickInsideDrawer(String OriginalPortFolioName) {
         String newPortfolioName = "Automation123";
-        updatePortfolio(newPortfolioName);
+        updatePortfolioNameInPortfolioManagementDrawer(newPortfolioName);
         clickInSidePortfolioDrawer();
         assertTestCase.assertTrue(getPortfolioDrawerHeader(newPortfolioName).isDisplayed(), "Validate if portfolio name saved " +
                 "and after change and click inside the drawer");
@@ -2095,7 +2105,7 @@ public abstract class PageBase {
 
     public void validatePortfolioNameSavedAutomaticallyAfterTwoSecond(String OriginalPortFolioName) {
         String newPortfolioName = "After2Second";
-        updatePortfolio(newPortfolioName);
+        updatePortfolioNameInPortfolioManagementDrawer(newPortfolioName);
         BrowserUtils.wait(2);
         assertTestCase.assertTrue(wait.until(ExpectedConditions.visibilityOf(successMessageForNameSaved)).isDisplayed(), "Validate Succee message is displayd after save");
         assertTestCase.assertTrue(getPortfolioDrawerHeader(newPortfolioName).isDisplayed(), "Validate that portfolio name saved " +
@@ -2117,7 +2127,7 @@ public abstract class PageBase {
 
 
     public void validateblankPortfolioName(String OriginalPortFolioName) {
-        updatePortfolio("");
+        updatePortfolioNameInPortfolioManagementDrawer("");
         BrowserUtils.wait(3);
         try {
             successMessageForNameSaved.isDisplayed();
@@ -2132,7 +2142,7 @@ public abstract class PageBase {
     }
 
     public void undoPortfolioNameChange(String OriginalPortFolioName) {
-        updatePortfolio(OriginalPortFolioName);
+        updatePortfolioNameInPortfolioManagementDrawer(OriginalPortFolioName);
         BrowserUtils.wait(4);
         clickInSidePortfolioDrawer();
     }
