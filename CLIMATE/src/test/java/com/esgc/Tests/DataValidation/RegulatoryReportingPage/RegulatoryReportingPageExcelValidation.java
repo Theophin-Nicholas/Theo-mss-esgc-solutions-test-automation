@@ -9,6 +9,7 @@ import com.esgc.Utilities.Xray;
 import org.testng.annotations.Test;
 
 import java.util.List;
+import java.util.Set;
 
 public class RegulatoryReportingPageExcelValidation extends DataValidationTestBase {
 
@@ -226,18 +227,11 @@ public class RegulatoryReportingPageExcelValidation extends DataValidationTestBa
         List<String> selectedPortfolios = reportingPage.getSelectedPortfolioOptions();
         //verify create reports button before clicking
         assertTestCase.assertTrue(reportingPage.createReportsButton.isEnabled(), "Create report button is enabled");
+        Set<String> currentWindows = BrowserUtils.getWindowHandles();
         reportingPage.createReportsButton.click();
-        BrowserUtils.wait(2);
-        String newTab1 = "";
-        for (String tab : BrowserUtils.getWindowHandles()) {
-            if (!tab.equals(currentWindow)) {
-                newTab1 = tab;
-            }
-        }
-
         try {
             //New tab should be opened and empty state message should be displayed as in the screenshot
-            assertTestCase.assertTrue(reportingPage.verifyNewTabOpened(newTab1), "New tab is opened");
+            assertTestCase.assertTrue(reportingPage.verifyNewTabOpened(currentWindows), "New tab is opened");
             System.out.println("New tab is opened");
             assertTestCase.assertTrue(reportingPage.verifyReportsReadyToDownload(selectedPortfolios), "Reports are ready to download");
             System.out.println("Reports are ready to download");
@@ -249,6 +243,56 @@ public class RegulatoryReportingPageExcelValidation extends DataValidationTestBa
             assertTestCase.assertTrue(reportingPage.verifyPortfolioCoverageForExcel(portfolioName),
                     "EU Taxonomy portfolio coverage is verified for Excel vs DB");
             System.out.println("EU Taxonomy portfolio coverage is verified for Excel vs DB");
+        } catch (Exception e) {
+            e.printStackTrace();
+            assertTestCase.assertTrue(false, "New tab verification failed");
+        } finally {
+            BrowserUtils.switchWindowsTo(currentWindow);
+            System.out.println("=============================");
+        }
+    }
+
+    @Test(groups = {"regression", "DataValidation", "regulatoryReporting"},
+            description = "Data Validation | Regulatory Reporting | Verify the data downloaded in the generated annual report excel is for the latest data available for the portfolios irrespective of reporting year when use latest data filter is selected")
+    @Xray(test = {10855})
+    public void verifyLatestDataAvailableForPortfoliosWithLatestDataTest() {
+        //todo: Step 8, 9 and 10 are not completed yet
+        DashboardPage dashboardPage = new DashboardPage();
+        dashboardPage.navigateToPageFromMenu("Regulatory Reporting");
+        test.info("Navigated to Regulatory Reporting Page");
+        //verify portfolio upload modal
+        assertTestCase.assertTrue(reportingPage.uploadAnotherPortfolioLink.isDisplayed(), "Portfolio Upload button is displayed");
+
+        //upload a portfolio
+        String portfolioName = "SFDRPortfolio";
+        if (!reportingPage.verifyPortfolio(portfolioName)) reportingPage.uploadPortfolio(portfolioName);
+
+        String currentWindow = BrowserUtils.getCurrentWindowHandle();
+        reportingPage.selectPortfolioOptionByName(portfolioName);
+        reportingPage.selectUseLatestData();
+        assertTestCase.assertTrue(reportingPage.isUseLatestDataSelected(), "Use latest data is selected");
+        reportingPage.selectAnnualReports();
+        assertTestCase.assertTrue(reportingPage.isAnnualReportsSelected(), "Annual reports is selected");
+
+        List<String> selectedPortfolios = reportingPage.getSelectedPortfolioOptions();
+        //verify create reports button before clicking
+        assertTestCase.assertTrue(reportingPage.createReportsButton.isEnabled(), "Create report button is enabled");
+        Set<String> currentWindows = BrowserUtils.getWindowHandles();
+        reportingPage.createReportsButton.click();
+        try {
+            //New tab should be opened and empty state message should be displayed as in the screenshot
+            assertTestCase.assertTrue(reportingPage.verifyNewTabOpened(currentWindows), "New tab is opened");
+            System.out.println("New tab is opened");
+            assertTestCase.assertTrue(reportingPage.verifyReportsReadyToDownload(selectedPortfolios), "Reports are ready to download");
+            System.out.println("Reports are ready to download");
+            reportingPage.deleteFilesInDownloadsFolder();
+            assertTestCase.assertTrue(reportingPage.verifyIfReportsDownloaded(), "Reports are downloaded");
+            System.out.println("Reports are downloaded");
+            assertTestCase.assertTrue(reportingPage.unzipReports(), "Reports are extracted");
+            System.out.println("Reports are extracted");
+            assertTestCase.assertTrue(reportingPage.verifySFDRCompanyOutput(selectedPortfolios),
+                    "SFDR Company output for portfolio coverage is verified for Excel vs DB");
+            System.out.println("SFDR Company output for portfolio coverage is verified for Excel vs DB");
         } catch (Exception e) {
             e.printStackTrace();
             assertTestCase.assertTrue(false, "New tab verification failed");

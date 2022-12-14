@@ -456,7 +456,7 @@ public class AccountsPageTests extends EMCUITestBase {
         System.out.println("act fname = " + editUserPage.firstNameInput.getAttribute("value"));
         assertTestCase.assertEquals(editUserPage.firstNameInput.getAttribute("value"), fname, "First name is verified");
         assertTestCase.assertEquals(editUserPage.lastNameInput.getAttribute("value"), lname, "Last name is verified");
-        assertTestCase.assertTrue(editUserPage.suspendButton.isEnabled(), "Suspend button is verified");
+        //assertTestCase.assertTrue(editUserPage.suspendButton.isEnabled(), "Suspend button is verified");
         assertTestCase.assertTrue(editUserPage.activateButton.isDisplayed(), "Activate button is verified");
         assertTestCase.assertTrue(editUserPage.activateButton.isEnabled(), "Activate button is enabled");
         assertTestCase.assertEquals(editUserPage.status.getText(), "Staged", "Status is displayed");
@@ -1457,16 +1457,18 @@ public class AccountsPageTests extends EMCUITestBase {
     public void verifyAssignApplicationRoleProductUserLoginTest() {
         navigateToAccountsPage(accountName, "applications");
         EMCAccountDetailsPage detailsPage = new EMCAccountDetailsPage();
-        if (!detailsPage.verifyApplication("MESG Platform - DEV - QA"))
-            detailsPage.assignApplication("MESG Platform - DEV - QA");
+        String mesgAppName = Environment.MESG_APPLICATION_NAME;
+        if (!detailsPage.verifyApplication(mesgAppName))
+            detailsPage.assignApplication(mesgAppName);
         detailsPage.clickOnUsersTab();
-        assertTestCase.assertTrue(detailsPage.verifyUser("Active User"), "Active User is displayed");
-        detailsPage.searchUser("Active User");
+        BrowserUtils.wait(3);
+        assertTestCase.assertTrue(detailsPage.verifyUser(activeUserName), "Active User is displayed");
+        detailsPage.searchUser(activeUserName);
         EMCUserDetailsPage userPage = new EMCUserDetailsPage();
         assertTestCase.assertEquals(userPage.userStatus.getText(), "Active", "User status is Active");
-        if (!userPage.verifyApplicationRole("MESG Platform - DEV - QA"))
-            userPage.assignApplicationRoles("MESG Platform - DEV - QA");
-        assertTestCase.assertTrue(userPage.verifyApplicationRole("MESG Platform - DEV - QA"), "Application role is assigned");
+        if (!userPage.verifyApplicationRole(mesgAppName))
+            userPage.assignApplicationRoles(mesgAppName);
+        assertTestCase.assertTrue(userPage.verifyApplicationRole(mesgAppName), "Application role is assigned");
         assertTestCase.assertTrue(loginAndVerify(), "User is logged in");
     }
 
