@@ -10,17 +10,26 @@ jobs:
     runs-on: app-delivery-ec2-windows
 
     steps:
-    - uses: actions/checkout@v3
+    
+    - name: Checkout Repo
+      uses: actions/checkout@v3
+    
     - name: Set up JDK 11
       uses: actions/setup-java@v3
       with:
         java-version: '11'
         distribution: 'temurin'
         cache: maven
+    
+    - name: Set Path
+      run: |
+        echo "C:\Users\Administrator\Downloads\apache-maven-3.8.6-bin\apache-maven-3.8.6\bin" >> $GITHUB_ENV
+
     - name: Build with Maven
       run: |
         echo $MAVEN_HOME
         mvn --version
         mvn test -Dtest=PortfolioNameUpdateAPITest -DfailIfNoTests=false -Dbrowser=edge
+    
     - name: Surefire Report
       uses: ScaCap/action-surefire-report@v1
