@@ -35,6 +35,9 @@ public class DashboardPage extends UploadPage {
     @FindBy(xpath = "//div[text()='ESG score']/following-sibling::div/div")
     public WebElement esgScoreValue;
 
+    @FindBy(xpath = "//h3[contains(text(),'Portfolio Average')]")
+    public WebElement heatmapPortfolioAverage;
+
     @FindBy(xpath = "//div[text()='Physical Risk']")
     public WebElement physicalRiskCard;
 
@@ -952,6 +955,14 @@ public class DashboardPage extends UploadPage {
         return false;
     }
 
+    public boolean heatmapXAxisIsAvailable(){
+        try{
+            return heatMapXAxisIndicatorTitle.isDisplayed();
+        }catch(Exception e){
+            return false;
+        }
+    }
+
     public boolean verifyResearchLineDescriptionFromHeatmapSection(String section, String description) {
         //selectOrDeselectHeatMapSection(section);
         String actualDescription = Driver.getDriver().findElement(By.xpath("//h3[text()='" + section + "']/../p")).getText();
@@ -1436,6 +1447,12 @@ public class DashboardPage extends UploadPage {
             }
         }
         return false;
+    }
+
+    public String getHeatMapPortfolioAverage(){
+        String portfolioAverage = heatmapPortfolioAverage.getText();
+        return portfolioAverage.substring(portfolioAverage.lastIndexOf(":")+1).trim();
+
     }
 
     public boolean selectResearchLineForHeatMap(String researchLine) {
