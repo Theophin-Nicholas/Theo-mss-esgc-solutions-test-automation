@@ -12,4 +12,66 @@ public class RegulatoryReportingQueries {
                 "WHERE PORTFOLIO_ID='"+portfolioId+"' AND DATE_BASED_DATA_TYPE='"+dataType+"'";
         return getQueryResultMap(query);
     }
+
+    public int getNumberOfCompanies(String portfolioId) {
+        return getPortfolioDetails(portfolioId).size();
+    }
+    public List<Map<String, Object>> getPortfolioDetails(String portfolioId) {
+        String query = "select * from DF_PORTFOLIO where PORTFOLIO_ID='"+portfolioId+"'";
+        return getQueryResultMap(query);
+    }
+
+    public List<Map<String, Object>> getReportingYearDetails(String portfolioId) {
+        String query = "SELECT DISTINCT tt.portfolio_id --as \"portfolio_id\"\n" +
+                "\t\t,sfdr_coverage, taxonomy_coverage\n" +
+                "\t\t,reporting_year AS year\n" +
+                "  \t\t, tt.as_of_date\n" +
+                "\tFROM  (SELECT distinct portfolio_id\n" +
+                "\t\t,rrs.bvd9_number orbis_id\n" +
+                "\t\t,COUNT(DISTINCT(rrs.bvd9_number)) OVER (partition by portfolio_id) Covered_Comapnies\n" +
+                "\t\t,total_companies\n" +
+                "\t\t,p.AS_OF_DATE\n" +
+                "\tFROM df_target.regulatory_report_sfdr rrs ,\n" +
+                "(SELECT portfolio_id\n" +
+                "\t\t,nvl(bvd9_number, sec_id) AS bvd9_number\n" +
+                "\t\t,COUNT(*) OVER (partition by portfolio_id) total_companies\n" +
+                "\t\t,MAX(AS_OF_DATE) OVER (partition by portfolio_id) AS_OF_DATE\n" +
+                "\tFROM df_target.df_portfolio\n" +
+                "\tWHERE portfolio_id IN  ('"+portfolioId+"')) p\n" +
+                "    WHERE rrs.bvd9_number = p.bvd9_number) sc left outer join\n" +
+                "        df_target.regulatory_report_sfdr rrs\n" +
+                "\ton  rrs.BVD9_NUMBER = sc.orbis_id   inner join\n" +
+                "    (select distinct sc.portfolio_id, round((sc.Covered_Comapnies / sc.total_companies) * 100, 0) AS sfdr_coverage, round((tc.Covered_Comapnies / tc.total_companies) * 100, 0) AS taxonomy_coverage,\n" +
+                "       sc.AS_OF_DATE from\n" +
+                "       (SELECT distinct portfolio_id\n" +
+                "\t\t,eto.orbis_id\n" +
+                "\t\t,COUNT(DISTINCT(eto.orbis_id)) OVER (partition by portfolio_id) Covered_Comapnies\n" +
+                "\t\t,total_companies\n" +
+                "\t\t,p.AS_OF_DATE\n" +
+                "\tFROM (SELECT portfolio_id\n" +
+                "\t\t,nvl(bvd9_number, sec_id) AS bvd9_number\n" +
+                "\t\t,COUNT(*) OVER (partition by portfolio_id) total_companies\n" +
+                "\t\t,MAX(AS_OF_DATE) OVER (partition by portfolio_id) AS_OF_DATE\n" +
+                "\tFROM df_target.df_portfolio\n" +
+                "\tWHERE portfolio_id IN  ('"+portfolioId+"')) p left outer join df_target.EU_TAXONOMY_OVERVIEW eto\n" +
+                "\t\t\ton eto.orbis_id = p.bvd9_number) tc,\n" +
+                "       (SELECT distinct portfolio_id\n" +
+                "\t\t,rrs.bvd9_number orbis_id\n" +
+                "\t\t,COUNT(DISTINCT(rrs.bvd9_number)) OVER (partition by portfolio_id) Covered_Comapnies\n" +
+                "\t\t,total_companies\n" +
+                "\t\t,p.AS_OF_DATE\n" +
+                "\tFROM df_target.regulatory_report_sfdr rrs ,\n" +
+                "(SELECT portfolio_id\n" +
+                "\t\t,nvl(bvd9_number, sec_id) AS bvd9_number\n" +
+                "\t\t,COUNT(*) OVER (partition by portfolio_id) total_companies\n" +
+                "\t\t,MAX(AS_OF_DATE) OVER (partition by portfolio_id) AS_OF_DATE\n" +
+                "\tFROM df_target.df_portfolio\n" +
+                "\tWHERE portfolio_id IN  ('"+portfolioId+"')) p\n" +
+                "    WHERE rrs.bvd9_number = p.bvd9_number) sc\n" +
+                "       where sc.portfolio_id = tc.portfolio_id)\n" +
+                "    tt on tt.portfolio_id = sc.portfolio_id\t\n" +
+                "\tORDER BY portfolio_id\n" +
+                "\t\t,reporting_year DESC;";
+        return getQueryResultMap(query);
+    }
 }
