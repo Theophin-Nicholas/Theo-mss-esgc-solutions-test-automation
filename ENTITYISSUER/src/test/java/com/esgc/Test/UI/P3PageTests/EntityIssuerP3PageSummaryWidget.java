@@ -3,7 +3,7 @@ package com.esgc.Test.UI.P3PageTests;
 import com.esgc.Pages.EntityIssuerPage;
 import com.esgc.Pages.LoginPageIssuer;
 import com.esgc.Test.TestBases.EntityPageTestBase;
-import com.esgc.TestBase.DataProviderClass;
+import com.esgc.Test.TestBases.IssuerDataProviderClass;
 import com.esgc.Utilities.Xray;
 import org.testng.annotations.Test;
 
@@ -14,7 +14,7 @@ public class EntityIssuerP3PageSummaryWidget extends EntityPageTestBase {
 
     @Xray(test = {7438,7442,7443,8993,9721})
     @Test(groups = {"regression", "ui", "smoke","entity_issuer"},
-            dataProvider = "credentials",dataProviderClass = DataProviderClass.class,
+            dataProvider = "credentialsP3",dataProviderClass = IssuerDataProviderClass.class,
             description = "Verify Summary Widget")
     public void ValidateSummaryWidget(String... dataProvider) {
         String userId=dataProvider[0];
