@@ -436,7 +436,14 @@ public class DataProviderClass {
     @DataProvider(name = "SubsidiaryCompanies")
     public Object[][] subsidiaryCompanies() {
         return new Object[][]{
-                {"BAE Systems Holdings, Inc.","BAE Systems Plc"},
+                {"Oriental Bank","OFG Bancorp"},
+        };
+    }
+
+    @DataProvider(name = "CompaniesWithNoSubsidiaryCompanies")
+    public Object[][] NoSubsidiaryCompanies() {
+        return new Object[][]{
+                {"Amazon.com, Inc."},
         };
     }
 

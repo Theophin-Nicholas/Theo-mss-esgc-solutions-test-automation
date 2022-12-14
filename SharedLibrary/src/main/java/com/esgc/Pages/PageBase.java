@@ -1249,8 +1249,9 @@ public abstract class PageBase {
 
     public void clickTheCompany(String companyName) {
         String xpath = "//span[text()='"+companyName+"']";
-        WebElement element = Driver.getDriver().findElement(By.xpath(xpath));
-        element.click();
+        List<WebElement> elements = Driver.getDriver().findElements(By.xpath(xpath));
+        BrowserUtils.scrollTo(elements.get(elements.size()-1));
+        elements.get(elements.size()-1).click();
     }
 
     public boolean isElementClickable(WebElement element) {
