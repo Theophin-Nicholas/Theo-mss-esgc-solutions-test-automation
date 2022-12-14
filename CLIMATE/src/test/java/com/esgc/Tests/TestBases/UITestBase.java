@@ -45,9 +45,21 @@ public abstract class UITestBase extends TestBase {
         isUITest = true;
         Driver.getDriver().manage().window().maximize();
         DatabaseDriver.createDBConnection();
-//        String getAccessTokenScript = "return JSON.parse(localStorage.getItem('okta-token-storage')).accessToken.accessToken";
-//        String accessToken = ((JavascriptExecutor) Driver.getDriver()).executeScript(getAccessTokenScript).toString();
-//        System.setProperty("token", accessToken);
+        String getAccessTokenScript = "return JSON.parse(localStorage.getItem('okta-token-storage')).accessToken.accessToken";
+        int tryCount = 0;
+        while(true){
+            tryCount++;
+            try{
+                String accessToken = ((JavascriptExecutor) Driver.getDriver()).executeScript(getAccessTokenScript).toString();
+                System.setProperty("token", accessToken);
+                break;
+            } catch (Exception e) {
+                System.out.println("Access token could not be retrieved");
+                if(tryCount == 20) break;
+                BrowserUtils.wait(1);
+            }
+        }
+
     }
 
     @BeforeMethod(onlyForGroups = {"entitlements"}, groups = {"smoke", "regression", "entitlements"}, alwaysRun = true)
