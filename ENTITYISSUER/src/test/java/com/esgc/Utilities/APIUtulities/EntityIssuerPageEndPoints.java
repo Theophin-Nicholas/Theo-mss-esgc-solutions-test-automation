@@ -16,4 +16,6 @@ public class EntityIssuerPageEndPoints {
     public static String POST_DRIVERS_DETAILS = "/api/issuer/dual-materiality/driver-details";
     public static String POST_ENTITY_CONTROVERSIES = "api/issuer/dual-materiality/controversies";
     public static String POST_SECTOR_ALLOCATION = "api/issuer/sector-allocation";
+
+    public static String POST_VALIDATE_URL = "api/issuer/validate-url";
 }

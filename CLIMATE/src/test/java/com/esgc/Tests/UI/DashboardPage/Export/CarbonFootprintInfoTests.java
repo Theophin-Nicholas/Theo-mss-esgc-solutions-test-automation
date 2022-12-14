@@ -50,7 +50,7 @@ public class CarbonFootprintInfoTests extends DataValidationTestBase {
 
     public boolean verifyCarbonFootprintInfo(Map<String,String> excelResult, Map<String,Object> dbResult) {
 
-        boolean result =//TODO Below line disabled due to date issue (
+        boolean result =//TODO Below line disabled due to date issue ( check https://esjira/browse/ESGCA-8761
                //utils.compare(dbResult.get("PRODUCED_DATE"),excelResult.get("Carbon Footprint Produced Date")) &&
                 utils.compare(dbResult.get("SCORE_CATEGORY"),excelResult.get("Carbon Footprint Grade")) &&
                 utils.compare(dbResult.get("CARBON_FOOTPRINT_VALUE_TOTAL"),excelResult.get("Carbon Footprint Score (scope 1 & 2) (t CO2 eq)")) &&

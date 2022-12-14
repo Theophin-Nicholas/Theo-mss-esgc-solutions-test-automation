@@ -30,21 +30,25 @@ public abstract class UITestBase extends TestBase {
             Driver.getDriver().get(URL);
         }
 
-//        Driver.getDriver().manage().window().maximize();
-        Driver.getDriver().manage().timeouts().implicitlyWait(Duration.ofSeconds(30));
-        LoginPage loginPage = new LoginPage();
-
-        boolean isPampaTest = this.getClass().getName().contains("Pampa");
-        boolean isEntitlementsTest = this.getClass().getName().contains("Bundle") || this.getClass().getName().contains("Entitlements");
-        String url = Driver.getDriver().getCurrentUrl();
-//        if (!loginPage.isSearchIconDisplayed()) {
-        if (url.endsWith("/login")) {
-            if (!isPampaTest && !isEntitlementsTest) {
-                loginPage.login();
-            }
-        }
-        isUITest = true;
         Driver.getDriver().manage().window().maximize();
+        Driver.getDriver().manage().timeouts().implicitlyWait(Duration.ofSeconds(30));
+
+//        LoginPage loginPage = new LoginPage();
+//
+//        boolean isPampaTest = this.getClass().getName().contains("Pampa");
+//        boolean isEntitlementsTest = this.getClass().getName().contains("Bundle") || this.getClass().getName().contains("Entitlements");
+//        if (loginPage.isUsernameBoxDisplayed() || !loginPage.checkIfUserLoggedInSuccessfully()) {
+//            if (!isPampaTest && !isEntitlementsTest) {
+//                loginPage.login();
+//            }
+//        }
+
+        isUITest = true;
+
+//        DatabaseDriver.createDBConnection();
+//        String getAccessTokenScript = "return JSON.parse(localStorage.getItem('okta-token-storage')).accessToken.accessToken";
+//        String accessToken = ((JavascriptExecutor) Driver.getDriver()).executeScript(getAccessTokenScript).toString();
+//        System.setProperty("token", accessToken);
     }
 
     @BeforeMethod(onlyForGroups = {"entitlements"}, groups = {"smoke", "regression", "entitlements"}, alwaysRun = true)
@@ -66,6 +70,19 @@ public abstract class UITestBase extends TestBase {
         isUITest = true;
     }
 
+    @BeforeMethod(alwaysRun = true)
+    public synchronized void loginForTestsIfUserLoggedOut() {
+        boolean isPampaTest = this.getClass().getName().contains("Pampa");
+        boolean isEntitlementsTest = this.getClass().getName().contains("Bundle") || this.getClass().getName().contains("Entitlements");
+        LoginPage loginPage = new LoginPage();
+        if (Driver.getDriver().getCurrentUrl().endsWith("login")) {
+            if (!isPampaTest && !isEntitlementsTest) {
+                loginPage.login();
+            }
+        }
+    }
+
+
     @AfterMethod(onlyForGroups = {"ui"}, groups = {"smoke", "regression", "ui"})
     public void refreshPageToContinueUITesting(ITestResult result) {
         getScreenshot(result);
@@ -77,10 +94,10 @@ public abstract class UITestBase extends TestBase {
         Driver.closeDriver();
     }
 
-    @AfterClass(alwaysRun = true)
-    public void closeDriverAfterAllTests() {
-        Driver.closeDriver();
-    }
+//    @AfterClass(alwaysRun = true)
+//    public void closeDriverAfterAllTests() {
+//        Driver.closeDriver();
+//    }
 
 
 }

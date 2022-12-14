@@ -58,7 +58,7 @@ public class CarbonFootprint_EmissionWidgetsTest extends UITestBase {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio Analysis page");
         researchLinePage.goToEntity(entity);
-        assertTestCase.assertTrue(researchLinePage.checkIfUserIsOnRightPage(entity));
+        assertTestCase.assertTrue(researchLinePage.checkIfUserIsOnEntityPageBySearchedKeyword(entity));
         assertTestCase.assertTrue(researchLinePage.validateCarbonFootPrintAndSubLabels(), "Carbon Footprint label and sub-labels are correct");
         //researchLinePage.verifyBackGroundColor();
     }

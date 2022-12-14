@@ -43,7 +43,7 @@ public class PortfolioSettings extends UITestBase {
         researchLinePage.validatePortfolioNameSavedAutomaticallyAfterTwoSecond(originalPortfolioName);
         researchLinePage.validatePortfolioNameRevertbyCtrlZ(originalPortfolioName);
         researchLinePage.validatePortfolioNameUpdatedInAllLocations(originalPortfolioName);
-        // researchLinePage.validateblankPortfolioName(originalPortfolioName);
+        researchLinePage.validateblankPortfolioName(originalPortfolioName);
 
     }
 
@@ -66,18 +66,15 @@ public class PortfolioSettings extends UITestBase {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         researchLinePage.clickPortfolioSelectionButton();
         researchLinePage.selectPortfolioFromPortfolioSettings("Sample Portfolio");
-        BrowserUtils.wait(10);
         researchLinePage.clickMenu();
-        BrowserUtils.wait(2);
         researchLinePage.portfolioSettings.click();
-        BrowserUtils.wait(2);
 
         //Verify that Sample Portfolio Delete button is disabled
         System.out.println("Verify that Sample Portfolio Delete button is disabled");
         BrowserUtils.scrollTo(researchLinePage.samplePortfolio);
         researchLinePage.samplePortfolio.click();
         BrowserUtils.scrollTo(researchLinePage.deleteButton);
-        assertTestCase.assertFalse(researchLinePage.deleteButton.isEnabled());
+        assertTestCase.assertFalse(researchLinePage.isDeletePortfolioButtonActive());
         researchLinePage.pressESCKey();
 
 
@@ -184,7 +181,7 @@ public class PortfolioSettings extends UITestBase {
             researchLinePage.portfolioEntityList.get(i).click();
             BrowserUtils.wait(8);
             System.out.println("portfolioEntityName.getText() = " + researchLinePage.portfolioEntityName.getText());
-            assertTestCase.assertTrue(researchLinePage.portfolioEntityName.getText().contains(entityName));
+            assertTestCase.assertTrue(researchLinePage.portfolioEntityName.getText().contains(entityName), "Expected=" + entityName + "\nActual=" + researchLinePage.portfolioEntityName.getText());
             researchLinePage.pressESCKey();
             BrowserUtils.wait(2);
         }
@@ -265,7 +262,7 @@ public class PortfolioSettings extends UITestBase {
         dashboardPage.clickUploadPortfolioButton();
         List<WebElement> checkThePortfolioAvailability = Driver.getDriver().findElements(By.xpath("//span[@title='SamplePortfolioToDelete']"));
         if (checkThePortfolioAvailability.size() >= 1) {
-            dashboardPage.pressESCKey();
+            Driver.getDriver().findElement(By.xpath("//h2[text()='Import Portfolio']/button")).click();;
             return;
         }
         BrowserUtils.waitForVisibility(dashboardPage.uploadButton, 2);
