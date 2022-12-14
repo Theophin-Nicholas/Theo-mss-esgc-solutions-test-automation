@@ -539,7 +539,7 @@ public class EntityClimateProfilePage extends ClimatePageBase {
         return companyName;
     }
 
-    public boolean validateGlobalHeader(String companyName) {
+    public boolean validateGlobalCompanyNameHeader(String companyName) {
         try{
             return Driver.getDriver().findElement(By.xpath("//li[@role='menuitem']/span[text()='"+companyName+"']")).isDisplayed();
         }catch(Exception e){
@@ -2574,8 +2574,10 @@ public class EntityClimateProfilePage extends ClimatePageBase {
         BrowserUtils.hover(Company);
         BrowserUtils.wait(1);
         String color = Color.fromString(Company.findElement(By.xpath(".."))
-                .getCssValue("background-color")).toString();//.asHex().toUpperCase();
-        assertTestCase.assertEquals(color, "Color: rgba(0, 0, 0, 0.04)", "Validate Company Name hover functionality");
+                .getCssValue("background-color")).asHex().toUpperCase();
+        System.out.println(color);
+        assertTestCase.assertTrue(color.equals("#EBF4FA")
+                , "Validate Company Name hover functionality");
     }
 
     public void validatePhysicalClimateHazardUpdatedDate(String orbisID) {
