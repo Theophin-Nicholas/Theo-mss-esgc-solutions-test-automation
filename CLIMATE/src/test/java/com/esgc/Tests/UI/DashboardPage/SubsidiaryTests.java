@@ -3,10 +3,10 @@ package com.esgc.Tests.UI.DashboardPage;
 import com.esgc.Pages.DashboardPage;
 import com.esgc.Pages.EntityClimateProfilePage;
 import com.esgc.Pages.ResearchLinePage;
+import com.esgc.TestBase.DataProviderClass;
 import com.esgc.Tests.TestBases.UITestBase;
 import com.esgc.Utilities.*;
 import com.esgc.Utilities.Database.DashboardQueries;
-import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import java.util.List;
@@ -51,7 +51,7 @@ public class SubsidiaryTests extends UITestBase {
         // Search with subsidiary company name, when clicked, parent company profile page should be opened
         EntityClimateProfilePage entityClimateProfilePage = new EntityClimateProfilePage();
         entityClimateProfilePage.searchAndLoadClimateProfilePage(subsidiaryCompanyName);
-        assertTestCase.assertTrue(entityClimateProfilePage.validateGlobalHeader(parentCompanyName), "Global header verification");
+        assertTestCase.assertTrue(entityClimateProfilePage.validateGlobalCompanyNameHeader(parentCompanyName), "Global header verification");
         entityClimateProfilePage.closeEntityProfilePage();
         assertTestCase.assertFalse(dashboardPage.isSearchBoxDisplayed(), "User is on expected page");
 
@@ -61,7 +61,7 @@ public class SubsidiaryTests extends UITestBase {
         dashboardPage.verifyCompanyNameInCoveragePopup(subsidiaryCompanyName);
         dashboardPage.verifyCompanyIsClickableInCoveragePopup(subsidiaryCompanyName);
         dashboardPage.clickTheCompany(subsidiaryCompanyName);
-        assertTestCase.assertTrue(entityClimateProfilePage.validateGlobalHeader(parentCompanyName), "Global header verification");
+        assertTestCase.assertTrue(entityClimateProfilePage.validateGlobalCompanyNameHeader(parentCompanyName), "Global header verification");
         entityClimateProfilePage.closeEntityProfilePage();
         dashboardPage.pressESCKey();
 
@@ -73,21 +73,21 @@ public class SubsidiaryTests extends UITestBase {
         dashboardPage.verifyCompanyNameInTables(subsidiaryCompanyName);
         dashboardPage.verifyCompanyIsClickable(subsidiaryCompanyName);
         dashboardPage.clickTheCompany(subsidiaryCompanyName);
-        assertTestCase.assertTrue(entityClimateProfilePage.validateGlobalHeader(parentCompanyName), "Global header verification");
+        assertTestCase.assertTrue(entityClimateProfilePage.validateGlobalCompanyNameHeader(parentCompanyName), "Global header verification");
         entityClimateProfilePage.closeEntityProfilePage();
 
         dashboardPage.clickAndSelectAPerformanceChart("Leaders");
         dashboardPage.verifyCompanyNameInTables(subsidiaryCompanyName);
         dashboardPage.verifyCompanyIsClickable(subsidiaryCompanyName);
         dashboardPage.clickTheCompany(subsidiaryCompanyName);
-        assertTestCase.assertTrue(entityClimateProfilePage.validateGlobalHeader(parentCompanyName), "Global header verification");
+        assertTestCase.assertTrue(entityClimateProfilePage.validateGlobalCompanyNameHeader(parentCompanyName), "Global header verification");
         entityClimateProfilePage.closeEntityProfilePage();
 
         dashboardPage.clickAndSelectAPerformanceChart("Laggards");
         dashboardPage.verifyCompanyNameInTables(subsidiaryCompanyName);
         dashboardPage.verifyCompanyIsClickable(subsidiaryCompanyName);
         dashboardPage.clickTheCompany(subsidiaryCompanyName);
-        assertTestCase.assertTrue(entityClimateProfilePage.validateGlobalHeader(parentCompanyName), "Global header verification");
+        assertTestCase.assertTrue(entityClimateProfilePage.validateGlobalCompanyNameHeader(parentCompanyName), "Global header verification");
         entityClimateProfilePage.closeEntityProfilePage();
 
     }
@@ -152,7 +152,7 @@ public class SubsidiaryTests extends UITestBase {
         dashboardPage.verifyCompanyIsClickable(subsidiaryCompanyName);
         researchLinePage.clickTheCompany(subsidiaryCompanyName);
         EntityClimateProfilePage entityClimateProfilePage = new EntityClimateProfilePage();
-        assertTestCase.assertTrue(entityClimateProfilePage.validateGlobalHeader(parentCompanyName),"Verify Parent Company page is displayed");;
+        assertTestCase.assertTrue(entityClimateProfilePage.validateGlobalCompanyNameHeader(parentCompanyName),"Verify Parent Company page is displayed");;
         entityClimateProfilePage.closeEntityProfilePage();
         researchLinePage.closeMenuByClickingOutSide();
 
@@ -174,7 +174,7 @@ public class SubsidiaryTests extends UITestBase {
         researchLinePage.verifyCompanyNameInCoveragePopup(subsidiaryCompanyName);
         researchLinePage.verifyCompanyIsClickableInCoveragePopup(subsidiaryCompanyName);
         dashboardPage.clickTheCompany(subsidiaryCompanyName);
-        assertTestCase.assertTrue(entityClimateProfilePage.validateGlobalHeader(parentCompanyName), "Global header verification");
+        assertTestCase.assertTrue(entityClimateProfilePage.validateGlobalCompanyNameHeader(parentCompanyName), "Global header verification");
         entityClimateProfilePage.closeEntityProfilePage();
         dashboardPage.pressESCKey();
 
@@ -186,7 +186,7 @@ public class SubsidiaryTests extends UITestBase {
         dashboardPage.verifyCompanyNameInTables(subsidiaryCompanyName);
         dashboardPage.verifyCompanyIsClickable(subsidiaryCompanyName);
         dashboardPage.clickTheCompany(subsidiaryCompanyName);
-        assertTestCase.assertTrue(entityClimateProfilePage.validateGlobalHeader(parentCompanyName), "Global header verification");
+        assertTestCase.assertTrue(entityClimateProfilePage.validateGlobalCompanyNameHeader(parentCompanyName), "Global header verification");
         entityClimateProfilePage.closeEntityProfilePage();
 
     }
@@ -198,7 +198,7 @@ public class SubsidiaryTests extends UITestBase {
 
         EntityClimateProfilePage entityClimateProfilePage = new EntityClimateProfilePage();
         entityClimateProfilePage.searchAndLoadClimateProfilePage(subsidiaryCompanyName);
-        assertTestCase.assertTrue(entityClimateProfilePage.validateGlobalHeader(parentCompanyName), "Global header verification");
+        assertTestCase.assertTrue(entityClimateProfilePage.validateGlobalCompanyNameHeader(parentCompanyName), "Global header verification");
 
         entityClimateProfilePage.clickGlobalHeader();
         String  orbisId = entityClimateProfilePage.orbisIdValue.getText();
@@ -223,7 +223,7 @@ public class SubsidiaryTests extends UITestBase {
 
         EntityClimateProfilePage entityClimateProfilePage = new EntityClimateProfilePage();
         entityClimateProfilePage.searchAndLoadClimateProfilePage(companyName);
-        assertTestCase.assertTrue(entityClimateProfilePage.validateGlobalHeader(companyName), "Global header verification");
+        assertTestCase.assertTrue(entityClimateProfilePage.validateGlobalCompanyNameHeader(companyName), "Global header verification");
         assertTestCase.assertFalse(entityClimateProfilePage.verifySubsidiaryCompaniesLink(), "Verify subsidiary link is not available");
 
         entityClimateProfilePage.clickGlobalHeader();
