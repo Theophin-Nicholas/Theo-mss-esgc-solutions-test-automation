@@ -9,7 +9,7 @@ import com.aventstack.extentreports.reporter.ExtentSparkReporter;
 import com.esgc.APIModels.TestCase;
 import com.esgc.Reporting.CustomAssertion;
 import com.esgc.Utilities.*;
-import org.apache.commons.lang.time.StopWatch;
+import org.apache.commons.lang3.time.StopWatch;
 import org.openqa.selenium.JavascriptExecutor;
 import org.testng.ITestResult;
 import org.testng.Reporter;

@@ -2078,6 +2078,33 @@ public class ResearchLinePage extends UploadPage {
         return false;
     }
 
+    public boolean verifyMethodologyLink(String expectedUrl) {
+        try {
+            //Switch to the new tab
+            Set<String> handles = Driver.getDriver().getWindowHandles();
+            if (handles.size() == 2) {
+                String currentWindowHandle = Driver.getDriver().getWindowHandle();
+                for (String handle : handles) {
+                    if (!handle.equals(currentWindowHandle)) {
+                        Driver.getDriver().switchTo().window(handle);
+                        String url = Driver.getDriver().getCurrentUrl();
+                        url = url.replaceAll("%20", "");
+                        System.out.println("Methodology URL is:" + url);
+                        Driver.getDriver().close();
+                        BrowserUtils.wait(2);
+                        Driver.getDriver().switchTo().window(currentWindowHandle);
+                        return url.contains(expectedUrl);
+                    }
+                }
+            } else {
+                System.out.println("Multiple tabs open. Cannot validate! ");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
     public void Is_MoM_QoQ_TextAvailable(String page) {
         try {
             String whatToValidate = "";

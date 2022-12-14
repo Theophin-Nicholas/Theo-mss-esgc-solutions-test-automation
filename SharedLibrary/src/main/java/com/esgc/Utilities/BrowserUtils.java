@@ -30,7 +30,7 @@ public class BrowserUtils {
         String path = System.getProperty("user.dir") + File.separator + "src" +
                 File.separator + "test" + File.separator + "resources" + File.separator + "download";
 
-             return path;
+        return path;
     }
     /**
      * path to upload folder - all upload files here
@@ -142,7 +142,7 @@ public class BrowserUtils {
     public static void waitForPageToLoad(long timeOutInSeconds) {
         ExpectedCondition<Boolean> expectation = driver -> ((JavascriptExecutor) driver).executeScript("return document.readyState").equals("complete");
         try {
-            WebDriverWait wait = new WebDriverWait(Driver.getDriver(), timeOutInSeconds);
+            WebDriverWait wait = new WebDriverWait(Driver.getDriver(), Duration.ofSeconds(timeOutInSeconds));
             wait.until(expectation);
         } catch (Throwable error) {
             error.printStackTrace();
@@ -425,7 +425,6 @@ public class BrowserUtils {
         }
     }
 
-
     /**
      * Verifies whether the element is displayed on page
      *
@@ -466,7 +465,6 @@ public class BrowserUtils {
         return target;
     }
 
-
     public static void waitFor(int seconds) {
         wait(seconds);
     }
@@ -502,5 +500,25 @@ public class BrowserUtils {
             }
         }
         return sentences;
+    }
+    
+    public static String DataSourcePath (){
+
+        String path = System.getProperty("user.dir") + File.separator + "src" +
+                File.separator + "test" + File.separator + "resources" + File.separator + "DataSource";
+
+        return path;
+    }
+
+    public static Object[][] appendedArrays(Object[][] array1, Object[][] array2) {
+        Object[][] ret = new Object[array1.length + array2.length][];
+        int i = 0;
+        for (;i<array1.length;i++) {
+            ret[i] = array1[i];
+        }
+        for (int j = 0;j<array2.length;j++) {
+            ret[i++] = array2[j];
+        }
+        return ret;
     }
 }
