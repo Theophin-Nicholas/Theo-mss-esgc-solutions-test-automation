@@ -1,7 +1,7 @@
 package com.esgc.Utilities;
 
-import com.esgc.APIModels.Portfolio;
-import com.esgc.Controllers.APIController;
+import com.esgc.Base.API.APIModels.Portfolio;
+import com.esgc.Base.API.Controllers.APIController;
 import com.esgc.Utilities.EndPoints.CommonEndPoints;
 import io.restassured.response.Response;
 import org.hamcrest.Matchers;
