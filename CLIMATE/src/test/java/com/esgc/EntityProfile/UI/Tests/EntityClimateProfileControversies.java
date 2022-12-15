@@ -40,9 +40,10 @@ public class EntityClimateProfileControversies extends UITestBase {
             //Verify the Label - Filter by most impacted categories of ESG:
             assertTestCase.assertEquals(entityProfilePage.controversiesStaticText.getText(), "Filter by most impacted categories of ESG:");
             //Verify the subcategory names and the numbers in it. ex: Environmental Strategy (3)
+            //TODO get values from database instead hardcoded values
             List<String> categoryExpectedList = new ArrayList<>(
                     Arrays.asList(
-                            "Community Involvement (9)",
+                            "Community Involvement (8)",
                             "Business Behaviour (73)",
                             "Human Rights (17)",
                             "Human Resources (5)",

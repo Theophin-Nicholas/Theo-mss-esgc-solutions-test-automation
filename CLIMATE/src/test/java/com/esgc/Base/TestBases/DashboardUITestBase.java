@@ -63,7 +63,12 @@ public abstract class DashboardUITestBase extends TestBase {
         getScreenshot(iTestResult);
         if (isPampaTest || isEntitlementsTest) {
             LoginPage loginPage = new LoginPage();
-            loginPage.clickOnLogout();
+            try {
+                loginPage.clickOnLogout();
+            } catch (Exception ignored) {
+
+            }
+
         }
     }
 
