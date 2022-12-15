@@ -11,7 +11,7 @@ import com.esgc.Base.TestBases.DataValidationTestBase;
 import com.esgc.Utilities.APIUtilities;
 import com.esgc.Utilities.Database.DatabaseDriver;
 import com.esgc.Utilities.Database.PortfolioQueries;
-import com.esgc.Utilities.Database.UnderlyingDataMetricsQueries;
+import com.esgc.PortfolioAnalysis.DB.DBQueries.UnderlyingDataMetricsQueries;
 import com.esgc.Utilities.PortfolioUtilities;
 import com.esgc.Utilities.Xray;
 import io.restassured.http.ContentType;

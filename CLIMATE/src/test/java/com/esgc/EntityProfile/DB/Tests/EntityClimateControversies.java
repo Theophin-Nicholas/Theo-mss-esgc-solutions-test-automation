@@ -3,7 +3,7 @@ package com.esgc.EntityProfile.DB.Tests;
 import com.esgc.EntityProfile.API.APIModels.EntityControversies.Controversies;
 import com.esgc.EntityProfile.API.Controllers.EntityProfileClimatePageAPIController;
 import com.esgc.Base.TestBases.DataValidationTestBase;
-import com.esgc.Utilities.EndPoints.EntityProfilePageEndpoints;
+import com.esgc.EntityProfile.API.EntityProfilePageEndpoints;
 import com.esgc.Utilities.Environment;
 import com.esgc.Utilities.Xray;
 import io.restassured.http.ContentType;
@@ -14,7 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.esgc.Utilities.Database.EntityClimateProfilePageQueries.getCoverage;
+import static com.esgc.EntityProfile.DB.DBQueries.EntityClimateProfilePageQueries.getCoverage;
 import static io.restassured.RestAssured.given;
 
 

@@ -1,4 +1,4 @@
-package com.esgc.Utilities.EndPoints;
+package com.esgc.Dashboard.API;
 
 public class DashboardEndPoints {
 

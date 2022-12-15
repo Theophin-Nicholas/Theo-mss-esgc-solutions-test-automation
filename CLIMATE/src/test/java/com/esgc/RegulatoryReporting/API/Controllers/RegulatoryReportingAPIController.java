@@ -1,7 +1,7 @@
-package com.esgc.RegulatoryReport.API.Controllers;
+package com.esgc.RegulatoryReporting.API.Controllers;
 
 import com.esgc.Base.API.Controllers.APIController;
-import com.esgc.Utilities.EndPoints.RegulatoryReportingEndPoints;
+import com.esgc.RegulatoryReporting.API.RegulatoryReportingEndPoints;
 import io.restassured.response.Response;
 
 import java.util.List;

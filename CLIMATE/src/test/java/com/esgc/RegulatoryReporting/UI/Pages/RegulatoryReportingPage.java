@@ -1,9 +1,9 @@
-package com.esgc.RegulatoryReport.UI.Pages;
+package com.esgc.RegulatoryReporting.UI.Pages;
 
 import com.esgc.Base.UI.Pages.UploadPage;
-import com.esgc.RegulatoryReport.API.Controllers.RegulatoryReportingAPIController;
+import com.esgc.RegulatoryReporting.API.Controllers.RegulatoryReportingAPIController;
 import com.esgc.Utilities.*;
-import com.esgc.Utilities.Database.RegulatoryReportingQueries;
+import com.esgc.RegulatoryReporting.DB.DBQueries.RegulatoryReportingQueries;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 

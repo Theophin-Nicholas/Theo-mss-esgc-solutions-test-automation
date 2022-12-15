@@ -1,4 +1,4 @@
-package com.esgc.Base.UI.Tests.PampaLoginPageTest;
+package com.esgc.Base.UI.Tests.LoginPageTest;
 
 import com.esgc.Base.UI.Pages.LoginPage;
 import com.esgc.Base.TestBases.DashboardUITestBase;
