@@ -3,6 +3,7 @@ package com.esgc.Utilities;
 import com.esgc.APIModels.JiraTestCase;
 import com.esgc.APIModels.TestCase;
 import com.esgc.APIModels.TestEvidence;
+import com.esgc.TestBase.TestBase;
 import com.github.seratch.jslack.Slack;
 import com.github.seratch.jslack.api.webhook.Payload;
 import com.github.seratch.jslack.api.webhook.WebhookResponse;
@@ -335,8 +336,7 @@ public class XrayFileImporter {
     public static void attachHTMLReportToTestExecutionTicket(String tickedNumber, String reportName) {
         System.out.println("File Attachment Started");
         try {
-            //String filepath = TestBase.reportPath + File.separator + reportName;
-            String filepath = "D:\\Users\\TanF1\\OneDrive - moodys.com\\Desktop\\automation report" + File.separator + reportName;
+            String filepath = TestBase.reportPath + File.separator + reportName;
 
             configSpec()
                     .header("Content-Type", "multipart/form-data")
