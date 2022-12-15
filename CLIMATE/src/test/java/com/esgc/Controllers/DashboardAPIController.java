@@ -17,7 +17,7 @@ import java.time.LocalDate;
 
 public class DashboardAPIController extends APIController {
 
-    public Response getHeatMapData(String portfolio_id, APIHeatMapPayload apiHeatMapPayload) {
+    public synchronized Response getHeatMapData(String portfolio_id, APIHeatMapPayload apiHeatMapPayload) {
         Response response = null;
         try {
             apiHeatMapPayload.setResearch_line_1(apiResourceMapperWithoutphysicalriskinit(apiHeatMapPayload.getResearch_line_1()));
@@ -36,7 +36,7 @@ public class DashboardAPIController extends APIController {
         return response;
     }
 
-    public Response getControversies(String portfolioId, String region, String sector, String year, String month) {
+    public synchronized Response getControversies(String portfolioId, String region, String sector, String year, String month) {
         Response response = null;
         try {
             response = configSpec()
@@ -56,7 +56,7 @@ public class DashboardAPIController extends APIController {
     }
 
 
-    public Response getEsgCoverageScore(String portfolioId, String benchMark, String region, String sector, String year, String month) {
+    public synchronized Response getEsgCoverageScore(String portfolioId, String benchMark, String region, String sector, String year, String month) {
         Response response = null;
         try {
             response = configSpec()
@@ -74,7 +74,7 @@ public class DashboardAPIController extends APIController {
         return response;
     }
 
-    public Response getExportSourceDocuments(String entityId) {
+    public synchronized Response getExportSourceDocuments(String entityId) {
         Response response = null;
         try {
             response = configSpec()
@@ -91,7 +91,7 @@ public class DashboardAPIController extends APIController {
         return response;
     }
 
-    public Response verifyExport(String portfolioId, String portfolioName, String region, String sector, String year, String month) {
+    public synchronized Response verifyExport(String portfolioId, String portfolioName, String region, String sector, String year, String month) {
         Response response = null;
         try {
             response = configSpec()
@@ -109,7 +109,7 @@ public class DashboardAPIController extends APIController {
         return response;
     }
 
-    public Response verifyPortfolioAnalysisExcelExport(String portfolioId) {
+    public synchronized Response verifyPortfolioAnalysisExcelExport(String portfolioId) {
         Response response = null;
         try {
             response = configSpec().when()
@@ -125,7 +125,7 @@ public class DashboardAPIController extends APIController {
         return response;
     }
 
-    public Response verifyPortfolioAnalysisUploadJsonUrl(String portfolioId) {
+    public synchronized Response verifyPortfolioAnalysisUploadJsonUrl(String portfolioId) {
         Response response = null;
         try {
             response = configSpec().when()
@@ -141,7 +141,7 @@ public class DashboardAPIController extends APIController {
         return response;
     }
 
-    public Response getCoverageAPIREsponse(String portfolio_id, APIFilterPayloadWithoutBenchmark apiFilterPayload) {
+    public synchronized Response getCoverageAPIREsponse(String portfolio_id, APIFilterPayloadWithoutBenchmark apiFilterPayload) {
         Response response = null;
         try {
             response = configSpec()
@@ -157,7 +157,7 @@ public class DashboardAPIController extends APIController {
         return response;
     }
 
-    public Response getPortfolioSummaryCompanies(String portfolioId) {
+    public synchronized Response getPortfolioSummaryCompanies(String portfolioId) {
         Response response = null;
         try {
             LocalDate now = LocalDate.now();
@@ -192,7 +192,7 @@ public class DashboardAPIController extends APIController {
      * <p>
      * Response Example:
      */
-    public Response getGeoMapEntityListResponse(String portfolio_id, String research_line, APIEntityListPayload apiEntityListPayload) {
+    public synchronized Response getGeoMapEntityListResponse(String portfolio_id, String research_line, APIEntityListPayload apiEntityListPayload) {
         Response response = null;
         try {
 
@@ -210,7 +210,7 @@ public class DashboardAPIController extends APIController {
         return response;
     }
 
-    public Response getHeatMapResponse(String portfolio_id, String research_line, APIHeatMapSinglePayload apiHeatMapPayload) {
+    public synchronized Response getHeatMapResponse(String portfolio_id, String research_line, APIHeatMapSinglePayload apiHeatMapPayload) {
         Response response = null;
         try {
             //apiResourceMapperWithoutphysicalriskinit(research_line)
@@ -228,7 +228,7 @@ public class DashboardAPIController extends APIController {
         return response;
     }
 
-    public Response getPerformanceChartList(String portfolio_id, String research_line, APIFilterPayload apiFilterPayload, String performanceChart, String size) {
+    public synchronized Response getPerformanceChartList(String portfolio_id, String research_line, APIFilterPayload apiFilterPayload, String performanceChart, String size) {
         Response response = null;
         if (performanceChart.equals("largest_holdings"))
             research_line = null;
