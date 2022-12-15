@@ -1,7 +1,7 @@
 package com.esgc.Utilities.Database;
 
-import com.esgc.DBModels.IdentifierQueryModel;
-import com.esgc.DBModels.IdentifierQueryModelFactory;
+import com.esgc.Base.DB.DBModels.IdentifierQueryModel;
+import com.esgc.Base.DB.DBModels.IdentifierQueryModelFactory;
 import org.testng.annotations.Test;
 
 import java.util.List;
