@@ -32,7 +32,7 @@ public class EntityClimateProfile extends UITestBase {
         BrowserUtils.wait(5);
         EntityClimateProfilePage entityProfilePage = new EntityClimateProfilePage();
         String companyName = entityProfilePage.searchAndLoadClimateProfilePage(company);
-        Assert.assertTrue(entityProfilePage.validateGlobalHeader(companyName));
+        Assert.assertTrue(entityProfilePage.validateGlobalCompanyNameHeader(companyName));
         entityProfilePage.validateCompanyHeader(companyName);
     }
 

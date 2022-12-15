@@ -20,7 +20,7 @@ public class DashboardUiFilterTests extends UITestBase {
 
         dashboardPage.clickFiltersDropdown();
 
-        assertTestCase.assertTrue(dashboardPage.isSectorFilterPresent(),"Sectors filter is not available");
+        assertTestCase.assertTrue(dashboardPage.isSectorFilterPresent(), "Sectors filter is not available");
         assertTestCase.assertTrue(dashboardPage.verifySectorsSort(), "Verify list of sectors are sorted");
         assertTestCase.assertTrue(dashboardPage.verifyDefaultSelectedSectorValue("All Sectors"), "Verify default selected sector value is 'All Sectors'");
 
@@ -36,7 +36,7 @@ public class DashboardUiFilterTests extends UITestBase {
 
         dashboardPage.clickFiltersDropdown();
 
-        assertTestCase.assertTrue(dashboardPage.isRegionsFilterPresent(),"Regions filter is not available");
+        assertTestCase.assertTrue(dashboardPage.isRegionsFilterPresent(), "Regions filter is not available");
 
         ArrayList<String> expRegionsList = new ArrayList<>();
         expRegionsList.add("All Regions");
@@ -50,7 +50,7 @@ public class DashboardUiFilterTests extends UITestBase {
     }
 
     @Test(groups = {"regression", "ui", "smoke", "dashboard"})
-    @Xray(test = {1306,3284})
+    @Xray(test = {1306, 3284})
     public void verifyAsOfDates() {
 
         DashboardPage dashboardPage = new DashboardPage();
@@ -58,8 +58,8 @@ public class DashboardUiFilterTests extends UITestBase {
         test.info("Navigated to Dashboard Page");
 
         dashboardPage.clickFiltersDropdown();
-
-        assertTestCase.assertTrue(dashboardPage.isAsOfDateFilterPresent(),"As Of Date filter is not available");
+        dashboardPage.waitForDataLoadCompletion();
+        assertTestCase.assertTrue(dashboardPage.isAsOfDateFilterPresent(), "As Of Date filter is not available");
         assertTestCase.assertTrue(dashboardPage.verifyAsOfDatesSort(), "Verify As Of Dates are sorted");
         assertTestCase.assertTrue(dashboardPage.verifyDefaultSelectedAsOfDateValue(), "Verify default selected as of date value is Current Month and Year");
 
@@ -73,24 +73,24 @@ public class DashboardUiFilterTests extends UITestBase {
         ResearchLinePage researchLine = new ResearchLinePage();
         dashboardPage.selectSamplePortfolioFromPortfolioSelectionModal();
 
-        // Verify filter by using region
+        // Verify filter by using sector
         dashboardPage.navigateToPageFromMenu("Dashboard");
         int initControversiesCount = dashboardPage.controversies.size();
+        dashboardPage.clickFiltersDropdown();
+        dashboardPage.selectOptionFromFiltersDropdown("sectors", "Financials");
+        dashboardPage.waitForDataLoadCompletion();
+        assertTestCase.assertTrue(!researchLine.isFiltersDropdownPopupDisplayed(), "Verify filter popup is closed");
+        assertTestCase.assertTrue(dashboardPage.regionsDropdown.getText().contains("Financials"), "Verify the filter text");
+        int afterControversiesCount = dashboardPage.controversies.size();
+        assertTestCase.assertNotEquals(initControversiesCount, afterControversiesCount);
+
+        // Verify filter by using region
+        dashboardPage.navigateToPageFromMenu("Dashboard");
+        initControversiesCount = dashboardPage.controversies.size();
         dashboardPage.clickFiltersDropdown();
         dashboardPage.selectOptionFromFiltersDropdown("regions","Europe, Middle East & Africa");
         dashboardPage.waitForDataLoadCompletion();
         assertTestCase.assertTrue(dashboardPage.regionsDropdown.getText().contains("Europe, Middle East & Africa"), "Verify the filter text");
-        int afterControversiesCount = dashboardPage.controversies.size();
-        assertTestCase.assertNotEquals(initControversiesCount, afterControversiesCount);
-
-        // Verify filter by using sector
-        dashboardPage.navigateToPageFromMenu("Dashboard");
-        initControversiesCount = dashboardPage.controversies.size();
-        dashboardPage.clickFiltersDropdown();
-        dashboardPage.selectOptionFromFiltersDropdown("sectors","Energy");
-        dashboardPage.waitForDataLoadCompletion();
-        assertTestCase.assertTrue(!researchLine.isFiltersDropdownPopupDisplayed(), "Verify filter popup is closed");
-        assertTestCase.assertTrue(dashboardPage.regionsDropdown.getText().contains("Energy"), "Verify the filter text");
         afterControversiesCount = dashboardPage.controversies.size();
         assertTestCase.assertNotEquals(initControversiesCount, afterControversiesCount);
 

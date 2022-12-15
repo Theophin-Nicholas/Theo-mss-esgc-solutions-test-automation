@@ -18,7 +18,7 @@ public class EntityReferenceAndMethodologiesTest extends UITestBase {
         String company = "Rogers Corp.";
         EntityClimateProfilePage entityProfilePage = new EntityClimateProfilePage();
         String companyName = entityProfilePage.searchAndLoadClimateProfilePage(company);
-        assertTestCase.assertTrue(entityProfilePage.validateGlobalHeader(companyName),companyName+" Header Verification");
+        assertTestCase.assertTrue(entityProfilePage.validateGlobalCompanyNameHeader(companyName),companyName+" Header Verification");
 
         entityProfilePage.scrollToBottomOfPage();
         assertTestCase.assertTrue(entityProfilePage.verifyMethodologiesTabIsDisplayed(),"Verify Reference & Methodologies tab is in sticky notes");
@@ -37,7 +37,7 @@ public class EntityReferenceAndMethodologiesTest extends UITestBase {
         String company = "Rogers Corp.";
         EntityClimateProfilePage entityProfilePage = new EntityClimateProfilePage();
         String companyName = entityProfilePage.searchAndLoadClimateProfilePage(company);
-        assertTestCase.assertTrue(entityProfilePage.validateGlobalHeader(companyName),companyName+" Header Verification");
+        assertTestCase.assertTrue(entityProfilePage.validateGlobalCompanyNameHeader(companyName),companyName+" Header Verification");
 
         entityProfilePage.selectReferenceAndMethodologiesTab();
         assertTestCase.assertTrue(entityProfilePage.verifyPopup(), "Verify References & Methodologies popup");
@@ -69,7 +69,7 @@ public class EntityReferenceAndMethodologiesTest extends UITestBase {
         String company = "Rogers Corp.";
         EntityClimateProfilePage entityProfilePage = new EntityClimateProfilePage();
         String companyName = entityProfilePage.searchAndLoadClimateProfilePage(company);
-        assertTestCase.assertTrue(entityProfilePage.validateGlobalHeader(companyName),companyName+" Header Verification");
+        assertTestCase.assertTrue(entityProfilePage.validateGlobalCompanyNameHeader(companyName),companyName+" Header Verification");
 
         entityProfilePage.selectReferenceAndMethodologiesTab();
         assertTestCase.assertTrue(entityProfilePage.verifyPopup(), "Verify Reference & Methodologies popup");
