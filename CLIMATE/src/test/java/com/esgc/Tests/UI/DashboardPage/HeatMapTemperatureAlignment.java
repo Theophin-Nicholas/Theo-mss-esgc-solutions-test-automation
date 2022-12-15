@@ -1,6 +1,5 @@
 package com.esgc.Tests.UI.DashboardPage;
 
-import com.esgc.Pages.Dashboard.HeatMap;
 import com.esgc.Pages.DashboardPage;
 import com.esgc.Pages.LoginPage;
 import com.esgc.Tests.TestBases.DashboardUITestBase;
