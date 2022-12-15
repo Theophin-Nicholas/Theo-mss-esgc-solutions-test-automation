@@ -25,7 +25,7 @@ import static com.esgc.Utilities.Database.EntityClimateProfilePageQueries.getESG
 import static com.esgc.Utilities.Database.EntityClimateProfilePageQueries.getHeaderDB;
 
 public class ESGClimateSummaryDBTest extends EntityClimateProfileDataValidationTestBase {
-
+//TODO check https://esjira/browse/ESGCA-8761 and update date validations
     @Test(groups = {"regression", "data_validation"}, dataProvider = "orbisID")
     @Xray(test = {6020, 8151})
     public void validateGreenShare(@Optional String orbisID) {

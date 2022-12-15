@@ -9,7 +9,6 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.testng.annotations.Test;
 
-import java.util.Arrays;
 import java.util.List;
 
 public class EntityExportOrSourcesDocumentsTests extends UITestBase {
@@ -21,7 +20,7 @@ public class EntityExportOrSourcesDocumentsTests extends UITestBase {
         String company = "Rogers Corp.";
         EntityClimateProfilePage entityProfilePage = new EntityClimateProfilePage();
         String companyName = entityProfilePage.searchAndLoadClimateProfilePage(company);
-        assertTestCase.assertTrue(entityProfilePage.validateGlobalHeader(companyName),companyName+" Header Verification");
+        assertTestCase.assertTrue(entityProfilePage.validateGlobalCompanyNameHeader(companyName),companyName+" Header Verification");
         System.out.println("companyName = " + companyName);
         entityProfilePage.selectExportSourcesDocuments();
         assertTestCase.assertTrue(entityProfilePage.verifyPopup(), "Verify Export Sources Documents popup");
@@ -39,7 +38,7 @@ public class EntityExportOrSourcesDocumentsTests extends UITestBase {
         String company = "UFP Technologies, Inc.";
         EntityClimateProfilePage entityProfilePage = new EntityClimateProfilePage();
         String companyName = entityProfilePage.searchAndLoadClimateProfilePage(company);
-        assertTestCase.assertTrue(entityProfilePage.validateGlobalHeader(companyName),companyName+" Header Verification");
+        assertTestCase.assertTrue(entityProfilePage.validateGlobalCompanyNameHeader(companyName),companyName+" Header Verification");
 
         entityProfilePage.selectExportSourcesDocuments();
         assertTestCase.assertTrue(entityProfilePage.verifyPopup(), "Verify Export Sources Documents popup");
@@ -67,7 +66,7 @@ public class EntityExportOrSourcesDocumentsTests extends UITestBase {
         String company = "Apple, Inc.";
         EntityClimateProfilePage entityProfilePage = new EntityClimateProfilePage();
         String companyName = entityProfilePage.searchAndLoadClimateProfilePage(company);
-        assertTestCase.assertTrue(entityProfilePage.validateGlobalHeader(companyName),companyName+" Header Verification");
+        assertTestCase.assertTrue(entityProfilePage.validateGlobalCompanyNameHeader(companyName),companyName+" Header Verification");
 
         entityProfilePage.selectExportSourcesDocuments();
         assertTestCase.assertTrue(entityProfilePage.verifyPopup(), "Verify Export Sources Documents popup");
@@ -83,7 +82,7 @@ public class EntityExportOrSourcesDocumentsTests extends UITestBase {
         String company = "Rogers Corp.";
         EntityClimateProfilePage entityProfilePage = new EntityClimateProfilePage();
         String companyName = entityProfilePage.searchAndLoadClimateProfilePage(company);
-        assertTestCase.assertTrue(entityProfilePage.validateGlobalHeader(companyName),companyName+" Header Verification");
+        assertTestCase.assertTrue(entityProfilePage.validateGlobalCompanyNameHeader(companyName),companyName+" Header Verification");
         System.out.println("companyName = " + companyName);
         entityProfilePage.selectExportSourcesDocuments();
         assertTestCase.assertTrue(entityProfilePage.verifyPopup(), "Verify Export Sources Documents popup");
@@ -108,7 +107,7 @@ public class EntityExportOrSourcesDocumentsTests extends UITestBase {
         String company = "Rogers Corp.";
         EntityClimateProfilePage entityProfilePage = new EntityClimateProfilePage();
         String companyName = entityProfilePage.searchAndLoadClimateProfilePage(company);
-        assertTestCase.assertTrue(entityProfilePage.validateGlobalHeader(companyName),companyName+" Header Verification");
+        assertTestCase.assertTrue(entityProfilePage.validateGlobalCompanyNameHeader(companyName),companyName+" Header Verification");
         System.out.println("companyName = " + companyName);
         entityProfilePage.selectExportSourcesDocuments();
         assertTestCase.assertTrue(entityProfilePage.verifyPopup(), "Verify Export Sources Documents popup");
@@ -128,7 +127,7 @@ public class EntityExportOrSourcesDocumentsTests extends UITestBase {
         String company = "Rogers Corp.";
         EntityClimateProfilePage entityProfilePage = new EntityClimateProfilePage();
         String companyName = entityProfilePage.searchAndLoadClimateProfilePage(company);
-        assertTestCase.assertTrue(entityProfilePage.validateGlobalHeader(companyName),companyName+" Header Verification");
+        assertTestCase.assertTrue(entityProfilePage.validateGlobalCompanyNameHeader(companyName),companyName+" Header Verification");
         System.out.println("companyName = " + companyName);
         entityProfilePage.selectExportSourcesDocuments();
         assertTestCase.assertTrue(entityProfilePage.verifyPopup(), "Verify Export Sources Documents popup");
@@ -140,7 +139,7 @@ public class EntityExportOrSourcesDocumentsTests extends UITestBase {
         assertTestCase.assertTrue(!entityProfilePage.checkDownloadProgressBarIsPresent(), "Verify download progress message is present");
 
         companyName = entityProfilePage.searchAndLoadClimateProfilePage("Apple, Inc");
-        assertTestCase.assertTrue(entityProfilePage.validateGlobalHeader(companyName),companyName+" Header Verification");
+        assertTestCase.assertTrue(entityProfilePage.validateGlobalCompanyNameHeader(companyName),companyName+" Header Verification");
         System.out.println("companyName = " + companyName);
         entityProfilePage.selectExportSourcesDocuments();
         assertTestCase.assertTrue(entityProfilePage.verifyPopup(), "Verify Export Sources Documents popup");
@@ -160,7 +159,7 @@ public class EntityExportOrSourcesDocumentsTests extends UITestBase {
         String company = "Rogers Corp.";
         EntityClimateProfilePage entityProfilePage = new EntityClimateProfilePage();
         String companyName = entityProfilePage.searchAndLoadClimateProfilePage(company);
-        assertTestCase.assertTrue(entityProfilePage.validateGlobalHeader(companyName),companyName+" Header Verification");
+        assertTestCase.assertTrue(entityProfilePage.validateGlobalCompanyNameHeader(companyName),companyName+" Header Verification");
         System.out.println("companyName = " + companyName);
         entityProfilePage.selectExportSourcesDocuments();
         assertTestCase.assertTrue(entityProfilePage.verifyPopup(), "Verify Export Sources Documents popup");
@@ -201,7 +200,7 @@ public class EntityExportOrSourcesDocumentsTests extends UITestBase {
 
         String company = "Rogers Corp.";
         String companyName = entityProfilePage.searchAndLoadClimateProfilePage(company);
-        assertTestCase.assertTrue(entityProfilePage.validateGlobalHeader(companyName),companyName+" Header Verification");
+        assertTestCase.assertTrue(entityProfilePage.validateGlobalCompanyNameHeader(companyName),companyName+" Header Verification");
         System.out.println("companyName = " + companyName);
         entityProfilePage.selectExportSourcesDocuments();
         assertTestCase.assertTrue(entityProfilePage.verifyPopup(), "Verify Export Sources Documents popup");

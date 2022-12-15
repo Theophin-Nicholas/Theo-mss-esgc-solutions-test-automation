@@ -102,6 +102,20 @@ public class EntityClimateProfilePage extends ClimatePageBase {
     @FindBy(xpath = "//div[@role='dialog'][not(@aria-describedby)]//div/ul/li/a")
     public List<WebElement> listSourceDocuments;
 
+    @FindBy(xpath = "//div[text()='This company has ']/span")
+    public WebElement subsidiaryLink;
+
+    @FindBy(xpath = "//li[@role='menuitem']/span[text()]")
+    public WebElement globalHeaderLabel;
+
+    @FindBy(xpath = "//header/..//div[starts-with(text(),'Subsidiar')]")
+    public WebElement subsidiaryCompaniesHeader;
+
+    @FindBy(xpath = "//header/..//div[starts-with(text(),'Subsidiar')]/following-sibling::div")
+    public WebElement subsidiaryCompaniesPopupDescription;
+
+    @FindBy(xpath = "//table[@id='subsidiaries-table-id']//th")
+    public List<WebElement> subsidiaryCompaniesTableColumns;
 
     @FindBy(xpath = "//div[@id='entitySourceDocuments']//div[contains(@class,'MuiGrid-item')]/div[1]")
     public WebElement sourceDocumentsMessage;
@@ -192,6 +206,9 @@ public class EntityClimateProfilePage extends ClimatePageBase {
 
     @FindBy(xpath = "//header//div/span/span[contains(text(),'Orbis ID:')]")
     public WebElement orbisIdLabel;
+
+    @FindBy(xpath = "//div/span[contains(text(),'Orbis ID:')]/following-sibling::span")
+    public WebElement orbisIdValue;
 
     @FindBy(xpath = "//div[text()='Green Share']/../following-sibling::div//div[2]/span")
     public WebElement greenShareScoreRangeLabel;
@@ -474,7 +491,7 @@ public class EntityClimateProfilePage extends ClimatePageBase {
     //return WebElement
 
     public WebElement getCompanyHeader(String companyName) {
-        return Driver.getDriver().findElement(By.xpath("//header//span[contains(text(),'" + companyName + "')]"));
+        return Driver.getDriver().findElement(By.xpath("//span[contains(text(),'" + companyName + "')]"));
     }
 
     @FindBy(xpath = "// div[normalize-space()='Filter by most impacted categories of ESG:']")
@@ -493,10 +510,10 @@ public class EntityClimateProfilePage extends ClimatePageBase {
     @FindBy(xpath = "(//div[contains(text(),'Controversies')])")
     public WebElement controversiesPopUpVerify;
 
-    @FindBy(xpath = " //*[@id=\"div-mainlayout\"]/div/div/main/header/div/div/div/div[2]/span[4]/span")
+    @FindBy(xpath = "//*[@id=\"div-mainlayout\"]/div/div/main/header/div/div/div/div[2]/span[4]/span")
     public WebElement sectorInHeader;
 
-    @FindBy(xpath = " //body/div[@id='company-summary-panel']/div/div/div[5]")
+    @FindBy(xpath = "//body/div[@id='company-summary-panel']/div/div/div[5]")
     public WebElement companyDrawerSector;
 
 
@@ -522,14 +539,69 @@ public class EntityClimateProfilePage extends ClimatePageBase {
         return companyName;
     }
 
-    public boolean validateGlobalHeader(String companyName) {
+    public boolean validateGlobalCompanyNameHeader(String companyName) {
         try{
             return Driver.getDriver().findElement(By.xpath("//li[@role='menuitem']/span[text()='"+companyName+"']")).isDisplayed();
         }catch(Exception e){
             return false;
         }
-
     }
+
+    public void clickGlobalHeader() {
+        globalHeaderLabel.click();
+    }
+
+    public void clickSubsidiaryCompaniesLink() {
+        subsidiaryLink.click();
+    }
+
+    public void verifySubsidiaryCompaniesCount(int count) {
+        String subsidiaryText = subsidiaryLink.getText();
+        subsidiaryText = subsidiaryText.substring(0,subsidiaryText.indexOf(" "));
+        assertTestCase.assertEquals(count, Integer.parseInt(subsidiaryText),"Verification of Subsidiary Companies Count");
+    }
+
+    public boolean verifySubsidiaryCompaniesLink() {
+        try {
+            BrowserUtils.waitForVisibility(subsidiaryLink,30);
+            return true;
+        }catch(Exception e){
+            return false;
+        }
+    }
+
+    public void verifySubsidiaryCompaniesPopup(String companyName) {
+        verifyCompanyNameInCoveragePopup(companyName);
+        verifyCompanyIsClickableInCoveragePopup(companyName);
+        assertTestCase.assertTrue(subsidiaryCompaniesHeader.isDisplayed(),"Verify Subsidiary Companies popup header");
+
+        String expDescription="Unless assessed, subsidiaries have the same score as their parent company";
+        String actDescription=subsidiaryCompaniesPopupDescription.getText();
+        assertTestCase.assertEquals(actDescription,expDescription,"Verify Subsidiary Companies popup description");
+
+        assertTestCase.assertEquals(subsidiaryCompaniesTableColumns.get(0).getText(),"Company Name","Verify Subsidiary Companies Table columns");
+        assertTestCase.assertEquals(subsidiaryCompaniesTableColumns.get(1).getText(),"ESG Score","Verify Subsidiary Companies Table columns");
+    }
+
+    public boolean verifySubsidiaryCompaniesSectionInCoveragePopup() {
+        try{
+            return subsidiaryCompaniesHeader.isDisplayed();
+        }catch(Exception e){
+            return false;
+        }
+    }
+
+    public void verifyCompanyNameInCoveragePopup(String subsidiaryCompanyName) {
+        String xpath = "//div[contains(@class,'CompanyNameWrapper')]//span[@title][text()='"+subsidiaryCompanyName+"']";
+        assertTestCase.assertEquals(Driver.getDriver().findElements(By.xpath(xpath)).size(), 1);
+    }
+
+    public void verifyCompanyIsClickableInCoveragePopup(String companyName) {
+        String xpath = "//div[contains(@class,'CompanyNameWrapper')]//span[@title][text()='"+companyName+"']";
+        WebElement element = Driver.getDriver().findElement(By.xpath(xpath));
+        assertTestCase.assertTrue(element.getCssValue("text-decoration").contains("underline"));
+    }
+
 
     public boolean isProvidedFilterClickableInMaterialityMatrixFooter(String filterName) {
         try {

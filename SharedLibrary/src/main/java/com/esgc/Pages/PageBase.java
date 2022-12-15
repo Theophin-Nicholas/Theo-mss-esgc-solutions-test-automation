@@ -93,7 +93,7 @@ public abstract class PageBase {
     @FindBy(xpath = "//span[@title='SamplePortfolioToDelete']")
     public WebElement samplePortfolioToDelete;
 
-    @FindBy(xpath = "(//button[@id='button-button-test-id-1'])")//ferhat: I removed [2] from end of the locator since there was no 2nd on the test page
+    @FindBy(xpath = "//button[.//text()='Delete Portfolio']")
     public WebElement deleteButton;
 
     @FindBy(xpath = "//div[@role='dialog']/div[2]/div/div")
@@ -104,7 +104,7 @@ public abstract class PageBase {
 
     @FindBy(xpath = "//div[contains(text(),'No, Cancel')]")
     public WebElement confirmPortfolioDeleteCancelButton;
-    @FindBy(xpath = "//div[text()='Portfolio Management']")
+    @FindBy(xpath = "//*[text()='Portfolio Selection/Upload']")
     public WebElement header_portfolioManagement;
 
     @FindBy(xpath = " (//button[@id='button-holdings'])[1]/span/div")
@@ -139,13 +139,13 @@ public abstract class PageBase {
     @FindBy(xpath = "//table[@id='table-id']/thead/tr")
     public WebElement portfolioCompanyColumnNames;
 
-    @FindBy(xpath = " //table[@id='table-id-1']/tbody/tr")
+    @FindBy(xpath = "//*[contains(text(),'investments not matched')]")
     public WebElement portfolioFooterText;
 
     @FindBy(xpath = "(//table[@id='table-id'])/tbody/tr/td[1]/div/span")
     public List<WebElement> portfolioEntityList;
 
-    @FindBy(xpath = "//div[@role='dialog']/div/div/li")
+    @FindBy(xpath = "//li/span[text()]")
     public WebElement portfolioEntityName;
 
     @FindBy(css = "svg > path[fill-rule='evenodd'][fill='#b8b8b8']")
@@ -173,7 +173,7 @@ public abstract class PageBase {
     @FindBy(tagName = "//*[@aria-busy]")
     public List<WebElement> allLoadMasks;
 
-    @FindBy(xpath = "(//button[@id='button-holdings']/../../../../../div/div/div/div/div/div)[2]")
+    @FindBy(xpath = "//div[@title and ./following-sibling::div/span[contains(text(),'Coverage:')]]")
     public WebElement summaryPortfolioName;
 
     @FindBy(xpath = "//span[text()='About Climate Risk']")
@@ -276,6 +276,12 @@ public abstract class PageBase {
 
     @FindBy(xpath = "//div[@class=\"MuiToolbar-root MuiToolbar-regular\"]//*[local-name()='svg' and @class=\"MuiSvgIcon-root\"]")
     public WebElement closeIcon;
+
+    @FindBy(xpath = "//*[text()='Entities:']//div[starts-with(@id,'mini')]")
+    public List<WebElement> searchItems;
+
+    @FindBy(xpath = "//mark")
+    public List<WebElement> highlightedWordsInSearch;
 
     @FindBy(xpath = "//button/span[text()='View By Sector']")
     public WebElement viewBySectorButton;
@@ -920,7 +926,6 @@ public abstract class PageBase {
     }
 
 
-
     public void clickAwayinBlankArea() {
         Driver.getDriver().findElement(By.xpath("//body")).click();
         BrowserUtils.wait(2);
@@ -941,7 +946,6 @@ public abstract class PageBase {
 //        JavascriptExecutor executor = (JavascriptExecutor) Driver.getDriver();
 //        executor.executeScript("document.elementFromPoint(" + x + "," + y + ").click();");
     }
-
 
 
     public boolean checkIfLoadMaskIsDisplayed() {
@@ -972,7 +976,6 @@ public abstract class PageBase {
     public void refreshCurrentWindow() {
         Driver.getDriver().navigate().refresh();
     }
-
 
 
     public String getClimateEntitlementBundleName(String researchLine) {
@@ -1213,44 +1216,45 @@ public abstract class PageBase {
         return Driver.getDriver().findElements(By.xpath(xpath)).size() == 3; //For 3 regions
     }
 
-    public void verifyCompanyNameInCoveragePopup(String subsidiaryCompanyName, String parentCompanyName) {
-        String xpath = "//span[@heap_id='view-panel'][text()='"+subsidiaryCompanyName+"']/following-sibling::span/span[text()='"+parentCompanyName+"']";
+    public void verifyCompanyNameInCoveragePopup(String subsidiaryCompanyName) {
+        String xpath = "//span[@heap_id='view-panel'][text()='"+subsidiaryCompanyName+"']";
         assertTestCase.assertEquals(Driver.getDriver().findElements(By.xpath(xpath)).size(), 1);
     }
 
     public void verifyCompanyIsNotClickableInCoveragePopup(String companyName) {
-        String xpath = "//span[@heap_id='view-panel'][text()='"+companyName+"']";
+        String xpath = "//span[@heap_id='view-panel'][text()='" + companyName + "']";
         WebElement element = Driver.getDriver().findElement(By.xpath(xpath));
         assertTestCase.assertFalse(isElementClickable(element));
     }
 
     public void verifyCompanyIsClickableInCoveragePopup(String companyName) {
-        String xpath = "//span[@heap_id='view-panel'][text()='"+companyName+"']";
+        String xpath = "//span[@heap_id='view-panel'][text()='" + companyName + "']";
         WebElement element = Driver.getDriver().findElement(By.xpath(xpath));
         assertTestCase.assertTrue(element.getCssValue("text-decoration").contains("underline"));
     }
 
-    public void verifyCompanyNameInTables(String subsidiaryCompanyName, String parentCompanyName) {
-        String xpath = "//span[text()='"+subsidiaryCompanyName+"']/following-sibling::span/span[text()='"+parentCompanyName+"']";
+    public void verifyCompanyNameInTables(String subsidiaryCompanyName) {
+        String xpath = "//span[text()='"+subsidiaryCompanyName+"']";
         assertTestCase.assertEquals(Driver.getDriver().findElements(By.xpath(xpath)).size(), 1);
     }
 
     public void verifyCompanyIsNotClickable(String companyName) {
-        String xpath = "//span[text()='"+companyName+"']";
+        String xpath = "//span[text()='" + companyName + "']";
         WebElement element = Driver.getDriver().findElement(By.xpath(xpath));
         assertTestCase.assertFalse(isElementClickable(element));
     }
 
     public void verifyCompanyIsClickable(String companyName) {
-        String xpath = "//span[text()='"+companyName+"']";
+        String xpath = "//span[text()='" + companyName + "']";
         WebElement element = Driver.getDriver().findElement(By.xpath(xpath));
         assertTestCase.assertTrue(element.getCssValue("text-decoration").contains("underline"));
     }
 
     public void clickTheCompany(String companyName) {
         String xpath = "//span[text()='"+companyName+"']";
-        WebElement element = Driver.getDriver().findElement(By.xpath(xpath));
-        element.click();
+        List<WebElement> elements = Driver.getDriver().findElements(By.xpath(xpath));
+        BrowserUtils.scrollTo(elements.get(elements.size()-1));
+        elements.get(elements.size()-1).click();
     }
 
     public boolean isElementClickable(WebElement element) {
@@ -1303,8 +1307,10 @@ public abstract class PageBase {
             //Validate if Menu is available
             Assert.assertTrue(menu.isDisplayed(), "Menu Item is not displayed");
             clickMenu();
-            List<String> menuItemsArray = Arrays.asList("Moody's ESG360", "Dashboard", "Portfolio Analysis", "Portfolio Settings", "Contact Us", "Log Out",
-                    "Switch Application", "Climate on Demand", "Company Portal", "DataLab");
+            List<String> menuItemsArray = Arrays.asList("Moody's ESG360", "Dashboard", "Portfolio Analysis",
+                    "Portfolio Selection/Upload", "Regulatory Reporting",
+                    "Contact Us", "Terms & Conditions", "Log Out",
+                    "Switch Application", "Climate on Demand", "Company Portal", "Datalab");
 
             //Validate if all menu items are available
             for (String m : menuItemsArray)
@@ -1330,7 +1336,7 @@ public abstract class PageBase {
                     .findFirst().get().getCssValue("background-color").equalsIgnoreCase("rgba(215, 237, 250, 1)"), "Open page menu is not selected");
 
             //Click on cross button
-            Driver.getDriver().findElement(By.xpath("(//*[name()='svg'][@class='MuiSvgIcon-root'])[2]")).click();
+            Driver.getDriver().findElement(By.xpath("//li[text()=\"Moody's ESG360\"]/span//*[name()='svg']")).click();
             // menuList.get(0).findElement(By.xpath("span")).click();
             //Validating that menu list is closed and background page is still on
             waitForDataLoadCompletion();
@@ -1640,37 +1646,38 @@ public abstract class PageBase {
 
     }
 
-    String searchKeyword;
+
 
     public boolean checkClickingOnEntityName(String searchKeyword) {
-        this.searchKeyword = searchKeyword;
 
         searchBarOfPortfolio.sendKeys(searchKeyword);
-        BrowserUtils.wait(3);
         try {
-            BrowserUtils.isElementVisible(Driver.getDriver().findElement(By.xpath("//header[@id='prop-search']/following-sibling::*/DIV/div/div/div[3]")), 3);
-            String text = Driver.getDriver().findElement(By.xpath("//header[@id='prop-search']/following-sibling::*/DIV/div/div/div[3]")).getText();
-            System.out.println(text);
-            Driver.getDriver().findElement(By.xpath("//header[@id='prop-search']/following-sibling::*/DIV/div/div/div[3]")).click();
-            //BrowserUtils.isElementVisible(Driver.getDriver().findElement(By.xpath("//header[@id='prop-search']/following-sibling::*/DIV/div/div/div[3]")),3);
-            //searchIconPortfolioPages.get(0).click();
-            //return isSearchBoxAppearonDashboardPage();
-            List<WebElement> check = Driver.getDriver().findElements(By.xpath("//input[@id='platform-search-test-id']"));
-            if (check.size() == 0)
-                return false;
-            else
-                return true;
+            wait.until(ExpectedConditions.visibilityOfAllElements(searchItems));
+            searchItems.stream().map(WebElement::getText).forEach(System.out::println);
+            Collections.shuffle(searchItems);
+            searchItems.get(0).click();
+            BrowserUtils.wait(3);
+            return isSearchBoxDisplayed();
         } catch (Exception e) {
             e.printStackTrace();
-            return false;
+            return true;
         }
 
     }
 
-    public boolean checkIfUserIsOnRightPage() {
+    public boolean isSearchBoxAppearonDashboardPage() {
+        try {
+            List<WebElement> check = Driver.getDriver().findElements(By.xpath("//input[@id='platform-search-test-id']"));
+            return check.size() != 0;
+        } catch (Exception e) {
+            return false;
+        }
+    }
 
-        BrowserUtils.isElementVisible(Driver.getDriver().findElement(By.xpath("//div[.='Apple, Inc.']")), 3);
-        String text = Driver.getDriver().findElement(By.xpath("//div[.='Apple, Inc.']")).getText();
+    public boolean checkIfUserIsOnEntityPageBySearchedKeyword(String searchKeyword) {
+        String dynamicXpath = "//li[contains(.,'" + searchKeyword + "')]";
+        BrowserUtils.isElementVisible(Driver.getDriver().findElement(By.xpath(dynamicXpath)), 3);
+        String text = Driver.getDriver().findElement(By.xpath(dynamicXpath)).getText();
         System.out.println(text);
         return text.contains(searchKeyword);
     }
@@ -1699,14 +1706,13 @@ public abstract class PageBase {
     String entityName;
 
 
-
-    public boolean checkIfUserIsOnRightPage(String entityName) {
-        this.entityName = entityName;
-        BrowserUtils.isElementVisible(Driver.getDriver().findElement(By.xpath("//div[.='" + entityName + "']")), 3);
-        String text = Driver.getDriver().findElement(By.xpath("//div[.='" + entityName + "']")).getText();
-        System.out.println(text);
-        return text.contains(entityName);
-    }
+//    public boolean checkIfUserIsOnRightPage(String entityName) {
+//        this.entityName = entityName;
+//        BrowserUtils.isElementVisible(Driver.getDriver().findElement(By.xpath("//div[.='" + entityName + "']")), 3);
+//        String text = Driver.getDriver().findElement(By.xpath("//div[.='" + entityName + "']")).getText();
+//        System.out.println(text);
+//        return text.contains(entityName);
+//    }
 
     public boolean validateCarbonFootPrintAndSubLabels() {
 
@@ -1754,7 +1760,7 @@ public abstract class PageBase {
     }
 
     public void navigateToFirstEntity(String nameOfEntity) {
-        BrowserUtils.isElementVisible(searchIconPortfolioPage, 5);
+        BrowserUtils.isElementVisible(searchIconPortfolioPage, 10);
         searchIconPortfolioPage.click();
         searchBarOfPortfolio.sendKeys(nameOfEntity);
         BrowserUtils.wait(3);
@@ -1954,12 +1960,20 @@ public abstract class PageBase {
         BrowserUtils.wait(5);
     }
 
-    public boolean validatePOrtfolioManagementHeaderIsAvailable() {
-        return header_portfolioManagement.isDisplayed();
+    public boolean validatePortfolioManagementTitleIsDisplayed() {
+        try {
+            return header_portfolioManagement.isDisplayed();
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     public boolean validateUploadNewLinkIsAvailable() {
-        return link_UploadNew.isDisplayed();
+        try {
+            return wait.until(ExpectedConditions.visibilityOf(link_UploadNew)).isDisplayed();
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     public boolean validateSideArrowIsAvailable() {
@@ -2054,11 +2068,14 @@ public abstract class PageBase {
         return input_PortfolioName.isEnabled();
     }
 
-    public void updatePortfolio(String newName) {
-        while (!StringUtils.isEmpty(input_PortfolioName.getAttribute("value"))) {
-            input_PortfolioName.sendKeys("\u0008");
-        }
+    public void updatePortfolioNameInPortfolioManagementDrawer(String newName) {
+        clearPortfolioNameInputBox();
         input_PortfolioName.sendKeys(newName);
+    }
+
+    public void clearPortfolioNameInputBox() {
+        input_PortfolioName.sendKeys(Keys.CONTROL + "a");
+        input_PortfolioName.sendKeys(Keys.DELETE);
     }
 
     public void closeMenuByClickingOutSide() {
@@ -2066,7 +2083,7 @@ public abstract class PageBase {
     }
 
     public void validatePortfolioNameNotChangedAfterUpdateAndClickOutside(String OriginalPortFolioName) {
-        updatePortfolio(OriginalPortFolioName + "111");
+        updatePortfolioNameInPortfolioManagementDrawer(OriginalPortFolioName + "111");
         // BrowserUtils.wait(10);
         closeMenuByClickingOutSide();
         clickMenu();
@@ -2086,7 +2103,7 @@ public abstract class PageBase {
 
     public void validatePortfolioNameChangedAfterUpdateAndClickInsideDrawer(String OriginalPortFolioName) {
         String newPortfolioName = "Automation123";
-        updatePortfolio(newPortfolioName);
+        updatePortfolioNameInPortfolioManagementDrawer(newPortfolioName);
         clickInSidePortfolioDrawer();
         assertTestCase.assertTrue(getPortfolioDrawerHeader(newPortfolioName).isDisplayed(), "Validate if portfolio name saved " +
                 "and after change and click inside the drawer");
@@ -2095,7 +2112,7 @@ public abstract class PageBase {
 
     public void validatePortfolioNameSavedAutomaticallyAfterTwoSecond(String OriginalPortFolioName) {
         String newPortfolioName = "After2Second";
-        updatePortfolio(newPortfolioName);
+        updatePortfolioNameInPortfolioManagementDrawer(newPortfolioName);
         BrowserUtils.wait(2);
         assertTestCase.assertTrue(wait.until(ExpectedConditions.visibilityOf(successMessageForNameSaved)).isDisplayed(), "Validate Succee message is displayd after save");
         assertTestCase.assertTrue(getPortfolioDrawerHeader(newPortfolioName).isDisplayed(), "Validate that portfolio name saved " +
@@ -2116,9 +2133,8 @@ public abstract class PageBase {
     }
 
 
-
     public void validateblankPortfolioName(String OriginalPortFolioName) {
-        updatePortfolio("");
+        updatePortfolioNameInPortfolioManagementDrawer("");
         BrowserUtils.wait(3);
         try {
             successMessageForNameSaved.isDisplayed();
@@ -2133,7 +2149,7 @@ public abstract class PageBase {
     }
 
     public void undoPortfolioNameChange(String OriginalPortFolioName) {
-        updatePortfolio(OriginalPortFolioName);
+        updatePortfolioNameInPortfolioManagementDrawer(OriginalPortFolioName);
         BrowserUtils.wait(4);
         clickInSidePortfolioDrawer();
     }
