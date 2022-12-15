@@ -2817,9 +2817,5 @@ public class EntityClimateProfilePage extends ClimatePageBase {
 
     }
 
-    /*public String getControversiesData() {
 
-
-
-    }*/
 }
