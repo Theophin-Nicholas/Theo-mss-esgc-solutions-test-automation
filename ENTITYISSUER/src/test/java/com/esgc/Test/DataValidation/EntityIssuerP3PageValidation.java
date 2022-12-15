@@ -9,7 +9,6 @@ import com.esgc.DBModels.EntityIssuerPageDBModels.P3HeaderIdentifiersDBModel;
 import com.esgc.DBModels.EntityIssuerPageDBModels.SourceDocumentDBModel;
 import com.esgc.Test.TestBases.EntityIssuerPageDataValidationTestBase;
 import com.esgc.Utilities.Database.EntityIssuerQueries;
-import com.esgc.Utilities.Environment;
 import com.esgc.Utilities.Xray;
 import io.restassured.response.Response;
 import org.testng.annotations.Test;
