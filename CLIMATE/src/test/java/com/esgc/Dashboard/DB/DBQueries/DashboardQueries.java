@@ -1,4 +1,4 @@
-package com.esgc.Utilities.Database;
+package com.esgc.Dashboard.DB.DBQueries;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;

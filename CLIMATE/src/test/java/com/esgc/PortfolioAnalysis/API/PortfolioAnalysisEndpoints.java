@@ -1,4 +1,4 @@
-package com.esgc.Utilities.EndPoints;
+package com.esgc.PortfolioAnalysis.API;
 
 public class PortfolioAnalysisEndpoints {
     //==================PORTFOLIO ANALYSIS PAGE APIs

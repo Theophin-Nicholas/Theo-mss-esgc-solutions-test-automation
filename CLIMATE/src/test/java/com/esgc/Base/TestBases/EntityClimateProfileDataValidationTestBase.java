@@ -3,7 +3,7 @@ package com.esgc.Base.TestBases;
 import com.esgc.EntityProfile.API.Controllers.EntityProfileClimatePageAPIController;
 import com.esgc.Utilities.DataValidationUtilities;
 import com.esgc.Utilities.Database.DatabaseDriver;
-import com.esgc.Utilities.Database.EntityClimateProfilePageQueries;
+import com.esgc.EntityProfile.DB.DBQueries.EntityClimateProfilePageQueries;
 import com.esgc.Utilities.PortfolioUtilities;
 import org.testng.annotations.BeforeClass;
 
