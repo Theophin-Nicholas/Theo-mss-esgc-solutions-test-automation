@@ -9,7 +9,6 @@ import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
@@ -1703,7 +1702,7 @@ public abstract class PageBase {
 
     }
 
-    String entityName;
+    public String entityName;
 
 
 //    public boolean checkIfUserIsOnRightPage(String entityName) {
