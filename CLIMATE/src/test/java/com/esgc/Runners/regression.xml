@@ -17,9 +17,7 @@
 
         <packages>
 
-            <package name="com.esgc.Tests.UI.*"/>
-            <package name="com.esgc.Tests.API.*"/>
-            <package name="com.esgc.Tests.DataValidation.*"/>
+            <package name="com.esgc.*"/>
 
         </packages>
 
