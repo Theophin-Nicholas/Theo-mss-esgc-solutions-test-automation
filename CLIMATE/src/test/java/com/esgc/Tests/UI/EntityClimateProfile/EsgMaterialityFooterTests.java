@@ -18,7 +18,7 @@ public class EsgMaterialityFooterTests extends UITestBase {
         test.info("Searching and Selecting the company");
         EntityClimateProfilePage entityProfilePage = new EntityClimateProfilePage();
         String companyName = entityProfilePage.searchAndLoadClimateProfilePage(company);
-        assertTestCase.assertTrue(entityProfilePage.validateGlobalHeader(companyName), companyName + " Header Verification");
+        assertTestCase.assertTrue(entityProfilePage.validateGlobalCompanyNameHeader(companyName), companyName + " Header Verification");
         test.info("Searched and selected the company: " + companyName);
 
         entityProfilePage.selectEsgMaterialityTab();
@@ -53,7 +53,7 @@ public class EsgMaterialityFooterTests extends UITestBase {
         test.info("Searching and Selecting the company");
         EntityClimateProfilePage entityProfilePage = new EntityClimateProfilePage();
         String companyName = entityProfilePage.searchAndLoadClimateProfilePage(company);
-        assertTestCase.assertTrue(entityProfilePage.validateGlobalHeader(companyName), companyName + " Header Verification");
+        assertTestCase.assertTrue(entityProfilePage.validateGlobalCompanyNameHeader(companyName), companyName + " Header Verification");
         test.info("Searched and selected the company: " + companyName);
 
         entityProfilePage.selectEsgMaterialityTab();
@@ -78,7 +78,7 @@ public class EsgMaterialityFooterTests extends UITestBase {
         test.info("Searching and Selecting the company");
         EntityClimateProfilePage entityProfilePage = new EntityClimateProfilePage();
         String companyName = entityProfilePage.searchAndLoadClimateProfilePage(company);
-        assertTestCase.assertTrue(entityProfilePage.validateGlobalHeader(companyName), companyName + " Header Verification");
+        assertTestCase.assertTrue(entityProfilePage.validateGlobalCompanyNameHeader(companyName), companyName + " Header Verification");
         test.info("Searched and selected the company: " + companyName);
 
         entityProfilePage.selectEsgMaterialityTab();
@@ -110,7 +110,7 @@ public class EsgMaterialityFooterTests extends UITestBase {
         String company2 = "Apple, Inc.";
         test.info("Searching and Selecting the company");
         String companyName2 = entityProfilePage.searchAndLoadClimateProfilePage(company2);
-        assertTestCase.assertTrue(entityProfilePage.validateGlobalHeader(companyName2), companyName2 + " Header Verification");
+        assertTestCase.assertTrue(entityProfilePage.validateGlobalCompanyNameHeader(companyName2), companyName2 + " Header Verification");
         test.info("Searched and selected the company: " + companyName2);
 
         entityProfilePage.selectEsgMaterialityTab();

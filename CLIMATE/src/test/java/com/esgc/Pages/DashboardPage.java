@@ -62,8 +62,14 @@ public class DashboardPage extends UploadPage {
     public WebElement methodologyPopup_Link_Methodology20;
     @FindBy(xpath = "//a[@id='link-link-test-id-3']")
     public WebElement methodologyPopup_Link_RiskAssessmentts;
+
+    @FindBy(xpath = "//a[@id='link-link-test-id-3']")
+    public List<WebElement> methodologyPopup_Links;
+
     @FindBy(xpath = "//div[contains(text(),'Viewing')]")
     public WebElement regionTitleInStickyHeader;
+    @FindBy(xpath = "//div[contains(@class,'Drawer-paper')]//h2")
+    public List<WebElement> methodologySectionNames;
 
     @FindBy(xpath = "//a[text()='hide']")
     public WebElement hideLink;
@@ -79,6 +85,9 @@ public class DashboardPage extends UploadPage {
 
     @FindBy(xpath = "//button[@id='score-qualty-btn']//*[local-name()='svg']/*[local-name()='path']")
     public WebElement scoreQualityStatus;
+
+    @FindBy(xpath = "//td[@heap_id='perfchart']")
+    public List<WebElement> performanceTableRecords;
 
     @FindBy(xpath = "//td[@heap_id='perfchart']//*[local-name()='svg']/*[local-name()='rect'][1]")
     public List<WebElement> scoreQualityIconsPerformanceTable;
@@ -246,8 +255,8 @@ public class DashboardPage extends UploadPage {
     @FindBy(xpath = "//*[text()='Select two:']/following-sibling::div/div")
     public List<WebElement> heatMapResearchLines;
 
-    @FindBy(xpath = "//h3[normalize-space()='Overall ESG Score']")
-    public WebElement heatMapNoEntityWidget;
+    @FindBy(xpath = "//div[@class='entityList' and .//div[contains(text(),'Companies')]]")
+    public WebElement heatMapEntityDrawerWidget;
 
     @FindBy(xpath = "//div[@class='entityList']//br/..")
     public WebElement heatMapWidgetTitle;
@@ -264,7 +273,7 @@ public class DashboardPage extends UploadPage {
     @FindBy(xpath = "//td//div[@heap_id='heatmap']/span[2]")
     public List<WebElement> heatMapEsgScoreCells;
 
-    @FindBy(xpath = "(//div[@id='div-mainlayout']//table)[2]//tbody//td//span[1]")
+    @FindBy(xpath = "(//table[.//thead//div[text()]])[1]//*[@heap_id='heatmap']//span")
     public List<WebElement> heatMapYAxisIndicators;
 
     @FindBy(xpath = "(//div[@id='div-mainlayout']//table)[1]//tbody//td//span[1]")
@@ -276,16 +285,16 @@ public class DashboardPage extends UploadPage {
     @FindBy(xpath = "(//div[@id='div-mainlayout']//table)[2]//tbody//td//span[2]")
     public List<WebElement> heatMapYAxisIndicatorPercentages;
 
-    @FindBy(xpath = "(//div[@id='div-mainlayout']//table)[4]//tbody//td//span[1]")
+    @FindBy(xpath = "(//table[.//thead//div[text()]])[2]//*[@heap_id='heatmap']//span")
     public List<WebElement> heatMapXAxisIndicators;
 
     @FindBy(xpath = "(//div[@id='div-mainlayout']//table)[4]//tbody//td//span[2]")
     public List<WebElement> heatMapXAxisIndicatorPercentages;
 
-    @FindBy(xpath = "(//div[@id='div-mainlayout']//table)[2]//thead//td")
+    @FindBy(xpath = "(//thead//div[text()])[1]")
     public WebElement heatMapYAxisIndicatorTitle;
 
-    @FindBy(xpath = "(//div[@id='div-mainlayout']//table)[4]//thead//td")
+    @FindBy(xpath = "(//thead//div[text()])[2]")
     public WebElement heatMapXAxisIndicatorTitle;
 
     @FindBy(xpath = "//div[@id='heatmapentity-test-id']//p[text()='Select two:']")
@@ -491,7 +500,9 @@ public class DashboardPage extends UploadPage {
     }
 
     public boolean verifyScoreQualityIconWithEntitiesInPerformanceTable() {
-        return scoreQualityIconsPerformanceTable.size() == 10;
+        int performanceTableRecordsCount = performanceTableRecords.size();
+        int recordsWithScoreQualityIcons = scoreQualityIconsPerformanceTable.size();
+        return performanceTableRecordsCount == recordsWithScoreQualityIcons;
     }
 
     public boolean verifyScoreQualityIconWithEntitiesInCoveragePopup() {
@@ -582,6 +593,7 @@ public class DashboardPage extends UploadPage {
 
     public void selectViewMethodologies() {
         //  BrowserUtils.waitForInvisibility(btnViewMethodologies, 50);
+        BrowserUtils.waitForClickablility(btnViewMethodologies, 50);
         btnViewMethodologies.click();
     }
 
@@ -674,7 +686,8 @@ public class DashboardPage extends UploadPage {
 
     public List<String> getPerformanceChartDropdownOptions() {
         BrowserUtils.scrollTo(performanceChartDropdown);
-        wait.until(ExpectedConditions.elementToBeClickable(performanceChartDropdown)).click();
+        wait.until(ExpectedConditions.elementToBeClickable(performanceChartDropdown));
+        new Actions(Driver.getDriver()).moveToElement(performanceChartDropdown).pause(2000).click(performanceChartDropdown).pause(2000).build().perform();
         BrowserUtils.wait(2);
         wait.until(ExpectedConditions.visibilityOfAllElements(performanceChartDropdownOptions));
         System.out.println("performanceChartDropdownOptions " + performanceChartDropdownOptions.size());
@@ -1111,9 +1124,10 @@ public class DashboardPage extends UploadPage {
             WebElement element = Driver.getDriver().findElement(By.xpath(xpath));
             String colText = BrowserUtils.waitForClickablility(element, 30).getText();
             element.click();
-
-            BrowserUtils.waitForVisibility(Driver.getDriver().findElement(By.xpath("//*[contains(text(),'" + colText + "')]")), 30);
-            Driver.getDriver().findElement(By.xpath("//span[text()='X'] | //span[@class='close'] | //div[@role='dialog']/div/div[2]")).click();
+//TODO better approach needed
+            BrowserUtils.waitForVisibility(Driver.getDriver().findElement(By.xpath("//*[contains(text(),\"" + colText + "\")]")), 30);
+            Driver.getDriver().findElement(By.xpath("//*[text()='ESC']/following-sibling::* | //span[text()='X'] | //span[@class='close'] | //div[@role='dialog']/div/div[2]")).click();
+                    //""//"//span[text()='X'] | //span[@class='close'] | //div[@role='dialog']/div/div[2]")).click();
             return true;
         } catch (Exception e) {
             e.printStackTrace();
@@ -1305,7 +1319,8 @@ public class DashboardPage extends UploadPage {
 
             assertTestCase.assertTrue(DateTimeUtilities.isValidDate(controversiesTableDates.get(i).getText()), "Validate Date in table");
 
-            assertTestCase.assertTrue(SectorUtilities.isMESGSector(controversiesTableSectors.get(i).getText()), "Verify Sector");
+            String controversySector = controversiesTableSectors.get(i).getText();
+            assertTestCase.assertTrue(SectorUtilities.isMESGSector(controversySector), "Verify Sector=" + controversySector);
 
             assertTestCase.assertFalse(controversiesTableCompanyNames.get(i).getText().isEmpty(), "Verify Company Name");
 
@@ -1381,10 +1396,24 @@ public class DashboardPage extends UploadPage {
         BrowserUtils.waitForVisibility(heatMapCells.get(0), 10);
         BrowserUtils.waitForVisibility(heatMapActiveResearchLineInfo.get(0), 10);
         BrowserUtils.wait(2);
+        waitUntilHeatMapResearchLinesAreClickable();
+    }
+
+    public void waitUntilHeatMapResearchLinesAreClickable() {
+        heatMapResearchLines.forEach(each ->
+                wait.until(ExpectedConditions.attributeToBe(each, "cursor", "pointer")));
+    }
+
+    public boolean isHeatMapEntityListDrawerDisplayed() {
+        try {
+            return heatMapEntityDrawerWidget.isDisplayed();
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     //this method deselects all other heat map research lines and selects only one research line by index
-    public void selectOneResearchLine(int selection) {
+    public void selectOneResearchLineOnHeatMap(int selection) {
         //First make sure targeted line is selected
         BrowserUtils.wait(2);
         selectResearchLineForHeatMap(heatMapResearchLines.get(selection).getText());
@@ -1432,7 +1461,17 @@ public class DashboardPage extends UploadPage {
         }
     }
 
+    public List<String> getMethodologiesSections() {
+        List<String> methodologySections = new ArrayList<>();
+        for(WebElement element: methodologySectionNames){
+            methodologySections.add(element.getText());
+        }
+        return methodologySections;
+    }
+
     public boolean verifyMethodologiesLinks() {
+
+
         try {
             assertTestCase.assertTrue(methodologyPopup_Link_Methodology10.getText().equals("Read more about ESG Assessment Methodology 1.0"), "Validate link as 'Read more about ESG Assessment Methodology 1.0'");
             assertTestCase.assertTrue(methodologyPopup_Link_Methodology20.getText().equals("Read more about ESG Assessment Methodology 2.0"), "Validate link as 'Read more about ESG Assessment Methodology 2.0'");
@@ -1499,7 +1538,7 @@ public class DashboardPage extends UploadPage {
         System.out.println("Research line is not found");
         return false;
     }
-    
+
     public boolean verifyHeatMapTitle(String title) {
         String xpath = "//div[@id='heatmapentity-test-id']//div[text()='"+title+"']";
         try{
