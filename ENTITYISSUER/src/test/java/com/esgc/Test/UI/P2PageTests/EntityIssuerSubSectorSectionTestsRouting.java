@@ -3,7 +3,7 @@ package com.esgc.Test.UI.P2PageTests;
 import com.esgc.Pages.EntityIssuerPage;
 import com.esgc.Pages.LoginPageIssuer;
 import com.esgc.Test.TestBases.EntityPageTestBase;
-import com.esgc.TestBase.DataProviderClass;
+import com.esgc.Test.TestBases.IssuerDataProviderClass;
 import com.esgc.Utilities.Xray;
 import org.openqa.selenium.WebElement;
 import org.testng.annotations.Test;
@@ -16,7 +16,7 @@ public class EntityIssuerSubSectorSectionTestsRouting extends EntityPageTestBase
 
     @Xray(test = {6270})
     @Test(groups = {"regression", "ui", "smoke", "entity_issuer"},
-            dataProvider = "credentialsP2", dataProviderClass = DataProviderClass.class,
+            dataProvider = "credentialsP2", dataProviderClass = IssuerDataProviderClass.class,
             description = "Verify Weight is Numeric")
     public void verifyWeightIsNumeric(String UserID, String Password) {
         System.out.println(UserID +" "+Password);

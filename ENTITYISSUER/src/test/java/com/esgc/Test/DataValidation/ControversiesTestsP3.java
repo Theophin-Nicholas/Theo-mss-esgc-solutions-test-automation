@@ -13,7 +13,7 @@ import java.util.List;
 
 public class ControversiesTestsP3 extends EntityIssuerPageDataValidationTestBase {
 
-    @Test(enabled = false, groups = {"entity_issuer"})
+    @Test(enabled = false, groups = {"entity_issuer", "regression"})
     @Xray(test = {4354, 4355})
     public void verifyControversies() {
         List<EntityControversy> dbResults = entityIssuerQueries.getControversies("000002959", null);
@@ -39,7 +39,7 @@ public class ControversiesTestsP3 extends EntityIssuerPageDataValidationTestBase
         test.info("Entity Page Controversies test passed");
     }
 
-    @Test(enabled = false, groups = {"entity_issuer"})
+    @Test(enabled = false, groups = {"entity_issuer","regression"})
     @Xray(test = {4461, 4469})
     public void verifyRelatedControversies() {
         //EntityFilterPayload entityFilterPayload = new EntityFilterPayload("C&S1.2");

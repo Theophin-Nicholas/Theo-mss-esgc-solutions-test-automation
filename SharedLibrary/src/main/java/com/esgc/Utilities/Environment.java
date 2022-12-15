@@ -74,6 +74,7 @@ public class Environment {
     public static final String PDF_EXPORT_ONLY_PDF_USERNAME;
     public static final String PDF_EXPORT_ONLY_PDF_PASSWORD;
     public static final String MESG_APPLICATION_NAME;
+    public static  String environment ;
 
 
     static String getPropertiesPath() {
@@ -84,7 +85,7 @@ public class Environment {
 
     static {
         Properties properties = null;
-        String environment = ConfigurationReader.getProperty("environment");
+        environment = ConfigurationReader.getProperty("environment");
         if (System.getProperty("environment")!=null){
             environment=System.getProperty("environment");
 
