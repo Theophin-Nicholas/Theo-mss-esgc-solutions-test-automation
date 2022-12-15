@@ -245,7 +245,7 @@ public class RegulatoryReportingPageTests extends UITestBase {
         reportingPage.deselectInterimReports();
         reportingPage.deselectAnnualReports();
         reportingPage.deselectUseLatestData();
-        assertTestCase.assertTrue(reportingPage.reportingForListButtons.get(0).isEnabled(), "Reporting year dropdown is enabled");
+        assertTestCase.assertFalse(reportingPage.reportingForListButtons.get(0).isEnabled(), "Reporting year dropdown is enabled");
         BrowserUtils.waitForClickablility(reportingPage.reportingForList.get(0), 10).click();
         assertTestCase.assertTrue(reportingPage.reportingForDropdownOptionsList.size() == 0, "reporting for dropdown options are not listed if portfolio is not selected");
 
@@ -256,7 +256,7 @@ public class RegulatoryReportingPageTests extends UITestBase {
         assertTestCase.assertTrue(reportingPage.useLatestDataOption.isDisplayed(), "Use latest data toggle is displayed");
         reportingPage.selectUseLatestData();
         assertTestCase.assertTrue(reportingPage.isUseLatestDataSelected(), "Use latest data toggle is selected");
-        assertTestCase.assertTrue(reportingPage.reportingForListButtons.get(0).isEnabled(), "Reporting year dropdown is enabled");
+        assertTestCase.assertFalse(reportingPage.reportingForListButtons.get(0).isEnabled(), "Reporting year dropdown is enabled");
         BrowserUtils.waitForClickablility(reportingPage.reportingForList.get(0), 10).click();
         assertTestCase.assertTrue(reportingPage.reportingForDropdownOptionsList.size() == 0, "reporting for dropdown options are not listed if portfolio is not selected");
 
