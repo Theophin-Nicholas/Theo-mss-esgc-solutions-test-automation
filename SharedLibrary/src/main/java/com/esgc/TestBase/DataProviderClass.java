@@ -458,15 +458,17 @@ public class DataProviderClass {
     public Object[][] PDFEntitlements() {
 
         return new Object[][]{
-                {"esg-test5@outlook.com", "Helloworld25", "Physical Risk"},//
-                {"esg-test6@outlook.com", "Helloworld26", "Transition Risk"},//
-                {"esg-test1+export@outlook.com", "Moodys123", "Physical Risk and Transition Risk"},//
-                {"esg-test33@outlook.com", "Helloworld21", "ESG"},//
+
+                //{"esg-test5@outlook.com", "Helloworld25", "PR+ESG+Export"},//
+                {"qa-mesg+5e@outlook.com","Moodys123","PR+ESG+Export"},
+                {"esg-test6@outlook.com", "Helloworld26", "TR+ESG+Export"},//
+                {"esg-test1+export@outlook.com", "Helloworld21", "PR+Export"},//
+                {"esg-test2+export@outlook.com", "Helloworld21", "TR+Export"},//
         };
     }
 
-    @DataProvider(name = "PDFExportEntitlements")
-    public Object[][] PDFExportEntitlements() {
+    @DataProvider(name = "PDFExportButtonEntitlements")
+    public Object[][] PDFExportButtonEntitlements() {
 
         return new Object[][]{
                 {EntitlementsBundles.PDF_EXPORT_BUNDLE_ENTITLEMENT},
@@ -475,4 +477,6 @@ public class DataProviderClass {
                 {EntitlementsBundles.PDF_EXPORT_ONLY_SOURCEDOCUMENTS_ENTITLEMENT},
         };
     }
+
+
 }
