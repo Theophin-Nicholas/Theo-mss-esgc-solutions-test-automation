@@ -2,7 +2,7 @@ package com.esgc.Dashboard.UI.Tests.Export;
 
 import com.esgc.Dashboard.UI.Pages.DashboardPage;
 import com.esgc.Base.TestBases.DataValidationTestBase;
-import com.esgc.Utilities.Database.DashboardQueries;
+import com.esgc.Dashboard.DB.DBQueries.DashboardQueries;
 import com.esgc.Utilities.Xray;
 import org.testng.annotations.Test;
 

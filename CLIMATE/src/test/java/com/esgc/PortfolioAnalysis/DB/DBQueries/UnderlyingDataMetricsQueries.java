@@ -1,7 +1,8 @@
-package com.esgc.Utilities.Database;
+package com.esgc.PortfolioAnalysis.DB.DBQueries;
 
 import com.esgc.Base.DB.DBModels.IdentifierQueryModel;
 import com.esgc.Base.DB.DBModels.IdentifierQueryModelFactory;
+import com.esgc.Utilities.Database.DatabaseDriver;
 import org.testng.annotations.Test;
 
 import java.util.List;

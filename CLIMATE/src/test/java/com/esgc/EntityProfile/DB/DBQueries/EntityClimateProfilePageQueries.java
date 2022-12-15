@@ -1,4 +1,6 @@
-package com.esgc.Utilities.Database;
+package com.esgc.EntityProfile.DB.DBQueries;
+
+import com.esgc.Utilities.Database.DatabaseDriver;
 
 import java.util.ArrayList;
 import java.util.HashMap;

@@ -5,7 +5,7 @@ import com.esgc.EntityProfile.API.APIModels.EntityUnderlyingData.CarbonFootprint
 import com.esgc.EntityProfile.API.APIModels.EntityUnderlyingData.GreenShare;
 import com.esgc.EntityProfile.API.APIModels.SummarySection.TemperatureAlignmentSummary;
 import com.esgc.Base.TestBases.EntityClimateProfileDataValidationTestBase;
-import com.esgc.Utilities.EndPoints.EntityProfilePageEndpoints;
+import com.esgc.EntityProfile.API.EntityProfilePageEndpoints;
 import com.esgc.Utilities.Environment;
 import com.esgc.Utilities.Xray;
 import io.restassured.http.ContentType;
@@ -16,8 +16,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.esgc.Utilities.Database.EntityClimateProfilePageQueries.getCoverageForGreenShare;
-import static com.esgc.Utilities.Database.EntityClimateProfilePageQueries.getCoverageForWidgets;
+import static com.esgc.EntityProfile.DB.DBQueries.EntityClimateProfilePageQueries.getCoverageForGreenShare;
+import static com.esgc.EntityProfile.DB.DBQueries.EntityClimateProfilePageQueries.getCoverageForWidgets;
 import static io.restassured.RestAssured.given;
 
 public class EntityClimateUnderlyingData extends EntityClimateProfileDataValidationTestBase {

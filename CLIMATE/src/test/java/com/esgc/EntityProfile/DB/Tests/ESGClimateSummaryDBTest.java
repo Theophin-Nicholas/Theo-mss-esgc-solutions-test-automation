@@ -21,8 +21,8 @@ import org.testng.annotations.Test;
 
 import java.util.*;
 
-import static com.esgc.Utilities.Database.EntityClimateProfilePageQueries.getESGDbScores;
-import static com.esgc.Utilities.Database.EntityClimateProfilePageQueries.getHeaderDB;
+import static com.esgc.EntityProfile.DB.DBQueries.EntityClimateProfilePageQueries.getESGDbScores;
+import static com.esgc.EntityProfile.DB.DBQueries.EntityClimateProfilePageQueries.getHeaderDB;
 
 public class ESGClimateSummaryDBTest extends EntityClimateProfileDataValidationTestBase {
 //TODO check https://esjira/browse/ESGCA-8761 and update date validations

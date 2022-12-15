@@ -8,7 +8,7 @@ import org.testng.annotations.Test;
 
 import java.util.List;
 
-import static com.esgc.Utilities.Database.EntityClimateProfilePageQueries.getExportOrSourceDocumentsFromDB;
+import static com.esgc.EntityProfile.DB.DBQueries.EntityClimateProfilePageQueries.getExportOrSourceDocumentsFromDB;
 
 public class ExportSourceDocuments extends EntityClimateProfileDataValidationTestBase {
 

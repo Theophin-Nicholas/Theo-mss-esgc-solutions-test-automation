@@ -11,7 +11,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import static com.esgc.Utilities.Database.EntityClimateProfilePageQueries.getEntityHeaderDetails;
+import static com.esgc.EntityProfile.DB.DBQueries.EntityClimateProfilePageQueries.getEntityHeaderDetails;
 
 
 public class EntityClimateCompanyAbout extends DataValidationTestBase {
