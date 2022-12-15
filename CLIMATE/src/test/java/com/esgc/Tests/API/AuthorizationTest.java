@@ -17,7 +17,8 @@ public class AuthorizationTest extends APITestBase {
         APIFilterPayloadWithImpactFilter apiImpactFilterPayload = new APIFilterPayloadWithImpactFilter("all", "all", "03", "2021", "top5");
 
         String portfolio_id = APIUtilities.importScorePortfolio(APIUtilities.userID()).getBody().jsonPath().get("portfolio_id");
-
+        test.info("User is in " + researchLine);
+        test.info("portfolio_id = " + portfolio_id);
         apiController.getPortfolioScoreResponse(portfolio_id, researchLine, apiFilterPayload).then().assertThat().statusCode(200);
         apiController.getPortfolioDistributionResponse(portfolio_id, researchLine, apiFilterPayload).then().assertThat().statusCode(200);
         apiController.getPortfolioCoverageResponse(portfolio_id, researchLine, apiFilterPayload).then().assertThat().statusCode(200);
@@ -33,15 +34,16 @@ public class AuthorizationTest extends APITestBase {
                 apiController.getPortfolioUnderlyingDataMetricsResponse(portfolio_id, researchLine, apiFilterPayload).prettyPeek().then().assertThat().statusCode(200);
             if (researchLine.equals("carbonfootprint"))
                 apiController.getPortfolioEmissionsResponse(portfolio_id, researchLine, apiFilterPayload).prettyPeek().then().assertThat().statusCode(200);
-            if (researchLine.equals("marketrisk") || researchLine.equals("supplychainrisk") )
+            if (researchLine.equals("marketrisk") || researchLine.equals("supplychainrisk"))
                 apiController.getPhysicalRiskUnderlyingDataMetricsResponse(portfolio_id, researchLine, apiFilterPayload).then().assertThat().statusCode(200);
             apiController.getImpactDistributionResponse(portfolio_id, researchLine, apiImpactFilterPayload).then().assertThat().statusCode(200);
             apiController.getHistoryTablesResponse(portfolio_id, researchLine, apiFilterPayload).then().assertThat().statusCode(200);
         }
 
     }
-//3340 TCFD
-    @Xray(test = {3333, 3334, 3335, 3336, 3337, 3338, 3339,  3341})
+
+    //3340 TCFD
+    @Xray(test = {3333, 3334, 3335, 3336, 3337, 3338, 3339, 3341})
     @Test(groups = {"api", "regression"}, dataProvider = "API Research Lines")
     public void invalidPortfolioAuthorizationTest(String researchLine) {
         APIController apiController = new APIController();

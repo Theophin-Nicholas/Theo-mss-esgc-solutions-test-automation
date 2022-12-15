@@ -74,4 +74,9 @@ public class RegulatoryReportingQueries {
                 "\t\t,reporting_year DESC;";
         return getQueryResultMap(query);
     }
+
+    public List<Map<String, Object>> getSFDRCompanyOutput(String portfolioId, String year) {
+        String query = "SELECT * FROM VW_SFDR_REPORT_COMPANY_OUTPUT WHERE PORTFOLIO_ID='"+portfolioId+"' AND YEAR = '"+year+"' AND DATE_BASED_DATA_TYPE='yearly'";
+        return getQueryResultMap(query);
+    }
 }

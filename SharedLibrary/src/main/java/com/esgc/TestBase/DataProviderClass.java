@@ -276,9 +276,9 @@ public class DataProviderClass {
     public Object[][] orbisIDWithoutTempAlignment() {
 
         return new Object[][]{
-                {"012146622"},
-                {"058618674"},
-                {"037507363"},//
+                {"012146622"},//Huawei Technologies Co., Ltd.
+                {"058618674"},//Ford Motor Co.
+                {"037507363"},//Ayala Corp.
         };
     }
 
@@ -299,6 +299,8 @@ public class DataProviderClass {
 
         return new Object[][]{
                /* {"ESG Assessments"},*/ //De-scoped as of now
+
+                {"Physical Risk Hazards"},
                 {"Carbon Footprint"},
                 {"Physical Risk Management"},
                 {"Temperature Alignment"},
@@ -348,7 +350,10 @@ public class DataProviderClass {
     @DataProvider(name = "CompanyNames")
     public Object[][] provideParameters() {
         return new Object[][]
-                {{"Apple, Inc."}, {"Black Hills Corp."}, {"SEEK Ltd."}
+                {
+                        {"Apple, Inc."},
+                        {"Twitter, Inc."},
+                        {"SEEK Ltd."}
                 };
     }
 
@@ -436,7 +441,14 @@ public class DataProviderClass {
     @DataProvider(name = "SubsidiaryCompanies")
     public Object[][] subsidiaryCompanies() {
         return new Object[][]{
-                {"National Grid North America, Inc.","National Grid Plc"},
+                {"Oriental Bank","OFG Bancorp"},
+        };
+    }
+
+    @DataProvider(name = "CompaniesWithNoSubsidiaryCompanies")
+    public Object[][] NoSubsidiaryCompanies() {
+        return new Object[][]{
+                {"Amazon.com, Inc."},
         };
     }
 

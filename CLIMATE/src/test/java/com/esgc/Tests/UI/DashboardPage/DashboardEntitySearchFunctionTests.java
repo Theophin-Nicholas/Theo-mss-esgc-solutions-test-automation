@@ -157,8 +157,9 @@ public class DashboardEntitySearchFunctionTests extends UITestBase {
         test.info("Navigate to Dashboard page");
         dashboardPage.navigateToPageFromMenu("Dashboard");
         dashboardPage.searchIconPortfolioPage.click();
-        assertTestCase.assertFalse(dashboardPage.checkClickingOnEntityName("App"), "Clicking on entity name on search bar worked");
-        assertTestCase.assertTrue(dashboardPage.checkIfUserIsOnRightPage(), "User is not on expected page");
+        String searchKeyword = "App";
+        assertTestCase.assertFalse(dashboardPage.checkClickingOnEntityName(searchKeyword), "Clicking on entity name on search bar worked");
+        assertTestCase.assertTrue(dashboardPage.checkIfUserIsOnEntityPageBySearchedKeyword(searchKeyword), "User is not on expected page");
         dashboardPage.pressESCKey();
         assertTestCase.assertFalse(dashboardPage.isSearchBoxDisplayed(), "User is on expected page");
     }
