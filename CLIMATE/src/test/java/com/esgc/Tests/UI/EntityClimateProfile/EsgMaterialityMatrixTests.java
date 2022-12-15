@@ -57,7 +57,7 @@ public class EsgMaterialityMatrixTests extends UITestBase {
         test.info("Searching and Selecting the company");
         EntityClimateProfilePage entityProfilePage = new EntityClimateProfilePage();
         String companyName = entityProfilePage.searchAndLoadClimateProfilePage(company);
-        assertTestCase.assertTrue(entityProfilePage.validateGlobalHeader(companyName), companyName + " Header Verification");
+        assertTestCase.assertTrue(entityProfilePage.validateGlobalCompanyNameHeader(companyName), companyName + " Header Verification");
 
         entityProfilePage.selectEsgMaterialityTab();
         entityProfilePage.validateSubCategoriesButtonProperties();
@@ -88,7 +88,7 @@ public class EsgMaterialityMatrixTests extends UITestBase {
         String company = "Sculptor Capital Management, Inc.";
         EntityClimateProfilePage entityProfilePage = new EntityClimateProfilePage();
         String companyName = entityProfilePage.searchAndLoadClimateProfilePage(company);
-        assertTestCase.assertTrue(entityProfilePage.validateGlobalHeader(companyName), companyName + " Header Verification");
+        assertTestCase.assertTrue(entityProfilePage.validateGlobalCompanyNameHeader(companyName), companyName + " Header Verification");
 
         entityProfilePage.selectEsgMaterialityTab();
         entityProfilePage.validateNoneForTheSectorButton();

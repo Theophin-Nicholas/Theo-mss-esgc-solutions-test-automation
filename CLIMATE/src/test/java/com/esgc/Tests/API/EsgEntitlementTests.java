@@ -14,6 +14,7 @@ public class EsgEntitlementTests extends DataValidationTestBase {
     @Test(groups = {"api", "regression"})
     @Xray(test=8375)
     public void VerifyEsgCoverageAvailable() {
+        getExistingUsersAccessTokenFromUI();
         Response portfoliosResponse = APIUtilities.getAvailablePortfoliosForUser();
         JsonPath jsonPathEvaluator = portfoliosResponse.jsonPath();
         List<String> portfolioIds = jsonPathEvaluator.getList("portfolios.portfolio_id");

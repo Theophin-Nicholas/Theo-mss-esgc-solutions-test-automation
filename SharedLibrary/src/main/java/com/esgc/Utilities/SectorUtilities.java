@@ -26,7 +26,7 @@ public class SectorUtilities {
                     "Food",
                     "Tobacco",
                     "Personal & Non - durable",
-                    "Personal & Non - durable Household Goods",
+                    "Personal & Non-durable Household Goods",
                     "Supermarkets",
                     "Diversified Banks",
                     "Retail & Specialized Banks",

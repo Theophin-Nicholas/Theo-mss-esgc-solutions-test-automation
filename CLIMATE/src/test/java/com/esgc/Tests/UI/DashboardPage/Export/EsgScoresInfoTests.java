@@ -53,7 +53,6 @@ public class EsgScoresInfoTests extends DataValidationTestBase {
     @Xray(test = {11266, 11315, 11396})
     public void verifyScoreTypeOfEntitiesWhenEsgPredEntitlement_Bundle() {
         LoginPage login = new LoginPage();
-        login.clickOnLogout();
         login.entitlementsLogin(EntitlementsBundles.USER_WITH_ESG_PS_ENTITLEMENT);
 
         DashboardPage dashboardPage = new DashboardPage();
@@ -93,7 +92,6 @@ public class EsgScoresInfoTests extends DataValidationTestBase {
     @Xray(test = {11267, 11317})
     public void compareEsgScoresWhenNoEsgPredEntitlement_Bundle() {
         LoginPage login = new LoginPage();
-        login.clickOnLogout();
         login.entitlementsLogin(EntitlementsBundles.USER_WITH_ESG_ENTITLEMENT);
 
         DashboardPage dashboardPage = new DashboardPage();
@@ -132,7 +130,6 @@ public class EsgScoresInfoTests extends DataValidationTestBase {
     @Xray(test = {11268})
     public void compareEsgScoresWhenNoEsgEntitlement_Bundle() {
         LoginPage login = new LoginPage();
-        login.clickOnLogout();
         login.entitlementsLogin(EntitlementsBundles.USER_WITH_EXPORT_ENTITLEMENT);
 
         DashboardPage dashboardPage = new DashboardPage();

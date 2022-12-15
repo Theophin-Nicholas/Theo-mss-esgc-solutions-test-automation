@@ -19,7 +19,7 @@ public class PortfolioDistribution extends UITestBase {
             dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
     @Xray(test = {3924, 6730,657})
     public void verifyIfPortfolioDistributionIsAvailable(String page) {
-        if (page.equals("Physical Risk Hazards") || page.equals("Physical Risk Management")) {
+        if (page.equals("Physical Risk Hazards")) {
             throw new SkipException(page +" - Portfolio Distribution is not ready to test");
         }
         ResearchLinePage researchLinePage = new ResearchLinePage();
