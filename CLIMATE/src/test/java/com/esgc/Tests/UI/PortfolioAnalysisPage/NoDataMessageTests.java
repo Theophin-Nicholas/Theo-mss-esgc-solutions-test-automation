@@ -134,7 +134,7 @@ public class NoDataMessageTests extends UITestBase {
 
         EntityClimateProfilePage entityProfilePage = new EntityClimateProfilePage();
         String companyName = entityProfilePage.searchAndLoadClimateProfilePage("Alibaba Group Holding Ltd.");
-        assertTestCase.assertTrue(entityProfilePage.validateGlobalHeader(companyName),companyName+" Header Verification");
+        assertTestCase.assertTrue(entityProfilePage.validateGlobalCompanyNameHeader(companyName),companyName+" Header Verification");
         entityProfilePage.navigateToPhysicalRisk();
         BrowserUtils.wait(10);
 
@@ -155,7 +155,7 @@ public class NoDataMessageTests extends UITestBase {
         entityClimateProfile.clickCloseIcon();
 
         companyName = entityProfilePage.searchAndLoadClimateProfilePage("Axis Bank Ltd");
-        assertTestCase.assertTrue(entityProfilePage.validateGlobalHeader(companyName),companyName+" Header Verification");
+        assertTestCase.assertTrue(entityProfilePage.validateGlobalCompanyNameHeader(companyName),companyName+" Header Verification");
         entityClimateProfile.selectTransitionRiskTab();
         BrowserUtils.wait(10);
 

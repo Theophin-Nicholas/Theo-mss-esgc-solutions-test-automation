@@ -1,5 +1,6 @@
 package com.esgc.APIModels.PortfolioSettings;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 @Data
@@ -9,5 +10,10 @@ public class Investment {
     String orbis_id;
     int order;
     int rank;
+    String score_quality;
+    @JsonIgnore
+    String parent_company_name;
+    @JsonIgnore
+    String parent_orbis_id;
 
 }

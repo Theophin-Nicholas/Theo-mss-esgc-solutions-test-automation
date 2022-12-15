@@ -239,6 +239,7 @@ public class PDFTestMethods extends PageBase {
         if (Methodology.equals("ve")){
             expectedHeader= "Criteria Performance ESG Component";
             expectedMatricsTitle = "Criteria Materiality" ;
+
         } else if (Methodology.equals("mesg")) {
             // TODO  Change expectedHeader in below line according to ESGCA-11528 fix
             expectedHeader= "Subcategories Performance Disclosure Ratio ESG Component Weight:Business Stakeholder";
@@ -323,4 +324,30 @@ public class PDFTestMethods extends PageBase {
         }
     }
 
+    public boolean ValidateIfBROWNSHAREIN_UnderlyingDataTransitionRisk_IsAvaialble() {
+        EntityClimateProfilePage entityProfilePage = new EntityClimateProfilePage();
+        String UIValue = "Underlying Data Transition Risk BROWN SHARE";
+        String content = PdfUtil.extractPDFText(pdfFileText, UIValue);
+
+        if (content.equals("No ParaGraph Found")) {
+            UIValue = UIValue.replace("BROWN SHARE", "BROWNSHARE");
+            content = PdfUtil.extractPDFText(pdfFileText, UIValue);
+        }
+        if (!UIValue.contains("No information available."))
+            return true;
+        else
+            return false;
+    }
+
+    public void ValidatePDFShowsRegularFormatForVE() {
+        EntityClimateProfilePage entityProfilePage = new EntityClimateProfilePage();
+        String UIValue = "Metrics of High";
+        String content = PdfUtil.extractPDFText(pdfFileText, UIValue);
+        assertTestCase.assertTrue(content.equals("No ParaGraph Found"), "Validating Metrics of High is not displayed");
+
+        UIValue = "Very High Materiality";
+        content = PdfUtil.extractPDFText(pdfFileText, UIValue);
+        assertTestCase.assertTrue(content.equals("No ParaGraph Found"), "Validating Very High Materiality is not displayed");
+
+    }
 }
