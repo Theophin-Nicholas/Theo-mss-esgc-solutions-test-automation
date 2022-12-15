@@ -35,8 +35,7 @@ public abstract class TestBase {
     public static boolean isDataValidationTest = false;
     public static boolean isBrowserOpen = false;
     public static StopWatch stopWatch = new StopWatch();
-
-
+    public static String reportPath = System.getProperty("user.dir") + File.separator + "test-output";
 
     @BeforeTest(alwaysRun = true)
     @Parameters("reportName")
