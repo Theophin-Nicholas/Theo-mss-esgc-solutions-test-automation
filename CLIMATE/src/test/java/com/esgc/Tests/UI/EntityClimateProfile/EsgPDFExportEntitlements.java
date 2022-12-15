@@ -24,7 +24,7 @@ public class EsgPDFExportEntitlements extends UITestBase {
         String company = "Rogers Corp.";
         EntityClimateProfilePage entityProfilePage = new EntityClimateProfilePage();
         String companyName = entityProfilePage.searchAndLoadClimateProfilePage(company);
-        assertTestCase.assertTrue(entityProfilePage.validateGlobalHeader(companyName),companyName+" Header Verification");
+        assertTestCase.assertTrue(entityProfilePage.validateGlobalCompanyNameHeader(companyName),companyName+" Header Verification");
 
         test.info("Export or Source Documents feature availability");
         EntityClimateProfilePage entityPage = new EntityClimateProfilePage();
