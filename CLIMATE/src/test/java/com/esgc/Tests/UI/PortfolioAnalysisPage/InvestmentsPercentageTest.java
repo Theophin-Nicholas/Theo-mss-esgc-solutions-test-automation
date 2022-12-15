@@ -9,7 +9,7 @@ import org.testng.annotations.Test;
 
 public class InvestmentsPercentageTest extends UITestBase {
 //TODO this test case failing in UAT, needs attention
-    @Test(groups = {"regression", "ui", "smoke"},
+    @Test(groups = {"regression", "ui"},
     dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines Investments")
     @Xray(test = 5719)
     public void verifyInvestmentPercentageLessThanOne(String... dataProvider) {

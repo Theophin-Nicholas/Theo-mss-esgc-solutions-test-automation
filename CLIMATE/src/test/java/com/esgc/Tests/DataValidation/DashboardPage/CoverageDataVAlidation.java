@@ -18,6 +18,7 @@ public class CoverageDataVAlidation extends DataValidationTestBase {
 
     @Test(groups = {"regression", "data_validation", "dashboard"})
     @Xray(test = {3643, 3645,
+            8272, //ESG
             11049//Subs
     })
     public void verifyCoverage() {
