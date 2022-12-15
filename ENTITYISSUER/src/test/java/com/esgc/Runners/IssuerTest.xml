@@ -16,7 +16,7 @@
         </groups>
 
         <classes>
-            <class name="com.esgc.Tests.UI.PortfolioAnalysisPage.ExportTests"/>
+            <class name="com.esgc.PortfolioAnalysis.UI.Tests.ExportTests"/>
 
         </classes>
 
