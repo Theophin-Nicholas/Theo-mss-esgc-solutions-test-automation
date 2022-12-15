@@ -1,4 +1,4 @@
-package com.esgc.Utilities.Database;
+package com.esgc.RegulatoryReporting.DB.DBQueries;
 
 import java.util.List;
 import java.util.Map;

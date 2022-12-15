@@ -1,4 +1,4 @@
-package com.esgc.Utilities.EndPoints;
+package com.esgc.RegulatoryReporting.API;
 
 public class RegulatoryReportingEndPoints {
     //=================PORTFOLIO APIs

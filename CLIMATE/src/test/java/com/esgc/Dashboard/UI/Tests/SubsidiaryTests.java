@@ -6,7 +6,7 @@ import com.esgc.PortfolioAnalysis.UI.Pages.ResearchLinePage;
 import com.esgc.TestBase.DataProviderClass;
 import com.esgc.Base.TestBases.UITestBase;
 import com.esgc.Utilities.BrowserUtils;
-import com.esgc.Utilities.Database.DashboardQueries;
+import com.esgc.Dashboard.DB.DBQueries.DashboardQueries;
 import com.esgc.Utilities.PortfolioFilePaths;
 import com.esgc.Utilities.RobotRunner;
 import com.esgc.Utilities.Xray;

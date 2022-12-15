@@ -1,8 +1,8 @@
-package com.esgc.RegulatoryReport.DB.Tests;
+package com.esgc.RegulatoryReporting.DB.Tests;
 
 import com.esgc.Dashboard.UI.Pages.DashboardPage;
 import com.esgc.PortfolioAnalysis.UI.Pages.PhysicalRiskPages.PhysicalRiskManagementPages.PhysicalRiskManagementPage;
-import com.esgc.RegulatoryReport.UI.Pages.RegulatoryReportingPage;
+import com.esgc.RegulatoryReporting.UI.Pages.RegulatoryReportingPage;
 import com.esgc.Base.TestBases.DataValidationTestBase;
 import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.Xray;

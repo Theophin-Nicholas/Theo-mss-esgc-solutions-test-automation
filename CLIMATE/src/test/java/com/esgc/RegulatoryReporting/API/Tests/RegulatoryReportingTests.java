@@ -1,8 +1,8 @@
-package com.esgc.RegulatoryReport.API.Tests;
+package com.esgc.RegulatoryReporting.API.Tests;
 
-import com.esgc.RegulatoryReport.API.Controllers.RegulatoryReportingAPIController;
+import com.esgc.RegulatoryReporting.API.Controllers.RegulatoryReportingAPIController;
 import com.esgc.Dashboard.UI.Pages.DashboardPage;
-import com.esgc.RegulatoryReport.UI.Pages.RegulatoryReportingPage;
+import com.esgc.RegulatoryReporting.UI.Pages.RegulatoryReportingPage;
 import com.esgc.Base.TestBases.APITestBase;
 import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.Xray;

@@ -4,7 +4,7 @@ import com.esgc.Dashboard.UI.Pages.DashboardPage;
 import com.esgc.Base.UI.Pages.LoginPage;
 import com.esgc.Base.TestBases.DataValidationTestBase;
 import com.esgc.Utilities.*;
-import com.esgc.Utilities.Database.DashboardQueries;
+import com.esgc.Dashboard.DB.DBQueries.DashboardQueries;
 import org.testng.annotations.Test;
 
 import java.util.ArrayList;

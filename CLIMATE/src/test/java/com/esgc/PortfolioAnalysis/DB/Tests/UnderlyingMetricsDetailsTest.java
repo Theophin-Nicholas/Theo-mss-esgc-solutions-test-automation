@@ -4,7 +4,7 @@ import com.esgc.PortfolioAnalysis.API.APIModels.Entities;
 import com.esgc.PortfolioAnalysis.API.APIModels.PhysicalRiskEntities;
 import com.esgc.Base.API.Controllers.APIController;
 import com.esgc.Base.TestBases.DataValidationTestBase;
-import com.esgc.Utilities.Database.UnderlyingDataMetricsQueries;
+import com.esgc.PortfolioAnalysis.DB.DBQueries.UnderlyingDataMetricsQueries;
 import com.esgc.Utilities.Xray;
 import io.restassured.response.Response;
 import org.testng.annotations.Test;

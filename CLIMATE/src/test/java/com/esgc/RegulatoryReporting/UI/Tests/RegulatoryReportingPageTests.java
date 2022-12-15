@@ -1,9 +1,9 @@
-package com.esgc.RegulatoryReport.UI.Tests;
+package com.esgc.RegulatoryReporting.UI.Tests;
 
 import com.esgc.Dashboard.UI.Pages.DashboardPage;
 import com.esgc.Base.UI.Pages.LoginPage;
 import com.esgc.PortfolioAnalysis.UI.Pages.PhysicalRiskPages.PhysicalRiskManagementPages.PhysicalRiskManagementPage;
-import com.esgc.RegulatoryReport.UI.Pages.RegulatoryReportingPage;
+import com.esgc.RegulatoryReporting.UI.Pages.RegulatoryReportingPage;
 import com.esgc.Base.TestBases.UITestBase;
 import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.DateTimeUtilities;

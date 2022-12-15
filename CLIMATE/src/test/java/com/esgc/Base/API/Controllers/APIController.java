@@ -9,7 +9,7 @@ import com.esgc.Base.DB.DBModels.ResearchLineIdentifier;
 import com.esgc.Utilities.APIUtilities;
 import com.esgc.Utilities.Driver;
 import com.esgc.Utilities.EndPoints.CommonEndPoints;
-import com.esgc.Utilities.EndPoints.PortfolioAnalysisEndpoints;
+import com.esgc.PortfolioAnalysis.API.PortfolioAnalysisEndpoints;
 import com.esgc.Utilities.EndPoints.PortfolioSettingsEndPoints;
 import com.esgc.Utilities.Environment;
 import io.restassured.http.ContentType;
