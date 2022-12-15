@@ -12,8 +12,6 @@ import org.testng.annotations.Test;
 
 import java.util.List;
 
-//import edu.emory.mathcs.backport.java.util.Arrays;
-
 public class PortfolioAnalysisEntitlementsTests extends UITestBase {
 
     @Test(groups = {"regression", "ui", "smoke", "entitlements"})
@@ -102,7 +100,7 @@ public class PortfolioAnalysisEntitlementsTests extends UITestBase {
         Assert.assertEquals(currentUrl, "portfolioanalysis/physicalriskhazards");
     }
 
-    @Test(groups = {"regression", "ui", "smoke", "entitlements"})
+    @Test(enabled = false, groups = {"regression", "ui", "smoke", "entitlements"})
     @Xray(test = {4295, 4322})
     public void validateTransitionRiskAndClimateGovernanceBundleAccess() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
@@ -123,7 +121,7 @@ public class PortfolioAnalysisEntitlementsTests extends UITestBase {
         Assert.assertEquals(currentUrl, "portfolioanalysis/physicalriskhazards");
     }
 
-    @Test(groups = {"regression", "ui", "smoke", "entitlements"})
+    @Test(enabled = false, groups = {"regression", "ui", "smoke", "entitlements"})
     @Xray(test = {4294, 4321})
     public void validatePhysicalRiskClimateGovernanceBundleAccess() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
@@ -192,7 +190,7 @@ public class PortfolioAnalysisEntitlementsTests extends UITestBase {
         List<String> actualResearchLines = researchLinePage.getAvailableResearchLines();
         System.out.println("actualResearchLines = " + actualResearchLines);
         assertTestCase.assertEquals(actualResearchLines.size(), 6, "Existing Research Lines Validation ");
-        // assertTestCase.assertTrue(actualResearchLines.stream().filter(e -> e.equals("ESG Assessments")).count()==0);
+        assertTestCase.assertTrue(actualResearchLines.stream().filter(e -> e.equals("ESG Assessments")).count()==0);
 
     }
 

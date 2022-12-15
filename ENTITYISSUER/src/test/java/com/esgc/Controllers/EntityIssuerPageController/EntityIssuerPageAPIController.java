@@ -260,4 +260,17 @@ public class EntityIssuerPageAPIController {
         }
       return  subcat;
     }
+    public Response getVAlidateURLApiResponse(String url) {
+        Response response = null;
+        try {
+            response = configSpec()
+                    .when()
+                    .body("{\"url\":\"" + url + "\"}")
+                    .post(EntityIssuerPageEndPoints.POST_VALIDATE_URL).prettyPeek();
+
+        } catch (Exception e) {
+            System.out.println("Inside exception " + e.getMessage());
+        }
+        return response;
+    }
 }

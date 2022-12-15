@@ -126,7 +126,7 @@ public class LeadersAndLaggards extends UITestBase {
         test.info("Verified that the More companies ranked in link is working as expected");
     }
     //TODO De-Scoped as of now
-    @Test(enabled = true,groups = {"regression", "ui", "smoke"})
+    @Test(enabled = false,groups = {"regression", "ui", "smoke"})
     @Xray(test = {9871})
     public void VerifyESGLeadersAndLaggersTable() {
         ResearchLinePage researchLinePage = new ResearchLinePage();

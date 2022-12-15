@@ -276,9 +276,9 @@ public class DataProviderClass {
     public Object[][] orbisIDWithoutTempAlignment() {
 
         return new Object[][]{
-                {"012146622"},
-                {"058618674"},
-                {"037507363"},//
+                {"012146622"},//Huawei Technologies Co., Ltd.
+                {"058618674"},//Ford Motor Co.
+                {"037507363"},//Ayala Corp.
         };
     }
 
@@ -299,6 +299,8 @@ public class DataProviderClass {
 
         return new Object[][]{
                /* {"ESG Assessments"},*/ //De-scoped as of now
+
+                {"Physical Risk Hazards"},
                 {"Carbon Footprint"},
                 {"Physical Risk Management"},
                 {"Temperature Alignment"},
@@ -348,7 +350,10 @@ public class DataProviderClass {
     @DataProvider(name = "CompanyNames")
     public Object[][] provideParameters() {
         return new Object[][]
-                {{"Apple, Inc."}, {"Black Hills Corp."}, {"SEEK Ltd."}
+                {
+                        {"Apple, Inc."},
+                        {"Twitter, Inc."},
+                        {"SEEK Ltd."}
                 };
     }
 
@@ -436,7 +441,14 @@ public class DataProviderClass {
     @DataProvider(name = "SubsidiaryCompanies")
     public Object[][] subsidiaryCompanies() {
         return new Object[][]{
-                {"National Grid North America, Inc.","National Grid Plc"},
+                {"Oriental Bank","OFG Bancorp"},
+        };
+    }
+
+    @DataProvider(name = "CompaniesWithNoSubsidiaryCompanies")
+    public Object[][] NoSubsidiaryCompanies() {
+        return new Object[][]{
+                {"Amazon.com, Inc."},
         };
     }
 
@@ -458,15 +470,17 @@ public class DataProviderClass {
     public Object[][] PDFEntitlements() {
 
         return new Object[][]{
-                {"esg-test5@outlook.com", "Helloworld25", "Physical Risk"},//
-                {"esg-test6@outlook.com", "Helloworld26", "Transition Risk"},//
-                {"esg-test1+export@outlook.com", "Moodys123", "Physical Risk and Transition Risk"},//
-                {"esg-test33@outlook.com", "Helloworld21", "ESG"},//
+
+                //{"esg-test5@outlook.com", "Helloworld25", "PR+ESG+Export"},//
+                {"qa-mesg+5e@outlook.com","Moodys123","PR+ESG+Export"},
+                {"esg-test6@outlook.com", "Helloworld26", "TR+ESG+Export"},//
+                {"esg-test1+export@outlook.com", "Helloworld21", "PR+Export"},//
+                {"esg-test2+export@outlook.com", "Helloworld21", "TR+Export"},//
         };
     }
 
-    @DataProvider(name = "PDFExportEntitlements")
-    public Object[][] PDFExportEntitlements() {
+    @DataProvider(name = "PDFExportButtonEntitlements")
+    public Object[][] PDFExportButtonEntitlements() {
 
         return new Object[][]{
                 {EntitlementsBundles.PDF_EXPORT_BUNDLE_ENTITLEMENT},
@@ -475,4 +489,6 @@ public class DataProviderClass {
                 {EntitlementsBundles.PDF_EXPORT_ONLY_SOURCEDOCUMENTS_ENTITLEMENT},
         };
     }
+
+
 }
