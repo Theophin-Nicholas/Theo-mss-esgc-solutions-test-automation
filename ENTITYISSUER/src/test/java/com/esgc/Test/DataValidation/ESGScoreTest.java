@@ -5,9 +5,7 @@ import com.esgc.APIModels.EntityIssuerPage.ScoreCategory;
 import com.esgc.DBModels.EntityIssuerPageDBModels.ESGScoreSummaryDBModel;
 import com.esgc.Test.TestBases.EntityIssuerPageDataValidationTestBase;
 import com.esgc.Utilities.Database.EntityIssuerQueries;
-import com.esgc.Utilities.Environment;
 import com.esgc.Utilities.Xray;
-import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
 

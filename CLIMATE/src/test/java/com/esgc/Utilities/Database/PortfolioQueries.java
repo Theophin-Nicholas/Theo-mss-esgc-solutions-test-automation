@@ -1,13 +1,16 @@
 package com.esgc.Utilities.Database;
 
-import com.esgc.DBModels.*;
-import com.esgc.DBModels.EntityPage.PhysicalScore;
+import com.esgc.Base.DB.DBModels.EntityWithScores;
+import com.esgc.Base.DB.DBModels.IdentifierQueryModel;
+import com.esgc.Base.DB.DBModels.IdentifierQueryModelFactory;
+import com.esgc.Base.DB.DBModels.ResearchLineIdentifier;
+import com.esgc.EntityProfile.DB.DBModels.PhysicalScore;
+import com.esgc.PortfolioAnalysis.DB.DBModels.*;
 import com.esgc.Utilities.DateTimeUtilities;
 import com.esgc.Utilities.ESGUtilities;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
