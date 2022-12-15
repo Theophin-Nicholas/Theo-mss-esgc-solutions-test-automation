@@ -1,6 +1,6 @@
 package com.esgc.Utilities;
 
-import com.esgc.DBModels.ResearchLineIdentifier;
+import com.esgc.Base.DB.DBModels.ResearchLineIdentifier;
 import com.esgc.Utilities.Database.DatabaseDriver;
 import com.opencsv.CSVWriter;
 

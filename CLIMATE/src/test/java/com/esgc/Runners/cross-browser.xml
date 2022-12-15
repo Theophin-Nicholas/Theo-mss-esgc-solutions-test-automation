@@ -19,7 +19,7 @@
             <package name="com.esgc.Tests.UI"/>
             <package name="com.esgc.Tests.UI.*"/>
             <package name="com.esgc.Tests.UI.Dashboard"/>
-            <package name="com.esgc.Tests.UI.PampaLoginPageTest"/>
+            <package name="com.esgc.Base.UI.Tests.PampaLoginPageTest"/>
             <package name="com.esgc.Tests.UI.ResearchLineWidgets"/>
         </packages>
 
@@ -39,7 +39,7 @@
             <package name="com.esgc.Tests.UI"/>
             <package name="com.esgc.Tests.UI.*"/>
             <package name="com.esgc.Tests.UI.Dashboard"/>
-            <package name="com.esgc.Tests.UI.PampaLoginPageTest"/>
+            <package name="com.esgc.Base.UI.Tests.PampaLoginPageTest"/>
             <package name="com.esgc.Tests.UI.ResearchLineWidgets"/>
         </packages>
 
@@ -59,7 +59,7 @@
             <package name="com.esgc.Tests.UI"/>
             <package name="com.esgc.Tests.UI.*"/>
             <package name="com.esgc.Tests.UI.Dashboard"/>
-            <package name="com.esgc.Tests.UI.PampaLoginPageTest"/>
+            <package name="com.esgc.Base.UI.Tests.PampaLoginPageTest"/>
             <package name="com.esgc.Tests.UI.ResearchLineWidgets"/>
         </packages>
 
@@ -79,7 +79,7 @@
             <package name="com.esgc.Tests.UI"/>
             <package name="com.esgc.Tests.UI.*"/>
             <package name="com.esgc.Tests.UI.Dashboard"/>
-            <package name="com.esgc.Tests.UI.PampaLoginPageTest"/>
+            <package name="com.esgc.Base.UI.Tests.PampaLoginPageTest"/>
             <package name="com.esgc.Tests.UI.ResearchLineWidgets"/>
         </packages>
 
