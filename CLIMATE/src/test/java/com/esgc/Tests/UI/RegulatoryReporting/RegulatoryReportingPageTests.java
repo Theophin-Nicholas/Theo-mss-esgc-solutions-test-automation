@@ -101,8 +101,8 @@ public class RegulatoryReportingPageTests extends UITestBase {
         //Verify "Coverage" column is present with "% of coverage" as its value.
         assertTestCase.assertEquals(actualPortfoliosList.size(), reportingPage.coverageList.size(), "Coverage column is present with % of coverage as its value");
         for (WebElement coverage : reportingPage.coverageList) {
-            System.out.println("coverage.getText() = " + coverage.getText());
-            assertTestCase.assertTrue(coverage.getText().matches("\\d+%") || coverage.getText().equals("NA"),
+            //System.out.println("coverage.getText() = " + coverage.getText());
+            assertTestCase.assertTrue(coverage.getText().matches("\\d+.*") || coverage.getText().equals("NA"),
                     "Coverage column is present with % of coverage as its value");
         }
         System.out.println("Coverage column is present with % of coverage as its value is verified");
@@ -121,7 +121,7 @@ public class RegulatoryReportingPageTests extends UITestBase {
             reportingPage.selectPortfolioOptionByIndex(1);
         }
         assertTestCase.assertTrue(reportingPage.portfolioRadioButtonList.get(0).isSelected(), "Portfolio 1 is selected");
-//        System.out.println("Font-Family = " + regulatoryReportingPage.portfolioNamesList.get(0).getCssValue("font-family"));
+        System.out.println("Font-Family = " + reportingPage.rrPage_portfolioNamesList.get(0).getCssValue("font-family"));
         assertTestCase.assertTrue(reportingPage.rrPage_portfolioNamesList.get(0).getCssValue("font-family").contains("WhitneyNarrSemiBold"), "Portfolio is bolded");
         assertTestCase.assertTrue(reportingPage.lastUploadedList.get(0).getCssValue("font-family").contains("WhitneyNarrSemiBold"), "Upload date is bolded");
         assertTestCase.assertTrue(reportingPage.coverageList.get(0).getCssValue("font-family").contains("WhitneyNarrSemiBold"), "Coverage is bolded");
@@ -289,6 +289,7 @@ public class RegulatoryReportingPageTests extends UITestBase {
         String color = Color.fromString(reportingPage.createReportsButton.getCssValue("background-color")).asHex();
         System.out.println("color = " + color);
         assertTestCase.assertEquals(color, "#1f8cff", "Create report button color is blue");
+        Set<String> windows = BrowserUtils.getWindowHandles();
         reportingPage.createReportsButton.click();
 
         //verify create reports button after clicking
@@ -299,7 +300,7 @@ public class RegulatoryReportingPageTests extends UITestBase {
         assertTestCase.assertEquals(color, "#046bd9", "Create report button color is blue");
         try {
             //New tab should be opened and empty state message should be displayed as in the screenshot
-            assertTestCase.assertTrue(reportingPage.verifyNewTabOpened(currentWindow), "New tab is opened");
+            assertTestCase.assertTrue(reportingPage.verifyNewTabOpened(windows), "New tab is opened");
             System.out.println("New tab is opened");
             assertTestCase.assertTrue(reportingPage.verifyReportsReadyToDownload(selectedPortfolios), "Reports are ready to download");
             System.out.println("Reports are ready to download");
