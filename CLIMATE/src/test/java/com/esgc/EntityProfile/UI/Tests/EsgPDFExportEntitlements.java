@@ -1,10 +1,10 @@
-package com.esgc.Tests.UI.EntityClimateProfile;
+package com.esgc.EntityProfile.UI.Tests;
 
-import com.esgc.Pages.EntityClimateProfilePage;
-import com.esgc.Pages.LoginPage;
-import com.esgc.Pages.PDFTestMethods;
+import com.esgc.EntityProfile.UI.Pages.EntityClimateProfilePage;
+import com.esgc.Base.UI.Pages.LoginPage;
+import com.esgc.EntityProfile.UI.Pages.PDFTestMethods;
 import com.esgc.TestBase.DataProviderClass;
-import com.esgc.Tests.TestBases.UITestBase;
+import com.esgc.Base.TestBases.UITestBase;
 import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.EntitlementsBundles;
 import com.esgc.Utilities.Xray;
