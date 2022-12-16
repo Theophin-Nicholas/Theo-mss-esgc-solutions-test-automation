@@ -18,7 +18,7 @@ public class EntityClimateProfileMethodologyLinks extends UITestBase {
      /*   Driver.getDriver().manage().deleteAllCookies();
         Driver.getDriver().navigate().refresh();*/
         LoginPage login = new LoginPage();
-        login.clickOnLogout();
+        //login.clickOnLogout();
         ResearchLinePage researchLinePage = new ResearchLinePage();
         login.entitlementsLogin(EntitlementsBundles.PHYSICAL_RISK);
 

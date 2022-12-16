@@ -1,9 +1,11 @@
 package com.esgc.Test.API;
 
-import com.esgc.APIModels.EntityIssuerPage.*;
+import com.esgc.APIModels.EntityIssuerPage.SectorDrivers;
+import com.esgc.APIModels.EntityIssuerPage.SectorDriversWrapper;
+import com.esgc.APIModels.EntityIssuerPage.SectorIndicator;
 import com.esgc.Controllers.EntityIssuerPageController.EntityIssuerPageAPIController;
 import com.esgc.Test.TestBases.EntityIssuerPageTestBase;
-import com.esgc.Test.TestBases.IssuerDataProviderClass ;
+import com.esgc.Test.TestBases.IssuerDataProviderClass;
 import com.esgc.Utilities.Xray;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;

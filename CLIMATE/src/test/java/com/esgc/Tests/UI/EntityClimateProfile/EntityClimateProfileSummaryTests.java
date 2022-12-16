@@ -16,7 +16,6 @@ import io.restassured.response.Response;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.Color;
-import org.testng.SkipException;
 import org.testng.annotations.Test;
 
 import java.time.Year;

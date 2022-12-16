@@ -4,7 +4,6 @@ import com.esgc.Test.TestBases.EntityIssuerPageDataValidationTestBase;
 import com.esgc.Test.TestBases.EntityPageTestBase;
 import com.esgc.Test.TestBases.IssuerDataProviderClass;
 import com.esgc.Utilities.ConfigurationReader;
-import com.esgc.Utilities.Environment;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -12,7 +11,6 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class LoginPageIssuer extends PageBase{

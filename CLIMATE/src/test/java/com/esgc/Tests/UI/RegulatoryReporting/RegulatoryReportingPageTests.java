@@ -5,7 +5,10 @@ import com.esgc.Pages.LoginPage;
 import com.esgc.Pages.PortfolioAnalysisPage.PhysicalRiskPages.PhysicalRiskManagementPages.PhysicalRiskManagementPage;
 import com.esgc.Pages.RegulatoryReportingPage;
 import com.esgc.Tests.TestBases.UITestBase;
-import com.esgc.Utilities.*;
+import com.esgc.Utilities.BrowserUtils;
+import com.esgc.Utilities.DateTimeUtilities;
+import com.esgc.Utilities.Environment;
+import com.esgc.Utilities.Xray;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.Color;
 import org.testng.annotations.Test;
@@ -417,7 +420,7 @@ public class RegulatoryReportingPageTests extends UITestBase {
         assertTestCase.assertTrue(reportingPage.createReportsButton.isEnabled(), "Create reports button is enabled when use latest data option is selected");
     }
 
-    @Test(groups = {"regression", "ui", "regulatoryReporting"},
+    @Test(groups = {"regression", "ui", "regulatoryReporting", "smoke"},
             description = "UI | Regulatory Reporting | EU Taxonomy | Verify EU Taxonomy Report Sheets")
     @Xray(test = {11987, 11988, 11989, 11990, 11991, 11992})
     public void verifyEUTaxonomyReportSheetsTest() {
@@ -464,7 +467,7 @@ public class RegulatoryReportingPageTests extends UITestBase {
             assertTestCase.assertTrue(reportingPage.verifyDisclaimer(), "Definitions sheet is verified");
             System.out.println("Definitions sheet is verified");
         } catch (Exception e) {
-            //assertTestCase.assertTrue(false, "Report verification failed");
+            assertTestCase.assertTrue(false, "Report verification failed");
             e.printStackTrace();
         } finally {
             BrowserUtils.switchWindowsTo(currentWindow);

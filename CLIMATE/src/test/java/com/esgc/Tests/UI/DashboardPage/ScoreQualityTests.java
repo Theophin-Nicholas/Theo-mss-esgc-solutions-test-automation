@@ -4,13 +4,10 @@ import com.esgc.Pages.DashboardPage;
 import com.esgc.Pages.LoginPage;
 import com.esgc.Pages.ResearchLinePage;
 import com.esgc.Tests.TestBases.UITestBase;
-import com.esgc.Tests.UI.DashboardPage.Export.ExportUtils;
-import com.esgc.Utilities.*;
+import com.esgc.Utilities.BrowserUtils;
+import com.esgc.Utilities.EntitlementsBundles;
+import com.esgc.Utilities.Xray;
 import org.testng.annotations.Test;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 
 public class ScoreQualityTests extends UITestBase {

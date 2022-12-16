@@ -6,7 +6,6 @@ import com.esgc.Utilities.Database.DatabaseDriver;
 import com.esgc.Utilities.Database.EntityClimateProfilePageQueries;
 import com.esgc.Utilities.PortfolioUtilities;
 import org.testng.annotations.BeforeClass;
-import org.testng.annotations.BeforeTest;
 
 public abstract class EntityClimateProfileDataValidationTestBase extends TestBaseClimate{
 

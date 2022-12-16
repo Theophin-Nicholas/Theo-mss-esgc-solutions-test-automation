@@ -1,13 +1,9 @@
 package com.esgc.Controllers;
 
-import com.esgc.APIModels.DashboardModels.APIHeatMapPayload;
-import com.esgc.APIModels.Portfolio;
-import com.esgc.Utilities.EndPoints.DashboardEndPoints;
 import com.esgc.Utilities.EndPoints.RegulatoryReportingEndPoints;
 import io.restassured.response.Response;
 
 import java.util.List;
-import java.util.Map;
 
 public class RegulatoryReportingAPIController extends APIController{
     public Response getPortfolioDetails() {

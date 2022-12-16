@@ -7,8 +7,8 @@ import com.esgc.Utilities.ConfigurationReader;
 import com.esgc.Utilities.Driver;
 import com.esgc.Utilities.Environment;
 import org.testng.ITestResult;
-import org.testng.annotations.*;
 import org.testng.annotations.DataProvider;
+import org.testng.annotations.*;
 
 import java.lang.reflect.Method;
 import java.time.Duration;
@@ -48,7 +48,11 @@ public abstract class DashboardUITestBase extends TestBase {
         //If it is not an entitlements test, keep user logged in
         if (isPampaTest || isEntitlementsTest) {
             if (!userOnLoginPage) {
-                loginPage.clickOnLogout();
+                try {
+                    loginPage.clickOnLogout();
+                } catch (Exception ignored) {
+
+                }
             }
         } else {
             if (userOnLoginPage) {
@@ -63,7 +67,11 @@ public abstract class DashboardUITestBase extends TestBase {
         getScreenshot(iTestResult);
         if (isPampaTest || isEntitlementsTest) {
             LoginPage loginPage = new LoginPage();
-            loginPage.clickOnLogout();
+            try {
+                loginPage.clickOnLogout();
+            } catch (Exception ignored) {
+
+            }
         }
     }
 

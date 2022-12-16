@@ -3,15 +3,12 @@ package com.esgc.Test.TestBases;
 import com.esgc.Pages.LoginPageIssuer;
 import com.esgc.TestBase.TestBase;
 import com.esgc.Utilities.BrowserUtils;
-import com.esgc.Utilities.DataFinder;
 import com.esgc.Utilities.Driver;
 import com.esgc.Utilities.Environment;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.interactions.Actions;
 import org.testng.annotations.BeforeClass;
-import org.testng.annotations.DataProvider;
-import org.testng.annotations.Factory;
 import org.testng.annotations.Optional;
 
 import java.time.Duration;

@@ -5,7 +5,6 @@ import com.esgc.APIModels.PortoflioAnalysisModels.PortfolioPhysicalHazard;
 import com.esgc.APIModels.PortoflioAnalysisModels.RangeAndScoreCategory;
 import com.esgc.DBModels.EntityPage.PhysicalScore;
 import com.esgc.DBModels.ResearchLineIdentifier;
-import com.esgc.TestBase.TestBase;
 import com.esgc.Tests.TestBases.DataValidationTestBase;
 import com.esgc.Utilities.APIUtilities;
 import com.esgc.Utilities.DataProviderUtilities;
@@ -18,11 +17,8 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Test;
 
-import java.text.SimpleDateFormat;
-import java.time.Month;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 

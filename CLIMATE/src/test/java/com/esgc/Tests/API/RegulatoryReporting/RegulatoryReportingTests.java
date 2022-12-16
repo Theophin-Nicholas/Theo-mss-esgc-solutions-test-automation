@@ -3,7 +3,6 @@ package com.esgc.Tests.API.RegulatoryReporting;
 import com.esgc.Controllers.RegulatoryReportingAPIController;
 import com.esgc.Pages.DashboardPage;
 import com.esgc.Pages.RegulatoryReportingPage;
-import com.esgc.Tests.TestBases.APITestBase;
 import com.esgc.Tests.TestBases.UITestBase;
 import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.Xray;

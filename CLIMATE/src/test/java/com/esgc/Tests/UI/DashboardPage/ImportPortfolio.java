@@ -1,7 +1,6 @@
 package com.esgc.Tests.UI.DashboardPage;
 
 import com.esgc.Pages.DashboardPage;
-import com.esgc.TestBase.DataProviderClass;
 import com.esgc.Tests.TestBases.DashboardUITestBase;
 import com.esgc.Tests.TestBases.DataProvider;
 import com.esgc.Utilities.*;

@@ -5,9 +5,7 @@ import com.esgc.Pages.LoginPage;
 import com.esgc.Pages.ResearchLinePage;
 import com.esgc.TestBase.DataProviderClass;
 import com.esgc.Tests.TestBases.UITestBase;
-import com.esgc.Tests.UI.DashboardPage.PortfolioSettings;
 import com.esgc.Utilities.*;
-import com.esgc.Utilities.Database.DatabaseDriver;
 import com.esgc.Utilities.Database.PortfolioQueries;
 import org.testng.Assert;
 import org.testng.annotations.DataProvider;
@@ -15,7 +13,6 @@ import org.testng.annotations.Test;
 
 import java.io.File;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
