@@ -5,7 +5,6 @@ import com.esgc.Tests.TestBases.DataValidationTestBase;
 import com.esgc.Tests.UI.DashboardPage.Export.ExportUtils;
 import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.Database.DashboardQueries;
-import com.esgc.Utilities.Database.DatabaseDriver;
 import org.testng.Assert;
 
 import java.util.List;

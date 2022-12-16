@@ -4,10 +4,8 @@ package com.esgc.Tests.TestBases;
 import com.esgc.Pages.LoginPage;
 import com.esgc.TestBase.TestBase;
 import com.esgc.Utilities.BrowserUtils;
-import com.esgc.Utilities.Database.DatabaseDriver;
 import com.esgc.Utilities.Driver;
 import com.esgc.Utilities.Environment;
-import org.openqa.selenium.JavascriptExecutor;
 import org.testng.ITestResult;
 import org.testng.annotations.*;
 
@@ -15,12 +13,14 @@ import java.time.Duration;
 
 
 public abstract class UITestBase extends TestBase {
+    String accessToken;
 
     @BeforeClass(alwaysRun = true)
     @Parameters("browser")
     public synchronized void setupUIForTests(@Optional String browser) {
         System.out.println("Before Class Called");
         String URL = Environment.URL;
+        BrowserUtils.wait(1);
 
         if (browser != null) {
             Driver.getDriver(browser).get(URL);
@@ -62,7 +62,6 @@ public abstract class UITestBase extends TestBase {
             Driver.getDriver().get(URL);
             System.out.println("inside else");
         }
-
 
         Driver.getDriver().manage().window().maximize();
         Driver.getDriver().manage().timeouts().implicitlyWait(Duration.ofSeconds(30));

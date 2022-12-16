@@ -8,7 +8,6 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
-import java.security.PublicKey;
 import java.util.List;
 
 public abstract class EMCBasePage {

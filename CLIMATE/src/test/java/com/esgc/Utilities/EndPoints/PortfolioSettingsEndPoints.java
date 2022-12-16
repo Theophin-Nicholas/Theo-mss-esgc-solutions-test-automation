@@ -1,7 +1,5 @@
 package com.esgc.Utilities.EndPoints;
 
-import java.net.URI;
-
 public class PortfolioSettingsEndPoints {
     //=================PORTFOLIO APIs
     public static String IMPORT_PORTFOLIO = "api/portfolio";
