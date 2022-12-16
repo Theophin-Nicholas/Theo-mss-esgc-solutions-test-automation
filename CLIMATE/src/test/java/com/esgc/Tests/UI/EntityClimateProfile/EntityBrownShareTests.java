@@ -1,26 +1,18 @@
 package com.esgc.Tests.UI.EntityClimateProfile;
 
-import com.esgc.APIModels.EntityProfilePageModels.SummarySection.EntityPageSummaryCarbonFootprintMain;
-import com.esgc.Controllers.EntityPage.EntityProfileClimatePageAPIController;
 import com.esgc.Pages.EntityClimateProfilePage;
 import com.esgc.Pages.LoginPage;
 import com.esgc.Pages.ResearchLinePage;
 import com.esgc.TestBase.DataProviderClass;
 import com.esgc.Tests.TestBases.UITestBase;
 import com.esgc.Utilities.BrowserUtils;
-import com.esgc.Utilities.Database.DatabaseDriver;
 import com.esgc.Utilities.Database.EntityClimateProfilePageQueries;
 import com.esgc.Utilities.Driver;
 import com.esgc.Utilities.EntitlementsBundles;
 import com.esgc.Utilities.Xray;
-import io.restassured.response.Response;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.Color;
 import org.testng.annotations.Test;
-
-import java.time.Year;
-import java.util.*;
 
 
 public class EntityBrownShareTests extends UITestBase {

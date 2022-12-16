@@ -3,7 +3,7 @@ package com.esgc.Tests.DataValidation.RegulatoryReportingPage;
 import com.esgc.Pages.DashboardPage;
 import com.esgc.Pages.PortfolioAnalysisPage.PhysicalRiskPages.PhysicalRiskManagementPages.PhysicalRiskManagementPage;
 import com.esgc.Pages.RegulatoryReportingPage;
-import com.esgc.Tests.TestBases.DataValidationTestBase;
+import com.esgc.Tests.TestBases.UITestBase;
 import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.Xray;
 import org.testng.annotations.Test;
@@ -11,7 +11,7 @@ import org.testng.annotations.Test;
 import java.util.List;
 import java.util.Set;
 
-public class RegulatoryReportingPageExcelValidation extends DataValidationTestBase {
+public class RegulatoryReportingPageExcelValidation extends UITestBase {
 
     RegulatoryReportingPage reportingPage = new RegulatoryReportingPage();
     @Test(groups = {"regression", "DataValidation", "regulatoryReporting"}, description = "Data Validation | Regulatory Reporting | Check the Data available on User Input History Tab of Annual Report")
@@ -57,7 +57,7 @@ public class RegulatoryReportingPageExcelValidation extends DataValidationTestBa
             System.out.println("Reports are downloaded");
             assertTestCase.assertTrue(reportingPage.unzipReports(), "Reports are extracted");
             System.out.println("Reports are extracted");
-            assertTestCase.assertTrue(reportingPage.verifyReportsContentForData(selectedPortfolios, selectedPortfolios.size()+1, "Exposure Amount in EUR"),
+            assertTestCase.assertTrue(reportingPage.verifyReportsContentForData(selectedPortfolios, 2, "Exposure Amount in EUR"),
                     "Reports content is verified");
         } catch (Exception e) {
             e.printStackTrace();

@@ -5,13 +5,10 @@ import com.esgc.Pages.EntityClimateProfilePage;
 import com.esgc.Pages.ResearchLinePage;
 import com.esgc.Tests.TestBases.UITestBase;
 import com.esgc.Utilities.*;
-import com.esgc.Utilities.Database.DashboardQueries;
-import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class EsgAssessmentUITests extends UITestBase {
 

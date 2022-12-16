@@ -7,11 +7,8 @@ import com.esgc.Tests.TestBases.DashboardUITestBase;
 import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.EntitlementsBundles;
 import com.esgc.Utilities.Xray;
-import org.apache.commons.text.CaseUtils;
-import org.testng.annotations.Optional;
 import org.testng.annotations.Test;
 
-import java.time.Month;
 import java.util.List;
 
 public class ViewMethodologiesTests extends DashboardUITestBase {

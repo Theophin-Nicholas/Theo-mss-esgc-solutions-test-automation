@@ -9,7 +9,6 @@ import com.github.javafaker.Faker;
 import io.restassured.response.Response;
 import org.testng.annotations.Test;
 
-import java.util.Collections;
 import java.util.List;
 
 public class EMCAPITests extends APITestBase {

@@ -1,11 +1,8 @@
 package com.esgc.Tests.UI.EntityClimateProfile;
 
 import com.esgc.Pages.DashboardPage;
-import com.esgc.Pages.EntityClimateProfilePage;
 import com.esgc.Pages.LoginPage;
-import com.esgc.TestBase.DataProviderClass;
 import com.esgc.Tests.TestBases.UITestBase;
-import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.EntitlementsBundles;
 import com.esgc.Utilities.Xray;
 import org.testng.annotations.Test;

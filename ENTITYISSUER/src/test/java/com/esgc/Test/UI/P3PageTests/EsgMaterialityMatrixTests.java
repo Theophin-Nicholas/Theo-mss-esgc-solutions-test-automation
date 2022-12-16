@@ -10,7 +10,6 @@ import com.esgc.Test.TestBases.IssuerDataProviderClass;
 import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.Driver;
 import com.esgc.Utilities.Xray;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.annotations.Test;
 
 import java.util.ArrayList;
