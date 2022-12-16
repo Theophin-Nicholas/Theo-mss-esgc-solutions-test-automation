@@ -1,7 +1,6 @@
 package com.esgc.Pages;
 
 import com.esgc.Reporting.CustomAssertion;
-import com.esgc.Tests.UI.DashboardPage.PortfolioSettings;
 import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.Driver;
 import com.esgc.Utilities.EntitlementsBundles;
@@ -252,7 +251,7 @@ public class ResearchLinePage extends UploadPage {
     @FindBy(xpath = "//*[contains(text(),'selected. Please')]")
     public WebElement noBenchmarkMessage;
 
-    @FindBy(xpath = "(//div[@id='distribution_box'])[2]")
+    @FindBy(id = "benchmark_4_box")
     public WebElement BenchmarkSection;
 
     @FindBy(xpath = "//*[@id='benchmark_4_box']//div[text()='Score']/following-sibling::h6")
@@ -380,7 +379,7 @@ public class ResearchLinePage extends UploadPage {
     @FindBy(xpath = "//div[@class='impactTableWrapper']")
     public List<WebElement> impactTables;
 
-    @FindBy(xpath = "//*[text()='Physical Risk Hazards: Operations Risk']")
+    @FindBy(xpath = "//*[text()='Top 5']/ancestor::span/preceding-sibling::div")
     public WebElement impactTableMainTitle;
 
     @FindBy(xpath = "//div[@class='impactTableWrapper']")

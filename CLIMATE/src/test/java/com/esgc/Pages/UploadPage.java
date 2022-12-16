@@ -1,6 +1,9 @@
 package com.esgc.Pages;
 
-import com.esgc.Utilities.*;
+import com.esgc.Utilities.BrowserUtils;
+import com.esgc.Utilities.Driver;
+import com.esgc.Utilities.PortfolioFilePaths;
+import com.esgc.Utilities.RobotRunner;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;

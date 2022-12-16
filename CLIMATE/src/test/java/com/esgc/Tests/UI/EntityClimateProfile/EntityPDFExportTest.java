@@ -3,7 +3,7 @@ package com.esgc.Tests.UI.EntityClimateProfile;
 import com.esgc.Pages.PDFTestMethods;
 import com.esgc.TestBase.DataProviderClass;
 import com.esgc.Tests.TestBases.UITestBase;
-import com.esgc.Utilities.*;
+import com.esgc.Utilities.Xray;
 import org.testng.annotations.Test;
 
 public class EntityPDFExportTest extends UITestBase {

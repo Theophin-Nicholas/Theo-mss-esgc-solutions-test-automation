@@ -3,7 +3,6 @@ package com.esgc.Tests.DataValidation.RegulatoryReportingPage;
 import com.esgc.Pages.DashboardPage;
 import com.esgc.Pages.PortfolioAnalysisPage.PhysicalRiskPages.PhysicalRiskManagementPages.PhysicalRiskManagementPage;
 import com.esgc.Pages.RegulatoryReportingPage;
-import com.esgc.Tests.TestBases.DataValidationTestBase;
 import com.esgc.Tests.TestBases.UITestBase;
 import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.Xray;

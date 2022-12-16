@@ -3,11 +3,9 @@ package com.esgc.Tests.UI.DashboardPage;
 import com.esgc.Pages.DashboardPage;
 import com.esgc.Pages.LoginPage;
 import com.esgc.Pages.ResearchLinePage;
-import com.esgc.Tests.TestBases.DataValidationTestBase;
 import com.esgc.Tests.TestBases.UITestBase;
 import com.esgc.Tests.UI.DashboardPage.Export.ExportUtils;
 import com.esgc.Utilities.*;
-import com.esgc.Utilities.Database.DashboardQueries;
 import org.testng.annotations.Test;
 
 import java.util.ArrayList;

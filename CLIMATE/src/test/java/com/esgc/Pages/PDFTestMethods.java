@@ -8,11 +8,12 @@ import com.esgc.APIModels.EntityProfilePageModels.EntityControversies.Controvers
 import com.esgc.APIModels.EntityProfilePageModels.EntityControversies.SubCategory;
 import com.esgc.Controllers.EntityPage.EntityProfileClimatePageAPIController;
 import com.esgc.Utilities.*;
-
 import org.jetbrains.annotations.NotNull;
 import org.openqa.selenium.JavascriptExecutor;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 import java.util.stream.Collectors;
 
 

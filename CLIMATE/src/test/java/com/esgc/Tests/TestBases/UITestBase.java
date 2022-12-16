@@ -4,10 +4,8 @@ package com.esgc.Tests.TestBases;
 import com.esgc.Pages.LoginPage;
 import com.esgc.TestBase.TestBase;
 import com.esgc.Utilities.BrowserUtils;
-import com.esgc.Utilities.Database.DatabaseDriver;
 import com.esgc.Utilities.Driver;
 import com.esgc.Utilities.Environment;
-import org.openqa.selenium.JavascriptExecutor;
 import org.testng.ITestResult;
 import org.testng.annotations.*;
 
