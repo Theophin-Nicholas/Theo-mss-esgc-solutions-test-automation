@@ -6,6 +6,7 @@ import com.esgc.Base.TestBases.DashboardUITestBase;
 import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.EntitlementsBundles;
 import com.esgc.Utilities.Xray;
+import org.openqa.selenium.WebElement;
 import org.testng.annotations.Test;
 
 public class ControversiesModalTests extends DashboardUITestBase {
@@ -16,7 +17,6 @@ public class ControversiesModalTests extends DashboardUITestBase {
         DashboardPage dashboardPage = new DashboardPage();
         dashboardPage.selectSamplePortfolioFromPortfolioSelectionModal();
         dashboardPage.clickFiltersDropdown();
-
 
         dashboardPage.selectRandomOptionFromFiltersDropdown("as_of_date");
         dashboardPage.checkControversiesAreInLast60Days();
@@ -34,7 +34,7 @@ public class ControversiesModalTests extends DashboardUITestBase {
     }
 
     @Test(groups = {"regression", "dashboard", "ui"})
-    @Xray(test = 6954)
+    @Xray(test = {6954,8311})
     public void controversiesFilterTest() {
         DashboardPage dashboardPage = new DashboardPage();
         dashboardPage.selectSamplePortfolioFromPortfolioSelectionModal();
@@ -95,7 +95,7 @@ public class ControversiesModalTests extends DashboardUITestBase {
     }
 
     @Test(groups = {"regression", "dashboard", "ui"})
-    @Xray(test = {3191, 3935, 7764, 7765, 7766, 7769, 7770})
+    @Xray(test = {3191, 3935, 7764, 7765, 7766, 7769, 7770, 8307, 8312})
     public void verifyCriticalAndNonCriticalControversies() {
         DashboardPage dashboardPage = new DashboardPage();
         dashboardPage.selectSamplePortfolioFromPortfolioSelectionModal();
@@ -128,6 +128,29 @@ public class ControversiesModalTests extends DashboardUITestBase {
         assertTestCase.assertTrue(allControversies.length == notCriticalControversies.length + criticalControversies.length, "Verify Sum of Critical and Non Critical Controversies is All Controversies count");
         assertTestCase.assertTrue(dashboardPage.compareArrays(allControversies, criticalControversies), "Verify all critical controversies are in All controversies ");
         assertTestCase.assertTrue(dashboardPage.compareArrays(allControversies, notCriticalControversies), "Verify all not critical controversies are in All controversies ");
+
+    }
+
+    @Test(groups = {"regression", "dashboard", "ui"})
+    @Xray(test = 8306)
+    public void controversiesInEsg() {
+        DashboardPage dashboardPage = new DashboardPage();
+        dashboardPage.selectSamplePortfolioFromPortfolioSelectionModal();
+
+        BrowserUtils.waitForVisibility(dashboardPage.criticalControversiesInEsg, 30);
+        assertTestCase.assertEquals(dashboardPage.criticalControversiesInEsg.getText(), "Critical Controversies in ESG", "Verify Critical Controversies in ESG label in Portfolio Monitoring table");
+
+        assertTestCase.assertTrue(dashboardPage.esgScoreBoxesLabels.get(0).getText().contains("E"), "Verify first box label is 'E'");
+        assertTestCase.assertTrue(dashboardPage.esgScoreBoxesLabels.get(1).getText().contains("S"), "Verify first box label is 'S'");
+        assertTestCase.assertTrue(dashboardPage.esgScoreBoxesLabels.get(2).getText().contains("G"), "Verify first box label is 'G'");
+
+        for(WebElement label: dashboardPage.esgScoreBoxesLabels){
+            assertTestCase.assertTrue(label.getText().length()>4, "Verify label is having score inside parenthesis");
+        }
+
+        for(WebElement box:dashboardPage.esgScoreBoxes){
+            assertTestCase.assertEquals(box.getCssValue("background-color"),"rgba(179, 23, 23, 0.18)", "Verify label is having score inside parenthesis");
+        }
 
     }
 }
