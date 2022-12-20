@@ -28,6 +28,8 @@ public class EsgMaterialityMatrixTests extends EntityPageTestBase {
             String userId = dataProvider[0].toString();
             String password = dataProvider[1].toString();
             LoginPageIssuer LoginPageIssuer = new LoginPageIssuer();
+            BrowserUtils.wait(1);
+
             if (Driver.getDriver().getCurrentUrl().contains("login"))
                 LoginPageIssuer.loginWithParams(userId, password);
 
@@ -50,6 +52,7 @@ public class EsgMaterialityMatrixTests extends EntityPageTestBase {
             String userId = dataProvider[0].toString();
             String password = dataProvider[1].toString();
             LoginPageIssuer LoginPageIssuer = new LoginPageIssuer();
+            BrowserUtils.wait(1);
             if (Driver.getDriver().getCurrentUrl().contains("login"))
                 LoginPageIssuer.loginWithParams(userId, password);
 
@@ -85,6 +88,7 @@ public class EsgMaterialityMatrixTests extends EntityPageTestBase {
             String userId = dataProvider[0].toString();
             String password = dataProvider[1].toString();
             LoginPageIssuer LoginPageIssuer = new LoginPageIssuer();
+            BrowserUtils.wait(1);
             if (Driver.getDriver().getCurrentUrl().contains("login"))
                 LoginPageIssuer.loginWithParams(userId, password);
 
