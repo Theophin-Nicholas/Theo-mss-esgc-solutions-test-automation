@@ -4,6 +4,8 @@ import com.esgc.Pages.EntityIssuerPage;
 import com.esgc.Pages.LoginPageIssuer;
 import com.esgc.Test.TestBases.EntityPageTestBase;
 import com.esgc.Test.TestBases.IssuerDataProviderClass;
+import com.esgc.Utilities.BrowserUtils;
+import com.esgc.Utilities.Driver;
 import com.esgc.Utilities.Xray;
 import org.testng.annotations.Test;
 
@@ -22,6 +24,8 @@ public class EntityIssuerP3PageTest extends EntityPageTestBase {
             String userId = dataProvider[0];
             String password = dataProvider[1];
             LoginPageIssuer LoginPageIssuer = new LoginPageIssuer();
+            BrowserUtils.wait(1);
+            if (Driver.getDriver().getCurrentUrl().contains("login"))
             LoginPageIssuer.loginWithParams(userId, password);
             // EntityIssuerPage entitypage = new EntityIssuerPage();
             entitypage.validateP3ContactUSButton();
@@ -43,6 +47,9 @@ public class EntityIssuerP3PageTest extends EntityPageTestBase {
             String userId = dataProvider[0];
             String password = dataProvider[1];
             LoginPageIssuer LoginPageIssuer = new LoginPageIssuer();
+            BrowserUtils.wait(1);
+
+            if (Driver.getDriver().getCurrentUrl().contains("login"))
             LoginPageIssuer.loginWithParams(userId, password);
             //  EntityIssuerPage entitypage = new EntityIssuerPage();
             entitypage.validateHeaderAvailability();
@@ -64,6 +71,9 @@ public class EntityIssuerP3PageTest extends EntityPageTestBase {
             String userId = dataProvider[0];
             String password = dataProvider[1];
             LoginPageIssuer LoginPageIssuer = new LoginPageIssuer();
+            BrowserUtils.wait(1);
+
+            if (Driver.getDriver().getCurrentUrl().contains("login"))
             LoginPageIssuer.loginWithParams(userId, password);
             // EntityIssuerPage entitypage = new EntityIssuerPage();
             entitypage.validatP3eSourceDocumentWidgetIsAvailable();
@@ -85,6 +95,10 @@ public class EntityIssuerP3PageTest extends EntityPageTestBase {
             String userId = dataProvider[0];
             String password = dataProvider[1];
             LoginPageIssuer LoginPageIssuer = new LoginPageIssuer();
+            BrowserUtils.wait(1);
+
+            if (Driver.getDriver().getCurrentUrl().contains("login"))
+
             LoginPageIssuer.loginWithParams(userId, password);
             //  EntityIssuerPage entitypage = new EntityIssuerPage();
             entitypage.validateIfContoversiesHeadingAvailable();
@@ -107,6 +121,9 @@ public class EntityIssuerP3PageTest extends EntityPageTestBase {
             String userId = dataProvider[0];
             String password = dataProvider[1];
             LoginPageIssuer LoginPageIssuer = new LoginPageIssuer();
+            BrowserUtils.wait(1);
+
+            if (Driver.getDriver().getCurrentUrl().contains("login"))
             LoginPageIssuer.loginWithParams(userId, password);
             //   EntityIssuerPage entitypage = new EntityIssuerPage();
             entitypage.validateScoringMethodology();
@@ -126,6 +143,9 @@ public class EntityIssuerP3PageTest extends EntityPageTestBase {
         String userId = dataProvider[0];
         String password = dataProvider[1];
         LoginPageIssuer LoginPageIssuer = new LoginPageIssuer();
+            BrowserUtils.wait(1);
+
+            if (Driver.getDriver().getCurrentUrl().contains("login"))
         LoginPageIssuer.loginWithParams(userId, password);
       //  EntityIssuerPage entitypage = new EntityIssuerPage();
         entitypage.validateLogoutButton();
@@ -145,6 +165,9 @@ public class EntityIssuerP3PageTest extends EntityPageTestBase {
             String userId = dataProvider[0];
             String password = dataProvider[1];
             LoginPageIssuer LoginPageIssuer = new LoginPageIssuer();
+            BrowserUtils.wait(1);
+
+            if (Driver.getDriver().getCurrentUrl().contains("login"))
             LoginPageIssuer.loginWithParams(userId, password);
 
             entitypage.ValidateOverallDisclosureRatioIsVailableAndValueisNumeric();
