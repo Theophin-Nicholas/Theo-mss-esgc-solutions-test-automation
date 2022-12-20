@@ -4,6 +4,8 @@ import com.esgc.Pages.EntityIssuerPage;
 import com.esgc.Pages.LoginPageIssuer;
 import com.esgc.Test.TestBases.EntityPageTestBase;
 import com.esgc.Test.TestBases.IssuerDataProviderClass;
+import com.esgc.Utilities.BrowserUtils;
+import com.esgc.Utilities.Driver;
 import com.esgc.Utilities.Xray;
 import org.testng.annotations.Test;
 
@@ -14,11 +16,13 @@ public class EntityIssuerPageSourceDocumentRouting extends EntityPageTestBase {
     @Test(groups = {"regression", "ui", "smoke","entity_issuer"},
             dataProvider = "credentialsP2", dataProviderClass = IssuerDataProviderClass.class,
             description = "Verify Source Documents")
-    public void testMissingDocumentPopUp(String UserID, String Password) {
+    public void testMissingDocumentPopUp(String... data) {
         EntityIssuerPage entitypage = new EntityIssuerPage();
         try {
             LoginPageIssuer LoginPageIssuer = new LoginPageIssuer();
-            LoginPageIssuer.loginWithParams(UserID, Password);
+            BrowserUtils.wait(2);
+            if (Driver.getDriver().getCurrentUrl().contains("login"))
+            LoginPageIssuer.loginWithParams(data[0].toString(), data[1].toString());
 
             entitypage.validateSourceDocumentWidgetIsAvailable();
             entitypage.validateSourceDocumentlinkOpenInNewTab(".pdf");
