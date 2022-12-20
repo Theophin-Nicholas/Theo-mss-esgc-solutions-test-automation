@@ -4,6 +4,8 @@ import com.esgc.Pages.EntityIssuerPage;
 import com.esgc.Pages.LoginPageIssuer;
 import com.esgc.Test.TestBases.EntityPageTestBase;
 import com.esgc.Test.TestBases.IssuerDataProviderClass;
+import com.esgc.Utilities.BrowserUtils;
+import com.esgc.Utilities.Driver;
 import com.esgc.Utilities.Xray;
 import org.openqa.selenium.WebElement;
 import org.testng.annotations.Test;
@@ -18,20 +20,23 @@ public class EntityIssuerSubSectorSectionTestsRouting extends EntityPageTestBase
     @Test(groups = {"regression", "ui", "smoke", "entity_issuer"},
             dataProvider = "credentialsP2", dataProviderClass = IssuerDataProviderClass.class,
             description = "Verify Weight is Numeric")
-    public void verifyWeightIsNumeric(String UserID, String Password) {
-        System.out.println(UserID +" "+Password);
+    public void verifyWeightIsNumeric(String... data) {
+        System.out.println(data[0].toString() + " " + data[1].toString());
         EntityIssuerPage entitypage = new EntityIssuerPage();
         LoginPageIssuer LoginPageIssuer = new LoginPageIssuer();
-        LoginPageIssuer.loginWithParams(UserID, Password);
+        BrowserUtils.wait(2);
+        if (Driver.getDriver().getCurrentUrl().contains("login"))
+            LoginPageIssuer.loginWithParams(data[0].toString(), data[1].toString());
         try {
-        List<String> weightList = new ArrayList(Arrays.asList("Low", "High", "Moderate", "Very High"));
-        for (WebElement e : entitypage.weightColumn) {
-            assertTestCase.assertTrue(weightList.contains(e.getText()), "Validate Weight is in " + weightList);
-        }
+            List<String> weightList = new ArrayList(Arrays.asList("Low", "High", "Moderate", "Very High"));
+            for (WebElement e : entitypage.weightColumn) {
+                assertTestCase.assertTrue(weightList.contains(e.getText()), "Validate Weight is in " + weightList);
+            }
+            entitypage.logout.click();
         } catch (AssertionError ae) {
             entitypage.logout.click();
             ae.printStackTrace();
         }
-        entitypage.logout.click();
+
     }
 }
