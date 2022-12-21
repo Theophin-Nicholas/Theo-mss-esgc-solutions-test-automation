@@ -44,11 +44,11 @@ public class EntityClimateProfileControversies extends UITestBase {
             List<String> categoryExpectedList = new ArrayList<>(
                     Arrays.asList(
                             "Community Involvement (8)",
-                            "Business Behaviour (73)",
-                            "Human Rights (17)",
+                            "Business Behaviour (65)",
+                            "Human Rights (14)",
                             "Human Resources (5)",
                             "Environment (3)",
-                            "Corporate Governance (5)"
+                            "Corporate Governance (4)"
                     )
             );
             //number of controversies in sub category
