@@ -48,7 +48,11 @@ public abstract class DashboardUITestBase extends TestBase {
         //If it is not an entitlements test, keep user logged in
         if (isPampaTest || isEntitlementsTest) {
             if (!userOnLoginPage) {
-                loginPage.clickOnLogout();
+                try {
+                    loginPage.clickOnLogout();
+                } catch (Exception ignored) {
+
+                }
             }
         } else {
             if (userOnLoginPage) {
