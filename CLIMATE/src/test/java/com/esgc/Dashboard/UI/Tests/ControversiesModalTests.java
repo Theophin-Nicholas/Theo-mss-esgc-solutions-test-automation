@@ -6,6 +6,7 @@ import com.esgc.Base.TestBases.DashboardUITestBase;
 import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.EntitlementsBundles;
 import com.esgc.Utilities.Xray;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.openqa.selenium.WebElement;
 import org.testng.annotations.Test;
 
@@ -131,7 +132,7 @@ public class ControversiesModalTests extends DashboardUITestBase {
 
     }
 
-    @Test(groups = {"regression", "dashboard", "ui"})
+    @Test(enabled = false, groups = {"regression", "dashboard", "ui"})
     @Xray(test = 8306)
     public void controversiesInEsg() {
         DashboardPage dashboardPage = new DashboardPage();
@@ -145,7 +146,9 @@ public class ControversiesModalTests extends DashboardUITestBase {
         assertTestCase.assertTrue(dashboardPage.esgScoreBoxesLabels.get(2).getText().contains("G"), "Verify first box label is 'G'");
 
         for(WebElement label: dashboardPage.esgScoreBoxesLabels){
-            assertTestCase.assertTrue(label.getText().length()>4, "Verify label is having score inside parenthesis");
+            String labelText = label.getText();
+            String score = labelText.substring(labelText.indexOf('(')+1,labelText.indexOf(')'));
+            assertTestCase.assertTrue(NumberUtils.isParsable(score), "Verify label is having score inside parenthesis");
         }
 
         for(WebElement box:dashboardPage.esgScoreBoxes){
