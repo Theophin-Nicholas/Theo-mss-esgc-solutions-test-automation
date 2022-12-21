@@ -1,11 +1,11 @@
 package com.esgc.EntityProfile.UI.Pages;
 
 
-import com.esgc.PortfolioAnalysis.API.APIModels.RangeAndScoreCategory;
 import com.esgc.Base.API.Controllers.APIController;
+import com.esgc.EntityProfile.DB.DBQueries.EntityClimateProfilePageQueries;
+import com.esgc.PortfolioAnalysis.API.APIModels.RangeAndScoreCategory;
 import com.esgc.Utilities.*;
 import com.esgc.Utilities.Database.DatabaseDriver;
-import com.esgc.EntityProfile.DB.DBQueries.EntityClimateProfilePageQueries;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Ordering;
 import org.apache.commons.lang3.math.NumberUtils;

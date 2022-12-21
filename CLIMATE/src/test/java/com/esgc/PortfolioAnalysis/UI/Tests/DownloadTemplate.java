@@ -1,7 +1,7 @@
 package com.esgc.PortfolioAnalysis.UI.Tests;
 
-import com.esgc.PortfolioAnalysis.UI.Pages.ResearchLinePage;
 import com.esgc.Base.TestBases.UITestBase;
+import com.esgc.PortfolioAnalysis.UI.Pages.ResearchLinePage;
 import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.ExcelUtil;
 import org.testng.Assert;

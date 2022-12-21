@@ -1,12 +1,12 @@
 package com.esgc.Dashboard.DB.Tests;
 
 import com.esgc.Base.API.APIModels.APIFilterPayload;
-import com.esgc.Dashboard.API.APIModels.PerformanceChartCompany;
-import com.esgc.PortfolioAnalysis.API.APIModels.RangeAndScoreCategory;
 import com.esgc.Base.API.Controllers.APIController;
 import com.esgc.Base.DB.DBModels.EntityWithScores;
 import com.esgc.Base.DB.DBModels.ResearchLineIdentifier;
 import com.esgc.Base.TestBases.DataValidationTestBase;
+import com.esgc.Dashboard.API.APIModels.PerformanceChartCompany;
+import com.esgc.PortfolioAnalysis.API.APIModels.RangeAndScoreCategory;
 import com.esgc.Utilities.APIUtilities;
 import com.esgc.Utilities.PortfolioUtilities;
 import com.esgc.Utilities.Xray;

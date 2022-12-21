@@ -1,12 +1,12 @@
 package com.esgc.Dashboard.DB.Tests;
 
 import com.esgc.Base.API.APIModels.APIFilterPayload;
+import com.esgc.Base.DB.DBModels.ResearchLineIdentifier;
+import com.esgc.Base.TestBases.DataValidationTestBase;
 import com.esgc.Dashboard.API.APIModels.APIEntityListPayload;
 import com.esgc.Dashboard.API.APIModels.GeoMapCountryEntity;
 import com.esgc.PortfolioAnalysis.API.APIModels.RangeAndScoreCategory;
 import com.esgc.PortfolioAnalysis.API.APIModels.RegionMap;
-import com.esgc.Base.DB.DBModels.ResearchLineIdentifier;
-import com.esgc.Base.TestBases.DataValidationTestBase;
 import com.esgc.Utilities.APIUtilities;
 import com.esgc.Utilities.PortfolioUtilities;
 import com.esgc.Utilities.Xray;

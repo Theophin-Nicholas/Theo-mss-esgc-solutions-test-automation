@@ -1,10 +1,10 @@
 package com.esgc.PortfolioAnalysis.UI.Tests;
 
 import com.esgc.Base.API.Controllers.APIController;
+import com.esgc.Base.TestBases.UITestBase;
 import com.esgc.Base.UI.Pages.LoginPage;
 import com.esgc.PortfolioAnalysis.UI.Pages.ResearchLinePage;
 import com.esgc.TestBase.DataProviderClass;
-import com.esgc.Base.TestBases.UITestBase;
 import com.esgc.Utilities.*;
 import com.esgc.Utilities.Database.PortfolioQueries;
 import org.testng.Assert;

@@ -1,12 +1,12 @@
 package com.esgc.PortfolioAnalysis.DB.Tests;
 
 import com.esgc.Base.API.APIModels.APIFilterPayload;
+import com.esgc.Base.DB.DBModels.ResearchLineIdentifier;
+import com.esgc.Base.TestBases.DataValidationTestBase;
 import com.esgc.PortfolioAnalysis.API.APIModels.LeadersAndLaggards;
 import com.esgc.PortfolioAnalysis.API.APIModels.LeadersAndLaggardsWrapper;
 import com.esgc.PortfolioAnalysis.DB.DBModels.ESGLeaderANDLaggers;
-import com.esgc.Base.DB.DBModels.ResearchLineIdentifier;
 import com.esgc.Reporting.CustomAssertion;
-import com.esgc.Base.TestBases.DataValidationTestBase;
 import com.esgc.Utilities.APIUtilities;
 import com.esgc.Utilities.PortfolioUtilities;
 import com.esgc.Utilities.Xray;
