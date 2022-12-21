@@ -1,9 +1,9 @@
 package com.esgc.EntityProfile.DB.Tests;
 
+import com.esgc.Base.TestBases.DataValidationTestBase;
 import com.esgc.EntityProfile.API.APIModels.EntityHeader;
 import com.esgc.EntityProfile.API.Controllers.EntityProfileClimatePageAPIController;
 import com.esgc.TestBase.DataProviderClass;
-import com.esgc.Base.TestBases.DataValidationTestBase;
 import com.esgc.Utilities.Xray;
 import org.testng.annotations.Test;
 

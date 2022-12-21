@@ -1,7 +1,7 @@
 package com.esgc.Base.UI.Tests.LoginPageTest;
 
-import com.esgc.Base.UI.Pages.LoginPage;
 import com.esgc.Base.TestBases.DashboardUITestBase;
+import com.esgc.Base.UI.Pages.LoginPage;
 import com.esgc.Utilities.*;
 import org.openqa.selenium.Keys;
 import org.testng.Assert;

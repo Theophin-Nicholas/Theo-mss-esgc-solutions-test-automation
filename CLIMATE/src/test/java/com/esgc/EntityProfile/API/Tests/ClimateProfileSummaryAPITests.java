@@ -1,8 +1,8 @@
 package com.esgc.EntityProfile.API.Tests;
 
+import com.esgc.Base.TestBases.EntityClimateProfileTestBase;
 import com.esgc.EntityProfile.API.APIModels.SummarySection.*;
 import com.esgc.EntityProfile.API.Controllers.EntityProfileClimatePageAPIController;
-import com.esgc.Base.TestBases.EntityClimateProfileTestBase;
 import com.esgc.Utilities.ESGUtilities;
 import com.esgc.Utilities.Xray;
 import io.restassured.RestAssured;

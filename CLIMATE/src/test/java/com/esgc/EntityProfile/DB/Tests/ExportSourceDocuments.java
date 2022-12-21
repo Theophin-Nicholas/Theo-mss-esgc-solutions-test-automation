@@ -1,7 +1,7 @@
 package com.esgc.EntityProfile.DB.Tests;
 
-import com.esgc.EntityProfile.UI.Pages.EntityClimateProfilePage;
 import com.esgc.Base.TestBases.EntityClimateProfileDataValidationTestBase;
+import com.esgc.EntityProfile.UI.Pages.EntityClimateProfilePage;
 import com.esgc.Utilities.Xray;
 import org.openqa.selenium.WebElement;
 import org.testng.annotations.Test;

@@ -1,7 +1,7 @@
 package com.esgc.Base.UI.Tests.LoginPageTest;
 
-import com.esgc.Base.UI.Pages.LoginPage;
 import com.esgc.Base.TestBases.DashboardUITestBase;
+import com.esgc.Base.UI.Pages.LoginPage;
 import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.Driver;
 import com.esgc.Utilities.Environment;

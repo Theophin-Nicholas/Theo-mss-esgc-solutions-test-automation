@@ -1,11 +1,11 @@
 package com.esgc.PortfolioAnalysis.DB.Tests;
 
 import com.esgc.Base.API.APIModels.APIFilterPayload;
-import com.esgc.PortfolioAnalysis.API.APIModels.PortfolioPhysicalHazard;
-import com.esgc.PortfolioAnalysis.API.APIModels.RangeAndScoreCategory;
-import com.esgc.EntityProfile.DB.DBModels.PhysicalScore;
 import com.esgc.Base.DB.DBModels.ResearchLineIdentifier;
 import com.esgc.Base.TestBases.DataValidationTestBase;
+import com.esgc.EntityProfile.DB.DBModels.PhysicalScore;
+import com.esgc.PortfolioAnalysis.API.APIModels.PortfolioPhysicalHazard;
+import com.esgc.PortfolioAnalysis.API.APIModels.RangeAndScoreCategory;
 import com.esgc.Utilities.APIUtilities;
 import com.esgc.Utilities.DataProviderUtilities;
 import com.esgc.Utilities.Database.PortfolioQueries;

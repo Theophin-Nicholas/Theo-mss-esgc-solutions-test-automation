@@ -7,7 +7,6 @@ import com.esgc.EntityProfile.API.APIModels.EntityControversies.Controversies;
 import com.esgc.EntityProfile.API.APIModels.EntityControversies.ControversiesList;
 import com.esgc.EntityProfile.API.APIModels.EntityControversies.SubCategory;
 import com.esgc.EntityProfile.API.Controllers.EntityProfileClimatePageAPIController;
-import com.esgc.EntityProfile.UI.Pages.EntityClimateProfilePage;
 import com.esgc.Pages.PageBase;
 import com.esgc.Utilities.*;
 import org.jetbrains.annotations.NotNull;

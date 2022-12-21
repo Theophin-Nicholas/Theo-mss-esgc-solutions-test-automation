@@ -1,6 +1,7 @@
 package com.esgc.EntityProfile.DB.Tests;
 
 
+import com.esgc.Base.TestBases.EntityClimateProfileDataValidationTestBase;
 import com.esgc.EntityProfile.API.APIModels.EntityHeader;
 import com.esgc.EntityProfile.API.APIModels.EntityScoreCategory.ESGScores;
 import com.esgc.EntityProfile.API.APIModels.SummarySection.BrownShareAndGreenShareClimateSummary;
@@ -11,7 +12,6 @@ import com.esgc.EntityProfile.API.APIModels.UnderlyingDataMetrics.PhysicalRiskHa
 import com.esgc.EntityProfile.API.APIModels.UnderlyingDataMetrics.PhysicalRiskHazardsWrapper;
 import com.esgc.EntityProfile.API.Controllers.EntityProfileClimatePageAPIController;
 import com.esgc.TestBase.DataProviderClass;
-import com.esgc.Base.TestBases.EntityClimateProfileDataValidationTestBase;
 import com.esgc.Utilities.Xray;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;

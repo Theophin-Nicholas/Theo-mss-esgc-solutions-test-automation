@@ -1,8 +1,8 @@
 package com.esgc.Dashboard.UI.Tests.Widgets;
 
+import com.esgc.Base.TestBases.DashboardUITestBase;
 import com.esgc.Dashboard.UI.Pages.DashboardPage;
 import com.esgc.TestBase.DataProviderClass;
-import com.esgc.Base.TestBases.DashboardUITestBase;
 import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.PortfolioUtilities;
 import com.esgc.Utilities.Xray;

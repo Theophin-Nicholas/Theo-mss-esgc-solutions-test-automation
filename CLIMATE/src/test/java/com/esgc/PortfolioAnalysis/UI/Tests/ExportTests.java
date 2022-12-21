@@ -2,13 +2,13 @@ package com.esgc.PortfolioAnalysis.UI.Tests;
 
 import com.esgc.Base.API.APIModels.APIFilterPayload;
 import com.esgc.Base.API.Controllers.APIController;
-import com.esgc.PortfolioAnalysis.UI.Pages.ResearchLinePage;
-import com.esgc.TestBase.DataProviderClass;
 import com.esgc.Base.TestBases.UITestBase;
+import com.esgc.PortfolioAnalysis.UI.Pages.ResearchLinePage;
 import com.esgc.PortfolioAnalysis.UI.Tests.ExcelComparison.BrownShareAssessment;
 import com.esgc.PortfolioAnalysis.UI.Tests.ExcelComparison.CarbonFootprint;
 import com.esgc.PortfolioAnalysis.UI.Tests.ExcelComparison.EsgAssessment;
 import com.esgc.PortfolioAnalysis.UI.Tests.ExcelComparison.GreenShareAssessment;
+import com.esgc.TestBase.DataProviderClass;
 import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.ExcelUtil;
 import com.esgc.Utilities.Xray;

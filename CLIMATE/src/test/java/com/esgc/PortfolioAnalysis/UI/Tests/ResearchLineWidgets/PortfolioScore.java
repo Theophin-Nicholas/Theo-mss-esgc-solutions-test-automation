@@ -1,10 +1,10 @@
 package com.esgc.PortfolioAnalysis.UI.Tests.ResearchLineWidgets;
 
+import com.esgc.Base.TestBases.UITestBase;
+import com.esgc.Base.UI.Pages.UploadPage;
 import com.esgc.PortfolioAnalysis.UI.Pages.PhysicalRiskPages.PhysicalRiskManagementPages.PhysicalRiskManagementPage;
 import com.esgc.PortfolioAnalysis.UI.Pages.ResearchLinePage;
-import com.esgc.Base.UI.Pages.UploadPage;
 import com.esgc.TestBase.DataProviderClass;
-import com.esgc.Base.TestBases.UITestBase;
 import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.Xray;
 import org.testng.Assert;
