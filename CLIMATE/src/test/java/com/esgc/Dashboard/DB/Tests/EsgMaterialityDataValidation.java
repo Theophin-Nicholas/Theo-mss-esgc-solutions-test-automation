@@ -1,7 +1,7 @@
 package com.esgc.Dashboard.DB.Tests;
 
-import com.esgc.EntityProfile.UI.Pages.EntityClimateProfilePage;
 import com.esgc.Base.TestBases.DataValidationTestBase;
+import com.esgc.EntityProfile.UI.Pages.EntityClimateProfilePage;
 import com.esgc.Utilities.Database.EntityPageQueries;
 import com.esgc.Utilities.Xray;
 import org.testng.annotations.Test;

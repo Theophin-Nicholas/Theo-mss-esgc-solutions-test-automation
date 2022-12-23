@@ -1,11 +1,11 @@
 package com.esgc.EntityProfile.UI.Pages;
 
 
-import com.esgc.PortfolioAnalysis.API.APIModels.RangeAndScoreCategory;
 import com.esgc.Base.API.Controllers.APIController;
+import com.esgc.EntityProfile.DB.DBQueries.EntityClimateProfilePageQueries;
+import com.esgc.PortfolioAnalysis.API.APIModels.RangeAndScoreCategory;
 import com.esgc.Utilities.*;
 import com.esgc.Utilities.Database.DatabaseDriver;
-import com.esgc.EntityProfile.DB.DBQueries.EntityClimateProfilePageQueries;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Ordering;
 import org.apache.commons.lang3.math.NumberUtils;
@@ -485,7 +485,7 @@ public class EntityClimateProfilePage extends ClimatePageBase {
     @FindBy(xpath = "//*[@id=\"controversyError\"]/div/div/div[1] ")
     public WebElement noControversies;
 
-    @FindBy(xpath = "//span[normalize-space()='Controversies'] ")
+    @FindBy(xpath = "//span[normalize-space()='Controversies']")
     public List<WebElement> controversiesTitle;
 
     //return WebElement
@@ -494,13 +494,13 @@ public class EntityClimateProfilePage extends ClimatePageBase {
         return Driver.getDriver().findElement(By.xpath("//span[contains(text(),'" + companyName + "')]"));
     }
 
-    @FindBy(xpath = "// div[normalize-space()='Filter by most impacted categories of ESG:']")
+    @FindBy(xpath = "//div[normalize-space()='Filter by most impacted categories of ESG:']")
     public WebElement controversiesStaticText;
 
     @FindBy(xpath = "//div[normalize-space()='Filter by most impacted categories of ESG:']//following-sibling::div")
     public List<WebElement> subCategoryList;
 
-    @FindBy(xpath = "//div[@id='div-mainlayout']//div//div//main//header/following-sibling::div/div[3]/div/div/div/div/div/div/div/following-sibling::div[2]/div/table/tbody/tr")
+    @FindBy(xpath = "//tr[@heap_id='event']")
     public List<WebElement> controversiesTableRow;
 
     @FindBy(xpath = "//div[@id='methodologies_modal']//div[@role='dialog']/div[2]/div/div/div/span")

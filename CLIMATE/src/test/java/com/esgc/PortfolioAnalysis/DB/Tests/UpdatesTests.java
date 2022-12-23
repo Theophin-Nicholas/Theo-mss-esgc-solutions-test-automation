@@ -1,10 +1,10 @@
 package com.esgc.PortfolioAnalysis.DB.Tests;
 
 import com.esgc.Base.API.APIModels.APIFilterPayload;
-import com.esgc.PortfolioAnalysis.API.APIModels.RangeAndScoreCategory;
-import com.esgc.PortfolioAnalysis.API.APIModels.UpdatesModel;
 import com.esgc.Base.DB.DBModels.ResearchLineIdentifier;
 import com.esgc.Base.TestBases.DataValidationTestBase;
+import com.esgc.PortfolioAnalysis.API.APIModels.RangeAndScoreCategory;
+import com.esgc.PortfolioAnalysis.API.APIModels.UpdatesModel;
 import com.esgc.Utilities.APIUtilities;
 import com.esgc.Utilities.Xray;
 import io.restassured.response.Response;

@@ -1,8 +1,8 @@
 package com.esgc.Dashboard.UI.Tests;
 
+import com.esgc.Base.TestBases.UITestBase;
 import com.esgc.Base.UI.Pages.LoginPage;
 import com.esgc.PortfolioAnalysis.UI.Pages.ResearchLinePage;
-import com.esgc.Base.TestBases.UITestBase;
 import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.Driver;
 import com.esgc.Utilities.Xray;
@@ -32,8 +32,8 @@ public class GlobalHeaderSidePanel extends UITestBase {
         BrowserUtils.wait(10);
         researchLinePage.clickMenu();
         BrowserUtils.wait(2);
-        researchLinePage.portfolioSettings.click();
         assertTestCase.assertTrue(researchLinePage.validatePortfolioManagementTitleIsDisplayed(), "Validate Portfolio Selection header is available");
+        researchLinePage.portfolioSettings.click();
         assertTestCase.assertTrue(researchLinePage.validateUploadNewLinkIsAvailable(), "Validate Upload new link is available");
         assertTestCase.assertTrue(researchLinePage.validateSideArrowIsAvailable(), "Validate  Arrow  is available ");
         assertTestCase.assertTrue(researchLinePage.validatespanPortfolioNameColumnIsAvailable(), "Validate Portfolio Name Column  is available");

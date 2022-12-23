@@ -1,8 +1,8 @@
 package com.esgc.Dashboard.UI.Tests.Widgets;
 
+import com.esgc.Base.TestBases.DashboardUITestBase;
 import com.esgc.Dashboard.UI.Pages.DashboardPage;
 import com.esgc.TestBase.DataProviderClass;
-import com.esgc.Base.TestBases.DashboardUITestBase;
 import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.PortfolioUtilities;
 import com.esgc.Utilities.Xray;
@@ -76,7 +76,7 @@ public class PerformanceChart extends DashboardUITestBase {
         test.info("Switched to Largest Holdings");
         assertTestCase.assertTrue(sizeOfTable <= 10, "max 10 companies are listed");
         assertTestCase.assertEquals(actualColumnNames, expectedColumnNames, "Largest Holdings Performance Chart Verified");
-        assertTestCase.assertEquals(actualTotalInvestment, expectedTotalInvestment, "Total Investments are matching", 2066);
+        assertTestCase.assertEquals(expectedTotalInvestment, actualTotalInvestment, "Total Investments are matching", 2066);
     }
 
     @Test(groups = {"ui", "dashboard", "regression"},

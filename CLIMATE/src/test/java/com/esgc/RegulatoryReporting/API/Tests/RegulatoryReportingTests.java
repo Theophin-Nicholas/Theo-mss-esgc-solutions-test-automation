@@ -2,9 +2,10 @@ package com.esgc.RegulatoryReporting.API.Tests;
 
 import com.esgc.Base.UI.Pages.LoginPage;
 import com.esgc.RegulatoryReporting.API.Controllers.RegulatoryReportingAPIController;
+import com.esgc.Base.TestBases.UITestBase;
 import com.esgc.Dashboard.UI.Pages.DashboardPage;
+import com.esgc.RegulatoryReporting.API.Controllers.RegulatoryReportingAPIController;
 import com.esgc.RegulatoryReporting.UI.Pages.RegulatoryReportingPage;
-import com.esgc.Base.TestBases.APITestBase;
 import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.Driver;
 import com.esgc.Utilities.EntitlementsBundles;
@@ -15,7 +16,7 @@ import org.testng.annotations.Test;
 
 import java.util.List;
 
-public class RegulatoryReportingTests extends APITestBase {
+public class RegulatoryReportingTests extends UITestBase {
     RegulatoryReportingPage reportingPage = new RegulatoryReportingPage();
 
     @Test(groups = {"regression", "regulatoryReporting", "api"}, description = "Data Validation| MT | Regulatory Reporting | Validate Portfolio list and portfolio-details")
@@ -44,8 +45,15 @@ public class RegulatoryReportingTests extends APITestBase {
         reportingPage.reportingForDropdownOptionsList.get(0).click();
         RegulatoryReportingAPIController apiController = new RegulatoryReportingAPIController();
         List<String> apiPortfoliosList = apiController.getPortfolioNames();
-        System.out.println("apiPortfoliosList = " + apiPortfoliosList);
-        assertTestCase.assertTrue(apiPortfoliosList.containsAll(actualPortfoliosList), "API - Portfolio list is verified");
+        //sort the list
+        apiPortfoliosList.sort(String::compareToIgnoreCase);
+        assertTestCase.assertEquals(apiPortfoliosList.size(),actualPortfoliosList.size(), "API Portfolio list size is verified");
+        //print the list
+        expectedPortfoliosList.forEach(System.out::println);
+        for(String portfolioName : apiPortfoliosList){
+            System.out.println("portfolioName = " + portfolioName);
+            assertTestCase.assertTrue(actualPortfoliosList.contains(portfolioName.trim()), "Portfolio name from API is verified in UI");
+        }
     }
 
     @Test(groups = {"regression", "regulatoryReporting", "api"})

@@ -1,8 +1,8 @@
 package com.esgc.EntityProfile.DB.Tests;
 
+import com.esgc.Base.TestBases.DataValidationTestBase;
 import com.esgc.EntityProfile.API.APIModels.EntityControversies.Controversies;
 import com.esgc.EntityProfile.API.Controllers.EntityProfileClimatePageAPIController;
-import com.esgc.Base.TestBases.DataValidationTestBase;
 import com.esgc.EntityProfile.API.EntityProfilePageEndpoints;
 import com.esgc.Utilities.Environment;
 import com.esgc.Utilities.Xray;

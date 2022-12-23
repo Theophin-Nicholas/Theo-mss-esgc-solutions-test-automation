@@ -13,12 +13,14 @@ import java.time.Duration;
 
 
 public abstract class UITestBase extends TestBase {
+    String accessToken;
 
     @BeforeClass(alwaysRun = true)
     @Parameters("browser")
     public synchronized void setupUIForTests(@Optional String browser) {
         System.out.println("Before Class Called");
         String URL = Environment.URL;
+        BrowserUtils.wait(1);
 
         if (browser != null) {
             Driver.getDriver(browser).get(URL);
@@ -60,7 +62,6 @@ public abstract class UITestBase extends TestBase {
             Driver.getDriver().get(URL);
             System.out.println("inside else");
         }
-
 
         Driver.getDriver().manage().window().maximize();
         Driver.getDriver().manage().timeouts().implicitlyWait(Duration.ofSeconds(30));

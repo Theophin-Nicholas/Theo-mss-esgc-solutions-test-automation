@@ -1,8 +1,8 @@
 package com.esgc.Dashboard.UI.Tests;
 
-import com.esgc.Dashboard.UI.Pages.DashboardPage;
-import com.esgc.Base.UI.Pages.LoginPage;
 import com.esgc.Base.TestBases.DashboardUITestBase;
+import com.esgc.Base.UI.Pages.LoginPage;
+import com.esgc.Dashboard.UI.Pages.DashboardPage;
 import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.EntitlementsBundles;
 import com.esgc.Utilities.Xray;

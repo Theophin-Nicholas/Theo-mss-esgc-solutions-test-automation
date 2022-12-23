@@ -2,9 +2,9 @@ package com.esgc.Dashboard.UI.Tests;
 
 import com.esgc.Base.API.APIModels.PortfolioSettings.PortfolioDetails;
 import com.esgc.Base.API.Controllers.APIController;
+import com.esgc.Base.TestBases.UITestBase;
 import com.esgc.Dashboard.UI.Pages.DashboardPage;
 import com.esgc.PortfolioAnalysis.UI.Pages.ResearchLinePage;
-import com.esgc.Base.TestBases.UITestBase;
 import com.esgc.Utilities.*;
 import com.esgc.Utilities.Database.DatabaseDriver;
 import com.esgc.Utilities.Database.PortfolioQueries;
@@ -221,12 +221,13 @@ public class PortfolioSettings extends UITestBase {
             Double investmentPercentage = Double.valueOf(df.format(value / totalValue * 100));
             companyMap.put(companyName, investmentPercentage);
         }
-        System.out.println("companyMap = " + companyMap);
+        //System.out.println("companyMap = " + companyMap);
 
         //Get the API response payload to calculate to verify the not matched investments
         //Verify 10 largest and 20 largest portfolio UI is same as API
         getExistingUsersAccessTokenFromUI();
         APIController controller = new APIController();
+        controller.getPortfolioSettingsAPIResponse("00000000-0000-0000-0000-000000000000").prettyPrint();
         PortfolioDetails portfolioDetails = controller.getPortfolioSettingsAPIResponse("00000000-0000-0000-0000-000000000000").as(PortfolioDetails.class);
         System.out.println("portfolioDetails.getEntities() = " + portfolioDetails.getEntities());
         System.out.println("portfolioDetails.getTotal_unmatched_companies() = " + portfolioDetails.getTotal_unmatched_companies());

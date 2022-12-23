@@ -1,9 +1,9 @@
 package com.esgc.EntityProfile.UI.Tests;
 
-import com.esgc.EntityProfile.UI.Pages.EntityClimateProfilePage;
-import com.esgc.Base.UI.Pages.LoginPage;
-import com.esgc.TestBase.DataProviderClass;
 import com.esgc.Base.TestBases.UITestBase;
+import com.esgc.Base.UI.Pages.LoginPage;
+import com.esgc.EntityProfile.UI.Pages.EntityClimateProfilePage;
+import com.esgc.TestBase.DataProviderClass;
 import com.esgc.Utilities.*;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;

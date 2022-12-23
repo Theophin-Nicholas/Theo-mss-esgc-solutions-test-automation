@@ -2,10 +2,10 @@ package com.esgc.RegulatoryReporting.UI.Pages;
 
 import com.esgc.Base.UI.Pages.UploadPage;
 import com.esgc.RegulatoryReporting.API.Controllers.RegulatoryReportingAPIController;
-import com.esgc.Utilities.*;
 import com.esgc.RegulatoryReporting.DB.DBQueries.RegulatoryReportingQueries;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.openqa.selenium.By;
+import com.esgc.Utilities.*;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
@@ -18,7 +18,7 @@ import java.util.*;
 
 public class RegulatoryReportingPage extends UploadPage {
     //LOCATORS
-    @FindBy(xpath = "//li[@heap_menu='Reporting Service']")
+    @FindBy(xpath = "//header//li")
     public WebElement pageTitle;
 
     @FindBy(xpath = "//div[.='Select Reporting']")
@@ -33,7 +33,7 @@ public class RegulatoryReportingPage extends UploadPage {
     @FindBy(xpath = "//div[.='Reporting']/following-sibling::div//input")
     public List<WebElement> reportingRadioButtonList;
 
-    @FindBy(xpath = "//div[.='Select Portfolios']/../div[2]/following-sibling::div/div[1]")
+    @FindBy(xpath = "//div[.='Select Portfolios']/../div[2]/following-sibling::div/div[1]//span[2]")
     public List<WebElement> rrPage_portfolioNamesList;
 
     @FindBy(xpath = "//div[.='Select Portfolios']/../div[2]/following-sibling::div/div[1]//input")
@@ -171,7 +171,12 @@ public class RegulatoryReportingPage extends UploadPage {
     //select all portfolio options
     public void selectAllPortfolioOptions() {
         //select all buttons if not selected
-        portfolioRadioButtonList.stream().filter(button -> !button.isSelected()).forEach(WebElement::click);
+        int count = 0;
+        while (getSelectedPortfolioOptions().size() < 4) {
+            portfolioRadioButtonList.get(count).click();
+            count++;
+        }
+        //portfolioRadioButtonList.stream().filter(button -> !button.isSelected()).forEach(WebElement::click);
     }
 
     //verify selcted reporting option by name

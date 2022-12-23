@@ -2,8 +2,8 @@ package com.esgc.PortfolioAnalysis.DB.Tests;
 
 import com.esgc.Base.API.APIModels.APIFilterPayload;
 import com.esgc.Base.DB.DBModels.ResearchLineIdentifier;
-import com.esgc.PortfolioAnalysis.API.APIModels.*;
 import com.esgc.Base.TestBases.DataValidationTestBase;
+import com.esgc.PortfolioAnalysis.API.APIModels.*;
 import com.esgc.Utilities.APIUtilities;
 import com.esgc.Utilities.DateTimeUtilities;
 import com.esgc.Utilities.Xray;

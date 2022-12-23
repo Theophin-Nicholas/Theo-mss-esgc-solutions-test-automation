@@ -40,12 +40,12 @@ public class EntityPageTestRouting extends EntityPageTestBase {
     @Test(groups = {"regression", "ui", "smoke", "entity_issuer"},
             dataProvider = "credentialsP2", dataProviderClass = IssuerDataProviderClass.class,
             description = "Verify if Leaders and Laggards Table is Displayed as Expected")
-    public void testDrivers(String UserID, String Password) {
+    public void testDrivers(String... data) {
         EntityIssuerPage entitypage = new EntityIssuerPage();
         LoginPageIssuer loginPage = new LoginPageIssuer();
         BrowserUtils.wait(2);
         if(Driver.getDriver().getCurrentUrl().contains("login"))
-        loginPage.loginWithParams(UserID, Password);
+        loginPage.loginWithParams(data[0].toString(),data[1].toString());
         try {
             assertTestCase.assertTrue(entitypage.verifyDriverDrillDown());
             pressESCKey();
@@ -84,12 +84,12 @@ public class EntityPageTestRouting extends EntityPageTestBase {
             dataProvider = "credentialsP2", dataProviderClass = IssuerDataProviderClass.class,
             description = "ESGCA-5842-UI | ESG Issuer - Entity Page | Verify Landing Page and Banner")
     @Xray(test = {5842})
-    public void testLandingPageAndBanner(String UserID, String Password) {
+    public void testLandingPageAndBanner(String... data) {
         EntityIssuerPage entitypage = new EntityIssuerPage();
         LoginPageIssuer loginPage = new LoginPageIssuer();
         BrowserUtils.wait(2);
         if(Driver.getDriver().getCurrentUrl().contains("login"))
-        loginPage.loginWithParams(UserID, Password);
+        loginPage.loginWithParams(data[0].toString(),data[1].toString());
         try {
             assertTestCase.assertTrue(entitypage.verifyMoodysHeader(), "Header Validation");
             assertTestCase.assertTrue(entitypage.verifyMidTopHeaderDetails(), "Text Validation");
@@ -111,12 +111,12 @@ public class EntityPageTestRouting extends EntityPageTestBase {
             dataProvider = "credentialsP2", dataProviderClass = IssuerDataProviderClass.class,
             description = "ESGCA-5854-UI | ESG Issuer - Entity Page | Verify Footer is Displayed")
     @Xray(test = {5854})
-    public void testFooter(String UserID, String Password) {
+    public void testFooter(String... data) {
         EntityIssuerPage entitypage = new EntityIssuerPage();
         LoginPageIssuer loginPage = new LoginPageIssuer();
         BrowserUtils.wait(2);
         if(Driver.getDriver().getCurrentUrl().contains("login"))
-        loginPage.loginWithParams(UserID, Password);
+        loginPage.loginWithParams(data[0].toString(),data[1].toString());
         try {
             assertTestCase.assertTrue(entitypage.verifyFooterIsDisplayed(), "Footer Validation");
             entitypage.logout.click();
@@ -131,12 +131,12 @@ public class EntityPageTestRouting extends EntityPageTestBase {
             dataProvider = "credentialsP2", dataProviderClass = IssuerDataProviderClass.class,
             description = "ESGCA-5861-UI | ESG Issuer - Entity Page | Verify Methodology Details (Titles, Text)")
     @Xray(test = {5861,9694})
-    public void testMethodologyDetails(String UserID, String Password) {
+    public void testMethodologyDetails(String... data) {
         EntityIssuerPage entitypage = new EntityIssuerPage();
         LoginPageIssuer loginPage = new LoginPageIssuer();
         BrowserUtils.wait(2);
         if(Driver.getDriver().getCurrentUrl().contains("login"))
-        loginPage.loginWithParams(UserID, Password);
+        loginPage.loginWithParams(data[0].toString(),data[1].toString());
         try {
             // assertTestCase.assertTrue(entitypage.verifyMidTexts(), "Text Validation");
             assertTestCase.assertTrue(entitypage.verifySubHeadersDetails(), "Header Details Validation");

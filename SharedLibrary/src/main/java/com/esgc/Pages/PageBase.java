@@ -53,6 +53,9 @@ public abstract class PageBase {
 
 
     //Menu Tab on top left corner
+    @FindBy(xpath = "//li[starts-with(text(),\"Moody's ESG360: \")]")
+    public WebElement menuHeader;
+
     @FindBy(xpath = "//li[@role='menuitem']")
     public WebElement menu;
 
@@ -103,6 +106,7 @@ public abstract class PageBase {
 
     @FindBy(xpath = "//div[contains(text(),'No, Cancel')]")
     public WebElement confirmPortfolioDeleteCancelButton;
+
     @FindBy(xpath = "//*[text()='Portfolio Selection/Upload']")
     public WebElement header_portfolioManagement;
 
@@ -638,13 +642,20 @@ public abstract class PageBase {
         return portfolioSelectionButton.getText();
     }
 
+    public String getPageNameFromMenuHeader() {
+        return wait.until(ExpectedConditions.visibilityOf(menuHeader)).getText();
+    }
+
 
     public void navigateToPageFromMenu(String page) {
-        clickMenu();
-        // Dynamic xpath - Helps us to pass page names "Dashboard", "Portfolio Analysis"
-        String pageXpath = "//li[text()='" + page + "']";
-        WebElement pageElement = Driver.getDriver().findElement(By.xpath(pageXpath));
-        wait.until(ExpectedConditions.elementToBeClickable(pageElement)).click();
+        String pageName = getPageNameFromMenuHeader();
+        if (!pageName.endsWith(page)) {
+            clickMenu();
+            // Dynamic xpath - Helps us to pass page names "Dashboard", "Portfolio Analysis", "Regulatory Reporting"
+            String pageXpath = "//li[text()='" + page + "']";
+            WebElement pageElement = Driver.getDriver().findElement(By.xpath(pageXpath));
+            wait.until(ExpectedConditions.elementToBeClickable(pageElement)).click();
+        }
     }
 
     /**
@@ -695,7 +706,7 @@ public abstract class PageBase {
 
     /**
      * Method for navigation through research lines in the Portfolio Analysis page
-     * e.g. Carbon Footprint, Operations Risk, Market Risk...
+     * e.g. Carbon Footprint, Temperature Alignment, ESG Assessments...
      * The method navigates to a specific research line by page parameter
      *
      * @return
@@ -708,20 +719,25 @@ public abstract class PageBase {
                 .stream().map(WebElement::getText).collect(Collectors.toList());
     }
 
+    public String getCurrentResearchLinePageName() {
+        return wait.until(ExpectedConditions.visibilityOf(ResearchLineDropdown)).getText();
+    }
+
     /**
      * Select a research line from dropdown for data analysis in dashboard
-     * e.g. Carbon Footprint, Operations Risk, Market Risk...
+     * e.g. Carbon Footprint, Temperature Alignment, ESG Assessments...
      *
      * @param page
      */
     public void selectResearchLineFromDropdown(String page) {
-        // if(!BrowserUtils.isElementVisible(researchLineOptions,3))
         try {
-            clickResearchLineDropdown();
-            // Dynamic xpath - Helps us to pass page names "Operations Risk", "Market Risk"
-            String pageXpath = "//ul[@id='portfolioanalysis-reportnavigation-test-id']//span[contains(text(),'" + page + "')]";
-            WebElement pageElement = Driver.getDriver().findElement(By.xpath(pageXpath));
-            wait.until(ExpectedConditions.elementToBeClickable(pageElement)).click();
+            if (!getCurrentResearchLinePageName().equals(page)) {
+                clickResearchLineDropdown();
+                // Dynamic xpath - Helps us to pass page names "Carbon Footprint", "Green Share" etc
+                String pageXpath = "//ul[@id='portfolioanalysis-reportnavigation-test-id']//span[contains(text(),'" + page + "')]";
+                WebElement pageElement = Driver.getDriver().findElement(By.xpath(pageXpath));
+                wait.until(ExpectedConditions.elementToBeClickable(pageElement)).click();
+            }
         } catch (Exception e) {
             System.out.println("Couldn't find " + page);
             Actions a = new Actions(Driver.getDriver());
@@ -1216,7 +1232,7 @@ public abstract class PageBase {
     }
 
     public void verifyCompanyNameInCoveragePopup(String subsidiaryCompanyName) {
-        String xpath = "//span[@heap_id='view-panel'][text()='"+subsidiaryCompanyName+"']";
+        String xpath = "//span[@heap_id='view-panel'][text()='" + subsidiaryCompanyName + "']";
         assertTestCase.assertEquals(Driver.getDriver().findElements(By.xpath(xpath)).size(), 1);
     }
 
@@ -1233,7 +1249,7 @@ public abstract class PageBase {
     }
 
     public void verifyCompanyNameInTables(String subsidiaryCompanyName) {
-        String xpath = "//span[text()='"+subsidiaryCompanyName+"']";
+        String xpath = "//span[text()='" + subsidiaryCompanyName + "']";
         assertTestCase.assertEquals(Driver.getDriver().findElements(By.xpath(xpath)).size(), 1);
     }
 
@@ -1250,10 +1266,10 @@ public abstract class PageBase {
     }
 
     public void clickTheCompany(String companyName) {
-        String xpath = "//span[text()='"+companyName+"']";
+        String xpath = "//span[text()='" + companyName + "']";
         List<WebElement> elements = Driver.getDriver().findElements(By.xpath(xpath));
-        BrowserUtils.scrollTo(elements.get(elements.size()-1));
-        elements.get(elements.size()-1).click();
+        BrowserUtils.scrollTo(elements.get(elements.size() - 1));
+        elements.get(elements.size() - 1).click();
     }
 
     public boolean isElementClickable(WebElement element) {
@@ -1644,7 +1660,6 @@ public abstract class PageBase {
         }
 
     }
-
 
 
     public boolean checkClickingOnEntityName(String searchKeyword) {
@@ -2073,8 +2088,9 @@ public abstract class PageBase {
     }
 
     public void clearPortfolioNameInputBox() {
-        input_PortfolioName.sendKeys(Keys.CONTROL + "a");
-        input_PortfolioName.sendKeys(Keys.DELETE);
+        while(input_PortfolioName.getAttribute("value").length() > 0) {
+            input_PortfolioName.sendKeys(Keys.BACK_SPACE);
+        }
     }
 
     public void closeMenuByClickingOutSide() {
@@ -2104,8 +2120,8 @@ public abstract class PageBase {
         String newPortfolioName = "Automation123";
         updatePortfolioNameInPortfolioManagementDrawer(newPortfolioName);
         clickInSidePortfolioDrawer();
-        assertTestCase.assertTrue(getPortfolioDrawerHeader(newPortfolioName).isDisplayed(), "Validate if portfolio name saved " +
-                "and after change and click inside the drawer");
+        assertTestCase.assertTrue(getPortfolioDrawerHeader(newPortfolioName).isDisplayed(),
+                "Validate if portfolio name saved and after change and click inside the drawer");
         undoPortfolioNameChange(OriginalPortFolioName);
     }
 
