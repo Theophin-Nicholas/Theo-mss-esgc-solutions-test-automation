@@ -5,10 +5,7 @@ import com.esgc.Base.UI.Pages.LoginPage;
 import com.esgc.PortfolioAnalysis.UI.Pages.PhysicalRiskPages.PhysicalRiskManagementPages.PhysicalRiskManagementPage;
 import com.esgc.RegulatoryReporting.UI.Pages.RegulatoryReportingPage;
 import com.esgc.Base.TestBases.UITestBase;
-import com.esgc.Utilities.BrowserUtils;
-import com.esgc.Utilities.DateTimeUtilities;
-import com.esgc.Utilities.Environment;
-import com.esgc.Utilities.Xray;
+import com.esgc.Utilities.*;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.Color;
 import org.testng.annotations.Test;
@@ -469,5 +466,48 @@ public class RegulatoryReportingPageTests extends UITestBase {
         } finally {
             BrowserUtils.switchWindowsTo(currentWindow);
         }
+    }
+
+    @Test(groups = {"regression", "ui", "regulatoryReporting"})
+    @Xray(test = {11654, 11657})
+    public void verifyPreviouslyDownloadedFeature() {
+        DashboardPage dashboardPage = new DashboardPage();
+        dashboardPage.navigateToPageFromMenu("Regulatory Reporting");
+        test.info("Navigated to Regulatory Reporting Page");
+
+        assertTestCase.assertTrue(reportingPage.verifyPreviouslyDownloadedButton(), "Verify Previously Downloaded button");
+
+        reportingPage.clickPreviouslyDownloadedButton();
+        BrowserUtils.wait(5);
+        for (String windowHandle : Driver.getDriver().getWindowHandles()) {
+            Driver.getDriver().switchTo().window(windowHandle);
+        }
+
+        reportingPage.verifyPreviouslyDownloadedScreen();
+        reportingPage.verifyFileDownloadFromPreviouslyDownloadedScreen();
+    }
+
+    @Test(groups = {"regression", "ui", "regulatoryReporting"})
+    @Xray(test = {11786})
+    public void verifyNoFilesInPreviouslyDownloadedScreen() {
+
+        LoginPage login = new LoginPage();
+        login.clickOnLogout();
+        login.entitlementsLogin(EntitlementsBundles.NO_PREVIOUSLY_DOWNLOADED_REGULATORY_REPORTS);
+
+        DashboardPage dashboardPage = new DashboardPage();
+        dashboardPage.navigateToPageFromMenu("Regulatory Reporting");
+        test.info("Navigated to Regulatory Reporting Page");
+
+        assertTestCase.assertTrue(reportingPage.verifyPreviouslyDownloadedButton(), "Verify Previously Downloaded button");
+
+        reportingPage.clickPreviouslyDownloadedButton();
+        BrowserUtils.wait(5);
+        for (String windowHandle : Driver.getDriver().getWindowHandles()) {
+            Driver.getDriver().switchTo().window(windowHandle);
+        }
+        BrowserUtils.waitForVisibility(reportingPage.previouslyDownloadedErrorMessage, 30);
+        assertTestCase.assertEquals(reportingPage.previouslyDownloadedErrorMessage.getText(),"No previously downloaded reports to be displayed.", "Verify Error message in Previously Downloaded screen");
+
     }
 }

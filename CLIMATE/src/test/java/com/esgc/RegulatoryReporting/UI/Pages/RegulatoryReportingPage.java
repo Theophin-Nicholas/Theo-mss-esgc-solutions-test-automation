@@ -4,10 +4,15 @@ import com.esgc.Base.UI.Pages.UploadPage;
 import com.esgc.RegulatoryReporting.API.Controllers.RegulatoryReportingAPIController;
 import com.esgc.Utilities.*;
 import com.esgc.RegulatoryReporting.DB.DBQueries.RegulatoryReportingQueries;
+import org.apache.commons.lang3.math.NumberUtils;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
+import java.time.format.ResolverStyle;
 import java.util.*;
 
 
@@ -95,6 +100,18 @@ public class RegulatoryReportingPage extends UploadPage {
 
     @FindBy(xpath = "//button[.='Download']")
     public WebElement rrStatusPage_DownloadButton;
+
+    @FindBy(xpath = "//div[text()='Previously Downloaded']/following-sibling::span/*[local-name()='svg']")
+    public WebElement previouslyDownloadedButton;
+
+    @FindBy(xpath = "//div[text()='Reports created previously:']")
+    public WebElement previouslyDownloadedStaticLabel;
+
+    @FindBy(xpath = "//div[text()='Reports created previously:']/following-sibling::div/div/div[2]/span")
+    public WebElement recordFileName;
+
+    @FindBy(xpath = "//div[@id='reportingHistoryError']/div/div/div[1]")
+    public WebElement previouslyDownloadedErrorMessage;
 
 
     //METHODS
@@ -746,6 +763,51 @@ public class RegulatoryReportingPage extends UploadPage {
             }
         }
         return true;
+    }
+
+    public boolean verifyPreviouslyDownloadedButton() {
+        try{
+            return previouslyDownloadedButton.isDisplayed();
+        }catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public void clickPreviouslyDownloadedButton() {
+        previouslyDownloadedButton.click();
+    }
+
+    public void verifyPreviouslyDownloadedScreen() {
+        BrowserUtils.waitForVisibility(previouslyDownloadedStaticLabel,30);
+        String recordCellsXpath = "//div[text()='Reports created previously:']/following-sibling::div/div/div";
+        String strDate = Driver.getDriver().findElement(By.xpath(recordCellsXpath+"[1]")).getText();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        try{
+            sdf.parse(strDate);
+        }catch (Exception e){
+            assertTestCase.assertTrue(false,"Verify downloaded date in first column");
+        }
+
+        String fileName = Driver.getDriver().findElement(By.xpath(recordCellsXpath+"[2]/span")).getText();
+        assertTestCase.assertTrue(fileName.endsWith(".zip"), "Verify downloaded file name in second column");
+
+        String portfolios = Driver.getDriver().findElement(By.xpath(recordCellsXpath+"[3]")).getText();
+        String portfoliosSerialNumber = portfolios.substring(0,portfolios.indexOf(":"));
+        assertTestCase.assertTrue(NumberUtils.isParsable(portfoliosSerialNumber), "Verify portfolios information in the third column");
+    }
+
+    public void verifyFileDownloadFromPreviouslyDownloadedScreen() {
+        BrowserUtils.waitForVisibility(previouslyDownloadedStaticLabel,30);
+        String expFileName = recordFileName.getText();
+
+        FileDownloadUtilities.deleteDownloadFolder();
+        recordFileName.click();
+        assertTestCase.assertTrue(FileDownloadUtilities.waitUntilFileIsDownloaded(),"Verify download of export file");
+        String actualFileName = FileDownloadUtilities.getDownloadedFileName();
+
+        System.out.println(actualFileName+"-->"+expFileName);
+        assertTestCase.assertTrue(actualFileName.equals(expFileName),"Verify file is downloaded from Previously Downloaded screen");
     }
 
     public boolean verifySFDRCompanyOutput(List<String> selectedPortfolios) {

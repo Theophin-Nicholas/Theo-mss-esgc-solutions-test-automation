@@ -18,6 +18,18 @@ public class RegulatoryReportingAPIController extends APIController {
         }
         return response;
     }
+
+    public Response getDownloadHistory() {
+        Response response = null;
+        try {
+            response = configSpec()
+                    .when()
+                    .get(RegulatoryReportingEndPoints.GET_DOWNLOAD_HISTORY);
+        } catch (Exception e) {
+            System.out.println("Inside exception " + e.getMessage());
+        }
+        return response;
+    }
     public String getPortfolioId(String portfolioName) {
         Response response = getPortfolioDetails();
         List<String> portfolioNames = response.jsonPath().getList("portfolio_name");

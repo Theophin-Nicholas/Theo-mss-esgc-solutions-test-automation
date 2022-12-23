@@ -71,6 +71,8 @@ public class Environment {
     public static final String PDF_EXPORT_BUNDLE_PASSWORD;
     public static final String PDF_EXPORT_ONLY_SOURCEDOCUMENTS_USERNAME;
     public static final String PDF_EXPORT_ONLY_SOURCEDOCUMENTS_PASSWORD;
+    public static final String NO_PREVIOUSLY_DOWNLOADED_REGULATORY_REPORTS_USERNAME;
+    public static final String NO_PREVIOUSLY_DOWNLOADED_REGULATORY_REPORTS_PASSWORD;
     public static final String PDF_EXPORT_ONLY_PDF_USERNAME;
     public static final String PDF_EXPORT_ONLY_PDF_PASSWORD;
     public static final String MESG_APPLICATION_NAME;
@@ -158,6 +160,9 @@ public class Environment {
         PDF_EXPORT_ONLY_SOURCEDOCUMENTS_PASSWORD = properties.getProperty("PDFexport_OnlySourceDocument_password");
         PDF_EXPORT_ONLY_PDF_USERNAME = properties.getProperty("PDFexport_OnlyPDF_username");
         PDF_EXPORT_ONLY_PDF_PASSWORD = properties.getProperty("PDFexport_OnlyPDF_password");
+        NO_PREVIOUSLY_DOWNLOADED_REGULATORY_REPORTS_USERNAME = properties.getProperty("NoPreviouslyDownloadedRegulatoryReports_username");
+        NO_PREVIOUSLY_DOWNLOADED_REGULATORY_REPORTS_PASSWORD = properties.getProperty("NoPreviouslyDownloadedRegulatoryReports_password");
+
 
     }
 }
