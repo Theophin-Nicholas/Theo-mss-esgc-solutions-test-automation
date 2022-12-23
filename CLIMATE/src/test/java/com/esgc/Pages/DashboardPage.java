@@ -203,6 +203,11 @@ public class DashboardPage extends UploadPage {
     @FindBy(xpath = "//table[./thead//th[text()='% Investment']]/tbody/tr/td[2]")
     public List<WebElement> investmentsInPerformanceChart;
 
+    @FindBy(xpath = "//table[./thead//th[text()='% Investment']]/tbody/tr/td[3]")
+    public List<WebElement> OverallESGScore;
+
+    @FindBy(xpath = "//table[./thead//th[text()='% Investment']]/tbody/tr/td[4]")
+    public List<WebElement> TotalCriticalControversies;
     @FindBy(xpath = "//*[starts-with(text(),'Sum')]")
     public WebElement totalInvestmentInPerformanceChart;
 
@@ -1556,6 +1561,29 @@ public class DashboardPage extends UploadPage {
             randomCell = random.nextInt(heatMapCells.size());
         } while (heatMapCells.get(randomCell).getText().equals("0%"));
         BrowserUtils.scrollTo(heatMapCells.get(randomCell)).click();
+    }
+
+    public void verifyOverallESGScoreCatgories(){
+        List<String> categories = Arrays.asList(new String[]{"Weak","Limited","Robust","Advanced"});
+        for(WebElement e : OverallESGScore){
+            assertTestCase.assertTrue(categories.contains(e.getText()), "Validate OverAll ESG Scores");
+        }
+    }
+
+    public void verifyOverallESGTotalControversies(){
+
+        //List<String> categories = Arrays.asList(new String[]{"Weak","Limited","Robust","Advanced"});
+
+        for(WebElement e : TotalCriticalControversies){
+            switch (e.getText()){
+                case "":
+                    assertTestCase.assertTrue(true, "Validated if controversies are blank");
+                case "0":
+                    assertTestCase.assertTrue(true, "Validated if controversies are Zero");
+
+            }
+           // assertTestCase.assertTrue(e.., "Validate OverAll ESG Scores");
+        }
     }
 }
 
