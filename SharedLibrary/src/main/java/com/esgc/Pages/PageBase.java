@@ -31,6 +31,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
+import org.apache.poi.ss.usermodel.Cell;
 
 /**
  * This abstract class will be extended by Page classes
@@ -2167,5 +2168,62 @@ public abstract class PageBase {
         updatePortfolioNameInPortfolioManagementDrawer(OriginalPortFolioName);
         BrowserUtils.wait(4);
         clickInSidePortfolioDrawer();
+    }
+
+    public void verifyCompaniesOrderInRegionsAndSections(ExcelUtil exportedDocument, String sectionName, int sectionsCount){
+
+        System.out.println("Section Verifications: "+sectionName);
+        List<List<String>> categories = getCategoriesDetails(exportedDocument, sectionName, sectionsCount);
+
+        for(List<String> category:categories){
+            verifySortingOrder(exportedDocument, category.get(0), Integer.parseInt(category.get(1)), Integer.parseInt(category.get(2)), Integer.parseInt(category.get(3)));
+        }
+    }
+
+    public List<List<String>> getCategoriesDetails(ExcelUtil exportedDocument, String sectionName, int sectionsCount){
+        List<List<String>> categories = new ArrayList<>();
+        Cell regionsCell = exportedDocument.searchCellData(sectionName);
+
+        for(int j=0;j<sectionsCount;j++) {
+            String categoryName = "";
+            int companiesStartRow = 0;
+            int companiesEndRow = 0;
+            int companiesCountIndex = regionsCell.getColumnIndex() + (5*j);
+            int categoriesColumnIndex = regionsCell.getColumnIndex() + 3 +(5*j);
+            for (int i = 0; ; i++) {
+                List<String> category = new ArrayList<>(); // Category Name, Start Row, End Row
+                categoryName = exportedDocument.getCellData(regionsCell.getRowIndex() + 7 + i, companiesCountIndex+1);
+                if (categoryName.equals("Details")) break;
+                int categoryCompaniesCount = Math.round(Float.parseFloat(exportedDocument.getCellData(regionsCell.getRowIndex() + 7 + i, companiesCountIndex+2)));
+                if (companiesStartRow == 0) companiesStartRow = regionsCell.getRowIndex() + 13;
+                else companiesStartRow = companiesEndRow;
+                companiesEndRow = companiesStartRow + categoryCompaniesCount;
+                category.add(categoryName);
+                category.add(String.valueOf(companiesStartRow));
+                category.add(String.valueOf(companiesEndRow));
+                category.add(String.valueOf(categoriesColumnIndex));
+                System.out.println("Category Row:" + i + " - Rows:" + categoryName +"-->"+companiesStartRow+"-"+companiesEndRow+" --> Column"+categoriesColumnIndex);
+                categories.add(category);
+            }
+        }
+        return categories;
+    }
+
+    public void verifySortingOrder(ExcelUtil exportedDocument, String category, int startRow, int endRow, int categoryColumnIndex){
+
+        System.out.println(category+": "+startRow+" -- "+endRow);
+        for(int i=startRow; i<endRow; i++) {
+            System.out.print("\nRow Number: " + i);
+            String actualCategory = exportedDocument.getCellData(i, categoryColumnIndex);
+            System.out.print("-->Exp Category: " + category +" - Actual Category: "+actualCategory);
+            assertTestCase.assertEquals(actualCategory, category, "Verify companies are sorted based on category");
+            if (i < endRow-2) {
+                int score1 = Math.round(Float.parseFloat(exportedDocument.getCellData(i, categoryColumnIndex - 1).replace(",", "")));
+                int score2 = Math.round(Float.parseFloat(exportedDocument.getCellData(i + 1, categoryColumnIndex - 1).replace(",", "")));
+                System.out.print("-->Current Record Score: " + score1 +" - Next Record Score: "+score2);
+                assertTestCase.assertTrue(score1 >= score2, score1 + "-->" + score2 + ": Verify companies are sorted based on score");
+            }
+        }
+
     }
 }

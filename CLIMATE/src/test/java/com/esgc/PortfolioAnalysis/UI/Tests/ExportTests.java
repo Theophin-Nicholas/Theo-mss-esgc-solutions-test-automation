@@ -247,4 +247,32 @@ public class ExportTests extends UITestBase {
         researchLinePage.verifyExportOptions(researchLine);
         researchLinePage.clickOutsideOfDrillDownPanel();
     }
+
+    @Test(groups = {"regression", "export"})
+    @Xray(test = {2846})
+    public void verifyCompaniesOrderInRegionsAndSectors() {
+
+        ResearchLinePage researchLinePage = new ResearchLinePage();
+        String researchLine = "Carbon Footprint";
+
+        researchLinePage.navigateToResearchLine(researchLine);
+        researchLinePage.selectSamplePortfolioFromPortfolioSelectionModal();
+
+        researchLinePage.clickExportDropdown();
+        researchLinePage.selectExportData("Data", researchLine);
+        assertTestCase.assertTrue(researchLinePage.checkIfExportingLoadingMaskIsDisplayed(),
+                "Exporting... Load Mask is displayed", 2620);
+
+        researchLine = researchLine.replaceAll("Management", "Mgmt");
+        String expectedTitle = String.format("Portfolio Analysis - %s", researchLine);
+        BrowserUtils.wait(10);
+        Assert.assertEquals(researchLinePage.getDataFromExportedFile(0, 0, researchLine), expectedTitle,
+                "Exported Document verified by title for " + researchLinePage + " page");
+
+        String sheetName = String.format("Summary %s", researchLine);
+
+        ExcelUtil exportedDocument = new ExcelUtil(BrowserUtils.exportPath(researchLine), sheetName);
+        researchLinePage.verifyCompaniesOrderInRegionsAndSections(exportedDocument, "Regions", 3);
+        researchLinePage.verifyCompaniesOrderInRegionsAndSections(exportedDocument, "Sectors", 12);
+    }
 }
