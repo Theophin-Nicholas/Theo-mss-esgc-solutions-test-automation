@@ -62,6 +62,9 @@ public class PerformanceChartCompany {
     private String BVD9_NUMBER;
     @JsonProperty(value="COMPANY_NAME")
     private String COMPANY_NAME;
+
+    @JsonProperty(value="CURR_CRITICAL_CONTROVERSIES")
+    private String CURR_CRITICAL_CONTROVERSIES;
     @JsonProperty(value="CURR_SCORE_BROWN_SHARE")
     private Integer CURRENT_BROWN_SHARE_SCORE;
     @JsonProperty(value="CURR_SCORE_CARBON_FOOTPRINT")
@@ -97,6 +100,9 @@ public class PerformanceChartCompany {
     private String SCORE_CATEGORY_BROWN_SHARE;
     @JsonProperty(value="SCORE_CATEGORY_CARBON_FOOTPRINT")
     private String SCORE_CATEGORY_CARBON_FOOTPRINT;
+
+    @JsonProperty(value="SCORE_CATEGORY_ESG_ASSESSMENT")
+    private String SCORE_CATEGORY_ESG_ASSESSMENT;
     @JsonProperty(value="SCORE_CATEGORY_GREEN_SHARE")
     private String SCORE_CATEGORY_GREEN_SHARE;
 
