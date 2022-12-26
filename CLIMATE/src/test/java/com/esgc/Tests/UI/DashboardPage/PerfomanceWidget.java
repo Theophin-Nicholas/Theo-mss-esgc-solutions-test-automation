@@ -32,22 +32,29 @@ public class PerfomanceWidget extends DashboardUITestBase {
     }
 
     @Test(groups = {"dashboard", "regression", "ui", "smoke"})
-    @Xray(test = {8685})
+    @Xray(test = {8686})
     public void verifyPerformanceChartTotalControversies() {
 
         DashboardPage dashboardPage = new DashboardPage();
-        dashboardPage.navigateToPageFromMenu("Dashboard");
-        BrowserUtils.wait(4);
-        dashboardPage.selectSamplePortfolioFromPortfolioSelectionModal();
-        dashboardPage.clickAndSelectAPerformanceChart("Largest Holding");
-        dashboardPage.verifyOverallESGTotalControversies();
+        try {
+            dashboardPage.navigateToPageFromMenu("Dashboard");
+            BrowserUtils.wait(4);
+            dashboardPage.selectSamplePortfolioFromPortfolioSelectionModal();
 
-        dashboardPage.clickAndSelectAPerformanceChart("Leaders");
-        dashboardPage.verifyOverallESGTotalControversies();
+            dashboardPage.clickAndSelectAPerformanceChart("Largest Holding");
 
-        dashboardPage.clickAndSelectAPerformanceChart("Laggards");
-        dashboardPage.verifyOverallESGTotalControversies();
+            dashboardPage.verifyOverallESGTotalControversies();
+
+            dashboardPage.clickAndSelectAPerformanceChart("Leaders");
+            dashboardPage.verifyOverallESGTotalControversies();
+
+            dashboardPage.clickAndSelectAPerformanceChart("Laggards");
+            dashboardPage.verifyOverallESGTotalControversies();
+        }catch(Exception e){
+            e.printStackTrace();
+        }
     }
+
 
 
 }

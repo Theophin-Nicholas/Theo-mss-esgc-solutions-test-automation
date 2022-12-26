@@ -4,14 +4,17 @@ import com.esgc.APIModels.APIFilterPayload;
 import com.esgc.APIModels.DashboardModels.PerformanceChartCompany;
 import com.esgc.APIModels.PortoflioAnalysisModels.RangeAndScoreCategory;
 import com.esgc.Controllers.APIController;
+import com.esgc.DBModels.DashboardPerformanceChart;
 import com.esgc.DBModels.EntityWithScores;
 import com.esgc.DBModels.ResearchLineIdentifier;
 import com.esgc.Tests.TestBases.DataValidationTestBase;
 import com.esgc.Utilities.APIUtilities;
+import com.esgc.Utilities.Database.DashboardQueries;
 import com.esgc.Utilities.PortfolioUtilities;
 import com.esgc.Utilities.Xray;
 import io.restassured.response.Response;
 import org.hamcrest.Matchers;
+import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Test;
@@ -400,6 +403,47 @@ public class PerformanceChart extends DataValidationTestBase {
 
 
                 };
+
+
+    }
+    @Test(groups = {"regression", "data_validation", "dashboard"})
+    @Xray(test = {8689,8695,8697})
+    public void validateESGScoreCategory(){
+        String portfolioId = "00000000-0000-0000-0000-000000000000" ;
+        APIFilterPayload apiFilterPayload = new APIFilterPayload();
+        apiFilterPayload.setSector("all");
+        apiFilterPayload.setRegion("all");
+        apiFilterPayload.setBenchmark("");
+        apiFilterPayload.setYear("2022");
+        apiFilterPayload.setMonth("11");
+        List<String> performanceChartTypes = Arrays.asList("leaders", "laggards", "largest_holdings");
+
+        for (String performanceChartType : performanceChartTypes) {
+            System.out.println("Performance Chart:" + performanceChartType);
+            //Get all regions
+            List<PerformanceChartCompany> companyList = new ArrayList<>();
+            companyList = Arrays.asList(
+                    dashboardAPIController.getPerformanceChartList(portfolioId, "esgasmt", apiFilterPayload, performanceChartType, "10")
+                            .as(PerformanceChartCompany[].class));
+            System.out.println(companyList);
+
+            List<DashboardPerformanceChart> dbResult= DashboardQueries.getPerfomanceChartESGSCORE(performanceChartType);
+
+            System.out.println(dbResult);
+
+            for (int i = 0 ; i < companyList.size(); i++){
+                Assert.assertEquals(companyList.get(i).getCOMPANY_NAME(),dbResult.get(i).getCOMPANY_NAME(), "Validate Comapny Names");
+                Assert.assertEquals(companyList.get(i).getSCORE_CATEGORY_ESG_ASSESSMENT(),dbResult.get(i).getESGCATEGORIES(), "Validate Score Category");
+                if (dbResult.get(i).getControCounts()>-1){
+                    Assert.assertEquals(companyList.get(i).getCURR_CRITICAL_CONTROVERSIES(),String.valueOf(dbResult.get(i).getControCounts()), "Validating Critical Cntroversey Count");
+                }else{
+                    Assert.assertEquals(companyList.get(i).getCURR_CRITICAL_CONTROVERSIES(),null, "Validating if Controversey value is blank" );
+                }
+
+            }
+        }
+
+
     }
 
 
