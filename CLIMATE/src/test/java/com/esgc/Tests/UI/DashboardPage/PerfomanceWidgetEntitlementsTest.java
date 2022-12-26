@@ -8,6 +8,9 @@ import com.esgc.Utilities.EntitlementsBundles;
 import com.esgc.Utilities.Xray;
 import org.testng.annotations.Test;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class PerfomanceWidgetEntitlementsTest extends DashboardUITestBase {
 
     @Test(groups = {"regression", "ui", "smoke","entitlements"})
@@ -20,7 +23,12 @@ public class PerfomanceWidgetEntitlementsTest extends DashboardUITestBase {
         login.entitlementsLogin(EntitlementsBundles.PHYSICAL_RISK);
 
         test.info("ESG Score widget in Dashboard Page");
-        assertTestCase.assertTrue(!dashboardPage.isOverAllESGColumAvailable(),"Verify Overall ESG Score coloumn is not avaialble in performance widget");
+        List<String> performanceChartTypes = Arrays.asList("Leaders", "Laggards", "Largest Holding");
+
+        for (String performanceChartType : performanceChartTypes) {
+            dashboardPage.clickAndSelectAPerformanceChart(performanceChartType);
+            assertTestCase.assertTrue(!dashboardPage.isOverAllESGColumAvailable(), "Verify Overall ESG Score coloumn is not avaialble in performance widget");
+        }
     }
 
     @Test(groups = {"regression", "ui","smoke", "entitlements"})
@@ -33,7 +41,11 @@ public class PerfomanceWidgetEntitlementsTest extends DashboardUITestBase {
         login.entitlementsLogin(EntitlementsBundles.USER_WITH_OUT_CONTROVERSIES_ENTITLEMENT);
 
         test.info("ESG Score widget in Dashboard Page");
-        assertTestCase.assertTrue(!dashboardPage.isTotalControversiesColumAvailable(),"Verify Total Controversies coloumn is not avaialble in performance widget");
+        List<String> performanceChartTypes = Arrays.asList("Leaders", "Laggards", "Largest Holding");
+        for (String performanceChartType : performanceChartTypes) {
+            dashboardPage.clickAndSelectAPerformanceChart(performanceChartType);
+            assertTestCase.assertTrue(!dashboardPage.isTotalControversiesColumAvailable(), "Verify Total Controversies coloumn is not avaialble in performance widget");
+        }
     }
 
 
