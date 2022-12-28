@@ -3,6 +3,7 @@ package com.esgc.PortfolioAnalysis.UI.Tests;
 import com.esgc.Base.API.APIModels.APIFilterPayload;
 import com.esgc.Base.API.Controllers.APIController;
 import com.esgc.Base.TestBases.UITestBase;
+import com.esgc.Base.UI.Pages.LoginPage;
 import com.esgc.PortfolioAnalysis.UI.Pages.ResearchLinePage;
 import com.esgc.PortfolioAnalysis.UI.Tests.ExcelComparison.BrownShareAssessment;
 import com.esgc.PortfolioAnalysis.UI.Tests.ExcelComparison.CarbonFootprint;
@@ -248,14 +249,16 @@ public class ExportTests extends UITestBase {
         researchLinePage.clickOutsideOfDrillDownPanel();
     }
 
-    @Test(groups = {"regression", "export"})
+    @Test(groups = {"regression", "export"}, dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
     @Xray(test = {2846})
-    public void verifyCompaniesOrderInRegionsAndSectors() {
+    public void verifyCompaniesOrderInRegionsAndSectors(String researchLine) {
 
         ResearchLinePage researchLinePage = new ResearchLinePage();
-        String researchLine = "Carbon Footprint";
-
         researchLinePage.navigateToResearchLine(researchLine);
+        if (researchLine.equals("Physical Risk Hazards") || researchLine.equals("Temperature Alignment")
+                || researchLine.equals("Physical Risk Management") || researchLine.equals("Brown Share Assessment")) {
+            throw new SkipException("Export is not ready to test in " + researchLine);
+        }
         researchLinePage.selectSamplePortfolioFromPortfolioSelectionModal();
 
         researchLinePage.clickExportDropdown();
@@ -272,7 +275,8 @@ public class ExportTests extends UITestBase {
         String sheetName = String.format("Summary %s", researchLine);
 
         ExcelUtil exportedDocument = new ExcelUtil(BrowserUtils.exportPath(researchLine), sheetName);
-        researchLinePage.verifyCompaniesOrderInRegionsAndSections(exportedDocument, "Regions", 3);
-        researchLinePage.verifyCompaniesOrderInRegionsAndSections(exportedDocument, "Sectors", 12);
+        researchLinePage.verifyCompaniesOrderInRegionsAndSections(researchLine, exportedDocument, "Regions", 3);
+        researchLinePage.verifyCompaniesOrderInRegionsAndSections(researchLine, exportedDocument, "Sectors", 12);
     }
+
 }

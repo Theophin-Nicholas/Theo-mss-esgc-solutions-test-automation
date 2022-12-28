@@ -2170,13 +2170,13 @@ public abstract class PageBase {
         clickInSidePortfolioDrawer();
     }
 
-    public void verifyCompaniesOrderInRegionsAndSections(ExcelUtil exportedDocument, String sectionName, int sectionsCount){
+    public void verifyCompaniesOrderInRegionsAndSections(String researchLine, ExcelUtil exportedDocument, String sectionName, int sectionsCount){
 
         System.out.println("Section Verifications: "+sectionName);
         List<List<String>> categories = getCategoriesDetails(exportedDocument, sectionName, sectionsCount);
 
         for(List<String> category:categories){
-            verifySortingOrder(exportedDocument, category.get(0), Integer.parseInt(category.get(1)), Integer.parseInt(category.get(2)), Integer.parseInt(category.get(3)));
+            verifySortingOrder(researchLine, exportedDocument, category.get(0), Integer.parseInt(category.get(1)), Integer.parseInt(category.get(2)), Integer.parseInt(category.get(3)));
         }
     }
 
@@ -2209,7 +2209,7 @@ public abstract class PageBase {
         return categories;
     }
 
-    public void verifySortingOrder(ExcelUtil exportedDocument, String category, int startRow, int endRow, int categoryColumnIndex){
+    public void verifySortingOrder(String researchLine, ExcelUtil exportedDocument, String category, int startRow, int endRow, int categoryColumnIndex){
 
         System.out.println(category+": "+startRow+" -- "+endRow);
         for(int i=startRow; i<endRow; i++) {
@@ -2218,10 +2218,23 @@ public abstract class PageBase {
             System.out.print("-->Exp Category: " + category +" - Actual Category: "+actualCategory);
             assertTestCase.assertEquals(actualCategory, category, "Verify companies are sorted based on category");
             if (i < endRow-2) {
-                int score1 = Math.round(Float.parseFloat(exportedDocument.getCellData(i, categoryColumnIndex - 1).replace(",", "")));
-                int score2 = Math.round(Float.parseFloat(exportedDocument.getCellData(i + 1, categoryColumnIndex - 1).replace(",", "")));
-                System.out.print("-->Current Record Score: " + score1 +" - Next Record Score: "+score2);
-                assertTestCase.assertTrue(score1 >= score2, score1 + "-->" + score2 + ": Verify companies are sorted based on score");
+                if(researchLine.equals("Carbon Footprint")) {
+                    int score1 = Math.round(Float.parseFloat(exportedDocument.getCellData(i, categoryColumnIndex - 1).replace(",", "")));
+                    int score2 = Math.round(Float.parseFloat(exportedDocument.getCellData(i + 1, categoryColumnIndex - 1).replace(",", "")));
+                    System.out.print("-->Current Record Score: " + score1 + " - Next Record Score: " + score2);
+                    assertTestCase.assertTrue(score1 >= score2, score1 + "-->" + score2 + ": Verify companies are sorted based on score");
+                } else if (researchLine.equals("Green Share Assessment")){
+                    float investment1 = Float.parseFloat(exportedDocument.getCellData(i, categoryColumnIndex + 1).replace("%", ""));
+                    float investment2 = Float.parseFloat(exportedDocument.getCellData(i + 1, categoryColumnIndex + 1).replace("%", ""));
+                    System.out.print("-->Current Record Investment%: " + investment1 + " - Next Record Investment%: " + investment2);
+                    assertTestCase.assertTrue(investment1 >= investment2, investment1 + "-->" + investment2 + ": Verify companies are sorted based on score");
+                    if(investment1==investment2){
+                        String companyName1 = exportedDocument.getCellData(i, categoryColumnIndex - 2);
+                        String companyName2 = exportedDocument.getCellData(i + 1, categoryColumnIndex - 2);
+                        System.out.print("-->Current Record Company Name: " + companyName1 + " - Next Record CompanyName: " + companyName2);
+                        assertTestCase.assertTrue(companyName1.compareToIgnoreCase(companyName2)<0, companyName1 + "-->" + companyName2 + ": Verify companies are sorted based on score");
+                    }
+                }
             }
         }
 
