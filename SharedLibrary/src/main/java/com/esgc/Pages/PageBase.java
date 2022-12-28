@@ -1322,14 +1322,16 @@ public abstract class PageBase {
             //Validate if Menu is available
             Assert.assertTrue(menu.isDisplayed(), "Menu Item is not displayed");
             clickMenu();
-            List<String> menuItemsArray = Arrays.asList("Moody's ESG360", "Dashboard", "Portfolio Analysis",
+            List<String> menuItemsArray = Arrays.asList("Navigate To", "Dashboard", "Portfolio Analysis",
                     "Portfolio Selection/Upload", "Regulatory Reporting",
                     "Contact Us", "Terms & Conditions", "Log Out",
                     "Switch Application", "Climate on Demand", "Company Portal", "Datalab");
 
             //Validate if all menu items are available
-            for (String m : menuItemsArray)
-                Assert.assertTrue(menuList.stream().filter(p -> p.getText().equals(m)).count() == 1, m + " Menus are not correctly listed");
+            for (String m : menuItemsArray) {
+                System.out.println("Menu Item: "+m);
+                Assert.assertEquals(menuList.stream().filter(p -> p.getText().equals(m)).count(), 1, m + " Menus are not correctly listed");
+            }
 
             //To get page URL
             String url = Driver.getDriver().getCurrentUrl();
