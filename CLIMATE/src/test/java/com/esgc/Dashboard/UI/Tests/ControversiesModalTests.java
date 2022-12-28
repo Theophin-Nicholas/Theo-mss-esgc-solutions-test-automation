@@ -35,7 +35,7 @@ public class ControversiesModalTests extends DashboardUITestBase {
     }
 
     @Test(groups = {"regression", "dashboard", "ui"})
-    @Xray(test = {6954,8311})
+    @Xray(test = {6954})
     public void controversiesFilterTest() {
         DashboardPage dashboardPage = new DashboardPage();
         dashboardPage.selectSamplePortfolioFromPortfolioSelectionModal();
@@ -96,7 +96,7 @@ public class ControversiesModalTests extends DashboardUITestBase {
     }
 
     @Test(groups = {"regression", "dashboard", "ui"})
-    @Xray(test = {3191, 3935, 7764, 7765, 7766, 7769, 7770, 8307, 8312})
+    @Xray(test = {3191, 3935, 7764, 7765, 7766, 7769, 7770})
     public void verifyCriticalAndNonCriticalControversies() {
         DashboardPage dashboardPage = new DashboardPage();
         dashboardPage.selectSamplePortfolioFromPortfolioSelectionModal();
