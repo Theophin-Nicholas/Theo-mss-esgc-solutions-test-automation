@@ -496,7 +496,7 @@ public class RegulatoryReportingPageTests extends UITestBase {
     }
 
     @Test(groups = {"regression", "ui", "regulatoryReporting"})
-    @Xray(test = {11786})
+    @Xray(test = {11712})
     public void verifyNoFilesInPreviouslyDownloadedScreen() {
 
         LoginPage login = new LoginPage();
