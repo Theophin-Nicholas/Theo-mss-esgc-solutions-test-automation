@@ -2210,7 +2210,7 @@ public abstract class PageBase {
     }
 
     public void verifySortingOrder(String researchLine, ExcelUtil exportedDocument, String category, int startRow, int endRow, int categoryColumnIndex){
-
+        //TODO item for Brown Share, once https://esjira/browse/ESGCA-12562 is fixed we need to check Brown Share
         System.out.println(category+": "+startRow+" -- "+endRow);
         for(int i=startRow; i<endRow; i++) {
             System.out.print("\nRow Number: " + i);

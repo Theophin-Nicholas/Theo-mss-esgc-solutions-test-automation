@@ -253,6 +253,8 @@ public class ExportTests extends UITestBase {
     @Xray(test = {2846})
     public void verifyCompaniesOrderInRegionsAndSectors(String researchLine) {
 
+        //TODO item for Brown Share, once https://esjira/browse/ESGCA-12562 is fixed we need to check Brown Share
+
         ResearchLinePage researchLinePage = new ResearchLinePage();
         researchLinePage.navigateToResearchLine(researchLine);
         if (researchLine.equals("Physical Risk Hazards") || researchLine.equals("Temperature Alignment")
