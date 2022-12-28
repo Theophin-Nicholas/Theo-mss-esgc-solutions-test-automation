@@ -66,7 +66,7 @@ public class RegulatoryReportingTests extends UITestBase {
     }
 
     @Test(groups = {"regression", "regulatoryReporting", "api"})
-    @Xray(test = {11712})
+    @Xray(test = {11681})
     public void verifyDownloadHistoryWhenNoDownloadReports() {
         LoginPage login = new LoginPage();
         login.clickOnLogout();
