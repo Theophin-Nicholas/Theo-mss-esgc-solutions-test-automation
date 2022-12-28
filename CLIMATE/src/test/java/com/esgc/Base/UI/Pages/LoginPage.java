@@ -291,6 +291,10 @@ public class LoginPage extends ClimatePageBase {
                 wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.PDF_EXPORT_ONLY_SOURCEDOCUMENTS_USERNAME, Keys.ENTER);
                 wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.PDF_EXPORT_ONLY_SOURCEDOCUMENTS_PASSWORD);
                 break;
+            case NO_PREVIOUSLY_DOWNLOADED_REGULATORY_REPORTS:
+                wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.NO_PREVIOUSLY_DOWNLOADED_REGULATORY_REPORTS_USERNAME, Keys.ENTER);
+                wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.NO_PREVIOUSLY_DOWNLOADED_REGULATORY_REPORTS_PASSWORD);
+                break;
             default:
                 Assert.fail("Bundle not found!");
         }
