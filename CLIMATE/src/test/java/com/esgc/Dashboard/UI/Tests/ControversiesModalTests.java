@@ -132,6 +132,8 @@ public class ControversiesModalTests extends DashboardUITestBase {
 
     }
 
+//TODO Controversies ESG parts are not in scope yet, follow up https://esjira/browse/ESGCA-7696
+//Planned for Q2 2023
     @Test(enabled = false, groups = {"regression", "dashboard", "ui"})
     @Xray(test = 8306)
     public void controversiesInEsg() {
