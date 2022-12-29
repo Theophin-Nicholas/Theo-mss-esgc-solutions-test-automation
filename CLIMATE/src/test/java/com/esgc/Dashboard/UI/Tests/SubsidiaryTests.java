@@ -162,7 +162,7 @@ public class SubsidiaryTests extends UITestBase {
     }
 
     @Test(groups = {"regression", "ui", "search_entity"}, dataProviderClass = DataProviderClass.class, dataProvider = "SubsidiaryCompanies")
-    @Xray(test = {11529})
+    @Xray(test = {11529, 11237})
     public void verifySubsidiaryCompanyNameInPortfolioAnalysis(String subsidiaryCompanyName, String parentCompanyName) {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         DashboardPage dashboardPage = new DashboardPage();
@@ -170,6 +170,12 @@ public class SubsidiaryTests extends UITestBase {
 
         researchLinePage.selectPortfolioByNameFromPortfolioSelectionModal("PortfolioWithSubsidiaryCompany1");
         researchLinePage.navigateToResearchLine("ESG Assessments");
+
+        // Search with subsidiary company name, when clicked, parent company profile page should be opened
+        entityClimateProfilePage.searchAndLoadClimateProfilePage(subsidiaryCompanyName);
+        assertTestCase.assertTrue(entityClimateProfilePage.validateGlobalCompanyNameHeader(parentCompanyName), "Global header verification");
+        entityClimateProfilePage.closeEntityProfilePage();
+        assertTestCase.assertFalse(dashboardPage.isSearchBoxDisplayed(), "User is on expected page");
 
         // Verify subsidiary company in Coverage popup
         researchLinePage.selectEsgPortfolioCoverage();
