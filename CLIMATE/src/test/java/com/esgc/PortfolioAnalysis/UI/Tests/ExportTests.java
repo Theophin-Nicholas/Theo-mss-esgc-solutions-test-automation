@@ -3,6 +3,7 @@ package com.esgc.PortfolioAnalysis.UI.Tests;
 import com.esgc.Base.API.APIModels.APIFilterPayload;
 import com.esgc.Base.API.Controllers.APIController;
 import com.esgc.Base.TestBases.UITestBase;
+import com.esgc.Base.UI.Pages.LoginPage;
 import com.esgc.PortfolioAnalysis.UI.Pages.ResearchLinePage;
 import com.esgc.PortfolioAnalysis.UI.Tests.ExcelComparison.BrownShareAssessment;
 import com.esgc.PortfolioAnalysis.UI.Tests.ExcelComparison.CarbonFootprint;
@@ -247,4 +248,37 @@ public class ExportTests extends UITestBase {
         researchLinePage.verifyExportOptions(researchLine);
         researchLinePage.clickOutsideOfDrillDownPanel();
     }
+
+    @Test(groups = {"regression", "export"}, dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
+    @Xray(test = {2846})
+    public void verifyCompaniesOrderInRegionsAndSectors(String researchLine) {
+
+        //TODO item for Brown Share, once https://esjira/browse/ESGCA-12562 is fixed we need to check Brown Share
+
+        ResearchLinePage researchLinePage = new ResearchLinePage();
+        researchLinePage.navigateToResearchLine(researchLine);
+        if (researchLine.equals("Physical Risk Hazards") || researchLine.equals("Temperature Alignment")
+                || researchLine.equals("Physical Risk Management") || researchLine.equals("Brown Share Assessment")) {
+            throw new SkipException("Export is not ready to test in " + researchLine);
+        }
+        researchLinePage.selectSamplePortfolioFromPortfolioSelectionModal();
+
+        researchLinePage.clickExportDropdown();
+        researchLinePage.selectExportData("Data", researchLine);
+        assertTestCase.assertTrue(researchLinePage.checkIfExportingLoadingMaskIsDisplayed(),
+                "Exporting... Load Mask is displayed", 2620);
+
+        researchLine = researchLine.replaceAll("Management", "Mgmt");
+        String expectedTitle = String.format("Portfolio Analysis - %s", researchLine);
+        BrowserUtils.wait(10);
+        Assert.assertEquals(researchLinePage.getDataFromExportedFile(0, 0, researchLine), expectedTitle,
+                "Exported Document verified by title for " + researchLinePage + " page");
+
+        String sheetName = String.format("Summary %s", researchLine);
+
+        ExcelUtil exportedDocument = new ExcelUtil(BrowserUtils.exportPath(researchLine), sheetName);
+        researchLinePage.verifyCompaniesOrderInRegionsAndSections(researchLine, exportedDocument, "Regions", 3);
+        researchLinePage.verifyCompaniesOrderInRegionsAndSections(researchLine, exportedDocument, "Sectors", 12);
+    }
+
 }
