@@ -22,8 +22,8 @@ import java.util.List;
 public class EntityClimateProfile extends UITestBase {
 
 
-    @Xray(test = {5875, 5879})
-    @Test(enabled = false, groups = {"regression", "ui", "smoke", "entity_climate_profile"},
+    @Xray(test = {5875, 5879, 11725})
+    @Test(enabled = true, groups = {"regression", "ui", "smoke", "entity_climate_profile"},
             description = "Verify if Company headers are Displayed as Expected",
             dataProviderClass = DataProviderClass.class, dataProvider = "CompanyNames")
     public void testCompanyHeader(String company) {
@@ -33,7 +33,8 @@ public class EntityClimateProfile extends UITestBase {
         EntityClimateProfilePage entityProfilePage = new EntityClimateProfilePage();
         String companyName = entityProfilePage.searchAndLoadClimateProfilePage(company);
         Assert.assertTrue(entityProfilePage.validateGlobalCompanyNameHeader(companyName));
-        entityProfilePage.validateCompanyHeader(companyName);
+//        entityProfilePage.validateCompanyHeader(companyName);
+        entityProfilePage.validateCompanyNewHeader(companyName);
     }
 
     @Xray(test = 6019)

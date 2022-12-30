@@ -58,6 +58,8 @@ public class Environment {
     public static final String USER_WITH_OUT_ESG_ENTITLEMENT_PASSWORD;
     public static final String USER_WITH_OUT_EXPORT_ENTITLEMENT_USERNAME;
     public static final String USER_WITH_OUT_EXPORT_ENTITLEMENT_PASSWORD;
+    public static final String USER_WITH_ESG_WITHOUT_EXPORT_USERNAME;
+    public static final String USER_WITH_ESG_WITHOUT_EXPORT_PASSWORD;
     public static final String USER_WITH_ESG_PS_ENTITLEMENT_USERNAME;
     public static final String USER_WITH_ESG_PS_ENTITLEMENT_PASSWORD;
     public static final String USER_WITH_ESG_ENTITLEMENT_USERNAME;
@@ -139,6 +141,8 @@ public class Environment {
         USER_WITH_CONTROVERSIES_ENTITLEMENT_PASSWORD = properties.getProperty("controversies_bundle_password");
         USER_WITH_OUT_CONTROVERSIES_ENTITLEMENT_USERNAME = properties.getProperty("no_controversies_bundle_username");
         USER_WITH_OUT_CONTROVERSIES_ENTITLEMENT_PASSWORD = properties.getProperty("no_controversies_bundle_password");
+        USER_WITH_ESG_WITHOUT_EXPORT_USERNAME = properties.getProperty("user_with_esg_without_export_username");
+        USER_WITH_ESG_WITHOUT_EXPORT_PASSWORD = properties.getProperty("user_with_esg_without_export_password");
         USER_WITH_OUT_ESG_ENTITLEMENT_USERNAME = properties.getProperty("tr_bundle_username");
         USER_WITH_OUT_ESG_ENTITLEMENT_PASSWORD = properties.getProperty("tr_bundle_password");
         USER_WITH_EXPORT_ENTITLEMENT_USERNAME = properties.getProperty("export_bundle_username");

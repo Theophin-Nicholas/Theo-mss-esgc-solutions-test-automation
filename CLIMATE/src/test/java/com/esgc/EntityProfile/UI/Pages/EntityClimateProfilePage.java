@@ -41,6 +41,8 @@ public class EntityClimateProfilePage extends ClimatePageBase {
     public List<String> sectorsList = Arrays.asList("Automobiles", "ARA - all sectors", "Oil&Gas", "Electric & Gas Utilities",
             "Shipping", "Airlines", "Cement", "Steel", "Aluminium");
 
+    @FindBy(xpath = "//div/div[@class='MuiToolbar-root MuiToolbar-regular']//*[text()]")
+    public List<WebElement> companyHeaderItems;
 
     @FindBy(xpath = " (//*[name()='g'][contains(@class,'highcharts-legend-item highcharts-line-')])")
     public List<WebElement> temperatureAlignmentCharBenchmark;
@@ -84,10 +86,10 @@ public class EntityClimateProfilePage extends ClimatePageBase {
     @FindBy(id = "export_sources_doc_button")
     public WebElement exportSourcesDocumentsTab;
 
-    @FindBy(xpath = "//button [@id='export_pdf']")
+    @FindBy(xpath = "//button[@id='export_pdf']")
     public WebElement pdfDownloadButton;
 
-    @FindBy(id = "ref_Meth_button")
+    @FindBy(xpath = "//div[@class='MuiToolbar-root MuiToolbar-regular']//button[@id='ref_Meth_button']/span/div")
     public WebElement referenceAndMethodologiesTab;
 
     @FindBy(xpath = "//div[@role='dialog'][not(@aria-describedby)]//h2")
@@ -541,7 +543,7 @@ public class EntityClimateProfilePage extends ClimatePageBase {
 
     public boolean validateGlobalCompanyNameHeader(String companyName) {
         try{
-            return Driver.getDriver().findElement(By.xpath("//li[@role='menuitem']/span[text()='"+companyName+"']")).isDisplayed();
+            return Driver.getDriver().findElement(By.xpath("//div[@class='MuiToolbar-root MuiToolbar-regular']//li[@role='menuitem']/span[text()='"+companyName+"']")).isDisplayed();
         }catch(Exception e){
             return false;
         }
@@ -634,6 +636,32 @@ public class EntityClimateProfilePage extends ClimatePageBase {
         Assert.assertTrue(companySummary.get(3).getText().contains("Sector"));
     }
 
+    public void validateCompanyNewHeader(String companyName) {
+
+        List<String> actualHeaderItems = new ArrayList<>();
+        for(WebElement item:companyHeaderItems) {
+            actualHeaderItems.add(item.getText());
+        }
+
+        List<String> expectedHeaderItems = new ArrayList<>();
+        expectedHeaderItems.add(companyName);
+        expectedHeaderItems.add("Confidence Level:");
+        expectedHeaderItems.add("Export/Sources Documents");
+        expectedHeaderItems.add("Reference and Methodologies");
+        expectedHeaderItems.add("ESC");
+
+        for(String expItem:expectedHeaderItems) {
+            boolean matched = false;
+            for(String actItem:actualHeaderItems){
+                if(actItem.contains(expItem)){
+                    matched = true;
+                    break;
+                }
+            }
+            assertTestCase.assertTrue(matched, expItem+" is not available in the header");
+        }
+    }
+
     public void selectExportSourcesDocuments() {
         BrowserUtils.waitForClickablility(exportSourcesDocumentsTab, 30).click();
     }
@@ -664,6 +692,14 @@ public class EntityClimateProfilePage extends ClimatePageBase {
 
     public void selectPdfDownload() {
         BrowserUtils.waitForClickablility(pdfDownloadButton, 30).click();
+    }
+
+    public boolean IsPdfDownloadButtonAvailable() {
+        try{
+         return pdfDownloadButton.isDisplayed();
+        }catch(Exception e){
+            return false;
+        }
     }
 
     public boolean checkDownloadProgressBarIsPresent() {
