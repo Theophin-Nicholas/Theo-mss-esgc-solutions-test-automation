@@ -11,7 +11,7 @@ public class EntitySearchFunctionTests extends UITestBase {
 
     @Test(groups = {"regression", "ui"},
             description = "ESGCA-5209 - UI | Portfolio Analysis Page | Search Function | Verify that 10 most words/phrases user typed appear")
-    @Xray(test = {5209})
+    @Xray(test = {11645,11645})
     public void testSearchFunction() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio Analysis page");
@@ -21,7 +21,7 @@ public class EntitySearchFunctionTests extends UITestBase {
         researchLinePage.searchIconPortfolioPage.click();
         //BrowserUtils.wait(3);
 
-        assertTestCase.assertTrue(researchLinePage.checkIfNumberOfSearchResultIsTen("app"), "number of the result in the search bar is 10");
+        assertTestCase.assertTrue(researchLinePage.checkIfNumberOfSearchResultIsTen("app"), "number of the result in the search bar is 10",1012,1013);
 
     }
 

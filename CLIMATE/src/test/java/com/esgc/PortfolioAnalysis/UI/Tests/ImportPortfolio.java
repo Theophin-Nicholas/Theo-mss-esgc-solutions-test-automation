@@ -67,7 +67,7 @@ public class ImportPortfolio extends UITestBase {
 //1027
     @Test(groups = {"regression", "ui", "smoke", "robot_dependency"},dataProviderClass = DataProviderClass.class,
             dataProvider = "Valid Portfolios")
-    @Xray(test = {1027, 3044, 11069})
+    @Xray(test = {493, 497, 500, 1027, 3044, 11069})
     public void VerifyFileUploadSuccessPopup(String portfolio) {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
@@ -117,7 +117,7 @@ public class ImportPortfolio extends UITestBase {
                 ConfigurationReader.getProperty(portfolio).lastIndexOf("\\")+1,
                 ConfigurationReader.getProperty(portfolio).lastIndexOf(".")
         );//"Portfolio Upload updated_good";
-        assertTestCase.assertEquals(researchLinePage.getPlaceholderInSuccessPopUp(), expectedPortfolioName, "Portfolio name in pop up");
+        assertTestCase.assertEquals(researchLinePage.getPlaceholderInSuccessPopUp(), expectedPortfolioName, "Portfolio name in pop up", 494);
 
         researchLinePage.waitForDataLoadCompletion();
 

@@ -14,7 +14,7 @@ public class RegionsSectors extends UITestBase {
     @Test(groups = {"regression", "ui", "smoke"},
             description = "Verify if Region and Sector Tables are Displayed as Expected",
             dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
-    @Xray(test = {2712, 2563, 5961, 6933, 6765, 6766, 6767, 6750, 6749, 6697})
+    @Xray(test = {404, 2712, 2563, 5961, 6933, 6765, 6766, 6767, 6750, 6749, 6697})
     public void verifyRegionSectorChartsUI(String page) {
         ResearchLinePage researchLinePage = new ResearchLinePage();
 
@@ -53,7 +53,7 @@ public class RegionsSectors extends UITestBase {
         BrowserUtils.wait(5);
         researchLinePage.selectRandomPortfolioFromPortfolioSelectionModal();
         BrowserUtils.wait(5);
-        assertTestCase.assertTrue(researchLinePage.verifyRegionSectorDrillDowns(page), "Region & Sector drill downs verified", 411, 420, 467, 822, 823, 1208, 1265, 1279, 1281, 1704, 1705, 1748, 1920, 2145, 2149, 2212, 2488);
+        assertTestCase.assertTrue(researchLinePage.verifyRegionSectorDrillDowns(page), "Region & Sector drill downs verified", 411, 420, 467, 469, 470, 822, 823, 1208, 1265, 1279, 1281, 1704, 1705, 1748, 1920, 2145, 2149, 2212, 2488);
         test.pass("Regions & Sectors Table rows columns and content verified");
     }
 

@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 public class DashboardPage extends UploadPage {
 
     //=============== Summary Header
-    @FindBy(xpath = "//*[starts-with(text(),'Coverage: Across')]/preceding-sibling::div")
+    @FindBy(xpath = "//*[./following-sibling::*/*[starts-with(text(),'Coverage: Across')]]")
     public WebElement portfolioNameInSummaryHeaders;
 
     @FindBy(xpath = "//header[.//*[text()='About Climate Risk']]")
