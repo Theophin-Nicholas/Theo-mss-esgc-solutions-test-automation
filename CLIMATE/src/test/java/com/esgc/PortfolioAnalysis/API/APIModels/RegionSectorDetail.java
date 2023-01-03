@@ -12,15 +12,15 @@ import java.util.List;
 @Data
 public class RegionSectorDetail {
     @JsonProperty(value = "No Risk")
-    @JsonAlias({"Weak", "Moderate", "0%", "Major", "Well Below 2°C"})
+    @JsonAlias({"Weak", "Moderate", "No Involvement", "Major", "Well Below 2°C"})
     List<Company> category1;
 
     @JsonProperty(value = "Low Risk")
-    @JsonAlias({"Limited", "Significant", "0-20%", "Below 2°C"})
+    @JsonAlias({"Limited", "Significant", "Minor Involvement", "Below 2°C"})
     List<Company> category2;
 
     @JsonProperty(value = "Medium Risk")
-    @JsonAlias({"Robust", "High", "20-100%", "Minor", "2°C"})
+    @JsonAlias({"Robust", "High", "Major Involvement", "Minor", "2°C"})
     List<Company> category3;
 
     @JsonProperty(value = "High Risk")

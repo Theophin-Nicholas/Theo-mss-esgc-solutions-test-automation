@@ -535,9 +535,9 @@ public class APIController {
                 return rangesAndCategories;
 
             case "Brown Share":
-                rangesAndCategories.add(new RangeAndScoreCategory("0%", 0d, 0d, "positive"));
-                rangesAndCategories.add(new RangeAndScoreCategory("0-20%", 0.00000000000001d, 20d, "positive"));
-                rangesAndCategories.add(new RangeAndScoreCategory("20-100%", 20.0000000001d, 100d, "negative"));
+                rangesAndCategories.add(new RangeAndScoreCategory("No Involvement", 0d, 0d, "positive"));
+                rangesAndCategories.add(new RangeAndScoreCategory("Minor Involvement", 0.00000000000001d, 19.9999999999999999d, "positive"));
+                rangesAndCategories.add(new RangeAndScoreCategory("Major Involvement", 20d, 100d, "negative"));
                 return rangesAndCategories;
 
             case "Carbon Footprint":

@@ -8,6 +8,7 @@ import com.esgc.Dashboard.API.APIModels.APIHeatMapResponse;
 import com.esgc.Dashboard.API.APIModels.APIHeatMapSinglePayload;
 import com.esgc.Dashboard.API.Controllers.DashboardAPIController;
 import com.esgc.Dashboard.UI.Pages.DashboardPage;
+import com.esgc.PortfolioAnalysis.API.APIModels.RangeAndScoreCategory;
 import com.esgc.PortfolioAnalysis.UI.Pages.ResearchLinePage;
 import com.esgc.Utilities.*;
 import com.esgc.Utilities.Database.DatabaseDriver;
@@ -254,6 +255,9 @@ public class DashboardHeatMapEntityListTests extends UITestBase {
             }
             assertTestCase.assertEquals(selectedResearchLine, expectedAxisTitle, "Heat Map Research Line Title Verification");
 
+            //TODO update method and get categories dynamically
+            //APIController controller = new APIController();
+            //controller.getResearchLineRangesAndScoreCategories()
             System.out.println("researchLine = " + researchLine);
             switch (researchLine) {
                 case "Overall ESG Score":
@@ -313,9 +317,9 @@ public class DashboardHeatMapEntityListTests extends UITestBase {
                     break;
                 case "Brown Share Assessment":
                     BrowserUtils.wait(8);
-                    assertTestCase.assertEquals(dashboardPage.heatMapYAxisIndicators.get(0).getText(), "20-100%", "Brown Share Assessment Category Verified");
-                    assertTestCase.assertEquals(dashboardPage.heatMapYAxisIndicators.get(1).getText(), "0-20%", "Brown Share Assessment Category Verified");
-                    assertTestCase.assertEquals(dashboardPage.heatMapYAxisIndicators.get(2).getText(), "0%", "Brown Share Assessment Category Verified");
+                    assertTestCase.assertEquals(dashboardPage.heatMapYAxisIndicators.get(0).getText(), "Major Involvement", "Brown Share Assessment Category Verified");
+                    assertTestCase.assertEquals(dashboardPage.heatMapYAxisIndicators.get(1).getText(), "Minor Involvement", "Brown Share Assessment Category Verified");
+                    assertTestCase.assertEquals(dashboardPage.heatMapYAxisIndicators.get(2).getText(), "No Involvement", "Brown Share Assessment Category Verified");
                     assertTestCase.assertEquals(dashboardPage.brownShareAssessmentDescription.getText(), Descriptions.BROWN_SHARE_ASSESSMENT_DESCRIPTION_HEATMAP);
                     break;
             }
