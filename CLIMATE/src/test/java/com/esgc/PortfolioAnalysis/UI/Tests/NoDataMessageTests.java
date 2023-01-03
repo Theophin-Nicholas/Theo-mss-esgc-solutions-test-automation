@@ -10,11 +10,11 @@ import com.esgc.Utilities.RobotRunner;
 import com.esgc.Utilities.Xray;
 import org.testng.annotations.Test;
 
-//import edu.emory.mathcs.backport.java.util.Arrays;
+import static com.esgc.Utilities.Groups.*;
 
 public class NoDataMessageTests extends UITestBase {
 
-    @Test(priority = 1000, groups = {"regression", "ui","robot_dependency"})
+    @Test(priority = 1000, groups = {REGRESSION, UI,ROBOT_DEPENDENCY})
     @Xray(test = {7420, 7423, 7419})
     public void validateDataMessagesWhenPartialDataAvailable() {
 //Check if the sample portfolio not selected, first select the sample portfolio.
@@ -57,7 +57,7 @@ public class NoDataMessageTests extends UITestBase {
 
     }
 
-    @Test(groups = {"regression", "ui"})
+    @Test(groups = {REGRESSION, UI})
     @Xray(test = {7421})
     public void validateNoDataMessageOfNegativeImpact() {
         //Check if the sample portfolio not selected, first select the sample portfolio.
@@ -79,7 +79,7 @@ public class NoDataMessageTests extends UITestBase {
 
     }
 
-    @Test(groups = {"regression", "ui"})
+    @Test(groups = {REGRESSION, UI})
     @Xray(test = {7422, 7424, 7425, 7427, 7428, 7429})
     public void validateNoDataMessages() {
 //Check if the sample portfolio not selected, first select the sample portfolio.
@@ -123,7 +123,7 @@ public class NoDataMessageTests extends UITestBase {
 
     }
 
-    @Test(groups = {"regression", "ui"})
+    @Test(groups = {REGRESSION, UI})
     @Xray(test = {7432, 7433})
     public void validateNoDataMessagesInEntityProfilePage() {
 //Check if the sample portfolio not selected, first select the sample portfolio.

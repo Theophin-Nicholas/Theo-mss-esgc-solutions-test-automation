@@ -12,9 +12,11 @@ import org.testng.annotations.Test;
 
 import java.util.*;
 
+import static com.esgc.Utilities.Groups.*;
+
 public class GlobalHeaderSidePanel extends UITestBase {
 
-    @Test(groups = {"regression", "ui"})
+    @Test(groups = {REGRESSION, UI})
     @Xray(test = {1899, 5939, 8967})
     public void validateGlobalHeader() {
 
@@ -25,7 +27,7 @@ public class GlobalHeaderSidePanel extends UITestBase {
 
     }
 
-    @Test(groups = {"regression", "ui", "smoke"})
+    @Test(groups = {REGRESSION, UI, SMOKE})
     @Xray(test = 8968)
     public void validatePortfolioSettings() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
@@ -63,7 +65,7 @@ public class GlobalHeaderSidePanel extends UITestBase {
         assertTestCase.assertFalse(beforeRemovingTheDuplicatesSize == afterRemovingDuplicateSize);
     }
 
-    @Test(groups = {"regression", "ui"})
+    @Test(groups = {REGRESSION, UI})
     @Xray(test = 1905)
     public void validateGlobalHeaderActions() {
 

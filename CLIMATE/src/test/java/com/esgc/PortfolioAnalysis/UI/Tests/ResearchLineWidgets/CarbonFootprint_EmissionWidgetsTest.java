@@ -8,12 +8,14 @@ import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+import static com.esgc.Utilities.Groups.*;
+
 /**
  * Created by ChaudhS2 on 12/9/2021..
  */
 public class CarbonFootprint_EmissionWidgetsTest extends UITestBase {
 
-    @Test(groups = {"regression", "smoke", "ui"},
+    @Test(groups = {REGRESSION, SMOKE, UI},
             description = "ESGCA-3011 - Verify Emissions Section is Displayed in Carbon Footprint")
     @Xray(test = {3011, 3079})
     public void verifyEmissionsWidgetsAreDisplayedOnCarbonFootPrintPage() {
@@ -33,7 +35,7 @@ public class CarbonFootprint_EmissionWidgetsTest extends UITestBase {
 
     }
 
-    @Test(groups = {"regression", "ui"})
+    @Test(groups = {REGRESSION, UI})
     @Xray(test = {5506, 5507})
     public void verifyCarbonFootprintPageLabels_tCO2eq() {
 
@@ -51,7 +53,7 @@ public class CarbonFootprint_EmissionWidgetsTest extends UITestBase {
         researchLinePage.validateCarbonFootPrint();
     }
 
-    @Test(groups = {"regression", "ui"}, dataProvider = "Entity Names")
+    @Test(groups = {REGRESSION, UI}, dataProvider = "Entity Names")
     @Xray(test = {6028})
     public void verifyCarbonFootprintWidget(String entity) {
 

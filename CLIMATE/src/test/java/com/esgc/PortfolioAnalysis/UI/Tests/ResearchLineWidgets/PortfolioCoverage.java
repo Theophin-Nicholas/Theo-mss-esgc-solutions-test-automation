@@ -6,6 +6,8 @@ import com.esgc.TestBase.DataProviderClass;
 import com.esgc.Utilities.Xray;
 import org.testng.annotations.Test;
 
+import static com.esgc.Utilities.Groups.*;
+
 public class PortfolioCoverage extends UITestBase {
 
 
@@ -32,7 +34,7 @@ public class PortfolioCoverage extends UITestBase {
     dark green: investment
 
  */
-    @Test(groups = {"regression", "ui", "smoke"},
+    @Test(groups = {REGRESSION, UI, SMOKE},
             description = "Verify if Portfolio Coverage Table is Displayed as Expected",
             dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
     @Xray(test = {2420, 6729, 1690})

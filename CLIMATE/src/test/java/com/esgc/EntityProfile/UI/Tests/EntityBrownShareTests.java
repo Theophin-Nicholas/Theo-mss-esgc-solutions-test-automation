@@ -14,10 +14,12 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.testng.annotations.Test;
 
+import static com.esgc.Utilities.Groups.REGRESSION;
+import static com.esgc.Utilities.Groups.UI;
 
 public class EntityBrownShareTests extends UITestBase {
 
-    @Test(groups = {"regression", "ui"},
+    @Test(groups = {REGRESSION, UI},
             dataProviderClass = DataProviderClass.class, dataProvider = "orbisIDWithBrownShareScore")
     @Xray(test = {7890})
     public void verifyTooltipOverBrownShareSectorComparisionChart(String orbisID) {
@@ -43,7 +45,7 @@ public class EntityBrownShareTests extends UITestBase {
 
     }
 
-    @Test(groups = {"regression", "ui"})
+    @Test(groups = {REGRESSION, UI})
     @Xray(test = {7955})
     public void verifyNoDataMessageInBrownShareSection() {
         LoginPage login = new LoginPage();
@@ -62,7 +64,7 @@ public class EntityBrownShareTests extends UITestBase {
 
     }
 
-    @Test(groups = {"regression", "ui"},
+    @Test(groups = {REGRESSION, UI},
             dataProviderClass = DataProviderClass.class, dataProvider = "orbisIDWithBrownShareScore")
     @Xray(test = {7889, 7917})
     public void verifyBrownShareSectionInformation(String orbisID) {

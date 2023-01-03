@@ -8,9 +8,11 @@ import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import org.testng.annotations.Test;
 
+import static com.esgc.Utilities.Groups.*;
+
 public class ClimateProfileEntityHeaderAPITest extends EntityClimateProfileTestBase {
 
-    @Test(groups = {"api", "regression", "entity_climate_profile"},dataProvider = "Company With Orbis ID")
+    @Test(groups = {API, REGRESSION, ENTITY_PROFILE},dataProvider = "Company With Orbis ID")
     @Xray(test = {10047})
     public void validateTransitionRiskSectorComparisonChartContentResponse(String... dataprovider) {
         EntityProfileClimatePageAPIController entityClimateProfileApiController = new EntityProfileClimatePageAPIController();

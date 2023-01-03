@@ -9,11 +9,13 @@ import com.esgc.Utilities.Driver;
 import com.esgc.Utilities.Xray;
 import org.testng.annotations.Test;
 
+import static com.esgc.Utilities.Groups.*;
+
 public class EntityIssuerP3ScoreSubcategoriesTest extends EntityPageTestBase {
 
     //TODO should be tested both in p2 and p3 accounts
     @Xray(test = {7431, 7445, 7447, 7450, 7451, 7452, 7453, 7454, 7455, 7456, 7458, 7459, 7460, 7465, 7982, 7983, 8337})
-    @Test(groups = {"regression", "ui", "smoke", "entity_issuer"},
+    @Test(groups = {REGRESSION, UI, SMOKE, ISSUER},
             dataProvider = "credentialsP3", dataProviderClass = IssuerDataProviderClass.class,
             description = "Verify Source Documents")
     public void validateESGSubcategories(String... dataProvider) {

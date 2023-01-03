@@ -12,12 +12,14 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Test;
 
+import static com.esgc.Utilities.Groups.API;
+import static com.esgc.Utilities.Groups.REGRESSION;
 import static org.hamcrest.Matchers.*;
 
 public class RegionMapAPITest extends APITestBase {
 
     //1062
-    @Test(groups = {"api", "regression"}, dataProvider = "No ESG API Research Lines")
+    @Test(groups = {API, REGRESSION}, dataProvider = "No ESG API Research Lines")
     @Xray(test = {1062, 2387,   2450, 2905, 1267})
     //1824 TCFD
     //1802 Energy Trantision
@@ -39,7 +41,7 @@ public class RegionMapAPITest extends APITestBase {
     }
 
 
-    @Test(groups = {"api", "regression"}, dataProvider = "API Research Lines")
+    @Test(groups = {API, REGRESSION}, dataProvider = "API Research Lines")
     @Xray(test = {1064,1247})
     public void RegionMap_InvalidPayload(@Optional String researchLine) {
         APIController apiController = new APIController();
@@ -53,7 +55,7 @@ public class RegionMapAPITest extends APITestBase {
         test.pass("Successfully validated for " + researchLine + "research line");
     }
 
-    @Test(groups = {"api", "regression"}, dataProvider = "API Research Lines")
+    @Test(groups = {API, REGRESSION}, dataProvider = "API Research Lines")
     public void RegionMap_UnauthorisedAccess(@Optional String researchLine) {
         APIController apiController = new APIController();
 

@@ -12,10 +12,12 @@ import org.testng.annotations.Test;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.esgc.Utilities.Groups.*;
+
 public class EntityIssuerP3PageSummaryWidget extends EntityPageTestBase {
 
     @Xray(test = {7438,7442,7443,8993,9721})
-    @Test(groups = {"regression", "ui", "smoke","entity_issuer"},
+    @Test(groups = {REGRESSION, UI, SMOKE,ISSUER},
             dataProvider = "credentialsP3",dataProviderClass = IssuerDataProviderClass.class,
             description = "Verify Summary Widget")
     public void ValidateSummaryWidget(String... dataProvider) {

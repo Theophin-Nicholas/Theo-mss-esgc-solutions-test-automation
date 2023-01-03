@@ -2,10 +2,7 @@ package com.esgc.PortfolioAnalysis.UI.Pages;
 
 import com.esgc.Base.UI.Pages.UploadPage;
 import com.esgc.Reporting.CustomAssertion;
-import com.esgc.Utilities.BrowserUtils;
-import com.esgc.Utilities.Driver;
-import com.esgc.Utilities.EntitlementsBundles;
-import com.esgc.Utilities.ScoreCategories;
+import com.esgc.Utilities.*;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
@@ -1832,26 +1829,101 @@ public class ResearchLinePage extends UploadPage {
         }
     }
 
-    public List<String> getExpectedListOfResearchLines(EntitlementsBundles bundles) {
-        switch (bundles) {
-            case PHYSICAL_RISK:
-                return Arrays.asList("Physical Risk Hazards", "Physical Risk Management");
-            //case PHYSICAL_RISK_CLIMATE_GOVERNANCE:
-            //    return Arrays.asList("Operations Risk", "Market Risk", "Supply Chain Risk", "Physical Risk Management", "TCFD Strategy", "Green Share Assessment");
-            case TRANSITION_RISK:
-                return Arrays.asList("Temperature Alignment", "Carbon Footprint", "Green Share Assessment", "Brown Share Assessment"/*, "Temperature Alignment"*/);
-            //case TRANSITION_RISK_CLIMATE_GOVERNANCE:
-            //    return Arrays.asList("Carbon Footprint", "Brown Share Assessment"/*, "Temperature Alignment"*/, "Energy Transition Management", "TCFD Strategy", "Green Share Assessment");
-            //case CLIMATE_GOVERNANCE:
-            //    return Arrays.asList("TCFD Strategy", "Green Share Assessment");
-            case PHYSICAL_RISK_TRANSITION_RISK:
-                return Arrays.asList("Physical Risk Hazards", "Physical Risk Management", "Temperature Alignment", "Carbon Footprint", "Green Share Assessment", "Brown Share Assessment");
+    public List<String> getExpectedListOfPortfolioAnalysisResearchLines(List<EntitlementsBundles> bundles) {
+        List<String> expectedResearchLines = new ArrayList<>();
+        for (EntitlementsBundles bundle : bundles) {
+            switch (bundle) {
+                case PHYSICAL_RISK:
+                    expectedResearchLines.addAll(Arrays.asList("Physical Risk Hazards", "Physical Risk Management"));
+                    break;
+                case TRANSITION_RISK:
+                    expectedResearchLines.addAll(Arrays.asList("Temperature Alignment", "Carbon Footprint", "Green Share Assessment", "Brown Share Assessment"));
+                    break;
+                case ESG_ASSESSMENT:
+                    // TODO: 12/21/2022 Condition should be removed once ESG Assessment is available in other environments 
+                    if (Environment.environment.equalsIgnoreCase("qa") || Environment.environment.equalsIgnoreCase("qa2")) {
+                        expectedResearchLines.add("ESG Assessments");
+                    }
+                    break;
+                case ALL:
+                    expectedResearchLines.addAll(Arrays.asList("Physical Risk Hazards", "Physical Risk Management", "Temperature Alignment", "Carbon Footprint", "Green Share Assessment", "Brown Share Assessment"));
+                    // TODO: 12/21/2022 Condition should be removed once ESG Assessment is available in other environments
+                    if (Environment.environment.equalsIgnoreCase("qa") || Environment.environment.equalsIgnoreCase("qa2")) {
+                        expectedResearchLines.add("ESG Assessments");
+                    }
+                    break;
+                default:
+                    Assert.fail("Bundle not found");
+                    return null;
+            }
+        }
+        return expectedResearchLines;
+    }
 
-            case ALL://TODO ESG Assessments de-scoped
-                return Arrays.asList("Physical Risk Hazards", "Physical Risk Management", "Temperature Alignment", "Carbon Footprint", "Green Share Assessment", "Brown Share Assessment"); /*, "ESG Assessments"*/
-            default:
-                Assert.fail("Bundle not found");
-                return null;
+
+    public List<String> getExpectedListOfEntitlements(List<EntitlementsBundles> bundles) {
+        List<String> expectedEntitlements = new ArrayList<>();
+        for (EntitlementsBundles bundle : bundles) {
+            switch (bundle) {
+                case PHYSICAL_RISK:
+                    expectedEntitlements.add("Physical Risk");
+                    break;
+                case TRANSITION_RISK:
+                    expectedEntitlements.add("Transition Risk");
+                    break;
+                case ESG_ASSESSMENT:
+//                    // TODO: 12/21/2022 Condition should be removed once ESG Assessment is available in other environments
+//                    if (Environment.environment.equalsIgnoreCase("qa") || Environment.environment.equalsIgnoreCase("qa2")) {
+                    expectedEntitlements.add("ESG Assessments");
+                    break;
+                case ALL:
+                    expectedEntitlements.addAll(Arrays.asList("Physical Risk", "Transition Risk"));
+//                    // TODO: 12/21/2022 Condition should be removed once ESG Assessment is available in other environments
+//                    if (Environment.environment.equalsIgnoreCase("qa") || Environment.environment.equalsIgnoreCase("qa2")) {
+                    expectedEntitlements.add("ESG Assessments");
+
+                    break;
+                default:
+                    Assert.fail("Bundle not found");
+                    return null;
+            }
+        }
+        return expectedEntitlements;
+    }
+
+    public List<String> getAllPossibleEntitlementsAsList() {
+        return Arrays.asList("Operations Risk", "Market Risk", "Supply Chain Risk", "Physical Risk Hazards", "Physical Risk Management",
+                "Temperature Alignment", "Carbon Footprint", "Green Share Assessment", "Brown Share Assessment", "ESG Assessments");
+    }
+
+    public synchronized String convertResearchLineToURLDirection(String researchLine) {
+        return researchLine.toLowerCase().replaceAll(" ", "");
+    }
+
+    public synchronized void navigateToResearchLineByURL(String researchLine) {
+        String URL = Environment.URL + "portfolioanalysis/" + convertResearchLineToURLDirection(researchLine);
+        Driver.getDriver().navigate().to(URL);
+    }
+
+    /**
+     * Check if user is not able to navigate pages by entering URL if they don't have access
+     *
+     * @param entitlements
+     */
+    public synchronized void checkAccessToPagesByURL(List<String> entitlements) {
+        List<String> entitlementsToCheckFromURL = getAllPossibleEntitlementsAsList();
+        entitlementsToCheckFromURL.removeAll(entitlements);
+        for (String researchLine : entitlements) {
+            navigateToResearchLineByURL(researchLine);
+            waitForDataLoadCompletion();
+            assertTestCase.assertTrue(pageNotFoundMessage.isDisplayed());
+            assertTestCase.assertTrue(pageRemovedMessage.isDisplayed());
+            assertTestCase.assertTrue(returnToESG360Button.isDisplayed());
+
+            returnToESG360Button.click();
+
+            String currentURL = Driver.getDriver().getCurrentUrl();
+            assertTestCase.assertTrue(currentURL.endsWith("dashboard"));
         }
     }
 
@@ -2844,10 +2916,10 @@ public class ResearchLinePage extends UploadPage {
         return scoreQualityIconsInCoveragePopup.size() > 0;
     }
 
-    public boolean verifyScoreQualityIconWithEntitiesInLeadersAndLaggardsTables_PA(){
+    public boolean verifyScoreQualityIconWithEntitiesInLeadersAndLaggardsTables_PA() {
         int recordsCountInTable = recordsInLeadersAndLaggardsTable.size();
         int scoreQualityIconsCountInTable = scoreQualityIconsInLeadersAndLaggardsTable.size();
-        return scoreQualityIconsCountInTable==recordsCountInTable;
+        return scoreQualityIconsCountInTable == recordsCountInTable;
     }
 
     public boolean verifyScoreQualityIconWithEntitiesInLeadersPopup_PA() {
@@ -2858,26 +2930,26 @@ public class ResearchLinePage extends UploadPage {
         return scoreQualityIconsInLaggardsPopup.size() > 0;
     }
 
-    public boolean verifyEntitiesWithPredictedScoresInYellow_PA(List<WebElement> rows){
-        BrowserUtils.waitForVisibility(rows.get(0),30);
-        int i=1;
-        for(WebElement row:rows){
-            System.out.println("Record: "+(i++));
+    public boolean verifyEntitiesWithPredictedScoresInYellow_PA(List<WebElement> rows) {
+        BrowserUtils.waitForVisibility(rows.get(0), 30);
+        int i = 1;
+        for (WebElement row : rows) {
+            System.out.println("Record: " + (i++));
             BrowserUtils.scrollTo(row);
-            if(!row.getCssValue("background-color").equals("rgba(253, 247, 218, 1)")){
+            if (!row.getCssValue("background-color").equals("rgba(253, 247, 218, 1)")) {
                 return false;
             }
         }
         return true;
     }
 
-    public boolean verifyEntitiesWithPredictedScoresAreNotClickable_PA(List<WebElement> rows){
-        BrowserUtils.waitForVisibility(rows.get(0),30);
-        int i=1;
-        for(WebElement row:rows){
-            System.out.println("Record: "+(i++));
+    public boolean verifyEntitiesWithPredictedScoresAreNotClickable_PA(List<WebElement> rows) {
+        BrowserUtils.waitForVisibility(rows.get(0), 30);
+        int i = 1;
+        for (WebElement row : rows) {
+            System.out.println("Record: " + (i++));
             BrowserUtils.scrollTo(row);
-            if(row.getCssValue("text-decoration").contains("underline")){
+            if (row.getCssValue("text-decoration").contains("underline")) {
                 return false;
             }
         }
@@ -3041,12 +3113,12 @@ public class ResearchLinePage extends UploadPage {
     }
 
     public void verifyCompanyNameInCoveragePopup(String subsidiaryCompanyName) {
-        String xpath = "//td[@heap_id='coverage']//span[@title][text()='"+subsidiaryCompanyName+"']";
+        String xpath = "//td[@heap_id='coverage']//span[@title][text()='" + subsidiaryCompanyName + "']";
         assertTestCase.assertEquals(Driver.getDriver().findElements(By.xpath(xpath)).size(), 1);
     }
 
     public void verifyCompanyIsClickableInCoveragePopup(String companyName) {
-        String xpath = "//td[@heap_id='coverage']//span[@title][text()='"+companyName+"']";
+        String xpath = "//td[@heap_id='coverage']//span[@title][text()='" + companyName + "']";
         WebElement element = Driver.getDriver().findElement(By.xpath(xpath));
         assertTestCase.assertTrue(element.getCssValue("text-decoration").contains("underline"));
     }

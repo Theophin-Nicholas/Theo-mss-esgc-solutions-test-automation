@@ -9,13 +9,15 @@ import com.esgc.Utilities.Xray;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
+import static com.esgc.Utilities.Groups.*;
+
 /**
  * Created by ChaudhS2 on 10/14/2021.
  */
 public class LoginPageTest extends DashboardUITestBase {
 
 
-    @Test(groups = {"regression", "ui", "smoke"})
+    @Test(groups = {REGRESSION, UI, SMOKE})
     @Xray(test = {182})
     public void verifyValidCredentialsLoginPampa() {
         try {
@@ -30,7 +32,7 @@ public class LoginPageTest extends DashboardUITestBase {
         }
     }
 
-    @Test(groups = {"regression", "ui"},
+    @Test(groups = {REGRESSION, UI},
             description = "ESGCA -1778 : Verify User is able to Click Forgot Password on Pampa Login page")
     @Xray(test = 1778)
     public void verifyForgotPasswordLinkIsClickablePampa() {
@@ -51,7 +53,7 @@ public class LoginPageTest extends DashboardUITestBase {
         }
     }
 
-    @Test(groups = {"regression", "ui"},
+    @Test(groups = {REGRESSION, UI},
             description = "ESGCA -1427 : Verify Remember Me checkbox is Unselected by Default")
     @Xray(test = 1427)
     public void verifyRememberMeCheckboxDefaultStatusPampa() {
@@ -69,7 +71,7 @@ public class LoginPageTest extends DashboardUITestBase {
         }
     }
 
-    @Test(groups = {"regression", "ui"},
+    @Test(groups = {REGRESSION, UI},
             description = "ESGCA -1606/1508 : Verify Unauthorised user gets 'Unable to Sign in' Message.")
     @Xray(test = {1508, 1603})
     public void verifyTheValidationForInvalidUserPampa() {
@@ -86,7 +88,7 @@ public class LoginPageTest extends DashboardUITestBase {
         }
     }
 
-    @Test(groups = {"regression", "ui"},
+    @Test(groups = {REGRESSION, UI},
             description = "ESGCA -1506 : Verify the Next button functionality.")
     @Xray(test = {1506})
     public void verifyTheNextButtonFunctionalityPampa() {
@@ -112,7 +114,7 @@ public class LoginPageTest extends DashboardUITestBase {
         }
     }
 
-    @Test(groups = {"regression", "ui", "smoke"},
+    @Test(groups = {REGRESSION, UI, SMOKE},
             description = "ESGCA -1428 : Verify all the fields on Login page has Placeholder.")
     public void verifyThePlaceholderForLoginPageFieldsPampa() {
         try {
@@ -142,7 +144,7 @@ public class LoginPageTest extends DashboardUITestBase {
         }
     }
 
-    @Test(groups = {"regression", "ui", "smoke"},
+    @Test(groups = {REGRESSION, UI, SMOKE},
             description = "ESGCA -1483 : User is not Able to Login with a Blank Username and Password")
     @Xray(test = 1483)
     public void verifyUserIsNotableToLoginWithBlankUserNamePampa() {
@@ -177,7 +179,7 @@ public class LoginPageTest extends DashboardUITestBase {
         }
     }
 
-    @Test(enabled = false,groups = {"regression", "ui", "smoke"},
+    @Test(enabled = false,groups = {REGRESSION, UI, SMOKE},
             description = "ESGCA -1648 : User is able to access the MESGC application without providing credentials if already logged in other moodys application.")
     @Xray(test = 1648)
     public void verifyUserCanUseLoginCredentialsFromOtherMoodysToMESGCPampa() {

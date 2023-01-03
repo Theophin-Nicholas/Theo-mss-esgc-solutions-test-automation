@@ -20,9 +20,11 @@ import org.testng.asserts.SoftAssert;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static com.esgc.Utilities.Groups.*;
+
 public class PerformanceChart extends DataValidationTestBase {
 
-    @Test(groups = {"regression", "data_validation", "dashboard"}, dataProvider = "researchLines")
+    @Test(groups = {REGRESSION, DATA_VALIDATION, DASHBOARD}, dataProvider = "researchLines")
     @Xray(test = {4988, 7989, 6416, 6415, 11049})
     public void verifyPerformanceChartWithMixedIdentifiers(
             @Optional String sector, @Optional String region,

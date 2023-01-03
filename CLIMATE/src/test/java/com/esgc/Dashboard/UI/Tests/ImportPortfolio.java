@@ -11,12 +11,14 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.esgc.Utilities.Groups.*;
+
 public class ImportPortfolio extends DashboardUITestBase {
 
 
     //Test Cases: 303, 304, 305, 306, 307,985, 1298,
 //main test case 3218
-    @Test(groups = {"regression", "ui", "smoke", "robot_dependency", "dashboard"})
+    @Test(groups = {REGRESSION, UI, SMOKE, ROBOT_DEPENDENCY, DASHBOARD})
     @Xray(test = 3218)
     public void VerifyFileUploadSuccessPopup() {
         DashboardPage dashboardPage = new DashboardPage();
@@ -79,7 +81,7 @@ public class ImportPortfolio extends DashboardUITestBase {
     }
 
 
-    @Test(groups = {"regression", "ui", "smoke", "robot_dependency", "dashboard"})
+    @Test(groups = {REGRESSION, UI, SMOKE, ROBOT_DEPENDENCY, DASHBOARD})
     public void VerifyFileUploadErrorPopup() {
         DashboardPage dashboardPage = new DashboardPage();
 
@@ -109,7 +111,7 @@ public class ImportPortfolio extends DashboardUITestBase {
     }
 
     //test case: 336
-    @Test(groups = {"regression", "ui", "smoke", "robot_dependency", "dashboard"})
+    @Test(groups = {REGRESSION, UI, SMOKE, ROBOT_DEPENDENCY, DASHBOARD})
     public void VerifyPortfolioCanBeRenamed() {
         DashboardPage dashboardPage = new DashboardPage();
 
@@ -157,7 +159,7 @@ public class ImportPortfolio extends DashboardUITestBase {
     }
 
     //test case:ESGCA-985
-    @Test(groups = {"regression", "ui", "smoke", "dashboard"})
+    @Test(groups = {REGRESSION, UI, SMOKE, DASHBOARD})
     public void VerifyUploadModal() {
         DashboardPage dashboardPage = new DashboardPage();
         dashboardPage.navigateToPageFromMenu("Dashboard");
@@ -184,7 +186,7 @@ public class ImportPortfolio extends DashboardUITestBase {
     }
 
     //test case:338
-    @Test(groups = {"regression", "ui", "robot_dependency", "dashboard"})
+    @Test(groups = {REGRESSION, UI, ROBOT_DEPENDENCY, DASHBOARD})
     public void VerifySaveButtonVisibility() {
 
         DashboardPage dashboardPage = new DashboardPage();
@@ -224,7 +226,7 @@ public class ImportPortfolio extends DashboardUITestBase {
 
 
     //test case:316
-    @Test(groups = {"regression", "ui", "smoke", "robot_dependency", "dashboard"})
+    @Test(groups = {REGRESSION, UI, SMOKE, ROBOT_DEPENDENCY, DASHBOARD})
     public void VerifyFileRemovedFromUploadModal() {
 
         DashboardPage dashboardPage = new DashboardPage();
@@ -257,7 +259,7 @@ public class ImportPortfolio extends DashboardUITestBase {
         test.pass("Remove button verified");
     }
 
-    @Test(groups = {"regression", "ui", "errorMessages",  "robot_dependency", "dashboard"},
+    @Test(groups = {REGRESSION, UI, ERROR_MESSAGES,  ROBOT_DEPENDENCY, DASHBOARD},
             dataProviderClass = DataProvider.class, dataProvider = "ErrorMessages", singleThreaded = true)
     public void importPortfolio_verifyErrorPopupMessages(String fileName, String errorMessage, Integer... testCaseNumber) {
         DashboardPage dashboardPage = new DashboardPage();
@@ -292,7 +294,7 @@ public class ImportPortfolio extends DashboardUITestBase {
 
     }
 
-    @Test(groups = {"regression", "ui", "smoke", "robot_dependency", "dashboard"}, singleThreaded = true)
+    @Test(groups = {REGRESSION, UI, SMOKE, ROBOT_DEPENDENCY, DASHBOARD}, singleThreaded = true)
     @Xray(test = 984)
     public void importPortfolio_verifyUnknownIdentifierMessage() {
         DashboardPage dashboardPage = new DashboardPage();

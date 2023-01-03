@@ -12,13 +12,14 @@ import org.openqa.selenium.WebElement;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
+import static com.esgc.Utilities.Groups.*;
 
 /**
  * Created by ChaudhS2 on 12/6/2021.
  */
 public class BenchmarkSelectionTest extends UITestBase {
 
-    @Test(groups = {"regression", "ui", "smoke"},
+    @Test(groups = {REGRESSION, UI, SMOKE},
             description = "ESGCA-1433 - Verify User is Able to Select the Benchmark",
             dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
     @Xray(test = 1433)
@@ -48,7 +49,7 @@ public class BenchmarkSelectionTest extends UITestBase {
 
     }
 
-    @Test(groups = {"regression", "ui", "smoke"},
+    @Test(groups = {REGRESSION, UI, SMOKE},
             description = "ESGCA-2594 - Verify the Benchmark coverage section is displayed when a Benchmark portfolio selected")
     @Xray(test = {671, 2594, 4084, 6734})
     public void verifyBenchmarkCoverageSectionIsDisplayedAfterBenchmarkPortfolio() {
@@ -68,7 +69,7 @@ public class BenchmarkSelectionTest extends UITestBase {
 
     }
 
-    @Test(groups = {"regression", "ui"},
+    @Test(groups = {REGRESSION, UI},
             description = "ESGCA-3879 - Validate Score Title's for Portfolio and Benchmark Score")
     @Xray(test = 3879)
     public void verifyBenchmarkAndPortfolioScoreTitleAfterBenchmarkPortfolio() {
@@ -87,7 +88,7 @@ public class BenchmarkSelectionTest extends UITestBase {
 
     }
 
-    @Test(groups = {"regression", "ui"},
+    @Test(groups = {REGRESSION, UI},
             description = "ESGCA-1329 - Validate No Benchmark option is present")
     @Xray(test = 1329)
     public void verifyNoBenchMark() {
@@ -105,7 +106,7 @@ public class BenchmarkSelectionTest extends UITestBase {
         assertTestCase.assertTrue(researchLinePage.isNoBenchmarkMessageDisplayed(), " No Benchmark message is not displayed", 1329);
     }
 
-    @Test(groups = {"regression", "ui"},
+    @Test(groups = {REGRESSION, UI},
             description = "ESGCA-1436 - Verify changes persist after benchmark is selected")
     @Xray(test = 1436)
     public void verifyBenchmarkChangesPersistence() {
@@ -129,7 +130,7 @@ public class BenchmarkSelectionTest extends UITestBase {
     }
 
 
-    @Test(groups = {"regression", "ui"},
+    @Test(groups = {REGRESSION, UI},
             description = "ESGCA-2254 - Verify carbon footprint benchmark score")
     @Xray(test = 2254)
     public void verifyCarbonFootprint() {
@@ -152,7 +153,7 @@ public class BenchmarkSelectionTest extends UITestBase {
         test.info("Carbon Footprint score widget present");
     }
 
-    @Test(groups = {"regression", "ui"},
+    @Test(groups = {REGRESSION, UI},
             description = "ESGCA-2254 - Verify carbon footprint benchmark score")
     @Xray(test = 2254)
     public void verifyShadowedSelectBenchmark() {
@@ -166,7 +167,7 @@ public class BenchmarkSelectionTest extends UITestBase {
     }
 
 
-    @Test(enabled = false, groups = {"regression", "ui"}, //TODO disabled till ESG assessment scoped back.
+    @Test(enabled = false, groups = {REGRESSION, UI}, //TODO disabled till ESG assessment scoped back.
             description = "Verify that Benchmark can be selected and displayed on Summary Section")
     @Xray(test = {8387})
     public void verifyESGAssessmentsBenchmarkSection() {

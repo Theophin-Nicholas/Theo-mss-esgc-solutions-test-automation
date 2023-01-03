@@ -13,11 +13,14 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import static com.esgc.Utilities.Groups.DATA_VALIDATION;
+import static com.esgc.Utilities.Groups.REGRESSION;
+
 public class UnderlyingMetricsDetailsTest extends DataValidationTestBase {
 //TODO null companies should be removed and we need to extend the coverage with other portfolios
     public static String portfolioId = "00000000-0000-0000-0000-000000000000";
 
-    @Test(groups = {"regression", "data_validation"})
+    @Test(groups = {REGRESSION, DATA_VALIDATION})
     @Xray(test = 8073)
     public void verifyMarketRiskUnderlyingDataMetricsDetails() {
         UnderlyingDataMetricsQueries underlyingDataMetricsQueries = new UnderlyingDataMetricsQueries();
@@ -32,7 +35,7 @@ public class UnderlyingMetricsDetailsTest extends DataValidationTestBase {
 
     }
 
-    @Test(groups = {"regression", "data_validation"})
+    @Test(groups = {REGRESSION, DATA_VALIDATION})
     @Xray(test = 8073)
     public void verifySupplyRiskUnderlyingDataMetricsDetails() {
 

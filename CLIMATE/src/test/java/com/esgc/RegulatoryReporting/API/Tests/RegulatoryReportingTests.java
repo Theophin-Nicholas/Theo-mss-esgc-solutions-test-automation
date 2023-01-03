@@ -10,10 +10,12 @@ import org.testng.annotations.Test;
 
 import java.util.List;
 
+import static com.esgc.Utilities.Groups.*;
+
 public class RegulatoryReportingTests extends UITestBase {
     RegulatoryReportingPage reportingPage = new RegulatoryReportingPage();
 
-    @Test(groups = {"regression", "regulatoryReporting", "api"}, description = "Data Validation| MT | Regulatory Reporting | Validate Portfolio list and portfolio-details")
+    @Test(groups = {REGRESSION, REGULATORY_REPORTING, API}, description = "Data Validation| MT | Regulatory Reporting | Validate Portfolio list and portfolio-details")
     @Xray(test = {11140})
     public void verifyPortfolioPortfolioDetailsListTest() {
         DashboardPage dashboardPage = new DashboardPage();

@@ -16,10 +16,12 @@ import org.testng.annotations.Test;
 import java.util.List;
 import java.util.Set;
 
+import static com.esgc.Utilities.Groups.*;
+
 public class RegulatoryReportingPageTests extends UITestBase {
     RegulatoryReportingPage reportingPage = new RegulatoryReportingPage();
 
-    @Test(groups = {"regression", "ui", "regulatoryReporting", "smoke"}, description = "Verify that user can navigate to Regulatory Reporting page")
+    @Test(groups = {REGRESSION, UI, REGULATORY_REPORTING, SMOKE}, description = "Verify that user can navigate to Regulatory Reporting page")
     @Xray(test = {10693, 10694, 10709, 10710, 10743, 10744, 10745, 10851, 10865})
     public void verifyReportingListTest() {
         DashboardPage dashboardPage = new DashboardPage();
@@ -56,7 +58,7 @@ public class RegulatoryReportingPageTests extends UITestBase {
         assertTestCase.assertTrue(reportingPage.useLatestDataOption.isDisplayed(),"Use Latest Data option is displayed");
     }
 
-    @Test(groups = {"regression", "ui", "regulatoryReporting"}, description = "Verify user portfolio list on regulatory reporting page")
+    @Test(groups = {REGRESSION, UI, REGULATORY_REPORTING}, description = "Verify user portfolio list on regulatory reporting page")
     @Xray(test = {11063, 11604, 11093, 11332})
     public void verifyPortfolioListForUserTest() {
         DashboardPage dashboardPage = new DashboardPage();
@@ -142,7 +144,7 @@ public class RegulatoryReportingPageTests extends UITestBase {
         assertTestCase.assertEquals(reportingPage.createReportsButton.getText(), "Create 4 Reports", "Create Reports button is verified for 4 portfolio selected");
     }
 
-    @Test(groups = {"regression", "ui", "regulatoryReporting"}, description = "Verify user portfolio list on regulatory reporting page")
+    @Test(groups = {REGRESSION, UI, REGULATORY_REPORTING}, description = "Verify user portfolio list on regulatory reporting page")
     @Xray(test = {11091, 11092})
     public void verifyPortfolioUploadTest() {
         DashboardPage dashboardPage = new DashboardPage();
@@ -196,7 +198,7 @@ public class RegulatoryReportingPageTests extends UITestBase {
 //        assertTestCase.assertFalse(regulatoryReportingPage.getPortfolioList().contains(newPortfolioName),"New Portfolio is deleted from the list");
     }
 
-    @Test(groups = {"regression", "ui", "regulatoryReporting"}, description = "Validate 'Select Reporting' and 'Select Portfolios' columns")
+    @Test(groups = {REGRESSION, UI, REGULATORY_REPORTING}, description = "Validate 'Select Reporting' and 'Select Portfolios' columns")
     @Xray(test = {11137, 11138, 11139})
     public void verifySelectReportingAndPortfoliosColumnsTest() {
         DashboardPage dashboardPage = new DashboardPage();
@@ -274,7 +276,7 @@ public class RegulatoryReportingPageTests extends UITestBase {
         assertTestCase.assertTrue(reportingPage.isAnnualReportsSelected(), "Annual reports toggle is selected");
     }
 
-    @Test(groups = {"regression", "ui", "regulatoryReporting", "smoke"}, description = "UI | Regulatory Reporting | Download | Verify Create Reports Button is Clickable")
+    @Test(groups = {REGRESSION, UI, REGULATORY_REPORTING, SMOKE}, description = "UI | Regulatory Reporting | Download | Verify Create Reports Button is Clickable")
     @Xray(test = {10849, 11333, 11334, 11350, 11370, 11402})
     public void verifyCreateReportsButtonWorksTest() {
         DashboardPage dashboardPage = new DashboardPage();
@@ -321,7 +323,7 @@ public class RegulatoryReportingPageTests extends UITestBase {
         //This part is not automated since button turn back to blue in a short time
     }
 
-    @Test(groups = {"regression", "ui", "regulatoryReporting"}, description = "Verify user cant get report for predicted scores portfolio")
+    @Test(groups = {REGRESSION, UI, REGULATORY_REPORTING}, description = "Verify user cant get report for predicted scores portfolio")
     @Xray(test = {11403})
     public void verifyPredictedScorePortfolioTest() {
         DashboardPage dashboardPage = new DashboardPage();
@@ -337,7 +339,7 @@ public class RegulatoryReportingPageTests extends UITestBase {
         assertTestCase.assertFalse(reportingPage.createReportsButton.isEnabled(), "Create report button is disabled");
     }
 
-    @Test(groups = {"regression", "ui", "regulatoryReporting"}, description = "Verify user can't see reporting page if is not entitled to SFDR")
+    @Test(groups = {REGRESSION, UI, REGULATORY_REPORTING}, description = "Verify user can't see reporting page if is not entitled to SFDR")
 //, "smoke"
     @Xray(test = {10867})
     public void verifyReportingPageWithoutSFDRUserTest() {
@@ -356,7 +358,7 @@ public class RegulatoryReportingPageTests extends UITestBase {
 
 
 
-    @Test(groups = {"regression", "ui", "regulatoryReporting"}, description = "UI | Regulatory Reporting | Download | Verify Create Reports Button is Clickable")
+    @Test(groups = {REGRESSION, UI, REGULATORY_REPORTING}, description = "UI | Regulatory Reporting | Download | Verify Create Reports Button is Clickable")
 //"smoke",
     @Xray(test = {10854})
     public void verifyAnnualReportingDisabledTest() {
@@ -375,7 +377,7 @@ public class RegulatoryReportingPageTests extends UITestBase {
         assertTestCase.assertFalse(reportingPage.isAnnualReportsSelected(), "Annual reports option is disabled as expected");
     }
 
-    @Test(groups = {"regression", "ui", "regulatoryReporting"}, description = "UI | Regulatory Reporting | UI Checks for Reporting service Options")
+    @Test(groups = {REGRESSION, UI, REGULATORY_REPORTING}, description = "UI | Regulatory Reporting | UI Checks for Reporting service Options")
     @Xray(test = {11066, 11067})
     public void verifyReportingServiceOptionsTest() {
         DashboardPage dashboardPage = new DashboardPage();
@@ -420,7 +422,7 @@ public class RegulatoryReportingPageTests extends UITestBase {
         assertTestCase.assertTrue(reportingPage.createReportsButton.isEnabled(), "Create reports button is enabled when use latest data option is selected");
     }
 
-    @Test(groups = {"regression", "ui", "regulatoryReporting", "smoke"},
+    @Test(groups = {REGRESSION, UI, REGULATORY_REPORTING, SMOKE},
             description = "UI | Regulatory Reporting | EU Taxonomy | Verify EU Taxonomy Report Sheets")
     @Xray(test = {11987, 11988, 11989, 11990, 11991, 11992})
     public void verifyEUTaxonomyReportSheetsTest() {

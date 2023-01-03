@@ -11,9 +11,11 @@ import org.testng.annotations.Test;
 
 import java.util.List;
 
+import static com.esgc.Utilities.Groups.*;
+
 public class EntityExportOrSourcesDocumentsTests extends UITestBase {
 
-    @Test(groups = {"entity_climate_profile", "regression", "ui", "robot_dependency"})
+    @Test(groups = {ENTITY_PROFILE, REGRESSION, UI, ROBOT_DEPENDENCY})
     @Xray(test = {9206, 9208, 9209, 9212, 10175})
     public void validateExportSourceDocumentsPopup(){
 
@@ -31,7 +33,7 @@ public class EntityExportOrSourcesDocumentsTests extends UITestBase {
 
     }
 
-    @Test(groups = {"entity_climate_profile", "regression", "ui", "robot_dependency"})
+    @Test(groups = {ENTITY_PROFILE, REGRESSION, UI, ROBOT_DEPENDENCY})
     @Xray(test = {9211})
     public void validateExportSourceDocumentsPopupClosure(){
 
@@ -59,7 +61,7 @@ public class EntityExportOrSourcesDocumentsTests extends UITestBase {
         assertTestCase.assertTrue(!entityProfilePage.verifyPopup(), "Verify Export Sources Documents popup is closed");
     }
 
-    @Test(groups = {"entity_climate_profile", "regression", "ui"})
+    @Test(groups = {ENTITY_PROFILE, REGRESSION, UI})
     @Xray(test = {9381, 10175})
     public void validateExportSourceDocumentsPopupWithNoDocsMessage(){
 
@@ -75,7 +77,7 @@ public class EntityExportOrSourcesDocumentsTests extends UITestBase {
         entityProfilePage.closePopup();
     }
 
-    @Test(groups = {"entity_climate_profile", "regression", "ui"})
+    @Test(groups = {ENTITY_PROFILE, REGRESSION, UI})
     @Xray(test = {10084, 10154, 10176})
     public void validateExportSourceDocumentsDownload(){
 
@@ -100,7 +102,7 @@ public class EntityExportOrSourcesDocumentsTests extends UITestBase {
 
     }
 
-    @Test(groups = {"entity_climate_profile", "regression", "ui"})
+    @Test(groups = {ENTITY_PROFILE, REGRESSION, UI})
     @Xray(test = {10085})
     public void validateExportPdfButtonDisabledAfterClick(){
 
@@ -120,7 +122,7 @@ public class EntityExportOrSourcesDocumentsTests extends UITestBase {
 
     }
 
-    @Test(groups = {"entity_climate_profile", "regression", "ui"})
+    @Test(groups = {ENTITY_PROFILE, REGRESSION, UI})
     @Xray(test = {10086})
     public void validateExportPdfProgressBarClose(){
 
@@ -152,7 +154,7 @@ public class EntityExportOrSourcesDocumentsTests extends UITestBase {
 
     }
 
-    @Test(groups = {"entity_climate_profile", "regression", "ui"})
+    @Test(groups = {ENTITY_PROFILE, REGRESSION, UI})
     @Xray(test = {10177})
     public void validatePdfContent(){
 
@@ -185,7 +187,7 @@ public class EntityExportOrSourcesDocumentsTests extends UITestBase {
 
     }
 
-    @Test(groups = {"entity_climate_profile", "regression", "ui"}, dataProviderClass = DataProviderClass.class, dataProvider = "exportEntitlements")
+    @Test(groups = {ENTITY_PROFILE, REGRESSION, UI}, dataProviderClass = DataProviderClass.class, dataProvider = "exportEntitlements")
     @Xray(test = {10178, 11041,11153})
     public void validatePdfContentBasedOnEntitlement(String username, String password, String entitlement){
         LoginPage loginPage = new LoginPage();

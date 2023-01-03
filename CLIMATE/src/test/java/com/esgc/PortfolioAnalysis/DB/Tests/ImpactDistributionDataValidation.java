@@ -25,12 +25,14 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.esgc.Utilities.Groups.DATA_VALIDATION;
+import static com.esgc.Utilities.Groups.REGRESSION;
 
 public class ImpactDistributionDataValidation extends DataValidationTestBase {
 
     // private Object APIFilterPayloadWithImpactFilter;
 
-    @Test(groups = {"regression", "data_validation"}, dataProvider = "researchLines")
+    @Test(groups = {REGRESSION, DATA_VALIDATION}, dataProvider = "researchLines")
     @Xray(test = {5005, 4969, 4968, 4964, 5012, 5013, 6779})
     public void ImpactDistributionDataValidation(@Optional String sector, @Optional String region,
                                                  @Optional String researchLine, @Optional String month, @Optional String year, @Optional String filter) {
@@ -226,7 +228,7 @@ public class ImpactDistributionDataValidation extends DataValidationTestBase {
 
     }
 
-    @Test(groups = {"regression", "data_validation"}, dataProvider = "researchLines")
+    @Test(groups = {REGRESSION, DATA_VALIDATION}, dataProvider = "researchLines")
     @Xray(test = {6781})
     public void ImpactDistributionDataTableSum(@Optional String sector, @Optional String region,
                                                @Optional String researchLine, @Optional String month, @Optional String year, @Optional String filter) {
@@ -314,7 +316,7 @@ public class ImpactDistributionDataValidation extends DataValidationTestBase {
 
     }
 
-    @Test(groups = {"regression", "data_validation"}, dataProvider = "researchLines")
+    @Test(groups = {REGRESSION, DATA_VALIDATION}, dataProvider = "researchLines")
     @Xray(test = {6782})
     public void VerifyXAxisImpactDistribution(@Optional String sector, @Optional String region,
                                                  @Optional String researchLine, @Optional String month, @Optional String year, @Optional String filter) {

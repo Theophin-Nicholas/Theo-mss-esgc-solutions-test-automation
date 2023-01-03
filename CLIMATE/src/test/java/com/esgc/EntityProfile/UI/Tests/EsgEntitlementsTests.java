@@ -7,9 +7,11 @@ import com.esgc.Utilities.EntitlementsBundles;
 import com.esgc.Utilities.Xray;
 import org.testng.annotations.Test;
 
+import static com.esgc.Utilities.Groups.*;
+
 public class EsgEntitlementsTests extends UITestBase {
 
-    @Test(groups = {"regression", "ui", "entitlements"})
+    @Test(groups = {REGRESSION, UI, ENTITLEMENTS})
     @Xray(test = {8353})
     public void validateEsgScoreEntitlement(){
         DashboardPage dashboardPage = new DashboardPage();

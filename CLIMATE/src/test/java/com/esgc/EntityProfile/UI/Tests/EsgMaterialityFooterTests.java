@@ -8,9 +8,12 @@ import org.testng.annotations.Test;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.esgc.Utilities.Groups.REGRESSION;
+import static com.esgc.Utilities.Groups.UI;
+
 public class EsgMaterialityFooterTests extends UITestBase {
 
-    @Test(groups = {"esg_materiality", "regression", "ui"})
+    @Test(groups = {"esg_materiality", REGRESSION, UI})
     @Xray(test = {8368, 8370})
     public void validateEsgMaterialityFooter() {
 
@@ -45,7 +48,7 @@ public class EsgMaterialityFooterTests extends UITestBase {
         entityProfilePage.clickCloseIcon();
     }
 
-    @Test(groups = {"esg_materiality", "regression", "ui"})
+    @Test(groups = {"esg_materiality", REGRESSION, UI})
     @Xray(test = {8367})
     public void validateEsgMaterialityFooterLegacyVE() {
 
@@ -70,7 +73,7 @@ public class EsgMaterialityFooterTests extends UITestBase {
         entityProfilePage.clickCloseIcon();
     }
 
-    @Test(groups = {"esg_materiality", "regression", "ui"})
+    @Test(groups = {"esg_materiality", REGRESSION, UI})
     @Xray(test = {8369})
     public void validateEsgMaterialityMatrixViewByTests() {
 

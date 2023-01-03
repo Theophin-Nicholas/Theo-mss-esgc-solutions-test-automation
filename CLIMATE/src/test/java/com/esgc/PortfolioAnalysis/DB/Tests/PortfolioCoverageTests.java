@@ -17,9 +17,12 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.esgc.Utilities.Groups.DATA_VALIDATION;
+import static com.esgc.Utilities.Groups.REGRESSION;
+
 public class PortfolioCoverageTests extends DataValidationTestBase {
 
-    @Test(groups = {"regression", "data_validation"}, dataProvider = "researchLines")
+    @Test(groups = {REGRESSION, DATA_VALIDATION}, dataProvider = "researchLines")
     @Xray(test = {6372, 6726, 7242,
             11244,//subs
             10899//ESG predicted

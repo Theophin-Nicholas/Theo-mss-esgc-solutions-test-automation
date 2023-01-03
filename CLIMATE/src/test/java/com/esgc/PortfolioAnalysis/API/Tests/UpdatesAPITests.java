@@ -10,9 +10,12 @@ import io.restassured.response.Response;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Test;
 
+import static com.esgc.Utilities.Groups.API;
+import static com.esgc.Utilities.Groups.REGRESSION;
+
 public class UpdatesAPITests extends APITestBase {
 
-    @Test(groups = {"api", "regression"}, dataProvider = "API Research Lines")
+    @Test(groups = {API, REGRESSION}, dataProvider = "API Research Lines")
     @Xray(test = {1033, 2602, 2609})
     public void updates_Invalid_Payload(@Optional String researchLine) {
 
@@ -28,7 +31,7 @@ public class UpdatesAPITests extends APITestBase {
         test.pass("Response Invalid Payload Verified Successfully");
     }
 
-    @Test(groups = {"api", "regression"}, dataProvider = "No ESG API Research Lines")
+    @Test(groups = {API, REGRESSION}, dataProvider = "No ESG API Research Lines")
     @Xray(test = {2283})
     //2024 TCFD
     //2021 Energy Transition

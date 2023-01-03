@@ -14,6 +14,8 @@ import org.testng.annotations.Test;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.esgc.Utilities.Groups.*;
+
 public class PortfolioScore extends UITestBase {
 
     /*
@@ -32,7 +34,7 @@ public class PortfolioScore extends UITestBase {
       third column -> name
 
 */
-    @Test(groups = {"regression", "ui", "smoke"},
+    @Test(groups = {REGRESSION, UI, SMOKE},
             description = "Verify if Portfolio Score Table is Displayed as Expected", dataProvider = "3 Research Lines")
     public void verifyScoreWidgetAndRadarGraph(String page) {
         ResearchLinePage researchLinePage = new ResearchLinePage();
@@ -68,7 +70,7 @@ public class PortfolioScore extends UITestBase {
     //##################################################################################
 
 
-    @Test(groups = {"regression", "ui", "smoke"},
+    @Test(groups = {REGRESSION, UI, SMOKE},
             description = "Verify Score Widget for risk research lines",
             dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
     @Xray(test = {551, 2506, 2657, 2253, 6712, 2504, 2655})
@@ -152,7 +154,7 @@ public class PortfolioScore extends UITestBase {
     without updating the portfolio filter there should be no api call to load data
  */
 
-    @Test(groups = {"regression", "ui"},
+    @Test(groups = {REGRESSION, UI},
             description = "Verify Portfolio Score is not changed when User navigates another page and come back to Physical Management Page without any changes")
 
     public void verifyPortfolioScoreNotUpdated() {
@@ -195,7 +197,7 @@ public class PortfolioScore extends UITestBase {
     there should be a api call made for the new portfolio selected
  */
 
-    @Test(groups = {"regression", "ui"},
+    @Test(groups = {REGRESSION, UI},
             description = "Verify Portfolio Score Table is changed if User change page and select another portfolio")
     @Xray(test = {1257})
     public void verifyPortfolioScoreUpdatedWhenPageIsRefreshed() {
@@ -303,7 +305,7 @@ public class PortfolioScore extends UITestBase {
     the score should change to reflect the portfolio.
  */
 
-    @Test(groups = {"regression", "ui", "robot_dependency"},
+    @Test(groups = {REGRESSION, UI, ROBOT_DEPENDENCY},
             description = "Verify Portfolio Score Table is changed if User uploads a new portfolio and selects that new portfolio from dropdown")
     public void verifyPortfolioScoreUpdated() {
         UploadPage uploadPage = new UploadPage();

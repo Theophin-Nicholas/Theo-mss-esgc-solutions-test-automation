@@ -8,9 +8,11 @@ import org.testng.annotations.Test;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.esgc.Utilities.Groups.*;
+
 public class EsgMaterialityMatrixTests extends UITestBase {
 
-    @Test(groups = {"entity_climate_profile", "regression", "ui"})
+    @Test(groups = {ENTITY_PROFILE, REGRESSION, UI})
     @Xray(test = {8424})
     public void validateEsgMaterialityMatrixColumns() {
         String company = "Apple, Inc.";
@@ -35,7 +37,7 @@ public class EsgMaterialityMatrixTests extends UITestBase {
         entityProfilePage.clickCloseIcon();
     }
 
-    @Test(groups = {"entity_climate_profile", "regression", "ui"})
+    @Test(groups = {ENTITY_PROFILE, REGRESSION, UI})
     @Xray(test = {8424})
     public void validateLowMaterialityColumnProperties() {
         String company = "Apple, Inc.";
@@ -49,7 +51,7 @@ public class EsgMaterialityMatrixTests extends UITestBase {
         entityProfilePage.clickCloseIcon();
     }
 
-    @Test(groups = {"entity_climate_profile", "regression", "ui"})
+    @Test(groups = {ENTITY_PROFILE, REGRESSION, UI})
     @Xray(test = {8427})
     public void validateEsgMaterialityMatrixSubCategoriesProperties() {
 
@@ -65,7 +67,7 @@ public class EsgMaterialityMatrixTests extends UITestBase {
         entityProfilePage.clickCloseIcon();
     }
 
-    @Test(groups = {"entity_climate_profile", "regression", "ui"})
+    @Test(groups = {ENTITY_PROFILE, REGRESSION, UI})
     @Xray(test = {8425})
     public void validateEsgMaterialityMatrixOrderAndColors() {
 
@@ -81,7 +83,7 @@ public class EsgMaterialityMatrixTests extends UITestBase {
         entityProfilePage.clickCloseIcon();
     }
 
-    @Test(groups = {"entity_climate_profile", "regression", "ui", "smoke"})
+    @Test(groups = {ENTITY_PROFILE, REGRESSION, UI, SMOKE})
     @Xray(test = {8442})
     public void validateNoneForTheSector() {
 
@@ -95,7 +97,7 @@ public class EsgMaterialityMatrixTests extends UITestBase {
         entityProfilePage.clickCloseIcon();
     }
 
-    @Test(groups = {"entity_climate_profile", "regression", "ui"})
+    @Test(groups = {ENTITY_PROFILE, REGRESSION, UI})
     @Xray(test = {8835})
     public void validateAllButtons() {
 
@@ -111,7 +113,7 @@ public class EsgMaterialityMatrixTests extends UITestBase {
         entityProfilePage.clickCloseIcon();
     }
 
-    @Test(groups = {"entity_climate_profile", "regression", "ui"})
+    @Test(groups = {ENTITY_PROFILE, REGRESSION, UI})
     @Xray(test = {8841, 8842})
     public void validateMaterialityMatrixLegends() {
 
@@ -125,7 +127,7 @@ public class EsgMaterialityMatrixTests extends UITestBase {
         entityProfilePage.clickCloseIcon();
     }
 
-    @Test(groups = {"entity_climate_profile", "regression", "ui", "smoke"})
+    @Test(groups = {ENTITY_PROFILE, REGRESSION, UI, SMOKE})
     @Xray(test = {8868})
     public void validateEsgMaterialityPopup() {
 

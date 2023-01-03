@@ -21,10 +21,12 @@ import org.testng.annotations.Test;
 import java.io.File;
 import java.io.IOException;
 
+import static com.esgc.Utilities.Groups.*;
+
 
 public class ExportTests extends UITestBase {
 //TODO Needs attention. Tests are failing.
-    @Test(groups = {"regression", "smoke", "export"},
+    @Test(groups = {REGRESSION, SMOKE, EXPORT},
             dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
     @Xray(test = {2092, 2093, 2108, 2110, 2112, 2113, 2625, 3004, 3396, 3403, 3405, 3406, 4648, 5169, 3621, 8953, 9656, 9657, 9658, 10679 })
     public void verifyExportFunctionalityAndExcelFieldsWithUI(String researchLine) {
@@ -97,7 +99,7 @@ public class ExportTests extends UITestBase {
         }
     }
 
-    @Test(groups = {"regression", "export"}, dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
+    @Test(groups = {REGRESSION, EXPORT}, dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
     @Xray(test = {7254})
     public void verifyUserIsAbleToDownloadPDFTest(String researchLine) {
         System.out.println("PDF Download test for " + researchLine);
@@ -140,7 +142,7 @@ public class ExportTests extends UITestBase {
         }
     }
 
-    @Test(groups = {"regression", "smoke", "export"},
+    @Test(groups = {REGRESSION, SMOKE, EXPORT},
             dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
     @Xray(test = {2883, 2962})
     public void verifyBenchMarkExportFunctionalityandExcelFieldsWithUI(String researchLine) {
@@ -228,7 +230,7 @@ public class ExportTests extends UITestBase {
             System.out.println("There is no Directory to DELETE");
     }
 
-    @Test(groups = {"regression", "export"},
+    @Test(groups = {REGRESSION, EXPORT},
             dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
     @Xray(test = {7253})
     public void verifyResearchLinesExportOptions(String researchLine) {

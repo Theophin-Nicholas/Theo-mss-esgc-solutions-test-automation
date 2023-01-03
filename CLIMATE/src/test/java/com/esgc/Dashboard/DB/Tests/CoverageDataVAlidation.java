@@ -14,9 +14,11 @@ import org.testng.annotations.Test;
 import java.util.List;
 import java.util.Map;
 
+import static com.esgc.Utilities.Groups.*;
+
 public class CoverageDataVAlidation extends DataValidationTestBase {
 
-    @Test(groups = {"regression", "data_validation", "dashboard"})
+    @Test(groups = {REGRESSION, DATA_VALIDATION, DASHBOARD})
     @Xray(test = {3643, 3645,
             8272, //ESG
             11049//Subs

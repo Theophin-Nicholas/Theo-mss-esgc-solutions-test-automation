@@ -12,9 +12,12 @@ import io.restassured.response.Response;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Test;
 
+import static com.esgc.Utilities.Groups.API;
+import static com.esgc.Utilities.Groups.REGRESSION;
+
 public class PortfolioCoverage extends APITestBase {
 
-    @Test(groups = {"api", "regression"}, dataProvider = "API Research Lines")
+    @Test(groups = {API, REGRESSION}, dataProvider = "API Research Lines")
     @Xray(test = {  621, 1221, 652, 2100, 2587, 2422})
     //1723 TCFD
     //1691 Energy transition

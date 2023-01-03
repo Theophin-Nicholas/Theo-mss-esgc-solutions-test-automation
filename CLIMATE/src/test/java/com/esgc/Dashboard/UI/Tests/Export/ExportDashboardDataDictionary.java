@@ -15,10 +15,11 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.util.*;
 
+import static com.esgc.Utilities.Groups.*;
 
 public class ExportDashboardDataDictionary extends DashboardUITestBase {
 
-    @Test(groups = {"dashboard", "regression", "ui"})
+    @Test(groups = {DASHBOARD, REGRESSION, UI})
     @Xray(test = {9185})
     public void verifyDataDictionary() {
         DashboardPage dashboardPage = new DashboardPage();
@@ -58,7 +59,7 @@ public class ExportDashboardDataDictionary extends DashboardUITestBase {
         dashboardPage.deleteDownloadFolder();
     }
 
-    @Test(groups = {"dashboard", "regression", "ui"})
+    @Test(groups = {DASHBOARD, REGRESSION, UI})
     @Xray(test = {9188, 9786, 9817})
     public void verifyAllResearchLinesTabInfo() {
         DashboardPage dashboardPage = new DashboardPage();
@@ -116,7 +117,7 @@ public class ExportDashboardDataDictionary extends DashboardUITestBase {
         dashboardPage.deleteDownloadFolder();
     }
 
-    @Test(groups = {"dashboard", "regression", "ui"})
+    @Test(groups = {DASHBOARD, REGRESSION, UI})
     @Xray(test = {9787, 9789})
     public void verifyESGInfoInExcelWhenNoESGEntitlement_Bundle() {
         LoginPage login = new LoginPage();

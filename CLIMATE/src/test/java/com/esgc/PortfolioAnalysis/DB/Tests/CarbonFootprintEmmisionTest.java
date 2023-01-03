@@ -18,11 +18,12 @@ import java.math.RoundingMode;
 import java.util.Arrays;
 import java.util.List;
 
-
+import static com.esgc.Utilities.Groups.DATA_VALIDATION;
+import static com.esgc.Utilities.Groups.REGRESSION;
 
 public class CarbonFootprintEmmisionTest extends DataValidationTestBase {
 
-    @Test(groups = {"regression", "data_validation"}, dataProvider = "CarbonFootprint")
+    @Test(groups = {REGRESSION, DATA_VALIDATION}, dataProvider = "CarbonFootprint")
     @Xray(test = {3018, 3021, 3022, 3023, 3025, 3026, 3201})
     public void verifyCarbonFootprintEmmisionTest(@Optional String sector, @Optional String region,
                                                                @Optional String researchLine, @Optional String month, @Optional String year) {

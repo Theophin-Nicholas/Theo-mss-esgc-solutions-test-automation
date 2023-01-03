@@ -11,9 +11,12 @@ import org.testng.annotations.Test;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.esgc.Utilities.Groups.ISSUER;
+import static com.esgc.Utilities.Groups.REGRESSION;
+
 public class ControversiesTestsP3 extends EntityIssuerPageDataValidationTestBase {
 
-    @Test(enabled = false, groups = {"entity_issuer", "regression"})
+    @Test(enabled = false, groups = {ISSUER, REGRESSION})
     @Xray(test = {4354, 4355})
     public void verifyControversies() {
         List<EntityControversy> dbResults = entityIssuerQueries.getControversies("000002959", null);
@@ -39,7 +42,7 @@ public class ControversiesTestsP3 extends EntityIssuerPageDataValidationTestBase
         test.info("Entity Page Controversies test passed");
     }
 
-    @Test(enabled = false, groups = {"entity_issuer","regression"})
+    @Test(enabled = false, groups = {ISSUER,REGRESSION})
     @Xray(test = {4461, 4469})
     public void verifyRelatedControversies() {
         //EntityFilterPayload entityFilterPayload = new EntityFilterPayload("C&S1.2");

@@ -9,9 +9,11 @@ import org.testng.annotations.Test;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.esgc.Utilities.Groups.*;
+
 public class ResearchLineNavigation extends UITestBase {
     @Xray(test = {547, 3265, 3266, 3267, 3268})
-    @Test(groups = {"regression", "ui", "smoke"},
+    @Test(groups = {REGRESSION, UI, SMOKE},
             description = "Verify research line navigation")
     public void verifyResearchLineNavigation() {
         ResearchLinePage researchLinePage = new ResearchLinePage();

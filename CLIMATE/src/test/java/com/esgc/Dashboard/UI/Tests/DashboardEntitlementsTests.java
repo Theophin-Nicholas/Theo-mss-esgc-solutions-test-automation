@@ -13,9 +13,11 @@ import org.testng.annotations.Test;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.esgc.Utilities.Groups.*;
+
 public class DashboardEntitlementsTests extends DashboardUITestBase {
 
-    @Test(groups = {"dashboard", "regression", "ui", "smoke", "entitlements"},
+    @Test(groups = {DASHBOARD, REGRESSION, UI, SMOKE, ENTITLEMENTS},
             dataProviderClass = DataProviderClass.class, dataProvider = "bundles")
     @Xray(test = {4479, 7957})
     public void validateEntitlementsBundleInDashboard(@Optional EntitlementsBundles bundleName, @Optional Integer... testCase) {

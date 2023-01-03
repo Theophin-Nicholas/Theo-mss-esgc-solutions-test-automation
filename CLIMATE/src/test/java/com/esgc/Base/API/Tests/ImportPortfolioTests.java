@@ -21,6 +21,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import static com.esgc.Utilities.ErrorMessages.*;
+import static com.esgc.Utilities.Groups.*;
 import static org.hamcrest.Matchers.*;
 
 public class ImportPortfolioTests extends APITestBase {
@@ -28,7 +29,7 @@ public class ImportPortfolioTests extends APITestBase {
     /*
 
      */
-    @Test(groups = {"api", "regression", "smoke"})
+    @Test(groups = {API, REGRESSION, SMOKE})
     @Xray(test = {492, 11070})
     public void postValidPortfolio() {
         String filePath = PortfolioFilePaths.goodPortfolioPath();
@@ -73,7 +74,7 @@ public class ImportPortfolioTests extends APITestBase {
 
     }
 
-    @Test(groups = {"api", "regression", "smoke"})
+    @Test(groups = {API, REGRESSION, SMOKE})
     @Xray(test = {495})
     public void importPortfolioWithoutDate() {//495
 
@@ -114,7 +115,7 @@ public class ImportPortfolioTests extends APITestBase {
 
     }
 
-    @Test(groups = {"api", "regression", "smoke"})
+    @Test(groups = {API, REGRESSION, SMOKE})
     @Xray(test = {495})
     public void importPortfolioWithoutName() {//495
 
@@ -163,7 +164,7 @@ public class ImportPortfolioTests extends APITestBase {
         test.pass("Portfolio imported with name as portfolio-yyy-mm-dd format successfully");
     }
 
-    @Test(groups = {"api", "regression", "smoke"})
+    @Test(groups = {API, REGRESSION, SMOKE})
     @Xray(test = {495, 501})
     public void importPortfolioWithoutNameAndWithoutAsOfDate() {//495_501
 
@@ -211,7 +212,7 @@ public class ImportPortfolioTests extends APITestBase {
      * @param errorMessage - id of user
      */
 
-    @Test(groups = {"api", "regression", "errorMessages", "smoke"}, dataProvider = "ErrorMessages")
+    @Test(groups = {API, REGRESSION, ERROR_MESSAGES, SMOKE}, dataProvider = "ErrorMessages")
     public void importInvalidPortfolio(String fileName, String errorMessage, Integer... testCaseNumber) {
 
         String user_id = APIUtilities.userID();

@@ -11,9 +11,11 @@ import org.testng.annotations.Test;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.esgc.Utilities.Groups.*;
+
 public class PortfolioUpdatesTest extends UITestBase {
 
-    @Test(groups = {"regression", "ui", "smoke"},
+    @Test(groups = {REGRESSION, UI, SMOKE},
             description = "Verify if Portfolio Updates Table is Displayed as Expected",
             dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
     @Xray(test = {1243, 2027, 2291})
@@ -55,7 +57,7 @@ public class PortfolioUpdatesTest extends UITestBase {
 
     }
 
-    @Test(groups = {"regression", "ui"},
+    @Test(groups = {REGRESSION, UI},
             description = "Verify if Updates As Of Modal Window is Displayed as Expected",
             dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
     @Xray(test = {1776, 2035, 2289})
@@ -91,7 +93,7 @@ public class PortfolioUpdatesTest extends UITestBase {
 
     }
 
-    @Test(groups = {"regression", "ui", "smoke"},
+    @Test(groups = {REGRESSION, UI, SMOKE},
             description = "Verify if Updates Header is displayed as expected when filter is changed",
             dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
     @Xray(test = {477, 1951})

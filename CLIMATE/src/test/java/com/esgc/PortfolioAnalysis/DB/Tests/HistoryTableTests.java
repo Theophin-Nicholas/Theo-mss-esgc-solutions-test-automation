@@ -16,10 +16,13 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.esgc.Utilities.Groups.DATA_VALIDATION;
+import static com.esgc.Utilities.Groups.REGRESSION;
+
 public class HistoryTableTests extends DataValidationTestBase {
 
     //TODO count of companies validation and N/A category validation should be added
-    @Test(groups = {"regression", "data_validation"}, dataProvider = "researchLines")
+    @Test(groups = {REGRESSION, DATA_VALIDATION}, dataProvider = "researchLines")
     @Xray(test = {5060, 5063, 5934, 5917})
     public void verifyHistoryTableWithMixedIdentifiers(@Optional String sector, @Optional String region,
                                                        @Optional String researchLine, @Optional String month, @Optional String year) {

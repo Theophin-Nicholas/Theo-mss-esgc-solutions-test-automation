@@ -11,11 +11,13 @@ import io.restassured.response.Response;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.testng.annotations.Test;
 
+import static com.esgc.Utilities.Groups.API;
+import static com.esgc.Utilities.Groups.REGRESSION;
 import static org.hamcrest.Matchers.*;
 
 public class HistoryTableTest extends APITestBase{
 
-        @Test(groups = {"api", "regression"}, dataProvider = "API Research Lines")
+        @Test(groups = {API, REGRESSION}, dataProvider = "API Research Lines")
         @Xray(test = {5107})
         public void getHistoryTableSuccessAPIResponse(String researchLine) {
             APIController apiController = new APIController();
@@ -34,7 +36,7 @@ public class HistoryTableTest extends APITestBase{
             test.pass("Successfully validated for " + researchLine + "research line");
         }
 
-        @Test(groups = {"api", "regression"}, dataProvider = "No ESG API Research Lines")
+        @Test(groups = {API, REGRESSION}, dataProvider = "No ESG API Research Lines")
         @Xray(test = {5097})
         public void getHistoryTableInvalidPayload(String researchLine) {
             APIController apiController = new APIController();
@@ -48,7 +50,7 @@ public class HistoryTableTest extends APITestBase{
             test.pass("Successfully validated for " + researchLine + "research line");
         }
 
-        @Test(groups = {"api", "regression"}, dataProvider = "API Research Lines")
+        @Test(groups = {API, REGRESSION}, dataProvider = "API Research Lines")
         @Xray(test = {5097})
         public void getHistoryTableInvalidToken(String researchLine) {
             APIController apiController = new APIController();

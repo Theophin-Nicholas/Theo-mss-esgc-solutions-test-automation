@@ -21,10 +21,12 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.esgc.Utilities.Groups.*;
+
 public class GeographicRiskMap extends DataValidationTestBase {
 
     //Test cases ESGCA-1933 ESGCA-4606 ESGCA-4607 ESGCA-4616 ESGCA-4617  ESGCA-4622
-    @Test(enabled = false, groups = {"regression", "data_validation", "dashboard"}, dataProvider = "researchLines", threadPoolSize = 1)
+    @Test(enabled = false, groups = {REGRESSION, DATA_VALIDATION, DASHBOARD}, dataProvider = "researchLines", threadPoolSize = 1)
     @Xray(test = {1933, 4606, 4607, 4616, 4617, 4622})
     public void verifyGeographicRiskMap(@Optional String sector, @Optional String region, @Optional String researchLine, @Optional String month, @Optional String year) {
 

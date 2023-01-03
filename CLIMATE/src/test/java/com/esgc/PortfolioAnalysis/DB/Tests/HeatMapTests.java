@@ -7,9 +7,11 @@ import com.esgc.Utilities.Database.PortfolioQueries;
 import com.esgc.Utilities.Xray;
 import org.testng.annotations.Test;
 
+import static com.esgc.Utilities.Groups.REGRESSION;
+
 public class HeatMapTests extends DataValidationTestBase {
 
-    @Test(groups = {"regression", "heatmap"}, dataProviderClass = DataProviderClass.class, dataProvider = "Heat Map Research Lines")
+    @Test(groups = {REGRESSION, "heatmap"}, dataProviderClass = DataProviderClass.class, dataProvider = "Heat Map Research Lines")
     @Xray(test = {10030})
     public void verifyUpdatesTableForAllRLs(String portfolioId, String researchLine, String year, String month) {
         ResearchLinePage researchLinePage = new ResearchLinePage();

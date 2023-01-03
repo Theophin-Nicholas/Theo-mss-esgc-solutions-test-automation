@@ -12,9 +12,12 @@ import org.testng.annotations.Test;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.esgc.Utilities.Groups.API;
+import static com.esgc.Utilities.Groups.REGRESSION;
+
 public class ImpactTableTests extends APITestBase {
 
-    @Test(groups = {"api", "regression"}, dataProvider = "No ESG API Research Lines")
+    @Test(groups = {API, REGRESSION}, dataProvider = "No ESG API Research Lines")
     @Xray(test = {4957})
     public void getImpactDistributionSuccess(String researchLine) {
         test.info("Tests ESGCA-4957");
@@ -26,7 +29,7 @@ public class ImpactTableTests extends APITestBase {
         Assert.assertTrue(impactDistribution.size()>0);
     }
 
-    @Test(groups = {"api", "regression"}, dataProvider = "API Research Lines")
+    @Test(groups = {API, REGRESSION}, dataProvider = "API Research Lines")
     @Xray(test = {5011})
     public void getImpactDistributionInvalidPayload(String researchLine) {
         // API Returns 200 instead of 500
@@ -37,7 +40,7 @@ public class ImpactTableTests extends APITestBase {
         System.out.println("STatus Code" + response.statusCode());
     }
 
-    @Test(groups = {"api", "regression"}, dataProvider = "No ESG API Research Lines")
+    @Test(groups = {API, REGRESSION}, dataProvider = "No ESG API Research Lines")
     @Xray(test = {5010})
     public void getImpactDistributionInvalidToken(String researchLine) {
         test.info("Tests ESGCA-5010");

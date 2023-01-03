@@ -10,9 +10,12 @@ import org.testng.annotations.Test;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.esgc.Utilities.Groups.*;
+
+
 public class EsgAssessmentUITests extends UITestBase {
 
-     @Test(enabled = false,groups = {"regression", "ui", "smoke", "esg"})
+     @Test(enabled = false,groups = {REGRESSION, UI, SMOKE, ESG})
     @Xray(test = {8704, 9969}) //TODO de-scoped , enable after scoped
     public void verifyESGGradeDistributionIsDisplayed() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
@@ -21,7 +24,7 @@ public class EsgAssessmentUITests extends UITestBase {
         researchLinePage.validateEsgGradeDistribution();
     }
 
-    @Test(enabled = false,groups = {"regression", "ui", "smoke", "esg"})
+    @Test(enabled = false,groups = {REGRESSION, UI, SMOKE, ESG})
     @Xray(test = {9133})
     public void verifyESGGRegionMapAndCountryTableDrawer() {
 
@@ -31,7 +34,7 @@ public class EsgAssessmentUITests extends UITestBase {
         researchLinePage.validateCountry();
     }
 
-    @Test(groups = {"regression", "ui", "esg"})
+    @Test(groups = {REGRESSION, UI, ESG})
     @Xray(test = {9967, 9898})
     public void verifyEsgAssessmentScoreLegend() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
@@ -40,7 +43,7 @@ public class EsgAssessmentUITests extends UITestBase {
         researchLinePage.validateEsgAssessmentLegends();
     }
 
-    @Test(groups = {"regression", "ui", "esg"})
+    @Test(groups = {REGRESSION, UI, ESG})
     @Xray(test = {8291})
     public void verifyEsgAssessmentWithBenchmark() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
@@ -53,7 +56,7 @@ public class EsgAssessmentUITests extends UITestBase {
 
     }
 
-    @Test(groups = {"regression", "ui", "esg"})
+    @Test(groups = {REGRESSION, UI, ESG})
     @Xray(test = {11371})
     public void verifyEsgAssessmentExcelColumnsOrder_PortfolioAnalysis() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
@@ -90,7 +93,7 @@ public class EsgAssessmentUITests extends UITestBase {
 
     }
 
-    @Test(groups = {"regression", "ui", "esg"})
+    @Test(groups = {REGRESSION, UI, ESG})
     @Xray(test = {11372})
     public void verifyEsgAssessmentExcelColumnsOrder_Dashboard() {
         DashboardPage dashboardPage = new DashboardPage();
@@ -122,7 +125,7 @@ public class EsgAssessmentUITests extends UITestBase {
 
     }
 
-    @Test(groups = {"regression", "ui", "export"})
+    @Test(groups = {REGRESSION, UI, EXPORT})
     @Xray(test = {9791})
     public void VerifyFileUploadSubsidiaryCompany() {
         DashboardPage dashboardPage = new DashboardPage();
@@ -142,7 +145,7 @@ public class EsgAssessmentUITests extends UITestBase {
         verifyEsgAssessmentExcelColumnsOrder_Dashboard();
     }
 
-    @Test(groups = {"regression", "ui", "export"})
+    @Test(groups = {REGRESSION, UI, EXPORT})
     @Xray(test = {11142})
     public void VerifyRLScoresFromExcelToEntityProfilePage() {
         DashboardPage dashboardPage = new DashboardPage();

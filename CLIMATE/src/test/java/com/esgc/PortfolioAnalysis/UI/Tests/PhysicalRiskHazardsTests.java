@@ -8,9 +8,12 @@ import com.esgc.Utilities.Xray;
 import org.openqa.selenium.support.Color;
 import org.testng.annotations.Test;
 
+import static com.esgc.Utilities.Groups.REGRESSION;
+import static com.esgc.Utilities.Groups.UI;
+
 public class PhysicalRiskHazardsTests extends UITestBase {
 
-    @Test(groups = {"regression", "ui"})
+    @Test(groups = {REGRESSION, UI})
     @Xray(test = {6068, 6069,6070,6071,6072})
     public void validatePhysicalRiskPage() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
@@ -24,7 +27,7 @@ public class PhysicalRiskHazardsTests extends UITestBase {
 
     }
 
-    @Test(groups = {"regression", "ui"})
+    @Test(groups = {REGRESSION, UI})
     @Xray(test = {6362,6364,6365,6366,7102})
     public void verifyPortfolioScoreSectionTest() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
@@ -82,7 +85,7 @@ public class PhysicalRiskHazardsTests extends UITestBase {
         else return "RED FLAG RISK";
     }
 
-    @Test(groups = {"regression", "ui"})
+    @Test(groups = {REGRESSION, UI})
     @Xray(test = {8063, 8064})
     public void verifyDrawersAreDisplayed() {
 
@@ -100,7 +103,7 @@ public class PhysicalRiskHazardsTests extends UITestBase {
 
     }
 
-    @Test(groups = {"regression", "ui"})
+    @Test(groups = {REGRESSION, UI})
     @Xray(test = {7103})
     public void verifyScoreRangeColors() {
 
@@ -114,7 +117,7 @@ public class PhysicalRiskHazardsTests extends UITestBase {
         researchLinePage.verifyColorLegendOfScoreCategory();
     }
 
-    @Test(groups = {"regression", "ui"})
+    @Test(groups = {REGRESSION, UI})
     @Xray(test = {8155, 8157})
     public void verifyInvestmentSectioninSummarySection() {
 

@@ -8,9 +8,11 @@ import com.esgc.Utilities.EntitlementsBundles;
 import com.esgc.Utilities.Xray;
 import org.testng.annotations.Test;
 
+import static com.esgc.Utilities.Groups.*;
+
 public class ControversiesModalTests extends DashboardUITestBase {
 
-    @Test(groups = {"regression", "dashboard", "ui"})
+    @Test(groups = {REGRESSION, DASHBOARD, UI})
     @Xray(test = {3170, 3171, 3932, 3953, 4020, 4025, 4033, 4036, 4059, 7381})
     public void controversiesModalUIAutomationTest() {
         DashboardPage dashboardPage = new DashboardPage();
@@ -33,7 +35,7 @@ public class ControversiesModalTests extends DashboardUITestBase {
 
     }
 
-    @Test(groups = {"regression", "dashboard", "ui"})
+    @Test(groups = {REGRESSION, DASHBOARD, UI})
     @Xray(test = 6954)
     public void controversiesFilterTest() {
         DashboardPage dashboardPage = new DashboardPage();
@@ -47,7 +49,7 @@ public class ControversiesModalTests extends DashboardUITestBase {
 
     }
 
-    @Test(groups = {"regression", "dashboard", "ui", "smoke", "entitlements"})
+    @Test(groups = {REGRESSION, DASHBOARD, UI, SMOKE, ENTITLEMENTS})
     @Xray(test = 7931)
     public void verifyControversiesAreVisible_Bundle() {
 
@@ -71,7 +73,7 @@ public class ControversiesModalTests extends DashboardUITestBase {
 
     }
 
-    @Test(groups = {"regression", "dashboard", "ui", "smoke", "entitlements"})
+    @Test(groups = {REGRESSION, DASHBOARD, UI, SMOKE, ENTITLEMENTS})
     @Xray(test = 7933)
     public void verifyControversiesAreNotVisible_Bundle() {
 
@@ -94,7 +96,7 @@ public class ControversiesModalTests extends DashboardUITestBase {
                 "Verification of Controversies column");
     }
 
-    @Test(groups = {"regression", "dashboard", "ui"})
+    @Test(groups = {REGRESSION, DASHBOARD, UI})
     @Xray(test = {3191, 3935, 7764, 7765, 7766, 7769, 7770})
     public void verifyCriticalAndNonCriticalControversies() {
         DashboardPage dashboardPage = new DashboardPage();

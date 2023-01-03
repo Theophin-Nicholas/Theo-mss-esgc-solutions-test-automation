@@ -8,13 +8,14 @@ import com.esgc.Utilities.Xray;
 import org.testng.SkipException;
 import org.testng.annotations.Test;
 
+import static com.esgc.Utilities.Groups.*;
 
 /**
  * Created by Tarun
  */
 public class PortfolioDistribution extends UITestBase {
 
-    @Test(groups = {"regression", "ui", "smoke"},
+    @Test(groups = {REGRESSION, UI, SMOKE},
             description = "Verify if Portfolio Distribution is available",
             dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
     @Xray(test = {3924, 6730,657})

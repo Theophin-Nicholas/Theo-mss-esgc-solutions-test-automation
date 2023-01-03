@@ -10,13 +10,15 @@ import org.testng.annotations.Test;
 
 import java.util.ArrayList;
 
+import static com.esgc.Utilities.Groups.*;
+
 /**
  * Created by Satish Arukonda on 5/10/2022.
  */
 
 public class HeatMapTemperatureAlignment extends DashboardUITestBase {
 
-    @Test(groups = {"entity_climate_profile", "regression", "ui", "smoke", "entitlements"})
+    @Test(groups = {ENTITY_PROFILE, REGRESSION, UI, SMOKE, ENTITLEMENTS})
     @Xray(test = {7466})
     public void VerifyHeatMapsTemperatureAlignmentIsAvailableWithBundle(){
         LoginPage login = new LoginPage();
@@ -32,7 +34,7 @@ public class HeatMapTemperatureAlignment extends DashboardUITestBase {
 
     }
 
-    @Test(groups = {"regression", "ui", "smoke"})
+    @Test(groups = {REGRESSION, UI, SMOKE})
     @Xray(test = 7467)
     public void VerifyHeatMapsTemperatureAlignmentIsNotAvailableWithBundle() {
         LoginPage login = new LoginPage();
@@ -46,7 +48,7 @@ public class HeatMapTemperatureAlignment extends DashboardUITestBase {
         assertTestCase.assertTrue(!dashboardPage.isHeatMapTempratureAlignmentAvailable(), "Verify Heat Map's Temperature Alignment not is available");
     }
 
-    @Test(groups = {"regression", "ui", "smoke"})
+    @Test(groups = {REGRESSION, UI, SMOKE})
     @Xray(test = 7480)
     public void VerifyHeatmapTemperatureAlignmentOnGrid() {
         DashboardPage dashboardPage = new DashboardPage();
@@ -55,7 +57,7 @@ public class HeatMapTemperatureAlignment extends DashboardUITestBase {
         assertTestCase.assertTrue(dashboardPage.verifyHeatMapTableData(), "Verify Heat Map table data format");
     }
 
-    @Test(enabled = false,groups = {"regression", "ui", "smoke"})
+    @Test(enabled = false,groups = {REGRESSION, UI, SMOKE})
     @Xray(test = 7468)
     public void VerifyTemperatureAlignmentRLPresentationAndInteraction () {
         DashboardPage dashboardPage = new DashboardPage();

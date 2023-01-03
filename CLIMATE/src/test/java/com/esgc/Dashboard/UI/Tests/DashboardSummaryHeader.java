@@ -11,9 +11,11 @@ import org.testng.annotations.Test;
 
 import java.time.Month;
 
+import static com.esgc.Utilities.Groups.*;
+
 public class DashboardSummaryHeader extends DashboardUITestBase {
 
-    @Test(groups = {"dashboard", "regression", "ui", "smoke"}, dataProvider = "filters")
+    @Test(groups = {DASHBOARD, REGRESSION, UI, SMOKE}, dataProvider = "filters")
     @Xray(test = {3632, 5067, 6313, 7707, 8313, 8343, 4267})
     public void validateDashboardSummaryHeader(@Optional String sector, @Optional String region, @Optional String month, @Optional String year) {
         DashboardPage dashboardPage = new DashboardPage();
@@ -48,7 +50,7 @@ public class DashboardSummaryHeader extends DashboardUITestBase {
 
     }
 
-    @Test(groups = {"dashboard", "regression", "ui", "smoke"})
+    @Test(groups = {DASHBOARD, REGRESSION, UI, SMOKE})
     @Xray(test = {6082, 4324, 7391})
     public void verifyStickyHeader() {
         DashboardPage dashboardPage = new DashboardPage();
@@ -61,7 +63,7 @@ public class DashboardSummaryHeader extends DashboardUITestBase {
         assertTestCase.assertTrue(dashboardPage.verifyStickyHeaderInfo(), "Verify Sticky Header Info");
     }
 
-    @Test(groups = {"dashboard", "regression", "ui", "smoke"})
+    @Test(groups = {DASHBOARD, REGRESSION, UI, SMOKE})
     @Xray(test = {4260, 5074, 5076, 7892})
     public void validateClimateTiles() {
         DashboardPage dashboardPage = new DashboardPage();

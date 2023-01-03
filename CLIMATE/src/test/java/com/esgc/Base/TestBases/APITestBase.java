@@ -7,6 +7,8 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 
+import static com.esgc.Utilities.Groups.*;
+
 
 public abstract class APITestBase extends TestBaseClimate {
 
@@ -18,7 +20,7 @@ public abstract class APITestBase extends TestBaseClimate {
         getAccessTokenDataValidation();
     }
 
-    @BeforeMethod(onlyForGroups = {"api"}, groups = {"regression", "smoke", "api"})
+    @BeforeMethod(onlyForGroups = {API}, groups = {REGRESSION, SMOKE, API})
     public synchronized void importPortfolioBeforeAPITests() {
 
         if (portfolioID == null || portfolioID.trim().length() == 0) {

@@ -9,9 +9,11 @@ import com.esgc.Utilities.EntitlementsBundles;
 import com.esgc.Utilities.Xray;
 import org.testng.annotations.Test;
 
+import static com.esgc.Utilities.Groups.*;
+
 public class EntityClimateProfileEntitlementsTests extends UITestBase {
 
-    @Test(groups = {"entity_climate_profile", "regression", "ui", "smoke", "entitlements"})
+    @Test(groups = {ENTITY_PROFILE, REGRESSION, UI, SMOKE, ENTITLEMENTS})
     @Xray(test = {6110})
     public void validatePhysicalRiskEntitlements(){
         ResearchLinePage researchLinePage = new ResearchLinePage();
@@ -38,7 +40,7 @@ public class EntityClimateProfileEntitlementsTests extends UITestBase {
 
     }
 
-    @Test(groups = {"entity_climate_profile", "regression", "ui", "smoke", "entitlements"})
+    @Test(groups = {ENTITY_PROFILE, REGRESSION, UI, SMOKE, ENTITLEMENTS})
     @Xray(test = {6110})
     public void validateTransitionRiskEntitlements(){
         ResearchLinePage researchLinePage = new ResearchLinePage();
@@ -66,7 +68,7 @@ public class EntityClimateProfileEntitlementsTests extends UITestBase {
 
     }
 
-    @Test(groups = {"entity_climate_profile", "regression", "ui", "smoke", "entitlements"})
+    @Test(groups = {ENTITY_PROFILE, REGRESSION, UI, SMOKE, ENTITLEMENTS})
     @Xray(test = {6110})
     public void validatePhysicalAndTransitionRiskEntitlements(){
         ResearchLinePage researchLinePage = new ResearchLinePage();
@@ -100,7 +102,7 @@ public class EntityClimateProfileEntitlementsTests extends UITestBase {
 
     }
 
-    @Test(enabled = false,groups = {"entity_climate_profile", "regression", "ui", "smoke", "entitlements"})
+    @Test(enabled = false,groups = {ENTITY_PROFILE, REGRESSION, UI, SMOKE, ENTITLEMENTS})
     @Xray(test = {8982})//TODO #access only Climate Governance bundle cg_bundle_username=esg-test33@outlook.com not working
                         // Portfolio Analysis link is not available in UI
     public void validatePhysicalRiskManagementIsUnavailable() {
@@ -119,7 +121,7 @@ public class EntityClimateProfileEntitlementsTests extends UITestBase {
 
     }
 
-    @Test(groups = {"entity_climate_profile", "regression", "ui", "entitlements"})
+    @Test(groups = {ENTITY_PROFILE, REGRESSION, UI, ENTITLEMENTS})
     @Xray(test = {8890})
     public void validateMethodologiesTabWithControversiesEntitlement() {
 
@@ -133,7 +135,7 @@ public class EntityClimateProfileEntitlementsTests extends UITestBase {
         assertTestCase.assertTrue(entityProfilePage.verifyMethodologiesTabIsDisplayed(),"Validate methodologies tab is available");
     }
 
-    @Test(groups = {"entity_climate_profile", "regression", "ui", "entitlements"})
+    @Test(groups = {ENTITY_PROFILE, REGRESSION, UI, ENTITLEMENTS})
     @Xray(test = {8890})
     public void validateMethodologiesTabWithEsgEntitlement() {
 
@@ -147,7 +149,7 @@ public class EntityClimateProfileEntitlementsTests extends UITestBase {
         assertTestCase.assertTrue(entityProfilePage.verifyMethodologiesTabIsDisplayed(),"Validate methodologies tab is available");
     }
 
-    @Test(groups = {"entity_climate_profile", "regression", "ui", "entitlements"})
+    @Test(groups = {ENTITY_PROFILE, REGRESSION, UI, ENTITLEMENTS})
     @Xray(test = {8890})
     public void validateMethodologiesTabWithOutControversiesAndEsgEntitlements() {
 

@@ -12,12 +12,14 @@ import org.testng.Assert;
 import org.testng.SkipException;
 import org.testng.annotations.Test;
 
+import static com.esgc.Utilities.Groups.*;
+
 /**
  * Created by ChaudhS2 on 10/5/2021.
  */
 public class LeadersAndLaggards extends UITestBase {
 
-    @Test(groups = {"regression", "ui", "smoke"},
+    @Test(groups = {REGRESSION, UI, SMOKE},
             description = "Verify if Leaders and Laggards Table is Displayed as Expected",
             dataProviderClass = DataProviderClass.class,dataProvider = "Research Lines")
     @Xray(test = {389, 8433,9868})
@@ -50,7 +52,7 @@ public class LeadersAndLaggards extends UITestBase {
         test.pass(title + " Table rows columns and content verified");
     }
 
-    @Test(groups = {"regression", "ui", "smoke"},
+    @Test(groups = {REGRESSION, UI, SMOKE},
             description = "Verify if More companies ranked in link present",
             dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
     @Xray(test = {442, 543, 537, 1275, 2133, 2444, 2880, 3096, 3846, 1263, 1275, 6654, 8435 })
@@ -78,7 +80,7 @@ public class LeadersAndLaggards extends UITestBase {
     }
 
 
-    @Test(groups = {"regression", "ui"},
+    @Test(groups = {REGRESSION, UI},
             description = "Verify the ScoreLogic for Leaders And Laggards Section",
             dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
     @Xray(test = {2124, 3034, 3159, 2080, 3848, 3849, 11077})
@@ -103,7 +105,7 @@ public class LeadersAndLaggards extends UITestBase {
     }
 
 
-    @Test(groups = {"regression", "ui", "smoke"},
+    @Test(groups = {REGRESSION, UI, SMOKE},
             description = "Verify if More companies ranked in link present",
             dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
     @Xray(test = {8434})
@@ -126,7 +128,7 @@ public class LeadersAndLaggards extends UITestBase {
         test.info("Verified that the More companies ranked in link is working as expected");
     }
     //TODO De-Scoped as of now
-    @Test(enabled = false,groups = {"regression", "ui", "smoke"})
+    @Test(enabled = false,groups = {REGRESSION, UI, SMOKE})
     @Xray(test = {9871})
     public void VerifyESGLeadersAndLaggersTable() {
         ResearchLinePage researchLinePage = new ResearchLinePage();

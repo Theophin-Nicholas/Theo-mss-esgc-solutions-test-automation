@@ -21,8 +21,10 @@ import org.testng.annotations.Test;
 
 import java.util.*;
 
+import static com.esgc.Utilities.Groups.*;
+
 public class DashboardHeatMapEntityListTests extends UITestBase {
-    @Test(groups = {"dashboard", "ui", "smoke"})
+    @Test(groups = {DASHBOARD, UI, SMOKE})
     @Xray(test = {4843, 4844, 4829, 6221, 7475, 7943, 9268, 9269, 9270})
     public void verifyEntityListTest() {
         DashboardPage dashboardPage = new DashboardPage();
@@ -51,7 +53,7 @@ public class DashboardHeatMapEntityListTests extends UITestBase {
         }
     }
 
-    @Test(groups = {"dashboard", "ui", "smoke"})
+    @Test(groups = {DASHBOARD, UI, SMOKE})
     @Xray(test = {9271})
     public void verifyHeatMapDrawer() {
         //Verify that user is able to close drawer by clicking outside of drawer
@@ -63,7 +65,7 @@ public class DashboardHeatMapEntityListTests extends UITestBase {
         verifyDrawer();
     }
 
-    @Test(groups = {"dashboard", "ui", "regression"})
+    @Test(groups = {DASHBOARD, UI, REGRESSION})
     @Xray(test = {4784, 4785, 4786, 4787, 4788, 4789, 4798, 4799, 6208, 7899, 7900, 9266})
     public void DashboardUIHeatMapTest() {
         DashboardPage dashboardPage = new DashboardPage();
@@ -164,7 +166,7 @@ public class DashboardHeatMapEntityListTests extends UITestBase {
 
     }
 
-    @Test(groups = {"dashboard", "ui", "regression"})
+    @Test(groups = {DASHBOARD, UI, REGRESSION})
     @Xray(test = {4880, 4885, 4825, 4824})
     public void verifyHeatMapPercentages() {
         //Verify the percentage displayed in the axes
@@ -208,7 +210,7 @@ public class DashboardHeatMapEntityListTests extends UITestBase {
 
     }
 
-    @Test(groups = {"dashboard", "ui", "regression"})
+    @Test(groups = {DASHBOARD, UI, REGRESSION})
     @Xray(test = {4800, 4801, 4802})
     public void verifyHeatMapCellMatrix() {
         //Verify the percentage displayed in the axes
@@ -231,7 +233,7 @@ public class DashboardHeatMapEntityListTests extends UITestBase {
 
     }
 
-    @Test(groups = {"dashboard", "ui", "regression", "smoke"})
+    @Test(groups = {DASHBOARD, UI, REGRESSION, SMOKE})
     @Xray(test = {7942, 7944, 5115})
     public void getSelectedResearchLineNameFromHeatMap() {
         DashboardPage dashboardPage = new DashboardPage();
@@ -321,7 +323,7 @@ public class DashboardHeatMapEntityListTests extends UITestBase {
     }
 
     //Entitlements
-    @Test(groups = {"dashboard", "ui", "regression", "smoke"})
+    @Test(groups = {DASHBOARD, UI, REGRESSION, SMOKE})
     @Xray(test = {8185, 7973})
     public void heatMapAPIUIVerification() {
         LoginPage loginPage = new LoginPage();
@@ -502,7 +504,7 @@ public class DashboardHeatMapEntityListTests extends UITestBase {
         }
     }
 
-    @Test(groups = {"dashboard", "ui", "regression"})
+    @Test(groups = {DASHBOARD, UI, REGRESSION})
     @Xray(test = {9394, 9400})
     public void verifyUnderlyingDataForHeatMapCellsTest() {
         DashboardPage dashboardPage = new DashboardPage();
@@ -570,7 +572,7 @@ public class DashboardHeatMapEntityListTests extends UITestBase {
         assertTestCase.assertEquals(groupTotal + "", expGroupTotal, "Verified the group total in the widget matches the group total in the database.");
     }
 
-    @Test(groups = {"dashboard", "ui", "regression"})
+    @Test(groups = {DASHBOARD, UI, REGRESSION})
     @Xray(test = {9201, 9202, 11218})
     public void verifyOverallEsgScoreHeatMap() {
 
@@ -625,7 +627,7 @@ public class DashboardHeatMapEntityListTests extends UITestBase {
         }
     }
 
-    @Test(groups = {"dashboard", "ui", "regression"})
+    @Test(groups = {DASHBOARD, UI, REGRESSION})
     @Xray(test = {9204})
     public void verifyCompareEsgScoreHeatMap() {
 
@@ -655,7 +657,7 @@ public class DashboardHeatMapEntityListTests extends UITestBase {
 
     }
 
-    @Test(groups = {"dashboard", "ui", "regression"})
+    @Test(groups = {DASHBOARD, UI, REGRESSION})
     @Xray(test = {9205})
     public void verifyOverallEsgScoreNotAvailableInHeatMap() {
         LoginPage login = new LoginPage();
@@ -674,7 +676,7 @@ public class DashboardHeatMapEntityListTests extends UITestBase {
         }
     }
 
-    @Test(groups = {"dashboard", "ui", "regression"})
+    @Test(groups = {DASHBOARD, UI, REGRESSION})
     @Xray(test = {9214})
     public void verifyOnlyOverallEsgScoreInHeatMap() {
         DashboardPage dashboardPage = new DashboardPage();
@@ -704,7 +706,7 @@ public class DashboardHeatMapEntityListTests extends UITestBase {
 
     }
 
-    @Test(groups = {"dashboard", "ui", "regression"})
+    @Test(groups = {DASHBOARD, UI, REGRESSION})
     @Xray(test = {11222})
     public void verifySelectTwoStaticTextInHeatMap() {
         DashboardPage dashboardPage = new DashboardPage();

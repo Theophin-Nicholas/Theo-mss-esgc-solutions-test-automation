@@ -9,9 +9,11 @@ import org.testng.annotations.Test;
 import java.util.List;
 import java.util.Map;
 
+import static com.esgc.Utilities.Groups.*;
+
 public class EsgMaterialityDataValidation extends DataValidationTestBase {
 
-    @Test(groups = {"entity_climate_profile", "regression", "ui"})
+    @Test(groups = {ENTITY_PROFILE, REGRESSION, UI})
     @Xray(test = {9367, 9368, 9375, 8451, 8428, 8869})
     public void validateEsgMaterialityMatrix() {
 

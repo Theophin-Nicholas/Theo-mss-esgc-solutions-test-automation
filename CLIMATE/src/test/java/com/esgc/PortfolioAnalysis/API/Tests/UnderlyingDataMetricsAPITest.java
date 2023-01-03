@@ -14,6 +14,8 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Test;
 
+import static com.esgc.Utilities.Groups.API;
+import static com.esgc.Utilities.Groups.REGRESSION;
 import static org.hamcrest.Matchers.*;
 
 /**
@@ -21,7 +23,7 @@ import static org.hamcrest.Matchers.*;
  */
 public class UnderlyingDataMetricsAPITest extends APITestBase {
     //1178
-    @Test(groups = {"api", "regression"}, dataProvider = "No ESG API Research Lines")
+    @Test(groups = {API, REGRESSION}, dataProvider = "No ESG API Research Lines")
     @Xray(test = {1178, 2378})
     // 3852 TCFD
     // 3117 Energy Transition
@@ -61,7 +63,7 @@ public class UnderlyingDataMetricsAPITest extends APITestBase {
     }
 
     //3118 Energy Transition
-    @Test(groups = {"api", "regression"}, dataProvider = "API Research Lines")
+    @Test(groups = {API, REGRESSION}, dataProvider = "API Research Lines")
     @Xray(test = { 2379, 1248, 2763, 2945})
     public void UnderlyingDataMetricsAPI_InvalidPayload(@Optional String researchLine) {
         APIController apiController = new APIController();
@@ -76,7 +78,7 @@ public class UnderlyingDataMetricsAPITest extends APITestBase {
         test.pass("UnderLying Data Metrics Call Completed Successfully");
     }
 
-    @Test(groups = {"api", "regression"}, dataProvider = "API Research Lines")
+    @Test(groups = {API, REGRESSION}, dataProvider = "API Research Lines")
     public void UnderlyingDataMetricsAPI_UnauthorisedAccess(@Optional String researchLine) {
 
         APIController apiController = new APIController();
@@ -93,7 +95,7 @@ public class UnderlyingDataMetricsAPITest extends APITestBase {
         test.pass("UnderLying Data Metrics Call Completed Successfully");
     }
 
-    @Test(groups = {"api", "regression"})
+    @Test(groups = {API, REGRESSION})
     @Xray(test = {8072})
     public void PhysicalRiskUnderlyingDataMetricsAPI() {
 

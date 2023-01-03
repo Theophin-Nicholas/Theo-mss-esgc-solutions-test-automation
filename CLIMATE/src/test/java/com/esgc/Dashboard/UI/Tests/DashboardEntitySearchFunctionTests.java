@@ -8,13 +8,15 @@ import com.esgc.Utilities.Xray;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
+import static com.esgc.Utilities.Groups.*;
+
 /**
  * Created by ChaudhS2 on 1/20/2022.
  */
 
 public class DashboardEntitySearchFunctionTests extends UITestBase {
 
-    @Test(groups = {"dashboard", "regression", "ui", "smoke", "search_entity"})
+    @Test(groups = {DASHBOARD, REGRESSION, UI, SMOKE, SEARCH_ENTITY})
     @Xray(test = 5196)
     public void verifySearchBoxappearonSearchIConClickOnDashboard() {
         DashboardPage dashboardPage = new DashboardPage();
@@ -27,7 +29,7 @@ public class DashboardEntitySearchFunctionTests extends UITestBase {
 
     }
 
-    @Test(groups = {"dashboard", "regression", "ui", "smoke", "search_entity"})
+    @Test(groups = {DASHBOARD, REGRESSION, UI, SMOKE, SEARCH_ENTITY})
     @Xray(test = 5195)
     public void verifySearchBoxAppearonSearchIConClickOnPortfolioAnalysisPage() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
@@ -39,7 +41,7 @@ public class DashboardEntitySearchFunctionTests extends UITestBase {
 
     }
 
-    @Test(groups = {"dashboard", "regression", "ui", "smoke", "search_entity"})
+    @Test(groups = {DASHBOARD, REGRESSION, UI, SMOKE, SEARCH_ENTITY})
     @Xray(test = 5200)
     public void verifySearchBoxDisappearOnPortfolioAnalysisPageOnClickCloseICon() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
@@ -56,7 +58,7 @@ public class DashboardEntitySearchFunctionTests extends UITestBase {
 
     }
 
-    @Test(groups = {"dashboard", "regression", "ui", "smoke", "search_entity"})
+    @Test(groups = {DASHBOARD, REGRESSION, UI, SMOKE, SEARCH_ENTITY})
     @Xray(test = 5199)
     public void verifySearchBoxDisappearOnDashboardOnClickCloseICon() {
         DashboardPage dashboardPage = new DashboardPage();
@@ -72,7 +74,7 @@ public class DashboardEntitySearchFunctionTests extends UITestBase {
 
     }
 
-    @Test(groups = {"dashboard", "regression", "ui", "smoke", "search_entity"})
+    @Test(groups = {DASHBOARD, REGRESSION, UI, SMOKE, SEARCH_ENTITY})
     @Xray(test = 5201)
     public void verifySearchBoxOnDashboardDisappearsOnPressingESCKey() {
         DashboardPage dashboardPage = new DashboardPage();
@@ -89,7 +91,7 @@ public class DashboardEntitySearchFunctionTests extends UITestBase {
 
     }
 
-    @Test(groups = {"dashboard", "regression", "ui", "smoke", "search_entity"})
+    @Test(groups = {DASHBOARD, REGRESSION, UI, SMOKE, SEARCH_ENTITY})
     @Xray(test = 5202)
     public void verifySearchBoxOnPortfolioAnalysisPageDisappearsOnPressingESCKey() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
@@ -107,7 +109,7 @@ public class DashboardEntitySearchFunctionTests extends UITestBase {
 
     }
 
-    @Test(groups = {"regression", "ui", "search_entity"},
+    @Test(groups = {REGRESSION, UI, SEARCH_ENTITY},
             description = "ESGCA-5205 - UI | Dashboard Page | Search Function | Verify that user should be able to search an entity by typing in the search box")
     @Xray(test = 5205)
     public void testSearchBox() {
@@ -123,7 +125,7 @@ public class DashboardEntitySearchFunctionTests extends UITestBase {
 
     }
 
-    @Test(groups = {"regression", "ui", "search_entity"},
+    @Test(groups = {REGRESSION, UI, SEARCH_ENTITY},
             description = "ESGCA-5208 - UI | Dashboard Page | Search Function | Verify that 10 most words/phrases user typed appear")
     @Xray(test = 5208)
     public void testSearchFunction() {
@@ -138,7 +140,7 @@ public class DashboardEntitySearchFunctionTests extends UITestBase {
 
     }
 
-    @Test(groups = {"regression", "ui", "search_entity"},
+    @Test(groups = {REGRESSION, UI, SEARCH_ENTITY},
             description = "ESGCA-5710 - UI | Dashboard Page | Search Function | Verify the message in case No match found for the searched entity")
     @Xray(test = 5710)
     public void testSearchFunctionForNoMatchEntry() {
@@ -149,7 +151,7 @@ public class DashboardEntitySearchFunctionTests extends UITestBase {
         assertTestCase.assertTrue(dashboardPage.checkWarningWhenNoMatchEntry("sss"), "No results found message appeared as warning");
     }
 
-    @Test(groups = {"regression", "ui", "search_entity"},
+    @Test(groups = {REGRESSION, UI, SEARCH_ENTITY},
             description = "Verify that clicking on Entity name redirects to Entity page and ESC button is closing the Entity page")
     @Xray(test = {5843,5846})
     public void testClickingOnEntityName() {
@@ -164,7 +166,7 @@ public class DashboardEntitySearchFunctionTests extends UITestBase {
         assertTestCase.assertFalse(dashboardPage.isSearchBoxDisplayed(), "User is on expected page");
     }
 
-  /*  @Test(groups = {"regression", "ui", "search_entity"},
+  /*  @Test(groups = {REGRESSION, UI, SEARCH_ENTITY},
             description = "ESGCA-5846 - UI | Dashboard Page | Search Function | Verify that clicking ESC button is closing the Entity page")
     @Xray(test = 5846)
     public void testESCButtonClosingEntityPage() {

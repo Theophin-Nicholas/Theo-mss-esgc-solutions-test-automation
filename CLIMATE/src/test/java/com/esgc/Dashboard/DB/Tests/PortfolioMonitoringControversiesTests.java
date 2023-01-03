@@ -16,9 +16,11 @@ import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
+import static com.esgc.Utilities.Groups.*;
+
 public class PortfolioMonitoringControversiesTests extends DataValidationTestBase {
 
-    @Test(groups = {"regression", "data_validation", "dashboard"})
+    @Test(groups = {REGRESSION, DATA_VALIDATION, DASHBOARD})
     @Xray(test = 4060)
     public void verifyControversiesOrder() throws ParseException {
         Response portfoliosResponse = APIUtilities.getAvailablePortfoliosForUser();
@@ -38,7 +40,7 @@ public class PortfolioMonitoringControversiesTests extends DataValidationTestBas
         }
     }
 
-    @Test(groups = {"regression", "data_validation", "dashboard"})
+    @Test(groups = {REGRESSION, DATA_VALIDATION, DASHBOARD})
     @Xray(test = 4062)
     public void verifyControversiesOfSameCompany() {
 
@@ -66,7 +68,7 @@ public class PortfolioMonitoringControversiesTests extends DataValidationTestBas
 
     }
 
-    @Test(groups = {"regression", "data_validation", "dashboard"})
+    @Test(groups = {REGRESSION, DATA_VALIDATION, DASHBOARD})
     @Xray(test = {6816, 6955, 4058, 7823})
     public void verifyControversiesFromLast60Days() {
 
@@ -95,7 +97,7 @@ public class PortfolioMonitoringControversiesTests extends DataValidationTestBas
         }
     }
 
-    @Test(groups = {"regression", "data_validation", "dashboard"})
+    @Test(groups = {REGRESSION, DATA_VALIDATION, DASHBOARD})
     @Xray(test = {4058, 7823})
     public void verifyControversiesFromLastOneMonth() {
 
@@ -130,7 +132,7 @@ public class PortfolioMonitoringControversiesTests extends DataValidationTestBas
         }
     }
 
-    @Test(groups = {"regression", "data_validation", "dashboard"})
+    @Test(groups = {REGRESSION, DATA_VALIDATION, DASHBOARD})
     @Xray(test = {11050})
     public void verifySubsidiaryControversies() {
 

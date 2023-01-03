@@ -7,11 +7,12 @@ import com.esgc.Utilities.EntitlementsBundles;
 import com.esgc.Utilities.Xray;
 import org.testng.annotations.Test;
 
+import static com.esgc.Utilities.Groups.*;
 
 public class ExportEntitlementTests extends DashboardUITestBase {
 
 
-    @Test(groups = {"regression", "ui", "entitlements"})
+    @Test(groups = {REGRESSION, UI, ENTITLEMENTS})
     @Xray(test = {7815})
     public void verifyExportIsAvailableInDashboard_Bundle() {
 
@@ -33,7 +34,7 @@ public class ExportEntitlementTests extends DashboardUITestBase {
         dashboardPage.deleteDownloadFolder();
     }
 
-    @Test(groups = {"regression", "ui", "entitlements"})
+    @Test(groups = {REGRESSION, UI, ENTITLEMENTS})
     @Xray(test = {7816})
     public void verifyExportIsNotAvailableInDashboard_Bundle() {
 

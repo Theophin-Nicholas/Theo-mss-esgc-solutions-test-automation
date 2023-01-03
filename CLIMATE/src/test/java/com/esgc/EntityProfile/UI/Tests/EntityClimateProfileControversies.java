@@ -16,10 +16,12 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import static com.esgc.Utilities.Groups.*;
+
 public class EntityClimateProfileControversies extends UITestBase {
 
 
-    @Test(groups = {"entity_climate_profile", "regression", "ui", "smoke"})
+    @Test(groups = {ENTITY_PROFILE, REGRESSION, UI, SMOKE})
     @Xray(test = {8402, 8403, 8404, 8405, 8406,8407,8408,8409,8411})
     public void validateEntityControversiesWidget() {
         EntityClimateProfilePage entityProfilePage = new EntityClimateProfilePage();
