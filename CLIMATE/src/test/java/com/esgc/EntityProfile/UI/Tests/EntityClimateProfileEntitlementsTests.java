@@ -163,4 +163,28 @@ public class EntityClimateProfileEntitlementsTests extends UITestBase {
         assertTestCase.assertTrue(!entityProfilePage.verifyMethodologiesTabIsDisplayed(),"Validate methodologies tab is available");
     }
 
+    @Test(groups = {"entity_climate_profile", "regression", "ui", "smoke", "entitlements"})
+    @Xray(test = {11805})
+    public void validatePDF_ButtonWhenNoExportEntitlement(){
+        LoginPage login = new LoginPage();
+
+        login.entitlementsLogin(EntitlementsBundles.USER_WITH_ESG_WITHOUT_EXPORT_ENTITLEMENT);
+        BrowserUtils.wait(5);
+
+        String company = "Apple, Inc.";
+        test.info("Searching and Selecting the company");
+        EntityClimateProfilePage entityProfilePage = new EntityClimateProfilePage();
+        String companyName = entityProfilePage.searchAndLoadClimateProfilePage(company);
+        assertTestCase.assertTrue(entityProfilePage.validateGlobalCompanyNameHeader(companyName),companyName+" Header Verification");
+        test.info("Searched and selected the company: "+ companyName);
+
+        entityProfilePage.selectExportSourcesDocuments();
+        assertTestCase.assertTrue(entityProfilePage.verifyPopup(), "Verify Export Sources Documents popup");
+        assertTestCase.assertTrue(entityProfilePage.verifyPopupTitle(companyName), "Verify Export Popup Title");
+
+        test.info("Verifying PDF Button");
+        assertTestCase.assertFalse(entityProfilePage.IsPdfDownloadButtonAvailable(),"Verification of PDF button is not available");
+
+    }
+
 }

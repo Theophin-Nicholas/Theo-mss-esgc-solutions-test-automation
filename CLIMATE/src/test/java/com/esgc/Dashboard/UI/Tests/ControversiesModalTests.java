@@ -6,6 +6,8 @@ import com.esgc.Dashboard.UI.Pages.DashboardPage;
 import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.EntitlementsBundles;
 import com.esgc.Utilities.Xray;
+import org.apache.commons.lang3.math.NumberUtils;
+import org.openqa.selenium.WebElement;
 import org.testng.annotations.Test;
 
 import static com.esgc.Utilities.Groups.*;
@@ -18,7 +20,6 @@ public class ControversiesModalTests extends DashboardUITestBase {
         DashboardPage dashboardPage = new DashboardPage();
         dashboardPage.selectSamplePortfolioFromPortfolioSelectionModal();
         dashboardPage.clickFiltersDropdown();
-
 
         dashboardPage.selectRandomOptionFromFiltersDropdown("as_of_date");
         dashboardPage.checkControversiesAreInLast60Days();
@@ -130,6 +131,33 @@ public class ControversiesModalTests extends DashboardUITestBase {
         assertTestCase.assertTrue(allControversies.length == notCriticalControversies.length + criticalControversies.length, "Verify Sum of Critical and Non Critical Controversies is All Controversies count");
         assertTestCase.assertTrue(dashboardPage.compareArrays(allControversies, criticalControversies), "Verify all critical controversies are in All controversies ");
         assertTestCase.assertTrue(dashboardPage.compareArrays(allControversies, notCriticalControversies), "Verify all not critical controversies are in All controversies ");
+
+    }
+
+//TODO Controversies ESG parts are not in scope yet, follow up https://esjira/browse/ESGCA-7696
+//Planned for Q2 2023
+    @Test(enabled = false, groups = {"regression", "dashboard", "ui"})
+    @Xray(test = 8306)
+    public void controversiesInEsg() {
+        DashboardPage dashboardPage = new DashboardPage();
+        dashboardPage.selectSamplePortfolioFromPortfolioSelectionModal();
+
+        BrowserUtils.waitForVisibility(dashboardPage.criticalControversiesInEsg, 30);
+        assertTestCase.assertEquals(dashboardPage.criticalControversiesInEsg.getText(), "Critical Controversies in ESG", "Verify Critical Controversies in ESG label in Portfolio Monitoring table");
+
+        assertTestCase.assertTrue(dashboardPage.esgScoreBoxesLabels.get(0).getText().contains("E"), "Verify first box label is 'E'");
+        assertTestCase.assertTrue(dashboardPage.esgScoreBoxesLabels.get(1).getText().contains("S"), "Verify first box label is 'S'");
+        assertTestCase.assertTrue(dashboardPage.esgScoreBoxesLabels.get(2).getText().contains("G"), "Verify first box label is 'G'");
+
+        for(WebElement label: dashboardPage.esgScoreBoxesLabels){
+            String labelText = label.getText();
+            String score = labelText.substring(labelText.indexOf('(')+1,labelText.indexOf(')'));
+            assertTestCase.assertTrue(NumberUtils.isParsable(score), "Verify label is having score inside parenthesis");
+        }
+
+        for(WebElement box:dashboardPage.esgScoreBoxes){
+            assertTestCase.assertEquals(box.getCssValue("background-color"),"rgba(179, 23, 23, 0.18)", "Verify label is having score inside parenthesis");
+        }
 
     }
 }

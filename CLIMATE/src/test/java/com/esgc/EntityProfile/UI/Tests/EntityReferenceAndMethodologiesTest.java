@@ -14,7 +14,7 @@ import static com.esgc.Utilities.Groups.*;
 public class EntityReferenceAndMethodologiesTest extends UITestBase {
 
     @Test(groups = {ENTITY_PROFILE, REGRESSION, UI, ROBOT_DEPENDENCY})
-    @Xray(test = {8348})
+    @Xray(test = {8348, 11726})
     public void validateReferenceAndMethodologyPopup(){
 
         String company = "Rogers Corp.";

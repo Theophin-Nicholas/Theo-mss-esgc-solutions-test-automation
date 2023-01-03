@@ -39,6 +39,15 @@ public class DashboardPage extends UploadPage {
     @FindBy(xpath = "//h3[contains(text(),'Portfolio Average')]")
     public WebElement heatmapPortfolioAverage;
 
+    @FindBy(xpath = "//div[@id='portfoliomonitoring-test-id']//div[@class='scores']/preceding-sibling::span")
+    public WebElement criticalControversiesInEsg;
+
+    @FindBy(xpath = "//div[@class='score']/span")
+    public List<WebElement> esgScoreBoxes;
+
+    @FindBy(xpath = "//div[@class='score']/p")
+    public List<WebElement> esgScoreBoxesLabels;
+
     @FindBy(xpath = "//div[text()='Physical Risk']")
     public WebElement physicalRiskCard;
 

@@ -16,7 +16,7 @@ import static com.esgc.Utilities.Groups.*;
 public class EntityExportOrSourcesDocumentsTests extends UITestBase {
 
     @Test(groups = {ENTITY_PROFILE, REGRESSION, UI, ROBOT_DEPENDENCY})
-    @Xray(test = {9206, 9208, 9209, 9212, 10175})
+    @Xray(test = {9206, 9208, 9209, 9212, 10175, 11726})
     public void validateExportSourceDocumentsPopup(){
 
         String company = "Rogers Corp.";

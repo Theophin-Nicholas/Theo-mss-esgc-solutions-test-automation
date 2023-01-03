@@ -267,6 +267,10 @@ public class LoginPage extends ClimatePageBase {
                 wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.USER_WITH_EXPORT_ENTITLEMENT_USERNAME, Keys.ENTER);
                 wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.USER_WITH_EXPORT_ENTITLEMENT_PASSWORD);
                 break;
+            case USER_WITH_ESG_WITHOUT_EXPORT_ENTITLEMENT:
+                wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.USER_WITH_ESG_WITHOUT_EXPORT_USERNAME, Keys.ENTER);
+                wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.USER_WITH_ESG_WITHOUT_EXPORT_PASSWORD);
+                break;
             case USER_WITH_OUT_EXPORT_ENTITLEMENT:
                 wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.USER_WITH_OUT_EXPORT_ENTITLEMENT_USERNAME, Keys.ENTER);
                 wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.USER_WITH_OUT_EXPORT_ENTITLEMENT_PASSWORD);
@@ -290,6 +294,10 @@ public class LoginPage extends ClimatePageBase {
             case PDF_EXPORT_ONLY_SOURCEDOCUMENTS_ENTITLEMENT:
                 wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.PDF_EXPORT_ONLY_SOURCEDOCUMENTS_USERNAME, Keys.ENTER);
                 wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.PDF_EXPORT_ONLY_SOURCEDOCUMENTS_PASSWORD);
+                break;
+            case NO_PREVIOUSLY_DOWNLOADED_REGULATORY_REPORTS:
+                wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.NO_PREVIOUSLY_DOWNLOADED_REGULATORY_REPORTS_USERNAME, Keys.ENTER);
+                wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.NO_PREVIOUSLY_DOWNLOADED_REGULATORY_REPORTS_PASSWORD);
                 break;
             default:
                 Assert.fail("Bundle not found!");

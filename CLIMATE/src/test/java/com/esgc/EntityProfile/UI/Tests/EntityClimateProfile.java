@@ -24,8 +24,8 @@ import static com.esgc.Utilities.Groups.*;
 public class EntityClimateProfile extends UITestBase {
 
 
-    @Xray(test = {5875, 5879})
-    @Test(enabled = false, groups = {REGRESSION, UI, SMOKE, ENTITY_PROFILE},
+    @Xray(test = {5875, 5879, 11725})
+    @Test(enabled = true, groups = {REGRESSION, UI, SMOKE, ENTITY_PROFILE},
             description = "Verify if Company headers are Displayed as Expected",
             dataProviderClass = DataProviderClass.class, dataProvider = "CompanyNames")
     public void testCompanyHeader(String company) {

@@ -53,11 +53,10 @@ public class GlobalHeaderSidePanel extends UITestBase {
         actualList.remove(0);
         expectedList.remove(0);
         expectedList.remove(0);
-        Collections.sort(expectedList);
+        Collections.sort(expectedList, String.CASE_INSENSITIVE_ORDER);
         System.out.println("expectedList = " + expectedList);
         System.out.println("actualList = " + actualList);
-        //assertTestCase.assertEquals(actualList, expectedList);
-        //TODO Sorting is failing due to digits used in portfolio. And UI sorting logic not matching.
+        assertTestCase.assertEquals(actualList, expectedList);
         //Multiple portfolio with the same name is allowed for now
         Set<String> checkDuplicates = new HashSet<>(actualList);
         int beforeRemovingTheDuplicatesSize = actualList.size();
