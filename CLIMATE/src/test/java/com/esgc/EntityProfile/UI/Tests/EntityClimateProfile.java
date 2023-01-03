@@ -33,8 +33,7 @@ public class EntityClimateProfile extends UITestBase {
         EntityClimateProfilePage entityProfilePage = new EntityClimateProfilePage();
         String companyName = entityProfilePage.searchAndLoadClimateProfilePage(company);
         Assert.assertTrue(entityProfilePage.validateGlobalCompanyNameHeader(companyName));
-//        entityProfilePage.validateCompanyHeader(companyName);
-        entityProfilePage.validateCompanyNewHeader(companyName);
+        entityProfilePage.validateCompanyHeader(companyName);
     }
 
     @Xray(test = 6019)

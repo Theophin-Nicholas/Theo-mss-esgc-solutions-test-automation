@@ -41,7 +41,7 @@ public class EntityClimateProfilePage extends ClimatePageBase {
     public List<String> sectorsList = Arrays.asList("Automobiles", "ARA - all sectors", "Oil&Gas", "Electric & Gas Utilities",
             "Shipping", "Airlines", "Cement", "Steel", "Aluminium");
 
-    @FindBy(xpath = "//div/div[@class='MuiToolbar-root MuiToolbar-regular']//*[text()]")
+    @FindBy(xpath = "//div[@aria-labelledby='alert-dialog-title']/div[@style]//*[text()]")
     public List<WebElement> companyHeaderItems;
 
     @FindBy(xpath = " (//*[name()='g'][contains(@class,'highcharts-legend-item highcharts-line-')])")
@@ -89,7 +89,7 @@ public class EntityClimateProfilePage extends ClimatePageBase {
     @FindBy(xpath = "//button[@id='export_pdf']")
     public WebElement pdfDownloadButton;
 
-    @FindBy(xpath = "//div[@class='MuiToolbar-root MuiToolbar-regular']//button[@id='ref_Meth_button']/span/div")
+    @FindBy(id = "ref_Meth_button")
     public WebElement referenceAndMethodologiesTab;
 
     @FindBy(xpath = "//div[@role='dialog'][not(@aria-describedby)]//h2")
@@ -543,7 +543,7 @@ public class EntityClimateProfilePage extends ClimatePageBase {
 
     public boolean validateGlobalCompanyNameHeader(String companyName) {
         try{
-            return Driver.getDriver().findElement(By.xpath("//div[@class='MuiToolbar-root MuiToolbar-regular']//li[@role='menuitem']/span[text()='"+companyName+"']")).isDisplayed();
+            return Driver.getDriver().findElement(By.xpath("//li[@role='menuitem']/span[text()='"+companyName+"']")).isDisplayed();
         }catch(Exception e){
             return false;
         }
@@ -625,19 +625,7 @@ public class EntityClimateProfilePage extends ClimatePageBase {
     }
 
 
-    public void validateCompanyHeader(String CompanyName) {
-        List<String> headerList = Arrays.asList("LEI", "Orbis ID", "ISIN");
-        WebElement companyNameHeader = getCompanyHeader(CompanyName);
-        List<WebElement> companySummary = companyNameHeader.findElements(By.xpath("parent::span/parent::div/following-sibling::div/span"));
-        Assert.assertTrue(headerList.stream().anyMatch(a -> Arrays.asList(companySummary.get(0).getText().split(":|,")).contains(a)));
-        System.out.println("companySummary.get(3).getText() = " + companySummary.get(2).getText());
-        System.out.println("companySummary.get(4).getText() = " + companySummary.get(3).getText());
-        Assert.assertTrue(companySummary.get(2).getText().contains("Region"));
-        Assert.assertTrue(companySummary.get(3).getText().contains("Sector"));
-    }
-
-    public void validateCompanyNewHeader(String companyName) {
-
+    public void validateCompanyHeader(String companyName) {
         List<String> actualHeaderItems = new ArrayList<>();
         for(WebElement item:companyHeaderItems) {
             actualHeaderItems.add(item.getText());
