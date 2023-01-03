@@ -633,7 +633,8 @@ public class EntityClimateProfilePage extends ClimatePageBase {
 
         List<String> expectedHeaderItems = new ArrayList<>();
         expectedHeaderItems.add(companyName);
-        expectedHeaderItems.add("Confidence Level:");
+        //TODO: On Demand Release
+        // expectedHeaderItems.add("Confidence Level:");
         expectedHeaderItems.add("Export/Sources Documents");
         expectedHeaderItems.add("Reference and Methodologies");
         expectedHeaderItems.add("ESC");
