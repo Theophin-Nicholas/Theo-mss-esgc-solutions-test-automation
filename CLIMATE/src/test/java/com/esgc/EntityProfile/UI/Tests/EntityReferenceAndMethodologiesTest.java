@@ -12,7 +12,7 @@ import java.util.List;
 public class EntityReferenceAndMethodologiesTest extends UITestBase {
 
     @Test(groups = {"entity_climate_profile", "regression", "ui", "robot_dependency"})
-    @Xray(test = {8348})
+    @Xray(test = {8348,11726})
     public void validateReferenceAndMethodologyPopup(){
 
         String company = "Rogers Corp.";
