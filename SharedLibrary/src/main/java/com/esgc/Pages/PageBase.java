@@ -363,6 +363,18 @@ public abstract class PageBase {
     @FindBy(xpath = "//span[@heap_id='view-panel' and contains(text(),'Coverage:')]")
     public WebElement CoverageLink;
 
+
+    //=============== 404 Page not Found
+    @FindBy(xpath = "//*[text()=' Page not found ']")
+    public WebElement pageNotFoundMessage;
+
+    @FindBy(xpath = "//*[text()='The link might be corrupted or the page removed']")
+    public WebElement pageRemovedMessage;
+
+    @FindBy(xpath = "//*[text()=\"Return to Moody's ESG360\"]")
+    public WebElement returnToESG360Button;
+
+
     protected WebDriverWait wait = new WebDriverWait(Driver.getDriver(), Duration.ofSeconds(20));
     protected Actions actions = new Actions(Driver.getDriver());
     private String finalStringToCheck;
