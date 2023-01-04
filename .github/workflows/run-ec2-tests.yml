@@ -32,11 +32,10 @@ jobs:
     - name: Maven version
       run: |
         mvn --version
-        C:\Users\Administrator\Downloads\apache-maven-3.8.6-bin\apache-maven-3.8.6\bin\mvn -version
 
     - name: Build with Maven
       run: |
-        C:\Users\Administrator\Downloads\apache-maven-3.8.6-bin\apache-maven-3.8.6\bin\mvn test -Dtest=PortfolioNameUpdateAPITest -DfailIfNoTests=false -Dbrowser=edge
+        mvn test -Dtest=PortfolioNameUpdateAPITest -DfailIfNoTests=false -Dbrowser=edge
     
     
     - name: Surefire Report
