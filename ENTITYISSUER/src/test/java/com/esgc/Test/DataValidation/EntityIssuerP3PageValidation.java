@@ -9,7 +9,6 @@ import com.esgc.DBModels.EntityIssuerPageDBModels.P3HeaderIdentifiersDBModel;
 import com.esgc.DBModels.EntityIssuerPageDBModels.SourceDocumentDBModel;
 import com.esgc.Test.TestBases.EntityIssuerPageDataValidationTestBase;
 import com.esgc.Utilities.Database.EntityIssuerQueries;
-import com.esgc.Utilities.Environment;
 import com.esgc.Utilities.Xray;
 import io.restassured.response.Response;
 import org.testng.annotations.Test;
@@ -17,6 +16,7 @@ import org.testng.annotations.Test;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.esgc.Pages.LoginPageIssuer.OrbisID;
 
 
 public class EntityIssuerP3PageValidation extends EntityIssuerPageDataValidationTestBase {
@@ -25,7 +25,7 @@ public class EntityIssuerP3PageValidation extends EntityIssuerPageDataValidation
     @Xray(test = {7352})
     @Test(groups = {"regression", "entity_issuer"})
     public void ValidateP3PageHeaderIdentifiers() {
-        String orbisID = Environment.p3OrbisId;
+        String orbisID = OrbisID;
         P3HeaderIdentifiersDBModel HeaderIdentifierDBResult = EntityIssuerQueries.getHeaderIdentifiers(orbisID);
 
         EntityIssuerPageAPIController entityIssuerPageAPIController = new EntityIssuerPageAPIController();
@@ -43,7 +43,7 @@ public class EntityIssuerP3PageValidation extends EntityIssuerPageDataValidation
     @Xray(test = 7775)
     @Test(groups = {"regression", "entity_issuer"})
     public void p3sourceDocumentTest() {
-        String orbisID = Environment.OrbisId;
+        String orbisID = OrbisID;
         List<SourceDocumentDBModel> sourceDocumentDBData = EntityIssuerQueries.getSourceDocumentDBData(orbisID);
         EntityIssuerPageAPIController entityIssuerPageAPIController = new EntityIssuerPageAPIController();
         Response response = entityIssuerPageAPIController.getSourceDocument(orbisID);
@@ -61,7 +61,7 @@ public class EntityIssuerP3PageValidation extends EntityIssuerPageDataValidation
     @Xray(test = 7407)
     @Test(groups = {"regression", "entity_issuer"})
     public void p3ControversiesTest() {
-        String orbisID = Environment.OrbisId;
+        String orbisID = OrbisID;
         List<P3ControversiesDBModel> controversiesDBData = EntityIssuerQueries.getControversiesData(orbisID);
         EntityIssuerPageAPIController entityIssuerPageAPIController = new EntityIssuerPageAPIController();
         Response response = entityIssuerPageAPIController.getControversiesAPI(orbisID);
@@ -81,10 +81,11 @@ public class EntityIssuerP3PageValidation extends EntityIssuerPageDataValidation
 
     }
 
+    //TODO This feature is not available as of now for validation
     @Xray(test = {9727})
-    @Test(groups = {"regression", "entity_issuer"})
+    @Test(enabled = false ,groups = {"regression", "entity_issuer"})
     public void ValidateP3PageHeaderOverallDisclosureRatio() {
-        String orbisID = Environment.p3OrbisId;
+        String orbisID = OrbisID;
         int OverallDisclosureRatio = EntityIssuerQueries.getOverallDisclosureRatio(orbisID);
 
         EntityIssuerPageAPIController entityIssuerPageAPIController = new EntityIssuerPageAPIController();

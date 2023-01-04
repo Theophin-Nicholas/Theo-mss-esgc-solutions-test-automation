@@ -3,15 +3,21 @@ package com.esgc.Tests.TestBases;
 import com.esgc.Pages.LoginPage;
 import com.esgc.TestBase.TestBase;
 import com.esgc.Utilities.BrowserUtils;
-import com.esgc.Utilities.ConfigurationReader;
+import com.esgc.Utilities.Database.DatabaseDriver;
 import com.esgc.Utilities.Driver;
 import com.esgc.Utilities.Environment;
 import org.openqa.selenium.JavascriptExecutor;
+import org.testng.annotations.BeforeTest;
 
 import java.time.Duration;
 
 public class TestBaseClimate extends TestBase {
     String accessToken;
+
+    @BeforeTest(alwaysRun = true)
+    public void createDBConnectionForAllMethods(){
+        DatabaseDriver.createDBConnection();
+    }
 
     public void getNoExportBundleAccessTokenDataValidation() {
         System.out.println("getting token");
@@ -22,10 +28,10 @@ public class TestBaseClimate extends TestBase {
         Driver.getDriver().manage().window().maximize();
         Driver.getDriver().manage().timeouts().implicitlyWait(Duration.ofSeconds(30));
         LoginPage loginPage = new LoginPage();
-        loginPage.userLoginWithNoExportBundle();
+        //loginPage.userLoginWithNoExportBundle();
         //loginPage.entitlementsLogin(EntitlementsBundles.USER_WITH_OUT_CONTROVERSIES_ENTITLEMENT);
-//        loginPage.userLoginWithNoControversiesBundle();
-//        loginPage.entitlementsLogin(EntitlementsBundles.USER_WITH_OUT_CONTROVERSIES_ENTITLEMENT);
+        loginPage.userLoginWithNoControversiesBundle();
+        //loginPage.entitlementsLogin(EntitlementsBundles.USER_WITH_OUT_CONTROVERSIES_ENTITLEMENT);
         BrowserUtils.wait(20);
         String getAccessTokenScript = "return JSON.parse(localStorage.getItem('okta-token-storage')).accessToken.accessToken";
         accessToken = ((JavascriptExecutor) Driver.getDriver()).executeScript(getAccessTokenScript).toString();

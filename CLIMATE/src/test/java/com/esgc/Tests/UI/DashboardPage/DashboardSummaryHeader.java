@@ -23,9 +23,7 @@ public class DashboardSummaryHeader extends DashboardUITestBase {
 
         String dateFilter = CaseUtils.toCamelCase(Month.of(Integer.valueOf(month)).name(), true, ' ') + " " + year;
 
-        researchLinePage.clickFiltersDropdown();
         researchLinePage.selectOptionFromFiltersDropdown("regions", region);
-        researchLinePage.clickFiltersDropdown();
         researchLinePage.selectOptionFromFiltersDropdown("as_of_date", dateFilter);
         BrowserUtils.wait(5);
 
@@ -85,20 +83,6 @@ public class DashboardSummaryHeader extends DashboardUITestBase {
 
         dashboardPage.closePortfolioExportDrawer();
 
-    }
-
-    @Test(groups = {"dashboard", "regression", "ui", "smoke"})
-    @Xray(test = {8334, 8328,9729})
-    public void verifyViewMethodologies() {
-        // ESGCA-8334: General UI Checks for Methodology Drawer
-        DashboardPage dashboardPage = new DashboardPage();
-        dashboardPage.navigateToPageFromMenu("Dashboard");
-        BrowserUtils.wait(4);
-        dashboardPage.selectViewMethodologies();
-        assertTestCase.assertTrue(dashboardPage.verifyMethodologiesPopup(), "Verify Methodologies popup");
-        dashboardPage.verifyMethodologiesHeader();
-        dashboardPage.verifyMethodologiesLinks();
-        dashboardPage.clickHideLink();
     }
 
 }

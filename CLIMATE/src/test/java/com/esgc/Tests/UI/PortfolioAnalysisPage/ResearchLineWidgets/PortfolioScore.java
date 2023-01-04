@@ -8,7 +8,6 @@ import com.esgc.Tests.TestBases.UITestBase;
 import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.Xray;
 import org.testng.Assert;
-import org.testng.SkipException;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
@@ -75,9 +74,6 @@ public class PortfolioScore extends UITestBase {
     @Xray(test = {551, 2506, 2657, 2253, 6712, 2504, 2655})
     public void verifyPortfolioScore(String page) {
         ResearchLinePage researchLinePage = new ResearchLinePage();
-        if (page.equals("Physical Risk Management")) {
-            throw new SkipException("Physical Risk Management - Portfolio Distribution is not ready to test");
-        }
         test.info("Navigated to " + page + " Page");
         researchLinePage.navigateToResearchLine(page);
         assertTestCase.assertTrue(researchLinePage.checkIfResearchLineTitleIsDisplayed(page), "Portfolio Score Title Verification");

@@ -18,7 +18,7 @@ public class EntityClimateProfileMethodologyLinks extends UITestBase {
      /*   Driver.getDriver().manage().deleteAllCookies();
         Driver.getDriver().navigate().refresh();*/
         LoginPage login = new LoginPage();
-        login.clickOnLogout();
+        //login.clickOnLogout();
         ResearchLinePage researchLinePage = new ResearchLinePage();
         login.entitlementsLogin(EntitlementsBundles.PHYSICAL_RISK);
 
@@ -30,7 +30,7 @@ public class EntityClimateProfileMethodologyLinks extends UITestBase {
         test.info("Searching and Selecting the company");
         EntityClimateProfilePage entityProfilePage = new EntityClimateProfilePage();
         String companyName = entityProfilePage.searchAndLoadClimateProfilePage(company);
-        assertTestCase.assertTrue(entityProfilePage.validateGlobalHeader(companyName), companyName + " Header Verification");
+        assertTestCase.assertTrue(entityProfilePage.validateGlobalCompanyNameHeader(companyName), companyName + " Header Verification");
         test.info("Searched and selected the company: " + companyName);
 
         test.info("Verifying Physical Risk Items");
@@ -55,7 +55,7 @@ public class EntityClimateProfileMethodologyLinks extends UITestBase {
 
         EntityClimateProfilePage entityProfilePage = new EntityClimateProfilePage();
         String companyName = entityProfilePage.searchAndLoadClimateProfilePage("Apple, Inc.");
-        assertTestCase.assertTrue(entityProfilePage.validateGlobalHeader(companyName), companyName + " Header Verification");
+        assertTestCase.assertTrue(entityProfilePage.validateGlobalCompanyNameHeader(companyName), companyName + " Header Verification");
         test.info("Searched and selected the company: " + companyName);
 
         test.info("Verifying Transition Risk Widgets");

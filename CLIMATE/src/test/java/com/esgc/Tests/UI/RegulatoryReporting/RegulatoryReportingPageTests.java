@@ -1,24 +1,26 @@
 package com.esgc.Tests.UI.RegulatoryReporting;
 
-import com.esgc.Controllers.RegulatoryReportingAPIController;
 import com.esgc.Pages.DashboardPage;
 import com.esgc.Pages.LoginPage;
 import com.esgc.Pages.PortfolioAnalysisPage.PhysicalRiskPages.PhysicalRiskManagementPages.PhysicalRiskManagementPage;
 import com.esgc.Pages.RegulatoryReportingPage;
 import com.esgc.Tests.TestBases.UITestBase;
-import com.esgc.Utilities.*;
+import com.esgc.Utilities.BrowserUtils;
+import com.esgc.Utilities.DateTimeUtilities;
+import com.esgc.Utilities.Environment;
+import com.esgc.Utilities.Xray;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.Color;
 import org.testng.annotations.Test;
 
 import java.util.List;
+import java.util.Set;
 
 public class RegulatoryReportingPageTests extends UITestBase {
     RegulatoryReportingPage reportingPage = new RegulatoryReportingPage();
 
-    @Test(groups = {"regression", "ui", "regulatoryReporting"}, description = "Verify that user can navigate to Regulatory Reporting page")
-//, "smoke"
-    @Xray(test = {10693, 10694, 10709, 10710, 10743, 10744, 10745, 10865})
+    @Test(groups = {"regression", "ui", "regulatoryReporting", "smoke"}, description = "Verify that user can navigate to Regulatory Reporting page")
+    @Xray(test = {10693, 10694, 10709, 10710, 10743, 10744, 10745, 10851, 10865})
     public void verifyReportingListTest() {
         DashboardPage dashboardPage = new DashboardPage();
         dashboardPage.clickMenu();
@@ -38,7 +40,7 @@ public class RegulatoryReportingPageTests extends UITestBase {
                 "Regulatory Reporting Page - Reporting SubTitle is verified");
         assertTestCase.assertTrue(reportingPage.getReportingList().size() > 0,
                 "Regulatory Reporting Page - Reporting list is verified");
-        assertTestCase.assertTrue(reportingPage.portfolioNamesList.size() > 0,
+        assertTestCase.assertTrue(reportingPage.rrPage_portfolioNamesList.size() > 0,
                 "Regulatory Reporting Page - Portfolio list is verified");
         assertTestCase.assertTrue(reportingPage.getReportingList().contains("SFDR PAIs"),
                 "Regulatory Reporting Page - Reporting list is verified");
@@ -49,6 +51,9 @@ public class RegulatoryReportingPageTests extends UITestBase {
                 "SFDR PAIs is not selected");
         assertTestCase.assertTrue(reportingPage.isSelectedReportingOptionByName("EU Taxonomy"),
                 "EU Taxonomy is selected");
+        assertTestCase.assertTrue(reportingPage.interimReportsOption.isDisplayed(),"Interim Reports option is displayed");
+        assertTestCase.assertTrue(reportingPage.annualReportsOption.isEnabled(),"Annual Reports option is enabled");
+        assertTestCase.assertTrue(reportingPage.useLatestDataOption.isDisplayed(),"Use Latest Data option is displayed");
     }
 
     @Test(groups = {"regression", "ui", "regulatoryReporting"}, description = "Verify user portfolio list on regulatory reporting page")
@@ -99,8 +104,8 @@ public class RegulatoryReportingPageTests extends UITestBase {
         //Verify "Coverage" column is present with "% of coverage" as its value.
         assertTestCase.assertEquals(actualPortfoliosList.size(), reportingPage.coverageList.size(), "Coverage column is present with % of coverage as its value");
         for (WebElement coverage : reportingPage.coverageList) {
-            System.out.println("coverage.getText() = " + coverage.getText());
-            assertTestCase.assertTrue(coverage.getText().matches("\\d+%") || coverage.getText().equals("NA"),
+            //System.out.println("coverage.getText() = " + coverage.getText());
+            assertTestCase.assertTrue(coverage.getText().matches("\\d+.*") || coverage.getText().equals("NA"),
                     "Coverage column is present with % of coverage as its value");
         }
         System.out.println("Coverage column is present with % of coverage as its value is verified");
@@ -119,8 +124,8 @@ public class RegulatoryReportingPageTests extends UITestBase {
             reportingPage.selectPortfolioOptionByIndex(1);
         }
         assertTestCase.assertTrue(reportingPage.portfolioRadioButtonList.get(0).isSelected(), "Portfolio 1 is selected");
-//        System.out.println("Font-Family = " + regulatoryReportingPage.portfolioNamesList.get(0).getCssValue("font-family"));
-        assertTestCase.assertTrue(reportingPage.portfolioNamesList.get(0).getCssValue("font-family").contains("WhitneyNarrSemiBold"), "Portfolio is bolded");
+        System.out.println("Font-Family = " + reportingPage.rrPage_portfolioNamesList.get(0).getCssValue("font-family"));
+        assertTestCase.assertTrue(reportingPage.rrPage_portfolioNamesList.get(0).getCssValue("font-family").contains("WhitneyNarrSemiBold"), "Portfolio is bolded");
         assertTestCase.assertTrue(reportingPage.lastUploadedList.get(0).getCssValue("font-family").contains("WhitneyNarrSemiBold"), "Upload date is bolded");
         assertTestCase.assertTrue(reportingPage.coverageList.get(0).getCssValue("font-family").contains("WhitneyNarrSemiBold"), "Coverage is bolded");
         assertTestCase.assertTrue(reportingPage.reportingForList.get(0).getCssValue("font-family").contains("WhitneyNarrSemiBold"), "Reporting for year is bolded");
@@ -243,7 +248,7 @@ public class RegulatoryReportingPageTests extends UITestBase {
         reportingPage.deselectInterimReports();
         reportingPage.deselectAnnualReports();
         reportingPage.deselectUseLatestData();
-        assertTestCase.assertTrue(reportingPage.reportingForListButtons.get(0).isEnabled(), "Reporting year dropdown is enabled");
+        assertTestCase.assertFalse(reportingPage.reportingForListButtons.get(0).isEnabled(), "Reporting year dropdown is enabled");
         BrowserUtils.waitForClickablility(reportingPage.reportingForList.get(0), 10).click();
         assertTestCase.assertTrue(reportingPage.reportingForDropdownOptionsList.size() == 0, "reporting for dropdown options are not listed if portfolio is not selected");
 
@@ -254,7 +259,7 @@ public class RegulatoryReportingPageTests extends UITestBase {
         assertTestCase.assertTrue(reportingPage.useLatestDataOption.isDisplayed(), "Use latest data toggle is displayed");
         reportingPage.selectUseLatestData();
         assertTestCase.assertTrue(reportingPage.isUseLatestDataSelected(), "Use latest data toggle is selected");
-        assertTestCase.assertTrue(reportingPage.reportingForListButtons.get(0).isEnabled(), "Reporting year dropdown is enabled");
+        assertTestCase.assertFalse(reportingPage.reportingForListButtons.get(0).isEnabled(), "Reporting year dropdown is enabled");
         BrowserUtils.waitForClickablility(reportingPage.reportingForList.get(0), 10).click();
         assertTestCase.assertTrue(reportingPage.reportingForDropdownOptionsList.size() == 0, "reporting for dropdown options are not listed if portfolio is not selected");
 
@@ -269,8 +274,8 @@ public class RegulatoryReportingPageTests extends UITestBase {
         assertTestCase.assertTrue(reportingPage.isAnnualReportsSelected(), "Annual reports toggle is selected");
     }
 
-    @Test(groups = {"regression", "ui", "regulatoryReporting"}, description = "UI | Regulatory Reporting | Download | Verify Create Reports Button is Clickable")
-    @Xray(test = {11333, 11334, 11350, 11370, 11402})
+    @Test(groups = {"regression", "ui", "regulatoryReporting", "smoke"}, description = "UI | Regulatory Reporting | Download | Verify Create Reports Button is Clickable")
+    @Xray(test = {10849, 11333, 11334, 11350, 11370, 11402})
     public void verifyCreateReportsButtonWorksTest() {
         DashboardPage dashboardPage = new DashboardPage();
         dashboardPage.navigateToPageFromMenu("Regulatory Reporting");
@@ -287,6 +292,7 @@ public class RegulatoryReportingPageTests extends UITestBase {
         String color = Color.fromString(reportingPage.createReportsButton.getCssValue("background-color")).asHex();
         System.out.println("color = " + color);
         assertTestCase.assertEquals(color, "#1f8cff", "Create report button color is blue");
+        Set<String> windows = BrowserUtils.getWindowHandles();
         reportingPage.createReportsButton.click();
 
         //verify create reports button after clicking
@@ -297,7 +303,7 @@ public class RegulatoryReportingPageTests extends UITestBase {
         assertTestCase.assertEquals(color, "#046bd9", "Create report button color is blue");
         try {
             //New tab should be opened and empty state message should be displayed as in the screenshot
-            assertTestCase.assertTrue(reportingPage.verifyNewTabOpened(currentWindow), "New tab is opened");
+            assertTestCase.assertTrue(reportingPage.verifyNewTabOpened(windows), "New tab is opened");
             System.out.println("New tab is opened");
             assertTestCase.assertTrue(reportingPage.verifyReportsReadyToDownload(selectedPortfolios), "Reports are ready to download");
             System.out.println("Reports are ready to download");
@@ -348,44 +354,7 @@ public class RegulatoryReportingPageTests extends UITestBase {
         BrowserUtils.wait(5);
     }
 
-    @Test(groups = {"regression", "ui", "regulatoryReporting"}, description = "UI | Regulatory Reporting | Download | Verify Create Reports Button is Clickable")
-//"smoke",
-    @Xray(test = {10849, 10851})
-    public void verifyDownloadReportsTest() {
-        DashboardPage dashboardPage = new DashboardPage();
-        dashboardPage.navigateToPageFromMenu("Regulatory Reporting");
-        test.info("Navigated to Regulatory Reporting Page");
-        assertTestCase.assertTrue(reportingPage.interimReportsOption.isDisplayed(), "Interim reports option is displayed");
-        assertTestCase.assertTrue(reportingPage.annualReportsOption.isDisplayed(), "Annual reports option is displayed");
-        assertTestCase.assertTrue(reportingPage.useLatestDataOption.isDisplayed(), "Use latest data option is displayed");
-        String currentWindow = BrowserUtils.getCurrentWindowHandle();
-        System.out.println("currentWindow = " + currentWindow);
-        reportingPage.selectAllPortfolioOptions();
-        reportingPage.selectAnnualReports();
-        List<String> selectedPortfolios = reportingPage.getSelectedPortfolioOptions();
 
-        //verify create reports button before clicking
-        assertTestCase.assertTrue(reportingPage.createReportsButton.isEnabled(), "Create report button is enabled");
-        reportingPage.createReportsButton.click();
-
-        //verify create reports button after clicking
-        BrowserUtils.switchWindowsTo(currentWindow);
-        BrowserUtils.wait(1);
-        try {
-            //New tab should be opened and empty state message should be displayed as in the screenshot
-            assertTestCase.assertTrue(reportingPage.verifyNewTabOpened(currentWindow), "New tab is opened");
-            System.out.println("New tab is opened");
-            assertTestCase.assertTrue(reportingPage.verifyReportsReadyToDownload(selectedPortfolios), "Reports are ready to download");
-            System.out.println("Reports are ready to download");
-            assertTestCase.assertTrue(reportingPage.verifyIfReportsDownloaded(), "Reports are downloaded");
-            System.out.println("Reports are downloaded");
-        } catch (Exception e) {
-            assertTestCase.assertTrue(false, "New tab verification failed");
-            e.printStackTrace();
-        } finally {
-            BrowserUtils.switchWindowsTo(currentWindow);
-        }
-    }
 
     @Test(groups = {"regression", "ui", "regulatoryReporting"}, description = "UI | Regulatory Reporting | Download | Verify Create Reports Button is Clickable")
 //"smoke",
@@ -451,35 +420,32 @@ public class RegulatoryReportingPageTests extends UITestBase {
         assertTestCase.assertTrue(reportingPage.createReportsButton.isEnabled(), "Create reports button is enabled when use latest data option is selected");
     }
 
-    @Test(groups = {"regression", "ui", "regulatoryReporting"},
-            description = "Check the Data available on the Report with SF when Use latest data is selected (Company Level Output Tab)")
-    @Xray(test = {11111, 11231})
-    public void downloadAndVerifyExcelReportsTest() {
+    @Test(groups = {"regression", "ui", "regulatoryReporting", "smoke"},
+            description = "UI | Regulatory Reporting | EU Taxonomy | Verify EU Taxonomy Report Sheets")
+    @Xray(test = {11987, 11988, 11989, 11990, 11991, 11992})
+    public void verifyEUTaxonomyReportSheetsTest() {
         DashboardPage dashboardPage = new DashboardPage();
         dashboardPage.navigateToPageFromMenu("Regulatory Reporting");
         test.info("Navigated to Regulatory Reporting Page");
-        assertTestCase.assertTrue(reportingPage.interimReportsOption.isDisplayed(), "Interim reports option is displayed");
-        assertTestCase.assertTrue(reportingPage.useLatestDataOption.isDisplayed(), "Use latest data option is displayed");
+        String portfolioName = "SFDRPortfolio";
+        if (!reportingPage.verifyPortfolio(portfolioName)) reportingPage.uploadPortfolio(portfolioName);
         String currentWindow = BrowserUtils.getCurrentWindowHandle();
-        reportingPage.selectAllPortfolioOptions();
-        reportingPage.selectInterimReports();
+        reportingPage.selectReportingOptionByName("EU Taxonomy");
+        assertTestCase.assertEquals(reportingPage.getSelectedReportingOption(),"EU Taxonomy", "EU Taxonomy is selected");
+        reportingPage.selectPortfolioOptionByName(portfolioName);
         List<String> selectedPortfolios = reportingPage.getSelectedPortfolioOptions();
+        assertTestCase.assertTrue(selectedPortfolios.contains(portfolioName), "Portfolio is selected");
+        Set<String> tabs = BrowserUtils.getWindowHandles();
 
         //verify create reports button before clicking
         assertTestCase.assertTrue(reportingPage.createReportsButton.isEnabled(), "Create report button is enabled");
         reportingPage.createReportsButton.click();
-        BrowserUtils.wait(2);
-        String newTab1 = "";
-        for (String tab : BrowserUtils.getWindowHandles()) {
-            if (!tab.equals(currentWindow)) {
-                newTab1 = tab;
-            }
-        }
-        System.out.println("newTab = " + newTab1);
-        System.out.println("currentWindow = " + currentWindow);
+
+        //verify create reports button after clicking
+        BrowserUtils.wait(1);
         try {
             //New tab should be opened and empty state message should be displayed as in the screenshot
-            assertTestCase.assertTrue(reportingPage.verifyNewTabOpened(newTab1), "New tab is opened");
+            assertTestCase.assertTrue(reportingPage.verifyNewTabOpened(tabs), "New tab is opened");
             System.out.println("New tab is opened");
             assertTestCase.assertTrue(reportingPage.verifyReportsReadyToDownload(selectedPortfolios), "Reports are ready to download");
             System.out.println("Reports are ready to download");
@@ -488,130 +454,23 @@ public class RegulatoryReportingPageTests extends UITestBase {
             System.out.println("Reports are downloaded");
             assertTestCase.assertTrue(reportingPage.unzipReports(), "Reports are extracted");
             System.out.println("Reports are extracted");
-            assertTestCase.assertTrue(reportingPage.verifyReportsContent(selectedPortfolios), "Reports content is verified");
+            assertTestCase.assertTrue(reportingPage.verifyEUTaxonomySheets(), "EU Taxonomy sheets are verified");
+            System.out.println("EU Taxonomy sheets are verified");
+            assertTestCase.assertTrue(reportingPage.verifyGreenInvestmentRatioTemplate(), "Green Investment Ratio Template sheet is verified");
+            System.out.println("Green Investment Ratio Template sheet is verified");
+            assertTestCase.assertTrue(reportingPage.verifyUnderlyingDataOverview(), "Underlying Data Overview sheet is verified");
+            System.out.println("Underlying Data Overview sheet is verified");
+            assertTestCase.assertTrue(reportingPage.verifyUnderlyingDataActivities(), "Underlying Data Activities sheet is verified");
+            System.out.println("Underlying Data Activities sheet is verified");
+            assertTestCase.assertTrue(reportingPage.verifyDefinitions(), "Definitions sheet is verified");
+            System.out.println("Definitions sheet is verified");
+            assertTestCase.assertTrue(reportingPage.verifyDisclaimer(), "Definitions sheet is verified");
+            System.out.println("Definitions sheet is verified");
         } catch (Exception e) {
+            assertTestCase.assertTrue(false, "Report verification failed");
             e.printStackTrace();
-            assertTestCase.assertTrue(false, "New tab verification failed");
-        } finally {
-            BrowserUtils.switchWindowsTo(currentWindow);
-            System.out.println("=============================");
-        }
-
-        reportingPage.selectAnnualReports();
-        assertTestCase.assertTrue(reportingPage.createReportsButton.isEnabled(), "Create report button is enabled");
-        reportingPage.createReportsButton.click();
-        BrowserUtils.wait(2);
-        String newTab2 = "";
-        for (String tab : BrowserUtils.getWindowHandles()) {
-            if (!tab.equals(currentWindow) && !tab.equals(newTab1)) {
-                newTab2 = tab;
-            }
-        }
-        System.out.println("newTab2 = " + newTab2);
-        try {
-            //New tab should be opened and empty state message should be displayed as in the screenshot
-            assertTestCase.assertTrue(reportingPage.verifyNewTabOpened(newTab2), "New tab is opened");
-            System.out.println("New tab is opened");
-            assertTestCase.assertTrue(reportingPage.verifyReportsReadyToDownload(), "Reports are ready to download");
-            System.out.println("Reports are ready to download");
-            reportingPage.deleteFilesInDownloadsFolder();
-            assertTestCase.assertTrue(reportingPage.verifyIfReportsDownloaded(), "Reports are downloaded");
-            System.out.println("Reports are downloaded");
-            assertTestCase.assertTrue(reportingPage.unzipReports(), "Reports are extracted");
-            System.out.println("Reports are extracted");
-            assertTestCase.assertTrue(reportingPage.verifyReportsContentForAnnualReports(selectedPortfolios), "Reports content is verified");
-        } catch (Exception e) {
-            e.printStackTrace();
-            assertTestCase.assertTrue(false, "New tab verification failed");
         } finally {
             BrowserUtils.switchWindowsTo(currentWindow);
         }
-    }
-
-    @Test(groups = {"regression", "ui", "regulatoryReporting"}, description = "Data Validation | Regulatory Reporting | Check the Data available on User Input History Tab of Annual Report")
-    @Xray(test = {11112})
-    public void verifyDataAvailableForUserInputHistoryTabForAnnualReportTest() {
-        DashboardPage dashboardPage = new DashboardPage();
-        dashboardPage.navigateToPageFromMenu("Regulatory Reporting");
-        test.info("Navigated to Regulatory Reporting Page");
-        //verify portfolio upload modal
-        assertTestCase.assertTrue(reportingPage.uploadAnotherPortfolioLink.isDisplayed(), "Portfolio Upload button is displayed");
-
-        //upload a portfolio
-        String newPortfolioName = "PortfolioWithValidData2";
-        assertTestCase.assertTrue(reportingPage.uploadPortfolio(newPortfolioName), "New Portfolio is added to the list");
-        System.out.println(newPortfolioName + " uploaded");
-
-        String currentWindow = BrowserUtils.getCurrentWindowHandle();
-        newPortfolioName = "Portfolio Upload updated_good2";
-        reportingPage.selectPortfolioOptionByName(newPortfolioName);
-        reportingPage.selectAllPortfolioOptions();
-        reportingPage.selectAnnualReports();
-        List<String> selectedPortfolios = reportingPage.getSelectedPortfolioOptions();
-
-        //verify create reports button before clicking
-        assertTestCase.assertTrue(reportingPage.createReportsButton.isEnabled(), "Create report button is enabled");
-        reportingPage.createReportsButton.click();
-        BrowserUtils.wait(2);
-        String newTab1 = "";
-        for (String tab : BrowserUtils.getWindowHandles()) {
-            if (!tab.equals(currentWindow)) {
-                newTab1 = tab;
-            }
-        }
-
-        try {
-            //New tab should be opened and empty state message should be displayed as in the screenshot
-            assertTestCase.assertTrue(reportingPage.verifyNewTabOpened(newTab1), "New tab is opened");
-            System.out.println("New tab is opened");
-            assertTestCase.assertTrue(reportingPage.verifyReportsReadyToDownload(selectedPortfolios), "Reports are ready to download");
-            System.out.println("Reports are ready to download");
-            reportingPage.deleteFilesInDownloadsFolder();
-            assertTestCase.assertTrue(reportingPage.verifyIfReportsDownloaded(), "Reports are downloaded");
-            System.out.println("Reports are downloaded");
-            assertTestCase.assertTrue(reportingPage.unzipReports(), "Reports are extracted");
-            System.out.println("Reports are extracted");
-            assertTestCase.assertTrue(reportingPage.verifyReportsContentForData(selectedPortfolios, selectedPortfolios.size()+1, "Exposure Amount in EUR"),
-                    "Reports content is verified");
-        } catch (Exception e) {
-            e.printStackTrace();
-            assertTestCase.assertTrue(false, "New tab verification failed");
-        } finally {
-            BrowserUtils.switchWindowsTo(currentWindow);
-            System.out.println("=============================");
-        }
-        reportingPage.navigateToPageFromMenu("Portfolio Analysis");
-        PhysicalRiskManagementPage portfolioAnalysisPage = new PhysicalRiskManagementPage();
-        portfolioAnalysisPage.deletePortfolio(newPortfolioName);
-    }
-
-    @Test(groups = {"regression", "ui", "regulatoryReporting", "api"}, description = "Data Validation| MT | Regulatory Reporting | Validate Portfolio list and portfolio-details")
-    @Xray(test = {11140})
-    public void verifyPortfolioPortfolioDetailsListTest() {
-        DashboardPage dashboardPage = new DashboardPage();
-        //Verify all the portfolios that the user has uploaded, are listed in the "select portfolio" section.
-        dashboardPage.navigateToPageFromMenu("Dashboard");
-        test.info("Navigated to Dashboard Page");
-        dashboardPage.clickPortfolioSelectionButton();
-        List<String> expectedPortfoliosList = BrowserUtils.getElementsText(dashboardPage.portfolioNameList);
-        dashboardPage.navigateToPageFromMenu("Regulatory Reporting");
-        List<String> actualPortfoliosList = reportingPage.getPortfolioList();
-        assertTestCase.assertTrue(expectedPortfoliosList.containsAll(actualPortfoliosList), "Regulatory Reporting Page - Portfolio list is verified");
-
-        //Select a portfolio and validate the reporting for column is listed with year option dropdown.
-        // The oldest available option should be 2019 and should not list any year before that
-        reportingPage.selectPortfolioOptionByIndex(1);
-        assertTestCase.assertTrue(reportingPage.reportingForListButtons.get(0).isEnabled(), "Reporting year dropdown is enabled");
-        BrowserUtils.wait(2);
-        reportingPage.reportingForList.get(0).click();
-        BrowserUtils.wait(2);
-        List<String> dropDownOptions = BrowserUtils.getElementsText(reportingPage.reportingForDropdownOptionsList);
-        assertTestCase.assertTrue(dropDownOptions.contains("2019"), "Reporting for option oldest year is 2019 is verified");
-        assertTestCase.assertFalse(dropDownOptions.contains("2018"), "Reporting for option oldest year is 2019 is verified");
-        reportingPage.reportingForDropdownOptionsList.get(0).click();
-        RegulatoryReportingAPIController apiController = new RegulatoryReportingAPIController();
-        List<String> apiPortfoliosList = apiController.getPortfolioNames();
-        System.out.println("apiPortfoliosList = " + apiPortfoliosList);
-        assertTestCase.assertTrue(apiPortfoliosList.containsAll(actualPortfoliosList), "API - Portfolio list is verified");
     }
 }

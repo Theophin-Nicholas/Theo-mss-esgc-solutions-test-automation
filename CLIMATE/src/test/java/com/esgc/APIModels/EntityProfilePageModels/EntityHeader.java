@@ -3,6 +3,8 @@ package com.esgc.APIModels.EntityProfilePageModels;
 
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 
 public class EntityHeader {
@@ -21,4 +23,6 @@ public class EntityHeader {
     private int research_line_id;
     private String sector_l1;
     private String sector_l2;
+    private List<EntityHeaderSubsidiaryDetails> subsidiaries;
+    private int tot_subs;
 }

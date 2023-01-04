@@ -122,6 +122,14 @@ public class LoginPage extends ClimatePageBase {
     public WebElement userDropdown;
     //===================================================================================
 
+    public boolean isUsernameBoxDisplayed() {
+        try {
+            return usernameBox.isDisplayed();
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
     /**
      * *Method for login - version #1
      * Reusable login method that provides username & password as parameters
@@ -171,6 +179,7 @@ public class LoginPage extends ClimatePageBase {
      * Credentials will be retrieved from configuration.properties file
      */
     public void login() {
+        System.out.println("Login with default user");
         wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.UI_USERNAME, Keys.ENTER);
         wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.UI_PASSWORD);
        /* if (!termsAndConditionsCheckBox.isSelected())

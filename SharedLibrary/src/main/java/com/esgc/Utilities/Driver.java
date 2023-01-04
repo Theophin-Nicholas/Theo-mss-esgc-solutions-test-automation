@@ -12,7 +12,7 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.firefox.FirefoxProfile;
 import org.openqa.selenium.ie.InternetExplorerDriver;
-import org.openqa.selenium.remote.BrowserType;
+import org.openqa.selenium.remote.Browser;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.LocalFileDetector;
 import org.openqa.selenium.remote.RemoteWebDriver;
@@ -88,13 +88,13 @@ public class Driver {
                     try {
                         URL url = new URL(hubURL);
                         DesiredCapabilities desiredCapabilities = new DesiredCapabilities();
-                        desiredCapabilities.setBrowserName(BrowserType.CHROME);
+                        desiredCapabilities.setBrowserName(Browser.CHROME.browserName());
                         desiredCapabilities.setPlatform(Platform.ANY);
 
                         ChromeOptions chromeOptions = new ChromeOptions();
                         //gives us an option to download the file where we want download
                         Map<String, Object> prefs = new HashMap<String, Object>();
-                        System.out.println(chromeOptions.getVersion());
+                        System.out.println(chromeOptions.getBrowserVersion());
                         prefs.put("download.default_directory", BrowserUtils.downloadPath()); //path to dir
                         chromeOptions.setExperimentalOption("prefs", prefs);
                         chromeOptions.addArguments("--start-maximized");
@@ -160,7 +160,7 @@ public class Driver {
                     try {
                         URL url = new URL(hubURL);
                         DesiredCapabilities desiredCapabilities = new DesiredCapabilities();
-                        desiredCapabilities.setBrowserName(BrowserType.FIREFOX);
+                        desiredCapabilities.setBrowserName(Browser.FIREFOX.browserName());
                         desiredCapabilities.setPlatform(Platform.ANY);
                         FirefoxOptions firefoxOptionsRemote = new FirefoxOptions();
                         firefoxOptionsRemote.setProfile(firefoxProfile());
@@ -195,7 +195,7 @@ public class Driver {
                     try {
                         URL url = new URL(hubURL);
                         DesiredCapabilities desiredCapabilities = new DesiredCapabilities();
-                        desiredCapabilities.setBrowserName(BrowserType.EDGE);
+                        desiredCapabilities.setBrowserName(Browser.EDGE.browserName());
                         desiredCapabilities.setPlatform(Platform.ANY);
                         driverPool.set(new RemoteWebDriver(url, desiredCapabilities));
                     } catch (Exception e) {
@@ -245,13 +245,13 @@ public class Driver {
                     try {
                         URL url = new URL(hubURL);
                         DesiredCapabilities desiredCapabilities = new DesiredCapabilities();
-                        desiredCapabilities.setBrowserName(BrowserType.CHROME);
+                        desiredCapabilities.setBrowserName(Browser.CHROME.browserName());
                         desiredCapabilities.setPlatform(Platform.ANY);
 
                         ChromeOptions chromeOptions = new ChromeOptions();
                         //gives us an option to download the file to the right location
                         Map<String, Object> prefs = new HashMap<String, Object>();
-                        System.out.println(chromeOptions.getVersion());
+                        System.out.println(chromeOptions.getBrowserVersion());
                         prefs.put("download.default_directory", BrowserUtils.downloadPath()); //path to dir
                         chromeOptions.setExperimentalOption("prefs", prefs);
                         chromeOptions.addArguments("--start-maximized");
@@ -285,7 +285,7 @@ public class Driver {
 
                     chromeOptions.addArguments("--start-maximized");
                     chromeOptions.addArguments("--disable-notifications");
-                  //  chromeOptions.addArguments("--disable-dev-shm-usage");
+                    //  chromeOptions.addArguments("--disable-dev-shm-usage");
 
                     driverPool.set(new ChromeDriver(chromeOptions));
 
@@ -316,7 +316,7 @@ public class Driver {
                     try {
                         URL url = new URL(hubURL);
                         DesiredCapabilities desiredCapabilities = new DesiredCapabilities();
-                        desiredCapabilities.setBrowserName(BrowserType.FIREFOX);
+                        desiredCapabilities.setBrowserName(Browser.FIREFOX.browserName());
                         desiredCapabilities.setPlatform(Platform.ANY);
                         FirefoxOptions firefoxOptionsRemote = new FirefoxOptions();
                         firefoxOptionsRemote.setProfile(firefoxProfile());
@@ -344,7 +344,7 @@ public class Driver {
                     try {
                         URL url = new URL(hubURL);
                         DesiredCapabilities desiredCapabilities = new DesiredCapabilities();
-                        desiredCapabilities.setBrowserName(BrowserType.EDGE);
+                        desiredCapabilities.setBrowserName(Browser.EDGE.browserName());
                         desiredCapabilities.setPlatform(Platform.ANY);
                         driverPool.set(new RemoteWebDriver(url, desiredCapabilities));
                     } catch (Exception e) {

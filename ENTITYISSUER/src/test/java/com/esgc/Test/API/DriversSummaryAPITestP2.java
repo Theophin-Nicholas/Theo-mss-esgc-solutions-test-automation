@@ -1,11 +1,11 @@
 package com.esgc.Test.API;
 
-import com.esgc.APIModels.EntityIssuerPage.DriverSummaryAPIWrapper;
-import com.esgc.APIModels.EntityIssuerPage.DriverSummaryCriterion;
-import com.esgc.APIModels.EntityIssuerPage.DriverSummaryDrivers;
+import com.esgc.APIModels.EntityIssuerPage.SectorDrivers;
+import com.esgc.APIModels.EntityIssuerPage.SectorDriversWrapper;
+import com.esgc.APIModels.EntityIssuerPage.SectorIndicator;
 import com.esgc.Controllers.EntityIssuerPageController.EntityIssuerPageAPIController;
 import com.esgc.Test.TestBases.EntityIssuerPageTestBase;
-import com.esgc.TestBase.DataProviderClass;
+import com.esgc.Test.TestBases.IssuerDataProviderClass;
 import com.esgc.Utilities.Xray;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
@@ -16,11 +16,11 @@ import java.util.List;
 
 import static org.hamcrest.Matchers.*;
 
-public class DriversSummaryAPITestP3 extends EntityIssuerPageTestBase {
+public class DriversSummaryAPITestP2 extends EntityIssuerPageTestBase {
 
 
     @Test(groups = {"regression", "api"},
-            dataProvider = "credentials", dataProviderClass = DataProviderClass.class,
+            dataProvider = "credentialsP2", dataProviderClass = IssuerDataProviderClass.class,
             description = "ESGCA-5867-API | ESG Issuer - Entity Page | Verify API Response")
     @Xray(test = {3965, 3973})
     public void validateDriverSummaryAPIResponse(String... dataProvider) {
@@ -29,50 +29,51 @@ public class DriversSummaryAPITestP3 extends EntityIssuerPageTestBase {
         getEntityPageAccessTokenLoginWithParameter(userId, password);
         EntityIssuerPageAPIController controller = new EntityIssuerPageAPIController();
 
-        Response response = controller.getDriverSummary();
-        List<DriverSummaryAPIWrapper> driverSummaryPIResponse = Arrays.asList(
-                response.as(DriverSummaryAPIWrapper[].class));
+        Response response = controller.getSectorDrivers(dataProvider[2]);
+        List<SectorDriversWrapper> SectorDriversWrapper = Arrays.asList(
+                response.as(SectorDriversWrapper[].class));
         response.then().log().all();
         response.then().assertThat()
                 .statusCode(200)
                 .contentType(ContentType.JSON)
                 .body(".", everyItem(is(notNullValue())));
 
-        for (DriverSummaryCriterion criteria : driverSummaryPIResponse.get(0).getCriteria()) {
-            for (DriverSummaryDrivers driver : criteria.getDrivers()) {
+        for (SectorIndicator criteria : SectorDriversWrapper.get(0).getDriver_details()) {
+            for (SectorDrivers driver : criteria.getDrivers()) {
                 String scoreCategory = "";
-                int score = (int) Math.floor(driver.getCriteria_score());
-                if (score >= 0 && score <= 24) {           //0-24
-                    scoreCategory = "Weak";
-                } else if (score >= 25 && score <= 44) {    //25-44
-                    scoreCategory = "Limited";
-                } else if (score >= 45 && score <= 59) {    //45-59
-                    scoreCategory = "Robust";
-                } else if (score >= 60 && score <= 100) {   //60-100
-                    scoreCategory = "Advanced";
+                int score = (int) Math.floor(driver.getCriteria_weight_value());
+                if (score == 0 ) {           //0-24
+                    scoreCategory = "Low";
+                } else if (score == 1) {    //25-44
+                    scoreCategory = "Moderate";
+                } else if (score == 2) {    //45-59
+                    scoreCategory = "High";
+                } else if (score == 3) {   //60-100
+                    scoreCategory = "Very High";
                 }
-                assertTestCase.assertEquals(scoreCategory, driver.getScore_category(), "Validate Score Category");
+                assertTestCase.assertEquals(scoreCategory, driver.getCriteria_weight(), "Validate Score Category");
             }
         }
-        String a = driverSummaryPIResponse.get(0).getCriteria().get(0).getDrivers().get(0).getScore_category();
+      //  String a = SectorDriversWrapper.get(0).getCriteria().get(0).getDrivers().get(0).getScore_category();
     }
 
     @Test(groups = {"regression", "api"},
-            dataProvider = "credentials", dataProviderClass = DataProviderClass.class,
+            dataProvider = "credentialsP2", dataProviderClass = IssuerDataProviderClass.class,
             description = "ESGCA-5867-API | ESG Issuer - Entity Page | Verify API Response")
-    @Xray(test = {3965, 3973})
+    @Xray(test = {3974})
     public void validateDriverSummaryInvalidTokenAPIResponse(String... dataProvider) {
         String userId = dataProvider[0];
         String password = dataProvider[1];
         getEntityPageAccessTokenLoginWithParameter(userId, password);
         EntityIssuerPageAPIController controller = new EntityIssuerPageAPIController();
         controller.setInvalid();
-        Response response = controller.getDriverSummary();
+        Response response = controller.getSectorDrivers(dataProvider[2]);
 
         response.then().log().all();
         response.then().assertThat()
                 .statusCode(403)
                 .contentType(ContentType.JSON);
     }
+
 
 }

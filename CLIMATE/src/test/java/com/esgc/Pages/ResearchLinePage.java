@@ -1,7 +1,6 @@
 package com.esgc.Pages;
 
 import com.esgc.Reporting.CustomAssertion;
-import com.esgc.Tests.UI.DashboardPage.PortfolioSettings;
 import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.Driver;
 import com.esgc.Utilities.EntitlementsBundles;
@@ -252,7 +251,7 @@ public class ResearchLinePage extends UploadPage {
     @FindBy(xpath = "//*[contains(text(),'selected. Please')]")
     public WebElement noBenchmarkMessage;
 
-    @FindBy(xpath = "(//div[@id='distribution_box'])[2]")
+    @FindBy(id = "benchmark_4_box")
     public WebElement BenchmarkSection;
 
     @FindBy(xpath = "//*[@id='benchmark_4_box']//div[text()='Score']/following-sibling::h6")
@@ -380,7 +379,7 @@ public class ResearchLinePage extends UploadPage {
     @FindBy(xpath = "//div[@class='impactTableWrapper']")
     public List<WebElement> impactTables;
 
-    @FindBy(xpath = "//*[text()='Physical Risk Hazards: Operations Risk']")
+    @FindBy(xpath = "//*[text()='Top 5']/ancestor::span/preceding-sibling::div")
     public WebElement impactTableMainTitle;
 
     @FindBy(xpath = "//div[@class='impactTableWrapper']")
@@ -502,6 +501,9 @@ public class ResearchLinePage extends UploadPage {
 
     @FindBy(xpath = "//td[@heap_id='coverage']//*[local-name()='svg']/*[local-name()='rect'][1]")
     public List<WebElement> scoreQualityIconsInCoveragePopup;
+
+    @FindBy(xpath = "//td[@heap_id='leadlag']")
+    public List<WebElement> recordsInLeadersAndLaggardsTable;
 
     @FindBy(xpath = "//td[@heap_id='leadlag']//*[local-name()='svg']/*[local-name()='rect'][1]")
     public List<WebElement> scoreQualityIconsInLeadersAndLaggardsTable;
@@ -635,20 +637,20 @@ public class ResearchLinePage extends UploadPage {
 
     public boolean mouseHoverAndVerifyTooltipHistoryTable(String scoreCategory, String colorCode, String expColor) {
         try {
-            String xpath = "//*[local-name()='rect' and contains(@class,'"+colorCode+"')]";
+            String xpath = "//*[local-name()='rect' and contains(@class,'" + colorCode + "')]";
             List<WebElement> elements = Driver.getDriver().findElements(By.xpath(xpath));
             System.out.println(elements.size());
-            for(int i=0; i<3; i++){
+            for (int i = 0; i < 3; i++) {
                 String actColor = elements.get(i).getAttribute("fill");
-                System.out.println("Exp Color: "+expColor+", Actual Color: "+actColor);
+                System.out.println("Exp Color: " + expColor + ", Actual Color: " + actColor);
                 BrowserUtils.hover(elements.get(i));
                 BrowserUtils.wait(1);
                 String tooltipText = scoreCategoryTooltip.getText();
-                System.out.println("Expected Tooltip Text: "+scoreCategory);
-                System.out.println("Actual Tooltip Text: "+tooltipText);
-                int numberOfCompanies = Integer.parseInt(tooltipText.substring(tooltipText.lastIndexOf(" ")+1));
-                boolean flag = actColor.equalsIgnoreCase(expColor) && tooltipText.contains(scoreCategory) && numberOfCompanies>=0;
-                if(!flag) return false;
+                System.out.println("Expected Tooltip Text: " + scoreCategory);
+                System.out.println("Actual Tooltip Text: " + tooltipText);
+                int numberOfCompanies = Integer.parseInt(tooltipText.substring(tooltipText.lastIndexOf(" ") + 1));
+                boolean flag = actColor.equalsIgnoreCase(expColor) && tooltipText.contains(scoreCategory) && numberOfCompanies >= 0;
+                if (!flag) return false;
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -661,7 +663,7 @@ public class ResearchLinePage extends UploadPage {
         try {
             BrowserUtils.wait(5);
             //wait.until(ExpectedConditions.visibilityOf(historyTableBenchMark));
-            return historyTableBenchMark.size()>0;
+            return historyTableBenchMark.size() > 0;
         } catch (Exception e) {
             return false;
         }
@@ -1019,7 +1021,7 @@ public class ResearchLinePage extends UploadPage {
                 System.out.println("Expected Color for other Operations Risk, Market Risk, Supply Chain Risk");
                 //for these pages, we show score itself instead score category
                 expectedColor = getColorByScore(researchLine, Integer.parseInt(scoreCategory));
-            } else if(researchLine.equals("Temperature Alignment")){
+            } else if (researchLine.equals("Temperature Alignment")) {
                 System.out.println("Temp Alignment Color");
                 expectedColor = getColorByScoreCategory(researchLine, scoreCategory);
             } else {
@@ -1279,10 +1281,10 @@ public class ResearchLinePage extends UploadPage {
     }
 
     public int getCompaniesCountFromUpdatesTable() {
-        int displayCompaniesCount=10;
+        int displayCompaniesCount = 10;
         String companiesCountText = companiesCountFromUpdatesTable.getText();
-        companiesCountText = companiesCountText.substring(0,companiesCountText.indexOf(" "));
-        return Integer.parseInt(companiesCountText)+displayCompaniesCount;
+        companiesCountText = companiesCountText.substring(0, companiesCountText.indexOf(" "));
+        return Integer.parseInt(companiesCountText) + displayCompaniesCount;
     }
 
     public boolean verifyUpdatesSortingOrder(String page) {
@@ -2078,6 +2080,33 @@ public class ResearchLinePage extends UploadPage {
         return false;
     }
 
+    public boolean verifyMethodologyLink(String expectedUrl) {
+        try {
+            //Switch to the new tab
+            Set<String> handles = Driver.getDriver().getWindowHandles();
+            if (handles.size() == 2) {
+                String currentWindowHandle = Driver.getDriver().getWindowHandle();
+                for (String handle : handles) {
+                    if (!handle.equals(currentWindowHandle)) {
+                        Driver.getDriver().switchTo().window(handle);
+                        String url = Driver.getDriver().getCurrentUrl();
+                        url = url.replaceAll("%20", "");
+                        System.out.println("Methodology URL is:" + url);
+                        Driver.getDriver().close();
+                        BrowserUtils.wait(2);
+                        Driver.getDriver().switchTo().window(currentWindowHandle);
+                        return url.contains(expectedUrl);
+                    }
+                }
+            } else {
+                System.out.println("Multiple tabs open. Cannot validate! ");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
     public void Is_MoM_QoQ_TextAvailable(String page) {
         try {
             String whatToValidate = "";
@@ -2810,20 +2839,22 @@ public class ResearchLinePage extends UploadPage {
 
     }
 
-    public boolean verifyScoreQualityIconWithEntitiesInCoveragePopup_PA(){
-        return scoreQualityIconsInCoveragePopup.size()>0;
+    public boolean verifyScoreQualityIconWithEntitiesInCoveragePopup_PA() {
+        return scoreQualityIconsInCoveragePopup.size() > 0;
     }
 
     public boolean verifyScoreQualityIconWithEntitiesInLeadersAndLaggardsTables_PA(){
-        return scoreQualityIconsInLeadersAndLaggardsTable.size()==20;
+        int recordsCountInTable = recordsInLeadersAndLaggardsTable.size();
+        int scoreQualityIconsCountInTable = scoreQualityIconsInLeadersAndLaggardsTable.size();
+        return scoreQualityIconsCountInTable==recordsCountInTable;
     }
 
-    public boolean verifyScoreQualityIconWithEntitiesInLeadersPopup_PA(){
-        return scoreQualityIconsInLeadersPopup.size()>0;
+    public boolean verifyScoreQualityIconWithEntitiesInLeadersPopup_PA() {
+        return scoreQualityIconsInLeadersPopup.size() > 0;
     }
 
-    public boolean verifyScoreQualityIconWithEntitiesInLaggardsPopup_PA(){
-        return scoreQualityIconsInLaggardsPopup.size()>0;
+    public boolean verifyScoreQualityIconWithEntitiesInLaggardsPopup_PA() {
+        return scoreQualityIconsInLaggardsPopup.size() > 0;
     }
 
     public boolean verifyEntitiesWithPredictedScoresInYellow_PA(List<WebElement> rows){
@@ -2852,7 +2883,7 @@ public class ResearchLinePage extends UploadPage {
         return true;
     }
 
-    public void validatePhysicalRiskMgmtLegend(){
+    public void validatePhysicalRiskMgmtLegend() {
 
         String labelXpath = "//div[contains(text(),'Physical Risk Management Score:')]//span";
 
@@ -2941,7 +2972,7 @@ public class ResearchLinePage extends UploadPage {
             BrowserUtils.scrollTo(methodologyValues.get(i));
             String currentRecordScore = Driver.getDriver().findElement(By.xpath("(" + esgScoresXpath + ")[" + i + "]")).getText().replace(".esg", "");
             String nextRecordScore = Driver.getDriver().findElement(By.xpath("(" + esgScoresXpath + ")[" + (i + 1) + "]")).getText().replace(".esg", "");
-            if (getEsgRank(currentRecordScore)>getEsgRank(nextRecordScore)) {
+            if (getEsgRank(currentRecordScore) > getEsgRank(nextRecordScore)) {
                 return false;
             } else if (currentRecordScore.compareTo(nextRecordScore) == 0) {
                 String currentRecordInvestment = Driver.getDriver().findElement(By.xpath("(" + investmentsXpath + ")[" + i + "]")).getText();
@@ -2962,14 +2993,14 @@ public class ResearchLinePage extends UploadPage {
         return true;
     }
 
-    public int getEsgRank(String esgScore){
-        if(esgScore.equals("Advanced")){
+    public int getEsgRank(String esgScore) {
+        if (esgScore.equals("Advanced")) {
             return 1;
-        } else if(esgScore.equals("Robust")){
+        } else if (esgScore.equals("Robust")) {
             return 2;
-        } else if(esgScore.equals("Limited")){
+        } else if (esgScore.equals("Limited")) {
             return 3;
-        } else if(esgScore.equals("Weak")){
+        } else if (esgScore.equals("Weak")) {
             return 4;
         }
         return 10;
@@ -3006,6 +3037,17 @@ public class ResearchLinePage extends UploadPage {
     public void selectEsgPortfolioCoverage() {
         BrowserUtils.wait(5);
         wait.until(ExpectedConditions.elementToBeClickable(esgPortfolioCoverageLink)).click();
+    }
+
+    public void verifyCompanyNameInCoveragePopup(String subsidiaryCompanyName) {
+        String xpath = "//td[@heap_id='coverage']//span[@title][text()='"+subsidiaryCompanyName+"']";
+        assertTestCase.assertEquals(Driver.getDriver().findElements(By.xpath(xpath)).size(), 1);
+    }
+
+    public void verifyCompanyIsClickableInCoveragePopup(String companyName) {
+        String xpath = "//td[@heap_id='coverage']//span[@title][text()='"+companyName+"']";
+        WebElement element = Driver.getDriver().findElement(By.xpath(xpath));
+        assertTestCase.assertTrue(element.getCssValue("text-decoration").contains("underline"));
     }
 
     public void validateLinksOpenedInNewTab(WebElement element, String whatToValidate) {
@@ -3365,20 +3407,21 @@ public class ResearchLinePage extends UploadPage {
         }
     }
 
-    public void selectPortfolio(String portfolioName){
+    //Portfolio Selection Side Panel
+    public void selectPortfolio(String portfolioName) {
         System.out.println("Selecting portfolio: " + portfolioName);
-        try{
-            if (menu.isDisplayed()) {
+        try {
+            if (!menu.isDisplayed()) {
                 clickMenu();
                 BrowserUtils.wait(2);
                 portfolioSettings.click();
             }
-            WebElement targetPortfolio = Driver.getDriver().findElement(By.xpath("//div[@id='portfolio-drawer-test-id']//span[@title='"+portfolioName+"']"));
+            WebElement targetPortfolio = Driver.getDriver().findElement(By.xpath("//div[@id='portfolio-drawer-test-id']//span[@title='" + portfolioName + "']"));
             System.out.println("Portfolio Located");
             BrowserUtils.scrollTo(targetPortfolio);
-            BrowserUtils.waitForClickablility(targetPortfolio,10).click();
+            BrowserUtils.waitForClickablility(targetPortfolio, 10).click();
             System.out.println("Portfolio selected");
-        } catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -3386,31 +3429,47 @@ public class ResearchLinePage extends UploadPage {
     public void deletePortfolio(String portfolioName) {
         System.out.println("Deleting portfolio: " + portfolioName);
         selectPortfolio(portfolioName);
-        try{
+        try {
             BrowserUtils.waitForClickablility(deleteButton, 15).click();
-            BrowserUtils.waitForVisibility(confirmPortfolioDeletePopupHeader,10);
+            BrowserUtils.waitForVisibility(confirmPortfolioDeletePopupHeader, 10);
             confirmPortfolioDeleteYesButton.click(); //clicking the Yes button and deleting the portfolio
             BrowserUtils.wait(6);
             pressESCKey();
             System.out.println("Portfolio deleted");
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
-    public boolean verifyPortfolio(String portfolioName){
+
+    public boolean isDeletePortfolioButtonActive() {
+        try {
+            String cursor = wait.until(ExpectedConditions.visibilityOf(deleteButton)).getCssValue("cursor");
+            System.out.println("Deleting portfolio cursor: " + cursor);
+            if (cursor.equals("not-allowed")) {
+                return false;
+            }
+            return cursor.equals("pointer");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+
+    public boolean verifyPortfolio(String portfolioName) {
         System.out.println("Verifying portfolio: " + portfolioName);
-        try{
+        try {
             if (menu.isDisplayed()) {
                 clickMenu();
                 BrowserUtils.wait(2);
                 portfolioSettings.click();
             }
-            WebElement targetPortfolio = Driver.getDriver().findElement(By.xpath("//span[@title='"+portfolioName+"']"));
+            WebElement targetPortfolio = Driver.getDriver().findElement(By.xpath("//span[@title='" + portfolioName + "']"));
             BrowserUtils.scrollTo(targetPortfolio);
             System.out.println("Portfolio verified");
             closeMenuByClickingOutSide();
             return true;
-        } catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return false;
         }

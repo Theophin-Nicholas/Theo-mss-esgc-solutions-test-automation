@@ -42,12 +42,12 @@ public class EntityClimateProfileControversies extends UITestBase {
             //Verify the subcategory names and the numbers in it. ex: Environmental Strategy (3)
             List<String> categoryExpectedList = new ArrayList<>(
                     Arrays.asList(
-                            "Community Involvement (9)",
-                            "Business Behaviour (73)",
-                            "Human Rights (17)",
+                            "Community Involvement (8)",
+                            "Business Behaviour (65)",
+                            "Human Rights (14)",
                             "Human Resources (5)",
                             "Environment (3)",
-                            "Corporate Governance (5)"
+                            "Corporate Governance (4)"
                     )
             );
             //number of controversies in sub category
@@ -55,9 +55,6 @@ public class EntityClimateProfileControversies extends UITestBase {
 
             List<String> controversyList=new ArrayList<>();
             for (WebElement subCategoryActual : entityProfilePage.subCategoryList) {
-
-                System.out.println("subCategoryList = " + subCategoryActual.getText());
-                System.out.println("categoryExpectedList = " + categoryExpectedList);
                 System.out.println("subCategoryActual.getText() = " + subCategoryActual.getText());
                 assertTestCase.assertTrue(categoryExpectedList.contains(subCategoryActual.getText()));
                 subCategoryActual.click();

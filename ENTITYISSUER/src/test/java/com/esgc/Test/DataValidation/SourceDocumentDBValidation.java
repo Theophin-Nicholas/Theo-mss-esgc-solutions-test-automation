@@ -5,7 +5,6 @@ import com.esgc.Controllers.EntityIssuerPageController.EntityIssuerPageAPIContro
 import com.esgc.DBModels.EntityIssuerPageDBModels.SourceDocumentDBModel;
 import com.esgc.Test.TestBases.EntityIssuerPageDataValidationTestBase;
 import com.esgc.Utilities.Database.EntityIssuerQueries;
-import com.esgc.Utilities.Environment;
 import com.esgc.Utilities.Xray;
 import io.restassured.response.Response;
 import org.testng.annotations.Test;
@@ -14,13 +13,15 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.esgc.Pages.LoginPageIssuer.OrbisID;
+
 public class SourceDocumentDBValidation extends EntityIssuerPageDataValidationTestBase {
     List<String> criteria = new ArrayList<>();
 
     @Xray(test = 6968)
     @Test(groups = {"regression", "entity_issuer"})
     public void sourceDocumentTest() {
-        String orbisID = Environment.OrbisId;
+        String orbisID = OrbisID;
         List<SourceDocumentDBModel> sourceDocumentDBData = EntityIssuerQueries.getSourceDocumentDBData(orbisID);
         EntityIssuerPageAPIController entityIssuerPageAPIController = new EntityIssuerPageAPIController();
         Response response = entityIssuerPageAPIController.getSourceDocument(orbisID);

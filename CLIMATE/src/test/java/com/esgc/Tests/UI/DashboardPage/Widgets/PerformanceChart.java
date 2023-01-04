@@ -26,9 +26,11 @@ public class PerformanceChart extends DashboardUITestBase {
         dashboardPage.navigateToPageFromMenu("Dashboard");
         test.info("Navigated to Dashboard Page");
 
-        dashboardPage.selectPortfolioByNameFromPortfolioSelectionModal("My Number ONE Portfolio");
+        dashboardPage.selectRandomPortfolioFromPortfolioSelectionModal();
         BrowserUtils.wait(3);
         test.info("Check if Performance Charts are Displayed");
+
+        BrowserUtils.scrollTo(dashboardPage.performanceChart);
 
         List<String> expectedColumnNames =
                 Arrays.asList("Company", "% Investment", "Overall ESG Score", "Total Critical Controversies",
@@ -74,7 +76,7 @@ public class PerformanceChart extends DashboardUITestBase {
         test.info("Switched to Largest Holdings");
         assertTestCase.assertTrue(sizeOfTable <= 10, "max 10 companies are listed");
         assertTestCase.assertEquals(actualColumnNames, expectedColumnNames, "Largest Holdings Performance Chart Verified");
-        assertTestCase.assertEquals(actualTotalInvestment, expectedTotalInvestment, "Total Investments are matching", 2066);
+        assertTestCase.assertEquals(expectedTotalInvestment, actualTotalInvestment, "Total Investments are matching", 2066);
     }
 
     @Test(groups = {"ui", "dashboard", "regression"},
@@ -197,12 +199,12 @@ public class PerformanceChart extends DashboardUITestBase {
                         "category:" + actualCategory + "\n" +
                         "expected list:" + expectedCategories);
             }
-//            if (researchLine.equals("Physical Risk Hazards"))
-//                actualCategories = dashboardPage.getPerformanceChartColumnElementsByColumnIndex(6)
-//                        .stream().map(WebElement::getText)
-//                        .filter(e -> !e.equals(""))
-//                        .map(e -> Integer.parseInt(e.replace("%", "")))
-//                        .filter(e -> e > 0).map(String::valueOf).collect(Collectors.toList());
+            if (researchLine.equals("Physical Risk Hazards"))
+                actualCategories = dashboardPage.getPerformanceChartColumnElementsByColumnIndex(6)
+                        .stream().map(WebElement::getText)
+                        .filter(e -> !e.equals(""))
+                        .map(e -> Integer.parseInt(e.replace("%", "")))
+                        .filter(e -> e > 0).map(String::valueOf).collect(Collectors.toList());
 
             List<String> sortedCategories = dashboardPage.getPerformanceChartColumnElementsByResearchLine(header)
                     .stream().filter(e -> !e.getText().equals(""))

@@ -8,7 +8,6 @@ import com.esgc.Test.TestBases.EntityIssuerPageDataValidationTestBase;
 import com.esgc.Utilities.Database.EntityIssuerQueries;
 import com.esgc.Utilities.Xray;
 import org.testng.annotations.DataProvider;
-import org.testng.annotations.Optional;
 import org.testng.annotations.Test;
 
 import java.util.List;
@@ -18,15 +17,17 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+import static com.esgc.Pages.LoginPageIssuer.OrbisID;
+
 
 public class P3ESGMateriality extends EntityIssuerPageDataValidationTestBase {
 
-    @Test(dataProvider = "orbisID", groups = {"regression", "entity_issuer"})
+    @Test(groups = {"regression", "entity_issuer"})
     @Xray(test = {9953})
-    public void validateESGMaterialitySummaryData(@Optional String orbisID) {
+    public void validateESGMaterialitySummaryData() {
 
         // DB Data
-        List<ESGMaterlityDBModel> DBData = EntityIssuerQueries.getESGMaterlityData(orbisID);
+        List<ESGMaterlityDBModel> DBData = EntityIssuerQueries.getESGMaterlityData(OrbisID);
 
         // API Data
         ESGMaterlityDriverSummaryAPIWrapper APIData = controller.getDriverSummary().as(ESGMaterlityDriverSummaryAPIWrapper.class);

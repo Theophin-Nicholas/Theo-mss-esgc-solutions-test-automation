@@ -57,7 +57,7 @@ public class PortfolioFilePaths {
     public static String portfolioWithLongNamePath(){
         return System.getProperty("user.dir")+ File.separator+"src"+
                 File.separator+"test"+File.separator+"resources"+
-                File.separator+"upload"+File.separator+"Portfolio with very long name to check ellipses after limit.csv";
+                File.separator+"upload"+File.separator+"PortfolioWithVeeeeeeeeeeeeeeeeeeerrrrrrrrrrrrrrryyyyyyyyyyyyyyyyyyLongName.csv";
     }
 
     public static String portfolioWithNoData1(){
@@ -163,6 +163,12 @@ public class PortfolioFilePaths {
         return System.getProperty("user.dir")+ File.separator+"src"+
                 File.separator+"test"+File.separator+"resources"+
                 File.separator+"upload"+File.separator+"PortfolioWithInactiveSubsidiaryCompany.csv";
+    }
+
+    public static String portfolioWith10KCompanies(){
+        return System.getProperty("user.dir")+ File.separator+"src"+
+                File.separator+"test"+File.separator+"resources"+
+                File.separator+"upload"+File.separator+"PortfolioWith10KCompanies.csv";
     }
 
 

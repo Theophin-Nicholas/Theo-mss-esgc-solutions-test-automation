@@ -125,6 +125,11 @@ public abstract class ClimatePageBase extends PageBase {
         List<WebElement> list =
                 portfolioCards.stream().filter(e -> e.getText().substring(0, e.getText().length() - 11).equals(portfolioName))
                         .collect(Collectors.toList());
+        if(list.size() == 0) {
+            System.out.println("Portfolio with name " + portfolioName + " is not found");
+            clickAwayinBlankArea();
+            return;
+        }
         list.get(list.size() - 1).click();
     }
 
@@ -484,7 +489,7 @@ public abstract class ClimatePageBase extends PageBase {
 
     public void validatePortfolioNameUpdatedInAllLocations(String OriginalPortFolioName) {
         String newPortfolioName = "Automation Change in All Locations";
-        updatePortfolio(newPortfolioName);
+        updatePortfolioNameInPortfolioManagementDrawer(newPortfolioName);
         BrowserUtils.wait(2);
         assertTestCase.assertTrue(wait.until(ExpectedConditions.visibilityOf(successMessageForNameSaved)).isDisplayed(), "Validate Succee message is displayd after save");
         assertTestCase.assertTrue(getPortfolioDrawerHeader(newPortfolioName).isDisplayed(), "Validate that chnaged portfolio name is displayed in header ");

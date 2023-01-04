@@ -32,8 +32,8 @@ public class GlobalHeaderSidePanel extends UITestBase {
         BrowserUtils.wait(10);
         researchLinePage.clickMenu();
         BrowserUtils.wait(2);
+        assertTestCase.assertTrue(researchLinePage.validatePortfolioManagementTitleIsDisplayed(), "Validate Portfolio Selection header is available");
         researchLinePage.portfolioSettings.click();
-        assertTestCase.assertTrue(researchLinePage.validatePOrtfolioManagementHeaderIsAvailable(), "Validate Portfolio Management header is available");
         assertTestCase.assertTrue(researchLinePage.validateUploadNewLinkIsAvailable(), "Validate Upload new link is available");
         assertTestCase.assertTrue(researchLinePage.validateSideArrowIsAvailable(), "Validate  Arrow  is available ");
         assertTestCase.assertTrue(researchLinePage.validatespanPortfolioNameColumnIsAvailable(), "Validate Portfolio Name Column  is available");
@@ -112,7 +112,7 @@ public class GlobalHeaderSidePanel extends UITestBase {
         Driver.getDriver().close();
         Driver.getDriver().switchTo().window(firstPage);
 
-        researchLinePage.navigateToPageFromMenu("DataLab");
+        researchLinePage.navigateToPageFromMenu("Datalab");
         BrowserUtils.wait(10);
 
         for (String windowHandle : Driver.getDriver().getWindowHandles()) {
@@ -130,7 +130,7 @@ public class GlobalHeaderSidePanel extends UITestBase {
         BrowserUtils.wait(5);
         LoginPage login = new LoginPage();
 
-        assertTestCase.assertTrue(login.usernameBox.isDisplayed(), "Logout successfully");
+        assertTestCase.assertTrue(login.isUsernameBoxDisplayed(), "Logout successfully");
 
     }
 
