@@ -21,14 +21,12 @@ jobs:
         distribution: 'temurin'
         cache: 'maven'
     
-    - name: Set Path
-      run: |
-        echo "{MAVEN_HOME}={C:\Users\Administrator\Downloads\apache-maven-3.8.6-bin\apache-maven-3.8.6\bin}" >> $GITHUB_ENV
+    # - name: Set Path
+    #   run: |
+    #     echo "{MAVEN_HOME}={C:\Users\Administrator\Downloads\apache-maven-3.8.6-bin\apache-maven-3.8.6\bin}" >> $GITHUB_ENV
 
     - name: Build with Maven
       run: |
-        echo $MAVEN_HOME
-        "${{ env.MAVEN_HOME}}" --version
         C:\Users\Administrator\Downloads\apache-maven-3.8.6-bin\apache-maven-3.8.6\bin\mvn test -Dtest=PortfolioNameUpdateAPITest -DfailIfNoTests=false -Dbrowser=edge
     
     
