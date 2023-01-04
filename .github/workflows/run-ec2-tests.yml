@@ -21,9 +21,18 @@ jobs:
         distribution: 'temurin'
         cache: 'maven'
     
+    - name: Who am I
+      run: |
+        whoami
+
     # - name: Set Path
     #   run: |
     #     echo "{MAVEN_HOME}={C:\Users\Administrator\Downloads\apache-maven-3.8.6-bin\apache-maven-3.8.6\bin}" >> $GITHUB_ENV
+
+    - name: Maven version
+      run: |
+        mvn --version
+        C:\Users\Administrator\Downloads\apache-maven-3.8.6-bin\apache-maven-3.8.6\bin\mvn -version
 
     - name: Build with Maven
       run: |
