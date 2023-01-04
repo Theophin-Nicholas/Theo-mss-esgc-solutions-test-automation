@@ -1,5 +1,6 @@
 package com.esgc.OnDemandAssessment.UI.Pages;
 
+import com.esgc.Base.UI.Pages.UploadPage;
 import com.esgc.Pages.PageBase;
 import com.esgc.Utilities.BrowserUtils;
 import org.openqa.selenium.WebElement;
@@ -7,7 +8,7 @@ import org.openqa.selenium.support.FindBy;
 
 import java.util.List;
 
-public class OnDemandAssessmentPage extends PageBase {
+public class OnDemandAssessmentPage extends UploadPage {
 
     @FindBy(xpath = "//div[@data-test='sentinelStart']/following-sibling::div//div[contains(@class,'MuiToolbar-root')]/div[text()]")
     public WebElement menuOptionPageHeader;

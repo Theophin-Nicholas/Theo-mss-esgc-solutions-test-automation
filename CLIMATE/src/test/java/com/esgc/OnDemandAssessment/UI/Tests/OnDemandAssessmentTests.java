@@ -11,15 +11,12 @@ import org.testng.annotations.Test;
 
 public class OnDemandAssessmentTests extends UITestBase {
 
-
-
     @Test(groups = {"regression", "ui"})
     @Xray(test = {12001,12002,12011})
     public void validateOnDemandAssessmentRequest() {
 
         ResearchLinePage researchLinePage = new ResearchLinePage();
         OnDemandAssessmentPage onDemandAssessmentPage = new OnDemandAssessmentPage();
-        BrowserUtils.wait(10);
 
         researchLinePage.clickMenu();
         onDemandAssessmentPage.onDemandAssessmentRequest.click();
