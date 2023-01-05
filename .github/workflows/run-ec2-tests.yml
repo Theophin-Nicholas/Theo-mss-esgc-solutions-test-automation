@@ -21,7 +21,7 @@ jobs:
         distribution: 'temurin'
         cache: 'maven'
     
-    - name: Who am I
+    - name: Who am I 
       run: |
         whoami
 
