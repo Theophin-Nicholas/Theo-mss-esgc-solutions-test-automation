@@ -14,7 +14,7 @@ public class EntityClimateProfilePageQueries {
 
 
     public Map<String, String> getBrownShareData(String orbisID) {
-        String query = "with p as (select gs.bvd9_number,em.entity_name, round(IFNULL(BS_FOSF_INDUSTRY_REVENUES_ACCURATE,0),0)score , row_number()OVER(partition BY bvd9_number ORDER BY gs.AS_OF_date desc) row_number\n" +
+        String query = "with p as (select gs.bvd9_number,gs.SCORE_RANGE,em.entity_name, round(IFNULL(BS_FOSF_INDUSTRY_REVENUES_ACCURATE,0),0)score , row_number()OVER(partition BY bvd9_number ORDER BY gs.AS_OF_date desc) row_number\n" +
                 "from BROWN_SHARE gs, vw_Entity_Data em where gs.bvd9_number = bvd9_id)\n" +
                 "select * from p where row_number =1 and p.bvd9_number =  %s \n" +
                 "order by score desc";
@@ -27,6 +27,7 @@ public class EntityClimateProfilePageQueries {
             data.put("BVD9_NUMBER", rs.get("BVD9_NUMBER").toString());
             data.put("ENTITY_NAME", rs.get("ENTITY_NAME").toString());
             data.put("SCORE", rs.get("SCORE").toString());
+            data.put("SCORE_RANGE", rs.get("SCORE_RANGE").toString());
         }
 
         return data;
@@ -65,7 +66,7 @@ public class EntityClimateProfilePageQueries {
         String query = "select distinct(MESG_SECTOR),MESG_SECTOR_ID from DF_TARGET.SECTOR_HIERARCHY where MESG_SECTOR_ID in " +
                 "(select MESG_SECTOR_ID from DF_TARGET.ESG_ENTITY_MASTER where ORBIS_ID ='"+orbisId+"');";
 
-        return DatabaseDriver.getQueryResultMap(query);
+        return getQueryResultMap(query);
     }
 
     public List<Map<String, Object>> getSectorCompanies(String sectorName) {
