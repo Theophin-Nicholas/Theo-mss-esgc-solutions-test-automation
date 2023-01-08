@@ -6,8 +6,11 @@ import com.esgc.Base.DB.DBModels.EntityWithScores;
 import com.esgc.Base.DB.DBModels.ResearchLineIdentifier;
 import com.esgc.Base.TestBases.DataValidationTestBase;
 import com.esgc.Dashboard.API.APIModels.PerformanceChartCompany;
+import com.esgc.Dashboard.DB.DBQueries.DashboardQueries;
+import com.esgc.Dashboard.UI.Pages.DashboardPage;
 import com.esgc.PortfolioAnalysis.API.APIModels.RangeAndScoreCategory;
 import com.esgc.Utilities.APIUtilities;
+import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.PortfolioUtilities;
 import com.esgc.Utilities.Xray;
 import io.restassured.response.Response;
@@ -404,5 +407,59 @@ public class PerformanceChart extends DataValidationTestBase {
                 };
     }
 
+    @Test(groups = {REGRESSION, UI, DASHBOARD})
+    @Xray(test = {12323, 12324})
+    public void CompareUIandDBHeatMapBrownShareData() {
+        DashboardPage dashboardPage = new DashboardPage();
+        dashboardPage.navigateToPageFromMenu("Dashboard");
+        dashboardPage.selectSamplePortfolioFromPortfolioSelectionModal();
+        BrowserUtils.wait(5);
+        dashboardPage.selectOrDeselectHeatMapSection("Brown Share Assessment");
+        BrowserUtils.wait(5);
+        dashboardPage.selectOrDeselectHeatMapSection("Overall ESG Score");
+        BrowserUtils.wait(5);
+        dashboardPage.selectOrDeselectHeatMapSection("Overall ESG Score");
+        BrowserUtils.wait(5);
 
+        DashboardQueries dashboardQueries = new DashboardQueries();
+        List<Map<String, Object>> dbBrownShareHeatMapData = dashboardQueries.getPortfolioBrownShareInfo("00000000-0000-0000-0000-000000000000","2022","12");
+        List<Map<String, String>> uiBrownShareHeatMapData = dashboardPage.getBrownShareDataFromHeatMapDrawer();
+        assertTestCase.assertEquals(dbBrownShareHeatMapData.size(),uiBrownShareHeatMapData.size(),"Company Records Count from both DB and UI are not matching");
+        for(int i=0;i<dbBrownShareHeatMapData.size();i++){
+            String dbCompanyName = dbBrownShareHeatMapData.get(i).get("COMPANY_NAME").toString();
+            System.out.println("Verification of Record: "+i+" - "+dbCompanyName);
+            for(int j=0;j<uiBrownShareHeatMapData.size();j++){
+                String uiCompanyName = uiBrownShareHeatMapData.get(j).get("COMPANY_NAME");
+                if(dbCompanyName.equals(uiCompanyName)){
+                    Object objAccurateScore = dbBrownShareHeatMapData.get(i).get("BS_FOSF_INDUSTRY_REVENUES_ACCURATE_SOURCE");
+                    String dbScoreRange = dbBrownShareHeatMapData.get(i).get("SCORE_RANGE").toString();
+                    String uiScoreRange = uiBrownShareHeatMapData.get(j).get("SCORE_RANGE");
+                    System.out.println("DB Score Range:"+dbScoreRange+", UI Score Range:"+uiScoreRange);
+                    if(objAccurateScore!=null){
+                        System.out.println("DB Accurate Score:"+objAccurateScore);
+                        if(objAccurateScore.toString().contains(">") || objAccurateScore.toString().contains("<")) {
+                            dbScoreRange = objAccurateScore + "%";
+                        } else{
+                            if(Float.parseFloat(objAccurateScore.toString())>0 && Float.parseFloat(objAccurateScore.toString())<1){
+                                dbScoreRange = "<1%";
+                            } else {
+                                dbScoreRange = Float.parseFloat(objAccurateScore.toString()) + "%";
+                                uiScoreRange = Float.parseFloat(uiScoreRange.replace("%", "")) + "%";
+                            }
+                        }
+                        System.out.println("DB Score Range:"+dbScoreRange+", UI Score Range:"+uiScoreRange);
+                    }
+                    assertTestCase.assertEquals(dbScoreRange,uiScoreRange,dbCompanyName+" Score Ranges are not matching");
+
+                    String dbScoreCategory = dbBrownShareHeatMapData.get(i).get("SCORE_CATEGORY").toString();
+                    String uiScoreCategory = uiBrownShareHeatMapData.get(j).get("SCORE_CATEGORY");
+                    System.out.println("DB Score Category:"+dbScoreCategory+", UI Score Category:"+uiScoreCategory);
+                    assertTestCase.assertEquals(dbScoreCategory,uiScoreCategory,dbCompanyName+" Score Category are not matching");
+                    break;
+                }
+                if(j==uiBrownShareHeatMapData.size())
+                    assertTestCase.assertTrue(false,dbCompanyName+" Company Name is not available in UIHeatMap Drawer");
+            }
+        }
+    }
 }

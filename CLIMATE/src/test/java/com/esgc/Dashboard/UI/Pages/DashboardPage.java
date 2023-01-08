@@ -1002,6 +1002,7 @@ public class DashboardPage extends UploadPage {
         String uiBrownShareCoverage = heatMapBrownShareCoverage.getText();
         uiBrownShareCoverage = uiBrownShareCoverage.replace("Coverage: ","").split("/")[0];
         DashboardQueries dashboardQueries = new DashboardQueries();
+        DatabaseDriver.createDBConnection();
         int dbBrownShareCoverage = dashboardQueries.getPortfolioBrownShareInfo("00000000-0000-0000-0000-000000000000","2022","11").size();
         assertTestCase.assertEquals(Integer.parseInt(uiBrownShareCoverage),dbBrownShareCoverage, "Brown Share Coverage is not matching");
     }
