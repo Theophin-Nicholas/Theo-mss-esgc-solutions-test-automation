@@ -66,6 +66,12 @@ public class DashboardPage extends UploadPage {
     @FindBy(xpath = "//div[contains(@class,'MuiDrawer-paperAnchorRight')]//h2[1]")
     public WebElement methodologyPopup_Header;
 
+    @FindBy(xpath = "(//div[@class='entityList']//div/div[text()])[2]")
+    public WebElement heatMapDrawerYAxisColumnName;
+
+    @FindBy(xpath = "//div[@id='heatmapentity-test-id']//h3[text()='Brown Share Assessment']/..//h3[contains(text(),'Coverage')]")
+    public WebElement heatMapBrownShareCoverage;
+
     @FindBy(xpath = "//a[@id='link-link-test-id-1']")
     public WebElement methodologyPopup_Link_Methodology10;
     @FindBy(xpath = "//a[@id='link-link-test-id-2']")
@@ -222,7 +228,7 @@ public class DashboardPage extends UploadPage {
     @FindBy(xpath = "//span[contains(text(),'Laggards')]")
     public WebElement tabPerformanceLaggards;
 
-    @FindBy(xpath = "//*[starts-with(text(),'Show')]")
+    @FindBy(xpath = "//div[contains(text(),'Performance:')]/..//div[starts-with(text(),'Show Top')]")
     public WebElement performanceChartDropdown;
 
     @FindBy(xpath = "//ul[@role='listbox']//span[text()]")
@@ -264,6 +270,9 @@ public class DashboardPage extends UploadPage {
     //============= Heat Map
     @FindBy(xpath = "//*[text()='Select two:']/following-sibling::div/div")
     public List<WebElement> heatMapResearchLines;
+
+    @FindBy(xpath = "//div[text()='Brown Share Assessment']/ancestor::table//div[@heap_id='heatmap']/span")
+    public List<WebElement> brownShareCategories;
 
     @FindBy(xpath = "//div[@class='entityList' and .//div[contains(text(),'Companies')]]")
     public WebElement heatMapEntityDrawerWidget;
@@ -707,11 +716,17 @@ public class DashboardPage extends UploadPage {
     }
 
     public void selectPerformanceChartViewSizeFromDropdown(String size) {
+        System.out.println("Performance Chart: Selecting the dropdown option - "+size);
         BrowserUtils.scrollTo(performanceChartDropdown);
-        wait.until(ExpectedConditions.elementToBeClickable(performanceChartDropdown)).click();
+        BrowserUtils.wait(5);
+        BrowserUtils.waitForClickablility(performanceChartDropdown,30).click();
+        BrowserUtils.wait(5);
+        //wait.until(ExpectedConditions.elementToBeClickable(performanceChartDropdown)).click();
         wait.until(ExpectedConditions.visibilityOfAllElements(performanceChartDropdownOptions));
         performanceChartDropdownOptions.stream().filter(e -> e.getText().equals(size)).findFirst().get().click();
         waitForDataLoadCompletion();
+        Actions action = new Actions(Driver.getDriver());
+        action.sendKeys(Keys.ESCAPE).build().perform();
     }
 
 
@@ -977,8 +992,51 @@ public class DashboardPage extends UploadPage {
 
         BrowserUtils.scrollTo(element);
         wait.until(ExpectedConditions.elementToBeClickable(element));
+        BrowserUtils.wait(5);
         BrowserUtils.clickWithJS(element);
-        BrowserUtils.wait(10);
+        BrowserUtils.wait(5);
+    }
+
+    public void verifyBrownShareCoverageInHeatMapDescription(){
+        BrowserUtils.wait(5);
+        String uiBrownShareCoverage = heatMapBrownShareCoverage.getText();
+        uiBrownShareCoverage = uiBrownShareCoverage.replace("Coverage: ","").split("/")[0];
+        DashboardQueries dashboardQueries = new DashboardQueries();
+        int dbBrownShareCoverage = dashboardQueries.getPortfolioBrownShareInfo("00000000-0000-0000-0000-000000000000","2022","11").size();
+        assertTestCase.assertEquals(Integer.parseInt(uiBrownShareCoverage),dbBrownShareCoverage, "Brown Share Coverage is not matching");
+    }
+
+    public void verifyBrownShareCategoryInHeatMapDrawer(List<String> expectedCategoriesList){
+        for(int i=1; i<=3; i++){
+            String expCategory = expectedCategoriesList.get(3-i);
+            String xpath = "//tr["+i+"]//div[@heap_id='heatmap'][@heap_heatmap_id='gridcell']/span[2]";
+            Driver.getDriver().findElement(By.xpath(xpath)).click();
+            String actualCategory = heatMapDrawerYAxisColumnName.getText();
+            assertTestCase.assertEquals(expCategory,actualCategory,"Expected Category is not available in the drawer");
+        }
+    }
+
+    public List<Map<String, String>> getBrownShareDataFromHeatMapDrawer(){
+        List<Map<String, String>> uiBrownShareHeatMapData = new ArrayList<>();
+        for(int i=1; i<=3; i++){
+            String xpath = "//tr["+i+"]//div[@heap_id='heatmap'][@heap_heatmap_id='gridcell']/span[2]";
+            Driver.getDriver().findElement(By.xpath(xpath)).click();
+            String scoreCategory = heatMapDrawerYAxisColumnName.getText();
+            String recordsCountXpath = "//ul[@class='list']/li";
+            int recordsCount = Driver.getDriver().findElements(By.xpath(recordsCountXpath)).size();
+            for(int j=1; j<=recordsCount; j++){
+                Map<String, String> companyDetails = new HashMap<>();
+                String companyName = Driver.getDriver().findElement(By.xpath(recordsCountXpath+"["+j+"]//h3/span")).getText();
+                String investmentScore = Driver.getDriver().findElement(By.xpath(recordsCountXpath+"["+j+"]//h4")).getText();
+                String scoreRange = Driver.getDriver().findElement(By.xpath(recordsCountXpath+"["+j+"]//div[text()]")).getText();
+                companyDetails.put("COMPANY_NAME", companyName);
+                companyDetails.put("INVESTMENT_SCORE", investmentScore);
+                companyDetails.put("SCORE_RANGE", scoreRange);
+                companyDetails.put("SCORE_CATEGORY", scoreCategory);
+                uiBrownShareHeatMapData.add(companyDetails);
+            }
+        }
+        return uiBrownShareHeatMapData;
     }
 
     public boolean verifyHeatMapResearchLineTitle(int buttonIndex) {
