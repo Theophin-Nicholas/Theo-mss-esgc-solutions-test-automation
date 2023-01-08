@@ -15,10 +15,7 @@ import io.restassured.response.Response;
 import org.openqa.selenium.By;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class DashboardAPIController extends APIController {
 
@@ -271,15 +268,28 @@ public class DashboardAPIController extends APIController {
                         .post(DashboardEndPoints.POST_HEAT_MAP_ENTITY_LIST);
 
                 System.out.println(response.prettyPrint());
-                response.as(CompanyBrownShareInfo[].class);
 
-                for(int j=1; j<=250;j++) {
+                List<CompanyBrownShareInfo> companyList = new ArrayList<>();
+                companyList = Arrays.asList(response.as(CompanyBrownShareInfo[].class));
+                System.out.println("Category:"+category+" - Companies:"+companyList.size());
+
+                for(int j=0; j<companyList.size(); j++) {
                     Map<String, String> companyDetails = new HashMap<>();
-                    String companyName = "";
-                    String investmentScore = "";
-                    String scoreRange = "";
+                    String companyName = companyList.get(j).company_name;
+                    String scoreRange = companyList.get(j).category_score_r1_1;
+                    Double score = companyList.get(j).score_rl_1;
+                    if(score != null && score>0){
+                        if(score>0 && score<1){
+                            scoreRange = "<1%";
+                        }else{
+                            if(String.valueOf(score).endsWith(".0")){
+                                scoreRange = score.intValue()+"%";
+                            }else {
+                                scoreRange = score.floatValue() + "%";
+                            }
+                        }
+                    }
                     companyDetails.put("COMPANY_NAME", companyName);
-                    companyDetails.put("INVESTMENT_SCORE", investmentScore);
                     companyDetails.put("SCORE_RANGE", scoreRange);
                     companyDetails.put("SCORE_CATEGORY", category);
                     apiBrownShareHeatMapData.add(companyDetails);
@@ -290,6 +300,7 @@ public class DashboardAPIController extends APIController {
         } catch (Exception e) {
             System.out.println("Inside exception " + e.getMessage());
         }
+        System.out.println("Total Companies Count: " + apiBrownShareHeatMapData.size());
 
         return apiBrownShareHeatMapData;
     }

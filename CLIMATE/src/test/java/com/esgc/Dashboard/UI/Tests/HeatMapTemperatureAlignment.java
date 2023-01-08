@@ -214,7 +214,7 @@ public class HeatMapTemperatureAlignment extends DashboardUITestBase {
                     System.out.println("API Score Range:"+apiScoreRange+", UI Score Range:"+uiScoreRange);
                     assertTestCase.assertEquals(apiScoreRange,uiScoreRange,apiCompanyName+" Score Ranges are not matching");
 
-                    String apiScoreCategory = apiBrownShareHeatMapData.get(i).get("SCORE_CATEGORY").toString();
+                    String apiScoreCategory = apiBrownShareHeatMapData.get(i).get("SCORE_CATEGORY");
                     String uiScoreCategory = uiBrownShareHeatMapData.get(j).get("SCORE_CATEGORY");
                     System.out.println("API Score Category:"+apiScoreCategory+", UI Score Category:"+uiScoreCategory);
                     assertTestCase.assertEquals(apiScoreCategory,uiScoreCategory,apiCompanyName+" Score Category are not matching");

@@ -10,6 +10,6 @@ public class CompanyBrownShareInfo {
     public String category_score_r1_1;
     public String company_name;
     public String managed_type;
-    public double percent_holdings;
-    public double score_rl_1;
+    public Double percent_holdings;
+    public Double score_rl_1;
 }
