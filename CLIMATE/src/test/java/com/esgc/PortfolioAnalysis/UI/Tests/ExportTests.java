@@ -4,6 +4,8 @@ import com.esgc.Base.API.APIModels.APIFilterPayload;
 import com.esgc.Base.API.Controllers.APIController;
 import com.esgc.Base.TestBases.UITestBase;
 import com.esgc.Base.UI.Pages.LoginPage;
+import com.esgc.Dashboard.UI.Pages.DashboardPage;
+import com.esgc.Dashboard.UI.Tests.Export.ExportUtils;
 import com.esgc.PortfolioAnalysis.UI.Pages.ResearchLinePage;
 import com.esgc.PortfolioAnalysis.UI.Tests.ExcelComparison.BrownShareAssessment;
 import com.esgc.PortfolioAnalysis.UI.Tests.ExcelComparison.CarbonFootprint;
@@ -11,6 +13,7 @@ import com.esgc.PortfolioAnalysis.UI.Tests.ExcelComparison.EsgAssessment;
 import com.esgc.PortfolioAnalysis.UI.Tests.ExcelComparison.GreenShareAssessment;
 import com.esgc.TestBase.DataProviderClass;
 import com.esgc.Utilities.BrowserUtils;
+import com.esgc.Utilities.EntitlementsBundles;
 import com.esgc.Utilities.ExcelUtil;
 import com.esgc.Utilities.Xray;
 import org.apache.commons.io.FileUtils;
@@ -21,6 +24,8 @@ import org.testng.annotations.Test;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
+import java.util.Map;
 
 import static com.esgc.Utilities.Groups.*;
 
@@ -29,11 +34,10 @@ public class ExportTests extends UITestBase {
 //TODO Needs attention. Tests are failing.
     @Test(groups = {REGRESSION, SMOKE, EXPORT},
             dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
-    @Xray(test = {2092, 2093, 2108, 2110, 2112, 2113, 2625, 3004, 3396, 3403, 3405, 3406, 4648, 5169, 3621, 8953, 9656, 9657, 9658, 10679 })
+    @Xray(test = {2092, 2093, 2108, 2110, 2112, 2113, 2625, 3004, 3396, 3403, 3405, 3406, 4648, 5169, 3621, 8953, 9656, 9657, 9658, 9819, 10679 })
     public void verifyExportFunctionalityAndExcelFieldsWithUI(String researchLine) {
 
         ResearchLinePage researchLinePage = new ResearchLinePage();
-
         if (researchLine.equals("Physical Risk Hazards") || researchLine.equals("Temperature Alignment")
             || researchLine.equals("Physical Risk Management")) {
             throw new SkipException("Physical Risk Hazards - Export is not ready to test in " + researchLine);
@@ -283,4 +287,28 @@ public class ExportTests extends UITestBase {
         researchLinePage.verifyCompaniesOrderInRegionsAndSections(researchLine, exportedDocument, "Sectors", 12);
     }
 
+    @Test(groups = {REGRESSION, EXPORT})
+    @Xray(test = {9818})
+    public void verifyExcelColumnsWithEsgEntitlement_Bundle() {
+
+        ResearchLinePage researchLinePage = new ResearchLinePage();
+        String researchLine = "ESG Assessments";
+        researchLinePage.navigateToResearchLine(researchLine);
+        researchLinePage.selectSamplePortfolioFromPortfolioSelectionModal();
+        researchLinePage.clickExportDropdown();
+        researchLinePage.selectExportData("Data", researchLine);
+        BrowserUtils.wait(10);
+
+        ExportUtils utils = new ExportUtils();
+        DashboardPage dashboardPage = new DashboardPage();
+        String filePath = dashboardPage.getDownloadedCompaniesExcelFilePath();
+        List<Map<String,String>> excelResults = utils.convertExcelToNestedMap(filePath);
+
+        Map<String, String> excelResult = excelResults.get(0);
+        boolean keyCheck = !(excelResult.containsKey("Alphanumeric Score") ||
+                excelResult.containsKey("Overall Qualifier"));
+
+        assertTestCase.assertTrue(keyCheck,"Columns should not be available");
+        dashboardPage.deleteDownloadFolder();
+    }
 }
