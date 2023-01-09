@@ -14,6 +14,9 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.testng.annotations.Test;
 
+import java.util.List;
+import java.util.Map;
+
 import static com.esgc.Utilities.Groups.REGRESSION;
 import static com.esgc.Utilities.Groups.UI;
 
@@ -22,7 +25,7 @@ public class EntityBrownShareTests extends UITestBase {
     @Test(groups = {REGRESSION, UI},
             dataProviderClass = DataProviderClass.class, dataProvider = "orbisIDWithBrownShareScore")
     @Xray(test = {7890})
-    public void verifyTooltipOverBrownShareSectorComparisionChart(String orbisID) {
+    public void verifyTooltipOverBrownShareSectorComparisonChart(String orbisID) {
         LoginPage login = new LoginPage();
         login.clickOnLogout();
         login.entitlementsLogin(EntitlementsBundles.TRANSITION_RISK);
@@ -41,6 +44,7 @@ public class EntityBrownShareTests extends UITestBase {
         assertTestCase.assertTrue(companyName.length()>0, companyName+" - Verify Company Name in tooltip");
         assertTestCase.assertTrue(tooltip.getText().contains("Brown Share Score: "), "Verify Brown Share Score in tooltip");
         assertTestCase.assertTrue(tooltip.getText().contains("Brown Share Assessment: "), "Verify Brown Share Assessment in tooltip");
+        assertTestCase.assertTrue(tooltip.getText().contains("Involvement"), "Verify Involvement in tooltip");
         assertTestCase.assertTrue(tooltip.getText().contains("%"), "Verify Brown Share Score % in tooltip");
 
     }
@@ -66,20 +70,24 @@ public class EntityBrownShareTests extends UITestBase {
 
     @Test(groups = {REGRESSION, UI},
             dataProviderClass = DataProviderClass.class, dataProvider = "orbisIDWithBrownShareScore")
-    @Xray(test = {7889, 7917})
+    @Xray(test = {7889, 7917, 12341, 12342})
     public void verifyBrownShareSectionInformation(String orbisID) {
         LoginPage login = new LoginPage();
         login.clickOnLogout();
         login.entitlementsLogin(EntitlementsBundles.TRANSITION_RISK);
 
         EntityClimateProfilePageQueries entityClimateProfilepagequeries = new EntityClimateProfilePageQueries();
-        String sectorName = entityClimateProfilepagequeries.getEntitySectorInfo(orbisID).get(0).get("MESG_SECTOR").toString();
+        List<Map<String, Object>> sectorRecords = entityClimateProfilepagequeries.getEntitySectorInfo(orbisID);
+        String sectorName = sectorRecords.get(0).get("MESG_SECTOR").toString();
         int sectorCompaniesCount = entityClimateProfilepagequeries.getSectorCompanies(sectorName).size();
         EntityClimateProfilePage entityProfilePage = new EntityClimateProfilePage();
         String companyName = entityProfilePage.searchAndLoadClimateProfilePage(orbisID);
         entityProfilePage.verifyBrownShareWidget();
+        entityProfilePage.verifyBrownShareWidgetOverallRevenue(orbisID);
+        entityProfilePage.verifyBrownShareCategory();
         entityProfilePage.verifyBrownShareComparisonChartLegends(sectorName,companyName);
         entityProfilePage.verifyBrownShareComparisonChartAxes();
+        entityProfilePage.verifyBrownShareComparisonChartAverageLine();
         entityProfilePage.verifyBrownShareComparisonChartSectorDesc(sectorName,sectorCompaniesCount,companyName);
     }
 
