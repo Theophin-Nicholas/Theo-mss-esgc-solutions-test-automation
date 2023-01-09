@@ -10,6 +10,7 @@ import java.util.List;
 public class EntityHeader {
     private String company_name;
     private String country;
+    private String esg_confidence_level;
     private String generic_sector;
     private String lei;
     private String mesg_sector;

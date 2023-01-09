@@ -543,7 +543,7 @@ public class EntityClimateProfilePage extends ClimatePageBase {
 
     public boolean validateGlobalCompanyNameHeader(String companyName) {
         try{
-            return Driver.getDriver().findElement(By.xpath("//li[@role='menuitem']/span[text()='"+companyName+"']")).isDisplayed();
+            return Driver.getDriver().findElement(By.xpath("//li//span[text()='"+companyName+"']")).isDisplayed();
         }catch(Exception e){
             return false;
         }

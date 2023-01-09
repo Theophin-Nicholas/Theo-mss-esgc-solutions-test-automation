@@ -1,5 +1,6 @@
 package com.esgc.EntityProfile.API.APIModels.EntityControversies;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import java.util.ArrayList;
@@ -7,6 +8,7 @@ import java.util.ArrayList;
 @Data
 public class ControversiesList {
 
+    @JsonFormat(with = JsonFormat.Feature.ACCEPT_CASE_INSENSITIVE_PROPERTIES)
     String ESG_COMPONENTS;
     String controversy_description;
     String controversy_events;

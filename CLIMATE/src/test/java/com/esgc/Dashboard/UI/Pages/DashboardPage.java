@@ -682,7 +682,7 @@ public class DashboardPage extends UploadPage {
     public double calculateTotalInvestmentFromPerformanceChart() {
         wait.until(ExpectedConditions.visibilityOfAllElements(investmentsInPerformanceChart));
         return PortfolioUtilities.round(investmentsInPerformanceChart.stream()
-                .mapToDouble(element -> Double.parseDouble(element.getText().substring(0, element.getText().indexOf("%")))).sum(), 2);
+                .mapToDouble(element -> Double.parseDouble(element.getText().substring(0, element.getText().indexOf("%")))).sum(), 1);
     }
 
     public double getTotalInvestmentInPerformanceChart() {

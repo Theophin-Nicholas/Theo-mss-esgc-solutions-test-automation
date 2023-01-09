@@ -149,7 +149,7 @@ public abstract class PageBase {
     @FindBy(xpath = "(//table[@id='table-id'])/tbody/tr/td[1]/div/span")
     public List<WebElement> portfolioEntityList;
 
-    @FindBy(xpath = "//li/span[text()]")
+    @FindBy(xpath = "//li//span[text() and ./following-sibling::*[name()='svg']]")
     public WebElement portfolioEntityName;
 
     @FindBy(css = "svg > path[fill-rule='evenodd'][fill='#b8b8b8']")
@@ -987,18 +987,14 @@ public abstract class PageBase {
 
     public List<String> getListOfRegion() {
         wait.until(ExpectedConditions.visibilityOfAllElements(regionList));
-        List<String> regionsList =
-                regionList.stream().map(e -> e.getText())
-                        .collect(Collectors.toList());
-        return regionsList;
+        return regionList.stream().map(WebElement::getText)
+                .collect(Collectors.toList());
     }
 
     public List<String> getListOfSector() {
         wait.until(ExpectedConditions.visibilityOfAllElements(sectorList));
-        List<String> SectorsList =
-                sectorList.stream().map(e -> e.getText())
-                        .collect(Collectors.toList());
-        return SectorsList;
+        return sectorList.stream().map(WebElement::getText)
+                .collect(Collectors.toList());
     }
 
     public void refreshCurrentWindow() {
