@@ -8,15 +8,17 @@ import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import org.testng.annotations.Test;
 
+import static com.esgc.Utilities.Groups.*;
+
 public class AddMissingDcumentsURL extends EntityIssuerPageTestBase {
-    @Test(groups = {"api", "regression", "entity_issuer"},dataProvider = "loginP2", dataProviderClass = IssuerDataProviderClass.class)
+    @Test(groups = {API, REGRESSION, ISSUER},dataProvider = "loginP2", dataProviderClass = IssuerDataProviderClass.class)
     @Xray(test = 11715)
     public void ValidateUrlApiResponseP2(String... data) {
         getEntityPageAccessTokenLoginWithParameter(data[0].toString(),data[1].toString());
         validateResponse("googl.zxd","Invalid URL or the domain doesn't exists");
     }
 
-    @Test(groups = {"api", "regression", "entity_issuer"},dataProvider = "loginP3", dataProviderClass = IssuerDataProviderClass.class)
+    @Test(groups = {API, REGRESSION, ISSUER},dataProvider = "loginP3", dataProviderClass = IssuerDataProviderClass.class)
     @Xray(test = 11523)
     public void ValidateUrlApiResponseP3(String... data) {
         getEntityPageAccessTokenLoginWithParameter(data[0].toString(),data[1].toString());

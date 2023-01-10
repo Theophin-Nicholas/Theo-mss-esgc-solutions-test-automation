@@ -16,6 +16,8 @@ import java.util.Random;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static com.esgc.Utilities.Groups.*;
+
 
 public class AccountsPageTests extends EMCUITestBase {
     Faker faker = new Faker();
@@ -29,7 +31,7 @@ public class AccountsPageTests extends EMCUITestBase {
     String lname = "user";
     String email = "testuser@mail.com";
 
-    @Test(groups = {"EMC", "ui", "regression", "smoke", "prod"})
+    @Test(groups = {EMC, UI, REGRESSION, SMOKE, PROD})
     @Xray(test = {3377, 3476, 3477, 3478, 3479, 2526, 2527, 2528, 2583})
     public void accountDetailsVerificationTest() {
         EMCMainPage homePage = new EMCMainPage();
@@ -94,7 +96,7 @@ public class AccountsPageTests extends EMCUITestBase {
         assertTestCase.assertEquals(detailsPage.pageTitle.getText(), currentAccountName, "Account Details page is displayed");
     }
 
-    @Test(groups = {"EMC", "ui", "regression", "smoke"})
+    @Test(groups = {EMC, UI, REGRESSION, SMOKE})
     @Xray(test = {3374, 4174, 4175, 4222, 3979, 3981, 3992, 7316})
     public void accountCreationTests() {
         EMCMainPage homePage = new EMCMainPage();
@@ -193,7 +195,7 @@ public class AccountsPageTests extends EMCUITestBase {
         assertTestCase.assertTrue(detailsPage.verifyApplication(applicationName + 2), "Application is added to the list");
     }
 
-    @Test(groups = {"EMC", "ui", "regression", "smoke", "prod"})
+    @Test(groups = {EMC, UI, REGRESSION, SMOKE, PROD})
     @Xray(test = {4812, 4813, 4814, 4815, 2350})
     public void accountDetailsPageTest() {
         navigateToAccountsPage(accountName, "users");
@@ -236,7 +238,7 @@ public class AccountsPageTests extends EMCUITestBase {
         detailsPage.cancelButton.click();
     }
 
-    @Test(groups = {"EMC", "ui", "regression"})
+    @Test(groups = {EMC, UI, REGRESSION})
     @Xray(test = {4806, 6737, 7294, 7296, 7300})
     public void createNewUserTest() {
         navigateToAccountsPage(accountName, "users");
@@ -274,7 +276,7 @@ public class AccountsPageTests extends EMCUITestBase {
         assertTestCase.assertFalse(detailsPage.verifyUser(fname + " " + lname), "User is not verified in users list");
     }
 
-    @Test(enabled = true, groups = {"EMC", "ui", "regression", "smoke"})
+    @Test(enabled = true, groups = {EMC, UI, REGRESSION, SMOKE})
     @Xray(test = {4818})
     public void createAndEditNewUserTest() {
         navigateToAccountsPage(accountName, "users");
@@ -309,7 +311,7 @@ public class AccountsPageTests extends EMCUITestBase {
         editUserPage.deleteUser();
     }
 
-    @Test(groups = {"EMC", "ui", "regression"})
+    @Test(groups = {EMC, UI, REGRESSION})
     @Xray(test = {4839})
     public void verifyOktaUserDetailsTest() {
 
@@ -329,7 +331,7 @@ public class AccountsPageTests extends EMCUITestBase {
         assertTestCase.assertTrue(editUserPage.oktaUserMessage.isDisplayed(), "This user was provisioned by Okta message is displayed");
     }
 
-    @Test(groups = {"EMC", "ui", "smoke", "regression", "prod"})
+    @Test(groups = {EMC, UI, SMOKE, REGRESSION, PROD})
     @Xray(test = {4849})
     public void verifyEMCUserDetailsTest() {
         navigateToAccountsPage(accountName, "users");
@@ -348,7 +350,7 @@ public class AccountsPageTests extends EMCUITestBase {
         assertTestCase.assertTrue(currentInfo.get("modifiedBy").split(" ").length >= 5, "Modified by info is displayed");
     }
 
-    @Test(groups = {"EMC", "ui", "smoke", "regression", "test"})
+    @Test(groups = {EMC, UI, SMOKE, REGRESSION, "test"})
     @Xray(test = {5044, 4809})
     public void verifyAllUsersSortedByNameTest() {
         navigateToAccountsPage(accountName, "users");
@@ -361,7 +363,7 @@ public class AccountsPageTests extends EMCUITestBase {
         assertTestCase.assertTrue(detailsPage.isSortedByName(), "Users Table is displayed");
     }
 
-    @Test(groups = {"EMC", "ui", "regression"})
+    @Test(groups = {EMC, UI, REGRESSION})
     @Xray(test = {2351})
     public void verifyAllAccountsSortedByNameTest() {
         navigateToAccountsPage("", "users");
@@ -371,7 +373,7 @@ public class AccountsPageTests extends EMCUITestBase {
         assertTestCase.assertEquals(accountNames, accountsPage.getAccountNames(), "Accounts are sorted alphabetically");
     }
 
-    @Test(groups = {"EMC", "ui", "smoke", "regression", "prod"})
+    @Test(groups = {EMC, UI, SMOKE, REGRESSION, PROD})
     @Xray(test = {5492})
     public void verifySearchBoxOnUsersPageTest() {
         navigateToAccountsPage(accountName, "users");
@@ -382,7 +384,7 @@ public class AccountsPageTests extends EMCUITestBase {
 
     }
 
-    @Test(groups = {"EMC", "ui", "regression"})
+    @Test(groups = {EMC, UI, REGRESSION})
     @Xray(test = {5517})
     public void verifySuspendUserTest() {
         navigateToAccountsPage("AutomationAccount", "users");
@@ -436,7 +438,7 @@ public class AccountsPageTests extends EMCUITestBase {
 
     }
 
-    @Test(groups = {"EMC", "ui", "smoke", "regression"})
+    @Test(groups = {EMC, UI, SMOKE, REGRESSION})
     @Xray(test = {6169, 6170})
     public void verifyActivateUserTest() {
         navigateToAccountsPage(accountName, "users");
@@ -468,7 +470,7 @@ public class AccountsPageTests extends EMCUITestBase {
         editUserPage.deleteUser();
     }
 
-    @Test(groups = {"EMC", "ui", "smoke", "regression", "prod"})
+    @Test(groups = {EMC, UI, SMOKE, REGRESSION, PROD})
     @Xray(test = {6185})
     public void resetPasswordButtonTest() {
         navigateToAccountsPage(accountName, "users");
@@ -485,7 +487,7 @@ public class AccountsPageTests extends EMCUITestBase {
         assertTestCase.assertTrue(editUserPage.resetPasswordButton.isEnabled(), "Reset Password button is displayed");
     }
 
-    @Test(groups = {"EMC", "ui", "regression"})
+    @Test(groups = {EMC, UI, REGRESSION})
     @Xray(test = {6794, 6792, 6795, 6797})
     public void deleteMultipleUsersTest() {
         navigateToAccountsPage(accountName, "users");
@@ -538,7 +540,7 @@ public class AccountsPageTests extends EMCUITestBase {
         assertTestCase.assertFalse(detailsPage.verifyUser(firstUser), "User is not present");
     }
 
-    @Test(groups = {"EMC", "ui", "regression"})
+    @Test(groups = {EMC, UI, REGRESSION})
     @Xray(test = {6801, 6793, 6796})
     public void removeOnlyEMCUsersTest() {
         navigateToAccountsPage(accountName, "users");
@@ -584,7 +586,7 @@ public class AccountsPageTests extends EMCUITestBase {
         //todo: Search for the user on OKTA - User is present in Okta but not on EMC
     }
 
-//    @Test(enabled = true, groups = {"EMC", "ui", "regression"})
+//    @Test(enabled = true, groups = {EMC, UI, REGRESSION})
 //    @Xray(test = {5519})
 //    public void activateUserTest() {
 //        navigateToAccountsPage("AutomationAccount", "users");
@@ -652,7 +654,7 @@ public class AccountsPageTests extends EMCUITestBase {
 //        //todo: Check the user login to MESG with the new password
 //    }
 
-    @Test(groups = {"EMC", "ui", "smoke"})
+    @Test(groups = {EMC, UI, SMOKE})
     @Xray(test = {5179, 3994})
     public void verifyUserAssignApplicationRolesTest() {
         navigateToAccountsPage(accountName, "applications");
@@ -686,7 +688,7 @@ public class AccountsPageTests extends EMCUITestBase {
         BrowserUtils.waitForClickablility(detailsPage.assignApplicationModalDoneButton, 5).click();
     }
 
-    @Test(groups = {"EMC", "ui", "regression"})
+    @Test(groups = {EMC, UI, REGRESSION})
     @Xray(test = {5185, 5769, 5768})
     public void verifyUserRemoveApplicationRolesTest() {
         navigateToAccountsPage(accountName, "applications");
@@ -753,7 +755,7 @@ public class AccountsPageTests extends EMCUITestBase {
 
     }
 
-    @Test(groups = {"EMC", "ui", "smoke"})
+    @Test(groups = {EMC, UI, SMOKE})
     @Xray(test = {3993})
     public void verifyUserRemovesApplicationTest() {
         navigateToAccountsPage(accountName, "applications");
@@ -771,7 +773,7 @@ public class AccountsPageTests extends EMCUITestBase {
         assertTestCase.assertEquals(detailsPage.applicationAddedMessage.getText(), "Application " + applicationName + " removed successfully");
     }
 
-    @Test(groups = {"EMC", "ui", "regression", "smoke"})
+    @Test(groups = {EMC, UI, REGRESSION, SMOKE})
     @Xray(test = {3991})
     public void verifyUserAssignOneApplicationToMultipleAccounts() {
         navigateToAccountsPage(accountName, "applications");
@@ -804,7 +806,7 @@ public class AccountsPageTests extends EMCUITestBase {
         assertTestCase.assertTrue(detailsPage.addTestApplications(applicationName + 2), "TestQA Application is assigned");
     }
 
-    @Test(groups = {"EMC", "ui", "regression"})
+    @Test(groups = {EMC, UI, REGRESSION})
     @Xray(test = {5547})
     public void verifyCreatingExternalAccountWithoutBeingActivatedTest() {
         navigateToAccountsPage(accountName, "users");
@@ -852,7 +854,7 @@ public class AccountsPageTests extends EMCUITestBase {
         assertTestCase.assertTrue(detailsPage.notification.isDisplayed(), "User deleted message is displayed");
     }
 
-    @Test(groups = {"EMC", "ui", "regression"})
+    @Test(groups = {EMC, UI, REGRESSION})
     @Xray(test = {2352, 2582})
     public void VerifyAccountPageDisplaysListOfAccountsInformation() {
         navigateToAccountsPage("", "users");
@@ -877,7 +879,7 @@ public class AccountsPageTests extends EMCUITestBase {
         }
     }
 
-    @Test(groups = {"EMC", "ui", "regression"})
+    @Test(groups = {EMC, UI, REGRESSION})
     @Xray(test = {6537})
     public void verifyProductsCanRemovedFromAccountTest() {
         navigateToAccountsPage(accountName, "applications");
@@ -910,7 +912,7 @@ public class AccountsPageTests extends EMCUITestBase {
         //assertTestCase.assertTrue(detailsPage.notification.isDisplayed(), "Notification is displayed");
     }
 
-    @Test(groups = {"EMC", "ui", "regression"})
+    @Test(groups = {EMC, UI, REGRESSION})
     @Xray(test = {7603, 7604})
     public void verifyRemoveApplicationRoleUnderUserAccountsTest() {
         navigateToAccountsPage(accountName, "applications");
@@ -949,7 +951,7 @@ public class AccountsPageTests extends EMCUITestBase {
         assertTestCase.assertTrue(userDetailsPage.verifyApplicationRole(applicationName), "Application Role is assigned to the user");
     }
 
-    @Test(groups = {"EMC", "ui", "regression"})
+    @Test(groups = {EMC, UI, REGRESSION})
     @Xray(test = {8222, 8259})
     public void verifyAssignApplicationRoleForMAUserAccountsTest() {
         navigateToAccountsPage(accountName, "applications");
@@ -990,7 +992,7 @@ public class AccountsPageTests extends EMCUITestBase {
         assertTestCase.assertTrue(userDetailsPage.verifyApplicationRole(applicationName), "Application Role is assigned to the user");
     }
 
-    @Test(groups = {"EMC", "ui", "regression"})
+    @Test(groups = {EMC, UI, REGRESSION})
     @Xray(test = {8473})
     public void verifyCantAssignMSSApplicationRoleForMAUserAccountsTest() {
         navigateToAccountsPage(accountName, "applications");
@@ -1024,7 +1026,7 @@ public class AccountsPageTests extends EMCUITestBase {
         assertTestCase.assertFalse(userDetailsPage.verifyApplicationRole(applicationName), "MSS Application Role is not assigned to the user");
     }
 
-    @Test(groups = {"EMC", "ui", "regression"}, description = "UI | EMC | Users | Verify User can Cancel/Save the Update User Information")
+    @Test(groups = {EMC, UI, REGRESSION}, description = "UI | EMC | Users | Verify User can Cancel/Save the Update User Information")
     @Xray(test = {4973, 4974, 4976})
     public void verifyUserCanCancelUpdateTest() {
         navigateToAccountsPage(accountName, "users");
@@ -1118,7 +1120,7 @@ public class AccountsPageTests extends EMCUITestBase {
         editPage.editUser(firstName, lastName, email);
     }
 
-    @Test(groups = {"EMC", "ui", "regression"}, description = "UI | EMC | Accounts Applications | Validate that User is Able to Assign More than one Application to the Account")
+    @Test(groups = {EMC, UI, REGRESSION}, description = "UI | EMC | Accounts Applications | Validate that User is Able to Assign More than one Application to the Account")
     @Xray(test = {3983, 3997})
     public void verifyAssignMultipleApplicationsToAccountTest() {
         navigateToAccountsPage(accountName, "applications");
@@ -1162,7 +1164,7 @@ public class AccountsPageTests extends EMCUITestBase {
 
     }
 
-    @Test(groups = {"EMC", "ui", "regression"}, description = "UI | EMC | Accounts | Verify that User Can't Create a New Account if Required Fields are Missing ")
+    @Test(groups = {EMC, UI, REGRESSION}, description = "UI | EMC | Accounts | Verify that User Can't Create a New Account if Required Fields are Missing ")
     @Xray(test = {3378})
     public void verifyRequiredFieldsForAccountCreationTest() {
         EMCMainPage homePage = new EMCMainPage();
@@ -1206,7 +1208,7 @@ public class AccountsPageTests extends EMCUITestBase {
 
     }
 
-    @Test(groups = {"EMC", "ui", "regression"}, description = "UI | EMC | Accounts | Verify the ability to search for an account")
+    @Test(groups = {EMC, UI, REGRESSION}, description = "UI | EMC | Accounts | Verify the ability to search for an account")
     @Xray(test = {4514})
     public void verifySearchForAccountTest() {
         EMCMainPage homePage = new EMCMainPage();
@@ -1274,7 +1276,7 @@ public class AccountsPageTests extends EMCUITestBase {
 
     }
 
-    @Test(groups = {"EMC", "ui", "regression"}, description = "UI | EMC | Accounts | Verify the \"Subscriber Type\" options inside Dropbox for new account")
+    @Test(groups = {EMC, UI, REGRESSION}, description = "UI | EMC | Accounts | Verify the \"Subscriber Type\" options inside Dropbox for new account")
     @Xray(test = {9591, 9592, 9606})
     public void verifySubscriberTypeInputForAccountCreationTests() {
         EMCMainPage homePage = new EMCMainPage();
@@ -1333,7 +1335,7 @@ public class AccountsPageTests extends EMCUITestBase {
 
     }
 
-    @Test(groups = {"EMC", "ui", "regression"}, description = "UI | EMC | Accounts | Verify the \"Subscriber Type\" options inside Dropbox for existing account")
+    @Test(groups = {EMC, UI, REGRESSION}, description = "UI | EMC | Accounts | Verify the \"Subscriber Type\" options inside Dropbox for existing account")
     @Xray(test = {9593, 9595})
     public void verifySubscriberTypeInputForOldAccountTests() {
         navigateToAccountsPage("Test Account", "details");
@@ -1369,7 +1371,7 @@ public class AccountsPageTests extends EMCUITestBase {
 
     }
 
-    @Test(groups = {"EMC", "ui", "regression"}, description = "UI | EMC | Roles | Verify User with Admin Role can view Accounts list and Create Account button available")
+    @Test(groups = {EMC, UI, REGRESSION}, description = "UI | EMC | Roles | Verify User with Admin Role can view Accounts list and Create Account button available")
     @Xray(test = {7315})
     public void verifyUserWithAdminRoleViewAccountsTest() {
         navigateToAccountsPage("", "details");
@@ -1432,7 +1434,7 @@ public class AccountsPageTests extends EMCUITestBase {
         element.sendKeys(Keys.TAB);
     }
 
-    @Test(groups = {"EMC", "ui", "regression"}, description = "UI | EMC | Products | Verify that after remove Application Role, User can't get Access to the Products")
+    @Test(groups = {EMC, UI, REGRESSION}, description = "UI | EMC | Products | Verify that after remove Application Role, User can't get Access to the Products")
     @Xray(test = {5678})
     public void verifyRemoveApplicationRoleProductUserLoginTest() {
         navigateToAccountsPage(accountName, "applications");
@@ -1452,7 +1454,7 @@ public class AccountsPageTests extends EMCUITestBase {
         assertTestCase.assertFalse(loginAndVerify(), "User is logged in");
     }
 
-    @Test(groups = {"EMC", "ui", "regression"}, description = "UI | EMC | Products | Verify that after assign Application Role, User get Access to the Products")
+    @Test(groups = {EMC, UI, REGRESSION}, description = "UI | EMC | Products | Verify that after assign Application Role, User get Access to the Products")
     @Xray(test = {5646})
     public void verifyAssignApplicationRoleProductUserLoginTest() {
         navigateToAccountsPage(accountName, "applications");

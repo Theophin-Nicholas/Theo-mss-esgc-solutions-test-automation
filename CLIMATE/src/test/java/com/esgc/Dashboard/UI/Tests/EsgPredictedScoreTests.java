@@ -1,10 +1,10 @@
 package com.esgc.Dashboard.UI.Tests;
 
-import com.esgc.Dashboard.UI.Pages.DashboardPage;
-import com.esgc.Base.UI.Pages.LoginPage;
-import com.esgc.PortfolioAnalysis.UI.Pages.ResearchLinePage;
 import com.esgc.Base.TestBases.UITestBase;
+import com.esgc.Base.UI.Pages.LoginPage;
+import com.esgc.Dashboard.UI.Pages.DashboardPage;
 import com.esgc.Dashboard.UI.Tests.Export.ExportUtils;
+import com.esgc.PortfolioAnalysis.UI.Pages.ResearchLinePage;
 import com.esgc.Utilities.*;
 import org.testng.annotations.Test;
 
@@ -12,10 +12,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import static com.esgc.Utilities.Groups.*;
 
 public class EsgPredictedScoreTests extends UITestBase {
 //TODO check ESG Assessment Page, it is descoped as of now
-    @Test(enabled = false, groups = {"esg", "regression", "ui"})
+    @Test(enabled = false, groups = {ESG, REGRESSION, UI})
     @Xray(test = {11131,11133})
     public void verifyScoreQualityToggle() {
         DashboardPage dashboardPage = new DashboardPage();
@@ -36,7 +37,7 @@ public class EsgPredictedScoreTests extends UITestBase {
 
     }
 
-    @Test(groups = {"esg", "regression", "ui"})
+    @Test(groups = {ESG, REGRESSION, UI})
     @Xray(test = {11136})
     public void verifyScoreQualityLevels() {
         DashboardPage dashboardPage = new DashboardPage();
@@ -50,7 +51,7 @@ public class EsgPredictedScoreTests extends UITestBase {
         dashboardPage.verifyScoreQualityLevelsInIconInCoveragePopup();
     }
 
-    @Test(groups = {"esg", "regression", "ui"})
+    @Test(groups = {ESG, REGRESSION, UI})
     @Xray(test = {11135})
     public void verifyScoreQualityIconWithEntities_Dashboard() {
         DashboardPage dashboardPage = new DashboardPage();
@@ -78,7 +79,7 @@ public class EsgPredictedScoreTests extends UITestBase {
 
     }
 
-    @Test(enabled = false, groups = {"esg", "regression", "ui"})
+    @Test(enabled = false, groups = {ESG, REGRESSION, UI})
     @Xray(test = {11163, 11175})
     public void verifyScoreQualityIconWithEntities_PortfolioAnalysis() {
         DashboardPage dashboardPage = new DashboardPage();
@@ -112,7 +113,7 @@ public class EsgPredictedScoreTests extends UITestBase {
         researchLine.hideButton.click();
     }
 
-    @Test(groups = {"esg", "regression", "ui"})
+    @Test(groups = {ESG, REGRESSION, UI})
     @Xray(test = {11216})
     public void verifyScoreQualityToggleWithoutEsgEntitlement() {
         LoginPage login = new LoginPage();
@@ -130,7 +131,7 @@ public class EsgPredictedScoreTests extends UITestBase {
 
     }
 
-    @Test(enabled = false, groups = {"esg", "regression", "ui"})
+    @Test(enabled = false, groups = {ESG, REGRESSION, UI})
     @Xray(test = {11074, 11078})
     public void verifyEntitiesWithPredictedScoresInLeadersAndLaggardsTables_PortfolioAnalysis() {
         DashboardPage dashboardPage = new DashboardPage();
@@ -168,7 +169,7 @@ public class EsgPredictedScoreTests extends UITestBase {
         researchLine.hideButton.click();
     }
 
-    @Test(enabled = false, groups = {"esg", "regression", "ui"})
+    @Test(enabled = false, groups = {ESG, REGRESSION, UI})
     @Xray(test = {10901, 10903})
     public void verifyEntitiesWithPredictedScoresInCoveragePopup_PortfolioAnalysis() {
         DashboardPage dashboardPage = new DashboardPage();
@@ -185,7 +186,7 @@ public class EsgPredictedScoreTests extends UITestBase {
         researchLine.hideButton.click();
     }
 
-    @Test(groups = {"esg", "regression", "ui"})
+    @Test(groups = {ESG, REGRESSION, UI})
     @Xray(test = {11395})
     public void verifyEntitiesWithPredictedScoresInCoveragePopup_Dashboard() {
         DashboardPage dashboardPage = new DashboardPage();
@@ -201,7 +202,7 @@ public class EsgPredictedScoreTests extends UITestBase {
         dashboardPage.closePanelBtn.click();
     }
 
-    @Test(groups = {"esg", "regression", "ui"})
+    @Test(groups = {ESG, REGRESSION, UI})
     @Xray(test = {11399})
     public void verifyEntitiesWithPredictedScoresInHeatMap_Dashboard() {
         DashboardPage dashboardPage = new DashboardPage();
@@ -225,7 +226,7 @@ public class EsgPredictedScoreTests extends UITestBase {
         dashboardPage.heatMapResearchLines.get(1).click();
     }
 
-    @Test(groups = {"esg", "regression", "ui"})
+    @Test(groups = {ESG, REGRESSION, UI})
     @Xray(test = {11466})
     public void verifyEntitiesWithPredictedScoresInLeadersAndLaggardsTables_Dashboard() {
         DashboardPage dashboardPage = new DashboardPage();
@@ -247,7 +248,7 @@ public class EsgPredictedScoreTests extends UITestBase {
 
     }
 
-    @Test(groups = {"dashboard", "regression", "ui"})
+    @Test(groups = {DASHBOARD, REGRESSION, UI})
     @Xray(test = {11427})
     public void verifyScoreTypeOfPredictedEntities() {
 
@@ -271,7 +272,7 @@ public class EsgPredictedScoreTests extends UITestBase {
         dashboardPage.deleteDownloadFolder();
     }
 
-    @Test(groups = {"dashboard", "regression", "ui"})
+    @Test(groups = {DASHBOARD, REGRESSION, UI})
     @Xray(test = {11398})
     public void verifyScoreTypeIsEmptyForPredictedEntities() {
 

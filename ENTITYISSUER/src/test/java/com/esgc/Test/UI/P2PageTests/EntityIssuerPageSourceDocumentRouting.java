@@ -9,11 +9,13 @@ import com.esgc.Utilities.Driver;
 import com.esgc.Utilities.Xray;
 import org.testng.annotations.Test;
 
+import static com.esgc.Utilities.Groups.*;
+
 public class EntityIssuerPageSourceDocumentRouting extends EntityPageTestBase {
 
 
     @Xray(test = {6988})
-    @Test(groups = {"regression", "ui", "smoke","entity_issuer"},
+    @Test(groups = {REGRESSION, UI, SMOKE,ISSUER},
             dataProvider = "credentialsP2", dataProviderClass = IssuerDataProviderClass.class,
             description = "Verify Source Documents")
     public void testMissingDocumentPopUp(String... data) {

@@ -1,8 +1,8 @@
 package com.esgc.EntityProfile.UI.Tests;
 
+import com.esgc.Base.TestBases.UITestBase;
 import com.esgc.EntityProfile.UI.Pages.EntityClimateProfilePage;
 import com.esgc.PortfolioAnalysis.UI.Pages.ResearchLinePage;
-import com.esgc.Base.TestBases.UITestBase;
 import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.Xray;
 import org.openqa.selenium.By;
@@ -16,10 +16,12 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import static com.esgc.Utilities.Groups.*;
+
 public class EntityClimateProfileControversies extends UITestBase {
 
 
-    @Test(groups = {"entity_climate_profile", "regression", "ui", "smoke"})
+    @Test(groups = {ENTITY_PROFILE, REGRESSION, UI, SMOKE})
     @Xray(test = {8402, 8403, 8404, 8405, 8406,8407,8408,8409,8411})
     public void validateEntityControversiesWidget() {
         EntityClimateProfilePage entityProfilePage = new EntityClimateProfilePage();
@@ -44,8 +46,8 @@ public class EntityClimateProfileControversies extends UITestBase {
             List<String> categoryExpectedList = new ArrayList<>(
                     Arrays.asList(
                             "Community Involvement (8)",
-                            "Business Behaviour (73)",
-                            "Human Rights (17)",
+                            "Business Behaviour (65)",
+                            "Human Rights (14)",
                             "Human Resources (5)",
                             "Environment (3)",
                             "Corporate Governance (4)"
@@ -56,6 +58,9 @@ public class EntityClimateProfileControversies extends UITestBase {
 
             List<String> controversyList=new ArrayList<>();
             for (WebElement subCategoryActual : entityProfilePage.subCategoryList) {
+
+                System.out.println("subCategoryList = " + subCategoryActual.getText());
+                System.out.println("categoryExpectedList = " + categoryExpectedList);
                 System.out.println("subCategoryActual.getText() = " + subCategoryActual.getText());
                 assertTestCase.assertTrue(categoryExpectedList.contains(subCategoryActual.getText()));
                 subCategoryActual.click();

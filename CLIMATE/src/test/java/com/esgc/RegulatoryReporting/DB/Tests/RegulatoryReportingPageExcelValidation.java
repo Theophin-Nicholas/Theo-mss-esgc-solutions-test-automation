@@ -1,9 +1,9 @@
 package com.esgc.RegulatoryReporting.DB.Tests;
 
+import com.esgc.Base.TestBases.UITestBase;
 import com.esgc.Dashboard.UI.Pages.DashboardPage;
 import com.esgc.PortfolioAnalysis.UI.Pages.PhysicalRiskPages.PhysicalRiskManagementPages.PhysicalRiskManagementPage;
 import com.esgc.RegulatoryReporting.UI.Pages.RegulatoryReportingPage;
-import com.esgc.Base.TestBases.DataValidationTestBase;
 import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.Xray;
 import org.testng.annotations.Test;
@@ -11,10 +11,12 @@ import org.testng.annotations.Test;
 import java.util.List;
 import java.util.Set;
 
-public class RegulatoryReportingPageExcelValidation extends DataValidationTestBase {
+import static com.esgc.Utilities.Groups.*;
+
+public class RegulatoryReportingPageExcelValidation extends UITestBase {
 
     RegulatoryReportingPage reportingPage = new RegulatoryReportingPage();
-    @Test(groups = {"regression", "DataValidation", "regulatoryReporting"}, description = "Data Validation | Regulatory Reporting | Check the Data available on User Input History Tab of Annual Report")
+    @Test(groups = {REGRESSION, DATA_VALIDATION, REGULATORY_REPORTING}, description = "Data Validation | Regulatory Reporting | Check the Data available on User Input History Tab of Annual Report")
     @Xray(test = {11112})
     public void verifyDataAvailableForUserInputHistoryTabForAnnualReportTest() {
         DashboardPage dashboardPage = new DashboardPage();
@@ -71,7 +73,7 @@ public class RegulatoryReportingPageExcelValidation extends DataValidationTestBa
         portfolioAnalysisPage.deletePortfolio(newPortfolioName);
     }
 
-    @Test(groups = {"regression", "DataValidation", "regulatoryReporting"},
+    @Test(groups = {REGRESSION, DATA_VALIDATION, REGULATORY_REPORTING},
             description = "Check the Data available on the Report with SF when Use latest data is selected (Company Level Output Tab)")
     @Xray(test = {11111, 11231})
     public void downloadAndVerifyExcelReportsTest() {
@@ -148,7 +150,7 @@ public class RegulatoryReportingPageExcelValidation extends DataValidationTestBa
         }
     }
 
-    @Test(groups = {"regression", "DataValidation", "regulatoryReporting"}, description = "Data Validation | SFDR | Regulatory Reporting | Verify the portfolio coverage for the portfolio when SFDR reporting is selected")
+    @Test(groups = {REGRESSION, DATA_VALIDATION, REGULATORY_REPORTING}, description = "Data Validation | SFDR | Regulatory Reporting | Verify the portfolio coverage for the portfolio when SFDR reporting is selected")
     @Xray(test = {11730})
     public void verifyPortfolioCoverageForSFDRReportingTest() {
         DashboardPage dashboardPage = new DashboardPage();
@@ -202,7 +204,7 @@ public class RegulatoryReportingPageExcelValidation extends DataValidationTestBa
         }
     }
 
-    @Test(groups = {"regression", "DataValidation", "regulatoryReporting"},
+    @Test(groups = {REGRESSION, DATA_VALIDATION, REGULATORY_REPORTING},
             description = "Data Validation | EU Taxonomy | Regulatory Reporting | Verify the portfolio coverage for the portfolio when EU Taxonomy reporting is selected")
     @Xray(test = {11731})
     public void verifyPortfolioCoverageForEUTaxonomyReportingTest() {
@@ -252,7 +254,7 @@ public class RegulatoryReportingPageExcelValidation extends DataValidationTestBa
         }
     }
 
-    @Test(groups = {"regression", "DataValidation", "regulatoryReporting"},
+    @Test(groups = {REGRESSION, DATA_VALIDATION, REGULATORY_REPORTING},
             description = "Data Validation | Regulatory Reporting | Verify the data downloaded in the generated annual report excel is for the latest data available for the portfolios irrespective of reporting year when use latest data filter is selected")
     @Xray(test = {10855})
     public void verifyLatestDataAvailableForPortfoliosWithLatestDataTest() {

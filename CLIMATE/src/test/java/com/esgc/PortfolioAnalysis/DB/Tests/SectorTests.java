@@ -2,8 +2,8 @@ package com.esgc.PortfolioAnalysis.DB.Tests;
 
 import com.esgc.Base.API.APIModels.APIFilterPayload;
 import com.esgc.Base.DB.DBModels.ResearchLineIdentifier;
-import com.esgc.PortfolioAnalysis.API.APIModels.*;
 import com.esgc.Base.TestBases.DataValidationTestBase;
+import com.esgc.PortfolioAnalysis.API.APIModels.*;
 import com.esgc.Utilities.APIUtilities;
 import com.esgc.Utilities.DateTimeUtilities;
 import com.esgc.Utilities.Xray;
@@ -21,9 +21,12 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static com.esgc.Utilities.Groups.DATA_VALIDATION;
+import static com.esgc.Utilities.Groups.REGRESSION;
+
 public class SectorTests extends DataValidationTestBase {
 
-    @Test(groups = {"regression", "data_validation"}, dataProvider = "researchLines")
+    @Test(groups = {REGRESSION, DATA_VALIDATION}, dataProvider = "researchLines")
     @Xray(test = {1750, 2140, 2213, 2218, 2575, 3687, 3686, 4991, 3691, 1383, 1384, 5143, 11247})
     public void verifySectorSummaryAndDetails(@Optional String sector, @Optional String region,
                                               @Optional String researchLine, @Optional String month, @Optional String year) {
@@ -226,7 +229,7 @@ public class SectorTests extends DataValidationTestBase {
         }
     }
 
-    @Test(groups = {"regression", "data_validation"}, dataProvider = "researchLines")
+    @Test(groups = {REGRESSION, DATA_VALIDATION}, dataProvider = "researchLines")
     @Xray(test = {4234, 4236})
     public void verifySectorMonthlyOrQuarterlyChanges(@Optional String sector, @Optional String region, @Optional String researchLine, @Optional String month, @Optional String year) throws ParseException {
 

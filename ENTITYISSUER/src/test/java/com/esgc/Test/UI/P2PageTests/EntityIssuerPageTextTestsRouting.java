@@ -9,11 +9,13 @@ import com.esgc.Utilities.Driver;
 import com.esgc.Utilities.Xray;
 import org.testng.annotations.Test;
 
+import static com.esgc.Utilities.Groups.*;
+
 public class EntityIssuerPageTextTestsRouting extends EntityPageTestBase {
 
 
     @Xray(test = {6270})
-    @Test(groups = {"regression", "ui", "smoke", "entity_issuer"},
+    @Test(groups = {REGRESSION, UI, SMOKE, ISSUER},
             dataProvider = "credentialsP2", dataProviderClass = IssuerDataProviderClass.class,
             description = "Verify Assessment Framework")
     public void verifyAssessmentFramework(String... data) {
@@ -41,7 +43,7 @@ public class EntityIssuerPageTextTestsRouting extends EntityPageTestBase {
 
 
     @Xray(test = {7902})
-    @Test(groups = {"regression", "ui", "smoke", "entity_issuer"},
+    @Test(groups = {REGRESSION, UI, SMOKE, ISSUER},
             dataProvider = "credentialsP2", dataProviderClass = IssuerDataProviderClass.class,
             description = "Verify Scoring Methodology")
     public void verifyScoringMethodology(String... data) {
@@ -67,7 +69,7 @@ public class EntityIssuerPageTextTestsRouting extends EntityPageTestBase {
     }
 
     @Xray(test = {6356})
-    @Test(groups = {"regression", "ui", "smoke", "entity_issuer"},
+    @Test(groups = {REGRESSION, UI, SMOKE, ISSUER},
             dataProvider = "credentialsP2", dataProviderClass = IssuerDataProviderClass.class,
             description = "Verify Banner")
     public void verifybanner(String... data) {
@@ -87,7 +89,7 @@ public class EntityIssuerPageTextTestsRouting extends EntityPageTestBase {
     }
 
     @Xray(test = {7298, 7902, 9070})
-    @Test(groups = {"regression", "ui", "smoke", "entity_issuer"},
+    @Test(groups = {REGRESSION, UI, SMOKE, ISSUER},
             dataProvider = "credentialsP2", dataProviderClass = IssuerDataProviderClass.class,
             description = "Verify Grade and Scores")
     public void verifyGradesAndScores(String... data) {

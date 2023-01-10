@@ -9,10 +9,11 @@ import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import org.testng.annotations.Test;
 
+import static com.esgc.Utilities.Groups.*;
 import static org.hamcrest.Matchers.*;
 
 public class SourceDocumentAPITestP3 extends EntityIssuerPageTestBase {
-    @Test(groups = {"api", "regression", "entity_issuer"},
+    @Test(groups = {API, REGRESSION, ISSUER},
            // dataProvider = "credentialsWithOrbisId"
             dataProvider = "credentialsP3"
             ,dataProviderClass = IssuerDataProviderClass.class)

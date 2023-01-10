@@ -1,19 +1,27 @@
 package com.esgc.RegulatoryReporting.API.Tests;
 
+import com.esgc.Base.UI.Pages.LoginPage;
 import com.esgc.RegulatoryReporting.API.Controllers.RegulatoryReportingAPIController;
+import com.esgc.Base.TestBases.UITestBase;
 import com.esgc.Dashboard.UI.Pages.DashboardPage;
+import com.esgc.RegulatoryReporting.API.Controllers.RegulatoryReportingAPIController;
 import com.esgc.RegulatoryReporting.UI.Pages.RegulatoryReportingPage;
-import com.esgc.Base.TestBases.APITestBase;
 import com.esgc.Utilities.BrowserUtils;
+import com.esgc.Utilities.Driver;
+import com.esgc.Utilities.EntitlementsBundles;
 import com.esgc.Utilities.Xray;
+import io.restassured.response.Response;
+import org.openqa.selenium.JavascriptExecutor;
 import org.testng.annotations.Test;
 
 import java.util.List;
 
-public class RegulatoryReportingTests extends APITestBase {
+import static com.esgc.Utilities.Groups.*;
+
+public class RegulatoryReportingTests extends UITestBase {
     RegulatoryReportingPage reportingPage = new RegulatoryReportingPage();
 
-    @Test(groups = {"regression", "regulatoryReporting", "api"}, description = "Data Validation| MT | Regulatory Reporting | Validate Portfolio list and portfolio-details")
+    @Test(groups = {REGRESSION, REGULATORY_REPORTING, API}, description = "Data Validation| MT | Regulatory Reporting | Validate Portfolio list and portfolio-details")
     @Xray(test = {11140})
     public void verifyPortfolioPortfolioDetailsListTest() {
         DashboardPage dashboardPage = new DashboardPage();
@@ -48,5 +56,32 @@ public class RegulatoryReportingTests extends APITestBase {
             System.out.println("portfolioName = " + portfolioName);
             assertTestCase.assertTrue(actualPortfoliosList.contains(portfolioName.trim()), "Portfolio name from API is verified in UI");
         }
+    }
+
+    @Test(groups = {"regression", "regulatoryReporting", "api"})
+    @Xray(test = {11681})
+    public void verifyDownloadHistory() {
+        RegulatoryReportingAPIController apiController = new RegulatoryReportingAPIController();
+        List<String>  apiReportsList = apiController.getDownloadHistory().jsonPath().getList("report_name");
+        assertTestCase.assertTrue(apiReportsList.size()>0, "Verify downloaded reports available in Previously Downloaded reports list");
+
+    }
+
+    @Test(groups = {"regression", "regulatoryReporting", "api"})
+    @Xray(test = {11681})
+    public void verifyDownloadHistoryWhenNoDownloadReports() {
+        LoginPage login = new LoginPage();
+        login.clickOnLogout();
+        login.entitlementsLogin(EntitlementsBundles.NO_PREVIOUSLY_DOWNLOADED_REGULATORY_REPORTS);
+        BrowserUtils.wait(10);
+
+        String getAccessTokenScript = "return JSON.parse(localStorage.getItem('okta-token-storage')).accessToken.accessToken";
+        String accessToken = ((JavascriptExecutor) Driver.getDriver()).executeScript(getAccessTokenScript).toString();
+        System.setProperty("token", accessToken);
+
+        RegulatoryReportingAPIController apiController = new RegulatoryReportingAPIController();
+        List<String>  apiReportsList1 = apiController.getDownloadHistory().jsonPath().getList("report_name");
+        assertTestCase.assertTrue(apiReportsList1.size()==0, "Verify downloaded reports not available in Previously Downloaded reports list");
+
     }
 }

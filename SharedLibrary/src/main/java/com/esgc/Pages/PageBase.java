@@ -31,6 +31,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
+import org.apache.poi.ss.usermodel.Cell;
 
 /**
  * This abstract class will be extended by Page classes
@@ -53,6 +54,9 @@ public abstract class PageBase {
 
 
     //Menu Tab on top left corner
+    @FindBy(xpath = "//li[starts-with(text(),\"Moody's ESG360: \")]")
+    public WebElement menuHeader;
+
     @FindBy(xpath = "//li[@role='menuitem']")
     public WebElement menu;
 
@@ -359,6 +363,18 @@ public abstract class PageBase {
     @FindBy(xpath = "//span[@heap_id='view-panel' and contains(text(),'Coverage:')]")
     public WebElement CoverageLink;
 
+
+    //=============== 404 Page not Found
+    @FindBy(xpath = "//*[text()=' Page not found ']")
+    public WebElement pageNotFoundMessage;
+
+    @FindBy(xpath = "//*[text()='The link might be corrupted or the page removed']")
+    public WebElement pageRemovedMessage;
+
+    @FindBy(xpath = "//*[text()=\"Return to Moody's ESG360\"]")
+    public WebElement returnToESG360Button;
+
+
     protected WebDriverWait wait = new WebDriverWait(Driver.getDriver(), Duration.ofSeconds(20));
     protected Actions actions = new Actions(Driver.getDriver());
     private String finalStringToCheck;
@@ -639,13 +655,20 @@ public abstract class PageBase {
         return portfolioSelectionButton.getText();
     }
 
+    public String getPageNameFromMenuHeader() {
+        return wait.until(ExpectedConditions.visibilityOf(menuHeader)).getText();
+    }
+
 
     public void navigateToPageFromMenu(String page) {
-        clickMenu();
-        // Dynamic xpath - Helps us to pass page names "Dashboard", "Portfolio Analysis"
-        String pageXpath = "//li[text()='" + page + "']";
-        WebElement pageElement = Driver.getDriver().findElement(By.xpath(pageXpath));
-        wait.until(ExpectedConditions.elementToBeClickable(pageElement)).click();
+        String pageName = getPageNameFromMenuHeader();
+        if (!pageName.endsWith(page)) {
+            clickMenu();
+            // Dynamic xpath - Helps us to pass page names "Dashboard", "Portfolio Analysis", "Regulatory Reporting"
+            String pageXpath = "//li[text()='" + page + "']";
+            WebElement pageElement = Driver.getDriver().findElement(By.xpath(pageXpath));
+            wait.until(ExpectedConditions.elementToBeClickable(pageElement)).click();
+        }
     }
 
     /**
@@ -696,7 +719,7 @@ public abstract class PageBase {
 
     /**
      * Method for navigation through research lines in the Portfolio Analysis page
-     * e.g. Carbon Footprint, Operations Risk, Market Risk...
+     * e.g. Carbon Footprint, Temperature Alignment, ESG Assessments...
      * The method navigates to a specific research line by page parameter
      *
      * @return
@@ -709,20 +732,25 @@ public abstract class PageBase {
                 .stream().map(WebElement::getText).collect(Collectors.toList());
     }
 
+    public String getCurrentResearchLinePageName() {
+        return wait.until(ExpectedConditions.visibilityOf(ResearchLineDropdown)).getText();
+    }
+
     /**
      * Select a research line from dropdown for data analysis in dashboard
-     * e.g. Carbon Footprint, Operations Risk, Market Risk...
+     * e.g. Carbon Footprint, Temperature Alignment, ESG Assessments...
      *
      * @param page
      */
     public void selectResearchLineFromDropdown(String page) {
-        // if(!BrowserUtils.isElementVisible(researchLineOptions,3))
         try {
-            clickResearchLineDropdown();
-            // Dynamic xpath - Helps us to pass page names "Operations Risk", "Market Risk"
-            String pageXpath = "//ul[@id='portfolioanalysis-reportnavigation-test-id']//span[contains(text(),'" + page + "')]";
-            WebElement pageElement = Driver.getDriver().findElement(By.xpath(pageXpath));
-            wait.until(ExpectedConditions.elementToBeClickable(pageElement)).click();
+            if (!getCurrentResearchLinePageName().equals(page)) {
+                clickResearchLineDropdown();
+                // Dynamic xpath - Helps us to pass page names "Carbon Footprint", "Green Share" etc
+                String pageXpath = "//ul[@id='portfolioanalysis-reportnavigation-test-id']//span[contains(text(),'" + page + "')]";
+                WebElement pageElement = Driver.getDriver().findElement(By.xpath(pageXpath));
+                wait.until(ExpectedConditions.elementToBeClickable(pageElement)).click();
+            }
         } catch (Exception e) {
             System.out.println("Couldn't find " + page);
             Actions a = new Actions(Driver.getDriver());
@@ -1217,7 +1245,7 @@ public abstract class PageBase {
     }
 
     public void verifyCompanyNameInCoveragePopup(String subsidiaryCompanyName) {
-        String xpath = "//span[@heap_id='view-panel'][text()='"+subsidiaryCompanyName+"']";
+        String xpath = "//span[@heap_id='view-panel'][text()='" + subsidiaryCompanyName + "']";
         assertTestCase.assertEquals(Driver.getDriver().findElements(By.xpath(xpath)).size(), 1);
     }
 
@@ -1234,7 +1262,7 @@ public abstract class PageBase {
     }
 
     public void verifyCompanyNameInTables(String subsidiaryCompanyName) {
-        String xpath = "//span[text()='"+subsidiaryCompanyName+"']";
+        String xpath = "//span[text()='" + subsidiaryCompanyName + "']";
         assertTestCase.assertEquals(Driver.getDriver().findElements(By.xpath(xpath)).size(), 1);
     }
 
@@ -1251,10 +1279,10 @@ public abstract class PageBase {
     }
 
     public void clickTheCompany(String companyName) {
-        String xpath = "//span[text()='"+companyName+"']";
+        String xpath = "//span[text()='" + companyName + "']";
         List<WebElement> elements = Driver.getDriver().findElements(By.xpath(xpath));
-        BrowserUtils.scrollTo(elements.get(elements.size()-1));
-        elements.get(elements.size()-1).click();
+        BrowserUtils.scrollTo(elements.get(elements.size() - 1));
+        elements.get(elements.size() - 1).click();
     }
 
     public boolean isElementClickable(WebElement element) {
@@ -1307,14 +1335,16 @@ public abstract class PageBase {
             //Validate if Menu is available
             Assert.assertTrue(menu.isDisplayed(), "Menu Item is not displayed");
             clickMenu();
-            List<String> menuItemsArray = Arrays.asList("Moody's ESG360", "Dashboard", "Portfolio Analysis",
+            List<String> menuItemsArray = Arrays.asList("Navigate To", "Dashboard", "Portfolio Analysis",
                     "Portfolio Selection/Upload", "Regulatory Reporting",
                     "Contact Us", "Terms & Conditions", "Log Out",
                     "Switch Application", "Climate on Demand", "Company Portal", "Datalab");
 
             //Validate if all menu items are available
-            for (String m : menuItemsArray)
-                Assert.assertTrue(menuList.stream().filter(p -> p.getText().equals(m)).count() == 1, m + " Menus are not correctly listed");
+            for (String m : menuItemsArray) {
+                System.out.println("Menu Item: "+m);
+                Assert.assertEquals(menuList.stream().filter(p -> p.getText().equals(m)).count(), 1, m + " Menus are not correctly listed");
+            }
 
             //To get page URL
             String url = Driver.getDriver().getCurrentUrl();
@@ -1645,7 +1675,6 @@ public abstract class PageBase {
         }
 
     }
-
 
 
     public boolean checkClickingOnEntityName(String searchKeyword) {
@@ -2153,5 +2182,75 @@ public abstract class PageBase {
         updatePortfolioNameInPortfolioManagementDrawer(OriginalPortFolioName);
         BrowserUtils.wait(4);
         clickInSidePortfolioDrawer();
+    }
+
+    public void verifyCompaniesOrderInRegionsAndSections(String researchLine, ExcelUtil exportedDocument, String sectionName, int sectionsCount){
+
+        System.out.println("Section Verifications: "+sectionName);
+        List<List<String>> categories = getCategoriesDetails(exportedDocument, sectionName, sectionsCount);
+
+        for(List<String> category:categories){
+            verifySortingOrder(researchLine, exportedDocument, category.get(0), Integer.parseInt(category.get(1)), Integer.parseInt(category.get(2)), Integer.parseInt(category.get(3)));
+        }
+    }
+
+    public List<List<String>> getCategoriesDetails(ExcelUtil exportedDocument, String sectionName, int sectionsCount){
+        List<List<String>> categories = new ArrayList<>();
+        Cell regionsCell = exportedDocument.searchCellData(sectionName);
+
+        for(int j=0;j<sectionsCount;j++) {
+            String categoryName = "";
+            int companiesStartRow = 0;
+            int companiesEndRow = 0;
+            int companiesCountIndex = regionsCell.getColumnIndex() + (5*j);
+            int categoriesColumnIndex = regionsCell.getColumnIndex() + 3 +(5*j);
+            for (int i = 0; ; i++) {
+                List<String> category = new ArrayList<>(); // Category Name, Start Row, End Row
+                categoryName = exportedDocument.getCellData(regionsCell.getRowIndex() + 7 + i, companiesCountIndex+1);
+                if (categoryName.equals("Details")) break;
+                int categoryCompaniesCount = Math.round(Float.parseFloat(exportedDocument.getCellData(regionsCell.getRowIndex() + 7 + i, companiesCountIndex+2)));
+                if (companiesStartRow == 0) companiesStartRow = regionsCell.getRowIndex() + 13;
+                else companiesStartRow = companiesEndRow;
+                companiesEndRow = companiesStartRow + categoryCompaniesCount;
+                category.add(categoryName);
+                category.add(String.valueOf(companiesStartRow));
+                category.add(String.valueOf(companiesEndRow));
+                category.add(String.valueOf(categoriesColumnIndex));
+                System.out.println("Category Row:" + i + " - Rows:" + categoryName +"-->"+companiesStartRow+"-"+companiesEndRow+" --> Column"+categoriesColumnIndex);
+                categories.add(category);
+            }
+        }
+        return categories;
+    }
+
+    public void verifySortingOrder(String researchLine, ExcelUtil exportedDocument, String category, int startRow, int endRow, int categoryColumnIndex){
+        //TODO item for Brown Share, once https://esjira/browse/ESGCA-12562 is fixed we need to check Brown Share
+        System.out.println(category+": "+startRow+" -- "+endRow);
+        for(int i=startRow; i<endRow; i++) {
+            System.out.print("\nRow Number: " + i);
+            String actualCategory = exportedDocument.getCellData(i, categoryColumnIndex);
+            System.out.print("-->Exp Category: " + category +" - Actual Category: "+actualCategory);
+            assertTestCase.assertEquals(actualCategory, category, "Verify companies are sorted based on category");
+            if (i < endRow-2) {
+                if(researchLine.equals("Carbon Footprint")) {
+                    int score1 = Math.round(Float.parseFloat(exportedDocument.getCellData(i, categoryColumnIndex - 1).replace(",", "")));
+                    int score2 = Math.round(Float.parseFloat(exportedDocument.getCellData(i + 1, categoryColumnIndex - 1).replace(",", "")));
+                    System.out.print("-->Current Record Score: " + score1 + " - Next Record Score: " + score2);
+                    assertTestCase.assertTrue(score1 >= score2, score1 + "-->" + score2 + ": Verify companies are sorted based on score");
+                } else if (researchLine.equals("Green Share Assessment")){
+                    float investment1 = Float.parseFloat(exportedDocument.getCellData(i, categoryColumnIndex + 1).replace("%", ""));
+                    float investment2 = Float.parseFloat(exportedDocument.getCellData(i + 1, categoryColumnIndex + 1).replace("%", ""));
+                    System.out.print("-->Current Record Investment%: " + investment1 + " - Next Record Investment%: " + investment2);
+                    assertTestCase.assertTrue(investment1 >= investment2, investment1 + "-->" + investment2 + ": Verify companies are sorted based on score");
+                    if(investment1==investment2){
+                        String companyName1 = exportedDocument.getCellData(i, categoryColumnIndex - 2);
+                        String companyName2 = exportedDocument.getCellData(i + 1, categoryColumnIndex - 2);
+                        System.out.print("-->Current Record Company Name: " + companyName1 + " - Next Record CompanyName: " + companyName2);
+                        assertTestCase.assertTrue(companyName1.compareToIgnoreCase(companyName2)<0, companyName1 + "-->" + companyName2 + ": Verify companies are sorted based on score");
+                    }
+                }
+            }
+        }
+
     }
 }

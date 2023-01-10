@@ -1,17 +1,19 @@
 package com.esgc.EntityProfile.UI.Tests;
 
-import com.esgc.EntityProfile.UI.Pages.EntityClimateProfilePage;
-import com.esgc.Base.UI.Pages.LoginPage;
-import com.esgc.PortfolioAnalysis.UI.Pages.ResearchLinePage;
 import com.esgc.Base.TestBases.UITestBase;
+import com.esgc.Base.UI.Pages.LoginPage;
+import com.esgc.EntityProfile.UI.Pages.EntityClimateProfilePage;
+import com.esgc.PortfolioAnalysis.UI.Pages.ResearchLinePage;
 import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.EntitlementsBundles;
 import com.esgc.Utilities.Xray;
 import org.testng.annotations.Test;
 
+import static com.esgc.Utilities.Groups.*;
+
 public class EntityClimateProfileMethodologyLinks extends UITestBase {
 
-    @Test(groups = {"entity_climate_profile", "regression", "ui", "smoke", "entitlements"})
+    @Test(groups = {ENTITY_PROFILE, REGRESSION, UI, SMOKE, ENTITLEMENTS})
     @Xray(test = {6159})
     public void validatePhysicalRiskMethodologyLink() {
         //Trying to log in with only Physical Risk Entitilment User
@@ -41,7 +43,7 @@ public class EntityClimateProfileMethodologyLinks extends UITestBase {
 
     }
 
-    @Test(groups = {"entity_climate_profile", "regression", "ui", "smoke", "entitlements"})
+    @Test(groups = {ENTITY_PROFILE, REGRESSION, UI, SMOKE, ENTITLEMENTS})
     @Xray(test = {6326, 7872})
     public void validateTransitionRiskMethodologyLink() {
         ResearchLinePage researchLinePage = new ResearchLinePage();

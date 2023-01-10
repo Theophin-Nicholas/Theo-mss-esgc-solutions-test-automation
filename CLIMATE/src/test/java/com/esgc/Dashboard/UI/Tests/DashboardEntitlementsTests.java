@@ -1,9 +1,9 @@
 package com.esgc.Dashboard.UI.Tests;
 
-import com.esgc.Dashboard.UI.Pages.DashboardPage;
-import com.esgc.Base.UI.Pages.LoginPage;
-import com.esgc.TestBase.DataProviderClass;
 import com.esgc.Base.TestBases.DashboardUITestBase;
+import com.esgc.Base.UI.Pages.LoginPage;
+import com.esgc.Dashboard.UI.Pages.DashboardPage;
+import com.esgc.TestBase.DataProviderClass;
 import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.EntitlementsBundles;
 import com.esgc.Utilities.Xray;
@@ -13,9 +13,11 @@ import org.testng.annotations.Test;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.esgc.Utilities.Groups.*;
+
 public class DashboardEntitlementsTests extends DashboardUITestBase {
 
-    @Test(groups = {"dashboard", "regression", "ui", "smoke", "entitlements"},
+    @Test(groups = {DASHBOARD, REGRESSION, UI, SMOKE, ENTITLEMENTS},
             dataProviderClass = DataProviderClass.class, dataProvider = "bundles")
     @Xray(test = {4479, 7957})
     public void validateEntitlementsBundleInDashboard(@Optional EntitlementsBundles bundleName, @Optional Integer... testCase) {

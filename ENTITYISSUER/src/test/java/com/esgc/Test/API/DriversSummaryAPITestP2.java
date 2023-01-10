@@ -14,12 +14,14 @@ import org.testng.annotations.Test;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.esgc.Utilities.Groups.API;
+import static com.esgc.Utilities.Groups.REGRESSION;
 import static org.hamcrest.Matchers.*;
 
 public class DriversSummaryAPITestP2 extends EntityIssuerPageTestBase {
 
 
-    @Test(groups = {"regression", "api"},
+    @Test(groups = {REGRESSION, API},
             dataProvider = "credentialsP2", dataProviderClass = IssuerDataProviderClass.class,
             description = "ESGCA-5867-API | ESG Issuer - Entity Page | Verify API Response")
     @Xray(test = {3965, 3973})
@@ -57,7 +59,7 @@ public class DriversSummaryAPITestP2 extends EntityIssuerPageTestBase {
       //  String a = SectorDriversWrapper.get(0).getCriteria().get(0).getDrivers().get(0).getScore_category();
     }
 
-    @Test(groups = {"regression", "api"},
+    @Test(groups = {REGRESSION, API},
             dataProvider = "credentialsP2", dataProviderClass = IssuerDataProviderClass.class,
             description = "ESGCA-5867-API | ESG Issuer - Entity Page | Verify API Response")
     @Xray(test = {3974})

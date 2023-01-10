@@ -7,6 +7,7 @@ import java.util.ArrayList;
 @Data
 public class ControversiesList {
 
+    String ESG_COMPONENTS;
     String controversy_description;
     String controversy_events;
     String controversy_location;

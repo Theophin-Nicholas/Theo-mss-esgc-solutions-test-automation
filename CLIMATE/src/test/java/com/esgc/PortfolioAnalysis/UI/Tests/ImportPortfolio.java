@@ -1,10 +1,10 @@
 package com.esgc.PortfolioAnalysis.UI.Tests;
 
 import com.esgc.Base.API.Controllers.APIController;
+import com.esgc.Base.TestBases.UITestBase;
 import com.esgc.Base.UI.Pages.LoginPage;
 import com.esgc.PortfolioAnalysis.UI.Pages.ResearchLinePage;
 import com.esgc.TestBase.DataProviderClass;
-import com.esgc.Base.TestBases.UITestBase;
 import com.esgc.Utilities.*;
 import com.esgc.Utilities.Database.PortfolioQueries;
 import org.testng.Assert;
@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 import static com.esgc.Utilities.ErrorMessages.*;
+import static com.esgc.Utilities.Groups.*;
 
 public class ImportPortfolio extends UITestBase {
     ResearchLinePage researchLinePage = new ResearchLinePage();
@@ -27,7 +28,7 @@ public class ImportPortfolio extends UITestBase {
     Error Popup should be displayed when file is not uploaded successfully
  */
 
-    @Test(groups = {"regression", "ui", "smoke", "robot_dependency"})
+    @Test(groups = {REGRESSION, UI, SMOKE, ROBOT_DEPENDENCY})
     @Xray(test = {330})
     public void VerifyFileUploadErrorPopup() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
@@ -65,9 +66,9 @@ public class ImportPortfolio extends UITestBase {
   Successful message popup should be displayed when file is uploaded successfully
 */
 //1027
-    @Test(groups = {"regression", "ui", "smoke", "robot_dependency"},dataProviderClass = DataProviderClass.class,
+    @Test(groups = {REGRESSION, UI, SMOKE, ROBOT_DEPENDENCY},dataProviderClass = DataProviderClass.class,
             dataProvider = "Valid Portfolios")
-    @Xray(test = {1027, 3044, 11069})
+    @Xray(test = {493, 497, 500, 1027, 3044, 11069})
     public void VerifyFileUploadSuccessPopup(String portfolio) {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
@@ -117,7 +118,7 @@ public class ImportPortfolio extends UITestBase {
                 ConfigurationReader.getProperty(portfolio).lastIndexOf("\\")+1,
                 ConfigurationReader.getProperty(portfolio).lastIndexOf(".")
         );//"Portfolio Upload updated_good";
-        assertTestCase.assertEquals(researchLinePage.getPlaceholderInSuccessPopUp(), expectedPortfolioName, "Portfolio name in pop up");
+        assertTestCase.assertEquals(researchLinePage.getPlaceholderInSuccessPopUp(), expectedPortfolioName, "Portfolio name in pop up", 494);
 
         researchLinePage.waitForDataLoadCompletion();
 
@@ -130,7 +131,7 @@ public class ImportPortfolio extends UITestBase {
     }
 
     //test case:ESGCA-985
-    @Test(groups = {"regression", "ui", "smoke"})
+    @Test(groups = {REGRESSION, UI, SMOKE})
     @Xray(test = {985})
     public void VerifyUploadModal() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
@@ -163,7 +164,7 @@ public class ImportPortfolio extends UITestBase {
     User is able to modify portfolio name after successful upload message
     */
 
-    @Test(groups = {"regression", "ui", "smoke", "robot_dependency"})
+    @Test(groups = {REGRESSION, UI, SMOKE, ROBOT_DEPENDENCY})
     @Xray(test = {336, 3045})
     public void VerifyPortfolioCanBeRenamed() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
@@ -218,7 +219,7 @@ public class ImportPortfolio extends UITestBase {
      Acceptance Criteria:
      Observe Save button is not appearing unless user has not click to rename portfolio.
     */
-    @Test(groups = {"regression", "ui", "smoke", "robot_dependency"})
+    @Test(groups = {REGRESSION, UI, SMOKE, ROBOT_DEPENDENCY})
     @Xray(test = {3046})
     public void VerifySaveButtonVisibility() {
 
@@ -257,7 +258,7 @@ public class ImportPortfolio extends UITestBase {
     }
 
     //test case:316
-    @Test(groups = {"regression", "ui", "smoke", "robot_dependency"})
+    @Test(groups = {REGRESSION, UI, SMOKE, ROBOT_DEPENDENCY})
     public void VerifyFileRemovedFromUploadModal() {
 
         ResearchLinePage researchLinePage = new ResearchLinePage();
@@ -296,7 +297,7 @@ public class ImportPortfolio extends UITestBase {
     Error Popup should be displayed when file is not uploaded successfully with correct error message
  */
 
-    @Test(groups = {"regression", "ui", "errorMessages", "robot_dependency"}, dataProvider = "ErrorMessages", singleThreaded = true)
+    @Test(groups = {REGRESSION, UI, ERROR_MESSAGES, ROBOT_DEPENDENCY}, dataProvider = "ErrorMessages", singleThreaded = true)
     public void importPortfolio_verifyErrorPopupMessages(String fileName, String errorMessage, Integer... testCaseNumber) {
         ResearchLinePage researchLinePage = new ResearchLinePage();
 
@@ -336,7 +337,7 @@ public class ImportPortfolio extends UITestBase {
     Error Popup should be displayed when file is uploaded successfully but contains unknown identifiers
  */
 
-    @Test(groups = {"regression", "ui", "smoke", "robot_dependency"}, singleThreaded = true)
+    @Test(groups = {REGRESSION, UI, SMOKE, ROBOT_DEPENDENCY}, singleThreaded = true)
     @Xray(test = 984)
     public void importPortfolio_verifyUnknownIdentifierMessage() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
@@ -381,7 +382,7 @@ public class ImportPortfolio extends UITestBase {
 
     }
 
-    @Test(groups = {"regression", "ui", "errorMessages", "robot_dependency"}, dataProvider = "ErrorMessages", singleThreaded = true)
+    @Test(groups = {REGRESSION, UI, ERROR_MESSAGES, ROBOT_DEPENDENCY}, dataProvider = "ErrorMessages", singleThreaded = true)
     public void importPortfolio_ErrorMessageMissingBBGorISINIndetifier(String fileName, String errorMessage) {
         ResearchLinePage researchLinePage = new ResearchLinePage();
 
@@ -487,7 +488,7 @@ public class ImportPortfolio extends UITestBase {
         }
     }
 
-    @Test(groups = {"regression", "ui", "robot_dependency"}, description = "Upload BBG portfolio file with valid data")
+    @Test(groups = {REGRESSION, UI, ROBOT_DEPENDENCY}, description = "Upload BBG portfolio file with valid data")
     @Xray(test = {4300, 7000, 9778, 9911, 9912})
     public void VerifyBBGPortfolioUploadTest() {
         String portfolioName = "BBGPortfolioWithValidData";
@@ -524,7 +525,7 @@ public class ImportPortfolio extends UITestBase {
         researchLinePage.deletePortfolio(portfolioName);
     }
 
-    @Test(groups = {"regression", "ui", "robot_dependency"}
+    @Test(groups = {REGRESSION, UI, ROBOT_DEPENDENCY}
             , description = "UI | Upload | Verify the notification when User Uploads a portfolio having multiple BBG tickers( basic/Full ) belonging to multiple BVD9s as identifiers")
     @Xray(test = {4302})
     public void VerifyMultipleBBGPortfolioUploadTest() {
@@ -539,7 +540,7 @@ public class ImportPortfolio extends UITestBase {
         researchLinePage.closeUploadModal();
     }
 
-    @Test(groups = {"regression", "ui", "robot_dependency"}, description = "Upload portfolio with same identifiers")
+    @Test(groups = {REGRESSION, UI, ROBOT_DEPENDENCY}, description = "Upload portfolio with same identifiers")
     @Xray(test = {4303, 9913})
     public void VerifyUploadPortfolioWithSameIdentifiersTest() {
         String portfolioName = "PortfolioWithSameIdentifiers";
@@ -568,7 +569,7 @@ public class ImportPortfolio extends UITestBase {
         researchLinePage.deletePortfolio("PortfolioWithSameIdentifiers");
     }
 
-    @Test(groups = {"regression", "ui", "robot_dependency"}
+    @Test(groups = {REGRESSION, UI, ROBOT_DEPENDENCY}
             , description = "UI | Portfolio Upload | Verify currency values in imported portfolio when user enters an incorrect/uncovered currency value ")
     @Xray(test = {9914})
     public void VerifyIncorrectCurrencyPortfolioUploadTest() {
@@ -584,7 +585,7 @@ public class ImportPortfolio extends UITestBase {
         researchLinePage.closeUploadModal();
     }
 
-    @Test(groups = {"regression", "ui", "robot_dependency"}, description = "Upload portfolio with EUR Currency")
+    @Test(groups = {REGRESSION, UI, ROBOT_DEPENDENCY}, description = "Upload portfolio with EUR Currency")
     @Xray(test = {9913})
     public void VerifyUploadPortfolioWithEURCurrencyTest() {
         String portfolioName = "SamplePortfolioToDelete";
@@ -612,7 +613,7 @@ public class ImportPortfolio extends UITestBase {
         researchLinePage.deletePortfolio("PortfolioWithSameIdentifiers");
     }
 
-    @Test(groups = {"regression", "ui", "robot_dependency"}, description = "UI | Portfolio Upload | Verify the error message for non numeric number in Value field for less than 5 rows")
+    @Test(groups = {REGRESSION, UI, ROBOT_DEPENDENCY}, description = "UI | Portfolio Upload | Verify the error message for non numeric number in Value field for less than 5 rows")
     @Xray(test = {9931})
     public void VerifyPortfolioWithLessThan5NonNumericValuesUploadTest() {
         String portfolioName = "PortfolioWithLessThan5NonNumericValues";
@@ -627,7 +628,7 @@ public class ImportPortfolio extends UITestBase {
         researchLinePage.closeUploadModal();
     }
 
-    @Test(groups = {"regression", "ui", "robot_dependency"}, description = "UI | Portfolio Upload | Verify the error message for non numeric number in Value field for more than 5 rows")
+    @Test(groups = {REGRESSION, UI, ROBOT_DEPENDENCY}, description = "UI | Portfolio Upload | Verify the error message for non numeric number in Value field for more than 5 rows")
     @Xray(test = {9933})
     public void VerifyPortfolioWithMoreThan5NonNumericValuesUploadTest() {
         String portfolioName = "PortfolioWithMoreThan5NonNumericValues";
@@ -642,7 +643,7 @@ public class ImportPortfolio extends UITestBase {
         researchLinePage.closeUploadModal();
     }
 
-    @Test(groups = {"regression", "ui", "robot_dependency"}, description = "UI | Portfolio Upload | Verify error messages for missing less/more than 5 fields")
+    @Test(groups = {REGRESSION, UI, ROBOT_DEPENDENCY}, description = "UI | Portfolio Upload | Verify error messages for missing less/more than 5 fields")
     @Xray(test = {10028})
     public void VerifyPortfolioWithLessThan5MissingFieldsUploadTest() {
         String portfolioName = "PortfolioWithLessThan5MissingFields";
@@ -668,7 +669,7 @@ public class ImportPortfolio extends UITestBase {
         researchLinePage.closeUploadModal();
     }
 
-    @Test(groups = {"regression", "ui", "robot_dependency"}, description = "UI | Portfolio Upload | Verify UI changes on Portfolio modal")
+    @Test(groups = {REGRESSION, UI, ROBOT_DEPENDENCY}, description = "UI | Portfolio Upload | Verify UI changes on Portfolio modal")
     @Xray(test = {10358})
     public void verifyUIChangesOnPortfolioUploadModal() {
         researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
@@ -683,7 +684,7 @@ public class ImportPortfolio extends UITestBase {
         assertTestCase.assertTrue(researchLinePage.checkIfPortfolioUploadModalDescriptionIsDisplayedAsExpected(), "Portfolio Upload Modal Description is displayed as expected");
     }
 
-    @Test(groups = {"regression", "ui", "errorMessages", "robot_dependency"})
+    @Test(groups = {REGRESSION, UI, ERROR_MESSAGES, ROBOT_DEPENDENCY})
     @Xray(test = {11081})
     public void importEntityWithPredictedScoreWithoutEntitlements() {
 
@@ -718,7 +719,7 @@ public class ImportPortfolio extends UITestBase {
         BrowserUtils.waitForClickablility(researchLinePage.closeAlert, 10).click();
     }
 
-    @Test(groups = {"regression", "ui", "errorMessages", "robot_dependency"})
+    @Test(groups = {REGRESSION, UI, ERROR_MESSAGES, ROBOT_DEPENDENCY})
     @Xray(test = {11075})
     public void importPortfolioWithUnmatchedOrbisId() {
 

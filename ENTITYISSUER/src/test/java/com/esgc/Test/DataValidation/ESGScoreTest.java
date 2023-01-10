@@ -16,12 +16,13 @@ import java.util.regex.Pattern;
 
 import static com.esgc.Pages.LoginPageIssuer.OrbisID;
 import static com.esgc.Utilities.DateTimeUtilities.getFormattedDate;
+import static com.esgc.Utilities.Groups.ISSUER;
 
 
 public class ESGScoreTest extends EntityIssuerPageDataValidationTestBase {
 
     // TODO This feature is no more in use
-    @Test(groups = {"entity_page"})
+    @Test(groups = {ISSUER})
     @Xray(test = {3778, 3779, 3780, 3781, 3782, 3783,8341})
     public void validateScoreRange() {
         String orbisID = OrbisID;

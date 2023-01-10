@@ -1,13 +1,15 @@
 package com.esgc.Dashboard.UI.Tests.Widgets;
 
-import com.esgc.Dashboard.UI.Pages.DashboardPage;
 import com.esgc.Base.TestBases.DashboardUITestBase;
+import com.esgc.Dashboard.UI.Pages.DashboardPage;
 import com.esgc.Utilities.Xray;
 import org.testng.annotations.Test;
 
+import static com.esgc.Utilities.Groups.*;
+
 public class ControversiesTable extends DashboardUITestBase {
 
-    @Test(groups = {"ui", "dashboard", "smoke", "regression"})
+    @Test(groups = {UI, DASHBOARD, SMOKE, REGRESSION})
     @Xray(test = 3931)
     public void verifyPortfolioMonitoringIsDisplayed() {
         DashboardPage dashboardPage = new DashboardPage();

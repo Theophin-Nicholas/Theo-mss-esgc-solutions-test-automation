@@ -11,6 +11,7 @@ import org.testng.annotations.*;
 
 import java.time.Duration;
 
+import static com.esgc.Utilities.Groups.*;
 
 public abstract class UITestBase extends TestBase {
     String accessToken;
@@ -49,7 +50,7 @@ public abstract class UITestBase extends TestBase {
 //        System.setProperty("token", accessToken);
     }
 
-    @BeforeMethod(onlyForGroups = {"entitlements"}, groups = {"smoke", "regression", "entitlements"}, alwaysRun = true)
+    @BeforeMethod(onlyForGroups = {ENTITLEMENTS}, groups = {SMOKE, REGRESSION, ENTITLEMENTS}, alwaysRun = true)
     public synchronized void setupEntitlementsForUITesting(@Optional String browser) {
         System.out.println("Before method called");
         String URL = Environment.URL;
@@ -81,13 +82,13 @@ public abstract class UITestBase extends TestBase {
     }
 
 
-    @AfterMethod(onlyForGroups = {"ui"}, groups = {"smoke", "regression", "ui"})
+    @AfterMethod(onlyForGroups = {UI}, groups = {SMOKE, REGRESSION, UI})
     public void refreshPageToContinueUITesting(ITestResult result) {
         getScreenshot(result);
         Driver.getDriver().navigate().refresh();
     }
 
-    @AfterMethod(onlyForGroups = {"entitlements"}, groups = {"smoke", "regression", "entitlements"})
+    @AfterMethod(onlyForGroups = {ENTITLEMENTS}, groups = {SMOKE, REGRESSION, ENTITLEMENTS})
     public synchronized void teardownBrowserAfterUITesting() {
         Driver.closeDriver();
     }

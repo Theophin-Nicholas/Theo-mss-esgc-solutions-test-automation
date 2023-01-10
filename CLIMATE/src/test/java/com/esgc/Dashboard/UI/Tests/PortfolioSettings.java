@@ -2,9 +2,9 @@ package com.esgc.Dashboard.UI.Tests;
 
 import com.esgc.Base.API.APIModels.PortfolioSettings.PortfolioDetails;
 import com.esgc.Base.API.Controllers.APIController;
+import com.esgc.Base.TestBases.UITestBase;
 import com.esgc.Dashboard.UI.Pages.DashboardPage;
 import com.esgc.PortfolioAnalysis.UI.Pages.ResearchLinePage;
-import com.esgc.Base.TestBases.UITestBase;
 import com.esgc.Utilities.*;
 import com.esgc.Utilities.Database.DatabaseDriver;
 import com.esgc.Utilities.Database.PortfolioQueries;
@@ -20,10 +20,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.esgc.Utilities.Groups.*;
+
 public class PortfolioSettings extends UITestBase {
 
 
-    @Test(groups = {"regression", "ui", "smoke"})
+    @Test(groups = {REGRESSION, UI, SMOKE})
     @Xray(test = {9391, 9665, 9666, 9667, 9668, 9669, 9670, 9673, 9674})
     public void validatePortfolioSetting_EditPortfolioName() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
@@ -47,7 +49,7 @@ public class PortfolioSettings extends UITestBase {
 
     }
 
-    @Test(groups = {"regression", "ui", "smoke"})
+    @Test(groups = {REGRESSION, UI, SMOKE})
     @Xray(test = {9664})
     public void validatePortfolioSetting_SamplePortfolioNotEditable() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
@@ -59,7 +61,7 @@ public class PortfolioSettings extends UITestBase {
                 "Validate that Sample portfolio should not be editable");
     }
 
-    @Test(groups = {"regression", "ui", "smoke", "robot_dependency"})
+    @Test(groups = {REGRESSION, UI, SMOKE, ROBOT_DEPENDENCY})
     @Xray(test = {9627, 9628, 9629})
     public void
     validatePortfolioDeletionViaPortfolioSettings() {
@@ -113,7 +115,7 @@ public class PortfolioSettings extends UITestBase {
         researchLinePage.pressESCKey();
     }
 
-    @Test(groups = {"regression", "ui", "smoke", "robot_dependency"})
+    @Test(groups = {REGRESSION, UI, SMOKE, ROBOT_DEPENDENCY})
     @Xray(test = {9627, 9628, 9629})
     public void validatePortfolioManagementDrawer() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
@@ -134,7 +136,7 @@ public class PortfolioSettings extends UITestBase {
 
     }
 
-    @Test(groups = {"regression", "ui", "smoke"})
+    @Test(groups = {REGRESSION, UI, SMOKE})
     @Xray(test = {9537, 9563})
     public void validatePortfolioUnderPortfolioSettings() {
         DashboardPage dashboardPage = new DashboardPage();
@@ -187,7 +189,7 @@ public class PortfolioSettings extends UITestBase {
         }
     }
 
-    @Test(groups = {"regression", "ui", "smoke"})
+    @Test(groups = {REGRESSION, UI, SMOKE})
     @Xray(test = {9566, 9573, 9572})
     public void validateSelectedPortfolioDrawer() {
         DashboardPage dashboardPage = new DashboardPage();
@@ -296,7 +298,7 @@ public class PortfolioSettings extends UITestBase {
         BrowserUtils.wait(10);
     }
 
-    @Test(groups = {"regression", "ui", "smoke"})
+    @Test(groups = {REGRESSION, UI, SMOKE})
     @Xray(test = {9637})
     public void validateReUploadInPortfolioSettings() {
         //Upload a portfolio

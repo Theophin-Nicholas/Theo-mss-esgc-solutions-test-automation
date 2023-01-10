@@ -1,9 +1,9 @@
 package com.esgc.PortfolioAnalysis.DB.Tests;
 
 import com.esgc.Base.API.APIModels.APIFilterPayload;
-import com.esgc.PortfolioAnalysis.API.APIModels.PortfolioScoreWrapper;
 import com.esgc.Base.DB.DBModels.ResearchLineIdentifier;
 import com.esgc.Base.TestBases.DataValidationTestBase;
+import com.esgc.PortfolioAnalysis.API.APIModels.PortfolioScoreWrapper;
 import com.esgc.Utilities.APIUtilities;
 import com.esgc.Utilities.Xray;
 import io.restassured.response.Response;
@@ -15,11 +15,13 @@ import org.testng.annotations.Test;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.esgc.Utilities.Groups.DATA_VALIDATION;
+import static com.esgc.Utilities.Groups.REGRESSION;
 
 public class CarbonIntensityScoreTests extends DataValidationTestBase {
 
     //TODO update flow instead of getting results from DB with query
-    @Test(groups = {"regression", "data_validation"}, dataProvider = "researchLines")
+    @Test(groups = {REGRESSION, DATA_VALIDATION}, dataProvider = "researchLines")
     @Xray(test = {2988, 2991, 2992, 2993, 2994, 2996, 2997, 3203})
     public void verifyCarbonIntensityScoreWithMixedIdentifiers(@Optional String sector, @Optional String region,
                                                                @Optional String researchLine, @Optional String month, @Optional String year) {

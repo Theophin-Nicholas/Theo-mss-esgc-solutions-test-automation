@@ -1,18 +1,20 @@
 package com.esgc.PortfolioAnalysis.UI.Tests;
 
-import com.esgc.Dashboard.UI.Pages.DashboardPage;
-import com.esgc.Base.UI.Pages.LoginPage;
-import com.esgc.TestBase.DataProviderClass;
 import com.esgc.Base.TestBases.UITestBase;
+import com.esgc.Base.UI.Pages.LoginPage;
+import com.esgc.Dashboard.UI.Pages.DashboardPage;
+import com.esgc.TestBase.DataProviderClass;
 import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.EntitlementsBundles;
 import com.esgc.Utilities.Xray;
 import org.testng.SkipException;
 import org.testng.annotations.Test;
 
+import static com.esgc.Utilities.Groups.*;
+
 public class ExportEntitlementsTest extends UITestBase {
     //TODO PDF export is not working in QA and not available in UAT
-    @Test(groups = {"regression", "ui", "entitlements"},
+    @Test(groups = {REGRESSION, UI, ENTITLEMENTS},
             dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
     @Xray(test = {7841})
     public void verifyExportIsAvailableInPortfolioAnalysis_Bundle(String researchLine) {
@@ -39,7 +41,7 @@ public class ExportEntitlementsTest extends UITestBase {
 
     }
 
-    @Test(groups = {"regression", "ui", "entitlements"},
+    @Test(groups = {REGRESSION, UI, ENTITLEMENTS},
             dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
     @Xray(test = {7842})
     public void verifyExportIsNotAvailableInPortfolioAnalysis_Bundle(String researchLine) {

@@ -9,11 +9,13 @@ import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import org.testng.annotations.Test;
 
+import static com.esgc.Utilities.Groups.API;
+import static com.esgc.Utilities.Groups.REGRESSION;
 import static org.hamcrest.Matchers.*;
 
 public class SectorDriversAPITestP2 extends EntityIssuerPageTestBase {
 
-    @Test (groups ={"regression", "api"},
+    @Test (groups ={REGRESSION, API},
             dataProvider = "credentialsP2",dataProviderClass = IssuerDataProviderClass.class,
             description = "ESGCA-5867-API | ESG Issuer - Entity Page | Verify API Response")
     @Xray(test = {5867})

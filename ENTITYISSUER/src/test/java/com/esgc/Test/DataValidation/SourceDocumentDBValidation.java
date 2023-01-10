@@ -14,12 +14,14 @@ import java.util.Arrays;
 import java.util.List;
 
 import static com.esgc.Pages.LoginPageIssuer.OrbisID;
+import static com.esgc.Utilities.Groups.ISSUER;
+import static com.esgc.Utilities.Groups.REGRESSION;
 
 public class SourceDocumentDBValidation extends EntityIssuerPageDataValidationTestBase {
     List<String> criteria = new ArrayList<>();
 
     @Xray(test = 6968)
-    @Test(groups = {"regression", "entity_issuer"})
+    @Test(groups = {REGRESSION, ISSUER})
     public void sourceDocumentTest() {
         String orbisID = OrbisID;
         List<SourceDocumentDBModel> sourceDocumentDBData = EntityIssuerQueries.getSourceDocumentDBData(orbisID);

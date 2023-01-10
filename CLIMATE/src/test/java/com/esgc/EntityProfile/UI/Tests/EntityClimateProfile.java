@@ -1,11 +1,11 @@
 package com.esgc.EntityProfile.UI.Tests;
 
+import com.esgc.Base.TestBases.UITestBase;
 import com.esgc.EntityProfile.API.APIModels.EntityHeader;
 import com.esgc.EntityProfile.API.Controllers.EntityProfileClimatePageAPIController;
 import com.esgc.EntityProfile.UI.Pages.EntityClimateProfilePage;
 import com.esgc.PortfolioAnalysis.UI.Pages.ResearchLinePage;
 import com.esgc.TestBase.DataProviderClass;
-import com.esgc.Base.TestBases.UITestBase;
 import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.Driver;
 import com.esgc.Utilities.Xray;
@@ -19,11 +19,13 @@ import org.testng.annotations.Test;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.esgc.Utilities.Groups.*;
+
 public class EntityClimateProfile extends UITestBase {
 
 
-    @Xray(test = {5875, 5879})
-    @Test(enabled = false, groups = {"regression", "ui", "smoke", "entity_climate_profile"},
+    @Xray(test = {5875, 5879, 11725})
+    @Test(enabled = true, groups = {REGRESSION, UI, SMOKE, ENTITY_PROFILE},
             description = "Verify if Company headers are Displayed as Expected",
             dataProviderClass = DataProviderClass.class, dataProvider = "CompanyNames")
     public void testCompanyHeader(String company) {
@@ -37,7 +39,7 @@ public class EntityClimateProfile extends UITestBase {
     }
 
     @Xray(test = 6019)
-    @Test(groups = {"regression", "ui", "smoke", "entity_climate_profile"},
+    @Test(groups = {REGRESSION, UI, SMOKE, ENTITY_PROFILE},
             description = "Verify if Company headers are Displayed as Expected",
             dataProviderClass = DataProviderClass.class, dataProvider = "CompanyNames")
     public void testGreenShareCard(@Optional String Company) {
@@ -57,7 +59,7 @@ public class EntityClimateProfile extends UITestBase {
     }
 
     @Xray(test = 6019)
-    @Test(groups = {"regression", "ui", "smoke", "entity_climate_profile"},
+    @Test(groups = {REGRESSION, UI, SMOKE, ENTITY_PROFILE},
             description = "Verify if Company headers are Displayed as Expected",
             dataProviderClass = DataProviderClass.class, dataProvider = "CompanyNames")
     public void testBrownShareCard(@Optional String Company) {
@@ -76,7 +78,7 @@ public class EntityClimateProfile extends UITestBase {
     }
 
     @Xray(test = 6066)
-    @Test(groups = {"regression", "ui", "smoke", "entity_climate_profile"},
+    @Test(groups = {REGRESSION, UI, SMOKE, ENTITY_PROFILE},
             description = "Verify if Company headers are Displayed as Expected")
     public void testTemperatureAlignmentWidget() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
@@ -94,7 +96,7 @@ public class EntityClimateProfile extends UITestBase {
     }
 
     @Xray(test = {6111, 6113})
-    @Test(groups = {"regression", "ui", "entity_climate_profile"},
+    @Test(groups = {REGRESSION, UI, ENTITY_PROFILE},
             description = "Entity Climate Profile Page Carbon Footprint Sector Comparison Chart  for Transition Risk",
             dataProviderClass = DataProviderClass.class, dataProvider = "CompanyNames")
     public void testSectorComparisonChartForTransitionRisk(String CompanyName) {
@@ -113,7 +115,7 @@ public class EntityClimateProfile extends UITestBase {
     }
 
     @Xray(test = {6189, 6190})
-    @Test(groups = {"regression", "ui", "entity_climate_profile"},
+    @Test(groups = {REGRESSION, UI, ENTITY_PROFILE},
             description = "Entity Climate Profile Page-Sector Comparison Chart for Physical risk",
             dataProviderClass = DataProviderClass.class, dataProvider = "CompanyNames")
     public void testSectorComparisonChartForPhysicalRisk(String CompanyName) {
@@ -130,7 +132,7 @@ public class EntityClimateProfile extends UITestBase {
     }
 
     @Xray(test = {8981, 8983})
-    @Test(groups = {"regression", "ui", "entity_climate_profile"},
+    @Test(groups = {REGRESSION, UI, ENTITY_PROFILE},
             description = "Entity Climate Profile Page-Physical risk management",
             dataProviderClass = DataProviderClass.class, dataProvider = "CompanyNames")
     public void testPhysicalRiskManagement(String CompanyName) {
@@ -146,7 +148,7 @@ public class EntityClimateProfile extends UITestBase {
     }
     //todo: Check if functionality is available
     @Xray(test = {11207, 11209})
-    @Test(enabled = false, groups = {"regression","smoke", "ui", "entity_climate_profile"},
+    @Test(enabled = false, groups = {REGRESSION,SMOKE, UI, ENTITY_PROFILE},
             description = "Entity Climate Profile Page-Physical risk management",
             dataProviderClass = DataProviderClass.class, dataProvider = "orbisIdWithCompanyName")
     public void verifyL3SectorInEntityHeader(String companyName,String orbisId) {
@@ -179,7 +181,7 @@ public class EntityClimateProfile extends UITestBase {
     }
 
     @Xray(test = {10044})
-    @Test(groups = {"regression", "ui", "entity_climate_profile"},
+    @Test(groups = {REGRESSION, UI, ENTITY_PROFILE},
             description = "Verify Entity page header of the Company Name' About Drawer",
             dataProviderClass = DataProviderClass.class,  dataProvider = "CompanyNames")
     public void validateCompanyNameAndAboutDrawer (String CompanyName) {
@@ -204,7 +206,7 @@ public class EntityClimateProfile extends UITestBase {
     }
 
     @Xray(test = {10275})
-    @Test(groups = {"regression", "ui", "entity_climate_profile"},
+    @Test(groups = {REGRESSION, UI, ENTITY_PROFILE},
             dataProviderClass = DataProviderClass.class,  dataProvider = "Company With Orbis ID")
     public void validatePhysicalClimateHazardDate (String... Company) {
         EntityClimateProfilePage entityProfilePage = new EntityClimateProfilePage();
@@ -213,7 +215,7 @@ public class EntityClimateProfile extends UITestBase {
     }
 
     @Xray(test = {10282})
-    @Test(groups = {"regression", "ui", "entity_climate_profile"},
+    @Test(groups = {REGRESSION, UI, ENTITY_PROFILE},
             dataProviderClass = DataProviderClass.class,  dataProvider = "Company With Orbis ID")
     public void validatePhysicalRiskManagementUpdatedDate (String... Company) {
         EntityClimateProfilePage entityProfilePage = new EntityClimateProfilePage();

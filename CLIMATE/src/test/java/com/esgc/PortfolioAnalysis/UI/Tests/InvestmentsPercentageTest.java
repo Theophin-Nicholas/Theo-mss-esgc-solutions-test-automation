@@ -1,15 +1,18 @@
 package com.esgc.PortfolioAnalysis.UI.Tests;
 
+import com.esgc.Base.TestBases.UITestBase;
 import com.esgc.PortfolioAnalysis.UI.Pages.ResearchLinePage;
 import com.esgc.TestBase.DataProviderClass;
-import com.esgc.Base.TestBases.UITestBase;
 import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.Xray;
 import org.testng.annotations.Test;
 
+import static com.esgc.Utilities.Groups.REGRESSION;
+import static com.esgc.Utilities.Groups.UI;
+
 public class InvestmentsPercentageTest extends UITestBase {
 //TODO this test case failing in UAT, needs attention
-    @Test(groups = {"regression", "ui"},
+    @Test(groups = {REGRESSION, UI},
     dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines Investments")
     @Xray(test = 5719)
     public void verifyInvestmentPercentageLessThanOne(String... dataProvider) {

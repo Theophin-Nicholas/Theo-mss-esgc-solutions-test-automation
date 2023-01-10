@@ -14,10 +14,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.esgc.Utilities.Groups.*;
+
 public class EntityIssuerSubSectorSectionTestsRouting extends EntityPageTestBase {
 
     @Xray(test = {6270})
-    @Test(groups = {"regression", "ui", "smoke", "entity_issuer"},
+    @Test(groups = {REGRESSION, UI, SMOKE, ISSUER},
             dataProvider = "credentialsP2", dataProviderClass = IssuerDataProviderClass.class,
             description = "Verify Weight is Numeric")
     public void verifyWeightIsNumeric(String... data) {

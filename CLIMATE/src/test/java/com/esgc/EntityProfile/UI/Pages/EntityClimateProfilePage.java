@@ -1,11 +1,11 @@
 package com.esgc.EntityProfile.UI.Pages;
 
 
-import com.esgc.PortfolioAnalysis.API.APIModels.RangeAndScoreCategory;
 import com.esgc.Base.API.Controllers.APIController;
+import com.esgc.EntityProfile.DB.DBQueries.EntityClimateProfilePageQueries;
+import com.esgc.PortfolioAnalysis.API.APIModels.RangeAndScoreCategory;
 import com.esgc.Utilities.*;
 import com.esgc.Utilities.Database.DatabaseDriver;
-import com.esgc.EntityProfile.DB.DBQueries.EntityClimateProfilePageQueries;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Ordering;
 import org.apache.commons.lang3.math.NumberUtils;
@@ -41,6 +41,8 @@ public class EntityClimateProfilePage extends ClimatePageBase {
     public List<String> sectorsList = Arrays.asList("Automobiles", "ARA - all sectors", "Oil&Gas", "Electric & Gas Utilities",
             "Shipping", "Airlines", "Cement", "Steel", "Aluminium");
 
+    @FindBy(xpath = "//div[@aria-labelledby='alert-dialog-title']/div[@style]//*[text()]")
+    public List<WebElement> companyHeaderItems;
 
     @FindBy(xpath = " (//*[name()='g'][contains(@class,'highcharts-legend-item highcharts-line-')])")
     public List<WebElement> temperatureAlignmentCharBenchmark;
@@ -84,7 +86,7 @@ public class EntityClimateProfilePage extends ClimatePageBase {
     @FindBy(id = "export_sources_doc_button")
     public WebElement exportSourcesDocumentsTab;
 
-    @FindBy(xpath = "//button [@id='export_pdf']")
+    @FindBy(xpath = "//button[@id='export_pdf']")
     public WebElement pdfDownloadButton;
 
     @FindBy(id = "ref_Meth_button")
@@ -252,6 +254,9 @@ public class EntityClimateProfilePage extends ClimatePageBase {
     @FindBy(xpath = "//span[text()='Transition Risk']/../../..//div[text()='Brown Share Assessment']/../../../../../following-sibling::div//span[@variant='outlined']/../*")
     public List<WebElement> brownShareComparisonChartLegends;
 
+    @FindBy(xpath = "//div[text()='Brown Share Assessment']/../../../../../..//*[local-name()='path' and @class='highcharts-plot-line ']")
+    public WebElement brownShareComparisonChartAverageLine;
+
     @FindBy(xpath = "//span[text()='Transition Risk']/../../..//div[text()='Brown Share Assessment']/../../../../../following-sibling::div//div[text()]")
     public List<WebElement> brownShareComparisonChartAxes;
 
@@ -307,8 +312,14 @@ public class EntityClimateProfilePage extends ClimatePageBase {
     @FindBy(xpath = "//span[text()='Transition Risk']/../../..//div[text()='Brown Share Assessment']/../../../following-sibling::div/div/div[1]")
     public WebElement transitionRiskBrownShareWidgetSubHeading;
 
+    @FindBy(xpath = "//span[text()='Transition Risk']/../../..//div[text()='Brown Share Assessment']/../../../following-sibling::div/div/div[1]/span")
+    public WebElement transitionRiskBrownShareWidgetOverallRevenue;
+
     @FindBy(xpath = "//span[text()='Transition Risk']/../../..//div[text()='Brown Share Assessment']/../../../following-sibling::div/div/div[3]")
     public WebElement transitionRiskBrownShareWidgetUpdatedDate;
+
+    @FindBy(xpath = "//div[text()='Brown Share Assessment']//div[@id='climate-from-summaryoverview-']//div[text()]")
+    public WebElement transitionRiskBrownShareCategory;
 
     @FindBy(xpath = "//span[text()='Transition Risk']/../../..//div[text()='Brown Share Assessment']/../../../following-sibling::div//table/tbody/tr/td[1]")
     public List<WebElement> transitionRiskBrownShareTableBody;
@@ -623,15 +634,30 @@ public class EntityClimateProfilePage extends ClimatePageBase {
     }
 
 
-    public void validateCompanyHeader(String CompanyName) {
-        List<String> headerList = Arrays.asList("LEI", "Orbis ID", "ISIN");
-        WebElement companyNameHeader = getCompanyHeader(CompanyName);
-        List<WebElement> companySummary = companyNameHeader.findElements(By.xpath("parent::span/parent::div/following-sibling::div/span"));
-        Assert.assertTrue(headerList.stream().anyMatch(a -> Arrays.asList(companySummary.get(0).getText().split(":|,")).contains(a)));
-        System.out.println("companySummary.get(3).getText() = " + companySummary.get(2).getText());
-        System.out.println("companySummary.get(4).getText() = " + companySummary.get(3).getText());
-        Assert.assertTrue(companySummary.get(2).getText().contains("Region"));
-        Assert.assertTrue(companySummary.get(3).getText().contains("Sector"));
+    public void validateCompanyHeader(String companyName) {
+        List<String> actualHeaderItems = new ArrayList<>();
+        for(WebElement item:companyHeaderItems) {
+            actualHeaderItems.add(item.getText());
+        }
+
+        List<String> expectedHeaderItems = new ArrayList<>();
+        expectedHeaderItems.add(companyName);
+        //TODO: On Demand Release
+        // expectedHeaderItems.add("Confidence Level:");
+        expectedHeaderItems.add("Export/Sources Documents");
+        expectedHeaderItems.add("Reference and Methodologies");
+        expectedHeaderItems.add("ESC");
+
+        for(String expItem:expectedHeaderItems) {
+            boolean matched = false;
+            for(String actItem:actualHeaderItems){
+                if(actItem.contains(expItem)){
+                    matched = true;
+                    break;
+                }
+            }
+            assertTestCase.assertTrue(matched, expItem+" is not available in the header");
+        }
     }
 
     public void selectExportSourcesDocuments() {
@@ -664,6 +690,14 @@ public class EntityClimateProfilePage extends ClimatePageBase {
 
     public void selectPdfDownload() {
         BrowserUtils.waitForClickablility(pdfDownloadButton, 30).click();
+    }
+
+    public boolean IsPdfDownloadButtonAvailable() {
+        try{
+         return pdfDownloadButton.isDisplayed();
+        }catch(Exception e){
+            return false;
+        }
     }
 
     public boolean checkDownloadProgressBarIsPresent() {
@@ -2501,6 +2535,23 @@ public class EntityClimateProfilePage extends ClimatePageBase {
 
     }
 
+    public void verifyBrownShareCategory() {
+        List<String> expectedCategories = new ArrayList<>();
+        expectedCategories.add("NO INVOLVEMENT");
+        expectedCategories.add("MINOR INVOLVEMENT");
+        expectedCategories.add("MAJOR INVOLVEMENT");
+        String actualCategory = transitionRiskBrownShareCategory.getText();
+        assertTestCase.assertTrue(expectedCategories.contains(actualCategory), expectedCategories+" Category is not available from Expected Brown share Categories");
+    }
+
+    public void verifyBrownShareWidgetOverallRevenue(String orbisId) {
+        String uiOverallRevenuePercent = transitionRiskBrownShareWidgetOverallRevenue.getText();
+        EntityClimateProfilePageQueries queries = new EntityClimateProfilePageQueries();
+        String dbOverallRevenuePercent = queries.getBrownShareData(orbisId).get("SCORE_RANGE");
+        assertTestCase.assertEquals(uiOverallRevenuePercent.replace(" ",""),dbOverallRevenuePercent, "Overall Revenue Percent from UI is not matching with DB");
+
+    }
+
     public void verifyBrownShareComparisonChartLegends(String sectorName, String companyName) {
         assertTestCase.assertEquals(brownShareComparisonChartLegends.get(0).getAttribute("style"),"background: rgb(178, 133, 89);", "Brown Share Comparison Chart - Verify first legend color");
         assertTestCase.assertTrue(brownShareComparisonChartLegends.get(1).getText().contains(sectorName), "Brown Share Comparison Chart - Verify first legend label");
@@ -2511,8 +2562,16 @@ public class EntityClimateProfilePage extends ClimatePageBase {
     public void verifyBrownShareComparisonChartAxes() {
         assertTestCase.assertEquals(brownShareComparisonChartAxes.get(1).getText(),"Major", "Brown Share Comparison Chart - Verify X-Axis Label");
         assertTestCase.assertEquals(brownShareComparisonChartAxes.get(2).getText(),"None", "Brown Share Comparison Chart - Verify X-Axis Label");
-        assertTestCase.assertEquals(brownShareComparisonChartAxes.get(3).getText(),"0%", "Brown Share Comparison Chart - Verify X-Axis Label");
-        assertTestCase.assertEquals(brownShareComparisonChartAxes.get(4).getText(),">=50%", "Brown Share Comparison Chart - Verify X-Axis Label");
+        assertTestCase.assertEquals(brownShareComparisonChartAxes.get(3).getText(),"0%", "Brown Share Comparison Chart - Verify Y-Axis Label");
+        assertTestCase.assertEquals(brownShareComparisonChartAxes.get(4).getText(),">=50%", "Brown Share Comparison Chart - Verify Y-Axis Label");
+    }
+
+    public void verifyBrownShareComparisonChartAverageLine() {
+        try{
+            brownShareComparisonChartAverageLine.isDisplayed();
+        }catch (Exception e) {
+            assertTestCase.assertTrue(false, "Average Line is not available");
+        }
     }
 
     public void verifyBrownShareComparisonChartSectorDesc(String sectorName, int sectorCompaniesCount, String companyName) {

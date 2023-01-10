@@ -6,9 +6,12 @@ import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import org.testng.annotations.Test;
 
+import static com.esgc.Utilities.Groups.API;
+import static com.esgc.Utilities.Groups.REGRESSION;
+
 public class PortfolioNameUpdateAPITest extends APITestBase {
 
-    @Test(groups = {"api", "regression"})
+    @Test(groups = {API, REGRESSION})
     public void PortfolioNameChangeAPIValidation() {
         importPortfolioBeforeAPITests();
         APIController apiController = new APIController();

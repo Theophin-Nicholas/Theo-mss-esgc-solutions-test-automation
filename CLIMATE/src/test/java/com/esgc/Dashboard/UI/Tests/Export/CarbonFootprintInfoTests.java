@@ -1,13 +1,15 @@
 package com.esgc.Dashboard.UI.Tests.Export;
 
-import com.esgc.Dashboard.UI.Pages.DashboardPage;
 import com.esgc.Base.TestBases.DataValidationTestBase;
 import com.esgc.Dashboard.DB.DBQueries.DashboardQueries;
+import com.esgc.Dashboard.UI.Pages.DashboardPage;
 import com.esgc.Utilities.Xray;
 import org.testng.annotations.Test;
 
 import java.util.List;
 import java.util.Map;
+
+import static com.esgc.Utilities.Groups.*;
 
 
 public class CarbonFootprintInfoTests extends DataValidationTestBase {
@@ -15,7 +17,7 @@ public class CarbonFootprintInfoTests extends DataValidationTestBase {
     String portfolioId = "00000000-0000-0000-0000-000000000000";
     ExportUtils utils = new ExportUtils();
 
-    @Test(groups = {"dashboard", "regression", "ui"})
+    @Test(groups = {DASHBOARD, REGRESSION, UI})
     @Xray(test = {7220, 7221})
     public void compareCarbonFootPrintFromExcelToDB() {
         DashboardPage dashboardPage = new DashboardPage();

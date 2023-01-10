@@ -1,9 +1,9 @@
 package com.esgc.PortfolioAnalysis.API.Tests;
 
 import com.esgc.Base.API.APIModels.APIFilterPayload;
-import com.esgc.PortfolioAnalysis.API.APIModels.SectorSummary;
 import com.esgc.Base.API.Controllers.APIController;
 import com.esgc.Base.TestBases.APITestBase;
+import com.esgc.PortfolioAnalysis.API.APIModels.SectorSummary;
 import com.esgc.Utilities.APIUtilities;
 import com.esgc.Utilities.Xray;
 import io.restassured.http.ContentType;
@@ -12,13 +12,16 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Test;
 
+import static com.esgc.Utilities.Groups.API;
+import static com.esgc.Utilities.Groups.REGRESSION;
 import static org.hamcrest.Matchers.*;
+
 
 /**
  * Created by ChaudhS2 on 11/9/2021.
  */
 public class SectorSummaryAPITest extends APITestBase {//870
-    @Test(groups = {"api", "regression"}, dataProvider = "No ESG API Research Lines")
+    @Test(groups = {API, REGRESSION}, dataProvider = "No ESG API Research Lines")
     @Xray(test = {870,   2215, 1184, 2571, 2666})
     //1751 Energy transition
     //1923 TCFD
@@ -42,7 +45,7 @@ public class SectorSummaryAPITest extends APITestBase {//870
         test.pass("Sector Summary Call Completed Successfully");
     }
 
-    @Test(groups = {"api", "regression"}, dataProvider = "API Research Lines")
+    @Test(groups = {API, REGRESSION}, dataProvider = "API Research Lines")
     @Xray(test = {875, 1231, })
     public void SectorSummary_InvalidPayload(@Optional String researchLine) {
         APIController apiController = new APIController();
@@ -57,7 +60,7 @@ public class SectorSummaryAPITest extends APITestBase {//870
         test.pass("Sector Summary Call Completed Successfully");
     }
 
-    @Test(groups = {"api", "regression"}, dataProvider = "API Research Lines")
+    @Test(groups = {API, REGRESSION}, dataProvider = "API Research Lines")
     public void SectorSummary_UnauthorisedAccess(@Optional String researchLine) {
 
         APIController apiController = new APIController();

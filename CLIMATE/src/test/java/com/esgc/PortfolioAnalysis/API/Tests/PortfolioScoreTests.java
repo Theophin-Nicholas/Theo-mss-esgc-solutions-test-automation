@@ -3,10 +3,10 @@ package com.esgc.PortfolioAnalysis.API.Tests;
 import com.aventstack.extentreports.markuputils.CodeLanguage;
 import com.aventstack.extentreports.markuputils.MarkupHelper;
 import com.esgc.Base.API.APIModels.APIFilterPayload;
-import com.esgc.PortfolioAnalysis.API.APIModels.PortfolioScore;
-import com.esgc.PortfolioAnalysis.API.APIModels.PortfolioScoreWrapper;
 import com.esgc.Base.API.Controllers.APIController;
 import com.esgc.Base.TestBases.APITestBase;
+import com.esgc.PortfolioAnalysis.API.APIModels.PortfolioScore;
+import com.esgc.PortfolioAnalysis.API.APIModels.PortfolioScoreWrapper;
 import com.esgc.Utilities.APIUtilities;
 import com.esgc.Utilities.Xray;
 import io.restassured.response.Response;
@@ -14,10 +14,12 @@ import org.testng.Assert;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Test;
 
+import static com.esgc.Utilities.Groups.API;
+import static com.esgc.Utilities.Groups.REGRESSION;
 
 public class PortfolioScoreTests extends APITestBase {
 
-    @Test(groups = {"api", "regression"},dataProvider = "API Research Lines")
+    @Test(groups = {API, REGRESSION},dataProvider = "API Research Lines")
     @Xray(test = {2245,  2653,  2501, 1204})
     //1978 TCFD
     //Energy Transition 3009
@@ -72,7 +74,7 @@ public class PortfolioScoreTests extends APITestBase {
         }
     }
 
-    @Test(groups = {"api", "regression"})
+    @Test(groups = {API, REGRESSION})
     public void portfolioScoreInvalidPortfolioID() {
 
         String user_id = APIUtilities.userID();
@@ -97,7 +99,7 @@ public class PortfolioScoreTests extends APITestBase {
     }
 
 
-    @Test(groups = {"api", "regression"},expectedExceptions = NullPointerException.class)
+    @Test(groups = {API, REGRESSION},expectedExceptions = NullPointerException.class)
     @Xray(test = {2247,2652,2502,2440,2877,2304,})
     //3008, 3093 Energy Transition
     public void portfolioScoreNullPayload() {

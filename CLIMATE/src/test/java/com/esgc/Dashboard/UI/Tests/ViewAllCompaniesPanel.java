@@ -1,16 +1,18 @@
 package com.esgc.Dashboard.UI.Tests;
 
-import com.esgc.Dashboard.UI.Pages.DashboardPage;
 import com.esgc.Base.TestBases.UITestBase;
+import com.esgc.Dashboard.UI.Pages.DashboardPage;
 import com.esgc.Utilities.Xray;
 import org.testng.annotations.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import static com.esgc.Utilities.Groups.*;
+
 public class ViewAllCompaniesPanel extends UITestBase {
 
-    @Test(groups = {"regression", "dashboard", "ui"})
+    @Test(groups = {REGRESSION, DASHBOARD, UI})
     @Xray(test = {5084, 5090, 6078, 6079, 7506, 7507, 7508})
     public void verifyPanelTests() {
         DashboardPage dashboardPage = new DashboardPage();

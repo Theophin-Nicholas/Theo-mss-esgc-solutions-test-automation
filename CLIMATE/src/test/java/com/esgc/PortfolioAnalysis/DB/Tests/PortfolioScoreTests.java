@@ -1,11 +1,11 @@
 package com.esgc.PortfolioAnalysis.DB.Tests;
 
 import com.esgc.Base.API.APIModels.APIFilterPayload;
-import com.esgc.PortfolioAnalysis.API.APIModels.PortfolioPhysicalHazard;
-import com.esgc.PortfolioAnalysis.API.APIModels.RangeAndScoreCategory;
-import com.esgc.EntityProfile.DB.DBModels.PhysicalScore;
 import com.esgc.Base.DB.DBModels.ResearchLineIdentifier;
 import com.esgc.Base.TestBases.DataValidationTestBase;
+import com.esgc.EntityProfile.DB.DBModels.PhysicalScore;
+import com.esgc.PortfolioAnalysis.API.APIModels.PortfolioPhysicalHazard;
+import com.esgc.PortfolioAnalysis.API.APIModels.RangeAndScoreCategory;
 import com.esgc.Utilities.APIUtilities;
 import com.esgc.Utilities.DataProviderUtilities;
 import com.esgc.Utilities.Database.PortfolioQueries;
@@ -22,11 +22,13 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.esgc.Utilities.Groups.DATA_VALIDATION;
+import static com.esgc.Utilities.Groups.REGRESSION;
 
 public class PortfolioScoreTests extends DataValidationTestBase {
 
 
-    @Test(groups = {"regression", "data_validation"}, dataProvider = "researchLines")
+    @Test(groups = {REGRESSION, DATA_VALIDATION}, dataProvider = "researchLines")
     @Xray(test = {2259, 2256, 2255, 2692, 2691, 3019, 2257, 2511, 2510, 2693, 2512, 3024, 2258, 2694,
             2513, 2695, 2514, 2192, 4430, 6593, 6596,
             6725,
@@ -128,7 +130,7 @@ public class PortfolioScoreTests extends DataValidationTestBase {
 
 
     //TODO needs to be updated
-    @Test(groups = {"regression", "data_validation"})
+    @Test(groups = {REGRESSION, DATA_VALIDATION})
     @Xray(test = {6370, 6371})
     public void verifyPhysicalHazardPortfolioScore(
             //@Optional String sector, @Optional String region,
@@ -168,7 +170,7 @@ public class PortfolioScoreTests extends DataValidationTestBase {
         assertTestCase.assertTrue(score.getHrh_risk_category().equals(apiResponse.get(0).getHrh_risk_category()));
     }
 
-    @Test(groups = {"regression", "data_validation"})
+    @Test(groups = {REGRESSION, DATA_VALIDATION})
     @Xray(test = {8178})
     public void verifyESGAssessmentPortfolioScore(
             //@Optional String sector, @Optional String region,

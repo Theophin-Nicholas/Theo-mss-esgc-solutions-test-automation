@@ -11,6 +11,8 @@ import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.testng.annotations.Test;
 
+import static com.esgc.Utilities.Groups.*;
+
 public class ConfigurationPageTests extends EMCUITestBase {
     String accountName = "INTERNAL QATest - PROD123";
     String applicationName = "TestQA";
@@ -41,7 +43,7 @@ public class ConfigurationPageTests extends EMCUITestBase {
         element.sendKeys(Keys.TAB);
     }
 
-    @Test(groups = {"EMC", "ui", "smoke","regression","prod"})
+    @Test(groups = {EMC, UI, SMOKE,REGRESSION,PROD})
     @Xray(test = {6627,7820, 6944})
     public void configurationPageAdminTests() {
         EMCMainPage mainPage = new EMCMainPage();
@@ -82,7 +84,7 @@ public class ConfigurationPageTests extends EMCUITestBase {
         assertTestCase.assertTrue(detailsPage.roleMembersTag.isDisplayed(),"Users Tab - Role members tag is displayed");
     }
 
-    @Test(groups = {"EMC", "ui","regression"})//no smoke
+    @Test(groups = {EMC, UI,REGRESSION})//no smoke
     @Xray(test = {6667,6669})
     public void configurationPageAdminCreateRoleTest() {
         navigateToConfigPage("permission roles");
@@ -136,7 +138,7 @@ public class ConfigurationPageTests extends EMCUITestBase {
         assertTestCase.assertTrue(rolesPage.verifyRole(roleName),"New role is creation is verified");
     }
 
-    @Test(groups = {"EMC", "ui","regression","smoke","prod"})
+    @Test(groups = {EMC, UI,REGRESSION,SMOKE,PROD})
     @Xray(test = {7818})
     public void verifyAdminUserManagesConfigPageTest() {
         EMCMainPage mainPage = new EMCMainPage();
@@ -151,7 +153,7 @@ public class ConfigurationPageTests extends EMCUITestBase {
         assertTestCase.assertTrue(configurationsPage.sitesSettingsButton.isDisplayed(), "Site Settings button is displayed under Miscellaneous settings");
     }
 
-    @Test(groups = {"EMC", "ui","regression"})
+    @Test(groups = {EMC, UI,REGRESSION})
     @Xray(test = {7827,7828})
     public void verifyAdminUserAddMemberToRoleTest() {
         navigateToConfigPage("permission roles");
@@ -177,7 +179,7 @@ public class ConfigurationPageTests extends EMCUITestBase {
         assertTestCase.assertFalse(detailsPage.verifyRoleMember(userName), "Member is removed from role");
     }
 
-    @Test(groups = {"EMC", "ui","regression"})
+    @Test(groups = {EMC, UI,REGRESSION})
     @Xray(test = {8137,8140,8143})
     public void verifyAdminUserViewRoleDetailsTest() {
         navigateToConfigPage("permission roles");
@@ -214,7 +216,7 @@ public class ConfigurationPageTests extends EMCUITestBase {
         BrowserUtils.waitForClickablility(detailsPage.backToRolesButton,5).click();
     }
 
-    @Test(groups = {"EMC", "ui","regression"})
+    @Test(groups = {EMC, UI,REGRESSION})
     @Xray(test = {6668})
     public void verifyAdminUserCreateRoleWithoutOptionalFieldsTest() {
         navigateToConfigPage("permission roles");
@@ -250,7 +252,7 @@ public class ConfigurationPageTests extends EMCUITestBase {
         assertTestCase.assertTrue(rolesPage.verifyRole(roleName),"New role is creation is verified");
     }
 
-    @Test(groups = {"EMC", "ui","regression"})
+    @Test(groups = {EMC, UI,REGRESSION})
     @Xray(test = {6670})
     public void verifyAdminUserCreateRoleCancelButtonTest() {
         navigateToConfigPage("permission roles");
@@ -281,7 +283,7 @@ public class ConfigurationPageTests extends EMCUITestBase {
         assertTestCase.assertFalse(rolesPage.verifyRole(roleName),"New role creation is not verified");
     }
 
-    @Test(groups = {"EMC", "ui","regression","smoke", "prod"})
+    @Test(groups = {EMC, UI,REGRESSION,SMOKE, PROD})
     @Xray(test = {6671})
     public void verifyAdminUserCreateRoleKeyInputMustBeAValidCharTest() {
         navigateToConfigPage("permission roles");
@@ -322,7 +324,7 @@ public class ConfigurationPageTests extends EMCUITestBase {
         BrowserUtils.waitForClickablility(createRolePage.backButton, 5).click();
     }
 
-    @Test(groups = {"EMC", "ui","regression","smoke"})
+    @Test(groups = {EMC, UI,REGRESSION,SMOKE})
     @Xray(test = {6672})
     public void verifyAdminUserCreateRoleDuplicateKeyNotAllowedTest() {
         navigateToConfigPage("permission roles");
@@ -357,7 +359,7 @@ public class ConfigurationPageTests extends EMCUITestBase {
         assertTestCase.assertTrue(message.contains("Failed creating the role. Please try again."),"Duplicated key error is displayed");
     }
 
-    @Test(groups = {"EMC", "ui","regression","smoke"})
+    @Test(groups = {EMC, UI,REGRESSION,SMOKE})
     @Xray(test = {6949, 6950})
     public void verifyAdminUserAssignPermissionsTest() {
         navigateToConfigPage("permission roles");
@@ -377,7 +379,7 @@ public class ConfigurationPageTests extends EMCUITestBase {
         assertTestCase.assertFalse(detailsPage.verifyPermission("Search account users"),"Permission is not assigned to the role");
     }
 
-    @Test(groups = {"EMC", "ui","regression"}, description = "UI | EMC | Roles | Verify User with Admin Role can view Accounts menu on EMC")
+    @Test(groups = {EMC, UI,REGRESSION}, description = "UI | EMC | Roles | Verify User with Admin Role can view Accounts menu on EMC")
     @Xray(test = {7314, 7435, 7454, 7555, 7597, 7598})
     public void verifyUserWithAdminRoleCanViewAccountsMenuTest() {
         navigateToConfigPage("permission roles");
@@ -468,7 +470,7 @@ public class ConfigurationPageTests extends EMCUITestBase {
         assertTestCase.assertFalse(detailsPage.verifyUser("Ferhat Demir"),"User is not assigned to the role");
     }
 
-    @Test(groups = {"EMC", "ui","regression"}, description = "UI | EMC | Roles | Verify non-Admin User and can't view Accounts menu")
+    @Test(groups = {EMC, UI,REGRESSION}, description = "UI | EMC | Roles | Verify non-Admin User and can't view Accounts menu")
     @Xray(test = {7335})
     public void verifyUserWithNonAdminRoleCantViewAccountsMenuTest() {
         navigateToConfigPage("permission roles");
@@ -519,7 +521,7 @@ public class ConfigurationPageTests extends EMCUITestBase {
         Driver.getDriver().manage().window().maximize();
     }
 
-    @Test(groups = {"EMC", "ui","regression"}, description = "UI | EMC | Roles | Verify User with View Role can view Accounts menu on EMC")
+    @Test(groups = {EMC, UI,REGRESSION}, description = "UI | EMC | Roles | Verify User with View Role can view Accounts menu on EMC")
     @Xray(test = {7336, 7434, 7552, 7599})
     public void verifyUserWithViewerRoleCanViewAccountsMenuTest() {
         navigateToConfigPage("permission roles");

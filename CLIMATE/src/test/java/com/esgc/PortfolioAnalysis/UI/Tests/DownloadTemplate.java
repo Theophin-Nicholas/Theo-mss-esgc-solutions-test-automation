@@ -1,12 +1,13 @@
 package com.esgc.PortfolioAnalysis.UI.Tests;
 
-import com.esgc.PortfolioAnalysis.UI.Pages.ResearchLinePage;
 import com.esgc.Base.TestBases.UITestBase;
+import com.esgc.PortfolioAnalysis.UI.Pages.ResearchLinePage;
 import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.ExcelUtil;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
+import static com.esgc.Utilities.Groups.*;
 
 public class DownloadTemplate extends UITestBase {
 
@@ -17,7 +18,7 @@ public class DownloadTemplate extends UITestBase {
     Download template link is clickable on the import modal
  */
 
-    @Test(groups = {"regression", "ui", "smoke"})
+    @Test(groups = {REGRESSION, UI, SMOKE})
     public void downloadTemplateLinkTest() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
 
@@ -44,7 +45,7 @@ public class DownloadTemplate extends UITestBase {
      */
 
     @Test(description = "Verify that the downloaded template, when clicked will launch Excel",
-            groups = {"regression", "ui", "smoke"})
+            groups = {REGRESSION, UI, SMOKE})
     public void verifyTemplateIsAccessibleTest() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
 

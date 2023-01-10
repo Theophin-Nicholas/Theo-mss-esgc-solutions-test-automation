@@ -1,8 +1,8 @@
 package com.esgc.Dashboard.UI.Tests;
 
+import com.esgc.Base.TestBases.UITestBase;
 import com.esgc.Base.UI.Pages.LoginPage;
 import com.esgc.PortfolioAnalysis.UI.Pages.ResearchLinePage;
-import com.esgc.Base.TestBases.UITestBase;
 import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.Driver;
 import com.esgc.Utilities.Xray;
@@ -12,9 +12,11 @@ import org.testng.annotations.Test;
 
 import java.util.*;
 
+import static com.esgc.Utilities.Groups.*;
+
 public class GlobalHeaderSidePanel extends UITestBase {
 
-    @Test(groups = {"regression", "ui"})
+    @Test(groups = {REGRESSION, UI})
     @Xray(test = {1899, 5939, 8967})
     public void validateGlobalHeader() {
 
@@ -25,7 +27,7 @@ public class GlobalHeaderSidePanel extends UITestBase {
 
     }
 
-    @Test(groups = {"regression", "ui", "smoke"})
+    @Test(groups = {REGRESSION, UI, SMOKE})
     @Xray(test = 8968)
     public void validatePortfolioSettings() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
@@ -51,11 +53,10 @@ public class GlobalHeaderSidePanel extends UITestBase {
         actualList.remove(0);
         expectedList.remove(0);
         expectedList.remove(0);
-        Collections.sort(expectedList);
+        Collections.sort(expectedList, String.CASE_INSENSITIVE_ORDER);
         System.out.println("expectedList = " + expectedList);
         System.out.println("actualList = " + actualList);
-        //assertTestCase.assertEquals(actualList, expectedList);
-        //TODO Sorting is failing due to digits used in portfolio. And UI sorting logic not matching.
+        assertTestCase.assertEquals(actualList, expectedList);
         //Multiple portfolio with the same name is allowed for now
         Set<String> checkDuplicates = new HashSet<>(actualList);
         int beforeRemovingTheDuplicatesSize = actualList.size();
@@ -63,7 +64,7 @@ public class GlobalHeaderSidePanel extends UITestBase {
         assertTestCase.assertFalse(beforeRemovingTheDuplicatesSize == afterRemovingDuplicateSize);
     }
 
-    @Test(groups = {"regression", "ui"})
+    @Test(groups = {REGRESSION, UI})
     @Xray(test = 1905)
     public void validateGlobalHeaderActions() {
 
