@@ -61,6 +61,20 @@ public class EMCAPIController extends TestBase {
         System.out.println("Status Code = " + response.statusCode());
         return response;
     }
+    public Response getEMCAllAdminUsersPermissionsResponse() {
+        Response response = null;
+        System.out.println("EMC API URL: " + Environment.EMC_URL + Endpoints.EMC_ADMIN_USERS_PERMISSIONS);
+        try {
+            response = configSpec()
+                    .when()
+                    .get(Endpoints.EMC_ADMIN_USERS_PERMISSIONS);
+
+        } catch (Exception e) {
+            System.out.println("Inside exception " + e.getMessage());
+        }
+        System.out.println("Status Code = " + response.statusCode());
+        return response;
+    }
 
     public Response getEMCAllRolesResponse() {
         Response response = null;

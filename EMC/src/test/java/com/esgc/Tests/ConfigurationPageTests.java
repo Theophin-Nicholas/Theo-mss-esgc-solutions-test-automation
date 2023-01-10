@@ -396,7 +396,7 @@ public class ConfigurationPageTests extends EMCUITestBase {
         Driver.getDriver().get(Environment.EMC_URL);
         BrowserUtils.waitForPageToLoad(10);
         LoginPageEMC loginPageEMC = new LoginPageEMC();
-        loginPageEMC.loginEMCWithParams("ferhat.demir-non-empl@moodys.com", "Odessa2022??");
+        loginPageEMC.loginEMCWithParams("ferhat.demir-non-empl@moodys.com", "Cydeo@2022??");
 
         //Go to Accounts page and open account
         EMCMainPage homePage = new EMCMainPage();
@@ -487,7 +487,7 @@ public class ConfigurationPageTests extends EMCUITestBase {
         Driver.getDriver().get(Environment.EMC_URL);
         BrowserUtils.waitForPageToLoad(10);
         LoginPageEMC loginPageEMC = new LoginPageEMC();
-        loginPageEMC.loginEMCWithParams("ferhat.demir-non-empl@moodys.com", "Odessa2022??");
+        loginPageEMC.loginEMCWithParams("ferhat.demir-non-empl@moodys.com", "Cydeo@2022??");
         EMCMainPage homePage = new EMCMainPage();
 
         try {
@@ -518,7 +518,7 @@ public class ConfigurationPageTests extends EMCUITestBase {
     }
 
     @Test(groups = {"EMC", "ui","regression"}, description = "UI | EMC | Roles | Verify User with View Role can view Accounts menu on EMC")
-    @Xray(test = {7336, 7434, 7552, 7599})
+    @Xray(test = {7336, 7434, 7552, 7599, 7389})
     public void verifyUserWithViewerRoleCanViewAccountsMenuTest() {
         navigateToConfigPage("permission roles");
         EMCRolesPage rolesPage = new EMCRolesPage();
@@ -532,16 +532,17 @@ public class ConfigurationPageTests extends EMCUITestBase {
             detailsPage.assignMember("Ferhat Demir");
         }
         assertTestCase.assertTrue(detailsPage.verifyUser("Ferhat Demir"),"User is assigned to the role");
-        Driver.closeDriver();
+        Driver.quit();
         Driver.getDriver().get(Environment.EMC_URL);
         BrowserUtils.waitForPageToLoad(10);
         LoginPageEMC loginPageEMC = new LoginPageEMC();
-        loginPageEMC.loginEMCWithParams("ferhat.demir-non-empl@moodys.com", "Odessa2022??");
+        loginPageEMC.loginEMCWithParams("ferhat.demir-non-empl@moodys.com", "Cydeo@2022??");
         EMCMainPage homePage = new EMCMainPage();
         homePage.goToAccountsPage();
         EMCAccountsPage accountsPage = new EMCAccountsPage();
-        BrowserUtils.wait(5);
+        BrowserUtils.waitForVisibility(accountsPage.pageTitle, 20);
         assertTestCase.assertEquals(accountsPage.pageTitle.getText(), "Accounts", "Accounts page is displayed");
+        BrowserUtils.wait(10);
         assertTestCase.assertEquals(accountsPage.accountNames.size() > 0, true, "Account is displayed");
 
         accountsPage.goToAccount(accountName);
