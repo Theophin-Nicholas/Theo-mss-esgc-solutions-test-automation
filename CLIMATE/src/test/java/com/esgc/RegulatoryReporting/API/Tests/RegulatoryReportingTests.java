@@ -39,7 +39,14 @@ public class RegulatoryReportingTests extends APITestBase {
         reportingPage.reportingForDropdownOptionsList.get(0).click();
         RegulatoryReportingAPIController apiController = new RegulatoryReportingAPIController();
         List<String> apiPortfoliosList = apiController.getPortfolioNames();
-        System.out.println("apiPortfoliosList = " + apiPortfoliosList);
-        assertTestCase.assertTrue(apiPortfoliosList.containsAll(actualPortfoliosList), "API - Portfolio list is verified");
+        //sort the list
+        apiPortfoliosList.sort(String::compareToIgnoreCase);
+        assertTestCase.assertEquals(apiPortfoliosList.size(),actualPortfoliosList.size(), "API Portfolio list size is verified");
+        //print the list
+        expectedPortfoliosList.forEach(System.out::println);
+        for(String portfolioName : apiPortfoliosList){
+            System.out.println("portfolioName = " + portfolioName);
+            assertTestCase.assertTrue(actualPortfoliosList.contains(portfolioName.trim()), "Portfolio name from API is verified in UI");
+        }
     }
 }

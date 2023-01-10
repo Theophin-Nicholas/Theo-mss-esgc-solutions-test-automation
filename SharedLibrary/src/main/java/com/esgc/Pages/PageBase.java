@@ -103,6 +103,7 @@ public abstract class PageBase {
 
     @FindBy(xpath = "//div[contains(text(),'No, Cancel')]")
     public WebElement confirmPortfolioDeleteCancelButton;
+
     @FindBy(xpath = "//*[text()='Portfolio Selection/Upload']")
     public WebElement header_portfolioManagement;
 
@@ -2073,8 +2074,9 @@ public abstract class PageBase {
     }
 
     public void clearPortfolioNameInputBox() {
-        input_PortfolioName.sendKeys(Keys.CONTROL + "a");
-        input_PortfolioName.sendKeys(Keys.DELETE);
+        while(input_PortfolioName.getAttribute("value").length() > 0) {
+            input_PortfolioName.sendKeys(Keys.BACK_SPACE);
+        }
     }
 
     public void closeMenuByClickingOutSide() {
@@ -2104,8 +2106,8 @@ public abstract class PageBase {
         String newPortfolioName = "Automation123";
         updatePortfolioNameInPortfolioManagementDrawer(newPortfolioName);
         clickInSidePortfolioDrawer();
-        assertTestCase.assertTrue(getPortfolioDrawerHeader(newPortfolioName).isDisplayed(), "Validate if portfolio name saved " +
-                "and after change and click inside the drawer");
+        assertTestCase.assertTrue(getPortfolioDrawerHeader(newPortfolioName).isDisplayed(),
+                "Validate if portfolio name saved and after change and click inside the drawer");
         undoPortfolioNameChange(OriginalPortFolioName);
     }
 

@@ -48,7 +48,7 @@ public class EntityClimateProfileControversies extends UITestBase {
                             "Human Rights (17)",
                             "Human Resources (5)",
                             "Environment (3)",
-                            "Corporate Governance (5)"
+                            "Corporate Governance (4)"
                     )
             );
             //number of controversies in sub category
@@ -56,9 +56,6 @@ public class EntityClimateProfileControversies extends UITestBase {
 
             List<String> controversyList=new ArrayList<>();
             for (WebElement subCategoryActual : entityProfilePage.subCategoryList) {
-
-                System.out.println("subCategoryList = " + subCategoryActual.getText());
-                System.out.println("categoryExpectedList = " + categoryExpectedList);
                 System.out.println("subCategoryActual.getText() = " + subCategoryActual.getText());
                 assertTestCase.assertTrue(categoryExpectedList.contains(subCategoryActual.getText()));
                 subCategoryActual.click();

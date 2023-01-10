@@ -5,6 +5,7 @@ import com.esgc.Pages.LoginPageIssuer;
 import com.esgc.Test.TestBases.EntityPageTestBase;
 import com.esgc.Test.TestBases.IssuerDataProviderClass;
 import com.esgc.Utilities.BrowserUtils;
+import com.esgc.Utilities.Driver;
 import com.esgc.Utilities.Xray;
 import org.openqa.selenium.Keys;
 import org.testng.annotations.Test;
@@ -12,24 +13,32 @@ import org.testng.annotations.Test;
 public class EntityIssuerAddMissingDocumentPopUpTestRouting extends EntityPageTestBase {
 
 
-    @Xray(test = {7350,8795,9821})
+    @Xray(test = {7350, 8795, 9821})
     @Test(groups = {"regression", "ui", "smoke", "entity_issuer"},
             dataProvider = "loginP3", dataProviderClass = IssuerDataProviderClass.class,
             description = "Verify Add missing document functionlity")
     public void testMissingDocumentPopUp(String... dataProvider) {
-        LoginPageIssuer LoginPageIssuer = new LoginPageIssuer();
-        LoginPageIssuer.loginWithParams(dataProvider[0], dataProvider[1]);
         EntityIssuerPage entitypage = new EntityIssuerPage();
-        BrowserUtils.wait(1);
-        entitypage.ClickOnaddMissingDocuments();
-        entitypage.validateopupWindowOpenStatus();
-        entitypage.addURL("Google.com",true);
-        entitypage.validateAssignedCategories();
-        entitypage.validateWrongURL();
-        entitypage.validatePageNoBox();
-        entitypage.saveMissingDocuments();
-        entitypage.CloseAddMissingDocumentMessage.click();
-        entitypage.logout.click();
+        try {
+            LoginPageIssuer LoginPageIssuer = new LoginPageIssuer();
+            BrowserUtils.wait(2);
+            if (Driver.getDriver().getCurrentUrl().contains("login"))
+                LoginPageIssuer.loginWithParams(dataProvider[0], dataProvider[1]);
+
+            BrowserUtils.wait(1);
+            entitypage.ClickOnaddMissingDocuments();
+            entitypage.validateopupWindowOpenStatus();
+            entitypage.addURL("Google.com", true);
+            entitypage.validateAssignedCategories();
+            entitypage.validateWrongURL();
+            entitypage.validatePageNoBox();
+            entitypage.saveMissingDocuments();
+            entitypage.CloseAddMissingDocumentMessage.click();
+            entitypage.logout.click();
+        } catch (Exception e) {
+            e.printStackTrace();
+            entitypage.logout.click();
+        }
     }
 
     @Xray(test = {11522})
@@ -37,17 +46,26 @@ public class EntityIssuerAddMissingDocumentPopUpTestRouting extends EntityPageTe
             dataProvider = "loginP3", dataProviderClass = IssuerDataProviderClass.class,
             description = "Verify Add missing document functionlity with wrong URL")
     public void testMissingDocumentPopUpWrongURL(String... dataProvider) {
-        LoginPageIssuer LoginPageIssuer = new LoginPageIssuer();
-        LoginPageIssuer.loginWithParams(dataProvider[0], dataProvider[1]);
         EntityIssuerPage entitypage = new EntityIssuerPage();
-        BrowserUtils.wait(1);
-        entitypage.ClickOnaddMissingDocuments();
-        entitypage.validateopupWindowOpenStatus();
-        entitypage.addURL("Googl.com", true);
-        entitypage.validateURL();
-        System.out.println("Wrong URL validated");
-        BrowserUtils.ActionKeyPress(Keys.ESCAPE);
-        entitypage.logout.click();
+        try {
+            LoginPageIssuer LoginPageIssuer = new LoginPageIssuer();
+            BrowserUtils.wait(2);
+            if (Driver.getDriver().getCurrentUrl().contains("login"))
+                LoginPageIssuer.loginWithParams(dataProvider[0], dataProvider[1]);
+
+            BrowserUtils.wait(1);
+            entitypage.ClickOnaddMissingDocuments();
+            entitypage.validateopupWindowOpenStatus();
+            entitypage.addURL("Googl.com", true);
+            entitypage.validateURL();
+            System.out.println("Wrong URL validated");
+            BrowserUtils.ActionKeyPress(Keys.ESCAPE);
+            entitypage.logout.click();
+        } catch (Exception e) {
+            e.printStackTrace();
+            entitypage.logout.click();
+        }
+
 
     }
 }

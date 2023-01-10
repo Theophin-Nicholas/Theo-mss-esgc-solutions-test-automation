@@ -14,6 +14,7 @@ import org.openqa.selenium.support.Color;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
+import org.testng.SkipException;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -204,6 +205,18 @@ public class DashboardPage extends UploadPage {
     @FindBy(xpath = "//table[./thead//th[text()='% Investment']]/tbody/tr/td[2]")
     public List<WebElement> investmentsInPerformanceChart;
 
+    @FindBy(xpath = "//table/thead//th[text()='Overall ESG Score']")
+    public WebElement OverallESGScoreColoumn;
+
+    @FindBy(xpath = "//table[./thead//th[text()='Overall ESG Score']]/tbody/tr/td[3]")
+    public List<WebElement> OverallESGScoreTabledata;
+
+    @FindBy(xpath = "//table/thead//th[text()='Total Critical Controversies']")
+    public WebElement TotalCriticalControversiesColoumn;
+
+    @FindBy(xpath = "//table[./thead//th[text()='Total Critical Controversies']]/tbody/tr/td[4]")
+    public List<WebElement> TotalCriticalControversiesTabledata;
+
     @FindBy(xpath = "//*[starts-with(text(),'Sum')]")
     public WebElement totalInvestmentInPerformanceChart;
 
@@ -225,6 +238,8 @@ public class DashboardPage extends UploadPage {
     @FindBy(xpath = "//td[@heap_id='perfchart']//span[@title]")
     public List<WebElement> performanceChartCompanyNames;
 
+    @FindBy(xpath = "//div[@id='perfError']")
+    public List<WebElement> PerformanceChartError;
     //=========== Geographic Risk Map
 
     @FindBy(xpath = "//div[text()='Geographic Risk Distribution']/following-sibling::div//*[@role]")
@@ -632,6 +647,7 @@ public class DashboardPage extends UploadPage {
 
     public void clickAndSelectAPerformanceChart(String performanceChartName) {
         BrowserUtils.scrollTo(performanceChart);
+        System.out.println("Validating " +performanceChartName );
         wait.until(ExpectedConditions.elementToBeClickable(
                         Driver.getDriver()
                                 .findElement(By.xpath("//button[./span[contains(text(),'" + performanceChartName + "')]]"))))
@@ -991,18 +1007,18 @@ public class DashboardPage extends UploadPage {
         return false;
     }
 
-    public boolean heatmapXAxisIsAvailable(){
-        try{
+    public boolean heatmapXAxisIsAvailable() {
+        try {
             return heatMapXAxisIndicatorTitle.isDisplayed();
-        }catch(Exception e){
+        } catch (Exception e) {
             return false;
         }
     }
 
-    public boolean validateSelectTwoStaticText(){
-        try{
+    public boolean validateSelectTwoStaticText() {
+        try {
             return selectTwoLabel.isDisplayed();
-        }catch(Exception e){
+        } catch (Exception e) {
             return false;
         }
     }
@@ -1128,7 +1144,7 @@ public class DashboardPage extends UploadPage {
 //TODO better approach needed
             BrowserUtils.waitForVisibility(Driver.getDriver().findElement(By.xpath("//*[contains(text(),\"" + colText + "\")]")), 30);
             Driver.getDriver().findElement(By.xpath("//*[text()='ESC']/following-sibling::* | //span[text()='X'] | //span[@class='close'] | //div[@role='dialog']/div/div[2]")).click();
-                    //""//"//span[text()='X'] | //span[@class='close'] | //div[@role='dialog']/div/div[2]")).click();
+            //""//"//span[text()='X'] | //span[@class='close'] | //div[@role='dialog']/div/div[2]")).click();
             return true;
         } catch (Exception e) {
             e.printStackTrace();
@@ -1464,7 +1480,7 @@ public class DashboardPage extends UploadPage {
 
     public List<String> getMethodologiesSections() {
         List<String> methodologySections = new ArrayList<>();
-        for(WebElement element: methodologySectionNames){
+        for (WebElement element : methodologySectionNames) {
             methodologySections.add(element.getText());
         }
         return methodologySections;
@@ -1500,9 +1516,9 @@ public class DashboardPage extends UploadPage {
         return false;
     }
 
-    public String getHeatMapPortfolioAverage(){
+    public String getHeatMapPortfolioAverage() {
         String portfolioAverage = heatmapPortfolioAverage.getText();
-        return portfolioAverage.substring(portfolioAverage.lastIndexOf(":")+1).trim();
+        return portfolioAverage.substring(portfolioAverage.lastIndexOf(":") + 1).trim();
 
     }
 
@@ -1541,10 +1557,10 @@ public class DashboardPage extends UploadPage {
     }
 
     public boolean verifyHeatMapTitle(String title) {
-        String xpath = "//div[@id='heatmapentity-test-id']//div[text()='"+title+"']";
-        try{
+        String xpath = "//div[@id='heatmapentity-test-id']//div[text()='" + title + "']";
+        try {
             BrowserUtils.waitForVisibility(Driver.getDriver().findElement(By.xpath(xpath)), 30);
-        }catch(Exception e){
+        } catch (Exception e) {
             return false;
         }
         return true;
@@ -1558,5 +1574,47 @@ public class DashboardPage extends UploadPage {
         } while (heatMapCells.get(randomCell).getText().equals("0%"));
         BrowserUtils.scrollTo(heatMapCells.get(randomCell)).click();
     }
+
+    public void verifyOverallESGScoreCatgories() {
+        List<String> categories = Arrays.asList(new String[]{"Weak", "Limited", "Robust", "Advanced"});
+        for (WebElement e : OverallESGScoreTabledata) {
+            assertTestCase.assertTrue(categories.contains(e.getText()), "Validate OverAll ESG Scores");
+        }
+    }
+
+    public void verifyOverallESGTotalControversies() {
+        if (PerformanceChartError.size() < 1) {
+            for (WebElement e : TotalCriticalControversiesTabledata) {
+                if (e.getText().equals("")) {
+                    assertTestCase.assertTrue(true, "Validated if controversies are blank");
+                } else if (Integer.valueOf(e.getText()) == 0) {
+                    assertTestCase.assertEquals(Color.fromString(e.getCssValue("color")).asHex(),"#263238", "Validated if controversies are Zero");
+                } else if (Integer.valueOf(e.getText()) > 0) {
+                    assertTestCase.assertEquals(Color.fromString(e.getCssValue("color")).asHex(),"#b31717", "Validated if controversies are Zero");
+                }
+            }
+        }else{
+            throw new SkipException("Performance chart data not displayed");
+        }
+    }
+
+    public boolean isOverAllESGColumAvailable(){
+        try {
+            return OverallESGScoreColoumn.isDisplayed();
+        } catch(Exception e){
+            return false;
+        }
+
+
+    }
+
+    public boolean isTotalControversiesColumAvailable(){
+        try{
+        return TotalCriticalControversiesColoumn.isDisplayed();
+        } catch(Exception e){
+            return false;
+        }
+    }
+
 }
 
