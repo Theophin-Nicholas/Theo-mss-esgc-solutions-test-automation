@@ -274,4 +274,34 @@ public class ExcelUtil {
     public int getLastRowNum() {
         return workSheet.getLastRowNum();
     }
+
+    public Row getRow(int rowIndex) {
+        return workSheet.getRow(rowIndex);
+    }
+
+    public List<String> getRowData(int rowIndex, String nullValue) {
+        List<String> data = new ArrayList<>();
+        Row row = workSheet.getRow(rowIndex);
+        if(row == null) return data;
+        for (Cell cell : row) {
+            if (cell.getCellType() == CellType.BLANK) data.add(nullValue);
+            else if (cell.getCellType() == CellType.NUMERIC) data.add(String.valueOf(cell.getNumericCellValue()));
+            else data.add(cell.toString());
+        }
+        return data;
+    }
+    public List<String> getRowData(int rowIndex){
+        return getRowData(rowIndex, "");
+    }
+
+    public List<String> getRowData(String data){
+        //System.out.println("Last Row Num = "+workSheet.getLastRowNum());
+        for (int i = 0; i <=workSheet.getLastRowNum(); i++) {
+            if(getRowData(i).contains(data)){
+                return getRowData(i);
+            }
+        }
+        System.out.println("Data not found");
+        return null;
+    }
 }

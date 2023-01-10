@@ -81,6 +81,9 @@ public class DatabaseDriver {
      * only first row will be returned. The rest of the data will be ignored
      */
     public static Map<String, Object> getRowMap(String query) {
+        if (getQueryResultList(query).size() == 0) {
+            return null;
+        }
         return getQueryResultMap(query).get(0);
     }
 

@@ -256,7 +256,6 @@ public class RegulatoryReportingPageExcelValidation extends DataValidationTestBa
             description = "Data Validation | Regulatory Reporting | Verify the data downloaded in the generated annual report excel is for the latest data available for the portfolios irrespective of reporting year when use latest data filter is selected")
     @Xray(test = {10855})
     public void verifyLatestDataAvailableForPortfoliosWithLatestDataTest() {
-        //todo: Step 8, 9 and 10 are not completed yet
         DashboardPage dashboardPage = new DashboardPage();
         dashboardPage.navigateToPageFromMenu("Regulatory Reporting");
         test.info("Navigated to Regulatory Reporting Page");
@@ -292,7 +291,12 @@ public class RegulatoryReportingPageExcelValidation extends DataValidationTestBa
             System.out.println("Reports are extracted");
             assertTestCase.assertTrue(reportingPage.verifySFDRCompanyOutput(selectedPortfolios),
                     "SFDR Company output for portfolio coverage is verified for Excel vs DB");
-            System.out.println("SFDR Company output for portfolio coverage is verified for Excel vs DB");
+            assertTestCase.assertTrue(reportingPage.verifyUserInputHistory(selectedPortfolios),
+                    "User input history for portfolio coverage is verified for Excel vs DB");
+            System.out.println("SFDR Company output and User input history for portfolio coverage is verified for Excel vs DB");
+            assertTestCase.assertTrue(reportingPage.verifyPortfolioLevelOutput(selectedPortfolios),
+                    "Portfolio level output for portfolio coverage is verified for Excel vs DB");
+            System.out.println("Portfolio level output for portfolio coverage is verified for Excel vs DB");
         } catch (Exception e) {
             e.printStackTrace();
             assertTestCase.assertTrue(false, "New tab verification failed");
