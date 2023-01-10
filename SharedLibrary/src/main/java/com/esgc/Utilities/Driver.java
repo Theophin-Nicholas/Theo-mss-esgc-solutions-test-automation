@@ -102,6 +102,8 @@ public class Driver {
                         chromeOptions.addArguments("--diable-gpu");
                         chromeOptions.addArguments("--disable-extensions");
                         chromeOptions.addArguments("--no-sandbox");
+                        chromeOptions.addArguments("--ignore-ssl-errors=yes");
+                        chromeOptions.addArguments("--ignore-certificate-errors");
                         desiredCapabilities.setCapability(ChromeOptions.CAPABILITY, chromeOptions);
                         RemoteWebDriver driver = new RemoteWebDriver(url, desiredCapabilities);
                         driver.setFileDetector(new LocalFileDetector());
