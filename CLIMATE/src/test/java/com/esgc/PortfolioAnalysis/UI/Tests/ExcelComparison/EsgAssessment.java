@@ -5,7 +5,6 @@ import com.esgc.Dashboard.DB.DBQueries.DashboardQueries;
 import com.esgc.Dashboard.UI.Pages.DashboardPage;
 import com.esgc.Dashboard.UI.Tests.Export.ExportUtils;
 import com.esgc.Utilities.BrowserUtils;
-import com.esgc.Dashboard.DB.DBQueries.DashboardQueries;
 import org.testng.Assert;
 
 import java.util.List;

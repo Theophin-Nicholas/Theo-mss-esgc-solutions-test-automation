@@ -6,8 +6,6 @@ import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.Xray;
 import org.testng.annotations.Test;
 
-import java.util.List;
-
 public class PerfomanceWidget extends DashboardUITestBase {
 
     @Test(groups = {"dashboard", "regression", "ui", "smoke"})
