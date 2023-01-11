@@ -38,12 +38,13 @@ public class ExportTests extends UITestBase {
     public void verifyExportFunctionalityAndExcelFieldsWithUI(String researchLine) {
 
         ResearchLinePage researchLinePage = new ResearchLinePage();
+        researchLine = "Green Share Assessment";
+        researchLinePage.navigateToResearchLine(researchLine);
         if (researchLine.equals("Physical Risk Hazards") || researchLine.equals("Temperature Alignment")
             || researchLine.equals("Physical Risk Management")) {
             throw new SkipException("Physical Risk Hazards - Export is not ready to test in " + researchLine);
         }
 
-        researchLinePage.navigateToResearchLine(researchLine);
         researchLinePage.selectSamplePortfolioFromPortfolioSelectionModal();
         researchLinePage.clickFiltersDropdown();
         researchLinePage.selectOptionFromFiltersDropdown("as_of_date", "May 2022");
