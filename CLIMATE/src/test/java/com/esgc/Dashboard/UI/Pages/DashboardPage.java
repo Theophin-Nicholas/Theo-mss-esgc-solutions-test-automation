@@ -1291,8 +1291,9 @@ public class DashboardPage extends UploadPage {
         String todayDate = DateTimeUtilities.getCurrentDate("MMMM d, yyyy");
         controversiesTableDates.forEach(e -> {
             String date = e.getText();
-            assertTestCase.assertTrue(
-                    DateTimeUtilities.getDayDifference(date, todayDate, "MMMM d, yyyy") < 60,
+            int difference = (int)DateTimeUtilities.getDayDifference(date, todayDate, "MMMM d, yyyy");
+            System.out.println("Date Difference:" +  difference + " days");
+            assertTestCase.assertTrue(difference <= 60,
                     "Verify Controversies are displayed by last 60 days");
 
         });

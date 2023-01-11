@@ -80,7 +80,7 @@ public class EntityClimateProfilePage extends ClimatePageBase {
     @FindBy(xpath = "//input[@id='platform-search-test-id']")
     public WebElement searchInputBox;
 
-    @FindBy(xpath = " //div[@id='mini-0']")
+    @FindBy(xpath = "//div[@id='mini-0']")
     public WebElement firstElementOfSearch;
 
     @FindBy(id = "export_sources_doc_button")
@@ -107,8 +107,8 @@ public class EntityClimateProfilePage extends ClimatePageBase {
     @FindBy(xpath = "//div[text()='This company has ']/span")
     public WebElement subsidiaryLink;
 
-    @FindBy(xpath = "//li[@role='menuitem']/span[text()]")
-    public WebElement globalHeaderLabel;
+    @FindBy(xpath = "//li[@role='menuitem']//span[text()]")
+    public WebElement globalHeaderCompanyNameLabel;
 
     @FindBy(xpath = "//header/..//div[starts-with(text(),'Subsidiar')]")
     public WebElement subsidiaryCompaniesHeader;
@@ -206,7 +206,7 @@ public class EntityClimateProfilePage extends ClimatePageBase {
     @FindBy(id = "phyClimate-test-id")
     public WebElement physicalClimateHazards;
 
-    @FindBy(xpath = "//header//div/span/span[contains(text(),'Orbis ID:')]")
+    @FindBy(xpath = "//span[contains(text(),'Orbis ID:')]/following-sibling::span")
     public WebElement orbisIdLabel;
 
     @FindBy(xpath = "//div/span[contains(text(),'Orbis ID:')]/following-sibling::span")
@@ -436,13 +436,13 @@ public class EntityClimateProfilePage extends ClimatePageBase {
     public WebElement PhysicalRiskManagementTable;
     //ESG Monitoring Section
 
-    @FindBy(xpath = "//div[@id='cardInfo_box']/div[text()='Overall ESG Score']")
-    public WebElement overallEsgScoreWidget;
+    @FindBy(xpath = "//div[@id='cardInfo_box'][./div[text()='ESG Score']]")
+    public WebElement esgScoreWidget;
 
     @FindBy(xpath = "//div[@id='sector_comparison_chart_box']")
     public WebElement sectorComparisonChart;
 
-    @FindBy(xpath = "//div[.='Overall ESG Score']")
+    @FindBy(xpath = "//div[.='ESG Score']")
     public WebElement esgTitle;
 
     @FindBy(xpath = "//div[@id='cardInfo_box']/div[text()='Overall ESG Score']/parent::div/div/div/div")
@@ -559,7 +559,7 @@ public class EntityClimateProfilePage extends ClimatePageBase {
     }
 
     public void clickGlobalHeader() {
-        globalHeaderLabel.click();
+        BrowserUtils.waitForClickablility(globalHeaderCompanyNameLabel,20).click();
     }
 
     public void clickSubsidiaryCompaniesLink() {
@@ -1155,8 +1155,11 @@ public class EntityClimateProfilePage extends ClimatePageBase {
 
     }
 
-    public String getEntityOrbisId() {
-        return orbisIdLabel.getText().replace("Orbis ID: ", "");
+    public String getEntityOrbisIdFromUI() {
+        clickGlobalHeader();
+        String orbisId = orbisIdLabel.getText();
+        sendESCkey();
+        return orbisId;
     }
 
     public String getGreenShareScoreRange() {
@@ -1192,8 +1195,7 @@ public class EntityClimateProfilePage extends ClimatePageBase {
 
     public boolean verifyOverallEsgScoreWidget() {
         try {
-            wait.until(ExpectedConditions.visibilityOf(overallEsgScoreWidget));
-            return true;
+            return wait.until(ExpectedConditions.visibilityOf(esgScoreWidget)).isDisplayed();
         } catch (Exception e) {
             return false;
         }
@@ -2210,12 +2212,8 @@ public class EntityClimateProfilePage extends ClimatePageBase {
         List<String> scores = supplyChainRiskScores.stream().map(WebElement::getText).collect(Collectors.toList());
         System.out.println("scores = " + scores);
 
-        //current year
-        String currentYear = Year.now().minusYears(1).toString();
-        System.out.println("currentYear = " + currentYear);
-
         //Database Connection
-        String query = "select * from DF_TARGET.ENTITY_SCORE_CATEGORY where ENTITY_ID_BVD9 = '" + entity + "' and RISK_CATEGORY_ID in (6, 7 ) and RELEASE_YEAR='" + currentYear + "'";
+        String query = "select * from DF_TARGET.ENTITY_SCORE_CATEGORY where ENTITY_ID_BVD9 = '" + entity + "' and RISK_CATEGORY_ID in (6, 7 ) qualify row_number() over(partition by RISK_CATEGORY_ID order by RELEASE_YEAR desc, RELEASE_MONTH desc)=1";
         DatabaseDriver.createDBConnection();
         List<Map<String, Object>> result = DatabaseDriver.getQueryResultMap(query);
         System.out.println(result.size() + " records found");

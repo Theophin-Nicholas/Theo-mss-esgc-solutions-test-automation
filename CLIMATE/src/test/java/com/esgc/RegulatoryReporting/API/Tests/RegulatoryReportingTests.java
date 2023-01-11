@@ -1,8 +1,7 @@
 package com.esgc.RegulatoryReporting.API.Tests;
 
-import com.esgc.Base.UI.Pages.LoginPage;
-import com.esgc.RegulatoryReporting.API.Controllers.RegulatoryReportingAPIController;
 import com.esgc.Base.TestBases.UITestBase;
+import com.esgc.Base.UI.Pages.LoginPage;
 import com.esgc.Dashboard.UI.Pages.DashboardPage;
 import com.esgc.RegulatoryReporting.API.Controllers.RegulatoryReportingAPIController;
 import com.esgc.RegulatoryReporting.UI.Pages.RegulatoryReportingPage;
@@ -10,7 +9,6 @@ import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.Driver;
 import com.esgc.Utilities.EntitlementsBundles;
 import com.esgc.Utilities.Xray;
-import io.restassured.response.Response;
 import org.openqa.selenium.JavascriptExecutor;
 import org.testng.annotations.Test;
 
@@ -19,11 +17,12 @@ import java.util.List;
 import static com.esgc.Utilities.Groups.*;
 
 public class RegulatoryReportingTests extends UITestBase {
-    RegulatoryReportingPage reportingPage = new RegulatoryReportingPage();
+
 
     @Test(groups = {REGRESSION, REGULATORY_REPORTING, API}, description = "Data Validation| MT | Regulatory Reporting | Validate Portfolio list and portfolio-details")
     @Xray(test = {11140})
     public void verifyPortfolioPortfolioDetailsListTest() {
+        RegulatoryReportingPage reportingPage = new RegulatoryReportingPage();
         DashboardPage dashboardPage = new DashboardPage();
         //Verify all the portfolios that the user has uploaded, are listed in the "select portfolio" section.
         dashboardPage.navigateToPageFromMenu("Dashboard");
@@ -58,6 +57,7 @@ public class RegulatoryReportingTests extends UITestBase {
         }
     }
 
+    //TODO should be in API package
     @Test(groups = {"regression", "regulatoryReporting", "api"})
     @Xray(test = {11681})
     public void verifyDownloadHistory() {
