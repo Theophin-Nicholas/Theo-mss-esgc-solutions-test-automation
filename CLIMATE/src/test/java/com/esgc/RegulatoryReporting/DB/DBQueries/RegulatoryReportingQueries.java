@@ -139,6 +139,12 @@ public class RegulatoryReportingQueries {
                 "select SEC_ID, COMPANY_NAME, \"VALUE\", round(\"VALUE\"*100/(select sum(\"VALUE\") from p),2) as \"Exposure Amount Percent\" from p";
         return getQueryResultMap(query);
     }
+    public List<Map<String, Object>> getUserInputHistoryWithEUR(String portfolioId) {
+        String query = "with p as (Select * from df_portfolio where portfolio_id ='"+portfolioId+"'),\n" +
+                "c as (select top 1 MIDRATE from DF_LOOKUP.fx_rate where FROMCURRCODE='USD' and TOCURRCODE='EUR' order by CREATE_DATE_TIME Desc)\n" +
+                "select SEC_ID, COMPANY_NAME, VALUE*c.MIDRATE as VALUE, round(VALUE*100/(select sum(VALUE) from p),2) as percentage from p, c order by sec_id";
+        return getQueryResultMap(query);
+    }
 
     public Map<String, Object> getUserInputHistory(String portfolioId, String secId) {
         String query = "with p as (Select * from df_portfolio where portfolio_id ='"+portfolioId+"')\n" +
@@ -244,9 +250,9 @@ public class RegulatoryReportingQueries {
 
             //if exposure or entpValue is 0 then skip
             if (exposure == 0 || entpValue == 0) continue;
-            Scope1GHGemissions = Scope1GHGemissions + PortfolioUtilities.round(scope1 * PortfolioUtilities.round(exposure / entpValue, 2),2);
-            Scope2GHGemissions = Scope2GHGemissions + PortfolioUtilities.round(scope2 * PortfolioUtilities.round(exposure / entpValue, 3),3);
-            Scope3GHGemissions = Scope3GHGemissions + PortfolioUtilities.round(totalGHGEmissions * PortfolioUtilities.round(exposure / entpValue, 4),4);
+            Scope1GHGemissions = Scope1GHGemissions + PortfolioUtilities.round(scope1 * exposure / entpValue,2);
+            Scope2GHGemissions = Scope2GHGemissions + PortfolioUtilities.round(scope2 * exposure / entpValue,3);
+            Scope3GHGemissions = Scope3GHGemissions + PortfolioUtilities.round(totalGHGEmissions * exposure / entpValue, 4);
             System.out.println(Scope1GHGemissions+", "+Scope2GHGemissions+", "+Scope3GHGemissions);
             System.out.println();
         }

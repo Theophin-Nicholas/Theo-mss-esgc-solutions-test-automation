@@ -761,7 +761,7 @@ public class RegulatoryReportingPage extends UploadPage {
 
             //open Excel file
             String excelName = rrStatusPage_PortfoliosList.get(0).getText().replaceAll("ready", "").trim();
-            ExcelUtil excelData = getExcelData(excelName, (selectedPortfolios.indexOf(portfolioName) + 1) + "_" + portfolioName);
+            ExcelUtil excelData = getExcelData(excelName, selectedPortfolios.indexOf(portfolioName) + 1);
             for (int i = 0; i < dbData.size(); i++) {
                 //System.out.println("DBDate = "+dbData.get(i));
                 String companyName = dbData.get(i).get("COMPANY_NAME").toString();
