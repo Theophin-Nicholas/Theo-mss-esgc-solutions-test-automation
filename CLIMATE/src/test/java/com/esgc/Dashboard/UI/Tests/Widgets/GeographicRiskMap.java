@@ -1,8 +1,8 @@
 package com.esgc.Dashboard.UI.Tests.Widgets;
 
+import com.esgc.Base.TestBases.DashboardUITestBase;
 import com.esgc.Dashboard.UI.Pages.DashboardPage;
 import com.esgc.TestBase.DataProviderClass;
-import com.esgc.Base.TestBases.DashboardUITestBase;
 import com.esgc.Utilities.Driver;
 import com.esgc.Utilities.EntitlementsBundles;
 import com.esgc.Utilities.Xray;
@@ -10,10 +10,12 @@ import org.testng.annotations.Test;
 
 import java.util.List;
 
+import static com.esgc.Utilities.Groups.*;
+
 public class GeographicRiskMap extends DashboardUITestBase {
     //TODO Geomap is de-scoped until get an update from business
    //Todo there is random fails due to clicking on the country."Holdings Title Verification"
-    @Test(enabled = false, groups = {"ui", "dashboard", "smoke", "regression"},
+    @Test(enabled = false, groups = {UI, DASHBOARD, SMOKE, REGRESSION},
             dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
     @Xray(test = {1932, 4548, 7565, })
     public void verifyGeographicRiskMapIsDisplayed(String researchLine) {
@@ -47,7 +49,7 @@ public class GeographicRiskMap extends DashboardUITestBase {
 
     }
     //TODO Geomap is de-scoped until get an update from business
-    @Test(enabled = false, groups = {"ui", "dashboard", "smoke", "regression"},
+    @Test(enabled = false, groups = {UI, DASHBOARD, SMOKE, REGRESSION},
             dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
     @Xray(test = {4559, 6309, 6310, 6311})
     public void verifyGeographicRiskMapRedirectLink(String researchLine) {

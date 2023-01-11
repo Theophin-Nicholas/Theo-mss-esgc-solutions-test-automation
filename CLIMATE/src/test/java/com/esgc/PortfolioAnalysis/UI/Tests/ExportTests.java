@@ -2,13 +2,14 @@ package com.esgc.PortfolioAnalysis.UI.Tests;
 
 import com.esgc.Base.API.APIModels.APIFilterPayload;
 import com.esgc.Base.API.Controllers.APIController;
-import com.esgc.PortfolioAnalysis.UI.Pages.ResearchLinePage;
-import com.esgc.TestBase.DataProviderClass;
 import com.esgc.Base.TestBases.UITestBase;
+import com.esgc.Base.UI.Pages.LoginPage;
+import com.esgc.PortfolioAnalysis.UI.Pages.ResearchLinePage;
 import com.esgc.PortfolioAnalysis.UI.Tests.ExcelComparison.BrownShareAssessment;
 import com.esgc.PortfolioAnalysis.UI.Tests.ExcelComparison.CarbonFootprint;
 import com.esgc.PortfolioAnalysis.UI.Tests.ExcelComparison.EsgAssessment;
 import com.esgc.PortfolioAnalysis.UI.Tests.ExcelComparison.GreenShareAssessment;
+import com.esgc.TestBase.DataProviderClass;
 import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.ExcelUtil;
 import com.esgc.Utilities.Xray;
@@ -21,10 +22,12 @@ import org.testng.annotations.Test;
 import java.io.File;
 import java.io.IOException;
 
+import static com.esgc.Utilities.Groups.*;
+
 
 public class ExportTests extends UITestBase {
 //TODO Needs attention. Tests are failing.
-    @Test(groups = {"regression", "smoke", "export"},
+    @Test(groups = {REGRESSION, SMOKE, EXPORT},
             dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
     @Xray(test = {2092, 2093, 2108, 2110, 2112, 2113, 2625, 3004, 3396, 3403, 3405, 3406, 4648, 5169, 3621, 8953, 9656, 9657, 9658, 10679 })
     public void verifyExportFunctionalityAndExcelFieldsWithUI(String researchLine) {
@@ -97,7 +100,7 @@ public class ExportTests extends UITestBase {
         }
     }
 
-    @Test(groups = {"regression", "export"}, dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
+    @Test(groups = {REGRESSION, EXPORT}, dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
     @Xray(test = {7254})
     public void verifyUserIsAbleToDownloadPDFTest(String researchLine) {
         System.out.println("PDF Download test for " + researchLine);
@@ -140,7 +143,7 @@ public class ExportTests extends UITestBase {
         }
     }
 
-    @Test(groups = {"regression", "smoke", "export"},
+    @Test(groups = {REGRESSION, SMOKE, EXPORT},
             dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
     @Xray(test = {2883, 2962})
     public void verifyBenchMarkExportFunctionalityandExcelFieldsWithUI(String researchLine) {
@@ -228,7 +231,7 @@ public class ExportTests extends UITestBase {
             System.out.println("There is no Directory to DELETE");
     }
 
-    @Test(groups = {"regression", "export"},
+    @Test(groups = {REGRESSION, EXPORT},
             dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
     @Xray(test = {7253})
     public void verifyResearchLinesExportOptions(String researchLine) {
@@ -247,4 +250,37 @@ public class ExportTests extends UITestBase {
         researchLinePage.verifyExportOptions(researchLine);
         researchLinePage.clickOutsideOfDrillDownPanel();
     }
+
+    @Test(groups = {"regression", "export"}, dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
+    @Xray(test = {2846})
+    public void verifyCompaniesOrderInRegionsAndSectors(String researchLine) {
+
+        //TODO item for Brown Share, once https://esjira/browse/ESGCA-12562 is fixed we need to check Brown Share
+
+        ResearchLinePage researchLinePage = new ResearchLinePage();
+        researchLinePage.navigateToResearchLine(researchLine);
+        if (researchLine.equals("Physical Risk Hazards") || researchLine.equals("Temperature Alignment")
+                || researchLine.equals("Physical Risk Management") || researchLine.equals("Brown Share Assessment")) {
+            throw new SkipException("Export is not ready to test in " + researchLine);
+        }
+        researchLinePage.selectSamplePortfolioFromPortfolioSelectionModal();
+
+        researchLinePage.clickExportDropdown();
+        researchLinePage.selectExportData("Data", researchLine);
+        assertTestCase.assertTrue(researchLinePage.checkIfExportingLoadingMaskIsDisplayed(),
+                "Exporting... Load Mask is displayed", 2620);
+
+        researchLine = researchLine.replaceAll("Management", "Mgmt");
+        String expectedTitle = String.format("Portfolio Analysis - %s", researchLine);
+        BrowserUtils.wait(10);
+        Assert.assertEquals(researchLinePage.getDataFromExportedFile(0, 0, researchLine), expectedTitle,
+                "Exported Document verified by title for " + researchLinePage + " page");
+
+        String sheetName = String.format("Summary %s", researchLine);
+
+        ExcelUtil exportedDocument = new ExcelUtil(BrowserUtils.exportPath(researchLine), sheetName);
+        researchLinePage.verifyCompaniesOrderInRegionsAndSections(researchLine, exportedDocument, "Regions", 3);
+        researchLinePage.verifyCompaniesOrderInRegionsAndSections(researchLine, exportedDocument, "Sectors", 12);
+    }
+
 }

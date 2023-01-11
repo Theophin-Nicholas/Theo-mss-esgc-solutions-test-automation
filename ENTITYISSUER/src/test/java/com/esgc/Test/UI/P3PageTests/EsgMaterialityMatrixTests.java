@@ -17,10 +17,12 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.esgc.Utilities.Groups.*;
+
 public class EsgMaterialityMatrixTests extends EntityPageTestBase {
 
 
-    @Test(groups = {"entity_Issuer_profile", "smoke", "regression", "ui"}, dataProvider = "ESGMaterialitycredentials", dataProviderClass = IssuerDataProviderClass.class)
+    @Test(groups = {"entity_Issuer_profile", SMOKE, REGRESSION, UI}, dataProvider = "ESGMaterialitycredentials", dataProviderClass = IssuerDataProviderClass.class)
     @Xray(test = {9884, 9921})
     public void validateESGMaterialityMatrixHeader(String... dataProvider) {
         EntityIssuerPage entityIssuerPage = new EntityIssuerPage();
@@ -28,6 +30,8 @@ public class EsgMaterialityMatrixTests extends EntityPageTestBase {
             String userId = dataProvider[0].toString();
             String password = dataProvider[1].toString();
             LoginPageIssuer LoginPageIssuer = new LoginPageIssuer();
+            BrowserUtils.wait(1);
+
             if (Driver.getDriver().getCurrentUrl().contains("login"))
                 LoginPageIssuer.loginWithParams(userId, password);
 
@@ -42,7 +46,7 @@ public class EsgMaterialityMatrixTests extends EntityPageTestBase {
 
     }
 
-    @Test(groups = {"entity_climate_profile", "smoke", "regression", "ui"}, dataProvider = "ESGMaterialitycredentials", dataProviderClass = IssuerDataProviderClass.class)
+    @Test(groups = {ENTITY_PROFILE, SMOKE, REGRESSION, UI}, dataProvider = "ESGMaterialitycredentials", dataProviderClass = IssuerDataProviderClass.class)
     @Xray(test = {9924})
     public void validateEsgMaterialityMatrixColumns(String... dataProvider) {
         EntityIssuerPage entityIssuerpage = new EntityIssuerPage();
@@ -50,6 +54,7 @@ public class EsgMaterialityMatrixTests extends EntityPageTestBase {
             String userId = dataProvider[0].toString();
             String password = dataProvider[1].toString();
             LoginPageIssuer LoginPageIssuer = new LoginPageIssuer();
+            BrowserUtils.wait(1);
             if (Driver.getDriver().getCurrentUrl().contains("login"))
                 LoginPageIssuer.loginWithParams(userId, password);
 
@@ -77,7 +82,7 @@ public class EsgMaterialityMatrixTests extends EntityPageTestBase {
     }
 
 
-    @Test(groups = {"esg_materiality", "smoke", "regression", "ui"}, dataProvider = "ESGMaterialitycredentials", dataProviderClass = IssuerDataProviderClass.class)
+    @Test(groups = {"esg_materiality", SMOKE, REGRESSION, UI}, dataProvider = "ESGMaterialitycredentials", dataProviderClass = IssuerDataProviderClass.class)
     @Xray(test = {9925})
     public void validateEsgMaterialityFooter(String... dataProvider) {
         EntityIssuerPage entityIssuerpage = new EntityIssuerPage();
@@ -85,6 +90,7 @@ public class EsgMaterialityMatrixTests extends EntityPageTestBase {
             String userId = dataProvider[0].toString();
             String password = dataProvider[1].toString();
             LoginPageIssuer LoginPageIssuer = new LoginPageIssuer();
+            BrowserUtils.wait(1);
             if (Driver.getDriver().getCurrentUrl().contains("login"))
                 LoginPageIssuer.loginWithParams(userId, password);
 
@@ -122,7 +128,7 @@ public class EsgMaterialityMatrixTests extends EntityPageTestBase {
 
     }
 
-    @Test(groups = {"esg_materiality", "regression", "ui","Test"}, dataProvider = "ESGMaterialitycredentials", dataProviderClass = IssuerDataProviderClass.class)
+    @Test(groups = {"esg_materiality", REGRESSION, UI,"Test"}, dataProvider = "ESGMaterialitycredentials", dataProviderClass = IssuerDataProviderClass.class)
 
     @Xray(test = {9926})
     public void validateEsgMaterialitySubCategoryModel(String... dataProvider) {

@@ -8,9 +8,12 @@ import com.esgc.Utilities.APIUtilities;
 import com.esgc.Utilities.Xray;
 import org.testng.annotations.Test;
 
+import static com.esgc.Utilities.Groups.API;
+import static com.esgc.Utilities.Groups.REGRESSION;
+
 public class AuthorizationTest extends APITestBase {
 
-    @Test(groups = {"api", "regression"}, dataProvider = "API Research Lines")
+    @Test(groups = {API, REGRESSION}, dataProvider = "API Research Lines")
     public void APIAuthorization(String researchLine) {
         APIController apiController = new APIController();
         APIFilterPayload apiFilterPayload = new APIFilterPayload("all", "all", "03", "2021", "");
@@ -44,7 +47,7 @@ public class AuthorizationTest extends APITestBase {
 
     //3340 TCFD
     @Xray(test = {3333, 3334, 3335, 3336, 3337, 3338, 3339, 3341})
-    @Test(groups = {"api", "regression"}, dataProvider = "API Research Lines")
+    @Test(groups = {API, REGRESSION}, dataProvider = "API Research Lines")
     public void invalidPortfolioAuthorizationTest(String researchLine) {
         APIController apiController = new APIController();
         APIFilterPayload apiFilterPayload = new APIFilterPayload("all", "all", "03", "2021", "");

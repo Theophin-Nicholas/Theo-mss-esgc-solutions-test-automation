@@ -9,9 +9,12 @@ import org.testng.annotations.Test;
 
 import java.util.List;
 
+import static com.esgc.Utilities.Groups.API;
+import static com.esgc.Utilities.Groups.REGRESSION;
+
 public class ControversiesEntitlementTests extends DataValidationTestBase {
 
-    @Test(groups = {"api", "regression"})
+    @Test(groups = {API, REGRESSION})
     @Xray(test=7958)
     public void VerifyControversiesAvailable() {
         Response portfoliosResponse = APIUtilities.getAvailablePortfoliosForUser();
@@ -21,7 +24,7 @@ public class ControversiesEntitlementTests extends DataValidationTestBase {
         dashboardAPIController.getControversies(portfolioId,"all","all", "latest","latest").then().assertThat().statusCode(200);
     }
 
-    @Test(groups = {"api", "regression"})
+    @Test(groups = {API, REGRESSION})
     @Xray(test=7958)
     public void VerifyControversiesNotAvailableBundle() {
         getNoControversiesBundleAccessTokenDataValidation();

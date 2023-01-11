@@ -14,10 +14,12 @@ import org.testng.asserts.SoftAssert;
 
 import java.time.Duration;
 
+import static com.esgc.Utilities.Groups.*;
+
 public class EntityIssuerPageRoutingTest extends EntityPageTestBase {
 
     @Xray(test = {7634, 7331})
-    @Test(groups = {"regression", "ui", "entity_issuer"},
+    @Test(groups = {REGRESSION, UI, ISSUER},
             dataProvider = "RoutingCheck", dataProviderClass = IssuerDataProviderClass.class,
             description = "Verify if Landing page is routing correctly")
     public void validateRouting(String UserID, String Password, String coverage_status, String expectedPage ) {

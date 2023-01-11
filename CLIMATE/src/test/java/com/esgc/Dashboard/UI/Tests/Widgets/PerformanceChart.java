@@ -1,8 +1,8 @@
 package com.esgc.Dashboard.UI.Tests.Widgets;
 
+import com.esgc.Base.TestBases.DashboardUITestBase;
 import com.esgc.Dashboard.UI.Pages.DashboardPage;
 import com.esgc.TestBase.DataProviderClass;
-import com.esgc.Base.TestBases.DashboardUITestBase;
 import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.PortfolioUtilities;
 import com.esgc.Utilities.Xray;
@@ -16,9 +16,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.esgc.Utilities.Groups.*;
+
 public class PerformanceChart extends DashboardUITestBase {
 //TODO portfolio selection should be updated since some portfolios do not have enough data
-    @Test(groups = {"ui", "dashboard", "smoke", "regression"})
+    @Test(groups = {UI, DASHBOARD, SMOKE, REGRESSION})
     @Xray(test = {2051, 4273, 4448, 2064, 7838, 8683, 8684, 8690})
     public void verifyPerformanceChartsAreDisplayed() {
         DashboardPage dashboardPage = new DashboardPage();
@@ -76,10 +78,10 @@ public class PerformanceChart extends DashboardUITestBase {
         test.info("Switched to Largest Holdings");
         assertTestCase.assertTrue(sizeOfTable <= 10, "max 10 companies are listed");
         assertTestCase.assertEquals(actualColumnNames, expectedColumnNames, "Largest Holdings Performance Chart Verified");
-        assertTestCase.assertEquals(actualTotalInvestment, expectedTotalInvestment, "Total Investments are matching", 2066);
+        assertTestCase.assertEquals(expectedTotalInvestment, actualTotalInvestment, "Total Investments are matching", 2066);
     }
 
-    @Test(groups = {"ui", "dashboard", "regression"},
+    @Test(groups = {UI, DASHBOARD, REGRESSION},
             dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
     @Xray(test = {2041, 2043, 2048, 2052, 2067, 3131, 3132, 3152, 3153, 4375, 4376, 4380, 6235, 7111, 7112, 7114})
     public void verifyPerformanceChartScoreCategoriesUnderColumns(String researchLine) {
@@ -318,7 +320,7 @@ public class PerformanceChart extends DashboardUITestBase {
     }
 
 
-    @Test(groups = {"ui", "dashboard", "regression"})
+    @Test(groups = {UI, DASHBOARD, REGRESSION})
     @Xray(test = {4459})
     public void verifyPerformanceChartSizes() {
         DashboardPage dashboardPage = new DashboardPage();
@@ -400,7 +402,7 @@ public class PerformanceChart extends DashboardUITestBase {
     }
 
 
-    @Test(groups = {"ui", "dashboard", "regression"})
+    @Test(groups = {UI, DASHBOARD, REGRESSION})
     @Xray(test = {7115})
     public void verifyPerformanceChartSelectedColumnRemainsSameForOtherTables() {
         DashboardPage dashboardPage = new DashboardPage();

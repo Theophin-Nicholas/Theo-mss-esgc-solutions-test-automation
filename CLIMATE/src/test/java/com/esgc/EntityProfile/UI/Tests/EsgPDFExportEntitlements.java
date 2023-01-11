@@ -1,19 +1,21 @@
 package com.esgc.EntityProfile.UI.Tests;
 
-import com.esgc.EntityProfile.UI.Pages.EntityClimateProfilePage;
+import com.esgc.Base.TestBases.UITestBase;
 import com.esgc.Base.UI.Pages.LoginPage;
+import com.esgc.EntityProfile.UI.Pages.EntityClimateProfilePage;
 import com.esgc.EntityProfile.UI.Pages.PDFTestMethods;
 import com.esgc.TestBase.DataProviderClass;
-import com.esgc.Base.TestBases.UITestBase;
 import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.EntitlementsBundles;
 import com.esgc.Utilities.Xray;
 import org.testng.annotations.Test;
 
+import static com.esgc.Utilities.Groups.*;
+
 public class EsgPDFExportEntitlements extends UITestBase {
 
 
-    @Test(groups = {"regression", "ui", "entitlements"})
+    @Test(groups = {REGRESSION, UI, ENTITLEMENTS})
     @Xray(test = {9207})
     public void validateExportWithoutEsgScoreEntitlement(){
         LoginPage login = new LoginPage();
@@ -31,7 +33,7 @@ public class EsgPDFExportEntitlements extends UITestBase {
         assertTestCase.assertTrue(!entityPage.IsExportSourcesDocumentsButtonAvailable(),"Verify Export or Source Documents button is not available");
     }
 
-    @Test(groups = {"regression", "ui", "entitlements"},dataProviderClass= DataProviderClass.class, dataProvider = "PDFExportButtonEntitlements")
+    @Test(groups = {REGRESSION, UI, ENTITLEMENTS},dataProviderClass= DataProviderClass.class, dataProvider = "PDFExportButtonEntitlements")
     @Xray(test = {10941})
     public void validatePDFExportButtonEntitlements(EntitlementsBundles entitlements){
         LoginPage login = new LoginPage();
@@ -76,7 +78,7 @@ public class EsgPDFExportEntitlements extends UITestBase {
 
 
 
-    @Test(groups = {"regression", "ui", "entitlements"},dataProviderClass= DataProviderClass.class, dataProvider = "PDFEntitlements")
+    @Test(groups = {REGRESSION, UI, ENTITLEMENTS},dataProviderClass= DataProviderClass.class, dataProvider = "PDFEntitlements")
     @Xray(test = {11765})
     public void validateBrownShareExportEntitlement(String... data){
         LoginPage login = new LoginPage();

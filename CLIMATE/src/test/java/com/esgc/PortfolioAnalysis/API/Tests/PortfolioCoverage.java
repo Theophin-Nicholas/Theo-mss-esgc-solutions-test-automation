@@ -3,18 +3,21 @@ package com.esgc.PortfolioAnalysis.API.Tests;
 import com.aventstack.extentreports.markuputils.CodeLanguage;
 import com.aventstack.extentreports.markuputils.MarkupHelper;
 import com.esgc.Base.API.APIModels.APIFilterPayload;
-import com.esgc.PortfolioAnalysis.API.APIModels.PortfolioCoverageWrapper;
 import com.esgc.Base.API.Controllers.APIController;
 import com.esgc.Base.TestBases.APITestBase;
+import com.esgc.PortfolioAnalysis.API.APIModels.PortfolioCoverageWrapper;
 import com.esgc.Utilities.APIUtilities;
 import com.esgc.Utilities.Xray;
 import io.restassured.response.Response;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Test;
 
+import static com.esgc.Utilities.Groups.API;
+import static com.esgc.Utilities.Groups.REGRESSION;
+
 public class PortfolioCoverage extends APITestBase {
 
-    @Test(groups = {"api", "regression"}, dataProvider = "API Research Lines")
+    @Test(groups = {API, REGRESSION}, dataProvider = "API Research Lines")
     @Xray(test = {  621, 1221, 652, 2100, 2587, 2422})
     //1723 TCFD
     //1691 Energy transition

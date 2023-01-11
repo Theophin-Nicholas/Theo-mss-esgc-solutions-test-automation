@@ -1,12 +1,12 @@
 package com.esgc.PortfolioAnalysis.DB.Tests;
 
 import com.esgc.Base.API.APIModels.APIFilterPayload;
+import com.esgc.Base.DB.DBModels.ResearchLineIdentifier;
+import com.esgc.Base.TestBases.DataValidationTestBase;
 import com.esgc.PortfolioAnalysis.API.APIModels.LeadersAndLaggards;
 import com.esgc.PortfolioAnalysis.API.APIModels.LeadersAndLaggardsWrapper;
 import com.esgc.PortfolioAnalysis.DB.DBModels.ESGLeaderANDLaggers;
-import com.esgc.Base.DB.DBModels.ResearchLineIdentifier;
 import com.esgc.Reporting.CustomAssertion;
-import com.esgc.Base.TestBases.DataValidationTestBase;
 import com.esgc.Utilities.APIUtilities;
 import com.esgc.Utilities.PortfolioUtilities;
 import com.esgc.Utilities.Xray;
@@ -24,12 +24,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static com.esgc.Utilities.Groups.DATA_VALIDATION;
+import static com.esgc.Utilities.Groups.REGRESSION;
 import static com.esgc.Utilities.PortfolioUtilities.distinctByKey;
 
 public class LeadersAndLaggardsTests extends DataValidationTestBase {
 
 
-    @Test(groups = {"regression", "data_validation"}, dataProvider = "researchLines")
+    @Test(groups = {REGRESSION, DATA_VALIDATION}, dataProvider = "researchLines")
     @Xray(test = {2126, 2125, 2892, 2891, 2476, 2130, 2129, 2127,
             2893, 2497, 2480, 1287, 2132, 2131, 2896, 2897, 2128,
             2894, 2483, 2482, 3836, 3885, 2481, 2890, 3889, 3882,
@@ -303,7 +305,7 @@ public class LeadersAndLaggardsTests extends DataValidationTestBase {
         return lists;
     }
 
-    @Test(groups = {"regression", "data_validation"})
+    @Test(groups = {REGRESSION, DATA_VALIDATION})
     @Xray(test = {8452, 9873})
     public void validateESGLeadersAndLaggardsData() {
 

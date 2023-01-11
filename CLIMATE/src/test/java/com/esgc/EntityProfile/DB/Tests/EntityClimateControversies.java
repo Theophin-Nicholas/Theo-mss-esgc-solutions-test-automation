@@ -1,8 +1,8 @@
 package com.esgc.EntityProfile.DB.Tests;
 
+import com.esgc.Base.TestBases.DataValidationTestBase;
 import com.esgc.EntityProfile.API.APIModels.EntityControversies.Controversies;
 import com.esgc.EntityProfile.API.Controllers.EntityProfileClimatePageAPIController;
-import com.esgc.Base.TestBases.DataValidationTestBase;
 import com.esgc.EntityProfile.API.EntityProfilePageEndpoints;
 import com.esgc.Utilities.Environment;
 import com.esgc.Utilities.Xray;
@@ -15,14 +15,14 @@ import java.util.List;
 import java.util.Map;
 
 import static com.esgc.EntityProfile.DB.DBQueries.EntityClimateProfilePageQueries.getCoverage;
+import static com.esgc.Utilities.Groups.*;
 import static io.restassured.RestAssured.given;
-
 
 public class EntityClimateControversies extends DataValidationTestBase {
 
     //Verify the Subcategories data for the entity is matching with the snowflake db
     @Xray(test = {8418,8419})
-    @Test(groups = {"regression", "ui", "smoke", "entity_climate_profile"},
+    @Test(groups = {REGRESSION, UI, SMOKE, ENTITY_PROFILE},
             description = "Verify the Subcategories data for the entity is matching with the snowflake db")
     public void entityClimateControversies() {
         // Get the api response

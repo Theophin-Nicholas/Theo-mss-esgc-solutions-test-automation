@@ -1,15 +1,16 @@
 package com.esgc.Dashboard.UI.Tests.Export;
 
-import com.esgc.Dashboard.UI.Pages.DashboardPage;
 import com.esgc.Base.TestBases.DashboardUITestBase;
+import com.esgc.Dashboard.UI.Pages.DashboardPage;
 import com.esgc.Utilities.Xray;
 import org.testng.annotations.Test;
 
+import static com.esgc.Utilities.Groups.*;
 
 public class ExportDashboardTests extends DashboardUITestBase {
 
 
-    @Test(groups = {"dashboard", "regression", "ui"})
+    @Test(groups = {DASHBOARD, REGRESSION, UI})
     @Xray(test = {6080})
     public void exportCompaniesInPortfolioBySectorTest() {
         DashboardPage dashboardPage = new DashboardPage();
@@ -31,7 +32,7 @@ public class ExportDashboardTests extends DashboardUITestBase {
         dashboardPage.deleteDownloadFolder();
     }
 
-    @Test(groups = {"dashboard", "regression", "ui"})
+    @Test(groups = {DASHBOARD, REGRESSION, UI})
     @Xray(test = {6080})
     public void exportCompaniesInPortfolioByRegionTest() {
         DashboardPage dashboardPage = new DashboardPage();
@@ -53,7 +54,7 @@ public class ExportDashboardTests extends DashboardUITestBase {
         dashboardPage.deleteDownloadFolder();
     }
 
-    @Test(groups = {"dashboard", "regression", "ui"})
+    @Test(groups = {DASHBOARD, REGRESSION, UI})
     @Xray(test = {7167,7238})
     public void temperatureAlignmentFieldsInExportedFile() {
         DashboardPage dashboardPage = new DashboardPage();

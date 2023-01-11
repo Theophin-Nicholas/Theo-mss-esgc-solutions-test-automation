@@ -1,7 +1,7 @@
 package com.esgc.Dashboard.DB.Tests;
 
-import com.esgc.Dashboard.UI.Pages.DashboardPage;
 import com.esgc.Base.TestBases.DataValidationTestBase;
+import com.esgc.Dashboard.UI.Pages.DashboardPage;
 import com.esgc.Utilities.APIUtilities;
 import com.esgc.Utilities.Xray;
 import io.restassured.path.json.JsonPath;
@@ -15,9 +15,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import static com.esgc.Utilities.Groups.*;
+
 public class PortfolioCompaniesAndInvestments extends DataValidationTestBase {
     // TODO: update queries (db methods should take month and year)
-    @Test(groups = {"regression", "dashboard"})
+    @Test(groups = {REGRESSION, DASHBOARD})
     @Xray(test = {6218, 6385, 6386, 11049})
     public void verifyInvestmentsAndControversies() throws ParseException {
         Response portfoliosResponse = APIUtilities.getAvailablePortfoliosForUser();
@@ -67,7 +69,7 @@ public class PortfolioCompaniesAndInvestments extends DataValidationTestBase {
 
 
 
-    @Test(groups = {"dashboard", "regression", "ui", "smoke"})
+    @Test(groups = {DASHBOARD, REGRESSION, UI, SMOKE})
     @Xray(test = {8320, 8321})
     public void verifyCoverageAndEsgInfo(){
         DashboardPage dashboardPage = new DashboardPage();

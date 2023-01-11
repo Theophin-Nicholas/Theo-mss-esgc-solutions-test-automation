@@ -1,12 +1,12 @@
 package com.esgc.PortfolioAnalysis.DB.Tests;
 
 import com.esgc.Base.API.APIModels.APIFilterPayload;
+import com.esgc.Base.DB.DBModels.ResearchLineIdentifier;
+import com.esgc.Base.TestBases.DataValidationTestBase;
 import com.esgc.PortfolioAnalysis.API.APIModels.PortfolioDistribution;
 import com.esgc.PortfolioAnalysis.API.APIModels.PortfolioDistributionWrapper;
 import com.esgc.PortfolioAnalysis.API.APIModels.RangeAndScoreCategory;
 import com.esgc.PortfolioAnalysis.DB.DBModels.ESGLeaderANDLaggers;
-import com.esgc.Base.DB.DBModels.ResearchLineIdentifier;
-import com.esgc.Base.TestBases.DataValidationTestBase;
 import com.esgc.Utilities.APIUtilities;
 import com.esgc.Utilities.PortfolioUtilities;
 import com.esgc.Utilities.Xray;
@@ -22,10 +22,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static com.esgc.Utilities.Groups.DATA_VALIDATION;
+import static com.esgc.Utilities.Groups.REGRESSION;
 
 public class PortfolioDistributionTests extends DataValidationTestBase {
 
-    @Test(groups = {"regression", "data_validation"}, dataProvider = "researchLines")
+    @Test(groups = {REGRESSION, DATA_VALIDATION}, dataProvider = "researchLines")
     @Xray(test = {2704, 2703, 2558, 2557, 2188, 2189, 2559,
             2705, 2190, 2192, 2315, 2308, 2309, 2560, 2706, 2191, 2310, 2561, 2707,
             4217, 4216, 4218, 4221,
@@ -143,7 +145,7 @@ public class PortfolioDistributionTests extends DataValidationTestBase {
 
     }
 
-    @Test(groups = {"regression", "data_validation"})
+    @Test(groups = {REGRESSION, DATA_VALIDATION})
     @Xray(test = {8727})
     public void verifyESGDistribution() {
         String sector = "all";

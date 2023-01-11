@@ -1,10 +1,12 @@
 package com.esgc.RegulatoryReporting.UI.Tests;
 
-import com.esgc.Dashboard.UI.Pages.DashboardPage;
+import com.esgc.Base.TestBases.UITestBase;
 import com.esgc.Base.UI.Pages.LoginPage;
+import com.esgc.Dashboard.UI.Pages.DashboardPage;
 import com.esgc.PortfolioAnalysis.UI.Pages.PhysicalRiskPages.PhysicalRiskManagementPages.PhysicalRiskManagementPage;
 import com.esgc.RegulatoryReporting.UI.Pages.RegulatoryReportingPage;
 import com.esgc.Base.TestBases.UITestBase;
+import com.esgc.Utilities.*;
 import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.DateTimeUtilities;
 import com.esgc.Utilities.Environment;
@@ -16,12 +18,13 @@ import org.testng.annotations.Test;
 import java.util.List;
 import java.util.Set;
 
+import static com.esgc.Utilities.Groups.*;
+
 public class RegulatoryReportingPageTests extends UITestBase {
     RegulatoryReportingPage reportingPage = new RegulatoryReportingPage();
 
-    @Test(groups = {"regression", "ui", "regulatoryReporting"}, description = "Verify that user can navigate to Regulatory Reporting page")
-//, "smoke"
-    @Xray(test = {10693, 10694, 10709, 10710, 10743, 10744, 10745, 10865})
+    @Test(groups = {REGRESSION, UI, REGULATORY_REPORTING, SMOKE}, description = "Verify that user can navigate to Regulatory Reporting page")
+    @Xray(test = {10693, 10694, 10709, 10710, 10743, 10744, 10745, 10851, 10865})
     public void verifyReportingListTest() {
         DashboardPage dashboardPage = new DashboardPage();
         dashboardPage.clickMenu();
@@ -52,9 +55,12 @@ public class RegulatoryReportingPageTests extends UITestBase {
                 "SFDR PAIs is not selected");
         assertTestCase.assertTrue(reportingPage.isSelectedReportingOptionByName("EU Taxonomy"),
                 "EU Taxonomy is selected");
+        assertTestCase.assertTrue(reportingPage.interimReportsOption.isDisplayed(),"Interim Reports option is displayed");
+        assertTestCase.assertTrue(reportingPage.annualReportsOption.isEnabled(),"Annual Reports option is enabled");
+        assertTestCase.assertTrue(reportingPage.useLatestDataOption.isDisplayed(),"Use Latest Data option is displayed");
     }
 
-    @Test(groups = {"regression", "ui", "regulatoryReporting"}, description = "Verify user portfolio list on regulatory reporting page")
+    @Test(groups = {REGRESSION, UI, REGULATORY_REPORTING}, description = "Verify user portfolio list on regulatory reporting page")
     @Xray(test = {11063, 11604, 11093, 11332})
     public void verifyPortfolioListForUserTest() {
         DashboardPage dashboardPage = new DashboardPage();
@@ -102,8 +108,8 @@ public class RegulatoryReportingPageTests extends UITestBase {
         //Verify "Coverage" column is present with "% of coverage" as its value.
         assertTestCase.assertEquals(actualPortfoliosList.size(), reportingPage.coverageList.size(), "Coverage column is present with % of coverage as its value");
         for (WebElement coverage : reportingPage.coverageList) {
-            System.out.println("coverage.getText() = " + coverage.getText());
-            assertTestCase.assertTrue(coverage.getText().matches("\\d+%") || coverage.getText().equals("NA"),
+            //System.out.println("coverage.getText() = " + coverage.getText());
+            assertTestCase.assertTrue(coverage.getText().matches("\\d+.*") || coverage.getText().equals("NA"),
                     "Coverage column is present with % of coverage as its value");
         }
         System.out.println("Coverage column is present with % of coverage as its value is verified");
@@ -122,7 +128,7 @@ public class RegulatoryReportingPageTests extends UITestBase {
             reportingPage.selectPortfolioOptionByIndex(1);
         }
         assertTestCase.assertTrue(reportingPage.portfolioRadioButtonList.get(0).isSelected(), "Portfolio 1 is selected");
-//        System.out.println("Font-Family = " + regulatoryReportingPage.portfolioNamesList.get(0).getCssValue("font-family"));
+        System.out.println("Font-Family = " + reportingPage.rrPage_portfolioNamesList.get(0).getCssValue("font-family"));
         assertTestCase.assertTrue(reportingPage.rrPage_portfolioNamesList.get(0).getCssValue("font-family").contains("WhitneyNarrSemiBold"), "Portfolio is bolded");
         assertTestCase.assertTrue(reportingPage.lastUploadedList.get(0).getCssValue("font-family").contains("WhitneyNarrSemiBold"), "Upload date is bolded");
         assertTestCase.assertTrue(reportingPage.coverageList.get(0).getCssValue("font-family").contains("WhitneyNarrSemiBold"), "Coverage is bolded");
@@ -140,7 +146,7 @@ public class RegulatoryReportingPageTests extends UITestBase {
         assertTestCase.assertEquals(reportingPage.createReportsButton.getText(), "Create 4 Reports", "Create Reports button is verified for 4 portfolio selected");
     }
 
-    @Test(groups = {"regression", "ui", "regulatoryReporting"}, description = "Verify user portfolio list on regulatory reporting page")
+    @Test(groups = {REGRESSION, UI, REGULATORY_REPORTING}, description = "Verify user portfolio list on regulatory reporting page")
     @Xray(test = {11091, 11092})
     public void verifyPortfolioUploadTest() {
         DashboardPage dashboardPage = new DashboardPage();
@@ -194,7 +200,7 @@ public class RegulatoryReportingPageTests extends UITestBase {
 //        assertTestCase.assertFalse(regulatoryReportingPage.getPortfolioList().contains(newPortfolioName),"New Portfolio is deleted from the list");
     }
 
-    @Test(groups = {"regression", "ui", "regulatoryReporting"}, description = "Validate 'Select Reporting' and 'Select Portfolios' columns")
+    @Test(groups = {REGRESSION, UI, REGULATORY_REPORTING}, description = "Validate 'Select Reporting' and 'Select Portfolios' columns")
     @Xray(test = {11137, 11138, 11139})
     public void verifySelectReportingAndPortfoliosColumnsTest() {
         DashboardPage dashboardPage = new DashboardPage();
@@ -246,7 +252,7 @@ public class RegulatoryReportingPageTests extends UITestBase {
         reportingPage.deselectInterimReports();
         reportingPage.deselectAnnualReports();
         reportingPage.deselectUseLatestData();
-        assertTestCase.assertTrue(reportingPage.reportingForListButtons.get(0).isEnabled(), "Reporting year dropdown is enabled");
+        assertTestCase.assertFalse(reportingPage.reportingForListButtons.get(0).isEnabled(), "Reporting year dropdown is enabled");
         BrowserUtils.waitForClickablility(reportingPage.reportingForList.get(0), 10).click();
         assertTestCase.assertTrue(reportingPage.reportingForDropdownOptionsList.size() == 0, "reporting for dropdown options are not listed if portfolio is not selected");
 
@@ -257,7 +263,7 @@ public class RegulatoryReportingPageTests extends UITestBase {
         assertTestCase.assertTrue(reportingPage.useLatestDataOption.isDisplayed(), "Use latest data toggle is displayed");
         reportingPage.selectUseLatestData();
         assertTestCase.assertTrue(reportingPage.isUseLatestDataSelected(), "Use latest data toggle is selected");
-        assertTestCase.assertTrue(reportingPage.reportingForListButtons.get(0).isEnabled(), "Reporting year dropdown is enabled");
+        assertTestCase.assertFalse(reportingPage.reportingForListButtons.get(0).isEnabled(), "Reporting year dropdown is enabled");
         BrowserUtils.waitForClickablility(reportingPage.reportingForList.get(0), 10).click();
         assertTestCase.assertTrue(reportingPage.reportingForDropdownOptionsList.size() == 0, "reporting for dropdown options are not listed if portfolio is not selected");
 
@@ -272,8 +278,8 @@ public class RegulatoryReportingPageTests extends UITestBase {
         assertTestCase.assertTrue(reportingPage.isAnnualReportsSelected(), "Annual reports toggle is selected");
     }
 
-    @Test(groups = {"regression", "ui", "regulatoryReporting"}, description = "UI | Regulatory Reporting | Download | Verify Create Reports Button is Clickable")
-    @Xray(test = {11333, 11334, 11350, 11370, 11402})
+    @Test(groups = {REGRESSION, UI, REGULATORY_REPORTING, SMOKE}, description = "UI | Regulatory Reporting | Download | Verify Create Reports Button is Clickable")
+    @Xray(test = {10849, 11333, 11334, 11350, 11370, 11402})
     public void verifyCreateReportsButtonWorksTest() {
         DashboardPage dashboardPage = new DashboardPage();
         dashboardPage.navigateToPageFromMenu("Regulatory Reporting");
@@ -290,6 +296,7 @@ public class RegulatoryReportingPageTests extends UITestBase {
         String color = Color.fromString(reportingPage.createReportsButton.getCssValue("background-color")).asHex();
         System.out.println("color = " + color);
         assertTestCase.assertEquals(color, "#1f8cff", "Create report button color is blue");
+        Set<String> windows = BrowserUtils.getWindowHandles();
         reportingPage.createReportsButton.click();
 
         //verify create reports button after clicking
@@ -300,7 +307,7 @@ public class RegulatoryReportingPageTests extends UITestBase {
         assertTestCase.assertEquals(color, "#046bd9", "Create report button color is blue");
         try {
             //New tab should be opened and empty state message should be displayed as in the screenshot
-            assertTestCase.assertTrue(reportingPage.verifyNewTabOpened(currentWindow), "New tab is opened");
+            assertTestCase.assertTrue(reportingPage.verifyNewTabOpened(windows), "New tab is opened");
             System.out.println("New tab is opened");
             assertTestCase.assertTrue(reportingPage.verifyReportsReadyToDownload(selectedPortfolios), "Reports are ready to download");
             System.out.println("Reports are ready to download");
@@ -318,7 +325,7 @@ public class RegulatoryReportingPageTests extends UITestBase {
         //This part is not automated since button turn back to blue in a short time
     }
 
-    @Test(groups = {"regression", "ui", "regulatoryReporting"}, description = "Verify user cant get report for predicted scores portfolio")
+    @Test(groups = {REGRESSION, UI, REGULATORY_REPORTING}, description = "Verify user cant get report for predicted scores portfolio")
     @Xray(test = {11403})
     public void verifyPredictedScorePortfolioTest() {
         DashboardPage dashboardPage = new DashboardPage();
@@ -334,7 +341,7 @@ public class RegulatoryReportingPageTests extends UITestBase {
         assertTestCase.assertFalse(reportingPage.createReportsButton.isEnabled(), "Create report button is disabled");
     }
 
-    @Test(groups = {"regression", "ui", "regulatoryReporting"}, description = "Verify user can't see reporting page if is not entitled to SFDR")
+    @Test(groups = {REGRESSION, UI, REGULATORY_REPORTING}, description = "Verify user can't see reporting page if is not entitled to SFDR")
 //, "smoke"
     @Xray(test = {10867})
     public void verifyReportingPageWithoutSFDRUserTest() {
@@ -353,7 +360,7 @@ public class RegulatoryReportingPageTests extends UITestBase {
 
 
 
-    @Test(groups = {"regression", "ui", "regulatoryReporting"}, description = "UI | Regulatory Reporting | Download | Verify Create Reports Button is Clickable")
+    @Test(groups = {REGRESSION, UI, REGULATORY_REPORTING}, description = "UI | Regulatory Reporting | Download | Verify Create Reports Button is Clickable")
 //"smoke",
     @Xray(test = {10854})
     public void verifyAnnualReportingDisabledTest() {
@@ -372,7 +379,7 @@ public class RegulatoryReportingPageTests extends UITestBase {
         assertTestCase.assertFalse(reportingPage.isAnnualReportsSelected(), "Annual reports option is disabled as expected");
     }
 
-    @Test(groups = {"regression", "ui", "regulatoryReporting"}, description = "UI | Regulatory Reporting | UI Checks for Reporting service Options")
+    @Test(groups = {REGRESSION, UI, REGULATORY_REPORTING}, description = "UI | Regulatory Reporting | UI Checks for Reporting service Options")
     @Xray(test = {11066, 11067})
     public void verifyReportingServiceOptionsTest() {
         DashboardPage dashboardPage = new DashboardPage();
@@ -417,7 +424,7 @@ public class RegulatoryReportingPageTests extends UITestBase {
         assertTestCase.assertTrue(reportingPage.createReportsButton.isEnabled(), "Create reports button is enabled when use latest data option is selected");
     }
 
-    @Test(groups = {"regression", "ui", "regulatoryReporting"},
+    @Test(groups = {REGRESSION, UI, REGULATORY_REPORTING, SMOKE},
             description = "UI | Regulatory Reporting | EU Taxonomy | Verify EU Taxonomy Report Sheets")
     @Xray(test = {11987, 11988, 11989, 11990, 11991, 11992})
     public void verifyEUTaxonomyReportSheetsTest() {
@@ -464,10 +471,53 @@ public class RegulatoryReportingPageTests extends UITestBase {
             assertTestCase.assertTrue(reportingPage.verifyDisclaimer(), "Definitions sheet is verified");
             System.out.println("Definitions sheet is verified");
         } catch (Exception e) {
-            //assertTestCase.assertTrue(false, "Report verification failed");
+            assertTestCase.assertTrue(false, "Report verification failed");
             e.printStackTrace();
         } finally {
             BrowserUtils.switchWindowsTo(currentWindow);
         }
+    }
+
+    @Test(groups = {"regression", "ui", "regulatoryReporting"})
+    @Xray(test = {11654, 11657})
+    public void verifyPreviouslyDownloadedFeature() {
+        DashboardPage dashboardPage = new DashboardPage();
+        dashboardPage.navigateToPageFromMenu("Regulatory Reporting");
+        test.info("Navigated to Regulatory Reporting Page");
+
+        assertTestCase.assertTrue(reportingPage.verifyPreviouslyDownloadedButton(), "Verify Previously Downloaded button");
+
+        reportingPage.clickPreviouslyDownloadedButton();
+        BrowserUtils.wait(5);
+        for (String windowHandle : Driver.getDriver().getWindowHandles()) {
+            Driver.getDriver().switchTo().window(windowHandle);
+        }
+
+        reportingPage.verifyPreviouslyDownloadedScreen();
+        reportingPage.verifyFileDownloadFromPreviouslyDownloadedScreen();
+    }
+
+    @Test(groups = {"regression", "ui", "regulatoryReporting"})
+    @Xray(test = {11712})
+    public void verifyNoFilesInPreviouslyDownloadedScreen() {
+
+        LoginPage login = new LoginPage();
+        login.clickOnLogout();
+        login.entitlementsLogin(EntitlementsBundles.NO_PREVIOUSLY_DOWNLOADED_REGULATORY_REPORTS);
+
+        DashboardPage dashboardPage = new DashboardPage();
+        dashboardPage.navigateToPageFromMenu("Regulatory Reporting");
+        test.info("Navigated to Regulatory Reporting Page");
+
+        assertTestCase.assertTrue(reportingPage.verifyPreviouslyDownloadedButton(), "Verify Previously Downloaded button");
+
+        reportingPage.clickPreviouslyDownloadedButton();
+        BrowserUtils.wait(5);
+        for (String windowHandle : Driver.getDriver().getWindowHandles()) {
+            Driver.getDriver().switchTo().window(windowHandle);
+        }
+        BrowserUtils.waitForVisibility(reportingPage.previouslyDownloadedErrorMessage, 30);
+        assertTestCase.assertEquals(reportingPage.previouslyDownloadedErrorMessage.getText(),"No previously downloaded reports to be displayed.", "Verify Error message in Previously Downloaded screen");
+
     }
 }

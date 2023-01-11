@@ -1,8 +1,8 @@
 package com.esgc.EntityProfile.API.Tests;
 
+import com.esgc.Base.TestBases.EntityClimateProfileTestBase;
 import com.esgc.EntityProfile.API.APIModels.SummarySection.*;
 import com.esgc.EntityProfile.API.Controllers.EntityProfileClimatePageAPIController;
-import com.esgc.Base.TestBases.EntityClimateProfileTestBase;
 import com.esgc.Utilities.ESGUtilities;
 import com.esgc.Utilities.Xray;
 import io.restassured.RestAssured;
@@ -16,11 +16,12 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import static com.esgc.Utilities.Groups.*;
 import static org.hamcrest.Matchers.*;
 
 public class ClimateProfileSummaryAPITests extends EntityClimateProfileTestBase {
 
-    @Test(groups = {"api", "regression", "entity_climate_profile"}, dataProvider = "API Research Lines")
+    @Test(groups = {API, REGRESSION, ENTITY_PROFILE}, dataProvider = "API Research Lines")
     @Xray(test = {5995, 6030, 6036, 6042, 7812})
     public void ValidateClimateSummaryAPIResponse(String researchLine, String orbis_id) {
         System.out.println("researchLine = " + researchLine);
@@ -58,7 +59,7 @@ public class ClimateProfileSummaryAPITests extends EntityClimateProfileTestBase 
     }
 
 
-    @Test(groups = {"api", "regression", "entity_climate_profile"}, dataProvider = "API Research Lines")
+    @Test(groups = {API, REGRESSION, ENTITY_PROFILE}, dataProvider = "API Research Lines")
     @Xray(test = {5996, 6037, 6043, 7813})
     public void ValidateClimateSummaryAPIWithInvalidToken(String researchLine, String orbis_id) {
         System.out.println("researchLine = " + researchLine);
@@ -74,7 +75,7 @@ public class ClimateProfileSummaryAPITests extends EntityClimateProfileTestBase 
         test.pass("Successfully validated for " + researchLine + "research line");
     }
 
-    @Test(groups = {"api", "regression", "entity_climate_profile"}, dataProvider = "orbis_id")
+    @Test(groups = {API, REGRESSION, ENTITY_PROFILE}, dataProvider = "orbis_id")
     @Xray(test = {6710})
     public void verifyDynamicDataScoresAPITest(String orbis_id) {
         EntityProfileClimatePageAPIController entityClimateProfileApiController = new EntityProfileClimatePageAPIController();
@@ -87,7 +88,7 @@ public class ClimateProfileSummaryAPITests extends EntityClimateProfileTestBase 
 
     }
 
-    @Test(groups = {"api", "regression", "entity_climate_profile"}, dataProvider = "orbis_id")
+    @Test(groups = {API, REGRESSION, ENTITY_PROFILE}, dataProvider = "orbis_id")
     @Xray(test = {8232})
     public void verifyAPIForOverallESGScoreWidget(String orbis_id) {
         EntityProfileClimatePageAPIController entityClimateProfileApiController = new EntityProfileClimatePageAPIController();
@@ -142,7 +143,7 @@ public class ClimateProfileSummaryAPITests extends EntityClimateProfileTestBase 
         }
     }
 
-    @Test(groups = {"api", "regression", "entity_climate_profile"})
+    @Test(groups = {API, REGRESSION, ENTITY_PROFILE})
     @Xray(test = {6710})
     public void verifyPostAPIRequestForTemperatureAlignmentGraphWithInvalidTokenTest() {
         RestAssured.useRelaxedHTTPSValidation();

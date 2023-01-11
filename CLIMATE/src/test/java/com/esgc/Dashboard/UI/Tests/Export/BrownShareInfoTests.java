@@ -10,7 +10,7 @@ public class BrownShareInfoTests extends DataValidationTestBase {
     String portfolioId = "00000000-0000-0000-0000-000000000000";
     ExportUtils utils = new ExportUtils();
 
-//    @Test(groups = {"dashboard", "regression", "ui"})
+//    @Test(groups = {DASHBOARD, REGRESSION, UI})
 //    @Xray(test = {7224, 7225})
 //    public void compareBrownShareInfoFromExcelToDB() {
 //        DashboardPage dashboardPage = new DashboardPage();

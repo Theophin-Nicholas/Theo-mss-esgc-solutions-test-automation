@@ -1,9 +1,9 @@
 package com.esgc.Dashboard.UI.Tests;
 
-import com.esgc.Dashboard.UI.Pages.DashboardPage;
-import com.esgc.Base.UI.Pages.LoginPage;
-import com.esgc.PortfolioAnalysis.UI.Pages.ResearchLinePage;
 import com.esgc.Base.TestBases.DashboardUITestBase;
+import com.esgc.Base.UI.Pages.LoginPage;
+import com.esgc.Dashboard.UI.Pages.DashboardPage;
+import com.esgc.PortfolioAnalysis.UI.Pages.ResearchLinePage;
 import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.EntitlementsBundles;
 import com.esgc.Utilities.Xray;
@@ -11,9 +11,11 @@ import org.testng.annotations.Test;
 
 import java.util.List;
 
+import static com.esgc.Utilities.Groups.*;
+
 public class ViewMethodologiesTests extends DashboardUITestBase {
 
-    @Test(groups = {"dashboard", "regression", "ui", "smoke"})
+    @Test(groups = {DASHBOARD, REGRESSION, UI, SMOKE})
     @Xray(test = {8325, 8328, 8334,9729})
     public void verifyViewMethodologies() {
         // ESGCA-8334: General UI Checks for Methodology Drawer
@@ -27,7 +29,7 @@ public class ViewMethodologiesTests extends DashboardUITestBase {
         dashboardPage.clickHideLink();
     }
 
-    @Test(groups = {"dashboard", "regression", "ui"})
+    @Test(groups = {DASHBOARD, REGRESSION, UI})
     @Xray(test = {8304})
     public void verifyViewMethodologiesPhysicalRisk_Bundle() {
         LoginPage login = new LoginPage();
@@ -45,7 +47,7 @@ public class ViewMethodologiesTests extends DashboardUITestBase {
 
     }
 
-    @Test(groups = {"dashboard", "regression", "ui"})
+    @Test(groups = {DASHBOARD, REGRESSION, UI})
     @Xray(test = {8304})
     public void verifyViewMethodologiesTransitionRisk_Bundle() {
         LoginPage login = new LoginPage();
@@ -63,7 +65,7 @@ public class ViewMethodologiesTests extends DashboardUITestBase {
 
     }
 
-    @Test(groups = {"dashboard", "regression", "ui"})
+    @Test(groups = {DASHBOARD, REGRESSION, UI})
     @Xray(test = {8304})
     public void verifyViewMethodologiesEsg_Bundle() {
         LoginPage login = new LoginPage();
@@ -82,7 +84,7 @@ public class ViewMethodologiesTests extends DashboardUITestBase {
 
     }
 
-    @Test(groups = {"dashboard", "regression", "ui"})
+    @Test(groups = {DASHBOARD, REGRESSION, UI})
     @Xray(test = {8304})
     public void verifyViewMethodologiesControversies_Bundle() {
         LoginPage login = new LoginPage();
@@ -98,7 +100,7 @@ public class ViewMethodologiesTests extends DashboardUITestBase {
 
     }
 
-    @Test(groups = {"dashboard", "regression", "ui"})
+    @Test(groups = {DASHBOARD, REGRESSION, UI})
     @Xray(test = {8304})
     public void verifyViewMethodologiesWithPRandTR_Bundle() {
         LoginPage login = new LoginPage();
@@ -117,7 +119,7 @@ public class ViewMethodologiesTests extends DashboardUITestBase {
 
     }
 
-    @Test(groups = {"dashboard", "regression", "ui"})
+    @Test(groups = {DASHBOARD, REGRESSION, UI})
     @Xray(test = {8304})
     public void verifyViewMethodologiesWithAllEntitlements() {
 
@@ -136,7 +138,7 @@ public class ViewMethodologiesTests extends DashboardUITestBase {
 
     }
 
-    @Test(groups = {"dashboard", "regression", "ui"})
+    @Test(groups = {DASHBOARD, REGRESSION, UI})
     @Xray(test = {8326})
     public void verifyViewMethodologiesLinksPhysicalRisk_Bundle() {
         LoginPage login = new LoginPage();
@@ -157,7 +159,7 @@ public class ViewMethodologiesTests extends DashboardUITestBase {
 
     }
 
-    @Test(groups = {"dashboard", "regression", "ui"})
+    @Test(groups = {DASHBOARD, REGRESSION, UI})
     @Xray(test = {8327})
     public void verifyViewMethodologiesLinksTransitionRisk_Bundle() {
         LoginPage login = new LoginPage();

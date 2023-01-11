@@ -1,16 +1,18 @@
 package com.esgc.EntityProfile.API.Tests;
 
+import com.esgc.Base.TestBases.EntityClimateProfileTestBase;
 import com.esgc.EntityProfile.API.APIModels.ESGMateriality.ESGMaterlityDriverSummaryAPIWrapper;
 import com.esgc.EntityProfile.API.Controllers.EntityProfileClimatePageAPIController;
-import com.esgc.Base.TestBases.EntityClimateProfileTestBase;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import org.testng.annotations.Test;
 
+import static com.esgc.Utilities.Groups.*;
+
 public class MaterialityMetricsAPITests extends EntityClimateProfileTestBase {
 
     //TODO add materiality metrics API model
-    @Test(groups = {"api", "regression", "entity_climate_profile"})
+    @Test(groups = {API, REGRESSION, ENTITY_PROFILE})
     public void ValidateMaterialityMetricsAPIResponse() {
         String orbis_id = "000411117";
         System.out.println("orbis_id = " + orbis_id);

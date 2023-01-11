@@ -1,7 +1,7 @@
 package com.esgc.EntityProfile.DB.Tests;
 
-import com.esgc.EntityProfile.UI.Pages.EntityClimateProfilePage;
 import com.esgc.Base.TestBases.EntityClimateProfileDataValidationTestBase;
+import com.esgc.EntityProfile.UI.Pages.EntityClimateProfilePage;
 import com.esgc.Utilities.Xray;
 import org.openqa.selenium.WebElement;
 import org.testng.annotations.Test;
@@ -9,11 +9,12 @@ import org.testng.annotations.Test;
 import java.util.List;
 
 import static com.esgc.EntityProfile.DB.DBQueries.EntityClimateProfilePageQueries.getExportOrSourceDocumentsFromDB;
+import static com.esgc.Utilities.Groups.*;
 
 public class ExportSourceDocuments extends EntityClimateProfileDataValidationTestBase {
 
     @Xray(test = {9222})
-    @Test(groups = {"regression", "ui", "entity_climate_profile"})
+    @Test(groups = {REGRESSION, UI, ENTITY_PROFILE})
     public void validateExportSourceDocuments() {
 
         String company = "Rogers Corp.";

@@ -1,13 +1,13 @@
 package com.esgc.PortfolioAnalysis.DB.Tests;
 
 import com.esgc.Base.API.APIModels.APIFilterPayloadWithImpactFilter;
+import com.esgc.Base.DB.DBModels.ResearchLineIdentifier;
+import com.esgc.Base.TestBases.DataValidationTestBase;
 import com.esgc.PortfolioAnalysis.API.APIModels.ImpactDistribution;
 import com.esgc.PortfolioAnalysis.API.APIModels.ImpactDistributionWrappers;
 import com.esgc.PortfolioAnalysis.API.APIModels.InvestmentAndScore;
 import com.esgc.PortfolioAnalysis.API.APIModels.RangeAndScoreCategory;
-import com.esgc.Base.DB.DBModels.ResearchLineIdentifier;
 import com.esgc.PortfolioAnalysis.UI.Pages.ResearchLinePage;
-import com.esgc.Base.TestBases.DataValidationTestBase;
 import com.esgc.Utilities.APIUtilities;
 import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.PortfolioUtilities;
@@ -25,12 +25,14 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.esgc.Utilities.Groups.DATA_VALIDATION;
+import static com.esgc.Utilities.Groups.REGRESSION;
 
 public class ImpactDistributionDataValidation extends DataValidationTestBase {
 
     // private Object APIFilterPayloadWithImpactFilter;
 
-    @Test(groups = {"regression", "data_validation"}, dataProvider = "researchLines")
+    @Test(groups = {REGRESSION, DATA_VALIDATION}, dataProvider = "researchLines")
     @Xray(test = {5005, 4969, 4968, 4964, 5012, 5013, 6779})
     public void ImpactDistributionDataValidation(@Optional String sector, @Optional String region,
                                                  @Optional String researchLine, @Optional String month, @Optional String year, @Optional String filter) {
@@ -226,7 +228,7 @@ public class ImpactDistributionDataValidation extends DataValidationTestBase {
 
     }
 
-    @Test(groups = {"regression", "data_validation"}, dataProvider = "researchLines")
+    @Test(groups = {REGRESSION, DATA_VALIDATION}, dataProvider = "researchLines")
     @Xray(test = {6781})
     public void ImpactDistributionDataTableSum(@Optional String sector, @Optional String region,
                                                @Optional String researchLine, @Optional String month, @Optional String year, @Optional String filter) {
@@ -314,7 +316,7 @@ public class ImpactDistributionDataValidation extends DataValidationTestBase {
 
     }
 
-    @Test(groups = {"regression", "data_validation"}, dataProvider = "researchLines")
+    @Test(groups = {REGRESSION, DATA_VALIDATION}, dataProvider = "researchLines")
     @Xray(test = {6782})
     public void VerifyXAxisImpactDistribution(@Optional String sector, @Optional String region,
                                                  @Optional String researchLine, @Optional String month, @Optional String year, @Optional String filter) {

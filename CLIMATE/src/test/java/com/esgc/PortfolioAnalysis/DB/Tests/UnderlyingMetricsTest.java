@@ -1,17 +1,17 @@
 package com.esgc.PortfolioAnalysis.DB.Tests;
 
 import com.esgc.Base.API.APIModels.APIFilterPayload;
+import com.esgc.Base.API.Controllers.APIController;
+import com.esgc.Base.DB.DBModels.ResearchLineIdentifier;
+import com.esgc.Base.TestBases.DataValidationTestBase;
 import com.esgc.PortfolioAnalysis.API.APIModels.RangeAndScoreCategory;
 import com.esgc.PortfolioAnalysis.API.APIModels.UnderlyingDataMetricsTCFD;
 import com.esgc.PortfolioAnalysis.API.APIModels.UnderlyingDataMetricsWrapper;
 import com.esgc.PortfolioAnalysis.API.APIModels.UnderlyingDataMetricsWrapperNew;
-import com.esgc.Base.API.Controllers.APIController;
-import com.esgc.Base.DB.DBModels.ResearchLineIdentifier;
-import com.esgc.Base.TestBases.DataValidationTestBase;
+import com.esgc.PortfolioAnalysis.DB.DBQueries.UnderlyingDataMetricsQueries;
 import com.esgc.Utilities.APIUtilities;
 import com.esgc.Utilities.Database.DatabaseDriver;
 import com.esgc.Utilities.Database.PortfolioQueries;
-import com.esgc.PortfolioAnalysis.DB.DBQueries.UnderlyingDataMetricsQueries;
 import com.esgc.Utilities.PortfolioUtilities;
 import com.esgc.Utilities.Xray;
 import io.restassured.http.ContentType;
@@ -24,11 +24,13 @@ import org.testng.annotations.Test;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static com.esgc.Utilities.Groups.DATA_VALIDATION;
+import static com.esgc.Utilities.Groups.REGRESSION;
 import static org.hamcrest.Matchers.*;
 
 public class UnderlyingMetricsTest extends DataValidationTestBase {
 //TODO fails should be handled
-    @Test(groups = {"regression", "data_validation"}, dataProvider = "researchLines")
+    @Test(groups = {REGRESSION, DATA_VALIDATION}, dataProvider = "researchLines")
     @Xray(test = {1404, 2410, 2411, 2413, 2414, 2953, 3677, 3842, 3843})
     public void verifyUnderlyingDataMetricsWithMixedIdentifiers(@Optional String sector, @Optional String region,
                                                                 @Optional String researchLine, @Optional String month, @Optional String year) {
@@ -430,7 +432,7 @@ public class UnderlyingMetricsTest extends DataValidationTestBase {
                 };
     }
 
-    /*    @Test(groups = {"api", "regression"}, dataProvider = "API Research Lines")*/
+    /*    @Test(groups = {API, REGRESSION}, dataProvider = "API Research Lines")*/
     @Test
     public void brownShareFossilFuel(@Optional String researchLine) {
         String user_id = APIUtilities.userID();

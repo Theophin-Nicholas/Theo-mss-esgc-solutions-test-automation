@@ -1,8 +1,8 @@
 package com.esgc.PortfolioAnalysis.UI.Tests.ResearchLineWidgets;
 
+import com.esgc.Base.TestBases.UITestBase;
 import com.esgc.PortfolioAnalysis.UI.Pages.ResearchLinePage;
 import com.esgc.TestBase.DataProviderClass;
-import com.esgc.Base.TestBases.UITestBase;
 import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.Xray;
 import org.openqa.selenium.support.Color;
@@ -11,9 +11,11 @@ import org.testng.SkipException;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+import static com.esgc.Utilities.Groups.*;
+
 public class HistoryTableTests extends UITestBase {
 
-    @Test(groups = {"regression", "ui", "smoke"},
+    @Test(groups = {REGRESSION, UI, SMOKE},
             description = "ESGCA-5122 - Verify History Table",
             dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
     @Xray(test = {5051})
@@ -31,7 +33,7 @@ public class HistoryTableTests extends UITestBase {
         test.info("History Table is present. Test Passed");
     }
 
-    @Test(groups = {"regression", "ui", "smoke"},
+    @Test(groups = {REGRESSION, UI, SMOKE},
             description = "Verify History Table not available", dataProvider = "History Table Research Lines")
     @Xray(test = {5815, 5816, 5817, 5820})
     public void verifyHistoryTablbeNotAvailable(String page) {
@@ -49,7 +51,7 @@ public class HistoryTableTests extends UITestBase {
         Assert.assertTrue(!researchLinePage.checkIfBenchMarkHistoryTableExists(), "Validate that history table does not exists");
     }
 
-    @Test(groups = {"regression", "ui", "smoke"},
+    @Test(groups = {REGRESSION, UI, SMOKE},
             description = "Verify History Chart include unmatched companies/NULL/Negative values", dataProvider = "History Table Research Lines")
     @Xray(test = {5935})
     public void verifyHistoryChartIncludeUnmatchedCompanies(String page) {
@@ -69,7 +71,7 @@ public class HistoryTableTests extends UITestBase {
         BrowserUtils.wait(5);
     }
 
-    @Test(groups = {"regression", "ui", "smoke"}, dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
+    @Test(groups = {REGRESSION, UI, SMOKE}, dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
     @Xray(test = {9822})
     public void verifyCategoriesAndColorsOfHistoryTable(String page) {
         ResearchLinePage researchLinePage = new ResearchLinePage();

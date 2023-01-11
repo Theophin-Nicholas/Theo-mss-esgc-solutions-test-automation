@@ -9,8 +9,10 @@ import com.esgc.Utilities.Environment;
 import com.esgc.Utilities.Xray;
 import org.testng.annotations.Test;
 
+import static com.esgc.Utilities.Groups.*;
+
 public class MainPageTests extends EMCUITestBase {
-    @Test(groups = {"EMC", "ui", "smoke","regression","prod"})
+    @Test(groups = {EMC, UI, SMOKE,REGRESSION,PROD})
     @Xray(test = {2292})
     public void EMCLandingPageTest() {
 
@@ -29,7 +31,7 @@ public class MainPageTests extends EMCUITestBase {
 
     }
 
-    @Test(groups = {"EMC", "ui", "smoke","regression", "prod"})
+    @Test(groups = {EMC, UI, SMOKE,REGRESSION, PROD})
     @Xray(test = {3520})
     public void wrongUsernameLoginTest() {
         Driver.closeDriver();
@@ -43,7 +45,7 @@ public class MainPageTests extends EMCUITestBase {
         Driver.closeDriver();
     }
 
-    @Test(groups = {"EMC", "ui", "smoke","regression"})
+    @Test(groups = {EMC, UI, SMOKE,REGRESSION})
     @Xray(test = {3521})
     public void wrongPasswordLoginTest() {
         Driver.closeDriver();
@@ -57,7 +59,7 @@ public class MainPageTests extends EMCUITestBase {
         Driver.closeDriver();
     }
 
-    @Test(groups = {"EMC", "ui","regression"}, description = "Login | EMC | Verify that Users can't Access Using Empty Username or Password")
+    @Test(groups = {EMC, UI,REGRESSION}, description = "Login | EMC | Verify that Users can't Access Using Empty Username or Password")
     @Xray(test = {3530, 3531})
     public void verifyUserCantAccessUsingEmptyCredentialsTest() {
         Driver.closeDriver();
@@ -89,7 +91,7 @@ public class MainPageTests extends EMCUITestBase {
         Driver.closeDriver();
     }
 
-    @Test(groups = {"EMC", "ui","regression"}, description = "Login | EMC | Verify that Users can't Access Using External Credentials")
+    @Test(groups = {EMC, UI,REGRESSION}, description = "Login | EMC | Verify that Users can't Access Using External Credentials")
     @Xray(test = {3525})
     public void verifyUserCantAccessUsingExternalCredentialsTest() {
         Driver.closeDriver();

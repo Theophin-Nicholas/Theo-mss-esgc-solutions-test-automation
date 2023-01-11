@@ -1,10 +1,10 @@
 package com.esgc.PortfolioAnalysis.DB.Tests;
 
 import com.esgc.Base.API.APIModels.APIFilterPayload;
-import com.esgc.PortfolioAnalysis.API.APIModels.RangeAndScoreCategory;
-import com.esgc.PortfolioAnalysis.API.APIModels.RegionMap;
 import com.esgc.Base.DB.DBModels.ResearchLineIdentifier;
 import com.esgc.Base.TestBases.DataValidationTestBase;
+import com.esgc.PortfolioAnalysis.API.APIModels.RangeAndScoreCategory;
+import com.esgc.PortfolioAnalysis.API.APIModels.RegionMap;
 import com.esgc.Utilities.APIUtilities;
 import com.esgc.Utilities.PortfolioUtilities;
 import com.esgc.Utilities.Xray;
@@ -18,9 +18,12 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.esgc.Utilities.Groups.DATA_VALIDATION;
+import static com.esgc.Utilities.Groups.REGRESSION;
+
 public class RegionMapTests extends DataValidationTestBase {
 
-    @Test(groups = {"regression", "data_validation"}, dataProvider = "researchLines", threadPoolSize = 10)
+    @Test(groups = {REGRESSION, DATA_VALIDATION}, dataProvider = "researchLines", threadPoolSize = 10)
     @Xray(test = {4758, 4755, 4752, 4751, 4759, 4756, 4754, 4753})
     //Energy Transition 4757
     //TCFD 4758

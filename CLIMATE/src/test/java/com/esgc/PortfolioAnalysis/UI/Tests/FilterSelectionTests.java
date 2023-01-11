@@ -1,12 +1,14 @@
 package com.esgc.PortfolioAnalysis.UI.Tests;
 
-import com.esgc.PortfolioAnalysis.UI.Pages.ResearchLinePage;
 import com.esgc.Base.TestBases.UITestBase;
+import com.esgc.PortfolioAnalysis.UI.Pages.ResearchLinePage;
 import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.Driver;
 import com.esgc.Utilities.Xray;
 import org.openqa.selenium.support.Color;
 import org.testng.annotations.Test;
+
+import static com.esgc.Utilities.Groups.*;
 
 /**
  * Created by ChaudhS2 on 12/1/2021.
@@ -14,7 +16,7 @@ import org.testng.annotations.Test;
 public class FilterSelectionTests extends UITestBase {
 
 
-    @Test(groups = {"regression", "ui", "smoke"},
+    @Test(groups = {REGRESSION, UI, SMOKE},
             description = "ESGCA-1293 - Verify the Filters Selection When a User Refreshes  the Page")
     @Xray(test = {1293, 1300})
     public void verifyFiltersDefaultSelectionWithRefresh() {
@@ -61,7 +63,7 @@ public class FilterSelectionTests extends UITestBase {
     }
 
 
-    @Test(groups = {"regression", "ui"},
+    @Test(groups = {REGRESSION, UI},
             description = "ESGCA-1292 - UI | Filters | Verify the filters selection for returning user")
     @Xray(test = 1292)
     public void verifyFiltersDefaultSelectionByNavigatingResearchLines() {
@@ -105,7 +107,7 @@ public class FilterSelectionTests extends UITestBase {
 
     }
 
-    @Test(groups = {"regression", "ui"},
+    @Test(groups = {REGRESSION, UI},
             description = "ESGCA-1294 - UI | Filters | Verify the Filters Selection once User Refresh the Page in case of Default Portfolio")
     @Xray(test = 1294)
     public void verifyFiltersDefaultSelectionWithBenchmarkByRefreshingPage() {
@@ -155,7 +157,7 @@ public class FilterSelectionTests extends UITestBase {
 
     }
 
-    @Test(groups = {"regression", "ui"},
+    @Test(groups = {REGRESSION, UI},
             description = "ESGCA-1308 - Verify the filter selection for 'As of date' in case of new updates when user refresh the page")
     @Xray(test = {1307, 1308})
     public void verifyFilterSelectionAsOfDateTest() {
@@ -178,7 +180,7 @@ public class FilterSelectionTests extends UITestBase {
         assertTestCase.assertEquals(actBackgroundColor, "#d7edfa", "'As of date' filter is set to latest update date automatically");
     }
 
-    @Test(groups = {"regression", "ui"},
+    @Test(groups = {REGRESSION, UI},
             description = "ESGCA-1313 Verify the different sections are responding to the filter selections")
     @Xray(test = 1313)
     public void verifyDifferentSectionsRespondingSelectionsTest() {
@@ -212,7 +214,7 @@ public class FilterSelectionTests extends UITestBase {
                 "Region on sector chart is set to " + regionName);
     }
 
-    @Test(groups = {"regression", "ui"},
+    @Test(groups = {REGRESSION, UI},
             description = " ESGCA-1319 UI Verify User Changes Pages and Goes Back to Prior Page Without Updating the Portfolio Filter")
     @Xray(test = 1319)
     public void verifyUserChangesPagesPortfolioSelectionTest() {

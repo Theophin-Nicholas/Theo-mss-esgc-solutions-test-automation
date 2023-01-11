@@ -13,13 +13,15 @@ import org.testng.annotations.*;
 import java.lang.reflect.Method;
 import java.time.Duration;
 
+import static com.esgc.Utilities.Groups.*;
+
 public abstract class DashboardUITestBase extends TestBase {
 
     boolean isPampaTest;
     boolean isEntitlementsTest;
     boolean userOnLoginPage;
 
-    @BeforeMethod(onlyForGroups = {"ui", "dashboard"}, groups = {"smoke", "regression", "ui", "dashboard"})
+    @BeforeMethod(onlyForGroups = {UI, DASHBOARD}, groups = {SMOKE, REGRESSION, UI, DASHBOARD})
     @Parameters("browser")
     public synchronized void setupDashboardUI(@Optional String browser, Method method) {
         isUITest = true;
@@ -48,7 +50,11 @@ public abstract class DashboardUITestBase extends TestBase {
         //If it is not an entitlements test, keep user logged in
         if (isPampaTest || isEntitlementsTest) {
             if (!userOnLoginPage) {
-                loginPage.clickOnLogout();
+                try {
+                    loginPage.clickOnLogout();
+                } catch (Exception ignored) {
+
+                }
             }
         } else {
             if (userOnLoginPage) {
@@ -58,7 +64,7 @@ public abstract class DashboardUITestBase extends TestBase {
     }
 
 
-    @AfterMethod(onlyForGroups = {"ui"}, groups = {"smoke", "regression", "ui"})
+    @AfterMethod(onlyForGroups = {UI}, groups = {SMOKE, REGRESSION, UI})
     public synchronized void teardownDashboard(ITestResult iTestResult) {
         getScreenshot(iTestResult);
         if (isPampaTest || isEntitlementsTest) {

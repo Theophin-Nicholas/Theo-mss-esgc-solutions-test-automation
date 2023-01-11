@@ -1,7 +1,7 @@
 package com.esgc.Dashboard.UI.Tests;
 
-import com.esgc.Dashboard.UI.Pages.DashboardPage;
 import com.esgc.Base.TestBases.DashboardUITestBase;
+import com.esgc.Dashboard.UI.Pages.DashboardPage;
 import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.PortfolioFilePaths;
 import com.esgc.Utilities.RobotRunner;
@@ -17,9 +17,11 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import static com.esgc.Utilities.Groups.*;
+
 public class PortfolioSelectionModal extends DashboardUITestBase {
 
-    @Test(groups = {"regression", "ui", "smoke", "dashboard"},
+    @Test(groups = {REGRESSION, UI, SMOKE, DASHBOARD},
             description = "ESGCA -3179/3250/3274/3253 : Verify the search Function on Portfolio Selection Modal PopUP/Sample Portfolio is present in Portfolio list.")
     @Xray(test = {3179, 3250, 3274, 3253, 3434})
     public void verifySearchFunctionOnSelectionModalPopup() {
@@ -43,7 +45,7 @@ public class PortfolioSelectionModal extends DashboardUITestBase {
         }
     }
 
-    @Test(groups = {"regression", "ui", "smoke", "dashboard"},
+    @Test(groups = {REGRESSION, UI, SMOKE, DASHBOARD},
             description = "ESGCA -3252 : Verify user cannot select multiple portfolios at a time")
     @Xray(test = {3252, 3436})
     public void verifyUserCanSelectSinglePortfolioOnSelectionModalPopup() {
@@ -69,7 +71,7 @@ public class PortfolioSelectionModal extends DashboardUITestBase {
     }
 
 
-    @Test(groups = {"regression", "ui", "smoke", "dashboard"},
+    @Test(groups = {REGRESSION, UI, SMOKE, DASHBOARD},
             description = "ESGCA -3259/3260 : Verify Click on Portfolio Selection Opens Portfolio Selection Modal and closes on clicking away from the popup")
     @Xray(test = {3259, 3260})
     public void verifySelectionModalPopupBehaviour() {
@@ -91,7 +93,7 @@ public class PortfolioSelectionModal extends DashboardUITestBase {
         }
     }
 
-    @Test(groups = {"regression", "ui", "smoke", "dashboard"},
+    @Test(groups = {REGRESSION, UI, SMOKE, DASHBOARD},
             description = "ESGCA -3432 : Verify Upload Portfolio Link is Placed Right Above the List in Portfolio Selection Modal as per Design")
     @Xray(test = {3432})
     public void verifyUploadPortfolioLinkOnSelectionModalPopup() {
@@ -110,7 +112,7 @@ public class PortfolioSelectionModal extends DashboardUITestBase {
         }
     }
 
-    @Test(groups = {"regression", "ui", "smoke", "dashboard"},
+    @Test(groups = {REGRESSION, UI, SMOKE, DASHBOARD},
             description = "ESGCA -3435/3436 : Verify Selected Portfolio is Displayed on Top of the List")
     @Xray(test = {3435, 3436})
     public void verifyPortfolioSelectionOnSelectionModalPopup() {
@@ -149,7 +151,7 @@ public class PortfolioSelectionModal extends DashboardUITestBase {
         }
     }
 
-    @Test(groups = {"regression", "ui", "smoke", "robot_dependency", "dashboard"},
+    @Test(groups = {REGRESSION, UI, SMOKE, ROBOT_DEPENDENCY, DASHBOARD},
             description = "ESGCA -3269 : Verify that Region and Sector updated after Portfolio change")
     @Xray(test = {3269})
     public void verifyRegionAndSectorSetAsperSelectedPortfolio() {
@@ -213,7 +215,7 @@ public class PortfolioSelectionModal extends DashboardUITestBase {
 
     }
 
-    @Test(groups = {"regression", "ui", "smoke", "dashboard"},
+    @Test(groups = {REGRESSION, UI, SMOKE, DASHBOARD},
             description = "ESGCA -3430 : Verify the Sorting logic for Portfolios on Selection modal popup.")
     @Xray(test = {3251, 3430})
     public void verifyPortfolioSortingOnSelectionModalPopup() {

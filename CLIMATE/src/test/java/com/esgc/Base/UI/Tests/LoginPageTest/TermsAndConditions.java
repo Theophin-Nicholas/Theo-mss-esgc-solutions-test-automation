@@ -1,15 +1,18 @@
 package com.esgc.Base.UI.Tests.LoginPageTest;
 
-import com.esgc.Base.UI.Pages.LoginPage;
 import com.esgc.Base.TestBases.DashboardUITestBase;
+import com.esgc.Base.UI.Pages.LoginPage;
 import com.esgc.Utilities.*;
 import org.openqa.selenium.Keys;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
+import static com.esgc.Utilities.Groups.REGRESSION;
+import static com.esgc.Utilities.Groups.UI;
+
 public class TermsAndConditions extends DashboardUITestBase {
 
-    @Test(groups = {"regression", "ui"})
+    @Test(groups = {REGRESSION, UI})
     @Xray(test = {5431, 5437, 5439})
     //Covers ESGCA-5439 and ESGCA-5431 also
     public void externalUserPampaTC() {
@@ -43,7 +46,7 @@ public class TermsAndConditions extends DashboardUITestBase {
     }
 
 
-    @Test(groups = {"regression", "ui"})
+    @Test(groups = {REGRESSION, UI})
     @Xray(test = 5432)
     public void internalUserPampaTC() {
         test.info("Open Login Page");
@@ -59,7 +62,7 @@ public class TermsAndConditions extends DashboardUITestBase {
         }
     }
 
-    @Test(groups = {"regression", "ui"})
+    @Test(groups = {REGRESSION, UI})
     @Xray(test = 5445)
     public void externalUserClearCookies() {
         test.info("Open Login Page");

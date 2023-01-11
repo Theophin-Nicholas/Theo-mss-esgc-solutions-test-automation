@@ -5,9 +5,12 @@ import com.esgc.Base.TestBases.TestBaseClimate;
 import com.esgc.Utilities.Xray;
 import org.testng.annotations.Test;
 
+import static com.esgc.Utilities.Groups.API;
+import static com.esgc.Utilities.Groups.REGRESSION;
+
 public class PortfolioSettings {
 
-    @Test(groups = {"api", "regression"})
+    @Test(groups = {API, REGRESSION})
     @Xray(test = {9630,9638})
     public void verifyPortfolioDeletion() {
         APIController apiController = new APIController();

@@ -9,20 +9,22 @@ import com.esgc.Utilities.Driver;
 import com.esgc.Utilities.Xray;
 import org.testng.annotations.Test;
 
+import static com.esgc.Utilities.Groups.*;
+
 public class EntityIssuerPageTextTestsRouting extends EntityPageTestBase {
 
 
     @Xray(test = {6270})
-    @Test(groups = {"regression", "ui", "smoke", "entity_issuer"},
+    @Test(groups = {REGRESSION, UI, SMOKE, ISSUER},
             dataProvider = "credentialsP2", dataProviderClass = IssuerDataProviderClass.class,
             description = "Verify Assessment Framework")
-    public void verifyAssessmentFramework(String UserID, String Password) {
+    public void verifyAssessmentFramework(String... data) {
         EntityIssuerPage entitypage = new EntityIssuerPage();
         try {
             LoginPageIssuer LoginPageIssuer = new LoginPageIssuer();
             BrowserUtils.wait(2);
             if (Driver.getDriver().getCurrentUrl().contains("login"))
-                LoginPageIssuer.loginWithParams(UserID, Password);
+                LoginPageIssuer.loginWithParams(data[0].toString(),data[1].toString());
 
             BrowserUtils.wait(10);
             String AssementData = "Our " + entitypage.header.getText().split("for ")[1].toString() + " industry framework is composed of categories and sub-categories. " +
@@ -41,16 +43,16 @@ public class EntityIssuerPageTextTestsRouting extends EntityPageTestBase {
 
 
     @Xray(test = {7902})
-    @Test(groups = {"regression", "ui", "smoke", "entity_issuer"},
+    @Test(groups = {REGRESSION, UI, SMOKE, ISSUER},
             dataProvider = "credentialsP2", dataProviderClass = IssuerDataProviderClass.class,
             description = "Verify Scoring Methodology")
-    public void verifyScoringMethodology(String UserID, String Password) {
+    public void verifyScoringMethodology(String... data) {
         EntityIssuerPage entitypage = new EntityIssuerPage();
         try {
             LoginPageIssuer LoginPageIssuer = new LoginPageIssuer();
             BrowserUtils.wait(2);
             if (Driver.getDriver().getCurrentUrl().contains("login"))
-                LoginPageIssuer.loginWithParams(UserID, Password);
+                LoginPageIssuer.loginWithParams(data[0].toString(),data[1].toString());
 
             BrowserUtils.wait(10);
             String AssementData = "Our " + entitypage.header.getText().split("for ")[1].toString() + " industry framework is composed of categories and sub-categories. " +
@@ -67,16 +69,16 @@ public class EntityIssuerPageTextTestsRouting extends EntityPageTestBase {
     }
 
     @Xray(test = {6356})
-    @Test(groups = {"regression", "ui", "smoke", "entity_issuer"},
+    @Test(groups = {REGRESSION, UI, SMOKE, ISSUER},
             dataProvider = "credentialsP2", dataProviderClass = IssuerDataProviderClass.class,
             description = "Verify Banner")
-    public void verifybanner(String UserID, String Password) {
+    public void verifybanner(String... data) {
         EntityIssuerPage entitypage = new EntityIssuerPage();
         try {
             LoginPageIssuer LoginPageIssuer = new LoginPageIssuer();
             BrowserUtils.wait(2);
             if (Driver.getDriver().getCurrentUrl().contains("login"))
-                LoginPageIssuer.loginWithParams(UserID, Password);
+                LoginPageIssuer.loginWithParams(data[0].toString(),data[1].toString());
             BrowserUtils.wait(10);
             entitypage.validateIssuerPageBanner();
             entitypage.logout.click();
@@ -87,16 +89,16 @@ public class EntityIssuerPageTextTestsRouting extends EntityPageTestBase {
     }
 
     @Xray(test = {7298, 7902, 9070})
-    @Test(groups = {"regression", "ui", "smoke", "entity_issuer"},
+    @Test(groups = {REGRESSION, UI, SMOKE, ISSUER},
             dataProvider = "credentialsP2", dataProviderClass = IssuerDataProviderClass.class,
             description = "Verify Grade and Scores")
-    public void verifyGradesAndScores(String UserID, String Password) {
+    public void verifyGradesAndScores(String... data) {
         EntityIssuerPage entitypage = new EntityIssuerPage();
         try {
             LoginPageIssuer LoginPageIssuer = new LoginPageIssuer();
             BrowserUtils.wait(2);
             if (Driver.getDriver().getCurrentUrl().contains("login"))
-                LoginPageIssuer.loginWithParams(UserID, Password);
+                LoginPageIssuer.loginWithParams(data[0].toString(),data[1].toString());
             BrowserUtils.wait(10);
             entitypage.validateScoringMethodologyStaticText();
             entitypage.logout.click();

@@ -17,12 +17,14 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import static com.esgc.Pages.LoginPageIssuer.OrbisID;
+import static com.esgc.Utilities.Groups.ISSUER;
+import static com.esgc.Utilities.Groups.REGRESSION;
 
 public class DriverDetailsTest extends EntityIssuerPageDataValidationTestBase {
     List<String> criteria = new ArrayList<>();
 
     @Xray(test = {6290,7074,8896})
-    @Test(groups = {"entity_issuer","regression"})
+    @Test(groups = {ISSUER,REGRESSION})
     public void driverDetailsTestForNonTrendMetrcs() {
          String orbisID = OrbisID;
         //get all criteria using DriverSummary API
@@ -83,7 +85,7 @@ public class DriverDetailsTest extends EntityIssuerPageDataValidationTestBase {
 
 
     @Xray(test = {7984})
-    @Test(groups = {"entity_issuer","regression"})
+    @Test(groups = {ISSUER,REGRESSION})
     public void driverDetailsTestForTrendMetrics() {
         String orbisID = OrbisID;
         //get all criteria using DriverSummary API

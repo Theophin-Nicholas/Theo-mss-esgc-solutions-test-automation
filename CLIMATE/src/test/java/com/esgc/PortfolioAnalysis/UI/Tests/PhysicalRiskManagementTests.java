@@ -1,14 +1,17 @@
 package com.esgc.PortfolioAnalysis.UI.Tests;
 
+import com.esgc.Base.TestBases.UITestBase;
 import com.esgc.PortfolioAnalysis.UI.Pages.PhysicalRiskPages.PhysicalRiskManagementPages.PhysicalRiskManagementPage;
 import com.esgc.PortfolioAnalysis.UI.Pages.ResearchLinePage;
-import com.esgc.Base.TestBases.UITestBase;
 import com.esgc.Utilities.Xray;
 import org.testng.annotations.Test;
 
+import static com.esgc.Utilities.Groups.REGRESSION;
+import static com.esgc.Utilities.Groups.UI;
+
 public class PhysicalRiskManagementTests extends UITestBase {
 
-    @Test(groups = {"regression", "ui"})
+    @Test(groups = {REGRESSION, UI})
     @Xray(test = {7994})
     public void validatePhysicalRiskManagementPage() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
@@ -31,7 +34,7 @@ public class PhysicalRiskManagementTests extends UITestBase {
 
     }
 
-    @Test(groups = {"regression", "ui"})
+    @Test(groups = {REGRESSION, UI})
     @Xray(test = {8029})
     public void validateNoDataMessage() {
         ResearchLinePage researchLinePage = new ResearchLinePage();

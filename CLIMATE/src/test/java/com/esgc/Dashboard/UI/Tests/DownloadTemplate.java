@@ -1,19 +1,20 @@
 package com.esgc.Dashboard.UI.Tests;
 
+import com.esgc.Base.TestBases.DashboardUITestBase;
 import com.esgc.Dashboard.UI.Pages.DashboardPage;
 import com.esgc.PortfolioAnalysis.UI.Pages.ResearchLinePage;
-import com.esgc.Base.TestBases.DashboardUITestBase;
 import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.ExcelUtil;
 import com.esgc.Utilities.Xray;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
+import static com.esgc.Utilities.Groups.*;
 
 public class DownloadTemplate extends DashboardUITestBase {
 
 
-    @Test(groups = {"dashboard", "regression", "ui", "smoke"})
+    @Test(groups = {DASHBOARD, REGRESSION, UI, SMOKE})
     @Xray(test = {192, 188, 287})
     public void downloadTemplateLinkTest() {
         DashboardPage dashboardPage = new DashboardPage();
@@ -41,7 +42,7 @@ public class DownloadTemplate extends DashboardUITestBase {
 
 
     @Test(description = "Verify that the downloaded template, when clicked will launch Excel",
-            groups = {"dashboard", "regression", "ui", "smoke"})
+            groups = {DASHBOARD, REGRESSION, UI, SMOKE})
     public void verifyTemplateIsAccessibleTest() {
         DashboardPage dashboardPage = new DashboardPage();
 
@@ -67,7 +68,7 @@ public class DownloadTemplate extends DashboardUITestBase {
     }
 
     @Test(description = "Verify that the downloaded template, when clicked will launch Excel",
-            groups = {"dashboard", "regression", "ui", "smoke"})
+            groups = {DASHBOARD, REGRESSION, UI, SMOKE})
     public void verifyTemplateFromPortfolioManagement() {
         DashboardPage dashboardPage = new DashboardPage();
         ResearchLinePage researchLinePage = new ResearchLinePage();
