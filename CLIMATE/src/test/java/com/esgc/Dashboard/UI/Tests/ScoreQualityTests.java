@@ -1,18 +1,19 @@
 package com.esgc.Dashboard.UI.Tests;
 
-import com.esgc.Dashboard.UI.Pages.DashboardPage;
-import com.esgc.Base.UI.Pages.LoginPage;
-import com.esgc.PortfolioAnalysis.UI.Pages.ResearchLinePage;
 import com.esgc.Base.TestBases.UITestBase;
+import com.esgc.Base.UI.Pages.LoginPage;
+import com.esgc.Dashboard.UI.Pages.DashboardPage;
+import com.esgc.PortfolioAnalysis.UI.Pages.ResearchLinePage;
 import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.EntitlementsBundles;
 import com.esgc.Utilities.Xray;
 import org.testng.annotations.Test;
 
+import static com.esgc.Utilities.Groups.*;
 
 public class ScoreQualityTests extends UITestBase {
 
-    @Test(groups = {"esg", "regression", "ui"})
+    @Test(groups = {ESG, REGRESSION, UI})
     @Xray(test = {11131,11133})
     public void verifyScoreQualityToggle() {
         DashboardPage dashboardPage = new DashboardPage();
@@ -32,7 +33,7 @@ public class ScoreQualityTests extends UITestBase {
         assertTestCase.assertTrue(dashboardPage.scoreQualityButton.isDisplayed(),"Verify Score Quality Button in Dashboard Page");
     }
 
-    @Test(groups = {"esg", "regression", "ui"})
+    @Test(groups = {ESG, REGRESSION, UI})
     @Xray(test = {11136})
     public void verifyScoreQualityLevels() {
         DashboardPage dashboardPage = new DashboardPage();
@@ -46,7 +47,7 @@ public class ScoreQualityTests extends UITestBase {
         dashboardPage.verifyScoreQualityLevelsInIconInCoveragePopup();
     }
 
-    @Test(groups = {"esg", "regression", "ui"})
+    @Test(groups = {ESG, REGRESSION, UI})
     @Xray(test = {11135})
     public void verifyScoreQualityIconWithEntities_Dashboard() {
         DashboardPage dashboardPage = new DashboardPage();
@@ -74,7 +75,7 @@ public class ScoreQualityTests extends UITestBase {
 
     }
 
-    @Test(groups = {"esg", "regression", "ui"})
+    @Test(groups = {ESG, REGRESSION, UI})
     @Xray(test = {11163, 11175})
     public void verifyScoreQualityIconWithEntities_PortfolioAnalysis() {
         DashboardPage dashboardPage = new DashboardPage();
@@ -108,7 +109,7 @@ public class ScoreQualityTests extends UITestBase {
         researchLine.hideButton.click();
     }
 
-    @Test(groups = {"esg", "regression", "ui"})
+    @Test(groups = {ESG, REGRESSION, UI})
     @Xray(test = {11216})
     public void verifyScoreQualityToggleWithoutEsgEntitlement() {
         LoginPage login = new LoginPage();
@@ -126,7 +127,7 @@ public class ScoreQualityTests extends UITestBase {
 
     }
 
-    @Test(groups = {"esg", "regression", "ui"})
+    @Test(groups = {ESG, REGRESSION, UI})
     @Xray(test = {12069})
     public void verifyScoreQualityIconWithSubsidiaryCompanies_Dashboard() {
         DashboardPage dashboardPage = new DashboardPage();
@@ -156,7 +157,7 @@ public class ScoreQualityTests extends UITestBase {
 
     }
 
-    @Test(groups = {"esg", "regression", "ui"})
+    @Test(groups = {ESG, REGRESSION, UI})
     @Xray(test = {12071})
     public void verifyScoreQualityIconWithSubsidiaryCompanies_PortfolioAnalysis() {
         DashboardPage dashboardPage = new DashboardPage();

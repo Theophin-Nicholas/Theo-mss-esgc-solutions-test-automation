@@ -7,9 +7,12 @@ import com.esgc.Base.TestBases.APITestBase;
 import com.esgc.Utilities.Xray;
 import org.testng.annotations.Test;
 
+import static com.esgc.Utilities.Groups.API;
+import static com.esgc.Utilities.Groups.REGRESSION;
+
 public class InvalidAuthorizationTests extends APITestBase {
 
-    @Test(groups = {"api", "regression"}, dataProvider = "API Research Lines")
+    @Test(groups = {API, REGRESSION}, dataProvider = "API Research Lines")
     @Xray(test = {3324, 3325, 3326, 3327, 3328, 3329, 3330,  3332})
     //3331 TCFD
     public void invalidTokenAuthorizationTest(String researchLine) {
@@ -38,7 +41,7 @@ public class InvalidAuthorizationTests extends APITestBase {
         apiController.getHistoryTablesResponse(portfolio_id, researchLine, apiFilterPayload).then().assertThat().statusCode(403);
     }
 
-    @Test(groups = {"api", "regression"}, dataProvider = "API Research Lines")
+    @Test(groups = {API, REGRESSION}, dataProvider = "API Research Lines")
     @Xray(test = {3308, 3309, 3310, 3311, 3312, 3313, 3314,  3316})
     //3315 TCFD
     public void noTokenAuthorizationTest(String researchLine) {

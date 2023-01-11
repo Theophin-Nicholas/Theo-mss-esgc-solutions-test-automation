@@ -1,16 +1,18 @@
 package com.esgc.EntityProfile.API.Tests;
 
+import com.esgc.Base.TestBases.EntityClimateProfileTestBase;
 import com.esgc.EntityProfile.API.APIModels.SectorComparison;
 import com.esgc.EntityProfile.API.Controllers.EntityProfileClimatePageAPIController;
-import com.esgc.Base.TestBases.EntityClimateProfileTestBase;
 import com.esgc.Utilities.Xray;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import org.testng.annotations.Test;
 
+import static com.esgc.Utilities.Groups.*;
+
 public class ClimateProfileSectorComparisonChartAPITests extends EntityClimateProfileTestBase {
 //TODO add all research lines
-    @Test(groups = {"api", "regression", "entity_climate_profile"}, dataProvider = "API Research Lines2 Carbon Footprint")
+    @Test(groups = {API, REGRESSION, ENTITY_PROFILE}, dataProvider = "API Research Lines2 Carbon Footprint")
     @Xray(test = {6139})
     public void validateTransitionRiskSectorComparisonChartContentResponse(String researchLine, String orbis_id) {
         EntityProfileClimatePageAPIController entityClimateProfileApiController = new EntityProfileClimatePageAPIController();
@@ -29,7 +31,7 @@ public class ClimateProfileSectorComparisonChartAPITests extends EntityClimatePr
         test.pass("Successfully validated for " + researchLine + "Widget API");
     }
 
-    @Test(groups = {"api", "regression", "entity_climate_profile"}, dataProvider = "API Research Lines2 Carbon Footprint")
+    @Test(groups = {API, REGRESSION, ENTITY_PROFILE}, dataProvider = "API Research Lines2 Carbon Footprint")
     @Xray(test = {6141})
     public void validateTransitionRiskSectorComparisonChartContentResponseWithInvalidToken(String researchLine, String orbis_id) {
         test.info("Unauthorised Access : Climate Summery API POST request for " + researchLine + "Widget");
@@ -40,7 +42,7 @@ public class ClimateProfileSectorComparisonChartAPITests extends EntityClimatePr
         test.pass("Successfully validated for " + researchLine + "research line");
     }
 
-    @Test(groups = {"api", "regression", "entity_climate_profile"}, dataProvider = "API Research Lines2 Operations Risk")
+    @Test(groups = {API, REGRESSION, ENTITY_PROFILE}, dataProvider = "API Research Lines2 Operations Risk")
     @Xray(test = {6191})
     public void validatePhysicalRiskSectorComparisonChartContentResponse(String researchLine, String orbis_id) {
         EntityProfileClimatePageAPIController entityClimateProfileApiController = new EntityProfileClimatePageAPIController();
@@ -55,7 +57,7 @@ public class ClimateProfileSectorComparisonChartAPITests extends EntityClimatePr
         test.pass("Successfully validated for " + researchLine + "Widget API");
     }
 
-    @Test(groups = {"api", "regression", "entity_climate_profile"}, dataProvider = "API Research Lines2 Operations Risk")
+    @Test(groups = {API, REGRESSION, ENTITY_PROFILE}, dataProvider = "API Research Lines2 Operations Risk")
     @Xray(test = {6191})
     public void validatePhysicalRiskSectorComparisonChartContentResponseWithInvalidToken(String researchLine, String orbis_id) {
         test.info("Unauthorised Access : Climate Summery API POST request for " + researchLine + "Widget");
@@ -66,7 +68,7 @@ public class ClimateProfileSectorComparisonChartAPITests extends EntityClimatePr
         test.pass("Successfully validated for " + researchLine + "research line");
     }
 
-    @Test(groups = {"api", "regression", "entity_climate_profile"}, dataProvider = "API Research Lines2 Market Risk")
+    @Test(groups = {API, REGRESSION, ENTITY_PROFILE}, dataProvider = "API Research Lines2 Market Risk")
     @Xray(test = {8093})
     public void verifyComparisonChartContentResponseForMarketRisk(String researchLine, String orbis_id) {
         test.info("Authorised Access : Physical Climate Risk: Market Risk API POST request for " + researchLine + "Widget");
@@ -79,7 +81,7 @@ public class ClimateProfileSectorComparisonChartAPITests extends EntityClimatePr
         test.pass("Successfully validated for " + researchLine + "research line");
     }
 
-    @Test(groups = {"api", "regression", "entity_climate_profile"}, dataProvider = "API Research Lines2 Market Risk")
+    @Test(groups = {API, REGRESSION, ENTITY_PROFILE}, dataProvider = "API Research Lines2 Market Risk")
     @Xray(test = {8094})
     public void verifySectorComparisonChartContentResponseWithInvalidParameters(String researchLine, String orbis_id) {
         test.info("Unauthorised Access : Comparison Chart API POST request for " + researchLine + "Widget");
@@ -92,7 +94,7 @@ public class ClimateProfileSectorComparisonChartAPITests extends EntityClimatePr
         test.pass("Successfully validated for " + researchLine + "research line");
     }
 
-    @Test(groups = {"api", "regression", "entity_climate_profile"}, dataProvider = "API Research Lines2 Supply Chain Risk")
+    @Test(groups = {API, REGRESSION, ENTITY_PROFILE}, dataProvider = "API Research Lines2 Supply Chain Risk")
     @Xray(test = {8120})
     public void verifyComparisonChartContentResponseForSupplyChainRiskTest(String researchLine, String orbis_id) {
         System.out.println("========================================");
@@ -108,7 +110,7 @@ public class ClimateProfileSectorComparisonChartAPITests extends EntityClimatePr
         test.pass("Successfully validated for " + researchLine + "research line");
     }
 
-    @Test(groups = {"api", "regression", "entity_climate_profile"}, dataProvider = "API Research Lines2 Supply Chain Risk")
+    @Test(groups = {API, REGRESSION, ENTITY_PROFILE}, dataProvider = "API Research Lines2 Supply Chain Risk")
     @Xray(test = {8121})
     public void verifySectorComparisonChartContentResponseWithInvalidParametersForSupplyChainRiskTest(String researchLine, String orbis_id) {
         test.info("Unauthorised Access : Comparison Chart API POST request for " + researchLine + "Widget");

@@ -15,11 +15,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.esgc.Utilities.Groups.*;
+
 public class EntityIssuerAddMissingDocumentPopUpTestRouting extends EntityPageTestBase {
 
 
     @Xray(test = {6430, 6471, 6468, 8795, 9821})
-    @Test(groups = {"regression", "ui", "smoke", "entity_issuer"},
+    @Test(groups = {REGRESSION, UI, SMOKE, ISSUER},
             dataProvider = "loginP2", dataProviderClass = IssuerDataProviderClass.class,
             description = "Verify Add missing document functionlity")
     public void testMissingDocumentPopUp(String UserID, String Password) {
@@ -46,7 +48,7 @@ public class EntityIssuerAddMissingDocumentPopUpTestRouting extends EntityPageTe
     }
 
     @Xray(test = {6470})
-    @Test(groups = {"regression", "ui", "smoke", "entity_issuer"},
+    @Test(groups = {REGRESSION, UI, SMOKE, ISSUER},
             dataProvider = "loginP2", dataProviderClass = IssuerDataProviderClass.class,
             description = "Verify cancel missing Document")
     public void verifyCancelOnMissingDocumentPopUp(String UserID, String Password) {
@@ -69,7 +71,7 @@ public class EntityIssuerAddMissingDocumentPopUpTestRouting extends EntityPageTe
     }
 
     @Xray(test = {6426})
-    @Test(groups = {"regression", "ui", "entity_issuer"},
+    @Test(groups = {REGRESSION, UI, ISSUER},
             dataProvider = "loginP2", dataProviderClass = IssuerDataProviderClass.class,
             description = "Verify click out of missing Document popup")
     public void verifyClickOutOfMissingDocumentPopUp(String UserID, String Password) {
@@ -94,7 +96,7 @@ public class EntityIssuerAddMissingDocumentPopUpTestRouting extends EntityPageTe
     }
 
     @Xray(test = {6431})
-    @Test(groups = {"regression", "ui", "smoke", "entity_issuer"},
+    @Test(groups = {REGRESSION, UI, SMOKE, ISSUER},
             dataProvider = "loginP2", dataProviderClass = IssuerDataProviderClass.class,
             description = "Verify delete url functionality")
     public void verifyDeleteURLFunctionality(String UserID, String Password) {
@@ -123,7 +125,7 @@ public class EntityIssuerAddMissingDocumentPopUpTestRouting extends EntityPageTe
     }
 
     @Xray(test = {6466})
-    @Test(groups = {"regression", "ui", "smoke", "entity_issuer"},
+    @Test(groups = {REGRESSION, UI, SMOKE, ISSUER},
             dataProvider = "loginP2", dataProviderClass = IssuerDataProviderClass.class,
             description = "Verify duplicate url functionlity")
     public void verifyDuplicateURL(String UserID, String Password) {
@@ -151,7 +153,7 @@ public class EntityIssuerAddMissingDocumentPopUpTestRouting extends EntityPageTe
     }
 
     @Xray(test = {6469})
-    @Test(groups = {"regression", "ui", "smoke", "entity_issuer"},
+    @Test(groups = {REGRESSION, UI, SMOKE, ISSUER},
             dataProvider = "loginP2", dataProviderClass = IssuerDataProviderClass.class,
             description = "Verify save without adding categories")
     public void verifySaveWithoutAssignedCategories(String UserID, String Password) {
@@ -179,7 +181,7 @@ public class EntityIssuerAddMissingDocumentPopUpTestRouting extends EntityPageTe
     }
 
     @Xray(test = {6270})
-    @Test(groups = {"regression", "ui", "smoke", "entity_issuer"},
+    @Test(groups = {REGRESSION, UI, SMOKE, ISSUER},
             dataProvider = "loginP2", dataProviderClass = IssuerDataProviderClass.class,
             description = "Verify Assessment Framework")
     public void verifyAssessmentFramework(String UserID, String Password) {
@@ -207,7 +209,7 @@ public class EntityIssuerAddMissingDocumentPopUpTestRouting extends EntityPageTe
 
 
     @Xray(test = {7902})
-    @Test(groups = {"regression", "ui", "smoke", "entity_issuer"},
+    @Test(groups = {REGRESSION, UI, SMOKE, ISSUER},
             dataProvider = "loginP2", dataProviderClass = IssuerDataProviderClass.class,
             description = "Verify Scoring Methodology")
     public void verifyScoringMethodology(String UserID, String Password) {
@@ -236,7 +238,7 @@ public class EntityIssuerAddMissingDocumentPopUpTestRouting extends EntityPageTe
     }
 
     @Xray(test = {6270})
-    @Test(groups = {"regression", "ui", "smoke", "entity_issuer"},
+    @Test(groups = {REGRESSION, UI, SMOKE, ISSUER},
             dataProvider = "loginP2", dataProviderClass = IssuerDataProviderClass.class,
             description = "Verify Weight is Numeric")
     public void verifyWeightIsNumeric(String UserID, String Password) {
@@ -259,7 +261,7 @@ public class EntityIssuerAddMissingDocumentPopUpTestRouting extends EntityPageTe
     }
 
     @Xray(test = {6356})
-    @Test(groups = {"regression", "ui", "smoke", "entity_issuer"},
+    @Test(groups = {REGRESSION, UI, SMOKE, ISSUER},
             dataProvider = "loginP2", dataProviderClass = IssuerDataProviderClass.class,
             description = "Verify Banner")
     public void verifybanner(String UserID, String Password) {
@@ -279,7 +281,7 @@ public class EntityIssuerAddMissingDocumentPopUpTestRouting extends EntityPageTe
     }
 
     @Xray(test = {7298, 7902})
-    @Test(groups = {"regression", "ui", "smoke", "entity_issuer"},
+    @Test(groups = {REGRESSION, UI, SMOKE, ISSUER},
             dataProvider = "loginP2", dataProviderClass = IssuerDataProviderClass.class,
             description = "Verify Grade and Scores")
     public void verifyGradesAndScores(String UserID, String Password) {
@@ -299,7 +301,7 @@ public class EntityIssuerAddMissingDocumentPopUpTestRouting extends EntityPageTe
     }
 
     @Xray(test = {8087, 8088, 10250})
-    @Test(groups = {"regression", "ui", "smoke", "entity_issuer"},
+    @Test(groups = {REGRESSION, UI, SMOKE, ISSUER},
             dataProvider = "loginP2", dataProviderClass = IssuerDataProviderClass.class,
             description = "Verify Methodology Links")
     public void verifyMethodologyLinks(String UserID, String Password) {
@@ -323,7 +325,7 @@ public class EntityIssuerAddMissingDocumentPopUpTestRouting extends EntityPageTe
     }
 
     @Xray(test = {11714})
-    @Test(groups = {"regression", "ui", "smoke", "entity_issuer"},
+    @Test(groups = {REGRESSION, UI, SMOKE, ISSUER},
             dataProvider = "loginP2", dataProviderClass = IssuerDataProviderClass.class,
             description = "Verify Add missing document functionlity with wrong URL")
     public void testMissingDocumentPopUpWrongURL(String... dataProvider) {

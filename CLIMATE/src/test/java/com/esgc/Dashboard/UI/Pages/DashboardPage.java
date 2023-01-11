@@ -2,8 +2,8 @@ package com.esgc.Dashboard.UI.Pages;
 
 
 import com.esgc.Base.UI.Pages.UploadPage;
-import com.esgc.Utilities.*;
 import com.esgc.Dashboard.DB.DBQueries.DashboardQueries;
+import com.esgc.Utilities.*;
 import com.esgc.Utilities.Database.DatabaseDriver;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 public class DashboardPage extends UploadPage {
 
     //=============== Summary Header
-    @FindBy(xpath = "//*[starts-with(text(),'Coverage: Across')]/preceding-sibling::div")
+    @FindBy(xpath = "//*[./following-sibling::*/*[starts-with(text(),'Coverage: Across')]]")
     public WebElement portfolioNameInSummaryHeaders;
 
     @FindBy(xpath = "//header[.//*[text()='About Climate Risk']]")
@@ -38,6 +38,15 @@ public class DashboardPage extends UploadPage {
 
     @FindBy(xpath = "//h3[contains(text(),'Portfolio Average')]")
     public WebElement heatmapPortfolioAverage;
+
+    @FindBy(xpath = "//div[@id='portfoliomonitoring-test-id']//div[@class='scores']/preceding-sibling::span")
+    public WebElement criticalControversiesInEsg;
+
+    @FindBy(xpath = "//div[@class='score']/span")
+    public List<WebElement> esgScoreBoxes;
+
+    @FindBy(xpath = "//div[@class='score']/p")
+    public List<WebElement> esgScoreBoxesLabels;
 
     @FindBy(xpath = "//div[text()='Physical Risk']")
     public WebElement physicalRiskCard;

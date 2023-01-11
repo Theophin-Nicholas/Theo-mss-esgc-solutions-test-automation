@@ -19,13 +19,14 @@ import static com.esgc.Reporting.CustomAssertion.getScreenshot;
 
 public class XrayListener implements IInvokedMethodListener, ITestListener {
 
-    List<Integer> testCaseList;
+    public List<Integer> testCaseList;
     boolean isUITest = false;
 
-    public void beforeInvocation(IInvokedMethod method, ITestResult testResult) {
+    public synchronized void beforeInvocation(IInvokedMethod method, ITestResult testResult) {
 
         if (method.isTestMethod() && annotationPresent(method, Xray.class)) {
 
+            //Take test cases passed in Xray annotation
             testCaseList = Arrays.stream(method
                             .getTestMethod()
                             .getConstructorOrMethod()
@@ -33,6 +34,20 @@ public class XrayListener implements IInvokedMethodListener, ITestListener {
                             .getAnnotation(Xray.class)
                             .test())
                     .boxed().collect(Collectors.toList());
+
+            //Take test case numbers passed with data provider
+            try {
+                for (Integer testCase : (Integer[]) (Arrays.stream(testResult.getParameters()).filter(e -> e.getClass().equals(Integer[].class)).findFirst().get())) {
+                    System.out.println("testCase = " + testCase);
+                    if (!testCaseList.contains(testCase)) {
+                        testCaseList.add(testCase);
+                    }
+                }
+            } catch (Exception ignored) {
+
+            }
+
+            //Take screenshots only for UI tests, since there is nothing to show in API and Data Validation tests
             List<String> groups = Arrays.stream(method
                     .getTestMethod()
                     .getConstructorOrMethod()
@@ -41,36 +56,12 @@ public class XrayListener implements IInvokedMethodListener, ITestListener {
                     .groups()).collect(Collectors.toList());
 
             isUITest = groups.contains("UI") || groups.contains("ui") || groups.contains("Ui");
-           /* testResult.setAttribute(
-                    "requirement",
-                    method
-                            .getTestMethod()
-                            .getConstructorOrMethod()
-                            .getMethod()
-                            .getAnnotation(Xray.class)
-                            .requirement());
-            testResult.setAttribute(
-                    "test",
-                    method
-                            .getTestMethod()
-                            .getConstructorOrMethod()
-                            .getMethod()
-                            .getAnnotation(Xray.class)
-                            .test());
-            testResult.setAttribute(
-                    "labels",
-                    method
-                            .getTestMethod()
-                            .getConstructorOrMethod()
-                            .getMethod()
-                            .getAnnotation(Xray.class)
-                            .labels());*/
         }
     }
 
 
     @Override
-    public void onTestFailure(ITestResult arg0) {
+    public synchronized void onTestFailure(ITestResult arg0) {
         if (testCaseList != null) {
             TestCase testCase = new TestCase();
             testCase.setPassOrFail(false);
@@ -93,18 +84,18 @@ public class XrayListener implements IInvokedMethodListener, ITestListener {
     }
 
     @Override
-    public void onTestSkipped(ITestResult arg0) {
+    public synchronized void onTestSkipped(ITestResult arg0) {
         // TODO Auto-generated method stub
 
     }
 
     @Override
-    public void onTestStart(ITestResult arg0) {
+    public synchronized void onTestStart(ITestResult arg0) {
 
     }
 
     @Override
-    public void onTestSuccess(ITestResult arg0) {
+    public synchronized void onTestSuccess(ITestResult arg0) {
         if (testCaseList != null) {
             TestCase testCase = new TestCase();
             testCase.setPassOrFail(true);
@@ -119,7 +110,7 @@ public class XrayListener implements IInvokedMethodListener, ITestListener {
         }
     }
 
-    private boolean annotationPresent(IInvokedMethod method, Class<? extends Annotation> clazz) {
+    private synchronized boolean annotationPresent(IInvokedMethod method, Class<? extends Annotation> clazz) {
         return method.getTestMethod().getConstructorOrMethod().getMethod().isAnnotationPresent(clazz);
     }
 }

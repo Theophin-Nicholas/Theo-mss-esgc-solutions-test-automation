@@ -16,11 +16,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.esgc.Pages.LoginPageIssuer.OrbisID;
+import static com.esgc.Utilities.Groups.ISSUER;
+import static com.esgc.Utilities.Groups.REGRESSION;
 
 
 public class ESGDriverScoreTest extends EntityIssuerPageDataValidationTestBase {
 
-   /* @Test(enabled = false, dataProvider = "orbisID", groups = {"entity_page"})
+   /* @Test(enabled = false, dataProvider = "orbisID", groups = {ISSUER})
     @Xray(test = {4049, 4065})
     public void validateScoreRange(@Optional String orbisID) {
         SoftAssert softAssert = new SoftAssert();
@@ -75,8 +77,8 @@ public class ESGDriverScoreTest extends EntityIssuerPageDataValidationTestBase {
 
     }*/
 
-  //  @Test(dataProvider = "orbisID", groups = {"regression", "entity_issuer"})
-  @Test( groups = {"regression", "entity_issuer"})
+  //  @Test(dataProvider = "orbisID", groups = {REGRESSION, ISSUER})
+  @Test( groups = {REGRESSION, ISSUER})
     @Xray(test = {4049,5868, 5869})
     //public void validateSubSectorDrivers(@Optional String orbisID) {
   public void validateSubSectorDrivers() {

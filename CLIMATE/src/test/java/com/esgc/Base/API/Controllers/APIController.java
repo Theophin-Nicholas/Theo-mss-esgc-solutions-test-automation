@@ -4,12 +4,12 @@ import com.aventstack.extentreports.markuputils.CodeLanguage;
 import com.aventstack.extentreports.markuputils.MarkupHelper;
 import com.esgc.Base.API.APIModels.APIFilterPayload;
 import com.esgc.Base.API.APIModels.APIFilterPayloadWithImpactFilter;
-import com.esgc.PortfolioAnalysis.API.APIModels.RangeAndScoreCategory;
 import com.esgc.Base.DB.DBModels.ResearchLineIdentifier;
+import com.esgc.PortfolioAnalysis.API.APIModels.RangeAndScoreCategory;
+import com.esgc.PortfolioAnalysis.API.PortfolioAnalysisEndpoints;
 import com.esgc.Utilities.APIUtilities;
 import com.esgc.Utilities.Driver;
 import com.esgc.Utilities.EndPoints.CommonEndPoints;
-import com.esgc.PortfolioAnalysis.API.PortfolioAnalysisEndpoints;
 import com.esgc.Utilities.EndPoints.PortfolioSettingsEndPoints;
 import com.esgc.Utilities.Environment;
 import io.restassured.http.ContentType;
@@ -535,9 +535,9 @@ public class APIController {
                 return rangesAndCategories;
 
             case "Brown Share":
-                rangesAndCategories.add(new RangeAndScoreCategory("0%", 0d, 0d, "positive"));
-                rangesAndCategories.add(new RangeAndScoreCategory("0-20%", 0.00000000000001d, 20d, "positive"));
-                rangesAndCategories.add(new RangeAndScoreCategory("20-100%", 20.0000000001d, 100d, "negative"));
+                rangesAndCategories.add(new RangeAndScoreCategory("No Involvement", 0d, 0d, "positive"));
+                rangesAndCategories.add(new RangeAndScoreCategory("Minor Involvement", 0.00000000000001d, 19.9999999999999999d, "positive"));
+                rangesAndCategories.add(new RangeAndScoreCategory("Major Involvement", 20d, 100d, "negative"));
                 return rangesAndCategories;
 
             case "Carbon Footprint":

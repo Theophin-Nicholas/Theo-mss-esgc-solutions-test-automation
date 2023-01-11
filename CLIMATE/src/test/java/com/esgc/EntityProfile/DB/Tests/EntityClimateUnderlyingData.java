@@ -1,10 +1,10 @@
 package com.esgc.EntityProfile.DB.Tests;
 
+import com.esgc.Base.TestBases.EntityClimateProfileDataValidationTestBase;
 import com.esgc.EntityProfile.API.APIModels.EntityUnderlyingData.BrownShare;
 import com.esgc.EntityProfile.API.APIModels.EntityUnderlyingData.CarbonFootprint;
 import com.esgc.EntityProfile.API.APIModels.EntityUnderlyingData.GreenShare;
 import com.esgc.EntityProfile.API.APIModels.SummarySection.TemperatureAlignmentSummary;
-import com.esgc.Base.TestBases.EntityClimateProfileDataValidationTestBase;
 import com.esgc.EntityProfile.API.EntityProfilePageEndpoints;
 import com.esgc.Utilities.Environment;
 import com.esgc.Utilities.Xray;
@@ -18,12 +18,13 @@ import java.util.List;
 
 import static com.esgc.EntityProfile.DB.DBQueries.EntityClimateProfilePageQueries.getCoverageForGreenShare;
 import static com.esgc.EntityProfile.DB.DBQueries.EntityClimateProfilePageQueries.getCoverageForWidgets;
+import static com.esgc.Utilities.Groups.*;
 import static io.restassured.RestAssured.given;
 
 public class EntityClimateUnderlyingData extends EntityClimateProfileDataValidationTestBase {
 
     @Xray(test = {8005, 8006})
-    @Test(groups = {"regression", "ui", "smoke", "entity_climate_profile"})
+    @Test(groups = {REGRESSION, UI, SMOKE, ENTITY_PROFILE})
     public void verifyUnderlyingDataMetricsCorrectGreenShare() {
         String orbisId = "039634868";//"000411117";
         List<String> dbResults;
@@ -62,7 +63,7 @@ public class EntityClimateUnderlyingData extends EntityClimateProfileDataValidat
     }
 
     @Xray(test = {8218, 8262, 8805})
-    @Test(groups = {"regression", "ui", "smoke", "entity_climate_profile"})
+    @Test(groups = {REGRESSION, UI, SMOKE, ENTITY_PROFILE})
     public void verifyUnderlyingDataMetricsCorrectBrownShare() {
         String orbisId = "143622191";//"000411117";
         List<String> dbResults;
@@ -95,7 +96,7 @@ public class EntityClimateUnderlyingData extends EntityClimateProfileDataValidat
     }
 
     @Xray(test = {10231})
-    @Test(groups = {"regression", "ui", "smoke", "entity_climate_profile"})
+    @Test(groups = {REGRESSION, UI, SMOKE, ENTITY_PROFILE})
     public void verifyUpdatedDateInAllWidgets() {
         List<String> researchLines = Arrays.asList("Temperature Alignment", "Carbon Footprint", "Brown Share Assessments", "Green Share Assessment");
         for (String researchLine : researchLines) {

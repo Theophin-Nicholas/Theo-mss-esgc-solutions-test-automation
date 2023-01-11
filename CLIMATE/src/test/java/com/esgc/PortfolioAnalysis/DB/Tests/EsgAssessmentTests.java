@@ -1,7 +1,7 @@
 package com.esgc.PortfolioAnalysis.DB.Tests;
 
-import com.esgc.PortfolioAnalysis.UI.Pages.ResearchLinePage;
 import com.esgc.Base.TestBases.DataValidationTestBase;
+import com.esgc.PortfolioAnalysis.UI.Pages.ResearchLinePage;
 import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.ESGUtilities;
 import com.esgc.Utilities.Xray;
@@ -10,9 +10,11 @@ import org.testng.annotations.Test;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.esgc.Utilities.Groups.*;
+
 public class EsgAssessmentTests extends DataValidationTestBase {
 
-    @Test(enabled = false, groups = {"regression", "ui", "smoke", "esg"},
+    @Test(enabled = false, groups = {REGRESSION, UI, SMOKE, ESG},
             description = "Verify ESG Summary Coverage section")
     @Xray(test = {8373, 8374, 8375, 8376, 8377, 8378, 9968, 10910,
             11245,//Subs
@@ -70,7 +72,7 @@ public class EsgAssessmentTests extends DataValidationTestBase {
 
     }
 
-    @Test(groups = {"regression", "ui", "esg"}, description = "Verify ESG Score Data Validation")
+    @Test(groups = {REGRESSION, UI, ESG}, description = "Verify ESG Score Data Validation")
     @Xray(test = {9966})
     public void verifyESGWeightedAverageScoreDataValidationTest() {
         ResearchLinePage researchLinePage = new ResearchLinePage();

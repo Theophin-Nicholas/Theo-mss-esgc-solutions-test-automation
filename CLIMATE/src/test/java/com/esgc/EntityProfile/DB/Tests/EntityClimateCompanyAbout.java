@@ -1,9 +1,9 @@
 package com.esgc.EntityProfile.DB.Tests;
 
+import com.esgc.Base.TestBases.DataValidationTestBase;
 import com.esgc.EntityProfile.API.APIModels.EntityHeader;
 import com.esgc.EntityProfile.API.Controllers.EntityProfileClimatePageAPIController;
 import com.esgc.TestBase.DataProviderClass;
-import com.esgc.Base.TestBases.DataValidationTestBase;
 import com.esgc.Utilities.Xray;
 import org.testng.annotations.Test;
 
@@ -12,13 +12,13 @@ import java.util.List;
 import java.util.Map;
 
 import static com.esgc.EntityProfile.DB.DBQueries.EntityClimateProfilePageQueries.getEntityHeaderDetails;
-
+import static com.esgc.Utilities.Groups.*;
 
 public class EntityClimateCompanyAbout extends DataValidationTestBase {
 
 
     @Xray(test = {10045,10046})
-    @Test(groups = {"regression", "ui", "smoke", "entity_climate_profile"},dataProvider = "Company With Orbis ID",
+    @Test(groups = {REGRESSION, UI, SMOKE, ENTITY_PROFILE},dataProvider = "Company With Orbis ID",
             dataProviderClass = DataProviderClass.class)
     public void entityClimateCompanyAbout(String... dataprovider) {
 

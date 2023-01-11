@@ -336,7 +336,7 @@ public class XrayFileImporter {
     public static void attachHTMLReportToTestExecutionTicket(String tickedNumber, String reportName) {
         System.out.println("File Attachment Started");
         try {
-            String filepath = TestBase.reportPath + File.separator + reportName;
+            String filepath = TestBase.reportPath + File.separator + reportName + ".html";
 
             configSpec()
                     .header("Content-Type", "multipart/form-data")

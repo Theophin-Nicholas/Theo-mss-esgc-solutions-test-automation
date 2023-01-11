@@ -1,9 +1,9 @@
 package com.esgc.PortfolioAnalysis.API.Tests;
 
 import com.esgc.Base.API.APIModels.APIFilterPayload;
-import com.esgc.PortfolioAnalysis.API.APIModels.RegionSummary;
 import com.esgc.Base.API.Controllers.APIController;
 import com.esgc.Base.TestBases.APITestBase;
+import com.esgc.PortfolioAnalysis.API.APIModels.RegionSummary;
 import com.esgc.Utilities.APIUtilities;
 import com.esgc.Utilities.Xray;
 import io.restassured.http.ContentType;
@@ -11,10 +11,13 @@ import io.restassured.response.Response;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Test;
 
+import static com.esgc.Utilities.Groups.API;
+import static com.esgc.Utilities.Groups.REGRESSION;
+
 public class RegionSummaryTest extends APITestBase {
 //868,1190
 
-    @Test(groups = {"api", "regression"}, dataProvider = "No ESG API Research Lines")
+    @Test(groups = {API, REGRESSION}, dataProvider = "No ESG API Research Lines")
     @Xray(test = {868, 2147,  1190,})
     //1710 Energy Transition
     public void RegionSummary(@Optional String researchLine) {
@@ -32,7 +35,7 @@ public class RegionSummaryTest extends APITestBase {
     }
 
     //872//1209
-    @Test(groups = {"api", "regression"}, dataProvider = "API Research Lines")
+    @Test(groups = {API, REGRESSION}, dataProvider = "API Research Lines")
     @Xray(test = {872, 1209})
     public void RegionSummary_InvalidPayload(@Optional String researchLine) {
 

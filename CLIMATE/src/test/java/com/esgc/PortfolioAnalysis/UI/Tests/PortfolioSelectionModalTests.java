@@ -1,7 +1,7 @@
 package com.esgc.PortfolioAnalysis.UI.Tests;
 
-import com.esgc.PortfolioAnalysis.UI.Pages.ResearchLinePage;
 import com.esgc.Base.TestBases.UITestBase;
+import com.esgc.PortfolioAnalysis.UI.Pages.ResearchLinePage;
 import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.PortfolioFilePaths;
 import com.esgc.Utilities.RobotRunner;
@@ -17,12 +17,14 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import static com.esgc.Utilities.Groups.*;
+
 /**
  * Created by ChaudhS2 on 10/20/2021.
  */
 public class PortfolioSelectionModalTests extends UITestBase {
 
-    @Test(groups = {"regression", "ui", "smoke"},
+    @Test(groups = {REGRESSION, UI, SMOKE},
             description = "ESGCA -3179/3250/3274/3253 : Verify the search Funtion on Portfolio Selection Modal PopUP/Sample Portfolio is present in Portfolio list.")
     @Xray(test = {3179, 3250, 3274, 3253})
     public void verifySearchFunctionOnSelectionModalPopup() {
@@ -45,7 +47,7 @@ public class PortfolioSelectionModalTests extends UITestBase {
         }
     }
 
-    @Test(groups = {"regression", "ui", "smoke"},
+    @Test(groups = {REGRESSION, UI, SMOKE},
             description = "ESGCA -3252 : Verify user cannot select multiple portfolios at a time")
     @Xray(test = 3252)
     public void verifyUserCanSelectSinglePortfolioOnSelectionModalPopup() {
@@ -71,7 +73,7 @@ public class PortfolioSelectionModalTests extends UITestBase {
     }
 
 
-    @Test(groups = {"regression", "ui", "smoke"},
+    @Test(groups = {REGRESSION, UI, SMOKE},
             description = "ESGCA -3259/3260 : Verify Click on Portfolio Selection Opens Portfolio Selection Modal and closes on clicking away from the popup")
     @Xray(test = {3259, 3260})
     public void verifySelectionModalPopupBehaviour() {
@@ -93,7 +95,7 @@ public class PortfolioSelectionModalTests extends UITestBase {
         }
     }
 
-    @Test(groups = {"regression", "ui", "smoke"},
+    @Test(groups = {REGRESSION, UI, SMOKE},
             description = "ESGCA -3432 : Verify Upload Portfolio Link is Placed Right Above the List in Portfolio Selection Modal as per Design")
     @Xray(test = {3432})
     public void verifyUploadPortfolioLinkOnSelectionModalPopup() {
@@ -112,7 +114,7 @@ public class PortfolioSelectionModalTests extends UITestBase {
         }
     }
 
-    @Test(groups = {"regression", "ui", "smoke"},
+    @Test(groups = {REGRESSION, UI, SMOKE},
             description = "ESGCA -3435/3436 : Verify Selected Portfolio is Displayed on Top of the List")
     @Xray(test = {3254, 3435, 3436})
     public void verifyPortfolioSelectionOnSelectionModalPopup() {
@@ -151,7 +153,7 @@ public class PortfolioSelectionModalTests extends UITestBase {
         }
     }
 
-    @Test(groups = {"regression", "ui", "smoke", "robot_dependency"},
+    @Test(groups = {REGRESSION, UI, SMOKE, ROBOT_DEPENDENCY},
             description = "ESGCA -3269 : Verify that Region and Sector updated after Portfolio change")
     @Xray(test = {3269})
     public void verifyRegionAndSectorSetAsperSelectedPortfolio() {
@@ -214,7 +216,7 @@ public class PortfolioSelectionModalTests extends UITestBase {
 
     }
 
-    @Test(groups = {"regression", "ui", "smoke"},
+    @Test(groups = {REGRESSION, UI, SMOKE},
             description = "ESGCA -3430 : Verify the Sorting logic for Portfolios on Selection modal popup.")
     @Xray(test = {3430})
     public void verifyPortfolioSortingOnSelectionModalPopup() {
@@ -252,7 +254,7 @@ public class PortfolioSelectionModalTests extends UITestBase {
     }
 
 
-    @Test(groups = {"regression", "ui"},
+    @Test(groups = {REGRESSION, UI},
             description = "ESGCA -5313 : UI | Portfolio Name Search bar | Verify the default text in the search bar on selection Modal popup")
     @Xray(test = {5313})
     public void verifySearchDefaultMessages() {
@@ -272,7 +274,7 @@ public class PortfolioSelectionModalTests extends UITestBase {
         }
     }
 
-    @Test (groups = {"regression", "ui", "robot_dependency"},
+    @Test (groups = {REGRESSION, UI, ROBOT_DEPENDENCY},
             description = "ESGCA-5315 - UI | Portfolio Name Search bar | Verify that ellipsis are displayed for a company having too long name")
     @Xray(test = {5315})
     public void verifyEllipsesForPortfolioWithLongName() {

@@ -1,0 +1,26 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+<suite name="ESGC Regression Suite"  parallel="classes" thread-count="8">   <!-- Parallel execution eg.: parallel="methods" thread-count="8" -->
+    <listeners>
+        <listener class-name="com.esgc.Utilities.XrayListener"/>
+    </listeners>
+    <test name="ESGC Regression Test">
+
+        <parameter name="reportName" value="Regression Test Report"/>
+
+        <groups>
+            <run>
+                <include name="regression"/>
+                <exclude name="robot_dependency"></exclude>
+            </run>
+
+        </groups>
+
+        <packages>
+
+            <package name="com.esgc.EntityProfile.*"/>
+
+        </packages>
+
+    </test>
+
+</suite>

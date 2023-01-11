@@ -11,10 +11,12 @@ import io.restassured.response.Response;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Test;
 
+import static com.esgc.Utilities.Groups.API;
+import static com.esgc.Utilities.Groups.REGRESSION;
 import static io.restassured.RestAssured.requestSpecification;
 
 public class PortfolioDistributionTest extends APITestBase {
-    @Test(groups = {"api", "regression"}, dataProvider = "API Research Lines")
+    @Test(groups = {API, REGRESSION}, dataProvider = "API Research Lines")
     @Xray(test = { 2539, 2697, 2303, 570})
     //3106 Energy Transition
     public void APIPortfolioDistributionTest(@Optional String researchLine) {
@@ -35,7 +37,7 @@ public class PortfolioDistributionTest extends APITestBase {
         test.pass("Portfolio Distribution Call Completed Successfully");
     }
 
-    @Test(groups = {"api", "regression"}, dataProvider = "API Research Lines")
+    @Test(groups = {API, REGRESSION}, dataProvider = "API Research Lines")
     @Xray(test = {2698,  2540, 2304, 572})
     //3108 Energy Transition
     public void APIPortfolioDistributionNegativeTest(@Optional String researchLine) {
@@ -53,7 +55,7 @@ public class PortfolioDistributionTest extends APITestBase {
         test.pass("Portfolio Distribution Call Completed with invalid body Successfully");
     }
 
-    @Test(groups = {"api", "regression"}, dataProvider = "API Research Lines")
+    @Test(groups = {API, REGRESSION}, dataProvider = "API Research Lines")
     public void APIPortfolioDistributionWithInvalidToken(@Optional String researchLine) {
         String user_id = APIUtilities.userID();
         APIController apiController = new APIController();

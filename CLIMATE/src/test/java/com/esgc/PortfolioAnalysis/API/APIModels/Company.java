@@ -28,5 +28,6 @@ public class Company {
     private Date updated;
     private String orbis_id;
     private String score_msg;
+    private String score_range;
 
 }

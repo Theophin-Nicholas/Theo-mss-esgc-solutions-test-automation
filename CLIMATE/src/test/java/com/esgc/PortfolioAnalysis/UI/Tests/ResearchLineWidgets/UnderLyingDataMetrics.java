@@ -1,9 +1,9 @@
 package com.esgc.PortfolioAnalysis.UI.Tests.ResearchLineWidgets;
 
+import com.esgc.Base.TestBases.UITestBase;
 import com.esgc.Dashboard.UI.Pages.DashboardPage;
 import com.esgc.PortfolioAnalysis.UI.Pages.ResearchLinePage;
 import com.esgc.TestBase.DataProviderClass;
-import com.esgc.Base.TestBases.UITestBase;
 import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.Xray;
 import org.testng.SkipException;
@@ -12,12 +12,14 @@ import org.testng.annotations.Test;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.esgc.Utilities.Groups.*;
+
 /**
  * Created by Tarun
  */
 public class UnderLyingDataMetrics extends UITestBase {
 
-    @Test(groups = {"regression", "ui", "smoke"},
+    @Test(groups = {REGRESSION, UI, SMOKE},
             description = "Verify if underlying data metrics is available",
             dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
     @Xray(test = {416, 417, 1323, 1324, 3413, 2934, 2939,8943,8950,5662})
@@ -40,7 +42,7 @@ public class UnderLyingDataMetrics extends UITestBase {
 
     }
 
-    @Test(groups = {"regression", "ui"},
+    @Test(groups = {REGRESSION, UI},
             description = "Verify if underlying data metrics is available for Physical Risk Hazards")
     @Xray(test = {5954})
     public void verifyTooltipIsDisplayedOnHoverForUnderlyingDataMetrics_PhysicalRiskHazard() {
@@ -58,7 +60,7 @@ public class UnderLyingDataMetrics extends UITestBase {
         test.pass("User is on Physical Risk Hazards Page");
     }
 
-    @Test(groups = {"regression", "ui"},
+    @Test(groups = {REGRESSION, UI},
             description = "Verify if underlying data metrics is available for Green Share Assessment")
     @Xray(test = {2761,5689})
     public void verifyTooltipIsDisplayedOnHoverForUnderlyingDataMetrics_GreenShare() {
@@ -73,7 +75,7 @@ public class UnderLyingDataMetrics extends UITestBase {
 
     }
 
-    @Test(groups = {"regression", "ui"},
+    @Test(groups = {REGRESSION, UI},
             description = "Verify if underlying data metrics is available for Brown Share Assessment")
     @Xray(test = {2761,5688,2939})
     public void verifyTooltipIsDisplayedOnHoverForUnderlyingDataMetrics_BrownShare() {

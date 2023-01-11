@@ -1,9 +1,9 @@
 package com.esgc.PortfolioAnalysis.API.Tests;
 
 import com.esgc.Base.API.APIModels.APIFilterPayload;
-import com.esgc.PortfolioAnalysis.API.APIModels.LeadersAndLaggardsWrapper;
 import com.esgc.Base.API.Controllers.APIController;
 import com.esgc.Base.TestBases.APITestBase;
+import com.esgc.PortfolioAnalysis.API.APIModels.LeadersAndLaggardsWrapper;
 import com.esgc.Utilities.APIUtilities;
 import com.esgc.Utilities.Xray;
 import io.restassured.http.ContentType;
@@ -11,11 +11,13 @@ import io.restassured.response.Response;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Test;
 
+import static com.esgc.Utilities.Groups.API;
+import static com.esgc.Utilities.Groups.REGRESSION;
 import static org.hamcrest.Matchers.*;
 
 public class LeadersAndLaggards extends APITestBase {
 
-    @Test(groups = {"api", "regression"}, dataProvider = "API Research Lines")
+    @Test(groups = {API, REGRESSION}, dataProvider = "API Research Lines")
     @Xray(test = {645, 646,9875})
     public void leadersAndLaggards_Success(@Optional String researchLine) {
         APIController apiController = new APIController();
@@ -37,7 +39,7 @@ public class LeadersAndLaggards extends APITestBase {
         test.pass("Leaders and Laggards Call Completed Successfully");
     }
 
-    @Test(groups = {"api", "regression"}, dataProvider = "API Research Lines")
+    @Test(groups = {API, REGRESSION}, dataProvider = "API Research Lines")
     @Xray(test = {1168, 734, 1169, 2440,  2877})
     //3093 Energy Transition
     public void leadersAndLaggards_InvalidPayload(@Optional String researchLine) {

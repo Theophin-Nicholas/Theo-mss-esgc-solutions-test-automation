@@ -1,7 +1,7 @@
 package com.esgc.EntityProfile.UI.Tests;
 
-import com.esgc.EntityProfile.UI.Pages.EntityClimateProfilePage;
 import com.esgc.Base.TestBases.UITestBase;
+import com.esgc.EntityProfile.UI.Pages.EntityClimateProfilePage;
 import com.esgc.Utilities.Xray;
 import org.testng.annotations.Test;
 
@@ -9,10 +9,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import static com.esgc.Utilities.Groups.*;
+
 public class EntityReferenceAndMethodologiesTest extends UITestBase {
 
-    @Test(groups = {"entity_climate_profile", "regression", "ui", "robot_dependency"})
-    @Xray(test = {8348})
+    @Test(groups = {ENTITY_PROFILE, REGRESSION, UI, ROBOT_DEPENDENCY})
+    @Xray(test = {8348, 11726})
     public void validateReferenceAndMethodologyPopup(){
 
         String company = "Rogers Corp.";
@@ -30,7 +32,7 @@ public class EntityReferenceAndMethodologiesTest extends UITestBase {
         entityProfilePage.closePopup();
     }
 
-    @Test(groups = {"entity_climate_profile", "regression", "ui", "robot_dependency"})
+    @Test(groups = {ENTITY_PROFILE, REGRESSION, UI, ROBOT_DEPENDENCY})
     @Xray(test = {8349})
     public void validateReferenceAndMethodologyPopupClose(){
 
@@ -62,7 +64,7 @@ public class EntityReferenceAndMethodologiesTest extends UITestBase {
 
     }
 
-    @Test(groups = {"entity_climate_profile", "regression", "ui"})
+    @Test(groups = {ENTITY_PROFILE, REGRESSION, UI})
     @Xray(test = {8350, 8891,})
     public void validateReferenceAndMethodologyLinks(){
 

@@ -1,8 +1,8 @@
 package com.esgc.PortfolioAnalysis.UI.Tests.ResearchLineWidgets;
 
+import com.esgc.Base.TestBases.UITestBase;
 import com.esgc.PortfolioAnalysis.UI.Pages.ResearchLinePage;
 import com.esgc.TestBase.DataProviderClass;
-import com.esgc.Base.TestBases.UITestBase;
 import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.Driver;
 import com.esgc.Utilities.Xray;
@@ -15,9 +15,11 @@ import org.testng.annotations.Test;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.esgc.Utilities.Groups.*;
+
 public class ImpactTableTests extends UITestBase {
 
-    @Test(groups = {"regression", "ui", "smoke"},
+    @Test(groups = {REGRESSION, UI, SMOKE},
             description = "ESGCA-4932 - Verify Impact Filter dropdown",
             dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
     @Xray(test = {4932, 6772})
@@ -32,7 +34,7 @@ public class ImpactTableTests extends UITestBase {
         Assert.assertTrue(expected.containsAll(actual));
     }
 
-    @Test(groups = {"regression", "ui", "smoke"},
+    @Test(groups = {REGRESSION, UI, SMOKE},
             description = "ESGCA-4913, ESGCA-4997,  ESGCA-5007 - Verify Impact Table and graph is present",
             dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
     @Xray(test = {4913, 4997, 5007, 6772})
@@ -44,7 +46,7 @@ public class ImpactTableTests extends UITestBase {
         assertTestCase.assertTrue(researchLinePage.isImpactGraphPresent(), "Impact Graph Verification");
     }
 
-    @Test(groups = {"regression", "ui", "smoke"},
+    @Test(groups = {REGRESSION, UI, SMOKE},
             description = "ESGCA-4962  - Verify Impact Table columns",
             dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
     @Xray(test = {4962, 6931})
@@ -88,7 +90,7 @@ public class ImpactTableTests extends UITestBase {
         }
     }
 
-    @Test(enabled = true, groups = {"regression", "ui", "smoke"},
+    @Test(enabled = true, groups = {REGRESSION, UI, SMOKE},
             description = "ESGCA-4998 - Verify Score Category colors",
             dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
     @Xray(test = {4998, 6772})
@@ -101,7 +103,7 @@ public class ImpactTableTests extends UITestBase {
 
     }
 
-    @Test(groups = {"regression", "ui"}, dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
+    @Test(groups = {REGRESSION, UI}, dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
     @Xray(test = {6931})
     public void verifyPercentageSymbolWithInvestmentColumn(String page) {
         test.info("Test Cases: ESGCA-6931 ");
@@ -113,7 +115,7 @@ public class ImpactTableTests extends UITestBase {
     }
 
 
-    @Test(groups = {"regression", "ui", "smoke"},
+    @Test(groups = {REGRESSION, UI, SMOKE},
             description = "ESGCA-5543 - Verify labels for positive ane negative impact table",
             dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
     @Xray(test = {5543, 6772})
@@ -132,7 +134,7 @@ public class ImpactTableTests extends UITestBase {
         System.out.println("End of test");
     }
 
-    @Test(groups = {"regression", "ui"},
+    @Test(groups = {REGRESSION, UI},
             description = "ESGCA-5002 - UI | Impact Graph | Verify Impact graph data for all filters",
             dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
     @Xray(test = {5002})
@@ -148,7 +150,7 @@ public class ImpactTableTests extends UITestBase {
         }
     }
 
-    @Test(groups = {"regression", "ui"},
+    @Test(groups = {REGRESSION, UI},
             description = "ESGCA-5006 - UI | Impact Graph | Verify when Investment % and Impact % are same",
             dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
     @Xray(test = {5006})
@@ -182,7 +184,7 @@ public class ImpactTableTests extends UITestBase {
 
     }
 
-    @Test(groups = {"regression", "ui", "smoke"},
+    @Test(groups = {REGRESSION, UI, SMOKE},
             description = "ESGCA-4940 - Verify Drilldowns If There are More Than 20 Companies in Impact Tables",
             dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
     @Xray(test = {4940, 6775})
@@ -196,7 +198,7 @@ public class ImpactTableTests extends UITestBase {
 
     }
 
-    @Test(groups = {"regression", "ui"},
+    @Test(groups = {REGRESSION, UI},
             description = "ESGCA-9809 - UI | Portfolio Analysis | Impact Table | Verify Sorting Orders by Impact Filter",
             dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
     @Xray(test = {4933, 6774})
@@ -221,7 +223,7 @@ public class ImpactTableTests extends UITestBase {
         assertTestCase.assertTrue(researchLinePage.validateOrder("Bottom 10"),"Verify Order is Descending for Bottom 10");
     }
 
-    @Test(groups = {"regression", "ui"},
+    @Test(groups = {REGRESSION, UI},
             description = "ESGCA-6777 - UI | Temperature Alignment | Impact Table | Verify Impact Tables Presentation without Data")
     @Xray(test = {6777})
     public void checkImpactTablesWithoutData() {

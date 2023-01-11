@@ -1,12 +1,13 @@
 package com.esgc.PortfolioAnalysis.UI.Tests;
 
-import com.esgc.PortfolioAnalysis.UI.Pages.ResearchLinePage;
 import com.esgc.Base.TestBases.UITestBase;
+import com.esgc.PortfolioAnalysis.UI.Pages.ResearchLinePage;
 import com.esgc.Utilities.Xray;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import static com.esgc.Base.TestBases.Descriptions.*;
+import static com.esgc.Utilities.Groups.*;
 
 public class ResearchLinesDescriptionsTest extends UITestBase {
 
@@ -18,7 +19,7 @@ public class ResearchLinesDescriptionsTest extends UITestBase {
     on the description in the overview section of the page should match the attached document.
  */
 
-    @Test(groups = {"regression", "ui", "smoke", "esg"}, dataProvider = "Descriptions")
+    @Test(groups = {REGRESSION, UI, SMOKE, ESG}, dataProvider = "Descriptions")
     @Xray(test = {3918,6934,6502})
     public void verifyDescriptions(String page, String description, Integer... testCases) {
 
@@ -56,7 +57,7 @@ public class ResearchLinesDescriptionsTest extends UITestBase {
         };
     }
 
-    @Test(groups = {"regression", "ui", "esg"})
+    @Test(groups = {REGRESSION, UI, ESG})
     @Xray(test = {6517, 6522, 6519, 6516, 6517, 6477, 6520, 6521, 6523, 6561})
     public void validateDescriptionsForAdditionalPhysicalRiskHazards() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
@@ -80,7 +81,7 @@ public class ResearchLinesDescriptionsTest extends UITestBase {
 
     }
 
-    @Test(enabled = false, groups = {"regression", "ui", "smoke", "esg"},
+    @Test(enabled = false, groups = {REGRESSION, UI, SMOKE, ESG},
             description = "Verify  ESG Summary Section") //TODO De-scoped as of now.
     @Xray(test = {8283, 8285})
     public void verifyESGAssessmentBoxAndDescription() {

@@ -1,16 +1,18 @@
 package com.esgc.Dashboard.UI.Tests;
 
+import com.esgc.Base.TestBases.UITestBase;
 import com.esgc.Dashboard.UI.Pages.DashboardPage;
 import com.esgc.PortfolioAnalysis.UI.Pages.ResearchLinePage;
-import com.esgc.Base.TestBases.UITestBase;
 import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.Xray;
 import org.testng.annotations.Test;
 
 import java.util.ArrayList;
 
+import static com.esgc.Utilities.Groups.*;
+
 public class DashboardUiFilterTests extends UITestBase {
-    @Test(groups = {"regression", "ui", "smoke", "dashboard"})
+    @Test(groups = {REGRESSION, UI, SMOKE, DASHBOARD})
     @Xray(test = {1301, 1305, 3286})
     public void verifySectorsSorting() {
 
@@ -26,7 +28,7 @@ public class DashboardUiFilterTests extends UITestBase {
 
     }
 
-    @Test(groups = {"regression", "ui", "smoke", "dashboard"})
+    @Test(groups = {REGRESSION, UI, SMOKE, DASHBOARD})
     @Xray(test = {1302, 1304, 3285})
     public void verifyRegions() {
 
@@ -49,7 +51,7 @@ public class DashboardUiFilterTests extends UITestBase {
 
     }
 
-    @Test(groups = {"regression", "ui", "smoke", "dashboard"})
+    @Test(groups = {REGRESSION, UI, SMOKE, DASHBOARD})
     @Xray(test = {1306, 3284})
     public void verifyAsOfDates() {
 
@@ -65,7 +67,7 @@ public class DashboardUiFilterTests extends UITestBase {
 
     }
 
-    @Test(groups = {"regression", "ui", "smoke", "dashboard"})
+    @Test(groups = {REGRESSION, UI, SMOKE, DASHBOARD})
     @Xray(test = {7727})
     public void verifyDataAfterFilter() {
 

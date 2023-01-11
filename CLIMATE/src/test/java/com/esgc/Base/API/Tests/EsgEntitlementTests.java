@@ -9,9 +9,12 @@ import org.testng.annotations.Test;
 
 import java.util.List;
 
+import static com.esgc.Utilities.Groups.API;
+import static com.esgc.Utilities.Groups.REGRESSION;
+
 public class EsgEntitlementTests extends DataValidationTestBase {
 
-    @Test(groups = {"api", "regression"})
+    @Test(groups = {API, REGRESSION})
     @Xray(test=8375)
     public void VerifyEsgCoverageAvailable() {
         getExistingUsersAccessTokenFromUI();
@@ -22,7 +25,7 @@ public class EsgEntitlementTests extends DataValidationTestBase {
         dashboardAPIController.getEsgCoverageScore(portfolioId,"","all","all", "2022","06").then().assertThat().statusCode(200);
     }
 
-    @Test(groups = {"api", "regression"})
+    @Test(groups = {API, REGRESSION})
     @Xray(test=8376)
     public void VerifyControversiesNotAvailableBundle() {
         getNoEsgBundleAccessTokenDataValidation();

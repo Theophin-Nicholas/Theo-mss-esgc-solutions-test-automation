@@ -1,7 +1,7 @@
 package com.esgc.EntityProfile.API.Controllers;
 
-import com.esgc.Utilities.Driver;
 import com.esgc.EntityProfile.API.EntityProfilePageEndpoints;
+import com.esgc.Utilities.Driver;
 import com.esgc.Utilities.Environment;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;

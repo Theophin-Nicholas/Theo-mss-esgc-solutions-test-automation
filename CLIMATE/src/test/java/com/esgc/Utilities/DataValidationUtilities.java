@@ -1,10 +1,10 @@
 package com.esgc.Utilities;
 
 import com.aventstack.extentreports.util.Assert;
-import com.esgc.PortfolioAnalysis.API.APIModels.PortfolioScore;
-import com.esgc.PortfolioAnalysis.API.APIModels.PortfolioScoreWrapper;
 import com.esgc.Base.DB.DBModels.EntityWithScores;
 import com.esgc.Base.DB.DBModels.ResearchLineIdentifier;
+import com.esgc.PortfolioAnalysis.API.APIModels.PortfolioScore;
+import com.esgc.PortfolioAnalysis.API.APIModels.PortfolioScoreWrapper;
 import com.esgc.Utilities.Database.PortfolioQueries;
 import io.restassured.response.Response;
 

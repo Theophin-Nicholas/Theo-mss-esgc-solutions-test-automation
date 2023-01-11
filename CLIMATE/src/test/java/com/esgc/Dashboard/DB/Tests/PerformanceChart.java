@@ -1,12 +1,12 @@
 package com.esgc.Dashboard.DB.Tests;
 
 import com.esgc.Base.API.APIModels.APIFilterPayload;
-import com.esgc.Dashboard.API.APIModels.PerformanceChartCompany;
-import com.esgc.PortfolioAnalysis.API.APIModels.RangeAndScoreCategory;
 import com.esgc.Base.API.Controllers.APIController;
 import com.esgc.Base.DB.DBModels.EntityWithScores;
 import com.esgc.Base.DB.DBModels.ResearchLineIdentifier;
 import com.esgc.Base.TestBases.DataValidationTestBase;
+import com.esgc.Dashboard.API.APIModels.PerformanceChartCompany;
+import com.esgc.PortfolioAnalysis.API.APIModels.RangeAndScoreCategory;
 import com.esgc.Utilities.APIUtilities;
 import com.esgc.Utilities.PortfolioUtilities;
 import com.esgc.Utilities.Xray;
@@ -20,9 +20,11 @@ import org.testng.asserts.SoftAssert;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static com.esgc.Utilities.Groups.*;
+
 public class PerformanceChart extends DataValidationTestBase {
 
-    @Test(groups = {"regression", "data_validation", "dashboard"}, dataProvider = "researchLines")
+    @Test(groups = {REGRESSION, DATA_VALIDATION, DASHBOARD}, dataProvider = "researchLines")
     @Xray(test = {4988, 7989, 6416, 6415, 11049})
     public void verifyPerformanceChartWithMixedIdentifiers(
             @Optional String sector, @Optional String region,

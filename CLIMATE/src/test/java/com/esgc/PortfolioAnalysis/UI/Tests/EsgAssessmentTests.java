@@ -2,9 +2,9 @@ package com.esgc.PortfolioAnalysis.UI.Tests;
 
 import com.esgc.Base.API.APIModels.APIFilterPayload;
 import com.esgc.Base.API.Controllers.APIController;
+import com.esgc.Base.TestBases.UITestBase;
 import com.esgc.Dashboard.UI.Pages.DashboardPage;
 import com.esgc.PortfolioAnalysis.UI.Pages.ResearchLinePage;
-import com.esgc.Base.TestBases.UITestBase;
 import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.Database.DatabaseDriver;
 import com.esgc.Utilities.DateTimeUtilities;
@@ -22,9 +22,11 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import static com.esgc.Utilities.Groups.*;
+
 public class EsgAssessmentTests extends UITestBase {
 
-    @Test(enabled = false,groups = {"regression", "ui", "smoke", "esg"},
+    @Test(enabled = false,groups = {REGRESSION, UI, SMOKE, ESG},
             description = "Verify ESG Weighted Average Score Data Validation")
     @Xray(test = {8176}) //TODO de-scoped , enable after scoped
     public void verifyESGWeightedAverageScoreDataValidationTest() {
@@ -53,7 +55,7 @@ public class EsgAssessmentTests extends UITestBase {
         assertTestCase.assertEquals(actualColor, expectedColor, "Verify ESG Score Scale Category Color");
     }
 
-    @Test(groups = {"regression", "ui", "esg"},
+    @Test(groups = {REGRESSION, UI, ESG},
             description = "Verify displayed data for ESG is matching with SF data")
     @Xray(test = {8178})
     public void verifyESGDisplayedDataIsMatchingWithSFDataTest() {
@@ -143,7 +145,7 @@ public class EsgAssessmentTests extends UITestBase {
         assertTestCase.assertTrue(apiWeightedAvgScore.contains(df.format(weighted_avg_total)),"ESG weighted_avg value is verified based on API vs SF");
     }
 
-    @Test(groups = {"regression", "ui", "esg"},
+    @Test(groups = {REGRESSION, UI, ESG},
             description = "Verify ESG Weighted Average Score Data Validation")
     @Xray(test = {9084,9086,9083})
     public void verifyGeographicAndSectorDistributionSectionComponentsTest() {
@@ -192,7 +194,7 @@ public class EsgAssessmentTests extends UITestBase {
         }
     }
 
-    @Test(enabled = false,groups = {"regression", "ui", "smoke", "esg"})
+    @Test(enabled = false,groups = {REGRESSION, UI, SMOKE, ESG})
     @Xray(test = {8704}) //TODO de-scoped , enable after scoped
     public void verifyESGGradeDistributionIsDisplayed() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
@@ -201,7 +203,7 @@ public class EsgAssessmentTests extends UITestBase {
         researchLinePage.validateEsgGradeDistribution();
     }
 
-    @Test(enabled = false,groups = {"regression", "ui", "smoke", "esg"})
+    @Test(enabled = false,groups = {REGRESSION, UI, SMOKE, ESG})
     @Xray(test = {9133})
     public void verifyESGGRegionMapAndCountryTableDrawer() {
         ResearchLinePage researchLinePage = new ResearchLinePage();

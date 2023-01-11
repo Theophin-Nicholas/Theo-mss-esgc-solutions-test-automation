@@ -1,8 +1,8 @@
 package com.esgc.Dashboard.UI.Tests.Export;
 
 import com.esgc.Base.API.Controllers.APIController;
-import com.esgc.Dashboard.UI.Pages.DashboardPage;
 import com.esgc.Base.TestBases.APITestBase;
+import com.esgc.Dashboard.UI.Pages.DashboardPage;
 import com.esgc.Utilities.ExcelUtil;
 import com.esgc.Utilities.Xray;
 import io.restassured.path.json.JsonPath;
@@ -11,10 +11,11 @@ import org.testng.annotations.Test;
 
 import java.util.List;
 
+import static com.esgc.Utilities.Groups.*;
 
 public class ExportExcelColumnOrderTests extends APITestBase {
 
-    @Test(groups = {"dashboard", "regression", "ui"})
+    @Test(groups = {DASHBOARD, REGRESSION, UI})
     @Xray(test = {9794})
     public void checkColumnsOrderIsBasedOnEntitlementsOrder() {
         DashboardPage dashboardPage = new DashboardPage();

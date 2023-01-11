@@ -1,14 +1,16 @@
 package com.esgc.Dashboard.UI.Tests;
 
+import com.esgc.Base.TestBases.UITestBase;
 import com.esgc.Dashboard.UI.Pages.DashboardPage;
 import com.esgc.PortfolioAnalysis.UI.Pages.ResearchLinePage;
-import com.esgc.Base.TestBases.UITestBase;
 import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.Xray;
 import org.testng.annotations.Test;
 
+import static com.esgc.Utilities.Groups.*;
+
 public class EntityHyperlinksTests extends UITestBase {
-    @Test(groups = {"regression", "dashboard", "ui"})
+    @Test(groups = {REGRESSION, DASHBOARD, UI})
     @Xray(test = {4040, 6814, 6865})
     public void verifyDashboardHyperlinks() {
 
@@ -69,7 +71,7 @@ public class EntityHyperlinksTests extends UITestBase {
     }
 
     //TODO all researchline data provider
-    @Test(groups = {"regression", "dashboard", "ui"})
+    @Test(groups = {REGRESSION, DASHBOARD, UI})
     @Xray(test = {6566, 6865})
     public void verifyPortfolioAnalysisHyperlinks() {
 
