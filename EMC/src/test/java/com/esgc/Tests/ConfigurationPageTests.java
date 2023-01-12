@@ -396,7 +396,7 @@ public class ConfigurationPageTests extends EMCUITestBase {
         Driver.getDriver().get(Environment.EMC_URL);
         BrowserUtils.waitForPageToLoad(10);
         LoginPageEMC loginPageEMC = new LoginPageEMC();
-        loginPageEMC.loginEMCWithParams("ferhat.demir-non-empl@moodys.com", "Cydeo@2022??");
+        loginPageEMC.loginEMCWithParams("ferhat.demir-non-empl@moodys.com", "Apple@2023??");
 
         //Go to Accounts page and open account
         EMCMainPage homePage = new EMCMainPage();
@@ -487,7 +487,7 @@ public class ConfigurationPageTests extends EMCUITestBase {
         Driver.getDriver().get(Environment.EMC_URL);
         BrowserUtils.waitForPageToLoad(10);
         LoginPageEMC loginPageEMC = new LoginPageEMC();
-        loginPageEMC.loginEMCWithParams("ferhat.demir-non-empl@moodys.com", "Cydeo@2022??");
+        loginPageEMC.loginEMCWithParams("ferhat.demir-non-empl@moodys.com", "Apple@2023??");
         EMCMainPage homePage = new EMCMainPage();
 
         try {
@@ -536,7 +536,7 @@ public class ConfigurationPageTests extends EMCUITestBase {
         Driver.getDriver().get(Environment.EMC_URL);
         BrowserUtils.waitForPageToLoad(10);
         LoginPageEMC loginPageEMC = new LoginPageEMC();
-        loginPageEMC.loginEMCWithParams("ferhat.demir-non-empl@moodys.com", "Cydeo@2022??");
+        loginPageEMC.loginEMCWithParams("ferhat.demir-non-empl@moodys.com", "Apple@2023??");
         EMCMainPage homePage = new EMCMainPage();
         homePage.goToAccountsPage();
         EMCAccountsPage accountsPage = new EMCAccountsPage();
