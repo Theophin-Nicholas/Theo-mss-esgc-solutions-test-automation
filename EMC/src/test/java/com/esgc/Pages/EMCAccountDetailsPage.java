@@ -59,6 +59,12 @@ public class EMCAccountDetailsPage extends EMCBasePage {
     @FindBy (xpath = "//button[starts-with(.,'Back')]")
     public WebElement backToAccountsButton;
 
+    @FindBy (name = "contractStartDate")
+    public WebElement contractStartDateInput;
+
+    @FindBy (name = "contractEndDate")
+    public WebElement contractEndDateInput;
+
     //APPLICATIONS TAB
 
     @FindBy (xpath = "//button[.='Applications']")
@@ -282,7 +288,6 @@ public class EMCAccountDetailsPage extends EMCBasePage {
         if (applicationsAssignButtonList.isEmpty()) {
             System.out.println("application not found");
             doneButton.click();
-
             return false;
         }else {
             BrowserUtils.waitForClickablility(applicationsAssignButtonList.get(0), 15).click();
@@ -530,5 +535,20 @@ public class EMCAccountDetailsPage extends EMCBasePage {
     public void clickOnAssignApplicationButton() {
         System.out.println("clicking on assign application button");
         BrowserUtils.waitAndClick(assignApplicationsButton,10);
+    }
+
+    public void clickOnEditButton() {
+        System.out.println("clicking on edit button");
+        BrowserUtils.waitAndClick(editButton,10);
+    }
+
+    public void clickOnSaveButton() {
+        System.out.println("clicking on save button");
+        BrowserUtils.waitAndClick(saveButton,10);
+    }
+
+    public void clickOnCancelButton() {
+        System.out.println("clicking on cancel button");
+        BrowserUtils.waitAndClick(cancelButton,10);
     }
 }

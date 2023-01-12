@@ -653,7 +653,7 @@ public class AccountsPageTests extends EMCUITestBase {
 //    }
 
     @Test(groups = {"EMC", "ui", "smoke"})
-    @Xray(test = {5179, 3994})
+    @Xray(test = {5179, 3994, 7390, 7394, 7396})
     public void verifyUserAssignApplicationRolesTest() {
         navigateToAccountsPage(accountName, "applications");
         EMCAccountDetailsPage detailsPage = new EMCAccountDetailsPage();
@@ -684,6 +684,8 @@ public class AccountsPageTests extends EMCUITestBase {
         System.out.println("===================================");
         assertTestCase.assertTrue(availableApplications.contains(applicationName.toLowerCase()), "Assign Application Model - Search Result contains the application");
         BrowserUtils.waitForClickablility(detailsPage.assignApplicationModalDoneButton, 5).click();
+        BrowserUtils.wait(5);
+        assertTestCase.assertFalse(detailsPage.verifyApplication(applicationName), "Application is not added");
     }
 
     @Test(groups = {"EMC", "ui", "regression"})
@@ -1489,6 +1491,43 @@ public class AccountsPageTests extends EMCUITestBase {
             BrowserUtils.wait(2);
             return link.endsWith("issuerworkspace");
         }
+    }
 
+    @Test(groups = {"EMC", "ui", "regression"}, description = "UI | EMC | Roles | Verify User with Admin Role is able to Edit and Save Account Details")
+    @Xray(test = {7322, 7323})
+    public void editAccountTest() {
+        navigateToAccountsPage("Test Account.", "details");
+        EMCAccountDetailsPage detailsPage = new EMCAccountDetailsPage();
+        assertTestCase.assertTrue(detailsPage.detailsTab.isDisplayed(), "Details tab is displayed");
+        assertTestCase.assertTrue(detailsPage.applicationsTab.isDisplayed(), "Applications tab is displayed");
+        assertTestCase.assertTrue(detailsPage.productsTab.isDisplayed(), "Products tab is displayed");
+        assertTestCase.assertTrue(detailsPage.usersTab.isDisplayed(), "Users tab is displayed");
+        assertTestCase.assertTrue(detailsPage.backToAccountsButton.isDisplayed(), "Edit button is displayed");
+        assertTestCase.assertTrue(detailsPage.editButton.isDisplayed(), "Edit button is displayed");
+        detailsPage.clickOnEditButton();
+        assertTestCase.assertTrue(detailsPage.cancelButton.isEnabled(), "Accounts Page - Users Details - Cancel button is enabled for editing");
+        assertTestCase.assertTrue(detailsPage.saveButton.isEnabled(), "Accounts Page - Users Details - Save button is enabled for editing");
+        assertTestCase.assertTrue(detailsPage.accountNameInput.isEnabled(), "Accounts Page - Users Details - Account Name input is enabled for editing");
+        assertTestCase.assertTrue(detailsPage.contractStartDateInput.isEnabled(), "Accounts Page - Users Details - Contract Start Date input is enabled for editing");
+        assertTestCase.assertTrue(detailsPage.contractEndDateInput.isEnabled(), "Accounts Page - Users Details - Contract End Date input is enabled for editing");
+        clear(detailsPage.accountNameInput);
+        detailsPage.accountNameInput.sendKeys("Test Account Edited");
+        detailsPage.clickOnSaveButton();
+        BrowserUtils.waitForVisibility(detailsPage.notification, 15);
+        assertTestCase.assertTrue(detailsPage.notification.isDisplayed(), "Accounts Page - Users Details - Notification is displayed");
+        assertTestCase.assertEquals(detailsPage.accountNameInput.getAttribute("value"), "Test Account Edited", "Accounts Page - Users Details - Account Name is edited");
+        detailsPage.clickOnEditButton();
+        clear(detailsPage.accountNameInput);
+        detailsPage.accountNameInput.sendKeys("Test Account.");
+        detailsPage.clickOnSaveButton();
+        BrowserUtils.waitForVisibility(detailsPage.notification, 15);
+        assertTestCase.assertTrue(detailsPage.notification.isDisplayed(), "Accounts Page - Users Details - Notification is displayed");
+        assertTestCase.assertEquals(detailsPage.accountNameInput.getAttribute("value"), "Test Account.", "Accounts Page - Users Details - Account Name is edited");
+        detailsPage.clickOnEditButton();
+        assertTestCase.assertTrue(detailsPage.cancelButton.isEnabled(), "Accounts Page - Users Details - Cancel button is enabled for editing");
+        assertTestCase.assertTrue(detailsPage.saveButton.isEnabled(), "Accounts Page - Users Details - Save button is enabled for editing");
+        assertTestCase.assertTrue(detailsPage.accountNameInput.isEnabled(), "Accounts Page - Users Details - Account Name input is enabled for editing");
+        detailsPage.clickOnCancelButton();
+        assertTestCase.assertEquals(detailsPage.accountNameInput.getAttribute("value"), "Test Account.", "Accounts Page - Users Details - Account Name is not edited");
     }
 }

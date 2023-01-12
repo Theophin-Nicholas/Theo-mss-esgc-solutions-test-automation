@@ -9,6 +9,7 @@ import com.github.javafaker.Faker;
 import io.restassured.response.Response;
 import org.testng.annotations.Test;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -514,5 +515,34 @@ public class EMCAPITests extends APITestBase {
         } finally {
             System.setProperty("token", accessToken);
         }
+    }
+
+    @Test(groups = {"EMC", "api", "regression"})
+    @Xray(test = {7399, 7400})
+    public void verifyAdminUserCanGETListOfAllAdminUserPermissionsTest() {
+        response = apiController.getEMCAllAdminUsersPermissionsResponse();
+        response.prettyPrint();
+        System.out.println("response = " + response.statusCode());
+        assertTestCase.assertEquals(response.statusCode(),200, "Status code 200 OK is verified");
+        List<String> roleNames = response.jsonPath().getList("");
+        List<String> expectedAdminRoleNames = Arrays.asList("activate-account-user", "admin-assign-role-permissions", "admin-assign-role-users",
+                "admin-create-role", "admin-remove-role-permissions", "admin-remove-role-users", "admin-sync-users", "admin-view-configuration",
+                "admin-view-role", "admin-view-role-detail", "admin-view-role-permissions", "admin-view-role-users", "admin-view-roles",
+                "assign-account-applications", "assign-account-products", "assign-account-user-application-roles", "create-account",
+                "create-account-user", "create-application-product", "create-application-role", "edit-account-detail",
+                "edit-account-user-detail", "edit-application-detail", "edit-application-product", "reactivate-account-user",
+                "remove-account-applications", "remove-account-products", "remove-account-user", "remove-account-user-application-roles",
+                "reset-password-account-user", "search-account-users", "search-accounts", "search-applications", "search-users",
+                "suspend-account-user", "unsuspend-account-user", "view-account", "view-account-applications", "view-account-detail",
+                "view-account-products", "view-account-user", "view-account-user-application-roles", "view-account-user-detail",
+                "view-account-users", "view-accounts", "view-application", "view-application-detail", "view-application-product",
+                "view-application-products", "view-application-role", "view-application-roles", "view-applications", "view-users");
+        List<String> expectedViewerRoleNames = Arrays.asList("search-account-users", "search-accounts", "search-applications",
+                "search-users", "view-account", "view-account-applications", "view-account-detail", "view-account-products",
+                "view-account-user", "view-account-user-application-roles", "view-account-user-detail", "view-account-users",
+                "view-accounts", "view-application", "view-application-detail", "view-application-product", "view-application-products",
+                "view-application-role", "view-application-roles", "view-applications", "view-users");
+        assertTestCase.assertTrue(roleNames.containsAll(expectedAdminRoleNames), "Admin Role names are verified");
+        assertTestCase.assertTrue(roleNames.containsAll(expectedViewerRoleNames), "Viewer Role names are verified");
     }
 }
