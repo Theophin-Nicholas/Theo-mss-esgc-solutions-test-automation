@@ -5,12 +5,7 @@ import com.esgc.Base.UI.Pages.LoginPage;
 import com.esgc.Dashboard.UI.Pages.DashboardPage;
 import com.esgc.PortfolioAnalysis.UI.Pages.PhysicalRiskPages.PhysicalRiskManagementPages.PhysicalRiskManagementPage;
 import com.esgc.RegulatoryReporting.UI.Pages.RegulatoryReportingPage;
-import com.esgc.Base.TestBases.UITestBase;
 import com.esgc.Utilities.*;
-import com.esgc.Utilities.BrowserUtils;
-import com.esgc.Utilities.DateTimeUtilities;
-import com.esgc.Utilities.Environment;
-import com.esgc.Utilities.Xray;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.Color;
 import org.testng.annotations.Test;
@@ -95,6 +90,8 @@ public class RegulatoryReportingPageTests extends UITestBase {
         //Verify Portfolio column is displayed with portfolio list sorted in alphabetical order.
         List<String> sortedPortfolioList = reportingPage.getPortfolioList();
         sortedPortfolioList.sort(String::compareToIgnoreCase);
+
+        //TODO sorting logic should be ignore case and numbers comes first
         assertTestCase.assertEquals(sortedPortfolioList, actualPortfoliosList, "Portfolio list is sorted in alphabetical order");
         System.out.println("Portfolio column is displayed with portfolio list sorted in alphabetical order is verified");
 
@@ -169,6 +166,8 @@ public class RegulatoryReportingPageTests extends UITestBase {
         System.out.println(newPortfolioName + " is verified on regulatory reporting page");
         List<String> portfolioList = reportingPage.getPortfolioList();
         portfolioList.sort(String::compareToIgnoreCase);
+
+        //TODO sorting logic should be ignore case and numbers comes first
         assertTestCase.assertEquals(reportingPage.getPortfolioList(), portfolioList, "Portfolio list is sorted alphabetically");
 
         //verify portfolio on dashboard

@@ -37,6 +37,7 @@ public class PhysicalRiskManagementTests extends UITestBase {
     @Test(groups = {REGRESSION, UI})
     @Xray(test = {8029})
     public void validateNoDataMessage() {
+        //TODO we need to handle no data messages in one place, should not be separate tests for each section/research line
         ResearchLinePage researchLinePage = new ResearchLinePage();
         researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
         researchLinePage.selectSamplePortfolioFromPortfolioSelectionModal();

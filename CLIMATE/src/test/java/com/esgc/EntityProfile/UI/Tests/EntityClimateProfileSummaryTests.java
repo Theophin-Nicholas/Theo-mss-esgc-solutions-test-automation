@@ -47,7 +47,7 @@ public class EntityClimateProfileSummaryTests extends UITestBase {
         researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
         //BrowserUtils.wait(5);
         researchLinePage.navigateToEntity(Entity);
-        String orbisID = entityClimateProfilePage.getEntityOrbisId();
+        String orbisID = entityClimateProfilePage.getEntityOrbisIdFromUI();
         EntityClimateProfilePageQueries entityClimateProfilepagequeries = new EntityClimateProfilePageQueries();
         Map<String, String> data = entityClimateProfilepagequeries.getGreenShareData(orbisID);
         String scoreUI = entityClimateProfilePage.getGreenShareScoreRange();
@@ -1131,8 +1131,8 @@ public class EntityClimateProfileSummaryTests extends UITestBase {
         }
     }
 
-
-    @Test(groups = {REGRESSION, UI},
+//TODO disclosure ratio is not valid until 2.0 companies are visiable
+    @Test(enabled = false, groups = {REGRESSION, UI},
             dataProviderClass = DataProviderClass.class, dataProvider = "orbisIDWithDisclosureScore")
     @Xray(test = {8750})
     public void verifyDisclosureScore(String entity) {
