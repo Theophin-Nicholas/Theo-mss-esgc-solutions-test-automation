@@ -51,7 +51,7 @@ public class EntityClimateProfile extends UITestBase {
         Assert.assertTrue(entityProfilePage.checkIfGreenShareCardISAvailable());
         Assert.assertTrue(entityProfilePage.listOfGreenShareCardlabels.get(0).getText().equals("Green Share"));
         System.out.println("entityProfilePage.listOfGreenShareCardlabels.get(1).getText() = " + entityProfilePage.listOfGreenShareCardlabels.get(1).getText());
-        Assert.assertTrue(entityProfilePage.listOfGreenShareCardlabels.get(1).getText().equals("% of Commercial activities linked to green solutions"));
+        Assert.assertTrue(entityProfilePage.listOfGreenShareCardlabels.get(1).getText().equals("% of Commercial Activities linked to Green Solutions"));
         Assert.assertTrue(entityProfilePage.validateGreenCardValueBoxIsAvailable());
         Assert.assertTrue(entityProfilePage.validateifPieChartIsAvailable("greenshare"));
         int greenShareValue = Integer.valueOf(entityProfilePage.GreenShareWidgetValue.getText().split("[^\\d]")[0]);

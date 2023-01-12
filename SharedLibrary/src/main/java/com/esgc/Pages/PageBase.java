@@ -9,6 +9,7 @@ import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 import org.apache.commons.io.FileUtils;
+import org.apache.poi.ss.usermodel.Cell;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
@@ -31,7 +32,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
-import org.apache.poi.ss.usermodel.Cell;
 
 /**
  * This abstract class will be extended by Page classes
@@ -149,7 +149,7 @@ public abstract class PageBase {
     @FindBy(xpath = "(//table[@id='table-id'])/tbody/tr/td[1]/div/span")
     public List<WebElement> portfolioEntityList;
 
-    @FindBy(xpath = "//li/span[text()]")
+    @FindBy(xpath = "//li//span[text() and ./following-sibling::*[name()='svg']]")
     public WebElement portfolioEntityName;
 
     @FindBy(css = "svg > path[fill-rule='evenodd'][fill='#b8b8b8']")
@@ -278,8 +278,8 @@ public abstract class PageBase {
     @FindBy(xpath = "//input[@id='platform-search-test-id']")
     public WebElement SearchInputBox;
 
-    @FindBy(xpath = "//div[@class=\"MuiToolbar-root MuiToolbar-regular\"]//*[local-name()='svg' and @class=\"MuiSvgIcon-root\"]")
-    public WebElement closeIcon;
+    @FindBy(xpath = "//header[.//*[contains(text(),'Companies in')]]//*[name()='svg']")
+    public WebElement closeIconInCompanySummariesDrawer;
 
     @FindBy(xpath = "//*[text()='Entities:']//div[starts-with(@id,'mini')]")
     public List<WebElement> searchItems;
@@ -987,18 +987,14 @@ public abstract class PageBase {
 
     public List<String> getListOfRegion() {
         wait.until(ExpectedConditions.visibilityOfAllElements(regionList));
-        List<String> regionsList =
-                regionList.stream().map(e -> e.getText())
-                        .collect(Collectors.toList());
-        return regionsList;
+        return regionList.stream().map(WebElement::getText)
+                .collect(Collectors.toList());
     }
 
     public List<String> getListOfSector() {
         wait.until(ExpectedConditions.visibilityOfAllElements(sectorList));
-        List<String> SectorsList =
-                sectorList.stream().map(e -> e.getText())
-                        .collect(Collectors.toList());
-        return SectorsList;
+        return sectorList.stream().map(WebElement::getText)
+                .collect(Collectors.toList());
     }
 
     public void refreshCurrentWindow() {
@@ -1717,8 +1713,8 @@ public abstract class PageBase {
     }
 
     public void closePortfolioExportDrawer() {
-        Driver.getDriver().findElement(By.xpath("//span[text()='X']")).click();
-
+        Actions actionBuilder = new Actions(Driver.getDriver());
+        actionBuilder.click(closeIconInCompanySummariesDrawer).build().perform();
     }
 
     public void clickCloseXIconWithJs() {

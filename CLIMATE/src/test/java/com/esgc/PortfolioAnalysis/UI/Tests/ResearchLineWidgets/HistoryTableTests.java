@@ -98,8 +98,11 @@ public class HistoryTableTests extends UITestBase {
             assertTestCase.assertTrue(researchLinePage.mouseHoverAndVerifyTooltipHistoryTable("Not Covered", "highcharts-color-0", "#dce1e6"), "History Table Validation");
         } else if (page.equals("Brown Share Assessment")) {
             assertTestCase.assertTrue(researchLinePage.mouseHoverAndVerifyTooltipHistoryTable("0%", "highcharts-color-3", "#39A885"), "History Table Validation");
-            assertTestCase.assertTrue(researchLinePage.mouseHoverAndVerifyTooltipHistoryTable("0-20%", "highcharts-color-2", "#6FB24B"), "History Table Validation");
-            assertTestCase.assertTrue(researchLinePage.mouseHoverAndVerifyTooltipHistoryTable("20-100%", "highcharts-color-1", "#B28559"), "History Table Validation");
+            assertTestCase.assertTrue(researchLinePage.mouseHoverAndVerifyTooltipHistoryTable("0-10%", "highcharts-color-2", "#6FB24B"), "History Table Validation");
+            assertTestCase.assertTrue(researchLinePage.mouseHoverAndVerifyTooltipHistoryTable("10-20%", "highcharts-color-2", "#6FB24B"), "History Table Validation");
+            assertTestCase.assertTrue(researchLinePage.mouseHoverAndVerifyTooltipHistoryTable("20-33%", "highcharts-color-1", "#B28559"), "History Table Validation");
+            assertTestCase.assertTrue(researchLinePage.mouseHoverAndVerifyTooltipHistoryTable("33-50%", "highcharts-color-1", "#B28559"), "History Table Validation");
+            assertTestCase.assertTrue(researchLinePage.mouseHoverAndVerifyTooltipHistoryTable(">=50%", "highcharts-color-1", "#B28559"), "History Table Validation");
             assertTestCase.assertTrue(researchLinePage.mouseHoverAndVerifyTooltipHistoryTable("Not Covered", "highcharts-color-0", "#dce1e6"), "History Table Validation");
         } else if (page.equals("Physical Risk Management")) {
             assertTestCase.assertTrue(researchLinePage.mouseHoverAndVerifyTooltipHistoryTable("Advanced", "highcharts-color-4", "#229595"), "History Table Validation");

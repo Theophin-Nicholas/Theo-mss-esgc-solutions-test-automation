@@ -219,7 +219,8 @@ public class RegionTests extends DataValidationTestBase {
 
     }
 
-    @Test(groups = {REGRESSION, DATA_VALIDATION}, dataProvider = "researchLines")
+    //Descoped in story https://esjira/browse/ESGCA-9398
+    @Test(enabled = false, groups = {REGRESSION, DATA_VALIDATION}, dataProvider = "researchLines")
     @Xray(test = {4233, 4237})
     public void verifyRegionMonthlyorQuarterlyChanges(@Optional String sector, @Optional String region, @Optional String researchLine, @Optional String month, @Optional String year) throws ParseException {
 
