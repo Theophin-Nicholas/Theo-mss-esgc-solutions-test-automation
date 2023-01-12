@@ -1,6 +1,8 @@
 package com.esgc.TestBase;
 
+import com.esgc.Utilities.ConfigurationReader;
 import com.esgc.Utilities.EntitlementsBundles;
+import com.esgc.Utilities.Environment;
 import org.testng.annotations.DataProvider;
 
 public class DataProviderClass {
@@ -48,9 +50,9 @@ public class DataProviderClass {
                         {"mesg-platform-issuer-qa+test46@outlook.com", "Moodys123", "51059044"}, */
                         //Production
                         {"mesg360-testing+issuer59@outlook.com","Test12345"}
-                       // {"mesg360-testing+issuer35@outlook.com", "Test12345"},
-                      /*  {"mesg-platform-testing+metrics6@outlook.com", "Moodys123"},
-                        {"mesg360-testing+issuer26@outlook.com", "Test12345"}*/
+                        // {"mesg360-testing+issuer35@outlook.com", "Test12345"},
+                        /*  {"mesg-platform-testing+metrics6@outlook.com", "Moodys123"},
+                          {"mesg360-testing+issuer26@outlook.com", "Test12345"}*/
                 };
 
 
@@ -75,7 +77,7 @@ public class DataProviderClass {
                 {
                         //Production Accounts
                         {"mesg360-testing+issuer105@outlook.com", "Test12345"},
-                       /* {"mesg360-testing+issuer30@outlook.com", "Test12345"},*/
+                        /* {"mesg360-testing+issuer30@outlook.com", "Test12345"},*/
                         /*{"mesg360-testing+issuer70@outlook.com", "Test12345"}*/
                         //UAT Accounts
                         //QA Accounts
@@ -214,7 +216,7 @@ public class DataProviderClass {
                 {"esg-test1@outlook.com","Helloworld21","Physical Risk"},//
                 {"esg-test4@outlook.com","Helloworld24","Physical Risk and Transition Risk"},//
                 {"esg-test7@outlook.com","Moodys123","Physical Risk, Transition Risk, Corporate ESG and Controversies Entitlements"},
-               // {"esg-test1+controversy@outlook.com","Testing123","Physical Risk, Transition Risk and Controversies"},//
+                // {"esg-test1+controversy@outlook.com","Testing123","Physical Risk, Transition Risk and Controversies"},//
         };
     }
 
@@ -296,17 +298,28 @@ public class DataProviderClass {
 
     @DataProvider(name = "Research Lines")
     public Object[][] availableResearchLines() {
+        //TODO: ESG Assessment is available only in QA environment as of 12Jan2023
+        if(Environment.environment.equalsIgnoreCase("qa")){
+            return new Object[][]{
+                    {"ESG Assessments"},
+                    {"Physical Risk Hazards"},
+                    {"Carbon Footprint"},
+                    {"Physical Risk Management"},
+                    {"Temperature Alignment"},
+                    {"Brown Share Assessment"},
+                    {"Green Share Assessment"},
+            };
+        }else{
+            return new Object[][]{
+                    {"Physical Risk Hazards"},
+                    {"Carbon Footprint"},
+                    {"Physical Risk Management"},
+                    {"Temperature Alignment"},
+                    {"Brown Share Assessment"},
+                    {"Green Share Assessment"},
+            };
+        }
 
-        return new Object[][]{
-               /* {"ESG Assessments"},*/ //De-scoped as of now
-
-                {"Physical Risk Hazards"},
-                {"Carbon Footprint"},
-                {"Physical Risk Management"},
-                {"Temperature Alignment"},
-                {"Brown Share Assessment"},
-                {"Green Share Assessment"},
-        };
     }
 
     @DataProvider(name = "CompaniesWithMESGScore")
@@ -386,7 +399,7 @@ public class DataProviderClass {
                 {
                         //Production
                         {"mesg360-testing+issuer35@outlook.com", "Test12345"},
-                       // {"mesg-platform-issuer-qa@outlook.com","Moodys123"}
+                        // {"mesg-platform-issuer-qa@outlook.com","Moodys123"}
                         //qa
                         /*{"mesg-platform-issuer-qa+test1@outlook.com", "Moodys123"}*/
                 };
@@ -398,13 +411,13 @@ public class DataProviderClass {
         return new Object[][]{
 
                 {"Apple, Inc.", "000411117"},  // VE scored company
-             //   {"FORD MOTOR CO","058618674"}, // MESG scored Company
-               // {"FirstCash, Inc.","001668460"} // MESG scored Company
-              //  {"Lexicon Pharmaceuticals, Inc.","001769888"}, // MESG scored Company
-               // {"NMI Holdings, Inc.","136042839"}, // MESG scored Company
-              //  {"Samsung Securities Co., Ltd.","065260686"}, // VE scored company
-           //     {"Alibaba Health Information Technology Ltd.","261851236"}, // VE scored company
-           //     {"Development Bank of Japan, Inc.","093009310"}, // VE scored company
+                //   {"FORD MOTOR CO","058618674"}, // MESG scored Company
+                // {"FirstCash, Inc.","001668460"} // MESG scored Company
+                //  {"Lexicon Pharmaceuticals, Inc.","001769888"}, // MESG scored Company
+                // {"NMI Holdings, Inc.","136042839"}, // MESG scored Company
+                //  {"Samsung Securities Co., Ltd.","065260686"}, // VE scored company
+                //     {"Alibaba Health Information Technology Ltd.","261851236"}, // VE scored company
+                //     {"Development Bank of Japan, Inc.","093009310"}, // VE scored company
 
         };
     }

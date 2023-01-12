@@ -146,9 +146,9 @@ public class BrownShareAssessment extends UITestBase {
         }
         //Portfolio Distribution
         List<String> portfolioDistributionCategoryColumnNames = Arrays.asList(researchLinePage.portfolioDistributionAllTableHeaders.get(0).getText().split(" "));
-        String portfolioDistributionCategoryNameUI = portfolioDistributionCategoryColumnNames.get(0) + " " + portfolioDistributionCategoryColumnNames.get(1);
-        String portfolioDistributionCategoryInvestmentNameUI = "% " + portfolioDistributionCategoryColumnNames.get(3);
-        String portfolioDistributionCategoryCompanyNameUI = portfolioDistributionCategoryColumnNames.get(4);
+        String portfolioDistributionCategoryNameUI = portfolioDistributionCategoryColumnNames.get(0);
+        String portfolioDistributionCategoryInvestmentNameUI = "% " + portfolioDistributionCategoryColumnNames.get(2);
+        String portfolioDistributionCategoryCompanyNameUI = portfolioDistributionCategoryColumnNames.get(3);
 
         String portfolioDistributionCategoryUI1 = portfolioDistributionList.get(0).get(0);
         String portfolioDistributionCategory1InvestmentUI = portfolioDistributionList.get(0).get(1);
