@@ -4,8 +4,6 @@ import com.esgc.Base.API.APIModels.APIFilterPayload;
 import com.esgc.Base.TestBases.APITestBase;
 import com.esgc.Dashboard.API.APIModels.PerformanceChartCompany;
 import com.esgc.Dashboard.API.Controllers.DashboardAPIController;
-import com.esgc.Dashboard.UI.Pages.DashboardPage;
-import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.Xray;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
@@ -13,11 +11,8 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Test;
 
-import java.util.List;
-import java.util.Map;
-
-import static com.esgc.Utilities.Groups.*;
-import static com.esgc.Utilities.Groups.SMOKE;
+import static com.esgc.Utilities.Groups.API;
+import static com.esgc.Utilities.Groups.REGRESSION;
 import static org.hamcrest.Matchers.*;
 
 

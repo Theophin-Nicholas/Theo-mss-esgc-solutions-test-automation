@@ -6,11 +6,8 @@ import com.esgc.Base.DB.DBModels.EntityWithScores;
 import com.esgc.Base.DB.DBModels.ResearchLineIdentifier;
 import com.esgc.Base.TestBases.DataValidationTestBase;
 import com.esgc.Dashboard.API.APIModels.PerformanceChartCompany;
-import com.esgc.Dashboard.DB.DBQueries.DashboardQueries;
-import com.esgc.Dashboard.UI.Pages.DashboardPage;
 import com.esgc.PortfolioAnalysis.API.APIModels.RangeAndScoreCategory;
 import com.esgc.Utilities.APIUtilities;
-import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.PortfolioUtilities;
 import com.esgc.Utilities.Xray;
 import io.restassured.response.Response;
@@ -397,7 +394,6 @@ public class PerformanceChart extends DataValidationTestBase {
                                 {"all", "AMER", "Energy Transition Management", "03", "2021"},
                                 {"all", "EMEA", "Energy Transition Management", "03", "2021"},
                                 {"all", "all", "Energy Transition Management", "03", "2021"},
-
                                 {"all", "all", "TCFD", "03", "2021"},
                                 {"all", "APAC", "TCFD", "03", "2021"},
                                 {"all", "AMER", "TCFD", "03", "2021"},
@@ -406,4 +402,6 @@ public class PerformanceChart extends DataValidationTestBase {
 
                 };
     }
+
+
 }
