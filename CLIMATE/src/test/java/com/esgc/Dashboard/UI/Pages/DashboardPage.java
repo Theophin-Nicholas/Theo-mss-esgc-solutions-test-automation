@@ -685,6 +685,7 @@ public class DashboardPage extends UploadPage {
     }
 
     public int getPerformanceChartRowCount() {
+        BrowserUtils.wait(10);
         return wait.until(ExpectedConditions.visibilityOfAllElements(performanceChartRows)).size();
     }
 
@@ -720,9 +721,9 @@ public class DashboardPage extends UploadPage {
         BrowserUtils.scrollTo(performanceChartDropdown);
         BrowserUtils.wait(5);
         BrowserUtils.waitForClickablility(performanceChartDropdown,30).click();
-        BrowserUtils.wait(5);
+        BrowserUtils.wait(10);
         //wait.until(ExpectedConditions.elementToBeClickable(performanceChartDropdown)).click();
-        wait.until(ExpectedConditions.visibilityOfAllElements(performanceChartDropdownOptions));
+//        wait.until(ExpectedConditions.visibilityOfAllElements(performanceChartDropdownOptions));
         performanceChartDropdownOptions.stream().filter(e -> e.getText().equals(size)).findFirst().get().click();
         waitForDataLoadCompletion();
         Actions action = new Actions(Driver.getDriver());

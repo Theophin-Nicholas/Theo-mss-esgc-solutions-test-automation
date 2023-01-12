@@ -252,56 +252,17 @@ public class DashboardAPIController extends APIController {
         return response;
     }
 
-    public synchronized List<Map<String, String>> getPortfolioBrownShareData(String portfolioId, String year, String month) {
+    public Response getHeatMapEntitiesData(String portfolioId, String year, String month, String researchLine, String category){
         Response response = null;
-        List<Map<String, String>> apiBrownShareHeatMapData = new ArrayList<>();
         try {
-            List<String> categoriesList = new ArrayList<>();
-            categoriesList.add("No Involvement");
-            categoriesList.add("Minor Involvement");
-            categoriesList.add("Major Involvement");
-            for(String category:categoriesList) {
-                response = configSpec()
-                        .pathParam("portfolio_id", portfolioId)
-                        .when()
-                        .body("{\"region\":\"all\",\"sector\":\"all\",\"month\":\"" + month + "\",\"year\":\"" + year + "\",\"research_line_1\":\"brownshareasmt\",\"category_1\":\""+category+"\",\"category_2\":\"\"}")
-                        .post(DashboardEndPoints.POST_HEAT_MAP_ENTITY_LIST);
-
-                System.out.println(response.prettyPrint());
-
-                List<CompanyBrownShareInfo> companyList = new ArrayList<>();
-                companyList = Arrays.asList(response.as(CompanyBrownShareInfo[].class));
-                System.out.println("Category:"+category+" - Companies:"+companyList.size());
-
-                for(int j=0; j<companyList.size(); j++) {
-                    Map<String, String> companyDetails = new HashMap<>();
-                    String companyName = companyList.get(j).company_name;
-                    String scoreRange = companyList.get(j).category_score_r1_1;
-                    Double score = companyList.get(j).score_rl_1;
-                    if(score != null && score>0){
-                        if(score>0 && score<1){
-                            scoreRange = "<1%";
-                        }else{
-                            if(String.valueOf(score).endsWith(".0")){
-                                scoreRange = score.intValue()+"%";
-                            }else {
-                                scoreRange = score.floatValue() + "%";
-                            }
-                        }
-                    }
-                    companyDetails.put("COMPANY_NAME", companyName);
-                    companyDetails.put("SCORE_RANGE", scoreRange);
-                    companyDetails.put("SCORE_CATEGORY", category);
-                    apiBrownShareHeatMapData.add(companyDetails);
-                }
-
-            }
-
+            response = configSpec()
+                    .pathParam("portfolio_id", portfolioId)
+                    .when()
+                    .body("{\"region\":\"all\",\"sector\":\"all\",\"month\":\"" + month + "\",\"year\":\"" + year + "\",\"research_line_1\":\""+researchLine+"\",\"category_1\":\""+category+"\",\"category_2\":\"\"}")
+                    .post(DashboardEndPoints.POST_HEAT_MAP_ENTITY_LIST);
         } catch (Exception e) {
             System.out.println("Inside exception " + e.getMessage());
         }
-        System.out.println("Total Companies Count: " + apiBrownShareHeatMapData.size());
-
-        return apiBrownShareHeatMapData;
+        return response;
     }
 }

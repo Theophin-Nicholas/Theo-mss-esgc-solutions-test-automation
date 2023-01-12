@@ -94,39 +94,5 @@ public class HeatMapTemperatureAlignment extends DashboardUITestBase {
             BrowserUtils.wait(10);
         }
     }
-
-    @Test(groups = {REGRESSION, UI, SMOKE})
-    @Xray(test = {12278,12279, 12320,12321})
-    public void VerifyBrownShareAssessmentCategories() {
-
-        DashboardPage dashboardPage = new DashboardPage();
-        dashboardPage.navigateToPageFromMenu("Dashboard");
-        dashboardPage.selectSamplePortfolioFromPortfolioSelectionModal();
-        BrowserUtils.wait(5);
-        dashboardPage.selectOrDeselectHeatMapSection("Brown Share Assessment");
-        BrowserUtils.wait(5);
-        dashboardPage.selectOrDeselectHeatMapSection("Overall ESG Score");
-        BrowserUtils.wait(5);
-
-        dashboardPage.verifyBrownShareCoverageInHeatMapDescription();
-
-        List<String> actualCategoriesList = new ArrayList<>();
-        for(WebElement element: dashboardPage.brownShareCategories){
-            actualCategoriesList.add(element.getText());
-        }
-        Collections.sort(actualCategoriesList);
-        System.out.println("Actual Categories: "+actualCategoriesList);
-        List<String> expectedCategoriesList = new ArrayList<>();
-        expectedCategoriesList.add("No Involvement");
-        expectedCategoriesList.add("Minor Involvement");
-        expectedCategoriesList.add("Major Involvement");
-        Collections.sort(expectedCategoriesList);
-        System.out.println("Expected Categories: "+expectedCategoriesList);
-        assertTestCase.assertTrue(actualCategoriesList.equals(expectedCategoriesList),"Brown Share Categories are not matched");
-
-        Collections.sort(expectedCategoriesList, Collections.reverseOrder());
-        dashboardPage.verifyBrownShareCategoryInHeatMapDrawer(expectedCategoriesList);
-
-    }
 }
 

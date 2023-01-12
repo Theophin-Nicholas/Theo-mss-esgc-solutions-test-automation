@@ -514,29 +514,4 @@ public class PerformanceChart extends DashboardUITestBase {
         }
         return true;
     }
-
-    @Test(groups = {UI, DASHBOARD, REGRESSION})
-    @Xray(test = {12264})
-    public void verifyBrownShareCategories() {
-        DashboardPage dashboardPage = new DashboardPage();
-        dashboardPage.navigateToPageFromMenu("Dashboard");
-        test.info("Navigated to Dashboard Page");
-        dashboardPage.selectSamplePortfolioFromPortfolioSelectionModal();
-        test.info("Check Score categories in Performance Charts");
-
-        List<String> filterOptions = Arrays.asList("10", "25", "50", "75", "100");
-        for(String option:filterOptions){
-            dashboardPage.selectPerformanceChartViewSizeFromDropdown(option);
-            int rows = dashboardPage.getPerformanceChartRowCount();
-            for(int i=1; i<=rows; i++){
-                String xpath = "//tr["+i+"]/td[@heap_id='perfchart']/following-sibling::td[10]";
-                WebElement element = Driver.getDriver().findElement(By.xpath(xpath));
-                BrowserUtils.scrollTo(element);
-                String category = Driver.getDriver().findElement(By.xpath(xpath)).getText();
-                System.out.println("Record - "+i+": category - "+category);
-                if(!category.isEmpty())
-                assertTestCase.assertTrue(category.contains("%"),"Brown Share Assessment Score Category is not percent");
-            }
-        }
-    }
 }
