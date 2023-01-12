@@ -11,6 +11,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 import java.io.File;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -735,9 +736,9 @@ public class RegulatoryReportingPage extends UploadPage {
             for (int j = 0; j < template.columnCount(1); j++) {
                 if (template.getCellData(i, j) == null || template.getCellData(i, j).equals("")) {
                     continue;
-                } else if (!excelData.contains(template.getCellData(i, j).trim())) {
-                    System.out.println(template.getCellData(i, j));
-                    System.out.println("Row = " + (i + 1) + " Column = " + (j + 1));
+                } else if (!excelData.contains(template.getCellData(i,j).trim())) {
+                    System.out.println(template.getCellData(i,j));
+                    System.out.println("Row = " + (i+1) + " Column = " + (j+1));
                     return false;
                 }
             }
@@ -750,7 +751,7 @@ public class RegulatoryReportingPage extends UploadPage {
         String excelName = rrStatusPage_PortfoliosList.get(0).getText().replaceAll("ready", "").trim();
         System.out.println("Verifying reports content for Disclaimer Sheet");
         List<String> excelData = new ArrayList<>();
-        for (String data : getExcelDataList(excelName, "Disclaimer")) {
+        for(String data: getExcelDataList(excelName, "Disclaimer")){
             excelData.addAll(BrowserUtils.splitToSentences(data));
         }
 //        excelData.forEach(System.out::println);
@@ -762,11 +763,7 @@ public class RegulatoryReportingPage extends UploadPage {
         }
 //        System.out.println("\n===================================\n");
 //        templateData.forEach(System.out::println);
-
-        //update year with current year
-        templateData.set(0, templateData.get(0).replace("© 2022", "© " + LocalDate.now().getYear()));
-
-        for (String sentence : templateData) {
+        for(String sentence: templateData){
             if (!excelData.contains(sentence)) {
                 System.out.println(sentence);
                 return false;
@@ -776,9 +773,9 @@ public class RegulatoryReportingPage extends UploadPage {
     }
 
     public boolean verifyPreviouslyDownloadedButton() {
-        try {
+        try{
             return previouslyDownloadedButton.isDisplayed();
-        } catch (Exception e) {
+        }catch (Exception e){
             e.printStackTrace();
             return false;
         }
@@ -789,35 +786,35 @@ public class RegulatoryReportingPage extends UploadPage {
     }
 
     public void verifyPreviouslyDownloadedScreen() {
-        BrowserUtils.waitForVisibility(previouslyDownloadedStaticLabel, 30);
+        BrowserUtils.waitForVisibility(previouslyDownloadedStaticLabel,30);
         String recordCellsXpath = "//div[text()='Reports created previously:']/following-sibling::div/div/div";
-        String strDate = Driver.getDriver().findElement(By.xpath(recordCellsXpath + "[1]")).getText();
+        String strDate = Driver.getDriver().findElement(By.xpath(recordCellsXpath+"[1]")).getText();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        try {
+        try{
             sdf.parse(strDate);
-        } catch (Exception e) {
-            assertTestCase.assertTrue(false, "Verify downloaded date in first column");
+        }catch (Exception e){
+            assertTestCase.assertTrue(false,"Verify downloaded date in first column");
         }
 
-        String fileName = Driver.getDriver().findElement(By.xpath(recordCellsXpath + "[2]/span")).getText();
+        String fileName = Driver.getDriver().findElement(By.xpath(recordCellsXpath+"[2]/span")).getText();
         assertTestCase.assertTrue(fileName.endsWith(".zip"), "Verify downloaded file name in second column");
 
-        String portfolios = Driver.getDriver().findElement(By.xpath(recordCellsXpath + "[3]")).getText();
-        String portfoliosSerialNumber = portfolios.substring(0, portfolios.indexOf(":"));
+        String portfolios = Driver.getDriver().findElement(By.xpath(recordCellsXpath+"[3]")).getText();
+        String portfoliosSerialNumber = portfolios.substring(0,portfolios.indexOf(":"));
         assertTestCase.assertTrue(NumberUtils.isParsable(portfoliosSerialNumber), "Verify portfolios information in the third column");
     }
 
     public void verifyFileDownloadFromPreviouslyDownloadedScreen() {
-        BrowserUtils.waitForVisibility(previouslyDownloadedStaticLabel, 30);
+        BrowserUtils.waitForVisibility(previouslyDownloadedStaticLabel,30);
         String expFileName = recordFileName.getText();
 
         FileDownloadUtilities.deleteDownloadFolder();
         recordFileName.click();
-        assertTestCase.assertTrue(FileDownloadUtilities.waitUntilFileIsDownloaded(), "Verify download of export file");
+        assertTestCase.assertTrue(FileDownloadUtilities.waitUntilFileIsDownloaded(),"Verify download of export file");
         String actualFileName = FileDownloadUtilities.getDownloadedFileName();
 
-        System.out.println(actualFileName + "-->" + expFileName);
-        assertTestCase.assertTrue(actualFileName.equals(expFileName), "Verify file is downloaded from Previously Downloaded screen");
+        System.out.println(actualFileName+"-->"+expFileName);
+        assertTestCase.assertTrue(actualFileName.equals(expFileName),"Verify file is downloaded from Previously Downloaded screen");
     }
 
     public boolean verifySFDRCompanyOutput(List<String> selectedPortfolios) {
@@ -826,6 +823,7 @@ public class RegulatoryReportingPage extends UploadPage {
             String portfolioId = apiController.getPortfolioId(portfolioName);
             RegulatoryReportingQueries queries = new RegulatoryReportingQueries();
             List<Map<String, Object>> dbData = queries.getSFDRCompanyOutput(portfolioId, DateTimeUtilities.getCurrentYear(-1));
+            System.out.println("dbData.size() = " + dbData.size());
 
             //open Excel file
             String excelName = rrStatusPage_PortfoliosList.get(0).getText().replaceAll("ready", "").trim();
@@ -851,72 +849,6 @@ public class RegulatoryReportingPage extends UploadPage {
                     }
                 }
             }
-        }
-        return true;
-    }
-
-    public boolean verifyUserInputHistory(List<String> selectedPortfolios) {
-        for (String portfolioName : selectedPortfolios) {
-            RegulatoryReportingAPIController apiController = new RegulatoryReportingAPIController();
-            String portfolioId = apiController.getPortfolioId(portfolioName);
-            RegulatoryReportingQueries queries = new RegulatoryReportingQueries();
-            List<Map<String, Object>> dbData = queries.getUserInputHistory(portfolioId);
-
-            //open Excel file
-            String excelName = rrStatusPage_PortfoliosList.get(0).getText().replaceAll("ready", "").trim();
-            ExcelUtil excelData = getExcelData(excelName, "User Input History");
-            if(!excelData.searchData("Identifier")) return false;
-            if(!excelData.searchData("Company Name")) return false;
-            if(!excelData.searchData("Exposure Amount in EUR")) return false;
-            if(!excelData.searchData("Exposure Amount %")) return false;
-
-            for (int i = 0; i < dbData.size(); i++) {
-                //System.out.println("DBData = "+dbData.get(i).values());
-                String companyName = dbData.get(i).get("COMPANY_NAME").toString();
-                List<String> companyRow = excelData.getRowData(companyName);
-                for (String cell : companyRow) {
-
-                    //convert dbData to String
-                    if (!dbData.get(i).toString().contains(cell)) {
-                        if(cell.matches("\\d+\\.0")){
-                            cell = cell.replaceAll("\\.0", "");
-                            if(dbData.get(i).toString().contains(cell)){
-                                continue;
-                            }
-                            System.out.println("companyName = " + companyName);
-                            System.out.println("cell = " + cell);
-                            System.out.println(cell + " is not in DB");
-                            return false;
-                        }
-                    }
-                }
-            }
-
-        }
-        return true;
-    }
-
-    public boolean verifyPortfolioLevelOutput(List<String> selectedPortfolios) {
-        for (String portfolioName : selectedPortfolios) {
-            RegulatoryReportingAPIController apiController = new RegulatoryReportingAPIController();
-            String portfolioId = apiController.getPortfolioId(portfolioName);
-            RegulatoryReportingQueries queries = new RegulatoryReportingQueries();
-            //open Excel file
-            String excelName = rrStatusPage_PortfoliosList.get(0).getText().replaceAll("ready", "").trim();
-            List<String> excelData = getExcelDataList(excelName, (selectedPortfolios.indexOf(portfolioName) + 1) + "_" + portfolioName);
-            for (Map<String, Object> row : dbData) {
-                for (String key : row.keySet()) {
-                    if (row.get(key) == null) continue;
-                    if (!excelData.contains(row.get(key).toString())) {
-                        System.out.println(row.get(key));
-//                        return false;
-                    }
-                }
-            }
-            ExcelUtil excelData = getExcelData(excelName, "Portfolio Level Output");
-
-            //verify Scope 1 Emissions -> Sum(<carbon footprint (scope 1)>*(<exposure amount>/<Enterprise Value>))
-            System.out.println("Scope 1 Emissions = " + queries.getSumOfExposure(portfolioId));
         }
         return true;
     }
