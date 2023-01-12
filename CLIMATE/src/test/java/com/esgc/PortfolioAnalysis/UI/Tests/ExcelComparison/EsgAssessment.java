@@ -22,6 +22,7 @@ public class EsgAssessment extends DataValidationTestBase {
 
         DashboardPage dashboardPage = new DashboardPage();
         String filePath = BrowserUtils.exportPath(researchLine);
+        //TODO: Format is not correct
         //assertTestCase.assertTrue(validateEsgAssessmentExportedFileName(filePath), "File name should be in the format of ESG Assessment_26-Jul-2022_T12_24_53.xls");
         List<Map<String,String>> excelResults = utils.convertExcelToNestedMap(filePath);
 
