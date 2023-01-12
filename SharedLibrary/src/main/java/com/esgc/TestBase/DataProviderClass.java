@@ -298,6 +298,7 @@ public class DataProviderClass {
 
     @DataProvider(name = "Research Lines")
     public Object[][] availableResearchLines() {
+        //TODO: ESG Assessment is available only in QA environment as of 12Jan2023
         if(Environment.environment.equalsIgnoreCase("qa")){
             return new Object[][]{
                     {"ESG Assessments"},
