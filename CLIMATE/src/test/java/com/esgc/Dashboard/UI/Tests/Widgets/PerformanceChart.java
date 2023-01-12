@@ -4,7 +4,6 @@ import com.esgc.Base.TestBases.DashboardUITestBase;
 import com.esgc.Dashboard.UI.Pages.DashboardPage;
 import com.esgc.TestBase.DataProviderClass;
 import com.esgc.Utilities.BrowserUtils;
-import com.esgc.Utilities.Driver;
 import com.esgc.Utilities.PortfolioUtilities;
 import com.esgc.Utilities.Xray;
 import org.openqa.selenium.By;
