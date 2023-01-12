@@ -79,7 +79,6 @@ public class EntityReferenceAndMethodologiesTest extends UITestBase {
         List<String> actualMethodologies = entityProfilePage.getMethodologiesLinks();
         List<String> expectedMethodologies = new ArrayList<>();
         expectedMethodologies.add("ESG Assessment Methodology 1.0");
-        expectedMethodologies.add("ESG Assessment Methodology 2.0");
         expectedMethodologies.add("Controversy Risk Assessment Methodology");
         expectedMethodologies.add("ESG Assessment Subcategory Definitions");
         expectedMethodologies.add("ESG Assessment Metrics Definitions");

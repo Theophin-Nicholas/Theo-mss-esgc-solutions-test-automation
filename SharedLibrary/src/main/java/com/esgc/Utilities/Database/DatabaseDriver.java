@@ -35,23 +35,23 @@ public class DatabaseDriver {
     }).get();
 
     public static void createDBConnection() {
-
-        System.out.println("CONNECTING TO DEFAULT DATABASE...");
-        Properties props = new Properties();
-        props.put("db", DB_DATABASE);
-        props.put("user", DB_USERNAME);
-        props.put("password", DB_PASSWORD);
-        props.put("warehouse", DB_WAREHOUSE);
-        props.put("schema", DB_SCHEMA);
-        props.put("role", DB_ROLE);
-        props.put("TIMEZONE", "America/New_York");
-        try {
-            connection = DriverManager.getConnection(DB_HOST, props);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+        if(connection == null) {
+            System.out.println("CONNECTING TO DEFAULT DATABASE...");
+            Properties props = new Properties();
+            props.put("db", DB_DATABASE);
+            props.put("user", DB_USERNAME);
+            props.put("password", DB_PASSWORD);
+            props.put("warehouse", DB_WAREHOUSE);
+            props.put("schema", DB_SCHEMA);
+            props.put("role", DB_ROLE);
+            props.put("TIMEZONE", "America/New_York");
+            try {
+                connection = DriverManager.getConnection(DB_HOST, props);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+            System.out.println("DATABASE CONNECTION SUCCESSFUL!");
         }
-        System.out.println("DATABASE CONNECTION SUCCESSFUL!");
-
     }
 
     /**

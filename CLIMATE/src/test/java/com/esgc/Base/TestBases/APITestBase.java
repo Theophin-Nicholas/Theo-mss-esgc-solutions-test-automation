@@ -22,12 +22,14 @@ public abstract class APITestBase extends TestBaseClimate {
 
     @BeforeMethod(onlyForGroups = {API}, groups = {REGRESSION, SMOKE, API})
     public synchronized void importPortfolioBeforeAPITests() {
-
-        if (portfolioID == null || portfolioID.trim().length() == 0) {
-            String user_id = APIUtilities.userID();
-            Response response = APIUtilities.importScorePortfolio(user_id);
-            portfolioID = response.jsonPath().getString("portfolio_id");
-            portfolioName = response.jsonPath().getString("portfolio_name");
+        boolean isImportTest = this.getClass().getName().contains("Import");
+        if(!isImportTest) {
+            if (portfolioID == null || portfolioID.trim().length() == 0) {
+                String user_id = APIUtilities.userID();
+                Response response = APIUtilities.importScorePortfolio(user_id);
+                portfolioID = response.jsonPath().getString("portfolio_id");
+                portfolioName = response.jsonPath().getString("portfolio_name");
+            }
         }
     }
 

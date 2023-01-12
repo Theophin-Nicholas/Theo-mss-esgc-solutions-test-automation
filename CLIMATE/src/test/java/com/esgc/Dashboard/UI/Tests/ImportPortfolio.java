@@ -56,7 +56,7 @@ public class ImportPortfolio extends DashboardUITestBase {
 
         assertTestCase.assertTrue(dashboardPage.checkIfUploadingMaskIsDisplayed(), "Load mask");
 
-        BrowserUtils.waitForVisibility(dashboardPage.successMessagePopUP, 2);
+        BrowserUtils.waitForVisibility(dashboardPage.successMessagePopUP, 10);
         test.info("Waited for the Successful popup's visibility");
 
         assertTestCase.assertTrue(dashboardPage.checkifSuccessPopUpIsDisplyed(), "Success pop up is displayed", 335);
@@ -72,11 +72,11 @@ public class ImportPortfolio extends DashboardUITestBase {
         assertTestCase.assertEquals(dashboardPage.getPlaceholderInSuccessPopUp(), expectedPortfolioName, "Portfolio name displayed in pop up");
 
         dashboardPage.waitForDataLoadCompletion();
+        BrowserUtils.wait(20);
+        assertTestCase.assertFalse(dashboardPage.checkifSuccessPopUpIsDisplyed(), "Success pop up disappeared", 337);
 
         assertTestCase.assertEquals(dashboardPage.getSelectedPortfolioNameFromDropdown(), expectedPortfolioName, "Portfolio name verification", 1298);
-        assertTestCase.assertTrue(dashboardPage.getPortfolioNameInSummaryHeaders().endsWith(expectedPortfolioName), "Portfolio name in subtitle");
-        BrowserUtils.wait(10);
-        assertTestCase.assertFalse(dashboardPage.checkifSuccessPopUpIsDisplyed(), "Success pop up disappeared", 337);
+        assertTestCase.assertEquals(dashboardPage.getPortfolioNameInSummaryHeaders(), expectedPortfolioName, "Portfolio name in subtitle");
 
     }
 

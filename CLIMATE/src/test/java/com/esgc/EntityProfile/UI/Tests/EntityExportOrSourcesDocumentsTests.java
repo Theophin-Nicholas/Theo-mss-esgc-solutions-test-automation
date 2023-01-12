@@ -176,6 +176,7 @@ public class EntityExportOrSourcesDocumentsTests extends UITestBase {
 
         String filePath = BrowserUtils.downloadPath()+"\\"+actualFileName;
         int numberOfPages = PdfUtil.getNumberOfPages(filePath);
+        //TODO needs to be updated, summary is not first page with esg entitlements
         assertTestCase.assertTrue(PdfUtil.getPdfContent(filePath,1).contains("Summary"),"Verify first page is summary page");
         assertTestCase.assertTrue(PdfUtil.getPdfContent(filePath, 2).contains("Materiality"),"Verify first page is summary page");
         assertTestCase.assertTrue(PdfUtil.getPdfContent(filePath, numberOfPages).contains("Disclaimer and Copyright"),"Verify first page is summary page");
