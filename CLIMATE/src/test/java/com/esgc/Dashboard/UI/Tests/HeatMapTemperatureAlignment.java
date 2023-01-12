@@ -2,22 +2,13 @@ package com.esgc.Dashboard.UI.Tests;
 
 import com.esgc.Base.TestBases.DashboardUITestBase;
 import com.esgc.Base.UI.Pages.LoginPage;
-import com.esgc.Dashboard.API.Controllers.DashboardAPIController;
-import com.esgc.Dashboard.DB.DBQueries.DashboardQueries;
 import com.esgc.Dashboard.UI.Pages.DashboardPage;
 import com.esgc.Utilities.BrowserUtils;
-import com.esgc.Utilities.Driver;
 import com.esgc.Utilities.EntitlementsBundles;
 import com.esgc.Utilities.Xray;
-import io.restassured.response.Response;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
 import org.testng.annotations.Test;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
 
 import static com.esgc.Utilities.Groups.*;
 
