@@ -74,6 +74,8 @@ public class UpdatesTests extends DataValidationTestBase {
         DecimalFormat df = new DecimalFormat("0.##");
         df.setRoundingMode(RoundingMode.HALF_UP);
 
+        DecimalFormat df2 = new DecimalFormat("0.##");
+
         for (UpdatesModel each : updates) {
             System.out.println("Company Verification for : " + each.getCompanyName());
             ResearchLineIdentifier researchLineIdentifier = portfolioToUpload.stream()
@@ -85,7 +87,7 @@ public class UpdatesTests extends DataValidationTestBase {
             RangeAndScoreCategory dbScorePreviousCategory = rangeAndCategoryList.stream()
                     .filter(e -> e.getCategory().equals(each.getPreviousScoreCategory())).findFirst().orElse(null);
 
-            assertTestCase.assertEquals(df.format(each.getPreviousScore()), researchLineIdentifier.getPREVIOUS_SCORE(),
+            assertTestCase.assertEquals(each.getPreviousScore() == null ? 0.0d : df.format(each.getPreviousScore()), researchLineIdentifier.getPREVIOUS_SCORE(),
                     String.format("Validating %s previous score", each.companyName));
 
             assertTestCase.assertEquals(each.getPreviousUpdateDate(), researchLineIdentifier.getPREVIOUS_PRODUCED_DATE().equals("") ? null : researchLineIdentifier.getPREVIOUS_PRODUCED_DATE(),
@@ -97,13 +99,13 @@ public class UpdatesTests extends DataValidationTestBase {
             assertTestCase.assertEquals(each.getCompanyName(), researchLineIdentifier.getCOMPANY_NAME(),
                     String.format("Validating %s company name", each.companyName));
 
-            assertTestCase.assertEquals(each.getScore(), researchLineIdentifier.getSCORE(),
+            assertTestCase.assertEquals(df2.format(each.getScore()), df2.format(researchLineIdentifier.getSCORE()),
                     String.format("Validating %s current score", each.companyName));
 
             assertTestCase.assertEquals(each.getScoreCategory(), dbScoreCategory.getCategory(),
                     String.format("Validating %s score category", each.companyName));
 
-            assertTestCase.assertEquals(each.getInvestmentPct(), df.format(dataValidationUtilities.getTotalInvestmentPercentageForCompany(portfolioToUpload,
+            assertTestCase.assertEquals(each.getInvestmentPct() + "", df.format(dataValidationUtilities.getTotalInvestmentPercentageForCompany(portfolioToUpload,
                             researchLineIdentifier.getBVD9_NUMBER())),
                     String.format("Validating %s investment percentage", each.companyName));
 

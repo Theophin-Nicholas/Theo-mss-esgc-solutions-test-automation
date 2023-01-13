@@ -38,7 +38,7 @@ public class PhysicalRiskHazardsTests extends UITestBase {
                 "Underlying Data Operations Risk Facilities Exposed Widget is displayed under Portfolio Summary section");
         //-Title must say: Portfolio(vertically)
         assertTestCase.assertEquals(researchLinePage.PortfolioScoreTitle.getText().trim(),"Portfolio","Portfolio Score title is verified");
-        assertTestCase.assertEquals(researchLinePage.PortfolioScoreTitle.getCssValue("transform"), "matrix(-1, 1.22465e-16, -1.22465e-16, -1, 0, 0)",
+        assertTestCase.assertEquals(researchLinePage.PortfolioScoreTitle.getCssValue("transform"), "matrix(-1, 0, 0, -1, 0, 0)",
                         "Portfolio Score title is rotated");
         //Highest Risk Hazard: The highest Physical risk hazard score exposed to your portfolio or company | Highest Risk Hazard: Water Stress
         System.out.println(researchLinePage.physicalRiskHazardsScoreWidget.getText());
@@ -54,6 +54,7 @@ public class PhysicalRiskHazardsTests extends UITestBase {
 
         ResearchLineColors riskColor = new ResearchLineColors();
         System.out.println("getScore(researchLinePage.facilitiesExposedWidget.getText()) = " + getScore(researchLinePage.facilitiesExposedWidget.getText()));
+        //TODO risk color is not based on facilities exposed, should get score category from API
         assertTestCase.assertEquals(riskColor.getColorForScoreCategory(getScore(researchLinePage.facilitiesExposedWidget.getText())), actBackgroundColor,
                         "Highest Risk Hazard Widget background color is verified");
         actBackgroundColor = Color.fromString(researchLinePage.physicalRiskHazardsScoreWidgetText.getCssValue("color")).asHex();

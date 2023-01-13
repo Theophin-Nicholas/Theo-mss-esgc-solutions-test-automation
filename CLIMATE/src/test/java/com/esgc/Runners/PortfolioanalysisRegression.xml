@@ -17,7 +17,7 @@
 
         <packages>
 
-            <package name="com.esgc.EntityProfile.*"/>
+            <package name="com.esgc.PortfolioAnalysis.*"/>
 
         </packages>
 

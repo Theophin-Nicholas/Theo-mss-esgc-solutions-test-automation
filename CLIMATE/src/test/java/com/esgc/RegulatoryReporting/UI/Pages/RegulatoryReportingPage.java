@@ -3,6 +3,7 @@ package com.esgc.RegulatoryReporting.UI.Pages;
 import com.esgc.Base.UI.Pages.UploadPage;
 import com.esgc.RegulatoryReporting.API.Controllers.RegulatoryReportingAPIController;
 import com.esgc.RegulatoryReporting.DB.DBQueries.RegulatoryReportingQueries;
+import com.esgc.Utilities.*;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.openqa.selenium.By;
 import com.esgc.Utilities.*;
@@ -13,6 +14,7 @@ import org.openqa.selenium.support.FindBy;
 import java.io.File;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.*;
 
 
@@ -312,17 +314,19 @@ public class RegulatoryReportingPage extends UploadPage {
         BrowserUtils.switchWindowsTo(currentWindowHandle);
         return rrStatusPage_ReportGeneratingMessage.isDisplayed();
     }
+
     public boolean verifyNewTabOpened(Set<String> windowHandles) {
         BrowserUtils.wait(2);
         Set<String> currentTabs = BrowserUtils.getWindowHandles();
-        for(String handle:currentTabs){
-            if(!windowHandles.contains(handle)){
+        for (String handle : currentTabs) {
+            if (!windowHandles.contains(handle)) {
                 return verifyNewTabOpened(handle);
             }
         }
         System.out.println("No new tab opened");
         return false;
     }
+
     public List<String> getSelectedPortfolioOptions() {
         List<String> selectedPortfolioOptions = new ArrayList<>();
         for (int i = 0; i < portfolioRadioButtonList.size(); i++) {
@@ -436,7 +440,7 @@ public class RegulatoryReportingPage extends UploadPage {
         verifyIfReportsDownloaded(false);
         File dir = new File(BrowserUtils.downloadPath());
         File[] dir_contents = dir.listFiles();
-        String zipFilePath = Arrays.asList(dir_contents).stream().filter(e -> ((e.getName().startsWith("SFDR") ||e.getName().startsWith("EUT")) &&
+        String zipFilePath = Arrays.asList(dir_contents).stream().filter(e -> ((e.getName().startsWith("SFDR") || e.getName().startsWith("EUT")) &&
                 e.getName().contains(DateTimeUtilities.getCurrentDate("MM_dd_yyyy")) &&
                 e.getName().endsWith(".zip"))).findAny().get().getAbsolutePath();
         System.out.println("zipFilePath = " + zipFilePath);
@@ -573,11 +577,11 @@ public class RegulatoryReportingPage extends UploadPage {
         //System.out.println("excelFile = " + excelFile.getAbsolutePath());
         ExcelUtil excelUtil = new ExcelUtil(excelFile.getAbsolutePath(), sheetName);
         System.out.println("Verifying sheet " + sheetName);
-        System.out.println("Sheet Loaded "+excelUtil.getLastRowNum()+" vs. "+excelUtil.columnCount(columnIndex));
+        System.out.println("Sheet Loaded " + excelUtil.getLastRowNum() + " vs. " + excelUtil.columnCount(columnIndex));
         List<String> list = new ArrayList<>();
         for (int i = 0; i <= excelUtil.getLastRowNum(); i++) {
             for (int j = 0; j <= excelUtil.columnCount(columnIndex); j++) {
-                if(excelUtil.getCellData(i,j) == null || excelUtil.getCellData(i,j).equals("")) continue;
+                if (excelUtil.getCellData(i, j) == null || excelUtil.getCellData(i, j).equals("")) continue;
                 list.add(excelUtil.getCellData(i, j).trim());
             }
         }
@@ -692,7 +696,7 @@ public class RegulatoryReportingPage extends UploadPage {
     public boolean verifyEUTaxonomySheets() {
         String excelName = rrStatusPage_PortfoliosList.get(0).getText().replaceAll("ready", "").trim();
         System.out.println("Verifying reports content for " + excelName);
-        String[] sheets = {"Green Investment Ratio Template","Underlying Data - Overview","Underlying Data - Activities","Definitions","Disclaimer"};
+        String[] sheets = {"Green Investment Ratio Template", "Underlying Data - Overview", "Underlying Data - Activities", "Definitions", "Disclaimer"};
         for (String sheet : sheets) {
             ExcelUtil excelData = getExcelData(excelName, sheet);
             if (excelData == null) {
@@ -710,10 +714,10 @@ public class RegulatoryReportingPage extends UploadPage {
         List<String> excelData = getExcelDataList(excelName, "Green Investment Ratio Template", 3);
         for (int i = 4; i < template.rowCount(); i++) {
             for (int j = 1; j < template.columnCount(); j++) {
-                if(template.getCellData(i,j).equals("")||template.getCellData(i,j).equals("FUTURE RELEASE")){
+                if (template.getCellData(i, j).equals("") || template.getCellData(i, j).equals("FUTURE RELEASE")) {
                     continue;
-                } else if (!excelData.contains(template.getCellData(i,j).trim())) {
-                    System.out.println(template.getCellData(i,j));
+                } else if (!excelData.contains(template.getCellData(i, j).trim())) {
+                    System.out.println(template.getCellData(i, j));
                     //System.out.println("Row = " + (i+1) + " Column = " + (j+1));
                     return false;
                 }
@@ -727,8 +731,8 @@ public class RegulatoryReportingPage extends UploadPage {
         String excelName = rrStatusPage_PortfoliosList.get(0).getText().replaceAll("ready", "").trim();
         System.out.println("Verifying reports content for " + excelName);
         ExcelUtil excelData = getExcelData(excelName, "Underlying Data - Overview");
-        for(String title: template.getColumnsNames()){
-            if(!excelData.getColumnsNames().contains(title)){
+        for (String title : template.getColumnsNames()) {
+            if (!excelData.getColumnsNames().contains(title)) {
                 System.out.println(title);
                 return false;
             }
@@ -741,8 +745,8 @@ public class RegulatoryReportingPage extends UploadPage {
         String excelName = rrStatusPage_PortfoliosList.get(0).getText().replaceAll("ready", "").trim();
         System.out.println("Verifying reports content for " + excelName);
         ExcelUtil excelData = getExcelData(excelName, "Underlying Data - Activities");
-        for(String title: template.getColumnsNames()){
-            if(!excelData.getColumnsNames().contains(title)){
+        for (String title : template.getColumnsNames()) {
+            if (!excelData.getColumnsNames().contains(title)) {
                 System.out.println(title);
                 return false;
             }
@@ -757,11 +761,11 @@ public class RegulatoryReportingPage extends UploadPage {
         List<String> excelData = getExcelDataList(excelName, "Definitions");
         for (int i = 0; i < template.rowCount(); i++) {
             for (int j = 0; j < template.columnCount(1); j++) {
-                if(template.getCellData(i,j)==null||template.getCellData(i,j).equals("")){
+                if (template.getCellData(i, j) == null || template.getCellData(i, j).equals("")) {
                     continue;
-                } else if (!excelData.contains(template.getCellData(i,j).trim())) {
-                    System.out.println(template.getCellData(i,j));
-                    System.out.println("Row = " + (i+1) + " Column = " + (j+1));
+                } else if (!excelData.contains(template.getCellData(i, j).trim())) {
+                    System.out.println(template.getCellData(i, j));
+                    System.out.println("Row = " + (i + 1) + " Column = " + (j + 1));
                     return false;
                 }
             }
@@ -774,7 +778,7 @@ public class RegulatoryReportingPage extends UploadPage {
         String excelName = rrStatusPage_PortfoliosList.get(0).getText().replaceAll("ready", "").trim();
         System.out.println("Verifying reports content for Disclaimer Sheet");
         List<String> excelData = new ArrayList<>();
-        for(String data: getExcelDataList(excelName, "Disclaimer")){
+        for (String data : getExcelDataList(excelName, "Disclaimer")) {
             excelData.addAll(BrowserUtils.splitToSentences(data));
         }
 //        excelData.forEach(System.out::println);
@@ -786,7 +790,11 @@ public class RegulatoryReportingPage extends UploadPage {
         }
 //        System.out.println("\n===================================\n");
 //        templateData.forEach(System.out::println);
-        for(String sentence: templateData){
+
+        //update year with current year
+        templateData.set(0, templateData.get(0).replace("© 2022", "© " + LocalDate.now().getYear()));
+
+        for (String sentence : templateData) {
             if (!excelData.contains(sentence)) {
                 System.out.println(sentence);
                 return false;
@@ -796,9 +804,9 @@ public class RegulatoryReportingPage extends UploadPage {
     }
 
     public boolean verifyPreviouslyDownloadedButton() {
-        try{
+        try {
             return previouslyDownloadedButton.isDisplayed();
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
@@ -809,39 +817,39 @@ public class RegulatoryReportingPage extends UploadPage {
     }
 
     public void verifyPreviouslyDownloadedScreen() {
-        BrowserUtils.waitForVisibility(previouslyDownloadedStaticLabel,30);
+        BrowserUtils.waitForVisibility(previouslyDownloadedStaticLabel, 30);
         String recordCellsXpath = "//div[text()='Reports created previously:']/following-sibling::div/div/div";
-        String strDate = Driver.getDriver().findElement(By.xpath(recordCellsXpath+"[1]")).getText();
+        String strDate = Driver.getDriver().findElement(By.xpath(recordCellsXpath + "[1]")).getText();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        try{
+        try {
             sdf.parse(strDate);
-        }catch (Exception e){
-            assertTestCase.assertTrue(false,"Verify downloaded date in first column");
+        } catch (Exception e) {
+            assertTestCase.assertTrue(false, "Verify downloaded date in first column");
         }
 
-        String fileName = Driver.getDriver().findElement(By.xpath(recordCellsXpath+"[2]/span")).getText();
+        String fileName = Driver.getDriver().findElement(By.xpath(recordCellsXpath + "[2]/span")).getText();
         assertTestCase.assertTrue(fileName.endsWith(".zip"), "Verify downloaded file name in second column");
 
-        String portfolios = Driver.getDriver().findElement(By.xpath(recordCellsXpath+"[3]")).getText();
-        String portfoliosSerialNumber = portfolios.substring(0,portfolios.indexOf(":"));
+        String portfolios = Driver.getDriver().findElement(By.xpath(recordCellsXpath + "[3]")).getText();
+        String portfoliosSerialNumber = portfolios.substring(0, portfolios.indexOf(":"));
         assertTestCase.assertTrue(NumberUtils.isParsable(portfoliosSerialNumber), "Verify portfolios information in the third column");
     }
 
     public void verifyFileDownloadFromPreviouslyDownloadedScreen() {
-        BrowserUtils.waitForVisibility(previouslyDownloadedStaticLabel,30);
+        BrowserUtils.waitForVisibility(previouslyDownloadedStaticLabel, 30);
         String expFileName = recordFileName.getText();
 
         FileDownloadUtilities.deleteDownloadFolder();
         recordFileName.click();
-        assertTestCase.assertTrue(FileDownloadUtilities.waitUntilFileIsDownloaded(),"Verify download of export file");
+        assertTestCase.assertTrue(FileDownloadUtilities.waitUntilFileIsDownloaded(), "Verify download of export file");
         String actualFileName = FileDownloadUtilities.getDownloadedFileName();
 
-        System.out.println(actualFileName+"-->"+expFileName);
-        assertTestCase.assertTrue(actualFileName.equals(expFileName),"Verify file is downloaded from Previously Downloaded screen");
+        System.out.println(actualFileName + "-->" + expFileName);
+        assertTestCase.assertTrue(actualFileName.equals(expFileName), "Verify file is downloaded from Previously Downloaded screen");
     }
 
     public boolean verifySFDRCompanyOutput(List<String> selectedPortfolios) {
-        for(String portfolioName: selectedPortfolios){
+        for (String portfolioName : selectedPortfolios) {
             RegulatoryReportingAPIController apiController = new RegulatoryReportingAPIController();
             String portfolioId = apiController.getPortfolioId(portfolioName);
             RegulatoryReportingQueries queries = new RegulatoryReportingQueries();
@@ -850,11 +858,11 @@ public class RegulatoryReportingPage extends UploadPage {
 
             //open Excel file
             String excelName = rrStatusPage_PortfoliosList.get(0).getText().replaceAll("ready", "").trim();
-            List<String> excelData = getExcelDataList(excelName, (selectedPortfolios.indexOf(portfolioName)+1)+"_"+portfolioName);
-            for(Map<String, Object> row: dbData){
-                for(String key: row.keySet()){
-                    if(row.get(key)==null)continue;
-                    if(!excelData.contains(row.get(key).toString())){
+            List<String> excelData = getExcelDataList(excelName, (selectedPortfolios.indexOf(portfolioName) + 1) + "_" + portfolioName);
+            for (Map<String, Object> row : dbData) {
+                for (String key : row.keySet()) {
+                    if (row.get(key) == null) continue;
+                    if (!excelData.contains(row.get(key).toString())) {
                         System.out.println(row.get(key));
 //                        return false;
                     }

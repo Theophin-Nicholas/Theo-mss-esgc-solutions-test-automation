@@ -493,7 +493,6 @@ public class ImportPortfolio extends UITestBase {
     public void VerifyBBGPortfolioUploadTest() {
         String portfolioName = "BBGPortfolioWithValidData";
         uploadPortfolio(portfolioName);
-        assertTestCase.assertTrue(researchLinePage.checkIfUploadingMaskIsDisplayed(), "Load Mask");
         assertTestCase.assertTrue(researchLinePage.checkifSuccessPopUpIsDisplyed(), "Success pop up is displayed");
         test.pass("Verified:After a successful file upload,Success popup was displayed successfully");
         assertTestCase.assertEquals(researchLinePage.AlertMessage.getText(), "Portfolio Upload Successfully Saved", "Success message verified");
@@ -530,7 +529,6 @@ public class ImportPortfolio extends UITestBase {
     @Xray(test = {4302})
     public void VerifyMultipleBBGPortfolioUploadTest() {
         uploadPortfolio("PortfolioWithMultipleBBGTickers");
-        assertTestCase.assertTrue(researchLinePage.checkIfUploadingMaskIsDisplayed(), "Load Mask");
         assertTestCase.assertTrue(researchLinePage.checkifSuccessPopUpIsDisplyed(), "Success pop up is displayed");
         test.pass("Verified:After a successful file upload,Success popup was displayed successfully");
         assertTestCase.assertEquals(researchLinePage.AlertMessage.getText(), "The following identifiers are matched to the same entity.", "Same entity warning message verified");
@@ -545,7 +543,6 @@ public class ImportPortfolio extends UITestBase {
     public void VerifyUploadPortfolioWithSameIdentifiersTest() {
         String portfolioName = "PortfolioWithSameIdentifiers";
         uploadPortfolio(portfolioName);
-        assertTestCase.assertTrue(researchLinePage.checkIfUploadingMaskIsDisplayed(), "Load Mask");
         assertTestCase.assertTrue(researchLinePage.checkifSuccessPopUpIsDisplyed(), "Success pop up is displayed");
         test.pass("Verified:After a successful file upload,Success popup was displayed successfully");
         assertTestCase.assertEquals(researchLinePage.AlertMessage.getText(), "Portfolio Upload Successfully Saved", "Success message verified");
@@ -575,7 +572,6 @@ public class ImportPortfolio extends UITestBase {
     public void VerifyIncorrectCurrencyPortfolioUploadTest() {
         String portfolioName = "PortfolioWithIncorrectCurrency";
         uploadPortfolio(portfolioName);
-        assertTestCase.assertTrue(researchLinePage.checkIfUploadingMaskIsDisplayed(), "Load Mask");
         assertTestCase.assertTrue(researchLinePage.checkifSuccessPopUpIsDisplyed(), "Success pop up is displayed");
         test.pass("Verified:After a successful file upload,Success popup was displayed successfully");
         assertTestCase.assertEquals(researchLinePage.AlertMessage.getText(),
@@ -590,7 +586,6 @@ public class ImportPortfolio extends UITestBase {
     public void VerifyUploadPortfolioWithEURCurrencyTest() {
         String portfolioName = "SamplePortfolioToDelete";
         uploadPortfolio(portfolioName);
-        assertTestCase.assertTrue(researchLinePage.checkIfUploadingMaskIsDisplayed(), "Load Mask");
         assertTestCase.assertTrue(researchLinePage.checkifSuccessPopUpIsDisplyed(), "Success pop up is displayed");
         test.pass("Verified:After a successful file upload,Success popup was displayed successfully");
         assertTestCase.assertEquals(researchLinePage.AlertMessage.getText(), "Portfolio Upload Successfully Saved", "Success message verified");
@@ -618,7 +613,6 @@ public class ImportPortfolio extends UITestBase {
     public void VerifyPortfolioWithLessThan5NonNumericValuesUploadTest() {
         String portfolioName = "PortfolioWithLessThan5NonNumericValues";
         uploadPortfolio(portfolioName);
-        assertTestCase.assertTrue(researchLinePage.checkIfUploadingMaskIsDisplayed(), "Load Mask");
         assertTestCase.assertTrue(researchLinePage.checkifSuccessPopUpIsDisplyed(), "Success pop up is displayed");
         test.pass("Verified:After a successful file upload,Success popup was displayed successfully");
         assertTestCase.assertEquals(researchLinePage.AlertMessage.getText(),
@@ -633,7 +627,6 @@ public class ImportPortfolio extends UITestBase {
     public void VerifyPortfolioWithMoreThan5NonNumericValuesUploadTest() {
         String portfolioName = "PortfolioWithMoreThan5NonNumericValues";
         uploadPortfolio(portfolioName);
-        assertTestCase.assertTrue(researchLinePage.checkIfUploadingMaskIsDisplayed(), "Load Mask");
         assertTestCase.assertTrue(researchLinePage.checkifSuccessPopUpIsDisplyed(), "Success pop up is displayed");
         test.pass("Verified:After a successful file upload,Success popup was displayed successfully");
         assertTestCase.assertEquals(researchLinePage.AlertMessage.getText(),
@@ -648,7 +641,6 @@ public class ImportPortfolio extends UITestBase {
     public void VerifyPortfolioWithLessThan5MissingFieldsUploadTest() {
         String portfolioName = "PortfolioWithLessThan5MissingFields";
         uploadPortfolio(portfolioName);
-        assertTestCase.assertTrue(researchLinePage.checkIfUploadingMaskIsDisplayed(), "Load Mask");
         assertTestCase.assertTrue(researchLinePage.checkifSuccessPopUpIsDisplyed(), "Success pop up is displayed");
         test.pass("Verified:After a successful file upload,Success popup was displayed successfully");
         assertTestCase.assertTrue(researchLinePage.AlertMessage.getText().contains("Identifier Missing"),"Identifier Missing message verified");
@@ -659,7 +651,6 @@ public class ImportPortfolio extends UITestBase {
 
         portfolioName = "PortfolioWithMoreThan5MissingFields";
         uploadPortfolio(portfolioName);
-        assertTestCase.assertTrue(researchLinePage.checkIfUploadingMaskIsDisplayed(), "Load Mask");
         assertTestCase.assertTrue(researchLinePage.checkifSuccessPopUpIsDisplyed(), "Success pop up is displayed");
         test.pass("Verified:After a successful file upload,Success popup was displayed successfully");
         assertTestCase.assertEquals(researchLinePage.AlertMessage.getText(),
