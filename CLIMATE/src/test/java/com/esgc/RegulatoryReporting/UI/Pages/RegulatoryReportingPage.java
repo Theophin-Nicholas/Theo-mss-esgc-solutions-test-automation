@@ -6,10 +6,13 @@ import com.esgc.RegulatoryReporting.DB.DBQueries.RegulatoryReportingQueries;
 import com.esgc.Utilities.*;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.openqa.selenium.By;
+import com.esgc.Utilities.*;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 import java.io.File;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.*;
@@ -112,8 +115,33 @@ public class RegulatoryReportingPage extends UploadPage {
     @FindBy(xpath = "//div[@id='reportingHistoryError']/div/div/div[1]")
     public WebElement previouslyDownloadedErrorMessage;
 
+    @FindBy(xpath="//fieldset[@id='eu_taxonomy']")
+    public WebElement EUTaxonomy;
+
+   public List<WebElement> getEUTaxonomyInputBox(String portfolio){
+       return Driver.getDriver().findElements(By.xpath("//div[.='Select Portfolios']/..//span[contains(text(),'"+portfolio+"')]/../../../../../div[4]/div"));
+   }
+
 
     //METHODS
+
+    public void enterEUTaxonomyValues(String portfolioName, String NonSovereignDerivatives, String Cashandliquidities){
+
+        WebElement element_NonSovereignDerivatives = getEUTaxonomyInputBox(portfolioName).get(0).findElement(By.xpath("div/div/input"));
+        WebElement element_Cashandliquidities = getEUTaxonomyInputBox(portfolioName).get(2).findElement(By.xpath("div/div/input"));
+        removeAndInsertValue(element_NonSovereignDerivatives,NonSovereignDerivatives);
+        removeAndInsertValue(element_Cashandliquidities,Cashandliquidities);
+
+    }
+    public void removeAndInsertValue(WebElement e, String value){
+        int len = e.getAttribute("value").length();
+        for (int i = 0 ; i<len; i++){
+            e.sendKeys(Keys.BACK_SPACE);
+        }
+        e.sendKeys(value);
+
+    }
+
     public List<String> getReportingList() {
         return BrowserUtils.getElementsText(reportingNamesList);
     }
@@ -534,7 +562,6 @@ public class RegulatoryReportingPage extends UploadPage {
         ExcelUtil excelUtil = new ExcelUtil(excelFile.getAbsolutePath(), sheetName);
         return excelUtil;
     }
-
     //column index is for highest column index in the excel file
     public List<String> getExcelDataList(String excelName, String sheetName, int columnIndex) {
         File dir = new File(BrowserUtils.downloadPath());
@@ -840,6 +867,156 @@ public class RegulatoryReportingPage extends UploadPage {
 //                        return false;
                     }
                 }
+            }
+        }
+        return true;
+    }
+
+    public boolean verifyEUReportsUnderLyingDataOverview(String portfolioId) {
+        DecimalFormat dfZero = new DecimalFormat("0.00");
+        for (String portfolio : BrowserUtils.getElementsText(rrStatusPage_PortfoliosList)) {
+            String excelName = portfolio.replaceAll("ready", "").trim();
+            System.out.println("Verifying reports content for " + excelName);
+            ExcelUtil excelData = getExcelData(excelName, 1);
+           System.out.println("excelData = " + excelData.getColumnsNames());
+
+           RegulatoryReportingQueries queries = new RegulatoryReportingQueries();
+            List<Map<String, Object>> dbData = queries.getRUnderlyingDataOverview(portfolioId);
+
+
+            for (Map<String, Object> dbRow : dbData){
+                List<String> checkValues = new ArrayList<>(Arrays.asList(
+                        "BVD9 ID",
+                        "VIGEO KEY",
+                        "ISIN",
+                        "LEGAL ENTITY IDENTIFIER (LEI)",
+                        "TITLE",
+                        "Exposure Amount in EUR",
+                        "Exposure Amount %",
+                        "ZONE",
+                        "COUNTRY",
+                        "ENTITY TYPE (SOVEREIGN, NON-FINANCIAL, FINANCIAL)",
+                        "GENERIC SECTOR",
+                        "NFRD SCOPE (YES/NO)",
+                        "TURNOVER REPORTING YEAR",
+                        "CAPEX REPORTING YEAR",
+                        "CLIMATE CHANGE MITIGATION - PROPORTION OF TAXONOMY ALIGNED TURNOVER (% OF TOTAL COMPANY TURNOVER)",
+                        "CLIMATE CHANGE MITIGATION - PROPORTION OF TAXONOMY ALIGNED CAPEX (% OF TOTAL COMPANY CAPEX)",
+                        "CLIMATE CHANGE ADAPTATION - PROPORTION OF TAXONOMY ALIGNED TURNOVER (% OF TOTAL COMPANY TURNOVER)",
+                        "CLIMATE CHANGE ADAPTATION - PROPORTION OF TAXONOMY ALIGNED CAPEX (% OF TOTAL COMPANY CAPEX)",
+                        "EU TAXONOMY ELIGIBLE TURNOVER (%)",
+                        "EU TAXONOMY ELIGIBLE TURNOVER - VALUE TYPE",
+                        "EU TAXONOMY ELIGIBLE CAPEX (%)",
+                        "EU TAXONOMY ELIGIBLE CAPEX - VALUE TYPE",
+                        "EU TAXONOMY ALIGNED TURNOVER (%)",
+                        "EU TAXONOMY ALIGNED TURNOVER - VALUE TYPE",
+                        "EU TAXONOMY ALIGNED CAPEX (%)",
+                        "EU TAXONOMY ALIGNED CAPEX - VALUE TYPE"));
+                int rowNumber = excelData.getRowNumber(dbRow.get("BVD9 ID").toString(),excelData.getColumnNum("BVD9 ID"));
+                for (String colName : checkValues) {
+
+
+                    String excelValue = excelData.getCellData(rowNumber,excelData.getColumnNum(colName));
+                    if (BrowserUtils.isNumeric(excelValue) && !colName.equals("BVD9 ID")
+                    && !colName.equals("TURNOVER REPORTING YEAR") && !colName.equals("CAPEX REPORTING YEAR")
+                    ){
+
+                        excelValue = dfZero.format(Double.valueOf(excelValue));
+                    }
+                    if (excelValue == "" && dbRow.get(colName)==null) continue ;
+                    if (!excelValue.equals(dbRow.get(colName).toString())) {
+                        System.out.println("Data " + dbRow.get(colName).toString() + " is not found in the excel");
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
+    }
+    public boolean verifyEUReportsUnderlyingDataActivities(String portfolioId) {
+        DecimalFormat dfZero = new DecimalFormat("0.00");
+        //for (String portfolio : BrowserUtils.getElementsText(rrStatusPage_PortfoliosList)) {
+           // String excelName = portfolio.replaceAll("ready", "").trim();
+            String excelName = "EUT_Portfolio Upload updated_good2_01_11_2023_1673474560860.xlsx";
+            System.out.println("Verifying reports content for " + excelName);
+            ExcelUtil excelData = getExcelData(excelName, 2);
+            System.out.println("excelData = " + excelData.getColumnsNames());
+
+            RegulatoryReportingQueries queries = new RegulatoryReportingQueries();
+            List<Map<String, Object>> dbData = queries.getRUnderlyingDataActvities(portfolioId);
+
+            for (Map<String, Object> dbRow : dbData){
+                List<String> checkValues = new ArrayList<>(Arrays.asList(
+                        "BVD9 ID",	"VIGEO KEY",	"ISIN",	"TITLE",	"ZONE",	"COUNTRY",	"GENERIC SECTOR",
+                        "REPORTING YEAR",	"ENVIRONMENTAL OBJECTIVE",	"TYPE OF CONTRIBUTION TO CLIMATE CHANGE MITIGATION (TURNOVER)",
+                        "TYPE OF CONTRIBUTION TO CLIMATE CHANGE MITIGATION (CAPEX)",
+                        "TYPE OF CONTRIBUTION TO CLIMATE CHANGE ADAPTATION (TURNOVER)",
+                        "TYPE OF CONTRIBUTION TO CLIMATE CHANGE ADAPTATION (CAPEX)",
+                        "ACTIVITY TURNOVER (% OF TOTAL COMPANY TURNOVER)",	"VALUE TYPE (ACTIVITY TURNOVER)",
+                        "SOURCE (ACTIVITY TURNOVER)",	"COMMENT (ACTIVITY TURNOVER)",
+                        "ACTIVITY CAPEX (% OF TOTAL COMPANY CAPEX)",
+                        "VALUE TYPE (ACTIVITY CAPEX)",
+                        "SOURCE (ACTIVITY CAPEX)",
+                        "COMMENT (ACTIVITY CAPEX)"));
+               // int rowNumber = excelData.getRowNumber(dbRow.get("BVD9 ID").toString(),excelData.getColumnNum("BVD9 ID"));
+                Map<String,String> params = new HashMap<>();
+                params.put("BVD9 ID",dbRow.get("BVD9 ID").toString());
+                params.put("ACTIVITY TURNOVER (% OF TOTAL COMPANY TURNOVER)",
+                        dbRow.get("ACTIVITY TURNOVER (% OF TOTAL COMPANY TURNOVER)")==null? "": dbRow.get("ACTIVITY TURNOVER (% OF TOTAL COMPANY TURNOVER)").toString());
+                params.put("TYPE OF CONTRIBUTION TO CLIMATE CHANGE MITIGATION (TURNOVER)",
+                        dbRow.get("TYPE OF CONTRIBUTION TO CLIMATE CHANGE MITIGATION (TURNOVER)")==null? "": dbRow.get("TYPE OF CONTRIBUTION TO CLIMATE CHANGE MITIGATION (TURNOVER)").toString());
+                System.out.println(params.toString());
+                List<String> requiredCols= Arrays.asList(new String[]{"All"});
+                Map<String, String> exlData = excelData.getfilteredData (params,requiredCols);
+                for (String colName : checkValues) {
+                    String excelValue = exlData.get(colName);
+                    if (BrowserUtils.isNumeric(excelValue) && !colName.equals("BVD9 ID")
+                            && !colName.equals("REPORTING YEAR")){
+                        excelValue = dfZero.format(Double.valueOf(excelValue));
+                    }
+                    if (excelValue == "" && dbRow.get(colName)==null) continue ;
+                    if (!excelValue.equals(dbRow.get(colName).toString())) {
+                        System.out.println("Data " + dbRow.get(colName).toString() + " is not found in the excel");
+                        return false;
+                    }
+                }
+            }
+       // }
+        return true;
+    }
+
+
+    public boolean verifyEUReportsGreenInvestmentRatio(String portfolioId, String derivative, String cash) {
+        DecimalFormat dfZero = new DecimalFormat("0.00");
+        for (String portfolio : BrowserUtils.getElementsText(rrStatusPage_PortfoliosList)) {
+            String excelName = portfolio.replaceAll("ready", "").trim();
+            //String excelName = "EUT_Portfolio Upload updated_good2_01_11_2023_1673474560860.xlsx";
+            System.out.println("Verifying reports content for " + excelName);
+            ExcelUtil excelData = getExcelData(excelName, 0);
+            RegulatoryReportingQueries queries = new RegulatoryReportingQueries();
+            List<Map<String, Object>> dbData = queries.getGreenInvestmentRatio(portfolioId, derivative, cash);
+
+            for (Map<String, Object> dbRow : dbData) {
+                int rowNumber = Integer.valueOf(dbRow.get("ROWNUM").toString());
+                int tab = Integer.valueOf(dbRow.get("TAB").toString());
+                if (dbRow.get("VALUE") != null && dbRow.get("DESCRIPTION") != null && dbRow.get("KPIS") != null) {
+                    String desc = dbRow.get("DESCRIPTION") == null ? "NA" : dbRow.get("DESCRIPTION").toString();
+                    double value = Double.valueOf(dbRow.get("VALUE").toString());
+                    String KPIS = dbRow.get("KPIS").toString();
+                    double excelValue = 0.00;
+                    String excelDesc = "";
+                    if (tab == 1) {
+                        excelDesc = excelData.getCellData(rowNumber, 1);
+                        excelValue = Double.valueOf(excelData.getCellData(rowNumber, 2));
+                    } else if (tab == 2) {
+                        excelDesc = excelData.getCellData(rowNumber, 3);
+                        excelValue = Double.valueOf(excelData.getCellData(rowNumber, 4));
+                    }
+                    if (!String.format("%.2f", excelValue).equals(String.format("%.2f", value)) && excelDesc.equals(desc)) {
+                        return false;
+                    }
+                }
+
             }
         }
         return true;

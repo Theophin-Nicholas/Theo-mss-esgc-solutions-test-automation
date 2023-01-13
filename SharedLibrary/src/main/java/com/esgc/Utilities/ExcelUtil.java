@@ -274,4 +274,51 @@ public class ExcelUtil {
     public int getLastRowNum() {
         return workSheet.getLastRowNum();
     }
+
+    public int getRowNumber(String cellData, int colNumber)
+    {
+        int totalRows = workSheet.getLastRowNum();
+            Row row = null;
+            int RowNo = 0;
+            for(int rowNo =1; rowNo<=totalRows; rowNo++)
+            {
+                row = workSheet.getRow(rowNo);
+                RowNo = RowNo +1;
+                if(row.getCell(colNumber).getStringCellValue().equalsIgnoreCase(cellData))
+                {
+                    break;
+                }
+            }
+            return RowNo;
+    }
+
+    public Map<String,String> getfilteredData(Map<String, String> params, List<String> requiredColumns) {
+
+
+        int rows = workSheet.getLastRowNum();
+        int cols = requiredColumns.get(0).equals("All")? columnCount():requiredColumns.size();
+
+        Map<String, String> data = new HashMap<>();
+        String conditions = "";
+        for (int rowNum = 1; rowNum <= rows; rowNum++) {
+            boolean flag = false;
+            for (Map.Entry<String, String> entry : params.entrySet()) {
+                if (getCellData(rowNum, getColumnNum(entry.getKey())).equalsIgnoreCase(entry.getValue())) {
+                    flag = true;
+                } else {
+                    flag = false;
+                    break;
+                }
+            }
+            if (flag) {
+
+                for (int colNum = 0; colNum < cols; colNum++) {
+                    int coln = requiredColumns.get(0).equals("All")? colNum:getColumnNum(requiredColumns.get(colNum));
+                    data.put(getCellData(0, coln),(getCellData(rowNum, coln)));
+                }
+            }
+        }
+
+        return data;
+    }
 }
