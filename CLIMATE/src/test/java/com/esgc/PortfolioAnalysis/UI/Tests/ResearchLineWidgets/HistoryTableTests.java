@@ -72,14 +72,13 @@ public class HistoryTableTests extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI, SMOKE}, dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
-    @Xray(test = {9822})
+    @Xray(test = {9822, 12601})
     public void verifyCategoriesAndColorsOfHistoryTable(String page) {
         ResearchLinePage researchLinePage = new ResearchLinePage();
-
         researchLinePage.navigateToResearchLine(page);
         researchLinePage.waitForDataLoadCompletion();
 
-        if (page.equals("Physical Risk Hazards") || page.equals("Temperature Alignment") || page.equals("ESG Assessment")) {
+        if (page.equals("Physical Risk Hazards") || page.equals("Temperature Alignment") || page.equals("ESG Assessments")) {
             throw new SkipException("History Table is not ready to test in " + page);
         }
         assertTestCase.assertTrue(researchLinePage.checkIfHistoryTableExists(page), "History Table Validation");
@@ -98,11 +97,8 @@ public class HistoryTableTests extends UITestBase {
             assertTestCase.assertTrue(researchLinePage.mouseHoverAndVerifyTooltipHistoryTable("Not Covered", "highcharts-color-0", "#dce1e6"), "History Table Validation");
         } else if (page.equals("Brown Share Assessment")) {
             assertTestCase.assertTrue(researchLinePage.mouseHoverAndVerifyTooltipHistoryTable("0%", "highcharts-color-3", "#39A885"), "History Table Validation");
-            assertTestCase.assertTrue(researchLinePage.mouseHoverAndVerifyTooltipHistoryTable("0-10%", "highcharts-color-2", "#6FB24B"), "History Table Validation");
-            assertTestCase.assertTrue(researchLinePage.mouseHoverAndVerifyTooltipHistoryTable("10-20%", "highcharts-color-2", "#6FB24B"), "History Table Validation");
-            assertTestCase.assertTrue(researchLinePage.mouseHoverAndVerifyTooltipHistoryTable("20-33%", "highcharts-color-1", "#B28559"), "History Table Validation");
-            assertTestCase.assertTrue(researchLinePage.mouseHoverAndVerifyTooltipHistoryTable("33-50%", "highcharts-color-1", "#B28559"), "History Table Validation");
-            assertTestCase.assertTrue(researchLinePage.mouseHoverAndVerifyTooltipHistoryTable(">=50%", "highcharts-color-1", "#B28559"), "History Table Validation");
+            assertTestCase.assertTrue(researchLinePage.mouseHoverAndVerifyTooltipHistoryTable("0-10%,10-20%", "highcharts-color-2", "#6FB24B"), "History Table Validation");
+            assertTestCase.assertTrue(researchLinePage.mouseHoverAndVerifyTooltipHistoryTable("20-33%,33-50%,>=50%", "highcharts-color-1", "#B28559"), "History Table Validation");
             assertTestCase.assertTrue(researchLinePage.mouseHoverAndVerifyTooltipHistoryTable("Not Covered", "highcharts-color-0", "#dce1e6"), "History Table Validation");
         } else if (page.equals("Physical Risk Management")) {
             assertTestCase.assertTrue(researchLinePage.mouseHoverAndVerifyTooltipHistoryTable("Advanced", "highcharts-color-4", "#229595"), "History Table Validation");
