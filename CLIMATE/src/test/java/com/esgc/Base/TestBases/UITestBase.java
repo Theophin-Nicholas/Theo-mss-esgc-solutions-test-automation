@@ -4,6 +4,7 @@ package com.esgc.Base.TestBases;
 import com.esgc.Base.UI.Pages.LoginPage;
 import com.esgc.TestBase.TestBase;
 import com.esgc.Utilities.BrowserUtils;
+import com.esgc.Utilities.Database.DatabaseDriver;
 import com.esgc.Utilities.Driver;
 import com.esgc.Utilities.Environment;
 import org.testng.ITestResult;
@@ -44,7 +45,7 @@ public abstract class UITestBase extends TestBase {
 
         isUITest = true;
 
-//        DatabaseDriver.createDBConnection();
+        DatabaseDriver.createDBConnection();
 //        String getAccessTokenScript = "return JSON.parse(localStorage.getItem('okta-token-storage')).accessToken.accessToken";
 //        String accessToken = ((JavascriptExecutor) Driver.getDriver()).executeScript(getAccessTokenScript).toString();
 //        System.setProperty("token", accessToken);

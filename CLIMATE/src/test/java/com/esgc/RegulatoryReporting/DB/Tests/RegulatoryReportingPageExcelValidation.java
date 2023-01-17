@@ -296,8 +296,7 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
             assertTestCase.assertTrue(reportingPage.verifyUserInputHistory(selectedPortfolios),
                     "User input history for portfolio coverage is verified for Excel vs DB");
             System.out.println("SFDR Company output and User input history for portfolio coverage is verified for Excel vs DB");
-            //todo: Portfolio Level Output is not completed yet.
-            assertTestCase.assertTrue(reportingPage.verifyPortfolioLevelOutput(selectedPortfolios),
+            assertTestCase.assertTrue(reportingPage.verifyPortfolioLevelOutput(selectedPortfolios, "2021","Annual","Yes"),
                     "Portfolio level output for portfolio coverage is verified for Excel vs DB");
             System.out.println("Portfolio level output for portfolio coverage is verified for Excel vs DB");
         } catch (Exception e) {
@@ -348,8 +347,7 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
             assertTestCase.assertTrue(reportingPage.verifyUserInputHistory(selectedPortfolios),
                     "User input history for portfolio coverage is verified for Excel vs DB");
             System.out.println("SFDR Company output and User input history for portfolio coverage is verified for Excel vs DB");
-            //todo: Portfolio Level Output is not completed yet.
-            assertTestCase.assertTrue(reportingPage.verifyPortfolioLevelOutput(selectedPortfolios),
+            assertTestCase.assertTrue(reportingPage.verifyPortfolioLevelOutput(selectedPortfolios, "2020","Interim","No"),
                     "Portfolio level output for portfolio coverage is verified for Excel vs DB");
             System.out.println("Portfolio level output for portfolio coverage is verified for Excel vs DB");
         } catch (Exception e) {
@@ -400,8 +398,7 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
             assertTestCase.assertTrue(reportingPage.verifyUserInputHistory(selectedPortfolios),
                     "User input history for portfolio coverage is verified for Excel vs DB");
             System.out.println("SFDR Company output and User input history for portfolio coverage is verified for Excel vs DB");
-            //todo: Portfolio Level Output is not completed yet.
-            assertTestCase.assertTrue(reportingPage.verifyPortfolioLevelOutput(selectedPortfolios),
+            assertTestCase.assertTrue(reportingPage.verifyPortfolioLevelOutput(selectedPortfolios, "2021","Interim","Yes"),
                     "Portfolio level output for portfolio coverage is verified for Excel vs DB");
             System.out.println("Portfolio level output for portfolio coverage is verified for Excel vs DB");
         } catch (Exception e) {

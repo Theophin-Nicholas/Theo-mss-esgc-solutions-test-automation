@@ -304,4 +304,16 @@ public class ExcelUtil {
         System.out.println("Data not found");
         return null;
     }
+
+    public List<String> getNumericCells() {
+        List<String> data = new ArrayList<>();
+        for (Row row : workSheet) {
+            for (Cell cell : row) {
+                if (cell.getCellType() == CellType.NUMERIC) {
+                    data.add(cell.toString());
+                }
+            }
+        }
+        return data;
+    }
 }
