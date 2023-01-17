@@ -394,7 +394,6 @@ public class PerformanceChart extends DataValidationTestBase {
                                 {"all", "AMER", "Energy Transition Management", "03", "2021"},
                                 {"all", "EMEA", "Energy Transition Management", "03", "2021"},
                                 {"all", "all", "Energy Transition Management", "03", "2021"},
-
                                 {"all", "all", "TCFD", "03", "2021"},
                                 {"all", "APAC", "TCFD", "03", "2021"},
                                 {"all", "AMER", "TCFD", "03", "2021"},
