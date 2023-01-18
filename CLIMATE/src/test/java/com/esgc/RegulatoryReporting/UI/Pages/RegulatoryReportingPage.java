@@ -844,17 +844,17 @@ public class RegulatoryReportingPage extends UploadPage {
         assertTestCase.assertTrue(actualFileName.equals(expFileName), "Verify file is downloaded from Previously Downloaded screen");
     }
 
-    public boolean verifySFDRCompanyOutput(List<String> selectedPortfolios) {
-        for (String portfolioName : selectedPortfolios) {
+    public boolean verifySFDRCompanyOutput(String year) {
+        for (WebElement portfolio : rrStatusPage_PortfoliosList) {
+            String portfolioName = portfolio.getText().replaceAll("ready", "").trim();
             RegulatoryReportingAPIController apiController = new RegulatoryReportingAPIController();
             String portfolioId = apiController.getPortfolioId(portfolioName);
             RegulatoryReportingQueries queries = new RegulatoryReportingQueries();
-            List<Map<String, Object>> dbData = queries.getSFDRCompanyOutput(portfolioId, DateTimeUtilities.getCurrentYear(-1));
+            List<Map<String, Object>> dbData = queries.getSFDRCompanyOutput(portfolioId, year);
             System.out.println("dbData.size() = " + dbData.size());
 
             //open Excel file
-            String excelName = rrStatusPage_PortfoliosList.get(0).getText().replaceAll("ready", "").trim();
-            ExcelUtil excelData = getExcelData(excelName, selectedPortfolios.indexOf(portfolioName) + 1);
+            ExcelUtil excelData = getExcelData(portfolioName, rrStatusPage_PortfoliosList.indexOf(portfolio) + 1);
             for (int i = 0; i < dbData.size(); i++) {
                 //System.out.println("DBDate = "+dbData.get(i));
                 String companyName = dbData.get(i).get("COMPANY_NAME").toString();

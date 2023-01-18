@@ -5,6 +5,7 @@ import com.esgc.Dashboard.UI.Pages.DashboardPage;
 import com.esgc.PortfolioAnalysis.UI.Pages.PhysicalRiskPages.PhysicalRiskManagementPages.PhysicalRiskManagementPage;
 import com.esgc.RegulatoryReporting.UI.Pages.RegulatoryReportingPage;
 import com.esgc.Utilities.BrowserUtils;
+import com.esgc.Utilities.DateTimeUtilities;
 import com.esgc.Utilities.Xray;
 import org.testng.annotations.Test;
 
@@ -291,7 +292,7 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
             System.out.println("Reports are downloaded");
             assertTestCase.assertTrue(reportingPage.unzipReports(), "Reports are extracted");
             System.out.println("Reports are extracted");
-            assertTestCase.assertTrue(reportingPage.verifySFDRCompanyOutput(selectedPortfolios),
+            assertTestCase.assertTrue(reportingPage.verifySFDRCompanyOutput("latest"),
                     "SFDR Company output for portfolio coverage is verified for Excel vs DB");
             assertTestCase.assertTrue(reportingPage.verifyUserInputHistory(selectedPortfolios),
                     "User input history for portfolio coverage is verified for Excel vs DB");
@@ -342,7 +343,7 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
             System.out.println("Reports are downloaded");
             assertTestCase.assertTrue(reportingPage.unzipReports(), "Reports are extracted");
             System.out.println("Reports are extracted");
-            assertTestCase.assertTrue(reportingPage.verifySFDRCompanyOutput(selectedPortfolios),
+            assertTestCase.assertTrue(reportingPage.verifySFDRCompanyOutput("2020"),
                     "SFDR Company output for portfolio coverage is verified for Excel vs DB");
             assertTestCase.assertTrue(reportingPage.verifyUserInputHistory(selectedPortfolios),
                     "User input history for portfolio coverage is verified for Excel vs DB");
@@ -361,7 +362,7 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
 
     @Test(groups = {"regression", "DataValidation", "regulatoryReporting"},
             description = "Data Validation | Regulatory Reporting | Verify the data downloaded in the generated Interim report excel when the portfolios has data for the selected year")
-    @Xray(test = {11368})
+    @Xray(test = {11368, 11717})
     public void verifyInterimReportForLatestDataTest() {
         DashboardPage dashboardPage = new DashboardPage();
         dashboardPage.navigateToPageFromMenu("Regulatory Reporting");
@@ -393,7 +394,7 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
             System.out.println("Reports are downloaded");
             assertTestCase.assertTrue(reportingPage.unzipReports(), "Reports are extracted");
             System.out.println("Reports are extracted");
-            assertTestCase.assertTrue(reportingPage.verifySFDRCompanyOutput(selectedPortfolios),
+            assertTestCase.assertTrue(reportingPage.verifySFDRCompanyOutput("latest"),
                     "SFDR Company output for portfolio coverage is verified for Excel vs DB");
             assertTestCase.assertTrue(reportingPage.verifyUserInputHistory(selectedPortfolios),
                     "User input history for portfolio coverage is verified for Excel vs DB");
@@ -401,6 +402,73 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
             assertTestCase.assertTrue(reportingPage.verifyPortfolioLevelOutput(selectedPortfolios, "2021","Interim","Yes"),
                     "Portfolio level output for portfolio coverage is verified for Excel vs DB");
             System.out.println("Portfolio level output for portfolio coverage is verified for Excel vs DB");
+        } catch (Exception e) {
+            e.printStackTrace();
+            assertTestCase.assertTrue(false, "New tab verification failed");
+        } finally {
+            BrowserUtils.switchWindowsTo(currentWindow);
+            System.out.println("=============================");
+        }
+    }
+
+    @Test(groups = {"regression", "DataValidation", "regulatoryReporting"},
+            description = "Data Validation | UI | Regulatory Reporting | Verify data available in Company level Output across different reports")
+    @Xray(test = {11716})
+    public void verifyCompanyLevelOutputTest() {
+        DashboardPage dashboardPage = new DashboardPage();
+        dashboardPage.navigateToPageFromMenu("Regulatory Reporting");
+        test.info("Navigated to Regulatory Reporting Page");
+        //verify portfolio upload modal
+        assertTestCase.assertTrue(reportingPage.uploadAnotherPortfolioLink.isDisplayed(), "Portfolio Upload button is displayed");
+
+        //upload a portfolio
+        String portfolioName = "SFDRPortfolio";
+        if (!reportingPage.verifyPortfolio(portfolioName)) reportingPage.uploadPortfolio(portfolioName);
+
+        String currentWindow = BrowserUtils.getCurrentWindowHandle();
+        reportingPage.selectPortfolioOptionByName(portfolioName);
+
+        List<String> selectedPortfolios = reportingPage.getSelectedPortfolioOptions();
+        //verify create reports button before clicking
+        assertTestCase.assertTrue(reportingPage.createReportsButton.isEnabled(), "Create report button is enabled");
+        Set<String> currentWindows = BrowserUtils.getWindowHandles();
+        reportingPage.createReportsButton.click();
+        try {
+            //New tab should be opened and empty state message should be displayed as in the screenshot
+            assertTestCase.assertTrue(reportingPage.verifyNewTabOpened(currentWindows), "New tab is opened");
+            System.out.println("New tab is opened");
+            assertTestCase.assertTrue(reportingPage.verifyReportsReadyToDownload(selectedPortfolios), "Reports are ready to download");
+            System.out.println("Reports are ready to download");
+            reportingPage.deleteFilesInDownloadsFolder();
+            assertTestCase.assertTrue(reportingPage.verifyIfReportsDownloaded(), "Reports are downloaded");
+            System.out.println("Reports are downloaded");
+            assertTestCase.assertTrue(reportingPage.unzipReports(), "Reports are extracted");
+            System.out.println("Reports are extracted");
+            assertTestCase.assertTrue(reportingPage.verifySFDRCompanyOutput(DateTimeUtilities.getCurrentYear(-1)),
+                    "SFDR Company output for portfolio coverage is verified for Excel vs DB");
+        } catch (Exception e) {
+            e.printStackTrace();
+            assertTestCase.assertTrue(false, "New tab verification failed");
+        } finally {
+            BrowserUtils.switchWindowsTo(currentWindow);
+            System.out.println("=============================");
+        }
+        reportingPage.selectUseLatestData();
+        currentWindows = BrowserUtils.getWindowHandles();
+        reportingPage.createReportsButton.click();
+        try {
+            //New tab should be opened and empty state message should be displayed as in the screenshot
+            assertTestCase.assertTrue(reportingPage.verifyNewTabOpened(currentWindows), "New tab is opened");
+            System.out.println("New tab is opened");
+            assertTestCase.assertTrue(reportingPage.verifyReportsReadyToDownload(selectedPortfolios), "Reports are ready to download");
+            System.out.println("Reports are ready to download");
+            reportingPage.deleteFilesInDownloadsFolder();
+            assertTestCase.assertTrue(reportingPage.verifyIfReportsDownloaded(), "Reports are downloaded");
+            System.out.println("Reports are downloaded");
+            assertTestCase.assertTrue(reportingPage.unzipReports(), "Reports are extracted");
+            System.out.println("Reports are extracted");
+            assertTestCase.assertTrue(reportingPage.verifySFDRCompanyOutput("latest"),
+                    "SFDR Company output for portfolio coverage is verified for Excel vs DB");
         } catch (Exception e) {
             e.printStackTrace();
             assertTestCase.assertTrue(false, "New tab verification failed");
