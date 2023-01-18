@@ -1805,10 +1805,10 @@ public class ResearchLinePage extends UploadPage {
                     dataHeaders.add("Category");
                     break;
                 case "Brown Share Assessment":
-                    dataRows.add("0%");
-                    dataRows.add("0-20%");
-                    dataRows.add("20-100%");
-                    dataHeaders.add("Score Range");
+                    dataRows.add("No Involvement");
+                    dataRows.add("Minor Involvement");
+                    dataRows.add("Major Involvement");
+                    dataHeaders.add("Category");
                     break;
                 case "Green Share Assessment":
                     dataRows.add("Major");
@@ -3488,6 +3488,7 @@ public class ResearchLinePage extends UploadPage {
                 case "Physical Risk Hazards":
                 case "Operations Risk":
                 case "Market Risk":
+                case "Brown Share Assessment":
                 case "Supply Chain Risk":
                     whatToValidate = "Updates as of " + monthDate + ", Impact, and Current Leaders/Laggards";
                     break;
@@ -3497,7 +3498,7 @@ public class ResearchLinePage extends UploadPage {
                 default:
                     whatToValidate = "Updates in " + monthDate + ", Impact, and Current Leaders/Laggards";
             }
-            assertionTestCase.assertEquals(whatToValidate, updatesAndLeadersAndLaggardsHeader.getText(), "Header message is not correct", 477, 592);
+            assertionTestCase.assertEquals(updatesAndLeadersAndLaggardsHeader.getText(), whatToValidate, "Header message is not correct", 477, 592);
         } catch (Exception e) {
             e.printStackTrace();
         }

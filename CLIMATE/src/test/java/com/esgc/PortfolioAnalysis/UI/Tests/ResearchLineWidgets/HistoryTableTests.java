@@ -72,7 +72,7 @@ public class HistoryTableTests extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI, SMOKE}, dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
-    @Xray(test = {9822, 12601})
+    @Xray(test = {9822, 12601, 12615})
     public void verifyCategoriesAndColorsOfHistoryTable(String page) {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         researchLinePage.navigateToResearchLine(page);

@@ -75,7 +75,7 @@ public class PortfolioUpdatesTest extends UITestBase {
     @Test(groups = {REGRESSION, UI},
             description = "Verify if Updates As Of Modal Window is Displayed as Expected",
             dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
-    @Xray(test = {1776, 2035, 2289, 2474})
+    @Xray(test = {1776, 2035, 2289, 2474, 12606})
     public void verifyPortfolioUpdatesDrillDown(String page) {
         if (page.equals("Temperature Alignment") ) {
             throw new SkipException(page +" - Portfolio Distribution is not ready to test");
@@ -97,7 +97,7 @@ public class PortfolioUpdatesTest extends UITestBase {
         researchLinePage.clickMoreCompaniesDrillDown(page);
 
         assertTestCase.assertTrue(researchLinePage.checkIfUpdatesAsOfModalWindowPresent(), "Updates Expand verified", 1776);
-        if (Arrays.asList(new String[]{"Physical Risk Hazards", "Operations Risk", "Market Risk", "Supply Chain Risk"}).contains(page)) {
+        if (Arrays.asList(new String[]{"Physical Risk Hazards", "Operations Risk", "Market Risk", "Supply Chain Risk","Brown Share Assessment"}).contains(page)) {
             assertTestCase.assertEquals(researchLinePage.drillDownTitle.getText(), "Updates as of April 2021", "Updates Drilldown Title Verification", 2034);
         } else {
             assertTestCase.assertEquals(researchLinePage.drillDownTitle.getText(), "Updates in April 2021", "Updates Drilldown Title Verification", 2034);

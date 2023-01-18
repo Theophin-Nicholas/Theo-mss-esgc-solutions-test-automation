@@ -32,7 +32,8 @@ public class PortfolioDistributionTests extends DataValidationTestBase {
             2705, 2190, 2192, 2315, 2308, 2309, 2560, 2706, 2191, 2310, 2561, 2707,
             4217, 4216, 4218, 4221,
             6744,
-            11060,11061 //ESG Predicted
+            11060,11061, //ESG Predicted
+            12617
     })
     //Operations risk 4212, 2306, 2310, 2308, 2309, 2315
     //Market risk 4214, 4211
