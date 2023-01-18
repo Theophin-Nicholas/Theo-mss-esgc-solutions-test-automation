@@ -158,7 +158,7 @@ public class TestBaseClimate extends TestBase {
         String getAccessTokenScript = "return JSON.parse(localStorage.getItem('okta-token-storage')).accessToken.accessToken";
         accessToken = ((JavascriptExecutor) Driver.getDriver()).executeScript(getAccessTokenScript).toString();
         System.setProperty("token", accessToken);
-        System.out.println("token = " + accessToken);
+        //System.out.println("token = " + accessToken);
     }
 
 }

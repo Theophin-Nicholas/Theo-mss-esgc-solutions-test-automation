@@ -232,7 +232,7 @@ public class ConfigurationPageTests extends EMCUITestBase {
         assertTestCase.assertTrue(createRolePage.generalInfoTag.isDisplayed(),"Create Role Page - General Info tag is displayed");
 
         //Fill the mandatory fields (Key and Name), DO NOT fill the optional fields (Description and Permissions) and click on Save
-        String roleName = "qatestrole"+new Faker().food().fruit().replaceAll("\\W","").toLowerCase();
+        String roleName = "qatestrole"+faker.number().digits(6);
         System.out.println("roleName = " + roleName);
         createRolePage.keyInput.sendKeys(roleName);
         createRolePage.nameInput.sendKeys(roleName);
@@ -400,7 +400,7 @@ public class ConfigurationPageTests extends EMCUITestBase {
         Driver.getDriver().get(Environment.EMC_URL);
         BrowserUtils.waitForPageToLoad(10);
         LoginPageEMC loginPageEMC = new LoginPageEMC();
-        loginPageEMC.loginEMCWithParams("ferhat.demir-non-empl@moodys.com", "Odessa2022??");
+        loginPageEMC.loginEMCWithParams("ferhat.demir-non-empl@moodys.com", "Apple@2023??");
 
         //Go to Accounts page and open account
         EMCMainPage homePage = new EMCMainPage();
@@ -491,7 +491,7 @@ public class ConfigurationPageTests extends EMCUITestBase {
         Driver.getDriver().get(Environment.EMC_URL);
         BrowserUtils.waitForPageToLoad(10);
         LoginPageEMC loginPageEMC = new LoginPageEMC();
-        loginPageEMC.loginEMCWithParams("ferhat.demir-non-empl@moodys.com", "Odessa2022??");
+        loginPageEMC.loginEMCWithParams("ferhat.demir-non-empl@moodys.com", "Apple@2023??");
         EMCMainPage homePage = new EMCMainPage();
 
         try {
@@ -540,7 +540,7 @@ public class ConfigurationPageTests extends EMCUITestBase {
         Driver.getDriver().get(Environment.EMC_URL);
         BrowserUtils.waitForPageToLoad(10);
         LoginPageEMC loginPageEMC = new LoginPageEMC();
-        loginPageEMC.loginEMCWithParams("ferhat.demir-non-empl@moodys.com", "Odessa2022??");
+        loginPageEMC.loginEMCWithParams("ferhat.demir-non-empl@moodys.com", "Apple@2023??");
         EMCMainPage homePage = new EMCMainPage();
         homePage.goToAccountsPage();
         EMCAccountsPage accountsPage = new EMCAccountsPage();
