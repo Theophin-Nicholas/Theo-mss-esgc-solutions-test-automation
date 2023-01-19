@@ -33,7 +33,8 @@ public class PortfolioScoreTests extends DataValidationTestBase {
             2513, 2695, 2514, 2192, 4430, 6593, 6596,
             6725,
             11235,//Subs
-            10898, 11400//ESG predicted
+            10898, 11400,//ESG predicted
+            12616
     })
     //TCFD 1992
     //Energy Transition 3027, 3029, 3020, 3019, 3024

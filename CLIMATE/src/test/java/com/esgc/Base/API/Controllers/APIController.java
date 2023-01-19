@@ -540,6 +540,16 @@ public class APIController {
                 rangesAndCategories.add(new RangeAndScoreCategory("Major Involvement", 20d, 100d, "negative"));
                 return rangesAndCategories;
 
+            case "Brown Share Ranges":
+                rangesAndCategories.add(new RangeAndScoreCategory("N/A", 0d, 0d, "positive"));
+                rangesAndCategories.add(new RangeAndScoreCategory(">=50%", 0.00000000000001d, 19.9999999999999999d, "positive"));
+                rangesAndCategories.add(new RangeAndScoreCategory("33-50%", 20d, 100d, "negative"));
+                rangesAndCategories.add(new RangeAndScoreCategory("20-33%", 0d, 0d, "positive"));
+                rangesAndCategories.add(new RangeAndScoreCategory("10-20%", 0.00000000000001d, 19.9999999999999999d, "positive"));
+                rangesAndCategories.add(new RangeAndScoreCategory("0-10%", 20d, 100d, "negative"));
+                rangesAndCategories.add(new RangeAndScoreCategory("0%", 20d, 100d, "negative"));
+                return rangesAndCategories;
+
             case "Carbon Footprint":
                 rangesAndCategories.add(new RangeAndScoreCategory("Moderate", 0d, 99999d, "positive"));
                 rangesAndCategories.add(new RangeAndScoreCategory("Significant", 100000d, 999999d, "positive"));
