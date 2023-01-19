@@ -275,23 +275,49 @@ public class ExcelUtil {
         return workSheet.getLastRowNum();
     }
 
-    public int getRowNumber(String cellData, int colNumber)
-    {
+    public int getRowNumber(String cellData, int colNumber) {
 
         int totalRows = workSheet.getLastRowNum();
-            Row row = null;
-            int RowNo = 0;
-            for(int rowNo =1; rowNo<=totalRows; rowNo++)
-            {
-                row = workSheet.getRow(rowNo);
-                RowNo = RowNo +1;
-                if(row.getCell(colNumber).getStringCellValue().equalsIgnoreCase(cellData))
-                {
-                    break;
-                }
+        Row row = null;
+        int RowNo = 0;
+        for (int rowNo = 1; rowNo <= totalRows; rowNo++) {
+            row = workSheet.getRow(rowNo);
+            RowNo = RowNo + 1;
+            if (row.getCell(colNumber).getStringCellValue().equalsIgnoreCase(cellData)) {
+                break;
             }
-            return RowNo;
+        }
+        return RowNo;
+    }
 
+    public Row getRow(int rowIndex) {
+        return workSheet.getRow(rowIndex);
+    }
+
+    public List<String> getRowData(int rowIndex, String nullValue) {
+        List<String> data = new ArrayList<>();
+        Row row = workSheet.getRow(rowIndex);
+        if(row == null) return data;
+        for (Cell cell : row) {
+            if (cell.getCellType() == CellType.BLANK) data.add(nullValue);
+            else if (cell.getCellType() == CellType.NUMERIC) data.add(String.valueOf(cell.getNumericCellValue()));
+            else data.add(cell.toString());
+        }
+        return data;
+    }
+    public List<String> getRowData(int rowIndex){
+        return getRowData(rowIndex, "");
+    }
+
+    public List<String> getRowData(String data){
+        //System.out.println("Last Row Num = "+workSheet.getLastRowNum());
+        for (int i = 0; i <=workSheet.getLastRowNum(); i++) {
+            if(getRowData(i).contains(data)){
+                return getRowData(i);
+            }
+        }
+        System.out.println("Data not found");
+        return null;
     }
 
     public Map<String,String> getfilteredData(Map<String, String> params, List<String> requiredColumns) {
@@ -319,6 +345,16 @@ public class ExcelUtil {
         }
 
         return data;
-
+    }
+    public List<String> getNumericCells() {
+        List<String> data = new ArrayList<>();
+        for (Row row : workSheet) {
+            for (Cell cell : row) {
+                if (cell.getCellType() == CellType.NUMERIC) {
+                    data.add(cell.toString());
+                }
+            }
+        }
+        return data;
     }
 }

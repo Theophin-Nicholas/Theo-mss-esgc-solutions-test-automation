@@ -2,6 +2,7 @@ package com.esgc.RegulatoryReporting.UI.Pages;
 
 import com.esgc.Base.UI.Pages.UploadPage;
 import com.esgc.RegulatoryReporting.API.Controllers.RegulatoryReportingAPIController;
+import com.esgc.Utilities.*;
 import com.esgc.RegulatoryReporting.DB.DBQueries.RegulatoryReportingQueries;
 import com.esgc.Utilities.*;
 import org.apache.commons.lang3.math.NumberUtils;
@@ -14,7 +15,6 @@ import org.openqa.selenium.support.FindBy;
 import java.io.File;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.*;
 
 
@@ -816,10 +816,6 @@ public class RegulatoryReportingPage extends UploadPage {
         }
 //        System.out.println("\n===================================\n");
 //        templateData.forEach(System.out::println);
-
-        //update year with current year
-        templateData.set(0, templateData.get(0).replace("© 2022", "© " + LocalDate.now().getYear()));
-
         for (String sentence : templateData) {
             if (!excelData.contains(sentence)) {
                 System.out.println(sentence);
@@ -884,13 +880,104 @@ public class RegulatoryReportingPage extends UploadPage {
 
             //open Excel file
             String excelName = rrStatusPage_PortfoliosList.get(0).getText().replaceAll("ready", "").trim();
-            List<String> excelData = getExcelDataList(excelName, (selectedPortfolios.indexOf(portfolioName) + 1) + "_" + portfolioName);
-            for (Map<String, Object> row : dbData) {
-                for (String key : row.keySet()) {
-                    if (row.get(key) == null) continue;
-                    if (!excelData.contains(row.get(key).toString())) {
-                        System.out.println(row.get(key));
-//                        return false;
+            ExcelUtil excelData = getExcelData(excelName, selectedPortfolios.indexOf(portfolioName) + 1);
+            for (int i = 0; i < dbData.size(); i++) {
+                //System.out.println("DBDate = "+dbData.get(i));
+                String companyName = dbData.get(i).get("COMPANY_NAME").toString();
+                List<String> companyRow = excelData.getRowData(companyName);
+                List<String> dbAllYearsData = queries.getSFDRCompanyOutputForAllYears(portfolioId, companyName);
+                for (String cell : companyRow) {
+                    //if cell is instance of double and digit after decimal point is more than 10, then round it to 10 digits
+                    if (!dbAllYearsData.contains(cell)) {
+                        if (cell.matches("\\d+\\.\\d{11,}")) {
+                            DecimalFormat f = new DecimalFormat("##.##########");
+                            cell = f.format(Double.parseDouble(cell));
+                            if (dbAllYearsData.contains(cell)) {
+                                continue;
+                            }
+                            System.out.println("companyName = " + companyName);
+                            System.out.println(cell + " is not in DB");
+                            return false;
+                        }
+                    }
+                }
+            }
+        }
+        return true;
+    }
+
+    public boolean verifyUserInputHistory(List<String> selectedPortfolios) {
+        for (String portfolioName : selectedPortfolios) {
+            RegulatoryReportingAPIController apiController = new RegulatoryReportingAPIController();
+            String portfolioId = apiController.getPortfolioId(portfolioName);
+            RegulatoryReportingQueries queries = new RegulatoryReportingQueries();
+            List<Map<String, Object>> dbData = queries.getUserInputHistory(portfolioId);
+
+            //open Excel file
+            String excelName = rrStatusPage_PortfoliosList.get(0).getText().replaceAll("ready", "").trim();
+            ExcelUtil excelData = getExcelData(excelName, "User Input History");
+            if (!excelData.searchData("Identifier")) return false;
+            if (!excelData.searchData("Company Name")) return false;
+            if (!excelData.searchData("Exposure Amount in EUR")) return false;
+            if (!excelData.searchData("Exposure Amount %")) return false;
+
+            for (int i = 0; i < dbData.size(); i++) {
+                //System.out.println("DBData = "+dbData.get(i).values());
+                String companyName = dbData.get(i).get("COMPANY_NAME").toString();
+                List<String> companyRow = excelData.getRowData(companyName);
+                for (String cell : companyRow) {
+
+                    //convert dbData to String
+                    if (!dbData.get(i).toString().contains(cell)) {
+                        if (cell.matches("\\d+\\.0")) {
+                            cell = cell.replaceAll("\\.0", "");
+                            if (dbData.get(i).toString().contains(cell)) {
+                                continue;
+                            }
+                            System.out.println("companyName = " + companyName);
+                            System.out.println("cell = " + cell);
+                            System.out.println(cell + " is not in DB");
+                            return false;
+                        }
+                    }
+                }
+            }
+
+        }
+        return true;
+    }
+
+    public boolean verifyPortfolioLevelOutput(List<String> selectedPortfolios, String reportingYear, String reportFormat, String useLatestData) {
+        for (String portfolioName : selectedPortfolios) {
+            RegulatoryReportingAPIController apiController = new RegulatoryReportingAPIController();
+            String portfolioId = apiController.getPortfolioId(portfolioName);
+            RegulatoryReportingQueries queries = new RegulatoryReportingQueries();
+            //open Excel file
+            String excelName = rrStatusPage_PortfoliosList.get(0).getText().replaceAll("ready", "").trim();
+            ExcelUtil excelData = getExcelData(excelName, "Portfolio Level Output");
+
+            List<Map<String, Object>> dbData = queries.getPortfolioLevelOutput(portfolioId, reportingYear, reportFormat, useLatestData);
+            //get number cells from excel file
+            List<String> excelNumberCells = excelData.getNumericCells();
+            //System.out.println("excelNumberCells = " + excelNumberCells);
+            DecimalFormat decimalFormat = new DecimalFormat("##.####");
+            //get number cells from db
+            List<String> dbNumberCells = new ArrayList<>();
+            for (Map<String, Object> map : dbData) {
+                if(map.get("IMPACT") != null && !map.get("IMPACT").equals("NI"))
+                    dbNumberCells.add(decimalFormat.format(Double.parseDouble(map.get("IMPACT").toString())));
+                if(map.get("SCOPE_OF_DISCLOSURE") != null && !map.get("SCOPE_OF_DISCLOSURE").equals("NI"))
+                    dbNumberCells.add(decimalFormat.format(Double.parseDouble(map.get("SCOPE_OF_DISCLOSURE").toString())));
+            }
+            dbNumberCells.add("0.0");
+            dbNumberCells.add("0.00");
+            System.out.println("dbNumberCells = " + dbNumberCells);
+            //verify db number cells list contains all values of excelnumbercells list
+            for (String cell : excelNumberCells) {
+                if (!dbNumberCells.contains(cell)) {
+                    if (!dbNumberCells.contains(cell.replaceAll("\\.0", ""))){
+                        System.out.println(cell + " is not in DB");
+                        return false;
                     }
                 }
             }
