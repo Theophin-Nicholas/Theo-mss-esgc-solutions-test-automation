@@ -18,7 +18,7 @@ public class PortfolioDistribution extends UITestBase {
     @Test(groups = {REGRESSION, UI, SMOKE},
             description = "Verify if Portfolio Distribution is available",
             dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
-    @Xray(test = {3924, 6730,657})
+    @Xray(test = {3924, 6730, 657, 12605})
     public void verifyIfPortfolioDistributionIsAvailable(String page) {
         if (page.equals("Physical Risk Hazards")) {
             throw new SkipException(page +" - Portfolio Distribution is not ready to test");
