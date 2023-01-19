@@ -277,6 +277,7 @@ public class ExcelUtil {
 
     public int getRowNumber(String cellData, int colNumber)
     {
+
         int totalRows = workSheet.getLastRowNum();
             Row row = null;
             int RowNo = 0;
@@ -290,14 +291,12 @@ public class ExcelUtil {
                 }
             }
             return RowNo;
+
     }
 
     public Map<String,String> getfilteredData(Map<String, String> params, List<String> requiredColumns) {
-
-
         int rows = workSheet.getLastRowNum();
         int cols = requiredColumns.get(0).equals("All")? columnCount():requiredColumns.size();
-
         Map<String, String> data = new HashMap<>();
         String conditions = "";
         for (int rowNum = 1; rowNum <= rows; rowNum++) {
@@ -320,5 +319,6 @@ public class ExcelUtil {
         }
 
         return data;
+
     }
 }

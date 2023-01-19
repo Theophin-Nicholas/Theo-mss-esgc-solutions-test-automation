@@ -83,6 +83,7 @@ public class RegulatoryReportingQueries {
     }
 
     public List<Map<String, Object>> getRUnderlyingDataOverview(String portfolioId) {
+
         String query = "WITH PORTFOLIO_TOTAL AS (\n" +
                 "SELECT (DIV0(portfolio_total, MIDRATE)) AS portfolio_total_in_eur FROM ( SELECT SUM(df.VALUE) AS portfolio_total, CURRENCY\n" +
                 "FROM DF_TARGET.DF_PORTFOLIO AS df WHERE df.PORTFOLIO_ID = '"+portfolioId+"'   GROUP BY df.PORTFOLIO_ID, CURRENCY) df\n" +
@@ -346,6 +347,7 @@ public class RegulatoryReportingQueries {
     }
 
     public List<Map<String, Object>> getRUnderlyingDataActvities(String portfolioId) {
+
         String query = "WITH OVERVIEW_DTLS_1\n" +
                 " AS (SELECT DISTINCT ORBIS_ID ,ISIN ,VIGEO_KEY ,TITLE ,ZONE ,COUNTRY_OF_INCORPORATION ,GENERIC_SECTOR ,PRODUCED_DATE FROM EU_TAXONOMY_OVERVIEW OVERVIEW \n" +
                 "LEFT JOIN DF_DERIVED.ISIN_SORTED ISS ON OVERVIEW.ORBIS_ID = ISS.BVD9_NUMBER AND PRIMARY_ISIN = 'Y' WHERE OVERVIEW.ORBIS_ID IN \n" +
@@ -384,6 +386,7 @@ public class RegulatoryReportingQueries {
     }
 
     public List<Map<String, Object>> getGreenInvestmentRatio(String portfolioId, String derivat, String cash) {
+
         String query = "WITH uih  AS (  SELECT DISTINCT DF.BVD9_NUMBER,ISS.ISIN,DF.COUNTRY_NAME  ,ROUND(SUM(DIV0(VALUE, MIDRATE)) OVER (PARTITION BY df.BVD9_NUMBER), 2) AS EXPOSURE_AMNT_IN_EUR  FROM DF_TARGET.DF_PORTFOLIO df  INNER JOIN DF_TARGET.ESG_ENTITY_MASTER eem ON eem.ORBIS_ID = df.BVD9_NUMBER   \n" +
                 "INNER JOIN (  SELECT FROMCURRCODE ,TOCURRCODE ,MIDRATE  FROM DF_LOOKUP.FX_RATE WHERE TOCURRCODE = 'EUR' QUALIFY ROW_NUMBER() OVER (  PARTITION BY FROMCURRCODE  ,TOCURRCODE ORDER BY EXRATEDATE DESC NULLS LAST ,CREATE_DATE_TIME DESC ,MODIFY_DATE_TIME DESC  ) = 1  ) fx_rate ON fx_rate.FROMCURRCODE = df.CURRENCY  INNER JOIN DF_DERIVED.ISIN_SORTED ISS ON eem.ORBIS_ID = ISS.BVD9_NUMBER  AND PRIMARY_ISIN = 'Y' " +
                 " WHERE PORTFOLIO_ID = '"+portfolioId+"' AND df.BVD9_NUMBER IS NOT NULL  ),  not_covered as  (select BVD9_NUMBER, EXPOSURE_AMNT_IN_EUR from uih  minus  select distinct  uih.bvd9_number, EXPOSURE_AMNT_IN_EUR from  uih  join df_target.EU_TAXONOMY_OVERVIEW eto on eto.orbis_id = uih.bvd9_number),  tc as  (SELECT  eto.orbis_id, COUNTRY_NAME,  (CASE WHEN COUNTRY_NAME IN('Austria','Belgium','Bulgaria','Croatia','Cyprus','Czech Republic','Denmark','Estonia','Finland','France','Germany','Greece','Hungary','Ireland','Italy',  'Latvia','Lithuania','Luxembourg','Malta','Netherlands','Poland','Portugal','Romania','Slovakia','Slovenia','Spain','Sweden') THEN 'EU' ELSE 'NOT_EU' END) AS COUNTRY_CODE ,  EXPOSURE_AMNT_IN_EUR, eto.ENTITY_TYPE, eto.ATTRIBUTE_value  as NFRD_SCOPE FROM uih  join df_target.EU_TAXONOMY_OVERVIEW eto on eto.orbis_id = uih.bvd9_number  where DATA_TYPE = 'scope' AND ATTRIBUTE_TYPE = 'nfrd'  QUALIFY ROW_NUMBER() OVER (  PARTITION BY ORBIS_ID ORDER BY PRODUCED_DATE DESC  ) = 1 ),\n" +
