@@ -6,10 +6,12 @@ import com.esgc.PortfolioAnalysis.UI.Pages.PhysicalRiskPages.PhysicalRiskManagem
 import com.esgc.RegulatoryReporting.UI.Pages.RegulatoryReportingPage;
 import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.Xray;
+import org.openqa.selenium.WebElement;
 import org.testng.annotations.Test;
 
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static com.esgc.Utilities.Groups.*;
 
@@ -409,4 +411,6 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
             System.out.println("=============================");
         }
     }
+
+
 }

@@ -190,9 +190,15 @@ public class RegulatoryReportingPage extends UploadPage {
     }
 
     //select portfolio option by name
-    public void selectPortfolioOptionByName(String name) {
-        System.out.println("Index = " + getPortfolioList().indexOf(name));
-        portfolioRadioButtonList.get(getPortfolioList().indexOf(name)).click();
+    public int selectPortfolioOptionByName(String name) {
+       int index = getPortfolioList().indexOf(name.trim());
+        System.out.println("Index = " + index);
+        portfolioRadioButtonList.get(index).click();
+        return index ;
+    }
+
+    public int deSelectPortfolioOptionByName(String name) {
+        return selectPortfolioOptionByName(name);
     }
 
     //select all portfolio options
@@ -420,6 +426,26 @@ public class RegulatoryReportingPage extends UploadPage {
                 selectReportingYear(reportingYear);
             }
         }
+    }
+
+    public List<String> getReportingFor_YearList(String portfolioName, int index) {
+
+        if (isUseLatestDataSelected()) deselectUseLatestData();
+        reportingForList.get(index).click();
+       /* for (int i = 0; i < rrPage_portfolioNamesList.size(); i++) {
+
+            if (rrPage_portfolioNamesList.get(i).getText().equals(portfolioName)) {
+
+                if (!isPortfolioSelected(portfolioName)) {
+                    System.out.println("Selecting portfolio " + portfolioName);
+                    selectPortfolioOptionByName(portfolioName);
+                }
+                //click on reporting for dropdown
+                reportingForList.get(i).click();
+            }
+        }*/
+       // return returnList;
+        return  BrowserUtils.getElementsText(reportingForDropdownOptionsList);
     }
 
     public void selectReportingYear(String reportingYear) {
