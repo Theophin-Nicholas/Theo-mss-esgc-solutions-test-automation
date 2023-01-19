@@ -294,7 +294,7 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
             System.out.println("Reports are downloaded");
             assertTestCase.assertTrue(reportingPage.unzipReports(), "Reports are extracted");
             System.out.println("Reports are extracted");
-            assertTestCase.assertTrue(reportingPage.verifySFDRCompanyOutput("latest"),
+            assertTestCase.assertTrue(reportingPage.verifySFDRCompanyOutput(selectedPortfolios,"latest"),
                     "SFDR Company output for portfolio coverage is verified for Excel vs DB");
             assertTestCase.assertTrue(reportingPage.verifyUserInputHistory(selectedPortfolios),
                     "User input history for portfolio coverage is verified for Excel vs DB");
@@ -345,7 +345,7 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
             System.out.println("Reports are downloaded");
             assertTestCase.assertTrue(reportingPage.unzipReports(), "Reports are extracted");
             System.out.println("Reports are extracted");
-            assertTestCase.assertTrue(reportingPage.verifySFDRCompanyOutput("2020"),
+            assertTestCase.assertTrue(reportingPage.verifySFDRCompanyOutput(selectedPortfolios,"2020"),
                     "SFDR Company output for portfolio coverage is verified for Excel vs DB");
             assertTestCase.assertTrue(reportingPage.verifyUserInputHistory(selectedPortfolios),
                     "User input history for portfolio coverage is verified for Excel vs DB");
@@ -396,7 +396,7 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
             System.out.println("Reports are downloaded");
             assertTestCase.assertTrue(reportingPage.unzipReports(), "Reports are extracted");
             System.out.println("Reports are extracted");
-            assertTestCase.assertTrue(reportingPage.verifySFDRCompanyOutput("latest"),
+            assertTestCase.assertTrue(reportingPage.verifySFDRCompanyOutput(selectedPortfolios,"latest"),
                     "SFDR Company output for portfolio coverage is verified for Excel vs DB");
             assertTestCase.assertTrue(reportingPage.verifyUserInputHistory(selectedPortfolios),
                     "User input history for portfolio coverage is verified for Excel vs DB");
@@ -446,7 +446,7 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
             System.out.println("Reports are downloaded");
             assertTestCase.assertTrue(reportingPage.unzipReports(), "Reports are extracted");
             System.out.println("Reports are extracted");
-            assertTestCase.assertTrue(reportingPage.verifySFDRCompanyOutput(DateTimeUtilities.getCurrentYear(-1)),
+            assertTestCase.assertTrue(reportingPage.verifySFDRCompanyOutput(selectedPortfolios,DateTimeUtilities.getCurrentYear(-1)),
                     "SFDR Company output for portfolio coverage is verified for Excel vs DB");
         } catch (Exception e) {
             e.printStackTrace();
@@ -469,7 +469,7 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
             System.out.println("Reports are downloaded");
             assertTestCase.assertTrue(reportingPage.unzipReports(), "Reports are extracted");
             System.out.println("Reports are extracted");
-            assertTestCase.assertTrue(reportingPage.verifySFDRCompanyOutput("latest"),
+            assertTestCase.assertTrue(reportingPage.verifySFDRCompanyOutput(selectedPortfolios,"latest"),
                     "SFDR Company output for portfolio coverage is verified for Excel vs DB");
         } catch (Exception e) {
             e.printStackTrace();

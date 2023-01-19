@@ -19,6 +19,11 @@ import java.util.*;
 
 
 public class RegulatoryReportingPage extends UploadPage {
+
+    RegulatoryReportingQueries queries = new RegulatoryReportingQueries();
+    RegulatoryReportingAPIController apiController = new RegulatoryReportingAPIController();
+
+
     //LOCATORS
     @FindBy(xpath = "//header//li")
     public WebElement pageTitle;
@@ -870,31 +875,39 @@ public class RegulatoryReportingPage extends UploadPage {
         assertTestCase.assertTrue(actualFileName.equals(expFileName), "Verify file is downloaded from Previously Downloaded screen");
     }
 
-    public boolean verifySFDRCompanyOutput(String year) {
-        for (WebElement portfolio : rrStatusPage_PortfoliosList) {
-            String portfolioName = portfolio.getText().replaceAll("ready", "").trim();
-            RegulatoryReportingAPIController apiController = new RegulatoryReportingAPIController();
+    public boolean verifySFDRCompanyOutput(List<String> selectedPortfolios, String year) {
+        for (String portfolioName : selectedPortfolios) {
             String portfolioId = apiController.getPortfolioId(portfolioName);
-            RegulatoryReportingQueries queries = new RegulatoryReportingQueries();
             List<Map<String, Object>> dbData = queries.getSFDRCompanyOutput(portfolioId, year);
             System.out.println("dbData.size() = " + dbData.size());
 
             //open Excel file
-            ExcelUtil excelData = getExcelData(portfolioName, rrStatusPage_PortfoliosList.indexOf(portfolio) + 1);
-            for (int i = 0; i < dbData.size(); i++) {
-                //System.out.println("DBDate = "+dbData.get(i));
-                String companyName = dbData.get(i).get("COMPANY_NAME").toString();
-                List<String> companyRow = excelData.getRowData(companyName);
-                List<String> dbAllYearsData = queries.getSFDRCompanyOutputForAllYears(portfolioId, companyName);
-                for (String cell : companyRow) {
-                    //if cell is instance of double and digit after decimal point is more than 10, then round it to 10 digits
-                    if (!dbAllYearsData.contains(cell)) {
+            String excelName = "";
+            ExcelUtil excelData = null;
+            //if multiple portfolios are selected and
+            // if interim report selected, then multiple Excel files will be downloaded and sheet index will be always 1
+            // if annual report selected, then one Excel file will be downloaded and sheet index will be index of selected portfolios
+            if(rrStatusPage_PortfoliosList.size() > 1) {
+                excelName = rrStatusPage_PortfoliosList.get(selectedPortfolios.indexOf(portfolioName)).getText().replaceAll("ready", "").trim();
+                excelData = getExcelData(excelName, 1);
+            } else {
+                excelName = rrStatusPage_PortfoliosList.get(0).getText().replaceAll("ready", "").trim();
+                excelData = getExcelData(excelName, selectedPortfolios.indexOf(portfolioName) + 1);//we skip index 0 because it is for Portfolio Level Output
+            }
+
+            for (Map<String, Object> dbRow : dbData) {
+                String companyName = dbRow.get("COMPANY_NAME").toString();
+                List<String> excelRow = excelData.getRowData(companyName);
+                for (String cell : excelRow) {
+                    //Check if cell found in db values
+                    if (!dbRow.containsValue(cell)) {
+                        //if not, it might be because digits after decimal point are more than 10, then round it to 10 digits
                         if (cell.matches("\\d+\\.\\d{11,}")) {
                             DecimalFormat f = new DecimalFormat("##.##########");
                             cell = f.format(Double.parseDouble(cell));
-                            if (dbAllYearsData.contains(cell)) {
-                                continue;
-                            }
+                            //after decimal point rounding, check if cell found in db values
+                            if (!dbRow.containsValue(cell)) continue;//if yes continue to next cell
+                            //if not then data is not found in the db values
                             System.out.println("companyName = " + companyName);
                             System.out.println(cell + " is not in DB");
                             return false;
@@ -908,9 +921,7 @@ public class RegulatoryReportingPage extends UploadPage {
 
     public boolean verifyUserInputHistory(List<String> selectedPortfolios) {
         for (String portfolioName : selectedPortfolios) {
-            RegulatoryReportingAPIController apiController = new RegulatoryReportingAPIController();
             String portfolioId = apiController.getPortfolioId(portfolioName);
-            RegulatoryReportingQueries queries = new RegulatoryReportingQueries();
             List<Map<String, Object>> dbData = queries.getUserInputHistory(portfolioId);
 
             //open Excel file
@@ -1046,6 +1057,7 @@ public class RegulatoryReportingPage extends UploadPage {
         }
         return true;
     }
+
     public boolean verifyEUReportsUnderlyingDataActivities(String portfolioId) {
         DecimalFormat dfZero = new DecimalFormat("0.00");
         //for (String portfolio : BrowserUtils.getElementsText(rrStatusPage_PortfoliosList)) {
@@ -1097,7 +1109,6 @@ public class RegulatoryReportingPage extends UploadPage {
        // }
         return true;
     }
-
 
     public boolean verifyEUReportsGreenInvestmentRatio(String portfolioId, String derivative, String cash) {
         DecimalFormat dfZero = new DecimalFormat("0.00");
