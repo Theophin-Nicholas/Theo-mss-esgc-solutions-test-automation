@@ -97,11 +97,8 @@ public class PortfolioUpdatesTest extends UITestBase {
         researchLinePage.clickMoreCompaniesDrillDown(page);
 
         assertTestCase.assertTrue(researchLinePage.checkIfUpdatesAsOfModalWindowPresent(), "Updates Expand verified", 1776);
-        if (Arrays.asList(new String[]{"Physical Risk Hazards", "Operations Risk", "Market Risk", "Supply Chain Risk","Brown Share Assessment"}).contains(page)) {
-            assertTestCase.assertEquals(researchLinePage.drillDownTitle.getText(), "Updates as of April 2021", "Updates Drilldown Title Verification", 2034);
-        } else {
-            assertTestCase.assertEquals(researchLinePage.drillDownTitle.getText(), "Updates in April 2021", "Updates Drilldown Title Verification", 2034);
-        }
+        assertTestCase.assertEquals(researchLinePage.drillDownTitle.getText(), "Updates as of April 2021", "Updates Drilldown Title Verification", 2034);
+
         test.info("Found Updates as of April 2021");
 
         List<String> expectedColumnNames = new ArrayList<>();

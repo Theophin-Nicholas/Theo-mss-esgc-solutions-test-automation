@@ -3485,18 +3485,11 @@ public class ResearchLinePage extends UploadPage {
             String monthDate = filters.substring(filters.indexOf("at the end of") + 14);
             String whatToValidate = "";
             switch (page) {
-                case "Physical Risk Hazards":
-                case "Operations Risk":
-                case "Market Risk":
-                case "Brown Share Assessment":
-                case "Supply Chain Risk":
-                    whatToValidate = "Updates as of " + monthDate + ", Impact, and Current Leaders/Laggards";
-                    break;
                 case "Temperature Alignment":
                     whatToValidate = "Impact";
                     break;
                 default:
-                    whatToValidate = "Updates in " + monthDate + ", Impact, and Current Leaders/Laggards";
+                    whatToValidate = "Updates as of " + monthDate + ", Impact, and Current Leaders/Laggards";
             }
             assertionTestCase.assertEquals(updatesAndLeadersAndLaggardsHeader.getText(), whatToValidate, "Header message is not correct", 477, 592);
         } catch (Exception e) {
