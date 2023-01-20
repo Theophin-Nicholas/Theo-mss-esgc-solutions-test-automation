@@ -14,7 +14,7 @@ import com.google.common.collect.Lists;
 import org.openqa.selenium.JavascriptExecutor;
 import org.testng.annotations.Test;
 
-import java.util.List;
+import java.util.*;
 //import java.util.function.Function;
 import com.google.common.base.Function;
 //import com.google.common.collect.Lists;
@@ -53,10 +53,10 @@ public class RegulatoryReportingAPITests extends UITestBase {
         List<String> apiPortfoliosList = apiController.getPortfolioNames();
         //sort the list
         apiPortfoliosList.sort(String::compareToIgnoreCase);
-        assertTestCase.assertEquals(apiPortfoliosList.size(),actualPortfoliosList.size(), "API Portfolio list size is verified");
+        assertTestCase.assertEquals(apiPortfoliosList.size(), actualPortfoliosList.size(), "API Portfolio list size is verified");
         //print the list
         expectedPortfoliosList.forEach(System.out::println);
-        for(String portfolioName : apiPortfoliosList){
+        for (String portfolioName : apiPortfoliosList) {
             System.out.println("portfolioName = " + portfolioName);
             assertTestCase.assertTrue(actualPortfoliosList.contains(portfolioName.trim()), "Portfolio name from API is verified in UI");
         }
@@ -67,8 +67,8 @@ public class RegulatoryReportingAPITests extends UITestBase {
     @Xray(test = {11681})
     public void verifyDownloadHistory() {
         RegulatoryReportingAPIController apiController = new RegulatoryReportingAPIController();
-        List<String>  apiReportsList = apiController.getDownloadHistory().jsonPath().getList("report_name");
-        assertTestCase.assertTrue(apiReportsList.size()>0, "Verify downloaded reports available in Previously Downloaded reports list");
+        List<String> apiReportsList = apiController.getDownloadHistory().jsonPath().getList("report_name");
+        assertTestCase.assertTrue(apiReportsList.size() > 0, "Verify downloaded reports available in Previously Downloaded reports list");
 
     }
 
@@ -85,30 +85,51 @@ public class RegulatoryReportingAPITests extends UITestBase {
         System.setProperty("token", accessToken);
 
         RegulatoryReportingAPIController apiController = new RegulatoryReportingAPIController();
-        List<String>  apiReportsList1 = apiController.getDownloadHistory().jsonPath().getList("report_name");
-        assertTestCase.assertTrue(apiReportsList1.size()==0, "Verify downloaded reports not available in Previously Downloaded reports list");
+        List<String> apiReportsList1 = apiController.getDownloadHistory().jsonPath().getList("report_name");
+        assertTestCase.assertTrue(apiReportsList1.size() == 0, "Verify downloaded reports not available in Previously Downloaded reports list");
 
     }
 
     @Test(groups = {REGRESSION, REGULATORY_REPORTING, API}, description = "Data Validation| MT | Regulatory Reporting | Validate Portfolio list and portfolio-details")
     @Xray(test = {11300})
-    public void ValidatePortfolioListAndPOortfolioDetails() {
+    public void ValidatePortfolioListAndPortfolioDetails() {
         RegulatoryReportingPage reportingPage = new RegulatoryReportingPage();
         DashboardPage dashboardPage = new DashboardPage();
         dashboardPage.navigateToPageFromMenu("Regulatory Reporting");
         test.info("Navigated to Regulatory Reporting Page");
         RegulatoryReportingAPIController apiController = new RegulatoryReportingAPIController();
         PortfolioDetails[] apiResponse = apiController.getPortfolioDetails().as(PortfolioDetails[].class);
-        for (PortfolioDetails portfolio : apiResponse  ){
-            String portfolioName =  portfolio.getPortfolio_name();
-           int index = reportingPage.selectPortfolioOptionByName(portfolioName);
-            List<Integer> UIYears = BrowserUtils.convertStringListToIntList(reportingPage.getReportingFor_YearList(portfolioName,index), Integer::parseInt);
-            if (BrowserUtils.convertStringListToIntList(portfolio.getReporting_years(), Integer::parseInt).stream().min(Integer::compare).get()<2019) {
+        for (PortfolioDetails portfolio : apiResponse) {
+            String portfolioName = portfolio.getPortfolio_name();
+            int index = reportingPage.selectPortfolioOptionByName(portfolioName);
+            List<Integer> UIYears = BrowserUtils.convertStringListToIntList(reportingPage.getReportingFor_YearList(portfolioName, index), Integer::parseInt);
+            if (BrowserUtils.convertStringListToIntList(portfolio.getReporting_years(), Integer::parseInt).stream().min(Integer::compare).get() < 2019) {
                 assertTestCase.assertTrue(UIYears.stream().min(Integer::compare).get() > 2018, "Validating that years are not showing less tyhan 2019");
             }
             reportingPage.deSelectPortfolioOptionByName(portfolioName);
         }
-        }
-
     }
+
+    @Test(groups = {REGULATORY_REPORTING, API}, description = "Delete duplicate portfolios")
+    public void deleteDuplicatePortfolios() {
+        RegulatoryReportingAPIController apiController = new RegulatoryReportingAPIController();
+        List<String> portfolioNames = apiController.getPortfolioNames();
+        //sort the list
+        portfolioNames.sort(String::compareToIgnoreCase);
+        Map<String, Integer> portfolioNumbers = new HashMap<>();
+        for (String portfolioName : portfolioNames) {
+            if (portfolioNumbers.containsKey(portfolioName)) {
+                portfolioNumbers.put(portfolioName, portfolioNumbers.get(portfolioName) + 1);
+            } else {
+                portfolioNumbers.put(portfolioName, 1);
+            }
+        }
+        portfolioNumbers.forEach((key, value) -> {if (value > 1) System.out.println(key+" = "+value);});
+        for (String portfolioName : portfolioNumbers.keySet()) {
+            for(int i = 1; i < portfolioNumbers.get(portfolioName); i++) {
+                apiController.deletePortfolio(apiController.getPortfolioId(portfolioName));
+            }
+        }
+    }
+}
 

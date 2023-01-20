@@ -39,21 +39,14 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
         reportingPage.selectAllPortfolioOptions();
         reportingPage.selectAnnualReports();
         List<String> selectedPortfolios = reportingPage.getSelectedPortfolioOptions();
-
+        Set<String> currentWindows = BrowserUtils.getWindowHandles();
         //verify create reports button before clicking
         assertTestCase.assertTrue(reportingPage.createReportsButton.isEnabled(), "Create report button is enabled");
         reportingPage.createReportsButton.click();
-        BrowserUtils.wait(2);
-        String newTab1 = "";
-        for (String tab : BrowserUtils.getWindowHandles()) {
-            if (!tab.equals(currentWindow)) {
-                newTab1 = tab;
-            }
-        }
 
         try {
             //New tab should be opened and empty state message should be displayed as in the screenshot
-            assertTestCase.assertTrue(reportingPage.verifyNewTabOpened(newTab1), "New tab is opened");
+            assertTestCase.assertTrue(reportingPage.verifyNewTabOpened(currentWindows), "New tab is opened");
             System.out.println("New tab is opened");
             assertTestCase.assertTrue(reportingPage.verifyReportsReadyToDownload(selectedPortfolios), "Reports are ready to download");
             System.out.println("Reports are ready to download");
@@ -88,23 +81,16 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
         String currentWindow = BrowserUtils.getCurrentWindowHandle();
         reportingPage.selectAllPortfolioOptions();
         reportingPage.selectInterimReports();
+        reportingPage.selectUseLatestData();
         List<String> selectedPortfolios = reportingPage.getSelectedPortfolioOptions();
-
+        Set<String> currentWindows = BrowserUtils.getWindowHandles();
         //verify create reports button before clicking
         assertTestCase.assertTrue(reportingPage.createReportsButton.isEnabled(), "Create report button is enabled");
+
         reportingPage.createReportsButton.click();
-        BrowserUtils.wait(2);
-        String newTab1 = "";
-        for (String tab : BrowserUtils.getWindowHandles()) {
-            if (!tab.equals(currentWindow)) {
-                newTab1 = tab;
-            }
-        }
-        System.out.println("newTab = " + newTab1);
-        System.out.println("currentWindow = " + currentWindow);
         try {
             //New tab should be opened and empty state message should be displayed as in the screenshot
-            assertTestCase.assertTrue(reportingPage.verifyNewTabOpened(newTab1), "New tab is opened");
+            assertTestCase.assertTrue(reportingPage.verifyNewTabOpened(currentWindows), "New tab is opened");
             System.out.println("New tab is opened");
             assertTestCase.assertTrue(reportingPage.verifyReportsReadyToDownload(selectedPortfolios), "Reports are ready to download");
             System.out.println("Reports are ready to download");
@@ -113,7 +99,7 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
             System.out.println("Reports are downloaded");
             assertTestCase.assertTrue(reportingPage.unzipReports(), "Reports are extracted");
             System.out.println("Reports are extracted");
-            assertTestCase.assertTrue(reportingPage.verifyReportsContent(selectedPortfolios), "Reports content is verified");
+            assertTestCase.assertTrue(reportingPage.verifySFDRCompanyOutput(selectedPortfolios, "latest"), "Reports content is verified");
         } catch (Exception e) {
             e.printStackTrace();
             assertTestCase.assertTrue(false, "New tab verification failed");
@@ -121,21 +107,14 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
             BrowserUtils.switchWindowsTo(currentWindow);
             System.out.println("=============================");
         }
-
         reportingPage.selectAnnualReports();
         assertTestCase.assertTrue(reportingPage.createReportsButton.isEnabled(), "Create report button is enabled");
+        currentWindows = BrowserUtils.getWindowHandles();
         reportingPage.createReportsButton.click();
         BrowserUtils.wait(2);
-        String newTab2 = "";
-        for (String tab : BrowserUtils.getWindowHandles()) {
-            if (!tab.equals(currentWindow) && !tab.equals(newTab1)) {
-                newTab2 = tab;
-            }
-        }
-        System.out.println("newTab2 = " + newTab2);
         try {
             //New tab should be opened and empty state message should be displayed as in the screenshot
-            assertTestCase.assertTrue(reportingPage.verifyNewTabOpened(newTab2), "New tab is opened");
+            assertTestCase.assertTrue(reportingPage.verifyNewTabOpened(currentWindows), "New tab is opened");
             System.out.println("New tab is opened");
             assertTestCase.assertTrue(reportingPage.verifyReportsReadyToDownload(), "Reports are ready to download");
             System.out.println("Reports are ready to download");
@@ -144,7 +123,7 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
             System.out.println("Reports are downloaded");
             assertTestCase.assertTrue(reportingPage.unzipReports(), "Reports are extracted");
             System.out.println("Reports are extracted");
-            assertTestCase.assertTrue(reportingPage.verifyReportsContentForAnnualReports(selectedPortfolios), "Reports content is verified");
+            assertTestCase.assertTrue(reportingPage.verifySFDRCompanyOutput(selectedPortfolios,"latest"), "Reports content is verified");
         } catch (Exception e) {
             e.printStackTrace();
             assertTestCase.assertTrue(false, "New tab verification failed");
@@ -172,21 +151,15 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
         assertTestCase.assertTrue(reportingPage.verifySFDRPortfolioCoverageForUI(portfolioName),
                 "SFDR portfolio coverage is verified for UI vs DB");
         List<String> selectedPortfolios = reportingPage.getSelectedPortfolioOptions();
+        Set<String> currentWindows = BrowserUtils.getWindowHandles();
         reportingPage.selectReportingFor(portfolioName,"2021");
         //verify create reports button before clicking
         assertTestCase.assertTrue(reportingPage.createReportsButton.isEnabled(), "Create report button is enabled");
         reportingPage.createReportsButton.click();
-        BrowserUtils.wait(2);
-        String newTab1 = "";
-        for (String tab : BrowserUtils.getWindowHandles()) {
-            if (!tab.equals(currentWindow)) {
-                newTab1 = tab;
-            }
-        }
 
         try {
             //New tab should be opened and empty state message should be displayed as in the screenshot
-            assertTestCase.assertTrue(reportingPage.verifyNewTabOpened(newTab1), "New tab is opened");
+            assertTestCase.assertTrue(reportingPage.verifyNewTabOpened(currentWindows), "New tab is opened");
             System.out.println("New tab is opened");
             assertTestCase.assertTrue(reportingPage.verifyReportsReadyToDownload(selectedPortfolios), "Reports are ready to download");
             System.out.println("Reports are ready to download");
@@ -195,7 +168,7 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
             System.out.println("Reports are downloaded");
             assertTestCase.assertTrue(reportingPage.unzipReports(), "Reports are extracted");
             System.out.println("Reports are extracted");
-            assertTestCase.assertTrue(reportingPage.verifyPortfolioCoverageForExcel(portfolioName),
+            assertTestCase.assertTrue(reportingPage.verifyPortfolioCoverageForExcel(portfolioName,"SFDR_COVERAGE"),
                     "SFDR portfolio coverage is verified for Excel vs DB");
             System.out.println("SFDR portfolio coverage is verified for Excel vs DB");
         } catch (Exception e) {
@@ -245,7 +218,7 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
             System.out.println("Reports are downloaded");
             assertTestCase.assertTrue(reportingPage.unzipReports(), "Reports are extracted");
             System.out.println("Reports are extracted");
-            assertTestCase.assertTrue(reportingPage.verifyPortfolioCoverageForExcel(portfolioName),
+            assertTestCase.assertTrue(reportingPage.verifyPortfolioCoverageForExcel(portfolioName, "TAXONOMY_COVERAGE"),
                     "EU Taxonomy portfolio coverage is verified for Excel vs DB");
             System.out.println("EU Taxonomy portfolio coverage is verified for Excel vs DB");
         } catch (Exception e) {

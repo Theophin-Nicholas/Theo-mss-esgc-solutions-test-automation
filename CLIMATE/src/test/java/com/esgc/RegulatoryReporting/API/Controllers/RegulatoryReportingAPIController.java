@@ -35,7 +35,14 @@ public class RegulatoryReportingAPIController extends APIController {
         List<String> portfolioNames = response.jsonPath().getList("portfolio_name");
         List<String> portfolioIds = response.jsonPath().getList("portfolio_id");
         for (int i = 0; i < portfolioNames.size(); i++) {
-            if(portfolioNames.get(i).contains(portfolioName)) {
+            if(portfolioNames.get(i).equals(portfolioName)) {
+                System.out.println("Returning portfolio id: " + portfolioIds.get(i));
+                return portfolioIds.get(i);
+            }
+        }
+        System.out.println("No portfolios found with matching name. Searching portfolios starts with.");
+        for (int i = 0; i < portfolioNames.size(); i++) {
+            if(portfolioNames.get(i).startsWith(portfolioName)) {
                 System.out.println("Returning portfolio id: " + portfolioIds.get(i));
                 return portfolioIds.get(i);
             }
