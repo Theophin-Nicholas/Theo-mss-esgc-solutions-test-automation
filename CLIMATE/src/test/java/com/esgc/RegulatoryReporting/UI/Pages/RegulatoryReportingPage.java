@@ -870,12 +870,12 @@ public class RegulatoryReportingPage extends UploadPage {
         assertTestCase.assertTrue(actualFileName.equals(expFileName), "Verify file is downloaded from Previously Downloaded screen");
     }
 
-    public boolean verifySFDRCompanyOutput(List<String> selectedPortfolios) {
+    public boolean verifySFDRCompanyOutput(List<String> selectedPortfolios,String year) {
         for (String portfolioName : selectedPortfolios) {
             RegulatoryReportingAPIController apiController = new RegulatoryReportingAPIController();
             String portfolioId = apiController.getPortfolioId(portfolioName);
             RegulatoryReportingQueries queries = new RegulatoryReportingQueries();
-            List<Map<String, Object>> dbData = queries.getSFDRCompanyOutput(portfolioId, DateTimeUtilities.getCurrentYear(-1));
+            List<Map<String, Object>> dbData = queries.getSFDRCompanyOutput(portfolioId, year);
             System.out.println("dbData.size() = " + dbData.size());
 
             //open Excel file
