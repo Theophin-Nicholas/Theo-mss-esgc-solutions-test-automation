@@ -697,6 +697,7 @@ public abstract class PageBase {
             case "Physical Risk Hazards":
             case "Operations Risk":
             case "Market Risk":
+            case "Brown Share Assessment":
             case "Supply Chain Risk":
                 WebElement pageElement = Driver.getDriver().findElement(By.partialLinkText("more companies updated as of"));
                 wait.until(ExpectedConditions.elementToBeClickable(pageElement)).click();
@@ -704,7 +705,6 @@ public abstract class PageBase {
 
             case "Physical Risk Management":
             case "Carbon Footprint":
-            case "Brown Share Assessment":
             case "Energy Transition Management":
             case "TCFD Strategy":
             case "Green Share Assessment":
@@ -1453,6 +1453,13 @@ public abstract class PageBase {
                 case "0-20%":
                     return "#6FB24B";
                 case "20-100%":
+                    return "#B28559";
+
+                case "No INVOLVEMENT":
+                    return "#39A885";
+                case "MINOR INVOLVEMENT":
+                    return "#6FB24B";
+                case "MAJOR INVOLVEMENT":
                     return "#B28559";
 
                 case "WELL BELOW 2°C":

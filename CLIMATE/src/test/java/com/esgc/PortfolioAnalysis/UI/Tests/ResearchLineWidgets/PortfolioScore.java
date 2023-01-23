@@ -73,7 +73,7 @@ public class PortfolioScore extends UITestBase {
     @Test(groups = {REGRESSION, UI, SMOKE},
             description = "Verify Score Widget for risk research lines",
             dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
-    @Xray(test = {551, 2506, 2657, 2253, 6712, 2504, 2655})
+    @Xray(test = {551, 2506, 2657, 2253, 6712, 2504, 2655, 12604})
     public void verifyPortfolioScore(String page) {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigated to " + page + " Page");

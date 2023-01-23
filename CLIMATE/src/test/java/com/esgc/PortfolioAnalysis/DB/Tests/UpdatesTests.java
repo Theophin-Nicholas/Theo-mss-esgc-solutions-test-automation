@@ -24,7 +24,7 @@ import static com.esgc.Utilities.Groups.REGRESSION;
 public class UpdatesTests extends DataValidationTestBase {
 
     @Test(groups = {REGRESSION, DATA_VALIDATION}, dataProvider = "researchLines")
-    @Xray(test = {2580, 2475, 2604, 2605, 2621, 2623, 2622, 2606, 2958, 2947, 4990, 2284})
+    @Xray(test = {2580, 2475, 2604, 2605, 2621, 2623, 2622, 2606, 2958, 2947, 4990, 2284, 2466})
     public void validateUpdates(@Optional String sector, @Optional String region, @Optional String researchLine, @Optional String month, @Optional String year) {
 
 
