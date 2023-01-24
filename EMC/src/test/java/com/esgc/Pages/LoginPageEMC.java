@@ -159,7 +159,9 @@ public class LoginPageEMC extends PageBase {
         System.out.println("Log in to Prod with Authorized User");
         Driver.getDriver().manage().window().maximize();
         wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.INTERNAL_USER_USERNAME, Keys.ENTER);
-        //wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.INTERNAL_USER_PASSWORD, Keys.ENTER);
+        BrowserUtils.wait(10);
+        wait.until(ExpectedConditions.visibilityOf(PTusernameBox)).sendKeys(Environment.INTERNAL_USER_USERNAME);
+        wait.until(ExpectedConditions.visibilityOf(PTpasswordBox)).sendKeys(Environment.INTERNAL_USER_PASSWORD, Keys.ENTER);
         Driver.getDriver().manage().window().maximize();
     }
     public void loginWithWrongPass() {
