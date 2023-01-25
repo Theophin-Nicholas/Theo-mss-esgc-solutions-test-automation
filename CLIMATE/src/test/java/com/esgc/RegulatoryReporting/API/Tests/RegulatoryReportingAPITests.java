@@ -2,7 +2,6 @@ package com.esgc.RegulatoryReporting.API.Tests;
 
 import com.esgc.Base.TestBases.UITestBase;
 import com.esgc.Base.UI.Pages.LoginPage;
-import com.esgc.Dashboard.UI.Pages.DashboardPage;
 import com.esgc.RegulatoryReporting.API.APIModels.PortfolioDetails;
 import com.esgc.RegulatoryReporting.API.Controllers.RegulatoryReportingAPIController;
 import com.esgc.RegulatoryReporting.UI.Pages.RegulatoryReportingPage;
@@ -10,13 +9,11 @@ import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.Driver;
 import com.esgc.Utilities.EntitlementsBundles;
 import com.esgc.Utilities.Xray;
-import com.google.common.collect.Lists;
 import org.openqa.selenium.JavascriptExecutor;
 import org.testng.annotations.Test;
 
 import java.util.*;
 //import java.util.function.Function;
-import com.google.common.base.Function;
 //import com.google.common.collect.Lists;
 
 import static com.esgc.Utilities.Groups.*;

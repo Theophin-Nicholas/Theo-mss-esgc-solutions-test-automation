@@ -1,7 +1,7 @@
 package com.esgc.RegulatoryReporting.DB.Tests;
 
 import com.esgc.Base.TestBases.UITestBase;
-import com.esgc.Dashboard.UI.Pages.DashboardPage;
+import com.esgc.Dashboard.UI.Pages.*;
 import com.esgc.PortfolioAnalysis.UI.Pages.PhysicalRiskPages.PhysicalRiskManagementPages.PhysicalRiskManagementPage;
 import com.esgc.RegulatoryReporting.UI.Pages.RegulatoryReportingPage;
 import com.esgc.Utilities.BrowserUtils;
@@ -267,7 +267,6 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
             System.out.println("Reports are downloaded");
             assertTestCase.assertTrue(reportingPage.unzipReports(), "Reports are extracted");
             System.out.println("Reports are extracted");
-            assertTestCase.assertTrue(reportingPage.verifySFDRCompanyOutput(selectedPortfolios,"latest"),
             assertTestCase.assertTrue(reportingPage.verifySFDRCompanyOutput(selectedPortfolios,year),
                     "SFDR Company output for portfolio coverage is verified for Excel vs DB");
             assertTestCase.assertTrue(reportingPage.verifyUserInputHistory(selectedPortfolios),
@@ -377,7 +376,6 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
             System.out.println("Reports are downloaded");
             assertTestCase.assertTrue(reportingPage.unzipReports(), "Reports are extracted");
             System.out.println("Reports are extracted");
-            assertTestCase.assertTrue(reportingPage.verifySFDRCompanyOutput(selectedPortfolios,"2020"),
             assertTestCase.assertTrue(reportingPage.verifySFDRCompanyOutput(selectedPortfolios,year),
                     "SFDR Company output for portfolio coverage is verified for Excel vs DB");
             assertTestCase.assertTrue(reportingPage.verifyUserInputHistory(selectedPortfolios),
@@ -430,7 +428,6 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
             System.out.println("Reports are downloaded");
             assertTestCase.assertTrue(reportingPage.unzipReports(), "Reports are extracted");
             System.out.println("Reports are extracted");
-            assertTestCase.assertTrue(reportingPage.verifySFDRCompanyOutput(selectedPortfolios,"latest"),
             assertTestCase.assertTrue(reportingPage.verifySFDRCompanyOutput(selectedPortfolios,year),
                     "SFDR Company output for portfolio coverage is verified for Excel vs DB");
             assertTestCase.assertTrue(reportingPage.verifyUserInputHistory(selectedPortfolios),
