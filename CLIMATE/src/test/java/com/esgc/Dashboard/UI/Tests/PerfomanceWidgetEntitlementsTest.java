@@ -1,9 +1,9 @@
-package com.esgc.Tests.UI.DashboardPage;
+package com.esgc.Dashboard.UI.Tests;
 
-import com.esgc.Pages.DashboardPage;
-import com.esgc.Pages.LoginPage;
-import com.esgc.Tests.TestBases.DashboardUITestBase;
-import com.esgc.Utilities.BrowserUtils;
+
+import com.esgc.Base.TestBases.DashboardUITestBase;
+import com.esgc.Base.UI.Pages.LoginPage;
+import com.esgc.Dashboard.UI.Pages.DashboardPage;
 import com.esgc.Utilities.EntitlementsBundles;
 import com.esgc.Utilities.Xray;
 import org.testng.annotations.Test;

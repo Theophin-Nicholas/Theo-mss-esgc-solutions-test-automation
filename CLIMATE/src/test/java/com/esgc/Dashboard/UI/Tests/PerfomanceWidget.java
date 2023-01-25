@@ -1,15 +1,10 @@
-package com.esgc.Tests.UI.DashboardPage;
+package com.esgc.Dashboard.UI.Tests;
 
-import com.esgc.Pages.DashboardPage;
-import com.esgc.Pages.LoginPage;
-import com.esgc.Pages.ResearchLinePage;
-import com.esgc.Tests.TestBases.DashboardUITestBase;
+import com.esgc.Base.TestBases.DashboardUITestBase;
+import com.esgc.Dashboard.UI.Pages.DashboardPage;
 import com.esgc.Utilities.BrowserUtils;
-import com.esgc.Utilities.EntitlementsBundles;
 import com.esgc.Utilities.Xray;
 import org.testng.annotations.Test;
-
-import java.util.List;
 
 public class PerfomanceWidget extends DashboardUITestBase {
 
