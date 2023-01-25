@@ -44,6 +44,9 @@ public class EntityClimateProfilePage extends ClimatePageBase {
     @FindBy(xpath = "//div[@aria-labelledby='alert-dialog-title']/div[@style]//*[text()]")
     public List<WebElement> companyHeaderItems;
 
+    @FindBy(xpath="//span[@data-testid='confidence_level_test_id_2']")
+    public WebElement confidenceLevel;
+
     @FindBy(xpath = " (//*[name()='g'][contains(@class,'highcharts-legend-item highcharts-line-')])")
     public List<WebElement> temperatureAlignmentCharBenchmark;
 
@@ -445,7 +448,7 @@ public class EntityClimateProfilePage extends ClimatePageBase {
     @FindBy(xpath = "//div[.='ESG Score']")
     public WebElement esgTitle;
 
-    @FindBy(xpath = "//div[@id='cardInfo_box']/div[text()='Overall ESG Score']/parent::div/div/div/div")
+    @FindBy(xpath = "//div[@id='cardInfo_box']/div[text()='ESG Score']/parent::div/div/div/div")
     public List<WebElement> esgScores;
 
     @FindBy(xpath = "//div[.='Overall ESG Score']/../div/div/div/div[2]")
@@ -2351,7 +2354,7 @@ public class EntityClimateProfilePage extends ClimatePageBase {
 
     public boolean verifyESGScoreValue() {
         for (WebElement score : esgScores) {
-            System.out.println("score " + score.getText().split("\n")[1]);
+          //  System.out.println("score " + score.getText().split("\n")[1]);
             if (score.getText().split("/")[1].equals("100")) {
                 System.out.println("ESG score is verified = " + score.getText());
                 String color = Color.fromString(score.getCssValue("color")).asHex();
@@ -2361,6 +2364,28 @@ public class EntityClimateProfilePage extends ClimatePageBase {
             }
         }
         return false;
+    }
+
+    public void verifyESGScoreHeaders() {
+       List<String> pillars= Arrays.asList(new String[]{"Environment","Social","Governance"});
+        int count = 0;
+        //actPillars.put("ESG Rating");
+        for (WebElement pillar : esgScorePillars) {
+            if (count == 0) {
+                count++;
+                continue;
+            }
+
+            String pillarName = pillar.getText().substring(0, pillar.getText().indexOf("\n"));
+            String pillarScore = pillar.getText().substring(pillar.getText().indexOf("\n") + 1);
+            assertTestCase.assertTrue(pillars.contains(pillarName),"Validating the pillar name " + pillarName);
+            assertTestCase.assertEquals(pillarScore.split("/")[1],("100"), "Validating " + pillarName + " Score format" ) ;
+            String color = Color.fromString(pillar.getCssValue("color")).asHex();
+            System.out.println("color = " + color);
+            assertTestCase.assertEquals(color,"#ffffff","validating color");
+        }
+
+
     }
 
     public boolean verifyESGScorePillars(String Entity) {

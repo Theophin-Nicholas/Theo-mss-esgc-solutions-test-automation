@@ -625,7 +625,7 @@ public class EntityClimateProfileSummaryTests extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI}, dataProviderClass = DataProviderClass.class, dataProvider = "orbisID")
-    @Xray(test = {8227, 8228, 9840})
+    @Xray(test = {8227, 8228, 9840,12420})
     public void verify_ESG_Score_Value(String Entity) {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio Analysis page");
@@ -638,6 +638,7 @@ public class EntityClimateProfileSummaryTests extends UITestBase {
         //BrowserUtils.wait(5);
         assertTestCase.assertTrue(profilePage.esgTitle.isDisplayed(), "ESG Score title is displayed");
         assertTestCase.assertTrue(profilePage.verifyESGScoreValue(), "ESG Score is verified");
+        profilePage.verifyESGScoreHeaders();
     }
 
     @Test(groups = {REGRESSION, UI}, dataProviderClass = DataProviderClass.class, dataProvider = "orbisID")
@@ -653,6 +654,7 @@ public class EntityClimateProfileSummaryTests extends UITestBase {
         //BrowserUtils.wait(5);
         assertTestCase.assertTrue(profilePage.esgTitle.isDisplayed(), "ESG Score title is displayed");
         assertTestCase.assertTrue(profilePage.verifyESGScorePillars(Entity), "ESG Score is displayed");
+
     }
 
     @Test(groups = {REGRESSION, UI})
