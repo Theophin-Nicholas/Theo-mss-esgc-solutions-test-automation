@@ -98,6 +98,7 @@ public class EntityClimateUnderlyingData extends EntityClimateProfileDataValidat
     @Xray(test = {10231})
     @Test(groups = {REGRESSION, UI, SMOKE, ENTITY_PROFILE})
     public void verifyUpdatedDateInAllWidgets() {
+        //TODO use data provider instead research line lists
         List<String> researchLines = Arrays.asList("Temperature Alignment", "Carbon Footprint", "Brown Share Assessments", "Green Share Assessment");
         for (String researchLine : researchLines) {
             System.out.println("researchLine = " + researchLine);

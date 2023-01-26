@@ -2,14 +2,18 @@ package com.esgc.RegulatoryReporting.UI.Pages;
 
 import com.esgc.Base.UI.Pages.UploadPage;
 import com.esgc.RegulatoryReporting.API.Controllers.RegulatoryReportingAPIController;
+import com.esgc.Utilities.*;
 import com.esgc.RegulatoryReporting.DB.DBQueries.RegulatoryReportingQueries;
 import com.esgc.Utilities.*;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.openqa.selenium.By;
+import com.esgc.Utilities.*;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 import java.io.File;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -111,8 +115,33 @@ public class RegulatoryReportingPage extends UploadPage {
     @FindBy(xpath = "//div[@id='reportingHistoryError']/div/div/div[1]")
     public WebElement previouslyDownloadedErrorMessage;
 
+    @FindBy(xpath="//fieldset[@id='eu_taxonomy']")
+    public WebElement EUTaxonomy;
+
+   public List<WebElement> getEUTaxonomyInputBox(String portfolio){
+       return Driver.getDriver().findElements(By.xpath("//div[.='Select Portfolios']/..//span[contains(text(),'"+portfolio+"')]/../../../../../div[4]/div"));
+   }
+
 
     //METHODS
+
+    public void enterEUTaxonomyValues(String portfolioName, String NonSovereignDerivatives, String Cashandliquidities){
+
+        WebElement element_NonSovereignDerivatives = getEUTaxonomyInputBox(portfolioName).get(0).findElement(By.xpath("div/div/input"));
+        WebElement element_Cashandliquidities = getEUTaxonomyInputBox(portfolioName).get(2).findElement(By.xpath("div/div/input"));
+        removeAndInsertValue(element_NonSovereignDerivatives,NonSovereignDerivatives);
+        removeAndInsertValue(element_Cashandliquidities,Cashandliquidities);
+
+    }
+    public void removeAndInsertValue(WebElement e, String value){
+        int len = e.getAttribute("value").length();
+        for (int i = 0 ; i<len; i++){
+            e.sendKeys(Keys.BACK_SPACE);
+        }
+        e.sendKeys(value);
+
+    }
+
     public List<String> getReportingList() {
         return BrowserUtils.getElementsText(reportingNamesList);
     }
@@ -161,9 +190,15 @@ public class RegulatoryReportingPage extends UploadPage {
     }
 
     //select portfolio option by name
-    public void selectPortfolioOptionByName(String name) {
-        System.out.println("Index = " + getPortfolioList().indexOf(name));
-        portfolioRadioButtonList.get(getPortfolioList().indexOf(name)).click();
+    public int selectPortfolioOptionByName(String name) {
+       int index = getPortfolioList().indexOf(name.trim());
+        System.out.println("Index = " + index);
+        portfolioRadioButtonList.get(index).click();
+        return index ;
+    }
+
+    public int deSelectPortfolioOptionByName(String name) {
+        return selectPortfolioOptionByName(name);
     }
 
     //select all portfolio options
@@ -285,17 +320,19 @@ public class RegulatoryReportingPage extends UploadPage {
         BrowserUtils.switchWindowsTo(currentWindowHandle);
         return rrStatusPage_ReportGeneratingMessage.isDisplayed();
     }
+
     public boolean verifyNewTabOpened(Set<String> windowHandles) {
         BrowserUtils.wait(2);
         Set<String> currentTabs = BrowserUtils.getWindowHandles();
-        for(String handle:currentTabs){
-            if(!windowHandles.contains(handle)){
+        for (String handle : currentTabs) {
+            if (!windowHandles.contains(handle)) {
                 return verifyNewTabOpened(handle);
             }
         }
         System.out.println("No new tab opened");
         return false;
     }
+
     public List<String> getSelectedPortfolioOptions() {
         List<String> selectedPortfolioOptions = new ArrayList<>();
         for (int i = 0; i < portfolioRadioButtonList.size(); i++) {
@@ -391,6 +428,26 @@ public class RegulatoryReportingPage extends UploadPage {
         }
     }
 
+    public List<String> getReportingFor_YearList(String portfolioName, int index) {
+
+        if (isUseLatestDataSelected()) deselectUseLatestData();
+        reportingForList.get(index).click();
+       /* for (int i = 0; i < rrPage_portfolioNamesList.size(); i++) {
+
+            if (rrPage_portfolioNamesList.get(i).getText().equals(portfolioName)) {
+
+                if (!isPortfolioSelected(portfolioName)) {
+                    System.out.println("Selecting portfolio " + portfolioName);
+                    selectPortfolioOptionByName(portfolioName);
+                }
+                //click on reporting for dropdown
+                reportingForList.get(i).click();
+            }
+        }*/
+       // return returnList;
+        return  BrowserUtils.getElementsText(reportingForDropdownOptionsList);
+    }
+
     public void selectReportingYear(String reportingYear) {
         if (reportingForDropdownOptionsList.size() == 0)
             System.out.println("A reporting for option must be clicked before this");
@@ -409,7 +466,7 @@ public class RegulatoryReportingPage extends UploadPage {
         verifyIfReportsDownloaded(false);
         File dir = new File(BrowserUtils.downloadPath());
         File[] dir_contents = dir.listFiles();
-        String zipFilePath = Arrays.asList(dir_contents).stream().filter(e -> ((e.getName().startsWith("SFDR") ||e.getName().startsWith("EUT")) &&
+        String zipFilePath = Arrays.asList(dir_contents).stream().filter(e -> ((e.getName().startsWith("SFDR") || e.getName().startsWith("EUT")) &&
                 e.getName().contains(DateTimeUtilities.getCurrentDate("MM_dd_yyyy")) &&
                 e.getName().endsWith(".zip"))).findAny().get().getAbsolutePath();
         System.out.println("zipFilePath = " + zipFilePath);
@@ -546,11 +603,11 @@ public class RegulatoryReportingPage extends UploadPage {
         //System.out.println("excelFile = " + excelFile.getAbsolutePath());
         ExcelUtil excelUtil = new ExcelUtil(excelFile.getAbsolutePath(), sheetName);
         System.out.println("Verifying sheet " + sheetName);
-        System.out.println("Sheet Loaded "+excelUtil.getLastRowNum()+" vs. "+excelUtil.columnCount(columnIndex));
+        System.out.println("Sheet Loaded " + excelUtil.getLastRowNum() + " vs. " + excelUtil.columnCount(columnIndex));
         List<String> list = new ArrayList<>();
         for (int i = 0; i <= excelUtil.getLastRowNum(); i++) {
             for (int j = 0; j <= excelUtil.columnCount(columnIndex); j++) {
-                if(excelUtil.getCellData(i,j) == null || excelUtil.getCellData(i,j).equals("")) continue;
+                if (excelUtil.getCellData(i, j) == null || excelUtil.getCellData(i, j).equals("")) continue;
                 list.add(excelUtil.getCellData(i, j).trim());
             }
         }
@@ -665,7 +722,7 @@ public class RegulatoryReportingPage extends UploadPage {
     public boolean verifyEUTaxonomySheets() {
         String excelName = rrStatusPage_PortfoliosList.get(0).getText().replaceAll("ready", "").trim();
         System.out.println("Verifying reports content for " + excelName);
-        String[] sheets = {"Green Investment Ratio Template","Underlying Data - Overview","Underlying Data - Activities","Definitions","Disclaimer"};
+        String[] sheets = {"Green Investment Ratio Template", "Underlying Data - Overview", "Underlying Data - Activities", "Definitions", "Disclaimer"};
         for (String sheet : sheets) {
             ExcelUtil excelData = getExcelData(excelName, sheet);
             if (excelData == null) {
@@ -683,10 +740,10 @@ public class RegulatoryReportingPage extends UploadPage {
         List<String> excelData = getExcelDataList(excelName, "Green Investment Ratio Template", 3);
         for (int i = 4; i < template.rowCount(); i++) {
             for (int j = 1; j < template.columnCount(); j++) {
-                if(template.getCellData(i,j).equals("")||template.getCellData(i,j).equals("FUTURE RELEASE")){
+                if (template.getCellData(i, j).equals("") || template.getCellData(i, j).equals("FUTURE RELEASE")) {
                     continue;
-                } else if (!excelData.contains(template.getCellData(i,j).trim())) {
-                    System.out.println(template.getCellData(i,j));
+                } else if (!excelData.contains(template.getCellData(i, j).trim())) {
+                    System.out.println(template.getCellData(i, j));
                     //System.out.println("Row = " + (i+1) + " Column = " + (j+1));
                     return false;
                 }
@@ -700,8 +757,8 @@ public class RegulatoryReportingPage extends UploadPage {
         String excelName = rrStatusPage_PortfoliosList.get(0).getText().replaceAll("ready", "").trim();
         System.out.println("Verifying reports content for " + excelName);
         ExcelUtil excelData = getExcelData(excelName, "Underlying Data - Overview");
-        for(String title: template.getColumnsNames()){
-            if(!excelData.getColumnsNames().contains(title)){
+        for (String title : template.getColumnsNames()) {
+            if (!excelData.getColumnsNames().contains(title)) {
                 System.out.println(title);
                 return false;
             }
@@ -714,8 +771,8 @@ public class RegulatoryReportingPage extends UploadPage {
         String excelName = rrStatusPage_PortfoliosList.get(0).getText().replaceAll("ready", "").trim();
         System.out.println("Verifying reports content for " + excelName);
         ExcelUtil excelData = getExcelData(excelName, "Underlying Data - Activities");
-        for(String title: template.getColumnsNames()){
-            if(!excelData.getColumnsNames().contains(title)){
+        for (String title : template.getColumnsNames()) {
+            if (!excelData.getColumnsNames().contains(title)) {
                 System.out.println(title);
                 return false;
             }
@@ -730,11 +787,11 @@ public class RegulatoryReportingPage extends UploadPage {
         List<String> excelData = getExcelDataList(excelName, "Definitions");
         for (int i = 0; i < template.rowCount(); i++) {
             for (int j = 0; j < template.columnCount(1); j++) {
-                if(template.getCellData(i,j)==null||template.getCellData(i,j).equals("")){
+                if (template.getCellData(i, j) == null || template.getCellData(i, j).equals("")) {
                     continue;
-                } else if (!excelData.contains(template.getCellData(i,j).trim())) {
-                    System.out.println(template.getCellData(i,j));
-                    System.out.println("Row = " + (i+1) + " Column = " + (j+1));
+                } else if (!excelData.contains(template.getCellData(i, j).trim())) {
+                    System.out.println(template.getCellData(i, j));
+                    System.out.println("Row = " + (i + 1) + " Column = " + (j + 1));
                     return false;
                 }
             }
@@ -747,7 +804,7 @@ public class RegulatoryReportingPage extends UploadPage {
         String excelName = rrStatusPage_PortfoliosList.get(0).getText().replaceAll("ready", "").trim();
         System.out.println("Verifying reports content for Disclaimer Sheet");
         List<String> excelData = new ArrayList<>();
-        for(String data: getExcelDataList(excelName, "Disclaimer")){
+        for (String data : getExcelDataList(excelName, "Disclaimer")) {
             excelData.addAll(BrowserUtils.splitToSentences(data));
         }
 //        excelData.forEach(System.out::println);
@@ -759,7 +816,7 @@ public class RegulatoryReportingPage extends UploadPage {
         }
 //        System.out.println("\n===================================\n");
 //        templateData.forEach(System.out::println);
-        for(String sentence: templateData){
+        for (String sentence : templateData) {
             if (!excelData.contains(sentence)) {
                 System.out.println(sentence);
                 return false;
@@ -769,9 +826,9 @@ public class RegulatoryReportingPage extends UploadPage {
     }
 
     public boolean verifyPreviouslyDownloadedButton() {
-        try{
+        try {
             return previouslyDownloadedButton.isDisplayed();
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
@@ -782,56 +839,307 @@ public class RegulatoryReportingPage extends UploadPage {
     }
 
     public void verifyPreviouslyDownloadedScreen() {
-        BrowserUtils.waitForVisibility(previouslyDownloadedStaticLabel,30);
+        BrowserUtils.waitForVisibility(previouslyDownloadedStaticLabel, 30);
         String recordCellsXpath = "//div[text()='Reports created previously:']/following-sibling::div/div/div";
-        String strDate = Driver.getDriver().findElement(By.xpath(recordCellsXpath+"[1]")).getText();
+        String strDate = Driver.getDriver().findElement(By.xpath(recordCellsXpath + "[1]")).getText();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        try{
+        try {
             sdf.parse(strDate);
-        }catch (Exception e){
-            assertTestCase.assertTrue(false,"Verify downloaded date in first column");
+        } catch (Exception e) {
+            assertTestCase.assertTrue(false, "Verify downloaded date in first column");
         }
 
-        String fileName = Driver.getDriver().findElement(By.xpath(recordCellsXpath+"[2]/span")).getText();
+        String fileName = Driver.getDriver().findElement(By.xpath(recordCellsXpath + "[2]/span")).getText();
         assertTestCase.assertTrue(fileName.endsWith(".zip"), "Verify downloaded file name in second column");
 
-        String portfolios = Driver.getDriver().findElement(By.xpath(recordCellsXpath+"[3]")).getText();
-        String portfoliosSerialNumber = portfolios.substring(0,portfolios.indexOf(":"));
+        String portfolios = Driver.getDriver().findElement(By.xpath(recordCellsXpath + "[3]")).getText();
+        String portfoliosSerialNumber = portfolios.substring(0, portfolios.indexOf(":"));
         assertTestCase.assertTrue(NumberUtils.isParsable(portfoliosSerialNumber), "Verify portfolios information in the third column");
     }
 
     public void verifyFileDownloadFromPreviouslyDownloadedScreen() {
-        BrowserUtils.waitForVisibility(previouslyDownloadedStaticLabel,30);
+        BrowserUtils.waitForVisibility(previouslyDownloadedStaticLabel, 30);
         String expFileName = recordFileName.getText();
 
         FileDownloadUtilities.deleteDownloadFolder();
         recordFileName.click();
-        assertTestCase.assertTrue(FileDownloadUtilities.waitUntilFileIsDownloaded(),"Verify download of export file");
+        assertTestCase.assertTrue(FileDownloadUtilities.waitUntilFileIsDownloaded(), "Verify download of export file");
         String actualFileName = FileDownloadUtilities.getDownloadedFileName();
 
-        System.out.println(actualFileName+"-->"+expFileName);
-        assertTestCase.assertTrue(actualFileName.equals(expFileName),"Verify file is downloaded from Previously Downloaded screen");
+        System.out.println(actualFileName + "-->" + expFileName);
+        assertTestCase.assertTrue(actualFileName.equals(expFileName), "Verify file is downloaded from Previously Downloaded screen");
     }
 
-    public boolean verifySFDRCompanyOutput(List<String> selectedPortfolios) {
-        for(String portfolioName: selectedPortfolios){
-            RegulatoryReportingAPIController apiController = new RegulatoryReportingAPIController();
+    public boolean verifySFDRCompanyOutput(List<String> selectedPortfolios, String year) {
+        RegulatoryReportingAPIController apiController = new RegulatoryReportingAPIController();
+        RegulatoryReportingQueries queries = new RegulatoryReportingQueries();
+        for (String portfolioName : selectedPortfolios) {
             String portfolioId = apiController.getPortfolioId(portfolioName);
-            RegulatoryReportingQueries queries = new RegulatoryReportingQueries();
-            List<Map<String, Object>> dbData = queries.getSFDRCompanyOutput(portfolioId, DateTimeUtilities.getCurrentYear(-1));
+            List<Map<String, Object>> dbData = queries.getSFDRCompanyOutput(portfolioId, year);
             System.out.println("dbData.size() = " + dbData.size());
 
             //open Excel file
-            String excelName = rrStatusPage_PortfoliosList.get(0).getText().replaceAll("ready", "").trim();
-            List<String> excelData = getExcelDataList(excelName, (selectedPortfolios.indexOf(portfolioName)+1)+"_"+portfolioName);
-            for(Map<String, Object> row: dbData){
-                for(String key: row.keySet()){
-                    if(row.get(key)==null)continue;
-                    if(!excelData.contains(row.get(key).toString())){
-                        System.out.println(row.get(key));
-//                        return false;
+            String excelName = "";
+            ExcelUtil excelData = null;
+            //if multiple portfolios are selected and
+            // if interim report selected, then multiple Excel files will be downloaded and sheet index will be always 1
+            // if annual report selected, then one Excel file will be downloaded and sheet index will be index of selected portfolios
+            if(rrStatusPage_PortfoliosList.size() > 1) {
+                excelName = rrStatusPage_PortfoliosList.get(selectedPortfolios.indexOf(portfolioName)).getText().replaceAll("ready", "").trim();
+                excelData = getExcelData(excelName, 1);
+            } else {
+                excelName = rrStatusPage_PortfoliosList.get(0).getText().replaceAll("ready", "").trim();
+                excelData = getExcelData(excelName, selectedPortfolios.indexOf(portfolioName) + 1);
+            }
+
+            for (Map<String, Object> dbRow : dbData) {
+                String companyName = dbRow.get("COMPANY_NAME").toString();
+                List<String> excelRow = excelData.getRowData(companyName);
+                for (String cell : excelRow) {
+                    //Check if cell found in db values
+                    if (!dbRow.containsValue(cell)) {
+                        //if not, it might be because digits after decimal point are more than 10, then round it to 10 digits
+                        if (cell.matches("\\d+\\.\\d{11,}")) {
+                            DecimalFormat f = new DecimalFormat("##.##########");
+                            cell = f.format(Double.parseDouble(cell));
+                            //after decimal point rounding, check if cell found in db values
+                            if (!dbRow.containsValue(cell)) continue;//if yes continue to next cell
+                            //if not then data is not found in the db values
+                            System.out.println("companyName = " + companyName);
+                            System.out.println(cell + " is not in DB");
+                            return false;
+                        }
                     }
                 }
+            }
+        }
+        return true;
+    }
+
+    public boolean verifyUserInputHistory(List<String> selectedPortfolios) {
+        for (String portfolioName : selectedPortfolios) {
+            RegulatoryReportingAPIController apiController = new RegulatoryReportingAPIController();
+            String portfolioId = apiController.getPortfolioId(portfolioName);
+            RegulatoryReportingQueries queries = new RegulatoryReportingQueries();
+            List<Map<String, Object>> dbData = queries.getUserInputHistory(portfolioId);
+
+            //open Excel file
+            String excelName = rrStatusPage_PortfoliosList.get(0).getText().replaceAll("ready", "").trim();
+            ExcelUtil excelData = getExcelData(excelName, "User Input History");
+            if (!excelData.searchData("Identifier")) return false;
+            if (!excelData.searchData("Company Name")) return false;
+            if (!excelData.searchData("Exposure Amount in EUR")) return false;
+            if (!excelData.searchData("Exposure Amount %")) return false;
+
+            for (int i = 0; i < dbData.size(); i++) {
+                //System.out.println("DBData = "+dbData.get(i).values());
+                String companyName = dbData.get(i).get("COMPANY_NAME").toString();
+                List<String> companyRow = excelData.getRowData(companyName);
+                for (String cell : companyRow) {
+
+                    //convert dbData to String
+                    if (!dbData.get(i).toString().contains(cell)) {
+                        if (cell.matches("\\d+\\.0")) {
+                            cell = cell.replaceAll("\\.0", "");
+                            if (dbData.get(i).toString().contains(cell)) {
+                                continue;
+                            }
+                            System.out.println("companyName = " + companyName);
+                            System.out.println("cell = " + cell);
+                            System.out.println(cell + " is not in DB");
+                            return false;
+                        }
+                    }
+                }
+            }
+
+        }
+        return true;
+    }
+
+    public boolean verifyPortfolioLevelOutput(List<String> selectedPortfolios, String reportingYear, String reportFormat, String useLatestData) {
+        for (String portfolioName : selectedPortfolios) {
+            RegulatoryReportingAPIController apiController = new RegulatoryReportingAPIController();
+            String portfolioId = apiController.getPortfolioId(portfolioName);
+            RegulatoryReportingQueries queries = new RegulatoryReportingQueries();
+            //open Excel file
+            String excelName = rrStatusPage_PortfoliosList.get(0).getText().replaceAll("ready", "").trim();
+            ExcelUtil excelData = getExcelData(excelName, "Portfolio Level Output");
+
+            List<Map<String, Object>> dbData = queries.getPortfolioLevelOutput(portfolioId, reportingYear, reportFormat, useLatestData);
+            //get number cells from excel file
+            List<String> excelNumberCells = excelData.getNumericCells();
+            //System.out.println("excelNumberCells = " + excelNumberCells);
+            DecimalFormat decimalFormat = new DecimalFormat("##.####");
+            //get number cells from db
+            List<String> dbNumberCells = new ArrayList<>();
+            for (Map<String, Object> map : dbData) {
+                if(map.get("IMPACT") != null && !map.get("IMPACT").equals("NI"))
+                    dbNumberCells.add(decimalFormat.format(Double.parseDouble(map.get("IMPACT").toString())));
+                if(map.get("SCOPE_OF_DISCLOSURE") != null && !map.get("SCOPE_OF_DISCLOSURE").equals("NI"))
+                    dbNumberCells.add(decimalFormat.format(Double.parseDouble(map.get("SCOPE_OF_DISCLOSURE").toString())));
+            }
+            dbNumberCells.add("0.0");
+            dbNumberCells.add("0.00");
+            System.out.println("dbNumberCells = " + dbNumberCells);
+            //verify db number cells list contains all values of excelnumbercells list
+            for (String cell : excelNumberCells) {
+                if (!dbNumberCells.contains(cell)) {
+                    if (!dbNumberCells.contains(cell.replaceAll("\\.0", ""))){
+                        System.out.println(cell + " is not in DB");
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
+    }
+
+    public boolean verifyEUReportsUnderLyingDataOverview(String portfolioId) {
+        DecimalFormat dfZero = new DecimalFormat("0.00");
+        for (String portfolio : BrowserUtils.getElementsText(rrStatusPage_PortfoliosList)) {
+            String excelName = portfolio.replaceAll("ready", "").trim();
+            System.out.println("Verifying reports content for " + excelName);
+            ExcelUtil excelData = getExcelData(excelName, 1);
+           System.out.println("excelData = " + excelData.getColumnsNames());
+
+           RegulatoryReportingQueries queries = new RegulatoryReportingQueries();
+            List<Map<String, Object>> dbData = queries.getRUnderlyingDataOverview(portfolioId);
+
+
+            for (Map<String, Object> dbRow : dbData){
+                List<String> checkValues = new ArrayList<>(Arrays.asList(
+                        "BVD9 ID",
+                        "VIGEO KEY",
+                        "ISIN",
+                        "LEGAL ENTITY IDENTIFIER (LEI)",
+                        "TITLE",
+                        "Exposure Amount in EUR",
+                        "Exposure Amount %",
+                        "ZONE",
+                        "COUNTRY",
+                        "ENTITY TYPE (SOVEREIGN, NON-FINANCIAL, FINANCIAL)",
+                        "GENERIC SECTOR",
+                        "NFRD SCOPE (YES/NO)",
+                        "TURNOVER REPORTING YEAR",
+                        "CAPEX REPORTING YEAR",
+                        "CLIMATE CHANGE MITIGATION - PROPORTION OF TAXONOMY ALIGNED TURNOVER (% OF TOTAL COMPANY TURNOVER)",
+                        "CLIMATE CHANGE MITIGATION - PROPORTION OF TAXONOMY ALIGNED CAPEX (% OF TOTAL COMPANY CAPEX)",
+                        "CLIMATE CHANGE ADAPTATION - PROPORTION OF TAXONOMY ALIGNED TURNOVER (% OF TOTAL COMPANY TURNOVER)",
+                        "CLIMATE CHANGE ADAPTATION - PROPORTION OF TAXONOMY ALIGNED CAPEX (% OF TOTAL COMPANY CAPEX)",
+                        "EU TAXONOMY ELIGIBLE TURNOVER (%)",
+                        "EU TAXONOMY ELIGIBLE TURNOVER - VALUE TYPE",
+                        "EU TAXONOMY ELIGIBLE CAPEX (%)",
+                        "EU TAXONOMY ELIGIBLE CAPEX - VALUE TYPE",
+                        "EU TAXONOMY ALIGNED TURNOVER (%)",
+                        "EU TAXONOMY ALIGNED TURNOVER - VALUE TYPE",
+                        "EU TAXONOMY ALIGNED CAPEX (%)",
+                        "EU TAXONOMY ALIGNED CAPEX - VALUE TYPE"));
+                int rowNumber = excelData.getRowNumber(dbRow.get("BVD9 ID").toString(),excelData.getColumnNum("BVD9 ID"));
+                for (String colName : checkValues) {
+
+
+                    String excelValue = excelData.getCellData(rowNumber,excelData.getColumnNum(colName));
+                    if (BrowserUtils.isNumeric(excelValue) && !colName.equals("BVD9 ID")
+                    && !colName.equals("TURNOVER REPORTING YEAR") && !colName.equals("CAPEX REPORTING YEAR")
+                    ){
+
+                        excelValue = dfZero.format(Double.valueOf(excelValue));
+                    }
+                    if (excelValue == "" && dbRow.get(colName)==null) continue ;
+                    if (!excelValue.equals(dbRow.get(colName).toString())) {
+                        System.out.println("Data " + dbRow.get(colName).toString() + " is not found in the excel");
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
+    }
+    public boolean verifyEUReportsUnderlyingDataActivities(String portfolioId) {
+        DecimalFormat dfZero = new DecimalFormat("0.00");
+        //for (String portfolio : BrowserUtils.getElementsText(rrStatusPage_PortfoliosList)) {
+           // String excelName = portfolio.replaceAll("ready", "").trim();
+            String excelName = "EUT_Portfolio Upload updated_good2_01_11_2023_1673474560860.xlsx";
+            System.out.println("Verifying reports content for " + excelName);
+            ExcelUtil excelData = getExcelData(excelName, 2);
+            System.out.println("excelData = " + excelData.getColumnsNames());
+
+            RegulatoryReportingQueries queries = new RegulatoryReportingQueries();
+            List<Map<String, Object>> dbData = queries.getRUnderlyingDataActvities(portfolioId);
+
+            for (Map<String, Object> dbRow : dbData){
+                List<String> checkValues = new ArrayList<>(Arrays.asList(
+                        "BVD9 ID",	"VIGEO KEY",	"ISIN",	"TITLE",	"ZONE",	"COUNTRY",	"GENERIC SECTOR",
+                        "REPORTING YEAR",	"ENVIRONMENTAL OBJECTIVE",	"TYPE OF CONTRIBUTION TO CLIMATE CHANGE MITIGATION (TURNOVER)",
+                        "TYPE OF CONTRIBUTION TO CLIMATE CHANGE MITIGATION (CAPEX)",
+                        "TYPE OF CONTRIBUTION TO CLIMATE CHANGE ADAPTATION (TURNOVER)",
+                        "TYPE OF CONTRIBUTION TO CLIMATE CHANGE ADAPTATION (CAPEX)",
+                        "ACTIVITY TURNOVER (% OF TOTAL COMPANY TURNOVER)",	"VALUE TYPE (ACTIVITY TURNOVER)",
+                        "SOURCE (ACTIVITY TURNOVER)",	"COMMENT (ACTIVITY TURNOVER)",
+                        "ACTIVITY CAPEX (% OF TOTAL COMPANY CAPEX)",
+                        "VALUE TYPE (ACTIVITY CAPEX)",
+                        "SOURCE (ACTIVITY CAPEX)",
+                        "COMMENT (ACTIVITY CAPEX)"));
+               // int rowNumber = excelData.getRowNumber(dbRow.get("BVD9 ID").toString(),excelData.getColumnNum("BVD9 ID"));
+                Map<String,String> params = new HashMap<>();
+                params.put("BVD9 ID",dbRow.get("BVD9 ID").toString());
+                params.put("ACTIVITY TURNOVER (% OF TOTAL COMPANY TURNOVER)",
+                        dbRow.get("ACTIVITY TURNOVER (% OF TOTAL COMPANY TURNOVER)")==null? "": dbRow.get("ACTIVITY TURNOVER (% OF TOTAL COMPANY TURNOVER)").toString());
+                params.put("TYPE OF CONTRIBUTION TO CLIMATE CHANGE MITIGATION (TURNOVER)",
+                        dbRow.get("TYPE OF CONTRIBUTION TO CLIMATE CHANGE MITIGATION (TURNOVER)")==null? "": dbRow.get("TYPE OF CONTRIBUTION TO CLIMATE CHANGE MITIGATION (TURNOVER)").toString());
+                System.out.println(params.toString());
+                List<String> requiredCols= Arrays.asList(new String[]{"All"});
+                Map<String, String> exlData = excelData.getfilteredData (params,requiredCols);
+                for (String colName : checkValues) {
+                    String excelValue = exlData.get(colName);
+                    if (BrowserUtils.isNumeric(excelValue) && !colName.equals("BVD9 ID")
+                            && !colName.equals("REPORTING YEAR")){
+                        excelValue = dfZero.format(Double.valueOf(excelValue));
+                    }
+                    if (excelValue == "" && dbRow.get(colName)==null) continue ;
+                    if (!excelValue.equals(dbRow.get(colName).toString())) {
+                        System.out.println("Data " + dbRow.get(colName).toString() + " is not found in the excel");
+                        return false;
+                    }
+                }
+            }
+       // }
+        return true;
+    }
+
+
+    public boolean verifyEUReportsGreenInvestmentRatio(String portfolioId, String derivative, String cash) {
+        DecimalFormat dfZero = new DecimalFormat("0.00");
+        for (String portfolio : BrowserUtils.getElementsText(rrStatusPage_PortfoliosList)) {
+            String excelName = portfolio.replaceAll("ready", "").trim();
+            //String excelName = "EUT_Portfolio Upload updated_good2_01_11_2023_1673474560860.xlsx";
+            System.out.println("Verifying reports content for " + excelName);
+            ExcelUtil excelData = getExcelData(excelName, 0);
+            RegulatoryReportingQueries queries = new RegulatoryReportingQueries();
+            List<Map<String, Object>> dbData = queries.getGreenInvestmentRatio(portfolioId, derivative, cash);
+
+            for (Map<String, Object> dbRow : dbData) {
+                int rowNumber = Integer.valueOf(dbRow.get("ROWNUM").toString());
+                int tab = Integer.valueOf(dbRow.get("TAB").toString());
+                if (dbRow.get("VALUE") != null && dbRow.get("DESCRIPTION") != null && dbRow.get("KPIS") != null) {
+                    String desc = dbRow.get("DESCRIPTION") == null ? "NA" : dbRow.get("DESCRIPTION").toString();
+                    double value = Double.valueOf(dbRow.get("VALUE").toString());
+                    String KPIS = dbRow.get("KPIS").toString();
+                    double excelValue = 0.00;
+                    String excelDesc = "";
+                    if (tab == 1) {
+                        excelDesc = excelData.getCellData(rowNumber, 1);
+                        excelValue = Double.valueOf(excelData.getCellData(rowNumber, 2));
+                    } else if (tab == 2) {
+                        excelDesc = excelData.getCellData(rowNumber, 3);
+                        excelValue = Double.valueOf(excelData.getCellData(rowNumber, 4));
+                    }
+                    if (!String.format("%.2f", excelValue).equals(String.format("%.2f", value)) && excelDesc.equals(desc)) {
+                        return false;
+                    }
+                }
+
             }
         }
         return true;

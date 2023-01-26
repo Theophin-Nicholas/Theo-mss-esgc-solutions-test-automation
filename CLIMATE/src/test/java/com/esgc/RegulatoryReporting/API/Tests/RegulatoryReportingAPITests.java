@@ -3,25 +3,31 @@ package com.esgc.RegulatoryReporting.API.Tests;
 import com.esgc.Base.TestBases.UITestBase;
 import com.esgc.Base.UI.Pages.LoginPage;
 import com.esgc.Dashboard.UI.Pages.DashboardPage;
+import com.esgc.RegulatoryReporting.API.APIModels.PortfolioDetails;
 import com.esgc.RegulatoryReporting.API.Controllers.RegulatoryReportingAPIController;
 import com.esgc.RegulatoryReporting.UI.Pages.RegulatoryReportingPage;
 import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.Driver;
 import com.esgc.Utilities.EntitlementsBundles;
 import com.esgc.Utilities.Xray;
+import com.google.common.collect.Lists;
 import org.openqa.selenium.JavascriptExecutor;
 import org.testng.annotations.Test;
 
 import java.util.List;
+//import java.util.function.Function;
+import com.google.common.base.Function;
+//import com.google.common.collect.Lists;
 
 import static com.esgc.Utilities.Groups.*;
 
-public class RegulatoryReportingTests extends UITestBase {
-    RegulatoryReportingPage reportingPage = new RegulatoryReportingPage();
+public class RegulatoryReportingAPITests extends UITestBase {
+
 
     @Test(groups = {REGRESSION, REGULATORY_REPORTING, API}, description = "Data Validation| MT | Regulatory Reporting | Validate Portfolio list and portfolio-details")
     @Xray(test = {11140})
     public void verifyPortfolioPortfolioDetailsListTest() {
+        RegulatoryReportingPage reportingPage = new RegulatoryReportingPage();
         DashboardPage dashboardPage = new DashboardPage();
         //Verify all the portfolios that the user has uploaded, are listed in the "select portfolio" section.
         dashboardPage.navigateToPageFromMenu("Dashboard");
@@ -56,6 +62,7 @@ public class RegulatoryReportingTests extends UITestBase {
         }
     }
 
+    //TODO should be in API package
     @Test(groups = {"regression", "regulatoryReporting", "api"})
     @Xray(test = {11681})
     public void verifyDownloadHistory() {
@@ -82,4 +89,26 @@ public class RegulatoryReportingTests extends UITestBase {
         assertTestCase.assertTrue(apiReportsList1.size()==0, "Verify downloaded reports not available in Previously Downloaded reports list");
 
     }
-}
+
+    @Test(groups = {REGRESSION, REGULATORY_REPORTING, API}, description = "Data Validation| MT | Regulatory Reporting | Validate Portfolio list and portfolio-details")
+    @Xray(test = {11300})
+    public void ValidatePortfolioListAndPOortfolioDetails() {
+        RegulatoryReportingPage reportingPage = new RegulatoryReportingPage();
+        DashboardPage dashboardPage = new DashboardPage();
+        dashboardPage.navigateToPageFromMenu("Regulatory Reporting");
+        test.info("Navigated to Regulatory Reporting Page");
+        RegulatoryReportingAPIController apiController = new RegulatoryReportingAPIController();
+        PortfolioDetails[] apiResponse = apiController.getPortfolioDetails().as(PortfolioDetails[].class);
+        for (PortfolioDetails portfolio : apiResponse  ){
+            String portfolioName =  portfolio.getPortfolio_name();
+           int index = reportingPage.selectPortfolioOptionByName(portfolioName);
+            List<Integer> UIYears = BrowserUtils.convertStringListToIntList(reportingPage.getReportingFor_YearList(portfolioName,index), Integer::parseInt);
+            if (BrowserUtils.convertStringListToIntList(portfolio.getReporting_years(), Integer::parseInt).stream().min(Integer::compare).get()<2019) {
+                assertTestCase.assertTrue(UIYears.stream().min(Integer::compare).get() > 2018, "Validating that years are not showing less tyhan 2019");
+            }
+            reportingPage.deSelectPortfolioOptionByName(portfolioName);
+        }
+        }
+
+    }
+

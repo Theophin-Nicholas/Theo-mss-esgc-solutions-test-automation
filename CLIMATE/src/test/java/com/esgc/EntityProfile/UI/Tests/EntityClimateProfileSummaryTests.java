@@ -47,7 +47,7 @@ public class EntityClimateProfileSummaryTests extends UITestBase {
         researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
         //BrowserUtils.wait(5);
         researchLinePage.navigateToEntity(Entity);
-        String orbisID = entityClimateProfilePage.getEntityOrbisId();
+        String orbisID = entityClimateProfilePage.getEntityOrbisIdFromUI();
         EntityClimateProfilePageQueries entityClimateProfilepagequeries = new EntityClimateProfilePageQueries();
         Map<String, String> data = entityClimateProfilepagequeries.getGreenShareData(orbisID);
         String scoreUI = entityClimateProfilePage.getGreenShareScoreRange();
@@ -625,7 +625,7 @@ public class EntityClimateProfileSummaryTests extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI}, dataProviderClass = DataProviderClass.class, dataProvider = "orbisID")
-    @Xray(test = {8227, 8228, 9840})
+    @Xray(test = {8227, 8228, 9840,12420})
     public void verify_ESG_Score_Value(String Entity) {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio Analysis page");
@@ -638,6 +638,7 @@ public class EntityClimateProfileSummaryTests extends UITestBase {
         //BrowserUtils.wait(5);
         assertTestCase.assertTrue(profilePage.esgTitle.isDisplayed(), "ESG Score title is displayed");
         assertTestCase.assertTrue(profilePage.verifyESGScoreValue(), "ESG Score is verified");
+        profilePage.verifyESGScoreHeaders();
     }
 
     @Test(groups = {REGRESSION, UI}, dataProviderClass = DataProviderClass.class, dataProvider = "orbisID")
@@ -653,6 +654,7 @@ public class EntityClimateProfileSummaryTests extends UITestBase {
         //BrowserUtils.wait(5);
         assertTestCase.assertTrue(profilePage.esgTitle.isDisplayed(), "ESG Score title is displayed");
         assertTestCase.assertTrue(profilePage.verifyESGScorePillars(Entity), "ESG Score is displayed");
+
     }
 
     @Test(groups = {REGRESSION, UI})
@@ -1131,8 +1133,8 @@ public class EntityClimateProfileSummaryTests extends UITestBase {
         }
     }
 
-
-    @Test(groups = {REGRESSION, UI},
+//TODO disclosure ratio is not valid until 2.0 companies are visiable
+    @Test(enabled = false, groups = {REGRESSION, UI},
             dataProviderClass = DataProviderClass.class, dataProvider = "orbisIDWithDisclosureScore")
     @Xray(test = {8750})
     public void verifyDisclosureScore(String entity) {

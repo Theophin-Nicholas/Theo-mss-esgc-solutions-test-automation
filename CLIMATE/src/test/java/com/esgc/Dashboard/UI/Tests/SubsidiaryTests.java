@@ -42,7 +42,7 @@ public class SubsidiaryTests extends UITestBase {
         DashboardQueries dashboardQueries = new DashboardQueries();
         List<Map<String, Object>> dbSubsidiaryCompanyInfo = dashboardQueries.getSubsidiaryCompany("XS0097093636");
 
-        assertTestCase.assertTrue(dbSubsidiaryCompanyInfo.size()==1, "Verifying subsidiary company");
+        assertTestCase.assertEquals(dbSubsidiaryCompanyInfo.size(), 1, "Verifying subsidiary company");
     }
 
     @Test(groups = {REGRESSION, UI, SEARCH_ENTITY}, dataProviderClass = DataProviderClass.class, dataProvider = "SubsidiaryCompanies")
@@ -118,7 +118,7 @@ public class SubsidiaryTests extends UITestBase {
         DashboardQueries dashboardQueries = new DashboardQueries();
         List<Map<String, Object>> dbSubsidiaryCompanyInfo = dashboardQueries.getSubsidiaryCompany(inactiveSubsidiaryCompany);
 
-        assertTestCase.assertTrue(dbSubsidiaryCompanyInfo.size()==0, "Verifying subsidiary company");
+        assertTestCase.assertEquals(dbSubsidiaryCompanyInfo.size(), 0, "Verifying subsidiary company");
 
     }
 

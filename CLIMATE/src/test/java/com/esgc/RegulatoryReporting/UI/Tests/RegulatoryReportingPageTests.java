@@ -90,6 +90,8 @@ public class RegulatoryReportingPageTests extends UITestBase {
         //Verify Portfolio column is displayed with portfolio list sorted in alphabetical order.
         List<String> sortedPortfolioList = reportingPage.getPortfolioList();
         sortedPortfolioList.sort(String::compareToIgnoreCase);
+
+        //TODO sorting logic should be ignore case and numbers comes first
         assertTestCase.assertEquals(sortedPortfolioList, actualPortfoliosList, "Portfolio list is sorted in alphabetical order");
         System.out.println("Portfolio column is displayed with portfolio list sorted in alphabetical order is verified");
 
@@ -164,6 +166,8 @@ public class RegulatoryReportingPageTests extends UITestBase {
         System.out.println(newPortfolioName + " is verified on regulatory reporting page");
         List<String> portfolioList = reportingPage.getPortfolioList();
         portfolioList.sort(String::compareToIgnoreCase);
+
+        //TODO sorting logic should be ignore case and numbers comes first
         assertTestCase.assertEquals(reportingPage.getPortfolioList(), portfolioList, "Portfolio list is sorted alphabetically");
 
         //verify portfolio on dashboard

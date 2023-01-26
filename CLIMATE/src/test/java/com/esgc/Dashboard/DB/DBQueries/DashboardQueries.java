@@ -237,6 +237,18 @@ public class DashboardQueries {
         return result;
     }
 
+    public List<Map<String, Object>> getPortfolioBrownShareInfo(String portfolioId, String year, String month) {
+        String query = "WITH p AS (SELECT p.bvd9_number,p.company_name,p.region_name,p.region,p.sector,SUM(p.value) OVER(PARTITION BY p.bvd9_number) value,SUM(p.value) OVER() total_value\n" +
+                "FROM df_target.df_portfolio p WHERE p.portfolio_id = '"+portfolioId+"'\n" +
+                "QUALIFY ROW_NUMBER() OVER(partition by p.BVD9_NUMBER ORDER BY p.REGION_NAME NULLS LAST)=1)\n" +
+                "SELECT s.bvd9_number,p.company_name,p.region_name,p.region,p.sector,p.value, p.total_value,s.YEAR,s.MONTH,s.BS_FOSF_INDUSTRY_REVENUES,s.BS_FOSF_INDUSTRY_REVENUES_ACCURATE_SOURCE,\n" +
+                "s.BS_FOSF_INDUSTRY_REVENUES_ACCURATE,s.SCORE_RANGE,s.SCORE_CATEGORY,s.PRODUCED_DATE,s.PREVIOUS_PRODUCED_DATE\n" +
+                "FROM Brown_Share s JOIN p ON p.bvd9_number=s.BVD9_NUMBER\n" +
+                "WHERE s.YEAR || s.MONTH = '"+year+""+month+"'";
+        List<Map<String, Object>> result = getQueryResultMap(query);
+        return result;
+    }
+
     public List<Map<String, Object>> getCompanyTempAlignInfo(String portfolioId, String bvd9Number, String month, String year) {
         String query = "select ta.* from df_portfolio df" +
                 "    left join temperature_alignment ta on ta.bvd9_number=df.bvd9_number and ta.month=" + month + " and ta.year=" + year + "" +

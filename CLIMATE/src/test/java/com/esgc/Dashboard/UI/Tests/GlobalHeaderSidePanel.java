@@ -27,6 +27,8 @@ public class GlobalHeaderSidePanel extends UITestBase {
 
     }
 
+    //TODO orders are different and this method should be moved to a separate class for Portfolio Settings
+    //Expected order should be incase sensitive and numbers should come last
     @Test(groups = {REGRESSION, UI, SMOKE})
     @Xray(test = 8968)
     public void validatePortfolioSettings() {

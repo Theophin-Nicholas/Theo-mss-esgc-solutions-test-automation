@@ -24,7 +24,7 @@ import static com.esgc.Utilities.Groups.*;
 public class EntityClimateProfile extends UITestBase {
 
 
-    @Xray(test = {5875, 5879, 11725})
+    @Xray(test = {5875, 5879, 11725,12413})
     @Test(enabled = true, groups = {REGRESSION, UI, SMOKE, ENTITY_PROFILE},
             description = "Verify if Company headers are Displayed as Expected",
             dataProviderClass = DataProviderClass.class, dataProvider = "CompanyNames")
@@ -35,6 +35,7 @@ public class EntityClimateProfile extends UITestBase {
         EntityClimateProfilePage entityProfilePage = new EntityClimateProfilePage();
         String companyName = entityProfilePage.searchAndLoadClimateProfilePage(company);
         Assert.assertTrue(entityProfilePage.validateGlobalCompanyNameHeader(companyName));
+        Assert.assertEquals(entityProfilePage.confidenceLevel.getText(),"Confidence Level: Analyst Driven","Validating Confidence Level: Analyst Driven");
         entityProfilePage.validateCompanyHeader(companyName);
     }
 
@@ -51,7 +52,7 @@ public class EntityClimateProfile extends UITestBase {
         Assert.assertTrue(entityProfilePage.checkIfGreenShareCardISAvailable());
         Assert.assertTrue(entityProfilePage.listOfGreenShareCardlabels.get(0).getText().equals("Green Share"));
         System.out.println("entityProfilePage.listOfGreenShareCardlabels.get(1).getText() = " + entityProfilePage.listOfGreenShareCardlabels.get(1).getText());
-        Assert.assertTrue(entityProfilePage.listOfGreenShareCardlabels.get(1).getText().equals("% of Commercial activities linked to green solutions"));
+        Assert.assertTrue(entityProfilePage.listOfGreenShareCardlabels.get(1).getText().equals("% of Commercial Activities linked to Green Solutions"));
         Assert.assertTrue(entityProfilePage.validateGreenCardValueBoxIsAvailable());
         Assert.assertTrue(entityProfilePage.validateifPieChartIsAvailable("greenshare"));
         int greenShareValue = Integer.valueOf(entityProfilePage.GreenShareWidgetValue.getText().split("[^\\d]")[0]);

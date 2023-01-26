@@ -10,6 +10,7 @@ import com.esgc.Dashboard.API.APIModels.PerformanceChartCompany;
 import com.esgc.Dashboard.DB.DBQueries.DashboardQueries;
 import com.esgc.PortfolioAnalysis.API.APIModels.RangeAndScoreCategory;
 import com.esgc.Utilities.APIUtilities;
+import com.esgc.Dashboard.DB.DBQueries.DashboardQueries;
 import com.esgc.Utilities.PortfolioUtilities;
 import com.esgc.Utilities.Xray;
 import io.restassured.response.Response;

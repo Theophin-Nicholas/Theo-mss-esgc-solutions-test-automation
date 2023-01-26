@@ -1,5 +1,7 @@
 package com.esgc.Utilities;
 
+import com.google.common.base.Function;
+import com.google.common.collect.Lists;
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.*;
@@ -520,5 +522,23 @@ public class BrowserUtils {
             ret[i++] = array2[j];
         }
         return ret;
+    }
+
+    public static boolean isNumeric(String strNum) {
+        if (strNum == null) {
+            return false;
+        }
+        try {
+            double d = Double.parseDouble(strNum);
+        } catch (NumberFormatException nfe) {
+            return false;
+        }
+        return true;
+    }
+    public static <T, U> List<U>
+    convertStringListToIntList(List<T> listOfString,
+                               Function<T, U> function)
+    {
+        return Lists.transform(listOfString, function);
     }
 }

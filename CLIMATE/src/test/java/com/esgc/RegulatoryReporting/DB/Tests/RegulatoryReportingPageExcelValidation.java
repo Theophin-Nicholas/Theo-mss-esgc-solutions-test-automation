@@ -6,10 +6,12 @@ import com.esgc.PortfolioAnalysis.UI.Pages.PhysicalRiskPages.PhysicalRiskManagem
 import com.esgc.RegulatoryReporting.UI.Pages.RegulatoryReportingPage;
 import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.Xray;
+import org.openqa.selenium.WebElement;
 import org.testng.annotations.Test;
 
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static com.esgc.Utilities.Groups.*;
 
@@ -258,9 +260,9 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
             description = "Data Validation | Regulatory Reporting | Verify the data downloaded in the generated annual report excel is for the latest data available for the portfolios irrespective of reporting year when use latest data filter is selected")
     @Xray(test = {10855})
     public void verifyLatestDataAvailableForPortfoliosWithLatestDataTest() {
-        //todo: Step 8, 9 and 10 are not completed yet
         DashboardPage dashboardPage = new DashboardPage();
         dashboardPage.navigateToPageFromMenu("Regulatory Reporting");
+        String year = "2021";
         test.info("Navigated to Regulatory Reporting Page");
         //verify portfolio upload modal
         assertTestCase.assertTrue(reportingPage.uploadAnotherPortfolioLink.isDisplayed(), "Portfolio Upload button is displayed");
@@ -292,9 +294,175 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
             System.out.println("Reports are downloaded");
             assertTestCase.assertTrue(reportingPage.unzipReports(), "Reports are extracted");
             System.out.println("Reports are extracted");
-            assertTestCase.assertTrue(reportingPage.verifySFDRCompanyOutput(selectedPortfolios),
+            assertTestCase.assertTrue(reportingPage.verifySFDRCompanyOutput(selectedPortfolios,year),
                     "SFDR Company output for portfolio coverage is verified for Excel vs DB");
-            System.out.println("SFDR Company output for portfolio coverage is verified for Excel vs DB");
+            assertTestCase.assertTrue(reportingPage.verifyUserInputHistory(selectedPortfolios),
+                    "User input history for portfolio coverage is verified for Excel vs DB");
+            System.out.println("SFDR Company output and User input history for portfolio coverage is verified for Excel vs DB");
+            assertTestCase.assertTrue(reportingPage.verifyPortfolioLevelOutput(selectedPortfolios, year,"Annual","Yes"),
+                    "Portfolio level output for portfolio coverage is verified for Excel vs DB");
+            System.out.println("Portfolio level output for portfolio coverage is verified for Excel vs DB");
+        } catch (Exception e) {
+            e.printStackTrace();
+            assertTestCase.assertTrue(false, "New tab verification failed");
+        } finally {
+            BrowserUtils.switchWindowsTo(currentWindow);
+            System.out.println("=============================");
+        }
+    }
+
+    @Test(groups = {REGRESSION, DATA_VALIDATION, REGULATORY_REPORTING},
+            description = "Data Validation | Regulatory Reporting | Verify the data downloaded in the generated annual report excel is for the latest data available for the portfolios irrespective of reporting year when use latest data filter is selected")
+    @Xray(test = {11200,11388})
+    public void verifyAnnualReportWithoutLatestDataTest() {
+        DashboardPage dashboardPage = new DashboardPage();
+        dashboardPage.navigateToPageFromMenu("Regulatory Reporting");
+        String year = "2021";
+        test.info("Navigated to Regulatory Reporting Page");
+        //verify portfolio upload modal
+        assertTestCase.assertTrue(reportingPage.uploadAnotherPortfolioLink.isDisplayed(), "Portfolio Upload button is displayed");
+
+        //upload a portfolio
+        String portfolioName = "SFDRPortfolio";
+        if (!reportingPage.verifyPortfolio(portfolioName)) reportingPage.uploadPortfolio(portfolioName);
+
+        String currentWindow = BrowserUtils.getCurrentWindowHandle();
+        reportingPage.selectPortfolioOptionByName(portfolioName);
+       // reportingPage.selectUseLatestData();
+       // assertTestCase.assertTrue(reportingPage.isUseLatestDataSelected(), "Use latest data is selected");
+        reportingPage.selectReportingFor(portfolioName, year);
+        reportingPage.selectAnnualReports();
+        assertTestCase.assertTrue(reportingPage.isAnnualReportsSelected(), "Annual reports is selected");
+
+        List<String> selectedPortfolios = reportingPage.getSelectedPortfolioOptions();
+        //verify create reports button before clicking
+        assertTestCase.assertTrue(reportingPage.createReportsButton.isEnabled(), "Create report button is enabled");
+        Set<String> currentWindows = BrowserUtils.getWindowHandles();
+        reportingPage.createReportsButton.click();
+        try {
+            //New tab should be opened and empty state message should be displayed as in the screenshot
+            assertTestCase.assertTrue(reportingPage.verifyNewTabOpened(currentWindows), "New tab is opened");
+            System.out.println("New tab is opened");
+            assertTestCase.assertTrue(reportingPage.verifyReportsReadyToDownload(selectedPortfolios), "Reports are ready to download");
+            System.out.println("Reports are ready to download");
+            reportingPage.deleteFilesInDownloadsFolder();
+            assertTestCase.assertTrue(reportingPage.verifyIfReportsDownloaded(), "Reports are downloaded");
+            System.out.println("Reports are downloaded");
+            assertTestCase.assertTrue(reportingPage.unzipReports(), "Reports are extracted");
+            System.out.println("Reports are extracted");
+            assertTestCase.assertTrue(reportingPage.verifySFDRCompanyOutput(selectedPortfolios,year),
+                    "SFDR Company output for portfolio coverage is verified for Excel vs DB");
+            assertTestCase.assertTrue(reportingPage.verifyUserInputHistory(selectedPortfolios),
+                    "User input history for portfolio coverage is verified for Excel vs DB");
+            System.out.println("SFDR Company output and User input history for portfolio coverage is verified for Excel vs DB");
+            assertTestCase.assertTrue(reportingPage.verifyPortfolioLevelOutput(selectedPortfolios, year,"Annual","No"),
+                    "Portfolio level output for portfolio coverage is verified for Excel vs DB");
+            System.out.println("Portfolio level output for portfolio coverage is verified for Excel vs DB");
+        } catch (Exception e) {
+            e.printStackTrace();
+            assertTestCase.assertTrue(false, "New tab verification failed");
+        } finally {
+            BrowserUtils.switchWindowsTo(currentWindow);
+            System.out.println("=============================");
+        }
+    }
+
+
+    @Test(groups = {"regression", "DataValidation", "regulatoryReporting"},
+            description = "Data Validation | Regulatory Reporting | Verify the data downloaded in the generated Interim report excel when the portfolios has data for the selected year")
+    @Xray(test = {11352, 11367,11200,11388})
+    public void verifyInterimReportForSelectedYearTest() {
+        DashboardPage dashboardPage = new DashboardPage();
+        dashboardPage.navigateToPageFromMenu("Regulatory Reporting");
+        String year = "2020";
+        test.info("Navigated to Regulatory Reporting Page");
+        //verify portfolio upload modal
+        assertTestCase.assertTrue(reportingPage.uploadAnotherPortfolioLink.isDisplayed(), "Portfolio Upload button is displayed");
+
+        //upload a portfolio
+        String portfolioName = "SFDRPortfolio";
+        if (!reportingPage.verifyPortfolio(portfolioName)) reportingPage.uploadPortfolio(portfolioName);
+
+        String currentWindow = BrowserUtils.getCurrentWindowHandle();
+        reportingPage.selectPortfolioOptionByName(portfolioName);
+        reportingPage.selectReportingFor(portfolioName, year);
+
+        List<String> selectedPortfolios = reportingPage.getSelectedPortfolioOptions();
+        //verify create reports button before clicking
+        assertTestCase.assertTrue(reportingPage.createReportsButton.isEnabled(), "Create report button is enabled");
+        Set<String> currentWindows = BrowserUtils.getWindowHandles();
+        reportingPage.createReportsButton.click();
+        try {
+            //New tab should be opened and empty state message should be displayed as in the screenshot
+            assertTestCase.assertTrue(reportingPage.verifyNewTabOpened(currentWindows), "New tab is opened");
+            System.out.println("New tab is opened");
+            assertTestCase.assertTrue(reportingPage.verifyReportsReadyToDownload(selectedPortfolios), "Reports are ready to download");
+            System.out.println("Reports are ready to download");
+            reportingPage.deleteFilesInDownloadsFolder();
+            assertTestCase.assertTrue(reportingPage.verifyIfReportsDownloaded(), "Reports are downloaded");
+            System.out.println("Reports are downloaded");
+            assertTestCase.assertTrue(reportingPage.unzipReports(), "Reports are extracted");
+            System.out.println("Reports are extracted");
+            assertTestCase.assertTrue(reportingPage.verifySFDRCompanyOutput(selectedPortfolios,year),
+                    "SFDR Company output for portfolio coverage is verified for Excel vs DB");
+            assertTestCase.assertTrue(reportingPage.verifyUserInputHistory(selectedPortfolios),
+                    "User input history for portfolio coverage is verified for Excel vs DB");
+            System.out.println("SFDR Company output and User input history for portfolio coverage is verified for Excel vs DB");
+            assertTestCase.assertTrue(reportingPage.verifyPortfolioLevelOutput(selectedPortfolios, year,"Interim","No"),
+                    "Portfolio level output for portfolio coverage is verified for Excel vs DB");
+            System.out.println("Portfolio level output for portfolio coverage is verified for Excel vs DB");
+        } catch (Exception e) {
+            e.printStackTrace();
+            assertTestCase.assertTrue(false, "New tab verification failed");
+        } finally {
+            BrowserUtils.switchWindowsTo(currentWindow);
+            System.out.println("=============================");
+        }
+    }
+
+    @Test(groups = {"regression", "DataValidation", "regulatoryReporting"},
+            description = "Data Validation | Regulatory Reporting | Verify the data downloaded in the generated Interim report excel when the portfolios has data for the selected year")
+    @Xray(test = {11368})
+    public void verifyInterimReportForLatestDataTest() {
+        DashboardPage dashboardPage = new DashboardPage();
+        dashboardPage.navigateToPageFromMenu("Regulatory Reporting");
+        String year = "2021";
+        test.info("Navigated to Regulatory Reporting Page");
+        //verify portfolio upload modal
+        assertTestCase.assertTrue(reportingPage.uploadAnotherPortfolioLink.isDisplayed(), "Portfolio Upload button is displayed");
+
+        //upload a portfolio
+        String portfolioName = "SFDRPortfolio";
+        if (!reportingPage.verifyPortfolio(portfolioName)) reportingPage.uploadPortfolio(portfolioName);
+
+        String currentWindow = BrowserUtils.getCurrentWindowHandle();
+        reportingPage.selectPortfolioOptionByName(portfolioName);
+        reportingPage.selectUseLatestData();
+
+        List<String> selectedPortfolios = reportingPage.getSelectedPortfolioOptions();
+        //verify create reports button before clicking
+        assertTestCase.assertTrue(reportingPage.createReportsButton.isEnabled(), "Create report button is enabled");
+        Set<String> currentWindows = BrowserUtils.getWindowHandles();
+        reportingPage.createReportsButton.click();
+        try {
+            //New tab should be opened and empty state message should be displayed as in the screenshot
+            assertTestCase.assertTrue(reportingPage.verifyNewTabOpened(currentWindows), "New tab is opened");
+            System.out.println("New tab is opened");
+            assertTestCase.assertTrue(reportingPage.verifyReportsReadyToDownload(selectedPortfolios), "Reports are ready to download");
+            System.out.println("Reports are ready to download");
+            reportingPage.deleteFilesInDownloadsFolder();
+            assertTestCase.assertTrue(reportingPage.verifyIfReportsDownloaded(), "Reports are downloaded");
+            System.out.println("Reports are downloaded");
+            assertTestCase.assertTrue(reportingPage.unzipReports(), "Reports are extracted");
+            System.out.println("Reports are extracted");
+            assertTestCase.assertTrue(reportingPage.verifySFDRCompanyOutput(selectedPortfolios,year),
+                    "SFDR Company output for portfolio coverage is verified for Excel vs DB");
+            assertTestCase.assertTrue(reportingPage.verifyUserInputHistory(selectedPortfolios),
+                    "User input history for portfolio coverage is verified for Excel vs DB");
+            System.out.println("SFDR Company output and User input history for portfolio coverage is verified for Excel vs DB");
+            assertTestCase.assertTrue(reportingPage.verifyPortfolioLevelOutput(selectedPortfolios, year,"Interim","Yes"),
+                    "Portfolio level output for portfolio coverage is verified for Excel vs DB");
+            System.out.println("Portfolio level output for portfolio coverage is verified for Excel vs DB");
         } catch (Exception e) {
             e.printStackTrace();
             assertTestCase.assertTrue(false, "New tab verification failed");
