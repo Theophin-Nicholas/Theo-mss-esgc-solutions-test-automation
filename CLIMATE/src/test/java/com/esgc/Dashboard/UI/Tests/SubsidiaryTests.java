@@ -2,6 +2,7 @@ package com.esgc.Dashboard.UI.Tests;
 
 import com.esgc.Base.TestBases.UITestBase;
 import com.esgc.Dashboard.DB.DBQueries.DashboardQueries;
+import com.esgc.Dashboard.UI.Pages.DashboardPage;
 import com.esgc.EntityProfile.UI.Pages.EntityClimateProfilePage;
 import com.esgc.PortfolioAnalysis.UI.Pages.ResearchLinePage;
 import com.esgc.TestBase.DataProviderClass;

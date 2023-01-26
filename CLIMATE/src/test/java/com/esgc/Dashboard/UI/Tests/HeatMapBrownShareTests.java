@@ -4,6 +4,7 @@ import com.esgc.Base.TestBases.DashboardUITestBase;
 import com.esgc.Dashboard.API.APIModels.CompanyBrownShareInfo;
 import com.esgc.Dashboard.API.Controllers.DashboardAPIController;
 import com.esgc.Dashboard.DB.DBQueries.DashboardQueries;
+import com.esgc.Dashboard.UI.Pages.DashboardPage;
 import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.Database.DatabaseDriver;
 import com.esgc.Utilities.Driver;

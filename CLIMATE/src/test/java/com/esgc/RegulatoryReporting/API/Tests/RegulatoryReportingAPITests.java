@@ -2,6 +2,7 @@ package com.esgc.RegulatoryReporting.API.Tests;
 
 import com.esgc.Base.TestBases.UITestBase;
 import com.esgc.Base.UI.Pages.LoginPage;
+import com.esgc.Dashboard.UI.Pages.DashboardPage;
 import com.esgc.RegulatoryReporting.API.APIModels.PortfolioDetails;
 import com.esgc.RegulatoryReporting.API.Controllers.RegulatoryReportingAPIController;
 import com.esgc.RegulatoryReporting.UI.Pages.RegulatoryReportingPage;

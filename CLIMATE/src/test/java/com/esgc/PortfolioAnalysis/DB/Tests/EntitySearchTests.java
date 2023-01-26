@@ -1,6 +1,7 @@
 package com.esgc.PortfolioAnalysis.DB.Tests;
 
 import com.esgc.Base.TestBases.DataValidationTestBase;
+import com.esgc.Dashboard.UI.Pages.DashboardPage;
 import com.esgc.PortfolioAnalysis.UI.Pages.ResearchLinePage;
 import com.esgc.Utilities.Xray;
 import org.testng.annotations.Test;

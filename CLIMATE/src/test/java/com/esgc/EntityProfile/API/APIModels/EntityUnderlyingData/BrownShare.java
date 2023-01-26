@@ -11,5 +11,6 @@ public class BrownShare{
     int score;
     String score_category;
     String updated_date;
+    String score_range;
 
 }
