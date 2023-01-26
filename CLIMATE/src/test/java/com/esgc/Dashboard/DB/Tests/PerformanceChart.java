@@ -7,6 +7,7 @@ import com.esgc.Base.DB.DBModels.ResearchLineIdentifier;
 import com.esgc.Base.TestBases.DataValidationTestBase;
 import com.esgc.DBModels.DashboardPerformanceChart;
 import com.esgc.Dashboard.API.APIModels.PerformanceChartCompany;
+import com.esgc.Dashboard.DB.DBQueries.DashboardQueries;
 import com.esgc.PortfolioAnalysis.API.APIModels.RangeAndScoreCategory;
 import com.esgc.Utilities.APIUtilities;
 import com.esgc.Dashboard.DB.DBQueries.DashboardQueries;
