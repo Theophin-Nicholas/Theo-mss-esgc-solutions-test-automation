@@ -55,6 +55,7 @@ public class RegionsSectors extends UITestBase {
         BrowserUtils.wait(5);
         researchLinePage.selectRandomPortfolioFromPortfolioSelectionModal();
         BrowserUtils.wait(5);
+        System.out.println("Random Portfolio Selected");
         assertTestCase.assertTrue(researchLinePage.verifyRegionSectorDrillDowns(page), "Region & Sector drill downs verified", 411, 420, 467, 469, 470, 822, 823, 1208, 1265, 1279, 1281, 1704, 1705, 1748, 1920, 2145, 2149, 2212, 2488);
         test.pass("Regions & Sectors Table rows columns and content verified");
     }

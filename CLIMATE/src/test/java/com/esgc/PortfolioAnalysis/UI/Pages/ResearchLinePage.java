@@ -1431,9 +1431,9 @@ public class ResearchLinePage extends UploadPage {
                 break;
 
             case "Brown Share Assessment":
-                headerList.add("0% Score Range % Investment");
-                headerList.add("0-20% Score Range % Investment");
-                headerList.add("20-100% Score Range % Investment");
+                headerList.add("No Involvement Score Range % Investment");
+                headerList.add("Minor Involvement Score Range % Investment");
+                headerList.add("Major Involvement Score Range % Investment");
                 break;
 
             case "Carbon Footprint":
@@ -1466,21 +1466,23 @@ public class ResearchLinePage extends UploadPage {
             WebElement regionSectorChart = regionSectorChartNames.get(i);
 
             String expectedRegionSectorName = regionSectorChartNames.get(i).getText();
+            System.out.println("expectedRegionSectorName = " + expectedRegionSectorName);
             Assert.assertTrue(expectedRegionSectorList.contains(expectedRegionSectorName));
 
             int countOfCompanies = Integer.parseInt(regionSectorCompanyCountsInChart.get(i).getText().substring(0, regionSectorCompanyCountsInChart.get(i).getText().indexOf('/')));
-
+            System.out.println("countOfCompanies = " + countOfCompanies);
             wait.until(ExpectedConditions.elementToBeClickable(regionSectorChart)).click();
 
             System.out.println("Clicked on " + regionSectorChart.getText() + " chart");
 
             wait.until(ExpectedConditions.visibilityOf(drillDownPanel));
 
-            Assert.assertTrue(checkIfDrillDownPanelIsDisplayed(), "Drill Down Panel is not displayed");
+            Assert.assertTrue(checkIfDrillDownPanelIsDisplayed(), "Drill Down Panel is displayed");
 
             System.out.println("Drill Down Panel is opened");
 
             String drillDownTitleText = drillDownTitle.getText();
+            System.out.println("drillDownTitleText = " + drillDownTitleText);
             Assert.assertEquals(drillDownTitleText, expectedRegionSectorName);
 
             Assert.assertTrue(checkIfHideButtonIsDisplayedInDrillDownPanel(), "Hide button is not displayed in Drill Down Panel");
@@ -1576,6 +1578,8 @@ public class ResearchLinePage extends UploadPage {
 
     public void clickHideButtonInDrillDownPanel() {
         wait.until(ExpectedConditions.visibilityOf(hideButton)).click();
+        clickAwayinBlankArea();
+        pressESCKey();
     }
 
 

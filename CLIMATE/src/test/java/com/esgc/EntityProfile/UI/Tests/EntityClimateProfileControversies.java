@@ -22,7 +22,7 @@ public class EntityClimateProfileControversies extends UITestBase {
 
 
     @Test(groups = {ENTITY_PROFILE, REGRESSION, UI, SMOKE})
-    @Xray(test = {8402, 8403, 8404, 8405, 8406,8407,8408,8409,8411})
+    @Xray(test = {8402, 8403, 8404, 8405, 8406, 8407, 8408, 8409, 8411})
     public void validateEntityControversiesWidget() {
         EntityClimateProfilePage entityProfilePage = new EntityClimateProfilePage();
         ResearchLinePage researchLinePage = new ResearchLinePage();
@@ -31,7 +31,7 @@ public class EntityClimateProfileControversies extends UITestBase {
         BrowserUtils.wait(5);
         try {
             BrowserUtils.scrollTo(entityProfilePage.controversiesTitle.get(0));
-        }catch (Exception e){
+        } catch (Exception e) {
             System.out.println("Didn't find the Controversies");
         }
         //check if the entity has controversies
@@ -56,7 +56,7 @@ public class EntityClimateProfileControversies extends UITestBase {
             //number of controversies in sub category
             //Verify that selected subcategory controversies are visible after clicking the subcategory
 
-            List<String> controversyList=new ArrayList<>();
+            List<String> controversyList = new ArrayList<>();
             for (WebElement subCategoryActual : entityProfilePage.subCategoryList) {
 
                 System.out.println("subCategoryList = " + subCategoryActual.getText());
@@ -64,34 +64,33 @@ public class EntityClimateProfileControversies extends UITestBase {
                 System.out.println("subCategoryActual.getText() = " + subCategoryActual.getText());
                 assertTestCase.assertTrue(categoryExpectedList.contains(subCategoryActual.getText()));
                 subCategoryActual.click();
-                int numberOfSubCategoryControversies= Integer.parseInt(subCategoryActual.getText().substring( subCategoryActual.getText().indexOf("(")+1 ,subCategoryActual.getText().indexOf(")")));
+                int numberOfSubCategoryControversies = Integer.parseInt(subCategoryActual.getText().substring(subCategoryActual.getText().indexOf("(") + 1, subCategoryActual.getText().indexOf(")")));
                 System.out.println("Number of Controversies in Sub Category = " + numberOfSubCategoryControversies);
                 BrowserUtils.wait(2);
+
                 //Verify that there is vertical scrollbar is displayed for the widget if number of Controversies for the entity is too many
-                if(!(entityProfilePage.controversiesTableRow.size() ==50)) {
+                if(numberOfSubCategoryControversies>=50) {
+                    assertTestCase.assertEquals(entityProfilePage.controversiesTableRow.size(), 50);
+                } else {
                     assertTestCase.assertEquals(entityProfilePage.controversiesTableRow.size(), numberOfSubCategoryControversies);
-                }else {//if the number of controversies are more than 50, then need to scroll to the 50th item to get the remaining.
-                    BrowserUtils.scrollTo(entityProfilePage.controversiesTableRow.get(49));
-                    BrowserUtils.wait(3);
-                    assertTestCase.assertEquals(entityProfilePage.controversiesTableRow.size(), numberOfSubCategoryControversies);
-                    BrowserUtils.scrollTo(entityProfilePage.controversiesTableRow.get(0));
                 }
+
                 //Verify the sorting for the Controversy list in the widget. 8407
                 // Controversy list should be sorted by the most recent one on top followed by less recent
-                for(WebElement controversiesDetails: entityProfilePage.controversiesTableRow){
+                for (WebElement controversiesDetails : entityProfilePage.controversiesTableRow) {
                     // Verify that clicking on a controversy row in the widget ,is opening up a Controversy modal popup
                     controversyList.add(controversiesDetails.findElement(By.xpath("td[1]")).getText());
                     controversiesDetails.click();
                     System.out.println("entityProfilePage.controversiesPopUpVerify.getText() = " + entityProfilePage.controversiesPopUpVerify.getText());
-                    assertTestCase.assertEquals(entityProfilePage.controversiesPopUpVerify.getText(),"Controversies");
+                    assertTestCase.assertEquals(entityProfilePage.controversiesPopUpVerify.getText(), "Controversies");
                     BrowserUtils.wait(1);
                     entityProfilePage.controversiesPopUpClose.click();
                 }
                 System.out.println("controversyList = " + controversyList);
-                List<String> actualList=controversyList;
+                List<String> actualList = controversyList;
 
                 SimpleDateFormat formatter = new SimpleDateFormat("MMM d, yyyy");
-               // DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM d',' yyyy");
+                // DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM d',' yyyy");
                 Collections.sort(controversyList, (s1, s2) -> {
                     try {
                         return formatter.parse(s2).
@@ -101,7 +100,7 @@ public class EntityClimateProfileControversies extends UITestBase {
                     }
                 });
                 System.out.println("controversyList = " + controversyList);
-                assertTestCase.assertEquals(actualList,controversyList);
+                assertTestCase.assertEquals(actualList, controversyList);
 
                 BrowserUtils.scrollTo(entityProfilePage.controversiesStaticText);
                 subCategoryActual.click();//uncheck the sub category
