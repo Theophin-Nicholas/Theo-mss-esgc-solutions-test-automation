@@ -279,12 +279,13 @@ public class EntityProfileClimatePageAPIController {
                     .header("Content-Type", "application/json")
                     .body(payload)
                     .when()
+                    .log().all()
                     .post(EntityProfilePageEndpoints.POST_ENTITY_CONTROVERSIES);
 
         } catch (Exception e) {
             System.out.println("Inside exception " + e.getMessage());
         }
-
+        System.out.println("API Response: "+response.prettyPrint());
         return response;
     }
 }
