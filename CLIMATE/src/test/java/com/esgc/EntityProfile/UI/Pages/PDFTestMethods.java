@@ -29,7 +29,7 @@ public class PDFTestMethods extends PageBase {
         System.out.println("companyName = " + companyName);
 
         // Temp code to remove ------------
-       String actualFileName = "";
+       /* String actualFileName = "";
         if (entity.contains("Apple")) {
             actualFileName = "Apple_ Inc_Profile24-Jan-2023_1674577678251.pdf"; // "Akero Therapeutics_ Inc_Profile3-Oct-2022_1664804963663.pdf";
         } else if (entity.contains("Samsung")) {
@@ -42,18 +42,18 @@ public class PDFTestMethods extends PageBase {
             actualFileName = "NMI Holdings_ Inc_Profile27-Oct-2022_1666881615951.pdf";
         }else if (entity.contains("Lexicon")) {
             actualFileName = "Lexicon Pharmaceuticals_ Inc_Profile27-Oct-2022_1666884413598.pdf";
-        }
+        }*/
 
         // Temp remove till here  and Uncomment below code after removal of temp code above ----- ----------
 
-//         entityProfilePage.selectExportSourcesDocuments();
-//        assertTestCase.assertTrue(entityProfilePage.verifyPopup(), "Verify Export Sources Documents popup");
-//        assertTestCase.assertTrue(entityProfilePage.verifyPopupTitle(companyName), "Verify Export Popup Title");
-//        FileDownloadUtilities.deleteDownloadFolder();
-//        entityProfilePage.selectPdfDownload();
-//        assertTestCase.assertTrue(entityProfilePage.verifyDownloadProgressMessage(), "Verify download progress message");
-//        assertTestCase.assertTrue(FileDownloadUtilities.waitUntilFileIsDownloaded(),"Verify download of export file");
-//        String actualFileName = FileDownloadUtilities.getDownloadedFileName() ;
+         entityProfilePage.selectExportSourcesDocuments();
+        assertTestCase.assertTrue(entityProfilePage.verifyPopup(), "Verify Export Sources Documents popup");
+        assertTestCase.assertTrue(entityProfilePage.verifyPopupTitle(companyName), "Verify Export Popup Title");
+        FileDownloadUtilities.deleteDownloadFolder();
+        entityProfilePage.selectPdfDownload();
+        assertTestCase.assertTrue(entityProfilePage.verifyDownloadProgressMessage(), "Verify download progress message");
+        assertTestCase.assertTrue(FileDownloadUtilities.waitUntilFileIsDownloaded(),"Verify download of export file");
+        String actualFileName = FileDownloadUtilities.getDownloadedFileName() ;
 
         String filePath = BrowserUtils.downloadPath() + "/" + actualFileName;
         pdfFileText = PdfUtil.getPdfContent(filePath);

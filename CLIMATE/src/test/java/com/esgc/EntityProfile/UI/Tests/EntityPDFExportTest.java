@@ -19,25 +19,25 @@ public class EntityPDFExportTest extends EntityClimateProfileTestBase {
         PDFTestMethods pdfTest = new PDFTestMethods();
         pdfTest.DownloadPDFPAndGetFileContent(entity[0]);
 
-//        pdfTest.ValidateUnderlineTransitionRisk_CarbonFootprintWidget();
-//        pdfTest.ValidatePhysicalClimateHazard();
-//        pdfTest.ValidatePhysicalRiskManagement();
-//        pdfTest.ValidateTemperatureAlignmentSummarySection();
-//        pdfTest.ValidateGreenShareWidgetSummarySection();
-//        pdfTest.ValidateBrownShareWidgetSummarySection();
-//        pdfTest.ValidateStaticTextUnderTemperatureAlignmentChart();
-//        pdfTest.ValidatePhysicalRiskOperationRisk();
-//        pdfTest.ValidatePhysicalRiskMarketRisk();
-//        pdfTest.ValidatePhysicalRiskSupplyChainRisk();
-//        pdfTest.ValidateUnderlyingDataMetricsGreenShareAssessment();
-//        --pdfTest.ValidateHeader(entity[0]);
-//        pdfTest.ValidateFooter();
+        pdfTest.ValidateUnderlineTransitionRisk_CarbonFootprintWidget();
+        pdfTest.ValidatePhysicalClimateHazard();
+        pdfTest.ValidatePhysicalRiskManagement();
+        pdfTest.ValidateTemperatureAlignmentSummarySection();
+        pdfTest.ValidateGreenShareWidgetSummarySection();
+        pdfTest.ValidateBrownShareWidgetSummarySection();
+        pdfTest.ValidateStaticTextUnderTemperatureAlignmentChart();
+        pdfTest.ValidatePhysicalRiskOperationRisk();
+        pdfTest.ValidatePhysicalRiskMarketRisk();
+        pdfTest.ValidatePhysicalRiskSupplyChainRisk();
+        pdfTest.ValidateUnderlyingDataMetricsGreenShareAssessment();
+        pdfTest.ValidateHeader(entity[0]);
+        pdfTest.ValidateFooter();
         pdfTest.ValidateESGSummaryData();
         pdfTest.ValidateEsgMaterlity(entity[1]); //12015
 
-//        pdfTest.ValidateUnderlyingDataTransitionRiskBROWNSHARE();
-//        pdfTest.ValidateCompanyIntroductionText(entity[0]);
-//        pdfTest.ValidatePDFShowsRegularFormatForVE(); //11885
+        pdfTest.ValidateUnderlyingDataTransitionRiskBROWNSHARE();
+        pdfTest.ValidateCompanyIntroductionText(entity[0]);
+        pdfTest.ValidatePDFShowsRegularFormatForVE(); //11885
 
         pdfTest.ValidateControversies(entity[1]);
 
