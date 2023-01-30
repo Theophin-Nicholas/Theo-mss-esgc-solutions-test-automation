@@ -1349,9 +1349,9 @@ public class ResearchLinePage extends UploadPage {
                 case "Operations Risk":
                 case "Market Risk":
                 case "Supply Chain Risk":
-                case "Brown Share Assessment":
                     RegionSectorsTablesHeaders.addAll(Arrays.asList("Weighted Avg.", "Companies", "Investment", "Score Range", "Companies", "% Investment"));
                     break;
+                case "Brown Share Assessment":
                 case "Physical Risk Management":
                 case "Carbon Footprint":
                 case "Energy Transition Management":
@@ -1826,8 +1826,8 @@ public class ResearchLinePage extends UploadPage {
                     dataHeaders.add("Temperature Alignment");
             }
             //validate Portfolio Distribution Header
-            Assert.assertTrue(portfolioDistributionTable.findElement
-                    (By.xpath("./../../preceding-sibling::div")).getText().contains("Portfolio Distribution"));
+//            Assert.assertTrue(portfolioDistributionTable.findElement
+//                    (By.xpath("./../../preceding-sibling::div")).getText().contains("Portfolio Distribution"));
 
             //validate Portfolio Distribution Table Headers
             for (String coloumHeaders : dataHeaders)

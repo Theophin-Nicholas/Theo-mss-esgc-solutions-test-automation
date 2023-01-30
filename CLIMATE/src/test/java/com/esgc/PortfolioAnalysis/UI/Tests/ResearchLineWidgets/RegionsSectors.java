@@ -36,7 +36,7 @@ public class RegionsSectors extends UITestBase {
 
     //Test cases 467,822,823,1208,1265,1279,1281,1704,1705,1748,1920,2145,2149,2212.2488
     //main 467
-    @Test(groups = {REGRESSION, UI, SMOKE},
+    @Test(groups = {REGRESSION, UI},
             description = "Verify if Region and Sector Drill Downs are Displayed as Expected",
             dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
     @Xray(test = {467, 822, 823, 1208, 1265, 1279, 1281, 1704, 1705, 1748, 1920, 2145, 2149, 2212, 2488, 6763, 6762, 6761, 6760, 6759, 6757, 2665})
@@ -123,7 +123,7 @@ public class RegionsSectors extends UITestBase {
 
     }
 
-    @Test(groups = {REGRESSION, UI, SMOKE},
+    @Test(groups = {REGRESSION, UI},
             dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
     @Xray(test = 412)
     public void verify_RegionCardsOrder(String page) {
@@ -138,7 +138,7 @@ public class RegionsSectors extends UITestBase {
         System.out.println("Region Card Order validated");
     }
 
-    @Test(groups = {REGRESSION, UI, SMOKE},
+    @Test(groups = {REGRESSION, UI},
             dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
     @Xray(test = 423)
     public void verify_SectorCardsOrder(String page) {

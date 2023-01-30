@@ -33,7 +33,7 @@ public class HistoryTableTests extends UITestBase {
         test.info("History Table is present. Test Passed");
     }
 
-    @Test(groups = {REGRESSION, UI, SMOKE},
+    @Test(groups = {REGRESSION, UI},
             description = "Verify History Table not available", dataProvider = "History Table Research Lines")
     @Xray(test = {5815, 5816, 5817, 5820})
     public void verifyHistoryTablbeNotAvailable(String page) {
@@ -51,7 +51,7 @@ public class HistoryTableTests extends UITestBase {
         Assert.assertTrue(!researchLinePage.checkIfBenchMarkHistoryTableExists(), "Validate that history table does not exists");
     }
 
-    @Test(groups = {REGRESSION, UI, SMOKE},
+    @Test(groups = {REGRESSION, UI},
             description = "Verify History Chart include unmatched companies/NULL/Negative values", dataProvider = "History Table Research Lines")
     @Xray(test = {5935})
     public void verifyHistoryChartIncludeUnmatchedCompanies(String page) {
@@ -71,7 +71,7 @@ public class HistoryTableTests extends UITestBase {
         BrowserUtils.wait(5);
     }
 
-    @Test(groups = {REGRESSION, UI, SMOKE}, dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
+    @Test(groups = {REGRESSION, UI}, dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
     @Xray(test = {9822, 12601, 12615})
     public void verifyCategoriesAndColorsOfHistoryTable(String page) {
         ResearchLinePage researchLinePage = new ResearchLinePage();

@@ -1455,7 +1455,7 @@ public abstract class PageBase {
                 case "20-100%":
                     return "#B28559";
 
-                case "No INVOLVEMENT":
+                case "NO INVOLVEMENT":
                     return "#39A885";
                 case "MINOR INVOLVEMENT":
                     return "#6FB24B";
