@@ -193,6 +193,7 @@ public class LoginPage extends ClimatePageBase {
             clickOnNextButton();
         }
         wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.DATA_PASSWORD);
+        
 //        wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.UI_USERNAME, Keys.ENTER);
 //        wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.UI_PASSWORD);
        /* if (!termsAndConditionsCheckBox.isSelected())
