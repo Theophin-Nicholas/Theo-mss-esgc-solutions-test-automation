@@ -945,7 +945,7 @@ public class EntityClimateProfileSummaryTests extends UITestBase {
 
     }
 
-    @Test(groups = {REGRESSION, UI, SMOKE}, dataProviderClass = DataProviderClass.class, dataProvider = "entitlementCheckPrd")
+    @Test(groups = {REGRESSION, UI}, dataProviderClass = DataProviderClass.class, dataProvider = "entitlementCheckPrd")
     @Xray(test = {8448, 8449, 8875, 8878, 8879, 8880, 8881, 8884, 8224, 8225, 8226})
     public void verifyEntitlementBaseWidgets(String username, String password, String entitlement) {
         //Trying to log in with only Entitlement User

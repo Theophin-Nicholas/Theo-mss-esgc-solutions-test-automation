@@ -3,9 +3,8 @@
 
 name: Daily Smoke Test Execution
 
-on:
-  push:
-    branches: [ Develop_January ]
+on:  
+  workflow_dispatch
 
 jobs:
   build:

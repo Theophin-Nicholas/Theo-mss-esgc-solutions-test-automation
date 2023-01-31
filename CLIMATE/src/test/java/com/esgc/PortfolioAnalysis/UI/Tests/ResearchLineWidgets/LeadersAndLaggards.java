@@ -32,7 +32,7 @@ public class LeadersAndLaggards extends UITestBase {
         String commonWidgetsID = "updates_and_current_leaders_laggards";
         researchLinePage.selectSamplePortfolioFromPortfolioSelectionModal();
         researchLinePage.navigateToResearchLine(page);
-        BrowserUtils.wait(5);
+        BrowserUtils.wait(10);
         test.info("Navigated to " + page + " Page");
 
         Assert.assertTrue(researchLinePage.checkIfPageTitleIsDisplayed(page), "check if page title is displayed");
