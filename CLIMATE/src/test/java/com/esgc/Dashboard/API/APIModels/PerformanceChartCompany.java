@@ -66,7 +66,7 @@ public class PerformanceChartCompany {
     @JsonProperty(value="CURR_CRITICAL_CONTROVERSIES")
     private String CURR_CRITICAL_CONTROVERSIES;
     @JsonProperty(value="CURR_SCORE_BROWN_SHARE")
-    private Integer CURRENT_BROWN_SHARE_SCORE;
+    private Double CURRENT_BROWN_SHARE_SCORE;
     @JsonProperty(value="CURR_SCORE_CARBON_FOOTPRINT")
     private Integer CURRENT_CARBON_SCORE;
     @JsonProperty(value="CURR_SCORE_GREEN_SHARE")

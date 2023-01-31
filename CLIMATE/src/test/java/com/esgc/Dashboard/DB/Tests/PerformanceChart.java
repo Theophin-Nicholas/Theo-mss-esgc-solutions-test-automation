@@ -296,7 +296,7 @@ public class PerformanceChart extends DataValidationTestBase {
                 String carbonFootprintScoreCategory = company.getSCORE_CATEGORY_CARBON_FOOTPRINT();
                 softAssert.assertEquals(carbonFootprintScoreCategory, entityScoreRangeAndCategory5.getCategory(), company.getCOMPANY_NAME() + " Score Category verification");
 
-                Integer brownShareScore = company.getCURRENT_BROWN_SHARE_SCORE();
+                Integer brownShareScore =  (int) Math.round(company.getCURRENT_BROWN_SHARE_SCORE());
                 RangeAndScoreCategory entityScoreRangeAndCategory6 = getRangeAndScoreCategoryByScore("Brown Share", brownShareScore);
                 String brownShareScoreCategory = company.getSCORE_CATEGORY_BROWN_SHARE();
                 softAssert.assertEquals(brownShareScoreCategory, entityScoreRangeAndCategory6.getCategory(), company.getCOMPANY_NAME() + " Score Category verification");
@@ -409,10 +409,10 @@ public class PerformanceChart extends DataValidationTestBase {
 
 
     }
-    @Test(groups = {"regression", "data_validation", "dashboard"})
+    @Test(groups = {"regression","smoke", "data_validation", "dashboard"})
     @Xray(test = {8689,8695,8697})
-    public void validateESGScoreCategory(){
-        String portfolioId = "00000000-0000-0000-0000-000000000000" ;
+    public void validateESGScoreCategory() {
+        String portfolioId = "00000000-0000-0000-0000-000000000000";
         APIFilterPayload apiFilterPayload = new APIFilterPayload();
         apiFilterPayload.setSector("all");
         apiFilterPayload.setRegion("all");
@@ -430,24 +430,61 @@ public class PerformanceChart extends DataValidationTestBase {
                             .as(PerformanceChartCompany[].class));
             System.out.println(companyList);
 
-            List<DashboardPerformanceChart> dbResult= DashboardQueries.getPerfomanceChartESGSCORE(performanceChartType);
+            List<DashboardPerformanceChart> dbResult = DashboardQueries.getPerfomanceChartESGSCORE(performanceChartType);
 
             System.out.println(dbResult);
 
-            for (int i = 0 ; i < companyList.size(); i++){
-                Assert.assertEquals(companyList.get(i).getCOMPANY_NAME(),dbResult.get(i).getCOMPANY_NAME(), "Validate Comapny Names");
-                Assert.assertEquals(companyList.get(i).getSCORE_CATEGORY_ESG_ASSESSMENT(),dbResult.get(i).getESGCATEGORIES(), "Validate Score Category");
-                if (dbResult.get(i).getControCounts()>-1){
-                    Assert.assertEquals(companyList.get(i).getCURR_CRITICAL_CONTROVERSIES(),String.valueOf(dbResult.get(i).getControCounts()), "Validating Critical Cntroversey Count");
-                }else{
-                    Assert.assertEquals(companyList.get(i).getCURR_CRITICAL_CONTROVERSIES(),null, "Validating if Controversey value is blank" );
+            for (int i = 0; i < companyList.size(); i++) {
+                Assert.assertEquals(companyList.get(i).getCOMPANY_NAME(), dbResult.get(i).getCOMPANY_NAME(), "Validate Comapny Names");
+                Assert.assertEquals(companyList.get(i).getSCORE_CATEGORY_ESG_ASSESSMENT(), dbResult.get(i).getESGCATEGORIES(), "Validate Score Category");
+                if (dbResult.get(i).getControCounts() > -1) {
+                    Assert.assertEquals(companyList.get(i).getCURR_CRITICAL_CONTROVERSIES(), String.valueOf(dbResult.get(i).getControCounts()), "Validating Critical Cntroversey Count");
+                } else {
+                    Assert.assertEquals(companyList.get(i).getCURR_CRITICAL_CONTROVERSIES(), null, "Validating if Controversey value is blank");
                 }
 
             }
         }
-
-
     }
+        @Test(groups = {"regression", "data_validation", "dashboard"})
+        @Xray(test = {12267})
+        public void validateBrownshare(){
+            String portfolioId = "00000000-0000-0000-0000-000000000000" ;
+            APIFilterPayload apiFilterPayload = new APIFilterPayload();
+            apiFilterPayload.setSector("all");
+            apiFilterPayload.setRegion("all");
+            apiFilterPayload.setBenchmark("");
+            apiFilterPayload.setYear("2022");
+            apiFilterPayload.setMonth("12");
+            List<String> performanceChartTypes = Arrays.asList("leaders", "laggards");
+
+            for (String performanceChartType : performanceChartTypes) {
+                System.out.println("Performance Chart:" + performanceChartType);
+                //Get all regions
+                List<PerformanceChartCompany> companyList = Arrays.asList(
+                        dashboardAPIController.getPerformanceChartList(portfolioId, "brownshareasmt", apiFilterPayload, performanceChartType, "10")
+                                .as(PerformanceChartCompany[].class));
+                System.out.println(companyList);
+
+                List<DashboardPerformanceChart> dbResult= DashboardQueries.getBrownShareResultd(portfolioId, "2022", "12");
+
+                System.out.println(dbResult);
+
+                for (int i = 0 ; i < companyList.size(); i++){
+                    int counter = i;
+                    DashboardPerformanceChart dbRow = dbResult.stream().filter(e -> e.getBVD9_NUMBER().equals(companyList.get(counter).getBVD9_NUMBER())).findFirst().get();
+                    Assert.assertEquals(dbRow.getSCORE_RANGE(),companyList.get(counter).getSCORE_CATEGORY_BROWN_SHARE(), "Validate Brown Share Category");
+                    if (companyList.get(counter).getCURRENT_BROWN_SHARE_SCORE()==null){
+                        Assert.assertEquals(dbRow.getBS_FOSF_INDUSTRY_REVENUES_ACCURATE_SOURCE(),"NA", "Validating when accurate score is not present");
+                    }else{
+                        Assert.assertEquals(String.format("%.2f",Double.valueOf(dbRow.getBS_FOSF_INDUSTRY_REVENUES_ACCURATE_SOURCE())),String.format("%.2f",Double.valueOf(companyList.get(counter).getCURRENT_BROWN_SHARE_SCORE())), "Validating when accurate score is present");
+                    }
+
+                }
+            }
+
+
+        }
 
 
 }

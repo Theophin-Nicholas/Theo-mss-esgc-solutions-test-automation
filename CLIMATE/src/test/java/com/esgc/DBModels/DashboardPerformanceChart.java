@@ -17,6 +17,9 @@ public class DashboardPerformanceChart {
     private int controCounts ;
     private int Scale ;
     private String ESGCATEGORIES ;
+    private String BS_FOSF_INDUSTRY_REVENUES_ACCURATE_SOURCE ;
+    private String BS_FOSF_INDUSTRY_REVENUES_ACCURATE ;
+    private String SCORE_RANGE ;
 
 
 }

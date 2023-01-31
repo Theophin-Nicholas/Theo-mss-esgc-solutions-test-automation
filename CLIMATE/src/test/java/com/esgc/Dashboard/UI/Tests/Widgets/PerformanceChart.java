@@ -90,7 +90,7 @@ public class PerformanceChart extends DashboardUITestBase {
 
     @Test(groups = {UI, DASHBOARD, REGRESSION},
             dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
-    @Xray(test = {2041, 2043, 2048, 2052, 2067, 3131, 3132, 3152, 3153, 4375, 4376, 4380, 6235, 7111, 7112, 7114})
+    @Xray(test = {2041, 2043, 2048, 2052, 2067, 3131, 3132, 3152, 3153, 4375, 4376, 4380, 6235, 7111, 7112, 7114, 12268, 12264})
     public void verifyPerformanceChartScoreCategoriesUnderColumns(String researchLine) {
         DashboardPage dashboardPage = new DashboardPage();
         dashboardPage.navigateToPageFromMenu("Dashboard");
@@ -142,6 +142,21 @@ public class PerformanceChart extends DashboardUITestBase {
 
             if (header.equals("Carbon Footprint (tCO2eq)"))
                 sortedCategories = sortedCategories.stream().map(e -> e.substring(0, e.indexOf("\n"))).collect(Collectors.toList());
+            ;
+
+          if (header.equals("Brown Share Assessment"))
+              sortedCategories = sortedCategories.stream().map(s-> {
+                  switch (s){
+                      case "0-10%" : return "5%" ;
+                      case "10-20%" : return "15%";
+                      case "20-33%" : return "26.5%";
+                      case "33-50%" : return "41.5%";
+                      case ">=50%" : return "75%" ;
+                      default : return s;
+                  }
+              }).collect(Collectors.toList());
+
+
 
             System.out.println("Leaders sortedCategories = " + sortedCategories);
             boolean isOrderedAsExpected = isSortedBestToWorst(sortedCategories, expectedCategories);
