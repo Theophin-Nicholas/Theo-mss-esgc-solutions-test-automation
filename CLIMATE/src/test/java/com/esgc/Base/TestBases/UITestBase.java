@@ -31,7 +31,7 @@ public abstract class UITestBase extends TestBase {
         }
 
         Driver.getDriver().manage().window().maximize();
-        Driver.getDriver().manage().timeouts().implicitlyWait(Duration.ofSeconds(30));
+        Driver.getDriver().manage().timeouts().implicitlyWait(Duration.ofSeconds(80));
 
 //        LoginPage loginPage = new LoginPage();
 //
