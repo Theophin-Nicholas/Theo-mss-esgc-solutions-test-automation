@@ -313,7 +313,7 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
 
     @Test(groups = {REGRESSION, DATA_VALIDATION, REGULATORY_REPORTING},
             description = "Data Validation | Regulatory Reporting | Verify the data downloaded in the generated annual report excel is for the latest data available for the portfolios irrespective of reporting year when use latest data filter is selected")
-    @Xray(test = {11200,11388})
+    @Xray(test = {10852,10853, 11200,11388})
     public void verifyAnnualReportWithoutLatestDataTest() {
         DashboardPage dashboardPage = new DashboardPage();
         dashboardPage.navigateToPageFromMenu("Regulatory Reporting");

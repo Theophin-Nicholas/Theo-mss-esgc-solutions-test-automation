@@ -533,4 +533,30 @@ public class DashboardQueries {
 
     }
 
+    public static List<DashboardPerformanceChart> getBrownShareResultd(String portfolioID, String year, String month) {
+        String Query = "select Portfolio_id,df.bvd9_number,BS_FOSF_INDUSTRY_REVENUES_ACCURATE_SOURCE,BS_FOSF_INDUSTRY_REVENUES_ACCURATE, SCORE_RANGE\n" +
+                "from df_portfolio df\n" +
+                "JOIN BROWN_SHARE bs\n" +
+                "on df.bvd9_number = bs.bvd9_number\n" +
+                "where portfolio_id = '" + portfolioID + "'"+
+                "and year = '" + year + "'"+
+                "and month = '" + month + "'" ;
+        List<DashboardPerformanceChart> performanceChartESGScore = new ArrayList<>();
+
+        for (Map<String, Object> each : getQueryResultMap(Query)) {
+            DashboardPerformanceChart model = new DashboardPerformanceChart();
+            model.setBVD9_NUMBER(each.get("BVD9_NUMBER").toString());
+           model.setBS_FOSF_INDUSTRY_REVENUES_ACCURATE_SOURCE(each.get("BS_FOSF_INDUSTRY_REVENUES_ACCURATE_SOURCE")==null ? "NA":each.get("BS_FOSF_INDUSTRY_REVENUES_ACCURATE_SOURCE").toString());
+           model.setBS_FOSF_INDUSTRY_REVENUES_ACCURATE(each.get("BS_FOSF_INDUSTRY_REVENUES_ACCURATE").toString());
+           model.setSCORE_RANGE(each.get("SCORE_RANGE").toString());
+
+
+            performanceChartESGScore.add(model);
+        }
+        return performanceChartESGScore;
+
+
+    }
+
+
 }
