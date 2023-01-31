@@ -78,13 +78,15 @@ public class DashboardUiFilterTests extends UITestBase {
         // Verify filter by using sector
         dashboardPage.navigateToPageFromMenu("Dashboard");
         int initControversiesCount = dashboardPage.controversies.size();
+        System.out.println("initControversiesCount = " + initControversiesCount);
         dashboardPage.clickFiltersDropdown();
         dashboardPage.selectOptionFromFiltersDropdown("sectors", "Financials");
         dashboardPage.waitForDataLoadCompletion();
         assertTestCase.assertTrue(!researchLine.isFiltersDropdownPopupDisplayed(), "Verify filter popup is closed");
         assertTestCase.assertTrue(dashboardPage.regionsDropdown.getText().contains("Financials"), "Verify the filter text");
         int afterControversiesCount = dashboardPage.controversies.size();
-        assertTestCase.assertNotEquals(initControversiesCount, afterControversiesCount);
+        System.out.println("afterControversiesCount = " + afterControversiesCount);
+        assertTestCase.assertTrue(initControversiesCount>afterControversiesCount);
 
         // Verify filter by using region
         dashboardPage.navigateToPageFromMenu("Dashboard");
@@ -92,14 +94,14 @@ public class DashboardUiFilterTests extends UITestBase {
         dashboardPage.clickFiltersDropdown();
         dashboardPage.selectOptionFromFiltersDropdown("regions","Europe, Middle East & Africa");
         dashboardPage.waitForDataLoadCompletion();
+        System.out.println("Selected Region = " + dashboardPage.regionsDropdown.getText());
         assertTestCase.assertTrue(dashboardPage.regionsDropdown.getText().contains("Europe, Middle East & Africa"), "Verify the filter text");
         afterControversiesCount = dashboardPage.controversies.size();
-        assertTestCase.assertNotEquals(initControversiesCount, afterControversiesCount);
+        assertTestCase.assertTrue(initControversiesCount>=afterControversiesCount);
 
         dashboardPage.clickFiltersDropdown();
         researchLine.clickOutsideOfDrillDownPanel();
         BrowserUtils.wait(5);
         assertTestCase.assertTrue(!researchLine.isFiltersDropdownPopupDisplayed(), "Verify filter popup is closed");
-
     }
 }

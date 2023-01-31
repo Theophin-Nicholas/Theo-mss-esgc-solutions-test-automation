@@ -541,4 +541,15 @@ public class BrowserUtils {
     {
         return Lists.transform(listOfString, function);
     }
+
+    public static List<String> specialSort(List<String> list) {
+        //sort list with case-insensitive order and ignore special characters
+        list.sort(new Comparator<String>() {
+            @Override
+            public int compare(String o1, String o2) {
+                return o1.replaceAll("[^a-zA-Z0-9 ]", "~").compareToIgnoreCase(o2.replaceAll("[^a-zA-Z0-9 ]", "~"));
+            }
+        });
+        return list;
+    }
 }
