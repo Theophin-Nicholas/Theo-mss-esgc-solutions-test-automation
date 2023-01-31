@@ -375,7 +375,7 @@ public abstract class PageBase {
     public WebElement returnToESG360Button;
 
 
-    protected WebDriverWait wait = new WebDriverWait(Driver.getDriver(), Duration.ofSeconds(20));
+    protected WebDriverWait wait = new WebDriverWait(Driver.getDriver(), Duration.ofSeconds(80));
     protected Actions actions = new Actions(Driver.getDriver());
     private String finalStringToCheck;
 

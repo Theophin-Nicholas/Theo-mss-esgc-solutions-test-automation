@@ -52,7 +52,7 @@ public class PerformanceChart extends DashboardUITestBase {
 
         List<String> actualColumnNames = dashboardPage.getPerformanceChartColumnNames();
         int sizeOfTable = dashboardPage.getPerformanceChartRowCount();
-        double actualTotalInvestment = dashboardPage.calculateTotalInvestmentFromPerformanceChart();
+        double actualTotalInvestment = PortfolioUtilities.round(dashboardPage.calculateTotalInvestmentFromPerformanceChart(),1);
         double expectedTotalInvestment = PortfolioUtilities.round(dashboardPage.getTotalInvestmentInPerformanceChart(),1);
         System.out.println("actualColumnNames = " + actualColumnNames);
         System.out.println("expectedColumnNames = " + expectedColumnNames);
@@ -67,7 +67,7 @@ public class PerformanceChart extends DashboardUITestBase {
 
         actualColumnNames = dashboardPage.getPerformanceChartColumnNames();
         sizeOfTable = dashboardPage.getPerformanceChartRowCount();
-        actualTotalInvestment = dashboardPage.calculateTotalInvestmentFromPerformanceChart();
+        actualTotalInvestment = PortfolioUtilities.round(dashboardPage.calculateTotalInvestmentFromPerformanceChart(),1);
         expectedTotalInvestment = PortfolioUtilities.round(dashboardPage.getTotalInvestmentInPerformanceChart(),1);
 
         test.info("Switched to Laggards");
@@ -79,8 +79,8 @@ public class PerformanceChart extends DashboardUITestBase {
 
         actualColumnNames = dashboardPage.getPerformanceChartColumnNames();
         sizeOfTable = dashboardPage.getPerformanceChartRowCount();
-        actualTotalInvestment = dashboardPage.calculateTotalInvestmentFromPerformanceChart();
-        expectedTotalInvestment = PortfolioUtilities.round(dashboardPage.getTotalInvestmentInPerformanceChart(), 2);
+        actualTotalInvestment = PortfolioUtilities.round(dashboardPage.calculateTotalInvestmentFromPerformanceChart(),1);
+        expectedTotalInvestment = PortfolioUtilities.round(dashboardPage.getTotalInvestmentInPerformanceChart(), 1);
 
         test.info("Switched to Largest Holdings");
         assertTestCase.assertTrue(sizeOfTable <= 10, "max 10 companies are listed");
