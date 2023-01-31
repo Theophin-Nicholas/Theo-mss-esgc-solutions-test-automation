@@ -7,6 +7,7 @@ import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.Database.DatabaseDriver;
 import com.esgc.Utilities.Driver;
 import com.esgc.Utilities.Environment;
+import org.openqa.selenium.JavascriptExecutor;
 import org.testng.ITestResult;
 import org.testng.annotations.*;
 
@@ -82,7 +83,13 @@ public abstract class UITestBase extends TestBase {
         }
     }
 
-
+    @BeforeMethod(onlyForGroups = {API}, groups = {SMOKE, REGRESSION, ENTITLEMENTS}, alwaysRun = true)
+    public synchronized void setupForAPITesting(@Optional String browser) {
+        BrowserUtils.wait(10);
+        String getAccessTokenScript = "return JSON.parse(localStorage.getItem('okta-token-storage')).accessToken.accessToken";
+        String accessToken = ((JavascriptExecutor) Driver.getDriver()).executeScript(getAccessTokenScript).toString();
+        System.setProperty("token", accessToken);
+    }
     @AfterMethod(onlyForGroups = {UI}, groups = {SMOKE, REGRESSION, UI})
     public void refreshPageToContinueUITesting(ITestResult result) {
         getScreenshot(result);

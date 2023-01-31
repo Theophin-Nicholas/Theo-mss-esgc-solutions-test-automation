@@ -22,6 +22,7 @@ public class ViewMethodologiesTests extends DashboardUITestBase {
         DashboardPage dashboardPage = new DashboardPage();
         dashboardPage.navigateToPageFromMenu("Dashboard");
         BrowserUtils.wait(4);
+        dashboardPage.selectSamplePortfolioFromPortfolioSelectionModal();
         dashboardPage.selectViewMethodologies();
         assertTestCase.assertTrue(dashboardPage.verifyMethodologiesPopup(), "Verify Methodologies popup");
         dashboardPage.verifyMethodologiesHeader();
