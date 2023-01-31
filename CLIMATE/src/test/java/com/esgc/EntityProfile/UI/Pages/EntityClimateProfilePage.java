@@ -44,6 +44,9 @@ public class EntityClimateProfilePage extends ClimatePageBase {
     @FindBy(xpath = "//div[@aria-labelledby='alert-dialog-title']/div[@style]//*[text()]")
     public List<WebElement> companyHeaderItems;
 
+    @FindBy(xpath="//span[@data-testid='confidence_level_test_id_2']")
+    public WebElement confidenceLevel;
+
     @FindBy(xpath = " (//*[name()='g'][contains(@class,'highcharts-legend-item highcharts-line-')])")
     public List<WebElement> temperatureAlignmentCharBenchmark;
 
@@ -80,7 +83,7 @@ public class EntityClimateProfilePage extends ClimatePageBase {
     @FindBy(xpath = "//input[@id='platform-search-test-id']")
     public WebElement searchInputBox;
 
-    @FindBy(xpath = " //div[@id='mini-0']")
+    @FindBy(xpath = "//div[@id='mini-0']")
     public WebElement firstElementOfSearch;
 
     @FindBy(id = "export_sources_doc_button")
@@ -107,8 +110,8 @@ public class EntityClimateProfilePage extends ClimatePageBase {
     @FindBy(xpath = "//div[text()='This company has ']/span")
     public WebElement subsidiaryLink;
 
-    @FindBy(xpath = "//li[@role='menuitem']/span[text()]")
-    public WebElement globalHeaderLabel;
+    @FindBy(xpath = "//li[@role='menuitem']//span[text()]")
+    public WebElement globalHeaderCompanyNameLabel;
 
     @FindBy(xpath = "//header/..//div[starts-with(text(),'Subsidiar')]")
     public WebElement subsidiaryCompaniesHeader;
@@ -158,10 +161,10 @@ public class EntityClimateProfilePage extends ClimatePageBase {
     @FindBy(xpath = "//div[@id='phyRskMgmClimate-test-id']//div[@id='chiclet-id']/child::div[2]/span")
     public WebElement PhysicalRiskMgmtWidgetValue;
 
-    @FindBy(xpath = "//div[@id='greenClimate-test-id']//div[@id='chiclet-id']/child::div[2]/span")
+    @FindBy(xpath = "//div[@id='greenClimate-test-id']//span[2]")
     public WebElement GreenShareWidgetValue;
 
-    @FindBy(xpath = "//div[@id='brownClimate-test-id']//div[@id='chiclet-id']/child::div[2]/span")
+    @FindBy(xpath = "//div[@id='brownClimate-test-id']//span[2]")
     public WebElement BrownShareWidgetValue;
 
     @FindBy(xpath = "//div[@id='tempAlignclimate-test-id']")
@@ -206,7 +209,7 @@ public class EntityClimateProfilePage extends ClimatePageBase {
     @FindBy(id = "phyClimate-test-id")
     public WebElement physicalClimateHazards;
 
-    @FindBy(xpath = "//header//div/span/span[contains(text(),'Orbis ID:')]")
+    @FindBy(xpath = "//span[contains(text(),'Orbis ID:')]/following-sibling::span")
     public WebElement orbisIdLabel;
 
     @FindBy(xpath = "//div/span[contains(text(),'Orbis ID:')]/following-sibling::span")
@@ -253,6 +256,9 @@ public class EntityClimateProfilePage extends ClimatePageBase {
 
     @FindBy(xpath = "//span[text()='Transition Risk']/../../..//div[text()='Brown Share Assessment']/../../../../../following-sibling::div//span[@variant='outlined']/../*")
     public List<WebElement> brownShareComparisonChartLegends;
+
+    @FindBy(xpath = "//div[text()='Brown Share Assessment']/../../../../../..//*[local-name()='path' and @class='highcharts-plot-line ']")
+    public WebElement brownShareComparisonChartAverageLine;
 
     @FindBy(xpath = "//span[text()='Transition Risk']/../../..//div[text()='Brown Share Assessment']/../../../../../following-sibling::div//div[text()]")
     public List<WebElement> brownShareComparisonChartAxes;
@@ -309,8 +315,14 @@ public class EntityClimateProfilePage extends ClimatePageBase {
     @FindBy(xpath = "//span[text()='Transition Risk']/../../..//div[text()='Brown Share Assessment']/../../../following-sibling::div/div/div[1]")
     public WebElement transitionRiskBrownShareWidgetSubHeading;
 
+    @FindBy(xpath = "//span[text()='Transition Risk']/../../..//div[text()='Brown Share Assessment']/../../../following-sibling::div/div/div[1]/span")
+    public WebElement transitionRiskBrownShareWidgetOverallRevenue;
+
     @FindBy(xpath = "//span[text()='Transition Risk']/../../..//div[text()='Brown Share Assessment']/../../../following-sibling::div/div/div[3]")
     public WebElement transitionRiskBrownShareWidgetUpdatedDate;
+
+    @FindBy(xpath = "//div[text()='Brown Share Assessment']//div[@id='climate-from-summaryoverview-']//div[text()]")
+    public WebElement transitionRiskBrownShareCategory;
 
     @FindBy(xpath = "//span[text()='Transition Risk']/../../..//div[text()='Brown Share Assessment']/../../../following-sibling::div//table/tbody/tr/td[1]")
     public List<WebElement> transitionRiskBrownShareTableBody;
@@ -427,16 +439,16 @@ public class EntityClimateProfilePage extends ClimatePageBase {
     public WebElement PhysicalRiskManagementTable;
     //ESG Monitoring Section
 
-    @FindBy(xpath = "//div[@id='cardInfo_box']/div[text()='Overall ESG Score']")
-    public WebElement overallEsgScoreWidget;
+    @FindBy(xpath = "//div[@id='cardInfo_box'][./div[text()='ESG Score']]")
+    public WebElement esgScoreWidget;
 
     @FindBy(xpath = "//div[@id='sector_comparison_chart_box']")
     public WebElement sectorComparisonChart;
 
-    @FindBy(xpath = "//div[.='Overall ESG Score']")
+    @FindBy(xpath = "//div[.='ESG Score']")
     public WebElement esgTitle;
 
-    @FindBy(xpath = "//div[@id='cardInfo_box']/div[text()='Overall ESG Score']/parent::div/div/div/div")
+    @FindBy(xpath = "//div[@id='cardInfo_box']/div[text()='ESG Score']/parent::div/div/div/div")
     public List<WebElement> esgScores;
 
     @FindBy(xpath = "//div[.='Overall ESG Score']/../div/div/div/div[2]")
@@ -543,14 +555,14 @@ public class EntityClimateProfilePage extends ClimatePageBase {
 
     public boolean validateGlobalCompanyNameHeader(String companyName) {
         try{
-            return Driver.getDriver().findElement(By.xpath("//li[@role='menuitem']/span[text()='"+companyName+"']")).isDisplayed();
+            return Driver.getDriver().findElement(By.xpath("//li//span[text()='"+companyName+"']")).isDisplayed();
         }catch(Exception e){
             return false;
         }
     }
 
     public void clickGlobalHeader() {
-        globalHeaderLabel.click();
+        BrowserUtils.waitForClickablility(globalHeaderCompanyNameLabel,20).click();
     }
 
     public void clickSubsidiaryCompaniesLink() {
@@ -948,17 +960,17 @@ public class EntityClimateProfilePage extends ClimatePageBase {
         return BrownShareWidgetValue.isDisplayed();
     }
 
-    public void validatColorOfValueBoxAndPieChart(String reserchLine, int score) {
+    public void validateColorOfValueBoxAndPieChart(String researchLine, int score) {
         String expectedColorCode = "";
         String actualValueBoxcolor = "";
         String actualpieChartColor = "";
         String percentValue = "";
-        System.out.println("reserchLine = " + reserchLine);
+        System.out.println("reserchLine = " + researchLine);
         System.out.println("score = " + score);
-        switch (reserchLine) {
+        switch (researchLine) {
             case "Green Share":
                 percentValue = Driver.getDriver().findElement(By.xpath("(//div[@id='chiclet-id'])[2]")).getText();
-                expectedColorCode = getColorcode(reserchLine, score);
+                expectedColorCode = getColorcode(researchLine, score);
                 if (!percentValue.equalsIgnoreCase("0%")) {
                     actualValueBoxcolor = Color.fromString(GreenShareWidgetValue.getCssValue("background-color")).asHex();
                     actualpieChartColor = Color.fromString(pieCharts.get(0).getCssValue("fill")).asHex();
@@ -969,7 +981,7 @@ public class EntityClimateProfilePage extends ClimatePageBase {
                 }
                 break;
             case "Brown Share":
-                expectedColorCode = getColorcode(reserchLine, score);
+                expectedColorCode = getColorcode(researchLine, score);
                 percentValue = Driver.getDriver().findElement(By.xpath("(//div[@id='chiclet-id'])[3]")).getText();
                 if (!percentValue.equalsIgnoreCase("0%")) {
                     actualValueBoxcolor = Color.fromString(BrownShareWidgetValue.getCssValue("background-color")).asHex();
@@ -1041,60 +1053,54 @@ public class EntityClimateProfilePage extends ClimatePageBase {
     public void validateQualitativeScoreHeader() {
         Assert.assertTrue(temperatureAlignmentWidgetHeader.get(1).isDisplayed());
         WebElement QualitativeScoreInnerBox = temperatureAlignmentWidgetHeader.get(1).findElement(By.xpath("//div[@id='innerBox00']"));
-        Assert.assertTrue(Color.fromString(QualitativeScoreInnerBox.getCssValue("background-color")).asHex().
-                equals(getTempratureAligmentColor(QualitativeScoreInnerBox.getText()).get("background")));
-        Assert.assertTrue(Color.fromString(QualitativeScoreInnerBox.getCssValue("color")).asHex().
-                equals(getTempratureAligmentColor(QualitativeScoreInnerBox.getText()).get("text")));
-        Assert.assertTrue(QualitativeScoreInnerBox.getCssValue("font-size").equals("12px"));
-        Assert.assertTrue(QualitativeScoreInnerBox.getCssValue("font-family").equals("WhitneyNarrSemiBold, Roboto, Arial, sans-serif"));
+        Assert.assertEquals(Color.fromString(QualitativeScoreInnerBox.getCssValue("background-color")).asHex(),
+                getTemperatureAligmentColor(QualitativeScoreInnerBox.getText()).get("background"));
+        Assert.assertEquals(Color.fromString(QualitativeScoreInnerBox.getCssValue("color")).asHex(),
+                getTemperatureAligmentColor(QualitativeScoreInnerBox.getText()).get("text"));
+        Assert.assertEquals(QualitativeScoreInnerBox.getCssValue("font-size"), ("12px"));
+        Assert.assertEquals(QualitativeScoreInnerBox.getCssValue("font-family"), ("WhitneyNarrSemiBold, Roboto, Arial, sans-serif"));
     }
 
-    public void validateTempratureAlignmentImpliedTemperatureRise() {
+    public void validateTemperatureAlignmentImpliedTemperatureRise() {
         if (temperatureAlignmentDetailDivs.get(0).isDisplayed()) {
-
             Assert.assertTrue(temperatureAlignmentDetailDivs.get(0).getText().contains("Implied Temperature Rise:"));
-            Assert.assertTrue(Color.fromString(temperatureAlignmentDetailDivs.get(0).getCssValue("color")).asHex().
-                    equals("#263238"));
-            Assert.assertTrue(temperatureAlignmentDetailDivs.get(0).getCssValue("font-size").equals("12px"));
-            Assert.assertTrue(temperatureAlignmentDetailDivs.get(0).getCssValue("font-family")
-                    .equals("WhitneyNarrSemiBold, Roboto, Arial, sans-serif"));
+            Assert.assertEquals(Color.fromString(temperatureAlignmentDetailDivs.get(0).getCssValue("color")).asHex(), ("#263238"));
+            Assert.assertEquals(temperatureAlignmentDetailDivs.get(0).getCssValue("font-size"), ("12px"));
+            Assert.assertEquals(temperatureAlignmentDetailDivs.get(0).getCssValue("font-family"), "WhitneyNarrMedium, Roboto, Arial, sans-serif");
             Assert.assertTrue(temperatureAlignmentDetailDivs.get(0).findElement(By.xpath("span")).getText().contains("°C"));
         }
     }
 
-    public void validateTempratureAlignmentEmissionsReductionTargetYear() {
+    public void validateTemperatureAlignmentEmissionsReductionTargetYear() {
         if (temperatureAlignmentDetailDivs.get(1).isDisplayed()) {
             Assert.assertTrue(temperatureAlignmentDetailDivs.get(1).getText().contains("Emissions Reduction Target Year:"));
-            Assert.assertTrue(Color.fromString(temperatureAlignmentDetailDivs.get(1).getCssValue("color")).asHex().
-                    equals("#263238"));
-            Assert.assertTrue(temperatureAlignmentDetailDivs.get(1).getCssValue("font-size").equals("12px"));
-            Assert.assertTrue(temperatureAlignmentDetailDivs.get(1).getCssValue("font-family")
-                    .equals("WhitneyNarrSemiBold, Roboto, Arial, sans-serif"));
+            Assert.assertEquals(Color.fromString(temperatureAlignmentDetailDivs.get(1).getCssValue("color")).asHex(), "#263238");
+            Assert.assertEquals(temperatureAlignmentDetailDivs.get(1).getCssValue("font-size"), "12px");
+            Assert.assertEquals(temperatureAlignmentDetailDivs.get(1).getCssValue("font-family"),
+                    "WhitneyNarrMedium, Roboto, Arial, sans-serif");
             Assert.assertTrue(validateIfNumeic(temperatureAlignmentDetailDivs.get(1).findElement(By.xpath("span")).getText()));
         }
 
     }
 
-    public void validateTempratureAlignmentTargetDescription() {
+    public void validateTemperatureAlignmentTargetDescription() {
         if (temperatureAlignmentDetailDivs.get(2).isDisplayed()) {
             Assert.assertTrue(temperatureAlignmentDetailDivs.get(2).getText().contains("Target Description:"));
-            Assert.assertTrue(Color.fromString(temperatureAlignmentDetailDivs.get(2).getCssValue("color")).asHex().
-                    equals("#263238"));
-            Assert.assertTrue(temperatureAlignmentDetailDivs.get(2).getCssValue("font-size").equals("12px"));
-            Assert.assertTrue(temperatureAlignmentDetailDivs.get(2).getCssValue("font-family")
-                    .equals("WhitneyNarrSemiBold, Roboto, Arial, sans-serif"));
+            Assert.assertEquals(Color.fromString(temperatureAlignmentDetailDivs.get(2).getCssValue("color")).asHex(), "#263238");
+            Assert.assertEquals(temperatureAlignmentDetailDivs.get(2).getCssValue("font-size"), "12px");
+            Assert.assertEquals(temperatureAlignmentDetailDivs.get(2).getCssValue("font-family"),
+                    ("WhitneyNarrMedium, Roboto, Arial, sans-serif"));
 
         }
     }
 
-    public void validateTempratureAlignmentUpdatedOn() {
+    public void validateTemperatureAlignmentUpdatedOn() {
         if (temperatureAlignmentDetailDivs.get(2).isDisplayed()) {
             Assert.assertTrue(temperatureAlignmentDetailDivs.get(2).getText().contains("The company reports a target"));
-            Assert.assertTrue(Color.fromString(temperatureAlignmentDetailDivs.get(2).getCssValue("color")).asHex().
-                    equals("#263238"));
-            Assert.assertTrue(temperatureAlignmentDetailDivs.get(2).getCssValue("font-size").equals("12px"));
-            Assert.assertTrue(temperatureAlignmentDetailDivs.get(2).getCssValue("font-family")
-                    .equals("WhitneyNarrSemiBold, Roboto, Arial, sans-serif"));
+            Assert.assertEquals(Color.fromString(temperatureAlignmentDetailDivs.get(2).getCssValue("color")).asHex(), "#263238");
+            Assert.assertEquals(temperatureAlignmentDetailDivs.get(2).getCssValue("font-size"), "12px");
+            Assert.assertEquals(temperatureAlignmentDetailDivs.get(2).getCssValue("font-family"),
+                    ("WhitneyNarrMedium, Roboto, Arial, sans-serif"));
 
         }
     }
@@ -1107,14 +1113,14 @@ public class EntityClimateProfilePage extends ClimatePageBase {
     }
 
 
-    public Map<String, String> getTempratureAligmentColor(String value) {
+    public Map<String, String> getTemperatureAligmentColor(String value) {
         Map<String, String> color = new HashMap<>();
-        switch (value) {
-            case "Well Below 2°C":
+        switch (value.toUpperCase()) {
+            case "WELL BELOW 2°C":
                 color.put("background", "#eac550");
                 color.put("text", "#333333");
                 break;
-            case "Below 2°C":
+            case "BELOW 2°C":
                 color.put("background", "#e8951c");
                 color.put("text", "#ffffff");
 
@@ -1124,12 +1130,12 @@ public class EntityClimateProfilePage extends ClimatePageBase {
                 color.put("text", "#ffffff");
 
                 break;
-            case "Above 2°C":
+            case "ABOVE 2°C":
                 color.put("background", "#d63229");
                 color.put("text", "#ffffff");
 
                 break;
-            case "No Info":
+            case "NO INFO":
                 color.put("background", "#dbe5a3");
                 color.put("text", "#333333");
 
@@ -1146,8 +1152,11 @@ public class EntityClimateProfilePage extends ClimatePageBase {
 
     }
 
-    public String getEntityOrbisId() {
-        return orbisIdLabel.getText().replace("Orbis ID: ", "");
+    public String getEntityOrbisIdFromUI() {
+        clickGlobalHeader();
+        String orbisId = orbisIdLabel.getText();
+        sendESCkey();
+        return orbisId;
     }
 
     public String getGreenShareScoreRange() {
@@ -1183,8 +1192,7 @@ public class EntityClimateProfilePage extends ClimatePageBase {
 
     public boolean verifyOverallEsgScoreWidget() {
         try {
-            wait.until(ExpectedConditions.visibilityOf(overallEsgScoreWidget));
-            return true;
+            return wait.until(ExpectedConditions.visibilityOf(esgScoreWidget)).isDisplayed();
         } catch (Exception e) {
             return false;
         }
@@ -2201,12 +2209,8 @@ public class EntityClimateProfilePage extends ClimatePageBase {
         List<String> scores = supplyChainRiskScores.stream().map(WebElement::getText).collect(Collectors.toList());
         System.out.println("scores = " + scores);
 
-        //current year
-        String currentYear = Year.now().minusYears(1).toString();
-        System.out.println("currentYear = " + currentYear);
-
         //Database Connection
-        String query = "select * from DF_TARGET.ENTITY_SCORE_CATEGORY where ENTITY_ID_BVD9 = '" + entity + "' and RISK_CATEGORY_ID in (6, 7 ) and RELEASE_YEAR='" + currentYear + "'";
+        String query = "select * from DF_TARGET.ENTITY_SCORE_CATEGORY where ENTITY_ID_BVD9 = '" + entity + "' and RISK_CATEGORY_ID in (6, 7 ) qualify row_number() over(partition by RISK_CATEGORY_ID order by RELEASE_YEAR desc, RELEASE_MONTH desc)=1";
         DatabaseDriver.createDBConnection();
         List<Map<String, Object>> result = DatabaseDriver.getQueryResultMap(query);
         System.out.println(result.size() + " records found");
@@ -2344,7 +2348,7 @@ public class EntityClimateProfilePage extends ClimatePageBase {
 
     public boolean verifyESGScoreValue() {
         for (WebElement score : esgScores) {
-            System.out.println("score " + score.getText().split("\n")[1]);
+          //  System.out.println("score " + score.getText().split("\n")[1]);
             if (score.getText().split("/")[1].equals("100")) {
                 System.out.println("ESG score is verified = " + score.getText());
                 String color = Color.fromString(score.getCssValue("color")).asHex();
@@ -2354,6 +2358,28 @@ public class EntityClimateProfilePage extends ClimatePageBase {
             }
         }
         return false;
+    }
+
+    public void verifyESGScoreHeaders() {
+       List<String> pillars= Arrays.asList(new String[]{"Environment","Social","Governance"});
+        int count = 0;
+        //actPillars.put("ESG Rating");
+        for (WebElement pillar : esgScorePillars) {
+            if (count == 0) {
+                count++;
+                continue;
+            }
+
+            String pillarName = pillar.getText().substring(0, pillar.getText().indexOf("\n"));
+            String pillarScore = pillar.getText().substring(pillar.getText().indexOf("\n") + 1);
+            assertTestCase.assertTrue(pillars.contains(pillarName),"Validating the pillar name " + pillarName);
+            assertTestCase.assertEquals(pillarScore.split("/")[1],("100"), "Validating " + pillarName + " Score format" ) ;
+            String color = Color.fromString(pillar.getCssValue("color")).asHex();
+            System.out.println("color = " + color);
+            assertTestCase.assertEquals(color,"#ffffff","validating color");
+        }
+
+
     }
 
     public boolean verifyESGScorePillars(String Entity) {
@@ -2526,6 +2552,23 @@ public class EntityClimateProfilePage extends ClimatePageBase {
 
     }
 
+    public void verifyBrownShareCategory() {
+        List<String> expectedCategories = new ArrayList<>();
+        expectedCategories.add("NO INVOLVEMENT");
+        expectedCategories.add("MINOR INVOLVEMENT");
+        expectedCategories.add("MAJOR INVOLVEMENT");
+        String actualCategory = transitionRiskBrownShareCategory.getText();
+        assertTestCase.assertTrue(expectedCategories.contains(actualCategory), expectedCategories+" Category is not available from Expected Brown share Categories");
+    }
+
+    public void verifyBrownShareWidgetOverallRevenue(String orbisId) {
+        String uiOverallRevenuePercent = transitionRiskBrownShareWidgetOverallRevenue.getText();
+        EntityClimateProfilePageQueries queries = new EntityClimateProfilePageQueries();
+        String dbOverallRevenuePercent = queries.getBrownShareData(orbisId).get("SCORE_RANGE");
+        assertTestCase.assertEquals(uiOverallRevenuePercent.replace(" ",""),dbOverallRevenuePercent, "Overall Revenue Percent from UI is not matching with DB");
+
+    }
+
     public void verifyBrownShareComparisonChartLegends(String sectorName, String companyName) {
         assertTestCase.assertEquals(brownShareComparisonChartLegends.get(0).getAttribute("style"),"background: rgb(178, 133, 89);", "Brown Share Comparison Chart - Verify first legend color");
         assertTestCase.assertTrue(brownShareComparisonChartLegends.get(1).getText().contains(sectorName), "Brown Share Comparison Chart - Verify first legend label");
@@ -2536,8 +2579,16 @@ public class EntityClimateProfilePage extends ClimatePageBase {
     public void verifyBrownShareComparisonChartAxes() {
         assertTestCase.assertEquals(brownShareComparisonChartAxes.get(1).getText(),"Major", "Brown Share Comparison Chart - Verify X-Axis Label");
         assertTestCase.assertEquals(brownShareComparisonChartAxes.get(2).getText(),"None", "Brown Share Comparison Chart - Verify X-Axis Label");
-        assertTestCase.assertEquals(brownShareComparisonChartAxes.get(3).getText(),"0%", "Brown Share Comparison Chart - Verify X-Axis Label");
-        assertTestCase.assertEquals(brownShareComparisonChartAxes.get(4).getText(),">=50%", "Brown Share Comparison Chart - Verify X-Axis Label");
+        assertTestCase.assertEquals(brownShareComparisonChartAxes.get(3).getText(),"0%", "Brown Share Comparison Chart - Verify Y-Axis Label");
+        assertTestCase.assertEquals(brownShareComparisonChartAxes.get(4).getText(),">=50%", "Brown Share Comparison Chart - Verify Y-Axis Label");
+    }
+
+    public void verifyBrownShareComparisonChartAverageLine() {
+        try{
+            brownShareComparisonChartAverageLine.isDisplayed();
+        }catch (Exception e) {
+            assertTestCase.assertTrue(false, "Average Line is not available");
+        }
     }
 
     public void verifyBrownShareComparisonChartSectorDesc(String sectorName, int sectorCompaniesCount, String companyName) {

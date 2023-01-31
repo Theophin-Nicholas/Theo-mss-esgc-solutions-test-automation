@@ -19,7 +19,7 @@ import static com.esgc.Utilities.Groups.*;
 
 public class ImpactTableTests extends UITestBase {
 
-    @Test(groups = {REGRESSION, UI, SMOKE},
+    @Test(groups = {REGRESSION, UI},
             description = "ESGCA-4932 - Verify Impact Filter dropdown",
             dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
     @Xray(test = {4932, 6772})
@@ -46,7 +46,7 @@ public class ImpactTableTests extends UITestBase {
         assertTestCase.assertTrue(researchLinePage.isImpactGraphPresent(), "Impact Graph Verification");
     }
 
-    @Test(groups = {REGRESSION, UI, SMOKE},
+    @Test(groups = {REGRESSION, UI},
             description = "ESGCA-4962  - Verify Impact Table columns",
             dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
     @Xray(test = {4962, 6931})
@@ -90,7 +90,7 @@ public class ImpactTableTests extends UITestBase {
         }
     }
 
-    @Test(enabled = true, groups = {REGRESSION, UI, SMOKE},
+    @Test(enabled = true, groups = {REGRESSION, UI},
             description = "ESGCA-4998 - Verify Score Category colors",
             dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
     @Xray(test = {4998, 6772})

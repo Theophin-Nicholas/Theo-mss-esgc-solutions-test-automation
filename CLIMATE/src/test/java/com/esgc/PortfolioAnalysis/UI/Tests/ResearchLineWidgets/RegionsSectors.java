@@ -36,7 +36,7 @@ public class RegionsSectors extends UITestBase {
 
     //Test cases 467,822,823,1208,1265,1279,1281,1704,1705,1748,1920,2145,2149,2212.2488
     //main 467
-    @Test(groups = {REGRESSION, UI, SMOKE},
+    @Test(groups = {REGRESSION, UI},
             description = "Verify if Region and Sector Drill Downs are Displayed as Expected",
             dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
     @Xray(test = {467, 822, 823, 1208, 1265, 1279, 1281, 1704, 1705, 1748, 1920, 2145, 2149, 2212, 2488, 6763, 6762, 6761, 6760, 6759, 6757, 2665})
@@ -55,6 +55,7 @@ public class RegionsSectors extends UITestBase {
         BrowserUtils.wait(5);
         researchLinePage.selectRandomPortfolioFromPortfolioSelectionModal();
         BrowserUtils.wait(5);
+        System.out.println("Random Portfolio Selected");
         assertTestCase.assertTrue(researchLinePage.verifyRegionSectorDrillDowns(page), "Region & Sector drill downs verified", 411, 420, 467, 469, 470, 822, 823, 1208, 1265, 1279, 1281, 1704, 1705, 1748, 1920, 2145, 2149, 2212, 2488);
         test.pass("Regions & Sectors Table rows columns and content verified");
     }
@@ -106,7 +107,9 @@ public class RegionsSectors extends UITestBase {
         test.pass("Regions & Sectors Charts highlighted with hover action");
     }
 
-    @Test(groups = {REGRESSION, UI, SMOKE},
+
+    //Descoped in story https://esjira/browse/ESGCA-9398
+    @Test(enabled = false, groups = {REGRESSION, UI, SMOKE},
             dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
     @Xray(test = {4224, 4225, 4227, 4226, 4231})
     public void verify_MoM_QoQ_TextIsAvailable(String page) {
@@ -121,7 +124,7 @@ public class RegionsSectors extends UITestBase {
 
     }
 
-    @Test(groups = {REGRESSION, UI, SMOKE},
+    @Test(groups = {REGRESSION, UI},
             dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
     @Xray(test = 412)
     public void verify_RegionCardsOrder(String page) {
@@ -136,7 +139,7 @@ public class RegionsSectors extends UITestBase {
         System.out.println("Region Card Order validated");
     }
 
-    @Test(groups = {REGRESSION, UI, SMOKE},
+    @Test(groups = {REGRESSION, UI},
             dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
     @Xray(test = 423)
     public void verify_SectorCardsOrder(String page) {

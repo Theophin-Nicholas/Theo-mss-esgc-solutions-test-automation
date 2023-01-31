@@ -1,23 +1,20 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
-<suite name="ESGC API Suite">   <!-- Parallel execution eg.: parallel="methods" thread-count="8" -->
+<suite name="ESGC API Suite" >   <!-- Parallel execution eg.: parallel="methods" thread-count="8" -->
 
 
     <test name="ESGC API Test">
 
-        <parameter name="reportName" value="API Test Report"/>
-        <parameter name="url"
-                   value="https://solutions-qa.mra-esg-nprd.aws.moodys.tld/"/> <!-- Add URL here "value=... "-->
+        <parameter name="reportName" value="API Regression Test Report"/>
 
         <groups>
             <run>
-                <include name="errorMessages"/>
+                <include name="api"/>
             </run>
-
         </groups>
 
         <packages>
 
-            <package name="com.esgc.Tests.*"/>
+            <package name="com.esgc.*"/>
 
         </packages>
     </test>

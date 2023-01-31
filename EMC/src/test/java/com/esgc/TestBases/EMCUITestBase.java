@@ -36,6 +36,7 @@ public abstract class EMCUITestBase extends TestBase {
         System.out.println(System.getProperty("env"));
         if (ConfigurationReader.getProperty("environment").equals("prod")) {
             loginPage.loginEMCInternal();
+
         } else {
             loginPage.loginWithInternalUser();
         }

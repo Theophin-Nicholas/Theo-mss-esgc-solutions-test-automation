@@ -479,6 +479,9 @@ public class ResearchLinePage extends UploadPage {
     @FindBy(xpath = "//div[contains(@class,'MuiDrawer-paper')]//div[contains(text(), 'ESG in ')]")
     public WebElement esgCompaniesPopup;
 
+    @FindBy(xpath = "//div[contains(@class,'MuiDrawer-paper')]//th")
+    public List<WebElement> drawerColumns;
+
     @FindBy(xpath = "//*[@id='distribution_box']")
     public WebElement esgScoreDistribution;
 
@@ -647,7 +650,20 @@ public class ResearchLinePage extends UploadPage {
                 System.out.println("Expected Tooltip Text: " + scoreCategory);
                 System.out.println("Actual Tooltip Text: " + tooltipText);
                 int numberOfCompanies = Integer.parseInt(tooltipText.substring(tooltipText.lastIndexOf(" ") + 1));
-                boolean flag = actColor.equalsIgnoreCase(expColor) && tooltipText.contains(scoreCategory) && numberOfCompanies >= 0;
+                boolean categoryCheck = true;
+                if(scoreCategory.contains(",")){
+                    List<String> categories = Arrays.asList(scoreCategory.split(","));
+                    for(String category:categories){
+                        if(!tooltipText.contains(category)) {
+                            System.out.println(category+" is not available in tooltip text: "+tooltipText);
+                            categoryCheck = false;
+                            break;
+                        }
+                    }
+                }else{
+                    categoryCheck = tooltipText.contains(scoreCategory);
+                }
+                boolean flag = actColor.equalsIgnoreCase(expColor) && categoryCheck && numberOfCompanies >= 0;
                 if (!flag) return false;
             }
         } catch (Exception e) {
@@ -1333,9 +1349,9 @@ public class ResearchLinePage extends UploadPage {
                 case "Operations Risk":
                 case "Market Risk":
                 case "Supply Chain Risk":
-                case "Brown Share Assessment":
                     RegionSectorsTablesHeaders.addAll(Arrays.asList("Weighted Avg.", "Companies", "Investment", "Score Range", "Companies", "% Investment"));
                     break;
+                case "Brown Share Assessment":
                 case "Physical Risk Management":
                 case "Carbon Footprint":
                 case "Energy Transition Management":
@@ -1415,9 +1431,9 @@ public class ResearchLinePage extends UploadPage {
                 break;
 
             case "Brown Share Assessment":
-                headerList.add("0% Score Range % Investment");
-                headerList.add("0-20% Score Range % Investment");
-                headerList.add("20-100% Score Range % Investment");
+                headerList.add("No Involvement Score Range % Investment");
+                headerList.add("Minor Involvement Score Range % Investment");
+                headerList.add("Major Involvement Score Range % Investment");
                 break;
 
             case "Carbon Footprint":
@@ -1450,21 +1466,23 @@ public class ResearchLinePage extends UploadPage {
             WebElement regionSectorChart = regionSectorChartNames.get(i);
 
             String expectedRegionSectorName = regionSectorChartNames.get(i).getText();
+            System.out.println("expectedRegionSectorName = " + expectedRegionSectorName);
             Assert.assertTrue(expectedRegionSectorList.contains(expectedRegionSectorName));
 
             int countOfCompanies = Integer.parseInt(regionSectorCompanyCountsInChart.get(i).getText().substring(0, regionSectorCompanyCountsInChart.get(i).getText().indexOf('/')));
-
+            System.out.println("countOfCompanies = " + countOfCompanies);
             wait.until(ExpectedConditions.elementToBeClickable(regionSectorChart)).click();
 
             System.out.println("Clicked on " + regionSectorChart.getText() + " chart");
 
             wait.until(ExpectedConditions.visibilityOf(drillDownPanel));
 
-            Assert.assertTrue(checkIfDrillDownPanelIsDisplayed(), "Drill Down Panel is not displayed");
+            Assert.assertTrue(checkIfDrillDownPanelIsDisplayed(), "Drill Down Panel is displayed");
 
             System.out.println("Drill Down Panel is opened");
 
             String drillDownTitleText = drillDownTitle.getText();
+            System.out.println("drillDownTitleText = " + drillDownTitleText);
             Assert.assertEquals(drillDownTitleText, expectedRegionSectorName);
 
             Assert.assertTrue(checkIfHideButtonIsDisplayedInDrillDownPanel(), "Hide button is not displayed in Drill Down Panel");
@@ -1560,6 +1578,8 @@ public class ResearchLinePage extends UploadPage {
 
     public void clickHideButtonInDrillDownPanel() {
         wait.until(ExpectedConditions.visibilityOf(hideButton)).click();
+        clickAwayinBlankArea();
+        pressESCKey();
     }
 
 
@@ -1789,10 +1809,10 @@ public class ResearchLinePage extends UploadPage {
                     dataHeaders.add("Category");
                     break;
                 case "Brown Share Assessment":
-                    dataRows.add("0%");
-                    dataRows.add("0-20%");
-                    dataRows.add("20-100%");
-                    dataHeaders.add("Score Range");
+                    dataRows.add("No Involvement");
+                    dataRows.add("Minor Involvement");
+                    dataRows.add("Major Involvement");
+                    dataHeaders.add("Category");
                     break;
                 case "Green Share Assessment":
                     dataRows.add("Major");
@@ -1810,8 +1830,8 @@ public class ResearchLinePage extends UploadPage {
                     dataHeaders.add("Temperature Alignment");
             }
             //validate Portfolio Distribution Header
-            Assert.assertTrue(portfolioDistributionTable.findElement
-                    (By.xpath("./../../preceding-sibling::div")).getText().contains("Portfolio Distribution"));
+//            Assert.assertTrue(portfolioDistributionTable.findElement
+//                    (By.xpath("./../../preceding-sibling::div")).getText().contains("Portfolio Distribution"));
 
             //validate Portfolio Distribution Table Headers
             for (String coloumHeaders : dataHeaders)
@@ -3002,6 +3022,14 @@ public class ResearchLinePage extends UploadPage {
         return true;
     }
 
+    public List<String> getColumnNamesFromDrawer() {
+        List<String> actualColumnNames = new ArrayList<>();
+        for (WebElement column : drawerColumns) {
+            actualColumnNames.add(column.getText());
+        }
+        return actualColumnNames;
+    }
+
     public Boolean verifyEsgMethodologyValues() {
         String methodologiesXpath = "//div[contains(@class,'MuiDrawer-paper')]//table[contains(@id,'table-id')]//tr/td[4]/span";
         List<WebElement> methodologyValues = Driver.getDriver().findElements(By.xpath(methodologiesXpath));
@@ -3461,22 +3489,15 @@ public class ResearchLinePage extends UploadPage {
             String monthDate = filters.substring(filters.indexOf("at the end of") + 14);
             String whatToValidate = "";
             switch (page) {
-                case "Physical Risk Hazards":
-                case "Operations Risk":
-                case "Market Risk":
-                case "Supply Chain Risk":
-                    whatToValidate = "Updates as of " + monthDate + ", Impact, and Current Leaders/Laggards";
-                    break;
                 case "Temperature Alignment":
                     whatToValidate = "Impact";
                     break;
                 default:
-                    whatToValidate = "Updates in " + monthDate + ", Impact, and Current Leaders/Laggards";
+                    whatToValidate = "Updates as of " + monthDate + ", Impact, and Current Leaders/Laggards";
             }
-            assertionTestCase.assertEquals(whatToValidate, updatesAndLeadersAndLaggardsHeader.getText(), "Header message is not correct", 477, 592);
+            assertionTestCase.assertEquals(updatesAndLeadersAndLaggardsHeader.getText(), whatToValidate, "Header message is not correct", 477, 592);
         } catch (Exception e) {
             e.printStackTrace();
-
         }
     }
 

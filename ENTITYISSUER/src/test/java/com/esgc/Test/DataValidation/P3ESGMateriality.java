@@ -24,7 +24,7 @@ import static com.esgc.Utilities.Groups.REGRESSION;
 public class P3ESGMateriality extends EntityIssuerPageDataValidationTestBase {
 
     @Test(groups = {REGRESSION, ISSUER})
-    @Xray(test = {9953})
+    @Xray(test = {9953,12446})
     public void validateESGMaterialitySummaryData() {
 
         // DB Data
@@ -42,14 +42,14 @@ public class P3ESGMateriality extends EntityIssuerPageDataValidationTestBase {
         for(ESGMaterlityDBModel dbRow :eachCriteria){
 
             ESGMaterlityDriverSummaryDetails driver = APIData.getDrivers().stream().
-                    filter(f-> f.getCriteria_id().equals(dbRow.getCriteria_code())).findFirst().get();
+                    filter(f-> f.getCriteria_id().equals(dbRow.getCriteria_code()) && f.getIndicator().equals(dbRow.getIndicator())).findFirst().get();
 
             assertTestCase.assertTrue(driver.getCriteria_name().equals(dbRow.getCriteria_name()), "Validating Criteria name");
             assertTestCase.assertTrue((driver.getCriteria_score()*100.00)/100.00== dbRow.getCriteria_score(), "Validating Criteria Score");
             assertTestCase.assertTrue(driver.getCritical_controversy_exists_flag().equals(dbRow.getCritical_controversy_exists_flag()), "Validating Critical controversy Flag");
             assertTestCase.assertTrue(driver.getDisclosure_ratio()==(dbRow.getDisclosure_ratio()), "Validating Disclosure Ratio");
             assertTestCase.assertTrue(driver.getDomain().equals(dbRow.getDomain()), "Validating Domain");
-            assertTestCase.assertTrue(driver.getIndicator().equals(dbRow.getIndicator()), "Validating Indicator");
+            assertTestCase.assertEquals(driver.getIndicator(),(dbRow.getIndicator()), "Validating Indicator");
             assertTestCase.assertTrue(driver.getScore_category().equals(dbRow.getScore_category()));
             assertTestCase.assertTrue(driver.getSub_category_detailed_description().equals(dbRow.getSub_catg_desc()));
 

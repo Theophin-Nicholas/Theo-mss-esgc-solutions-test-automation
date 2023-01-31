@@ -1,4 +1,4 @@
-package com.esgc.Dashboard.DB.Tests;
+package com.esgc.EntityProfile.DB.Tests;
 
 import com.esgc.Base.TestBases.DataValidationTestBase;
 import com.esgc.EntityProfile.UI.Pages.EntityClimateProfilePage;
@@ -14,7 +14,7 @@ import static com.esgc.Utilities.Groups.*;
 public class EsgMaterialityDataValidation extends DataValidationTestBase {
 
     @Test(groups = {ENTITY_PROFILE, REGRESSION, UI})
-    @Xray(test = {9367, 9368, 9375, 8451, 8428, 8869})
+    @Xray(test = {9367, 9368, 9375, 8451, 8428, 8869,12419,12448})
     public void validateEsgMaterialityMatrix() {
 
        /* String company = "Sculptor Capital Management, Inc.";
