@@ -3,9 +3,6 @@ package com.esgc.PortfolioAnalysis.UI.Tests;
 import com.esgc.Base.API.APIModels.APIFilterPayload;
 import com.esgc.Base.API.Controllers.APIController;
 import com.esgc.Base.TestBases.UITestBase;
-import com.esgc.Base.UI.Pages.LoginPage;
-import com.esgc.Dashboard.UI.Pages.DashboardPage;
-import com.esgc.Dashboard.UI.Tests.Export.ExportUtils;
 import com.esgc.PortfolioAnalysis.UI.Pages.ResearchLinePage;
 import com.esgc.PortfolioAnalysis.UI.Tests.ExcelComparison.BrownShareAssessment;
 import com.esgc.PortfolioAnalysis.UI.Tests.ExcelComparison.CarbonFootprint;
@@ -13,7 +10,6 @@ import com.esgc.PortfolioAnalysis.UI.Tests.ExcelComparison.EsgAssessment;
 import com.esgc.PortfolioAnalysis.UI.Tests.ExcelComparison.GreenShareAssessment;
 import com.esgc.TestBase.DataProviderClass;
 import com.esgc.Utilities.BrowserUtils;
-import com.esgc.Utilities.EntitlementsBundles;
 import com.esgc.Utilities.ExcelUtil;
 import com.esgc.Utilities.Xray;
 import org.apache.commons.io.FileUtils;
@@ -24,8 +20,6 @@ import org.testng.annotations.Test;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
-import java.util.Map;
 
 import static com.esgc.Utilities.Groups.*;
 

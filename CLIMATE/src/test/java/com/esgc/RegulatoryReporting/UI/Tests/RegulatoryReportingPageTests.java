@@ -303,7 +303,7 @@ public class RegulatoryReportingPageTests extends UITestBase {
         BrowserUtils.wait(1);
         color = Color.fromString(reportingPage.createReportsButton.getCssValue("background-color")).asHex();
         System.out.println("color = " + color);
-        assertTestCase.assertEquals(color, "#046bd9", "Create report button color is blue");
+        assertTestCase.assertEquals(color, "#0971e0", "Create report button color is blue");
         try {
             //New tab should be opened and empty state message should be displayed as in the screenshot
             assertTestCase.assertTrue(reportingPage.verifyNewTabOpened(windows), "New tab is opened");

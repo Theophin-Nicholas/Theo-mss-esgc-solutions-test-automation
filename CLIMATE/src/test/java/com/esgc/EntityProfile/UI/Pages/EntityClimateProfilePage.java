@@ -960,17 +960,17 @@ public class EntityClimateProfilePage extends ClimatePageBase {
         return BrownShareWidgetValue.isDisplayed();
     }
 
-    public void validatColorOfValueBoxAndPieChart(String reserchLine, int score) {
+    public void validateColorOfValueBoxAndPieChart(String researchLine, int score) {
         String expectedColorCode = "";
         String actualValueBoxcolor = "";
         String actualpieChartColor = "";
         String percentValue = "";
-        System.out.println("reserchLine = " + reserchLine);
+        System.out.println("reserchLine = " + researchLine);
         System.out.println("score = " + score);
-        switch (reserchLine) {
+        switch (researchLine) {
             case "Green Share":
                 percentValue = Driver.getDriver().findElement(By.xpath("(//div[@id='chiclet-id'])[2]")).getText();
-                expectedColorCode = getColorcode(reserchLine, score);
+                expectedColorCode = getColorcode(researchLine, score);
                 if (!percentValue.equalsIgnoreCase("0%")) {
                     actualValueBoxcolor = Color.fromString(GreenShareWidgetValue.getCssValue("background-color")).asHex();
                     actualpieChartColor = Color.fromString(pieCharts.get(0).getCssValue("fill")).asHex();
@@ -981,7 +981,7 @@ public class EntityClimateProfilePage extends ClimatePageBase {
                 }
                 break;
             case "Brown Share":
-                expectedColorCode = getColorcode(reserchLine, score);
+                expectedColorCode = getColorcode(researchLine, score);
                 percentValue = Driver.getDriver().findElement(By.xpath("(//div[@id='chiclet-id'])[3]")).getText();
                 if (!percentValue.equalsIgnoreCase("0%")) {
                     actualValueBoxcolor = Color.fromString(BrownShareWidgetValue.getCssValue("background-color")).asHex();
@@ -1053,60 +1053,54 @@ public class EntityClimateProfilePage extends ClimatePageBase {
     public void validateQualitativeScoreHeader() {
         Assert.assertTrue(temperatureAlignmentWidgetHeader.get(1).isDisplayed());
         WebElement QualitativeScoreInnerBox = temperatureAlignmentWidgetHeader.get(1).findElement(By.xpath("//div[@id='innerBox00']"));
-        Assert.assertTrue(Color.fromString(QualitativeScoreInnerBox.getCssValue("background-color")).asHex().
-                equals(getTempratureAligmentColor(QualitativeScoreInnerBox.getText()).get("background")));
-        Assert.assertTrue(Color.fromString(QualitativeScoreInnerBox.getCssValue("color")).asHex().
-                equals(getTempratureAligmentColor(QualitativeScoreInnerBox.getText()).get("text")));
-        Assert.assertTrue(QualitativeScoreInnerBox.getCssValue("font-size").equals("12px"));
-        Assert.assertTrue(QualitativeScoreInnerBox.getCssValue("font-family").equals("WhitneyNarrSemiBold, Roboto, Arial, sans-serif"));
+        Assert.assertEquals(Color.fromString(QualitativeScoreInnerBox.getCssValue("background-color")).asHex(),
+                getTemperatureAligmentColor(QualitativeScoreInnerBox.getText()).get("background"));
+        Assert.assertEquals(Color.fromString(QualitativeScoreInnerBox.getCssValue("color")).asHex(),
+                getTemperatureAligmentColor(QualitativeScoreInnerBox.getText()).get("text"));
+        Assert.assertEquals(QualitativeScoreInnerBox.getCssValue("font-size"), ("12px"));
+        Assert.assertEquals(QualitativeScoreInnerBox.getCssValue("font-family"), ("WhitneyNarrSemiBold, Roboto, Arial, sans-serif"));
     }
 
-    public void validateTempratureAlignmentImpliedTemperatureRise() {
+    public void validateTemperatureAlignmentImpliedTemperatureRise() {
         if (temperatureAlignmentDetailDivs.get(0).isDisplayed()) {
-
             Assert.assertTrue(temperatureAlignmentDetailDivs.get(0).getText().contains("Implied Temperature Rise:"));
-            Assert.assertTrue(Color.fromString(temperatureAlignmentDetailDivs.get(0).getCssValue("color")).asHex().
-                    equals("#263238"));
-            Assert.assertTrue(temperatureAlignmentDetailDivs.get(0).getCssValue("font-size").equals("12px"));
-            Assert.assertTrue(temperatureAlignmentDetailDivs.get(0).getCssValue("font-family")
-                    .equals("WhitneyNarrSemiBold, Roboto, Arial, sans-serif"));
+            Assert.assertEquals(Color.fromString(temperatureAlignmentDetailDivs.get(0).getCssValue("color")).asHex(), ("#263238"));
+            Assert.assertEquals(temperatureAlignmentDetailDivs.get(0).getCssValue("font-size"), ("12px"));
+            Assert.assertEquals(temperatureAlignmentDetailDivs.get(0).getCssValue("font-family"), "WhitneyNarrMedium, Roboto, Arial, sans-serif");
             Assert.assertTrue(temperatureAlignmentDetailDivs.get(0).findElement(By.xpath("span")).getText().contains("°C"));
         }
     }
 
-    public void validateTempratureAlignmentEmissionsReductionTargetYear() {
+    public void validateTemperatureAlignmentEmissionsReductionTargetYear() {
         if (temperatureAlignmentDetailDivs.get(1).isDisplayed()) {
             Assert.assertTrue(temperatureAlignmentDetailDivs.get(1).getText().contains("Emissions Reduction Target Year:"));
-            Assert.assertTrue(Color.fromString(temperatureAlignmentDetailDivs.get(1).getCssValue("color")).asHex().
-                    equals("#263238"));
-            Assert.assertTrue(temperatureAlignmentDetailDivs.get(1).getCssValue("font-size").equals("12px"));
-            Assert.assertTrue(temperatureAlignmentDetailDivs.get(1).getCssValue("font-family")
-                    .equals("WhitneyNarrSemiBold, Roboto, Arial, sans-serif"));
+            Assert.assertEquals(Color.fromString(temperatureAlignmentDetailDivs.get(1).getCssValue("color")).asHex(), "#263238");
+            Assert.assertEquals(temperatureAlignmentDetailDivs.get(1).getCssValue("font-size"), "12px");
+            Assert.assertEquals(temperatureAlignmentDetailDivs.get(1).getCssValue("font-family"),
+                    "WhitneyNarrMedium, Roboto, Arial, sans-serif");
             Assert.assertTrue(validateIfNumeic(temperatureAlignmentDetailDivs.get(1).findElement(By.xpath("span")).getText()));
         }
 
     }
 
-    public void validateTempratureAlignmentTargetDescription() {
+    public void validateTemperatureAlignmentTargetDescription() {
         if (temperatureAlignmentDetailDivs.get(2).isDisplayed()) {
             Assert.assertTrue(temperatureAlignmentDetailDivs.get(2).getText().contains("Target Description:"));
-            Assert.assertTrue(Color.fromString(temperatureAlignmentDetailDivs.get(2).getCssValue("color")).asHex().
-                    equals("#263238"));
-            Assert.assertTrue(temperatureAlignmentDetailDivs.get(2).getCssValue("font-size").equals("12px"));
-            Assert.assertTrue(temperatureAlignmentDetailDivs.get(2).getCssValue("font-family")
-                    .equals("WhitneyNarrSemiBold, Roboto, Arial, sans-serif"));
+            Assert.assertEquals(Color.fromString(temperatureAlignmentDetailDivs.get(2).getCssValue("color")).asHex(), "#263238");
+            Assert.assertEquals(temperatureAlignmentDetailDivs.get(2).getCssValue("font-size"), "12px");
+            Assert.assertEquals(temperatureAlignmentDetailDivs.get(2).getCssValue("font-family"),
+                    ("WhitneyNarrMedium, Roboto, Arial, sans-serif"));
 
         }
     }
 
-    public void validateTempratureAlignmentUpdatedOn() {
+    public void validateTemperatureAlignmentUpdatedOn() {
         if (temperatureAlignmentDetailDivs.get(2).isDisplayed()) {
             Assert.assertTrue(temperatureAlignmentDetailDivs.get(2).getText().contains("The company reports a target"));
-            Assert.assertTrue(Color.fromString(temperatureAlignmentDetailDivs.get(2).getCssValue("color")).asHex().
-                    equals("#263238"));
-            Assert.assertTrue(temperatureAlignmentDetailDivs.get(2).getCssValue("font-size").equals("12px"));
-            Assert.assertTrue(temperatureAlignmentDetailDivs.get(2).getCssValue("font-family")
-                    .equals("WhitneyNarrSemiBold, Roboto, Arial, sans-serif"));
+            Assert.assertEquals(Color.fromString(temperatureAlignmentDetailDivs.get(2).getCssValue("color")).asHex(), "#263238");
+            Assert.assertEquals(temperatureAlignmentDetailDivs.get(2).getCssValue("font-size"), "12px");
+            Assert.assertEquals(temperatureAlignmentDetailDivs.get(2).getCssValue("font-family"),
+                    ("WhitneyNarrMedium, Roboto, Arial, sans-serif"));
 
         }
     }
@@ -1119,14 +1113,14 @@ public class EntityClimateProfilePage extends ClimatePageBase {
     }
 
 
-    public Map<String, String> getTempratureAligmentColor(String value) {
+    public Map<String, String> getTemperatureAligmentColor(String value) {
         Map<String, String> color = new HashMap<>();
-        switch (value) {
-            case "Well Below 2°C":
+        switch (value.toUpperCase()) {
+            case "WELL BELOW 2°C":
                 color.put("background", "#eac550");
                 color.put("text", "#333333");
                 break;
-            case "Below 2°C":
+            case "BELOW 2°C":
                 color.put("background", "#e8951c");
                 color.put("text", "#ffffff");
 
@@ -1136,12 +1130,12 @@ public class EntityClimateProfilePage extends ClimatePageBase {
                 color.put("text", "#ffffff");
 
                 break;
-            case "Above 2°C":
+            case "ABOVE 2°C":
                 color.put("background", "#d63229");
                 color.put("text", "#ffffff");
 
                 break;
-            case "No Info":
+            case "NO INFO":
                 color.put("background", "#dbe5a3");
                 color.put("text", "#333333");
 

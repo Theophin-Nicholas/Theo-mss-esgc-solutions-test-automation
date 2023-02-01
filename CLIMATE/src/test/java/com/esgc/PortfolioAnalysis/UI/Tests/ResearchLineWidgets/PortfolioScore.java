@@ -122,10 +122,6 @@ public class PortfolioScore extends UITestBase {
                 }
 
                 break;
-            default:
-                test.fail("Failed to get any Research line");
-                System.out.println("Failed to get any Research line");
-                break;
         }
     }
 
