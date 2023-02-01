@@ -35,8 +35,7 @@ public abstract class TestBase {
     public static boolean isDataValidationTest = false;
     public static boolean isBrowserOpen = false;
     public static StopWatch stopWatch = new StopWatch();
-
-
+    public static String reportPath = System.getProperty("user.dir") + File.separator + "test-output";
 
     @BeforeTest(alwaysRun = true)
     @Parameters("reportName")
@@ -124,7 +123,7 @@ public abstract class TestBase {
         String getAccessTokenScript = "return JSON.parse(localStorage.getItem('okta-token-storage')).accessToken.accessToken";
         String accessToken = ((JavascriptExecutor) Driver.getDriver()).executeScript(getAccessTokenScript).toString();
         System.setProperty("token", accessToken);
-        System.out.println("token = " + accessToken);
+        //System.out.println("token = " + accessToken);
     }
 
 }

@@ -14,10 +14,13 @@ import org.testng.annotations.Test;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.esgc.Utilities.Groups.API;
+import static com.esgc.Utilities.Groups.REGRESSION;
+
 public class ESGMateralityDriversSummaryAPITest extends EntityIssuerPageTestBase {
 
 
-    @Test(groups = {"regression", "api"},
+    @Test(groups = {REGRESSION, API},
             dataProvider = "credentialsP3", dataProviderClass = IssuerDataProviderClass.class,
             description = "Verify API Response")
     @Xray(test = {9951})
@@ -38,7 +41,7 @@ public class ESGMateralityDriversSummaryAPITest extends EntityIssuerPageTestBase
 
     }
 
-    @Test(groups = {"regression", "api"},
+    @Test(groups = {REGRESSION, API},
             dataProvider = "credentialsP3", dataProviderClass = IssuerDataProviderClass.class,
             description = "Verify API Response")
     @Xray(test = {9948})

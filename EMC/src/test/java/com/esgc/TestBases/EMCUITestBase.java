@@ -13,6 +13,8 @@ import org.testng.annotations.*;
 import java.time.Duration;
 import java.util.List;
 
+import static com.esgc.Utilities.Groups.*;
+
 public abstract class EMCUITestBase extends TestBase {
 
     @BeforeClass(alwaysRun = true)
@@ -34,6 +36,7 @@ public abstract class EMCUITestBase extends TestBase {
         System.out.println(System.getProperty("env"));
         if (ConfigurationReader.getProperty("environment").equals("prod")) {
             loginPage.loginEMCInternal();
+
         } else {
             loginPage.loginWithInternalUser();
         }
@@ -42,7 +45,7 @@ public abstract class EMCUITestBase extends TestBase {
 
     }
 
-    @AfterMethod(onlyForGroups = {"ui"}, groups = {"smoke", "ui", "regression"})
+    @AfterMethod(onlyForGroups = {UI}, groups = {SMOKE, UI, REGRESSION})
     public void refreshEMCPage(ITestResult result) {
         getScreenshot(result);
         Driver.getDriver().navigate().refresh();

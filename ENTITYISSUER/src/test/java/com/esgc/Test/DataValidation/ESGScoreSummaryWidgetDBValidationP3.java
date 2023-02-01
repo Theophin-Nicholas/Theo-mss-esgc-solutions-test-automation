@@ -15,11 +15,13 @@ import java.util.List;
 
 import static com.esgc.Pages.LoginPageIssuer.OrbisID;
 import static com.esgc.Utilities.DateTimeUtilities.getFormattedDate;
+import static com.esgc.Utilities.Groups.ISSUER;
+import static com.esgc.Utilities.Groups.REGRESSION;
 
 public class ESGScoreSummaryWidgetDBValidationP3 extends EntityIssuerPageDataValidationTestBase {
 
     @Xray(test = {7439,7441,7444})
-    @Test(groups = {"regression", "entity_issuer"})
+    @Test(groups = {REGRESSION, ISSUER})
     public void SummaryWidgetTest() {
         String orbisID = OrbisID;
         List<SummaryWidgetDBModel> summaryWidgetDBResult = EntityIssuerQueries.getESGScoreSummaryWidgetData(orbisID);

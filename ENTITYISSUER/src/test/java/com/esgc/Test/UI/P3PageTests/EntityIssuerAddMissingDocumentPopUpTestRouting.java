@@ -10,11 +10,13 @@ import com.esgc.Utilities.Xray;
 import org.openqa.selenium.Keys;
 import org.testng.annotations.Test;
 
+import static com.esgc.Utilities.Groups.*;
+
 public class EntityIssuerAddMissingDocumentPopUpTestRouting extends EntityPageTestBase {
 
 
     @Xray(test = {7350, 8795, 9821})
-    @Test(groups = {"regression", "ui", "smoke", "entity_issuer"},
+    @Test(groups = {REGRESSION, UI, SMOKE, ISSUER},
             dataProvider = "loginP3", dataProviderClass = IssuerDataProviderClass.class,
             description = "Verify Add missing document functionlity")
     public void testMissingDocumentPopUp(String... dataProvider) {
@@ -42,7 +44,7 @@ public class EntityIssuerAddMissingDocumentPopUpTestRouting extends EntityPageTe
     }
 
     @Xray(test = {11522})
-    @Test(groups = {"regression", "ui", "smoke", "entity_issuer"},
+    @Test(groups = {REGRESSION, UI, SMOKE, ISSUER},
             dataProvider = "loginP3", dataProviderClass = IssuerDataProviderClass.class,
             description = "Verify Add missing document functionlity with wrong URL")
     public void testMissingDocumentPopUpWrongURL(String... dataProvider) {
