@@ -8,6 +8,7 @@
         <groups>
             <run>
                 <!-- Used tag names: "EMC", "ui", "smoke", "regression", "prod" -->
+                <!-- ATTENTION!!! For prod env, only run tests with prod tag. Do not run other tags on prod. -->
                 <include name="prod"/>
             </run>
         </groups>
