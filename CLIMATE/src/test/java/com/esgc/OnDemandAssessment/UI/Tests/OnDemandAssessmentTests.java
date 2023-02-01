@@ -17,6 +17,7 @@ public class OnDemandAssessmentTests extends UITestBase {
 
         ResearchLinePage researchLinePage = new ResearchLinePage();
         OnDemandAssessmentPage onDemandAssessmentPage = new OnDemandAssessmentPage();
+        researchLinePage.selectPortfolio("EsgWithPredictedScores");
 
         researchLinePage.clickMenu();
         onDemandAssessmentPage.onDemandAssessmentRequest.click();

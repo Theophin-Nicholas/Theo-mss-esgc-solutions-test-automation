@@ -16,7 +16,7 @@ public class OnDemandAssessmentPage extends UploadPage {
     @FindBy(xpath = "//li[@heap_menu='On-Demand Assessment Request']")
     public WebElement onDemandAssessmentRequest;
 
-    @FindBy(xpath = "//li[@heap_menu='On-Demand Assessment Request']")
+    @FindBy(id = "button-review-req-test-id")
     public WebElement reviewAndSendRequestButton;
 
     @FindBy(xpath = "//div[@data-testid='remove-entity']")
@@ -40,7 +40,7 @@ public class OnDemandAssessmentPage extends UploadPage {
             removeButtons.get(0).click();
             BrowserUtils.wait(2000);
         }
-        txtSendTo.sendKeys("qatest@gmail.com");
+        txtSendTo.sendKeys("qatest"+Math.random()+"@gmail.com");
         btnConfirmRequest.click();
     }
 
