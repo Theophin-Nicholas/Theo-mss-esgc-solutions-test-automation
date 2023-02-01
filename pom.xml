@@ -242,8 +242,8 @@
             </build>
         </profile>
 
-        <!-- Smoke Test profile for Maven command line and CI/CD pipeline -->
-        <!--   mvn test -Psmoke-->
+        <!-- DEmo Profile -->
+        <!--   mvn test -Phello-->
         <profile>
             <id>hello</id>
             <build>
@@ -264,6 +264,7 @@
                             <artifactId>maven-surefire-plugin</artifactId>
                             <version>2.22.2</version>
                             <configuration>
+                                <encoding>UTF-8</encoding>
                                 <testFailureIgnore>true</testFailureIgnore>
                                 <parallel>classes</parallel>
                                 <useUnlimitedThreads>true</useUnlimitedThreads>
