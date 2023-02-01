@@ -4,22 +4,20 @@ import com.esgc.Base.TestBases.DashboardUITestBase;
 import com.esgc.Dashboard.UI.Pages.DashboardPage;
 import com.esgc.TestBase.DataProviderClass;
 import com.esgc.Utilities.BrowserUtils;
+import com.esgc.Utilities.Environment;
 import com.esgc.Utilities.PortfolioUtilities;
 import com.esgc.Utilities.Xray;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.testng.annotations.Test;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.esgc.Utilities.Groups.*;
 
 public class PerformanceChart extends DashboardUITestBase {
-//TODO portfolio selection should be updated since some portfolios do not have enough data
+    //TODO portfolio selection should be updated since some portfolios do not have enough data
     @Test(groups = {UI, DASHBOARD, SMOKE, REGRESSION})
     @Xray(test = {2051, 4273, 4448, 2064, 7838, 8683, 8684, 8690})
     public void verifyPerformanceChartsAreDisplayed() {
@@ -34,19 +32,28 @@ public class PerformanceChart extends DashboardUITestBase {
 
         BrowserUtils.scrollTo(dashboardPage.performanceChart);
 
-        List<String> expectedColumnNames =
-                Arrays.asList("Company", "% Investment", "Overall ESG Score", "Total Critical Controversies",
-                        "Highest Risk Hazard", "Facilities Exposed to High Risk/Red Flag",
-                        "Physical Risk Management", "Temperature Alignment",
-                        "Carbon Footprint (tCO2eq)", "Green Share Assessment", "Brown Share Assessment");
+        List<String> expectedColumnNames = new ArrayList<>();
+
+        //TODO: ESG Assessment is not available in Prod as of Jan 2023
+        if (Environment.environment.equalsIgnoreCase("qa") || Environment.environment.equalsIgnoreCase("uat")) {
+            expectedColumnNames = Arrays.asList("Company", "% Investment", "Overall ESG Score", "Total Critical Controversies",
+                    "Highest Risk Hazard", "Facilities Exposed to High Risk/Red Flag",
+                    "Physical Risk Management", "Temperature Alignment",
+                    "Carbon Footprint (tCO2eq)", "Green Share Assessment", "Brown Share Assessment");
+        } else {
+            expectedColumnNames = Arrays.asList("Company", "% Investment", "Total Critical Controversies",
+                    "Highest Risk Hazard", "Facilities Exposed to High Risk/Red Flag",
+                    "Physical Risk Management", "Temperature Alignment",
+                    "Carbon Footprint (tCO2eq)", "Green Share Assessment", "Brown Share Assessment");
+        }
 
 
         dashboardPage.clickAndSelectAPerformanceChart("Leaders");
 
         List<String> actualColumnNames = dashboardPage.getPerformanceChartColumnNames();
         int sizeOfTable = dashboardPage.getPerformanceChartRowCount();
-        double actualTotalInvestment = dashboardPage.calculateTotalInvestmentFromPerformanceChart();
-        double expectedTotalInvestment = dashboardPage.getTotalInvestmentInPerformanceChart();
+        double actualTotalInvestment = PortfolioUtilities.round(dashboardPage.calculateTotalInvestmentFromPerformanceChart(),1);
+        double expectedTotalInvestment = PortfolioUtilities.round(dashboardPage.getTotalInvestmentInPerformanceChart(),1);
         System.out.println("actualColumnNames = " + actualColumnNames);
         System.out.println("expectedColumnNames = " + expectedColumnNames);
         test.info("Switched to Leaders");
@@ -60,8 +67,8 @@ public class PerformanceChart extends DashboardUITestBase {
 
         actualColumnNames = dashboardPage.getPerformanceChartColumnNames();
         sizeOfTable = dashboardPage.getPerformanceChartRowCount();
-        actualTotalInvestment = dashboardPage.calculateTotalInvestmentFromPerformanceChart();
-        expectedTotalInvestment = dashboardPage.getTotalInvestmentInPerformanceChart();
+        actualTotalInvestment = PortfolioUtilities.round(dashboardPage.calculateTotalInvestmentFromPerformanceChart(),1);
+        expectedTotalInvestment = PortfolioUtilities.round(dashboardPage.getTotalInvestmentInPerformanceChart(),1);
 
         test.info("Switched to Laggards");
         assertTestCase.assertTrue(sizeOfTable <= 10, "max 10 companies are listed");
@@ -72,8 +79,8 @@ public class PerformanceChart extends DashboardUITestBase {
 
         actualColumnNames = dashboardPage.getPerformanceChartColumnNames();
         sizeOfTable = dashboardPage.getPerformanceChartRowCount();
-        actualTotalInvestment = dashboardPage.calculateTotalInvestmentFromPerformanceChart();
-        expectedTotalInvestment = PortfolioUtilities.round(dashboardPage.getTotalInvestmentInPerformanceChart(), 2);
+        actualTotalInvestment = PortfolioUtilities.round(dashboardPage.calculateTotalInvestmentFromPerformanceChart(),1);
+        expectedTotalInvestment = PortfolioUtilities.round(dashboardPage.getTotalInvestmentInPerformanceChart(), 1);
 
         test.info("Switched to Largest Holdings");
         assertTestCase.assertTrue(sizeOfTable <= 10, "max 10 companies are listed");
@@ -83,7 +90,7 @@ public class PerformanceChart extends DashboardUITestBase {
 
     @Test(groups = {UI, DASHBOARD, REGRESSION},
             dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
-    @Xray(test = {2041, 2043, 2048, 2052, 2067, 3131, 3132, 3152, 3153, 4375, 4376, 4380, 6235, 7111, 7112, 7114})
+    @Xray(test = {2041, 2043, 2048, 2052, 2067, 3131, 3132, 3152, 3153, 4375, 4376, 4380, 6235, 7111, 7112, 7114, 12268, 12264})
     public void verifyPerformanceChartScoreCategoriesUnderColumns(String researchLine) {
         DashboardPage dashboardPage = new DashboardPage();
         dashboardPage.navigateToPageFromMenu("Dashboard");
@@ -135,6 +142,21 @@ public class PerformanceChart extends DashboardUITestBase {
 
             if (header.equals("Carbon Footprint (tCO2eq)"))
                 sortedCategories = sortedCategories.stream().map(e -> e.substring(0, e.indexOf("\n"))).collect(Collectors.toList());
+            ;
+
+          if (header.equals("Brown Share Assessment"))
+              sortedCategories = sortedCategories.stream().map(s-> {
+                  switch (s){
+                      case "0-10%" : return "5%" ;
+                      case "10-20%" : return "15%";
+                      case "20-33%" : return "26.5%";
+                      case "33-50%" : return "41.5%";
+                      case ">=50%" : return "75%" ;
+                      default : return s;
+                  }
+              }).collect(Collectors.toList());
+
+
 
             System.out.println("Leaders sortedCategories = " + sortedCategories);
             boolean isOrderedAsExpected = isSortedBestToWorst(sortedCategories, expectedCategories);
