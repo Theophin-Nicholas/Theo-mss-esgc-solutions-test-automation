@@ -31,7 +31,7 @@ public class BrowserUtils {
 
         String path = System.getProperty("user.dir") + File.separator + "src" +
                 File.separator + "test" + File.separator + "resources" + File.separator + "download";
-
+        System.out.println("Source Path = " + path);
         return path;
     }
     /**
@@ -503,7 +503,7 @@ public class BrowserUtils {
         }
         return sentences;
     }
-    
+
     public static String DataSourcePath (){
 
         String path = System.getProperty("user.dir") + File.separator + "src" +
