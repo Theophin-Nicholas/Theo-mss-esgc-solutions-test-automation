@@ -225,12 +225,12 @@ public class DataProviderClass {
     public Object[][] exportEntitlements() {
 
         return new Object[][]{
-                {"esg-test5@outlook.com", "Helloworld25", "Physical Risk"},//
-                {"esg-test6@outlook.com", "Helloworld26", "Transition Risk"},//
-                {"esg-test1+export@outlook.com", "Moodys123", "Physical Risk and Transition Risk"},//
-                {"esg-test33@outlook.com", "Helloworld21", "ESG"},//
-                {"esg-test1+controversyandexport@outlook.com", "Helloworld21", "Controversey entitlement"},
-                {"esg-test1+no-controversy@outlook.com", "Moodys123","No Controversey"}
+                {"esg-test5@outlook.com", "Helloworld25", "Physical Risk", "Rogers Corp."},//
+                {"esg-test6@outlook.com", "Helloworld26", "Transition Risk", "Rogers Corp."},//
+                {"esg-test1+export@outlook.com", "Moodys123", "Physical Risk and Transition Risk", "Apple, Inc."},//
+                {"esg-test33@outlook.com", "Helloworld21", "ESG", "Apple, Inc."},//
+                {"esg-test1+controversyandexport@outlook.com", "Helloworld21", "Controversy entitlement", "Rogers Corp."},
+                {"esg-test1+no-controversy@outlook.com", "Moodys123","No Controversy", "Rogers Corp."}
         };
     }
 
@@ -410,14 +410,14 @@ public class DataProviderClass {
 
         return new Object[][]{
 
-                {"Apple, Inc.", "000411117"},  // VE scored company
+                 {"Apple, Inc.", "000411117"},  // VE scored company
                 //   {"FORD MOTOR CO","058618674"}, // MESG scored Company
                 // {"FirstCash, Inc.","001668460"} // MESG scored Company
                 //  {"Lexicon Pharmaceuticals, Inc.","001769888"}, // MESG scored Company
                 // {"NMI Holdings, Inc.","136042839"}, // MESG scored Company
                 //  {"Samsung Securities Co., Ltd.","065260686"}, // VE scored company
                 //     {"Alibaba Health Information Technology Ltd.","261851236"}, // VE scored company
-                //     {"Development Bank of Japan, Inc.","093009310"}, // VE scored company
+                  //   {"Development Bank of Japan, Inc.","093009310"}, // VE scored company
 
         };
     }
