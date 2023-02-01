@@ -16,9 +16,9 @@
             </run>
         </groups>
 
-        <packages>
-            <package name="com.esgc.*"/>
-        </packages>
+<!--        <packages>-->
+<!--            <package name="com.esgc.*"/>-->
+<!--        </packages>-->
 
         <classes>
             <class name="com.esgc.Dashboard.UI.Tests.DownloadTemplate"></class>
