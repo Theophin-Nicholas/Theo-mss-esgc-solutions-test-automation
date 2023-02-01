@@ -1,0 +1,29 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+<suite name="ESGC Smoke Suite">
+<!--<suite name="ESGC Smoke Suite" verbose="2">-->
+    <listeners>
+        <listener class-name="com.esgc.Utilities.XrayListener"/>
+        <listener class-name="com.esgc.Reporting.Listeners"/>
+    </listeners>
+    <test name="ESGC Climate Smoke Test Results" >
+
+        <parameter name="reportName" value="Smoke Demo Test Report"/>
+
+<!--        <groups>-->
+<!--            <run>-->
+<!--                <include name="smoke"/>-->
+<!--                <exclude name="robot_dependency"></exclude>-->
+<!--            </run>-->
+<!--        </groups>-->
+
+<!--        <packages>-->
+<!--            <package name="com.esgc.*"/>-->
+<!--        </packages>-->
+
+        <classes>
+            <class name="com.esgc.Dashboard.UI.Tests.DownloadTemplate"></class>
+        </classes>
+
+    </test>
+
+</suite>
