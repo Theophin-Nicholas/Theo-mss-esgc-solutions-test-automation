@@ -8,7 +8,6 @@ import com.esgc.Test.TestBases.EntityIssuerPageDataValidationTestBase;
 import com.esgc.Utilities.Database.EntityIssuerQueries;
 import com.esgc.Utilities.Xray;
 import org.testng.annotations.DataProvider;
-import org.testng.annotations.Optional;
 import org.testng.annotations.Test;
 
 import java.util.List;
@@ -18,15 +17,18 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+import static com.esgc.Pages.LoginPageIssuer.OrbisID;
+import static com.esgc.Utilities.Groups.ISSUER;
+import static com.esgc.Utilities.Groups.REGRESSION;
 
 public class P3ESGMateriality extends EntityIssuerPageDataValidationTestBase {
 
-    @Test(dataProvider = "orbisID", groups = {"regression", "entity_issuer"})
-    @Xray(test = {9953})
-    public void validateESGMaterialitySummaryData(@Optional String orbisID) {
+    @Test(groups = {REGRESSION, ISSUER})
+    @Xray(test = {9953,12446})
+    public void validateESGMaterialitySummaryData() {
 
         // DB Data
-        List<ESGMaterlityDBModel> DBData = EntityIssuerQueries.getESGMaterlityData(orbisID);
+        List<ESGMaterlityDBModel> DBData = EntityIssuerQueries.getESGMaterlityData(OrbisID);
 
         // API Data
         ESGMaterlityDriverSummaryAPIWrapper APIData = controller.getDriverSummary().as(ESGMaterlityDriverSummaryAPIWrapper.class);
@@ -40,14 +42,14 @@ public class P3ESGMateriality extends EntityIssuerPageDataValidationTestBase {
         for(ESGMaterlityDBModel dbRow :eachCriteria){
 
             ESGMaterlityDriverSummaryDetails driver = APIData.getDrivers().stream().
-                    filter(f-> f.getCriteria_id().equals(dbRow.getCriteria_code())).findFirst().get();
+                    filter(f-> f.getCriteria_id().equals(dbRow.getCriteria_code()) && f.getIndicator().equals(dbRow.getIndicator())).findFirst().get();
 
             assertTestCase.assertTrue(driver.getCriteria_name().equals(dbRow.getCriteria_name()), "Validating Criteria name");
             assertTestCase.assertTrue((driver.getCriteria_score()*100.00)/100.00== dbRow.getCriteria_score(), "Validating Criteria Score");
             assertTestCase.assertTrue(driver.getCritical_controversy_exists_flag().equals(dbRow.getCritical_controversy_exists_flag()), "Validating Critical controversy Flag");
             assertTestCase.assertTrue(driver.getDisclosure_ratio()==(dbRow.getDisclosure_ratio()), "Validating Disclosure Ratio");
             assertTestCase.assertTrue(driver.getDomain().equals(dbRow.getDomain()), "Validating Domain");
-            assertTestCase.assertTrue(driver.getIndicator().equals(dbRow.getIndicator()), "Validating Indicator");
+            assertTestCase.assertEquals(driver.getIndicator(),(dbRow.getIndicator()), "Validating Indicator");
             assertTestCase.assertTrue(driver.getScore_category().equals(dbRow.getScore_category()));
             assertTestCase.assertTrue(driver.getSub_category_detailed_description().equals(dbRow.getSub_catg_desc()));
 

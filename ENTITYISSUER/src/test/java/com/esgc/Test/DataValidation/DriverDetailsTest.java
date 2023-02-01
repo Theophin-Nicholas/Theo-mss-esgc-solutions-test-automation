@@ -5,7 +5,6 @@ import com.esgc.DBModels.EntityIssuerPageDBModels.DriverDetailsDBModel;
 import com.esgc.DBModels.EntityIssuerPageDBModels.DriverTrendDetailModel;
 import com.esgc.Test.TestBases.EntityIssuerPageDataValidationTestBase;
 import com.esgc.Utilities.Database.EntityIssuerQueries;
-import com.esgc.Utilities.Environment;
 import com.esgc.Utilities.Xray;
 import io.restassured.response.Response;
 import org.testng.annotations.DataProvider;
@@ -17,13 +16,17 @@ import java.util.List;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import static com.esgc.Pages.LoginPageIssuer.OrbisID;
+import static com.esgc.Utilities.Groups.ISSUER;
+import static com.esgc.Utilities.Groups.REGRESSION;
+
 public class DriverDetailsTest extends EntityIssuerPageDataValidationTestBase {
     List<String> criteria = new ArrayList<>();
 
     @Xray(test = {6290,7074,8896})
-    @Test(groups = {"entity_issuer"})
+    @Test(groups = {ISSUER,REGRESSION})
     public void driverDetailsTestForNonTrendMetrcs() {
-         String orbisID = Environment.OrbisId;
+         String orbisID = OrbisID;
         //get all criteria using DriverSummary API
         setCriteria(orbisID);
 
@@ -82,9 +85,9 @@ public class DriverDetailsTest extends EntityIssuerPageDataValidationTestBase {
 
 
     @Xray(test = {7984})
-    @Test(groups = {"entity_issuer"})
+    @Test(groups = {ISSUER,REGRESSION})
     public void driverDetailsTestForTrendMetrics() {
-        String orbisID = Environment.OrbisId;
+        String orbisID = OrbisID;
         //get all criteria using DriverSummary API
         setCriteria(orbisID);
 

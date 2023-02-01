@@ -135,13 +135,12 @@ public class EMCRoleDetailsPage extends EMCBasePage {
             BrowserUtils.scrollTo(member);
             if (member.getText().equals(userName)) {
                 memberDeleteButtons.get(memberNamesList.indexOf(member)).click();
-                BrowserUtils.waitForClickablility(detailsTab, 5).click();
-                BrowserUtils.wait(1);
-                BrowserUtils.waitForClickablility(usersTab, 5).click();
-                BrowserUtils.wait(3);
-                break;
             }
         }
+        BrowserUtils.waitForClickablility(detailsTab, 5).click();
+        BrowserUtils.wait(1);
+        BrowserUtils.waitForClickablility(usersTab, 5).click();
+        BrowserUtils.wait(3);
     }
 
     public boolean verifyPermission(String permissionName) {

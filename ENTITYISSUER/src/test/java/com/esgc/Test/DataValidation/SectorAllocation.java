@@ -11,11 +11,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.esgc.Utilities.Groups.ISSUER;
+import static com.esgc.Utilities.Groups.REGRESSION;
+
 public class SectorAllocation extends EntityIssuerPageDataValidationTestBase {
     List<String> criteria = new ArrayList<>();
 
     @Xray(test = 6267)
-    @Test(groups = {"entity_issuer"})
+    @Test(groups = {REGRESSION,ISSUER})
     public void verifySectorHeaderDescription() {
 
         Response response = controller.getHeaderAPI();

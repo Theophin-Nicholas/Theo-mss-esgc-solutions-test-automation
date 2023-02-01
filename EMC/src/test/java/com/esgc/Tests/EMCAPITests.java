@@ -13,6 +13,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import static com.esgc.Utilities.Groups.*;
+
 public class EMCAPITests extends APITestBase {
 
     protected EMCAPIController apiController = new EMCAPIController();
@@ -21,7 +23,7 @@ public class EMCAPITests extends APITestBase {
     String accountId = Environment.QA_TEST_ACCOUNT_ID;
     String applicationId = Environment.QA_TEST_APPLICATION_ID;
 
-    @Test(groups = {"EMC", "api", "regression"})
+    @Test(groups = {EMC, API, REGRESSION})
     @Xray(test = {6870})
     public void verifyAdminUserCanGETListOfAllUsersWithAdminRoleTest() {
         response = apiController.getEMCAllAdminUsersResponse();
@@ -35,7 +37,7 @@ public class EMCAPITests extends APITestBase {
         assertTestCase.assertTrue(response.as(AdminUser[].class).length>0, "User details are verified");
     }
 
-    @Test(groups = {"EMC", "api", "regression"})
+    @Test(groups = {EMC, API, REGRESSION})
     //@Xray(test = {6870})
     public void verifyAdminUserCanGETListOfAllRolesTest() {
         response = apiController.getEMCAllRolesResponse();
@@ -44,7 +46,7 @@ public class EMCAPITests extends APITestBase {
         assertTestCase.assertTrue(response.as(Role[].class).length>0, "Role details are verified");
     }
 
-    @Test(groups = {"EMC", "api", "regression"})
+    @Test(groups = {EMC, API, REGRESSION})
     @Xray(test = {6871,6872, 4979})
     public void verifyAdminUserCRUDOperationsOnUserTest() {
 
@@ -81,7 +83,7 @@ public class EMCAPITests extends APITestBase {
         assertTestCase.assertFalse(users.contains(email), "User deleted successfully");
     }
 
-    @Test(groups = {"EMC", "api", "regression"}, description = "API | EMC | Users | Verify Error Handling for Required fields when Create a User")
+    @Test(groups = {EMC, API, REGRESSION}, description = "API | EMC | Users | Verify Error Handling for Required fields when Create a User")
     @Xray(test = {5001, 5715})
     public void verifyErrorHandlingForRequiredFieldsWhenCreateUserTest() {
         String email = "erolvera.mx+006@gmail.com";
@@ -154,7 +156,7 @@ public class EMCAPITests extends APITestBase {
         assertTestCase.assertEquals(response.statusCode(),204, "Status code 204 OK is verified");
     }
 
-    @Test(groups = {"EMC", "api", "regression"}, description = "API | EMC | Users | Verify User does not have Access to PUT Users with Wrong Access Token")
+    @Test(groups = {EMC, API, REGRESSION}, description = "API | EMC | Users | Verify User does not have Access to PUT Users with Wrong Access Token")
     @Xray(test = {5034})
     public void verifyUserCantAccessPUTUsersWithWrongAccessTokenTest() {
         String email = "erolvera.mx+006@gmail.com";
@@ -174,7 +176,7 @@ public class EMCAPITests extends APITestBase {
         }
     }
 
-    @Test(groups = {"EMC", "api", "regression"}, description = "API | EMC | Users | Verify User does not have Access to PUT Users without Access Token")
+    @Test(groups = {EMC, API, REGRESSION}, description = "API | EMC | Users | Verify User does not have Access to PUT Users without Access Token")
     @Xray(test = {5033})
     public void verifyUserCantAccessPUTUsersWithoutAccessTokenTest() {
         String email = "erolvera.mx+006@gmail.com";
@@ -186,7 +188,7 @@ public class EMCAPITests extends APITestBase {
 
     }
 
-    @Test(groups = {"EMC", "api", "regression"}, description = "API | EMC | Users | Update Single OKTA Users")
+    @Test(groups = {EMC, API, REGRESSION}, description = "API | EMC | Users | Update Single OKTA Users")
     @Xray(test = {4980})
     public void verifyUpdateSingleOKTAUsersTest() {
         String email = "esgc-platform-test-user-1@outlook.com";
@@ -212,7 +214,7 @@ public class EMCAPITests extends APITestBase {
 
     }
 
-    @Test(groups = {"EMC", "api", "regression"}, description = "API | EMC | Apps | CRUD Operations for Applications")
+    @Test(groups = {EMC, API, REGRESSION}, description = "API | EMC | Apps | CRUD Operations for Applications")
     @Xray(test = {})
     public void verifyCRUDOperationsForApplicationsTest() {
         //Get All Applications
@@ -282,7 +284,7 @@ public class EMCAPITests extends APITestBase {
         assertTestCase.assertFalse(updatedApplications.contains(application), "Application is not deleted successfully");
     }
 
-    @Test(groups = {"EMC", "api", "regression"}, description = "API | EMC | Accounts Applications | Validate User is Able to Delete the Relation between Account and Application")
+    @Test(groups = {EMC, API, REGRESSION}, description = "API | EMC | Accounts Applications | Validate User is Able to Delete the Relation between Account and Application")
     @Xray(test = {4042})
     public void verifyRemoveApplicationFromAccountTest() {
         //verify if application assigned to account
@@ -300,7 +302,7 @@ public class EMCAPITests extends APITestBase {
         assertTestCase.assertFalse(apiController.verifyApplication(accountId, applicationId), "Application is deleted from account successfully");
     }
 
-    @Test(groups = {"EMC", "api", "regression"},
+    @Test(groups = {EMC, API, REGRESSION},
             description = "API | EMC | Accounts Applications | Verify User does not have Access to DELETE Applications with Invalid Access Token")
     @Xray(test = {4043})
     public void verifyUserCantDeleteApplicationWithWrongAccessTokenTest() {
@@ -328,7 +330,7 @@ public class EMCAPITests extends APITestBase {
         }
     }
 
-    @Test(groups = {"EMC", "api", "regression"},
+    @Test(groups = {EMC, API, REGRESSION},
             description = "API | EMC | Accounts Applications | Verify User does not have Access to PUT Applications with Invalid Access Token")
     @Xray(test = {4050})
     public void verifyUserCantAssignApplicationWithWrongAccessTokenTest() {
@@ -356,7 +358,7 @@ public class EMCAPITests extends APITestBase {
         }
     }
 
-    @Test(groups = {"EMC", "api", "regression"},
+    @Test(groups = {EMC, API, REGRESSION},
             description = "API | EMC | Accounts Applications | Verify User does not have Access to Assign/DELETE Applications without Access Token")
     @Xray(test = {4044, 4047})
     public void verifyUserCantDeleteApplicationWithoutAccessTokenTest() {
@@ -380,7 +382,7 @@ public class EMCAPITests extends APITestBase {
         assertTestCase.assertEquals(response.statusCode(),401, "Status code 401 Unauthorized is verified");
     }
 
-    @Test(groups = {"EMC", "api", "regression"},
+    @Test(groups = {EMC, API, REGRESSION},
             description = "API | EMC | Accounts Applications | Verify that User is Able to Add a New Relation between Account and Applications")
     @Xray(test = {4046})
     public void verifyAssignApplicationToAccountTest() {
@@ -397,7 +399,7 @@ public class EMCAPITests extends APITestBase {
         assertTestCase.assertTrue(apiController.verifyApplication(accountId, applicationId), "Application is deleted from account successfully");
     }
 
-    @Test(groups = {"EMC", "api", "regression", "smoke"},
+    @Test(groups = {EMC, API, REGRESSION, SMOKE},
             description = "API | EMC | Accounts | Verify a user's with proper permission role (view users) API response to create, update, retrieve and dlete the user list from an account")
     @Xray(test = {7309, 7312, 5712})
     public void verifyUserCRUDOperationsUnderAccountTest() {
@@ -427,7 +429,7 @@ public class EMCAPITests extends APITestBase {
 
     }
 
-    @Test(groups = {"EMC", "api", "regression"},
+    @Test(groups = {EMC, API, REGRESSION},
             description = "API | EMC | Issuer | Verify user is not Able to Create a New Issuer Account using Moody's email")
     @Xray(test = {5713})
     public void verifyUserCantCreateNewIssuerAccountUsingMoodyEmailTest() {
@@ -451,7 +453,7 @@ public class EMCAPITests extends APITestBase {
 
     }
 
-    @Test(groups = {"EMC", "api", "regression"},
+    @Test(groups = {EMC, API, REGRESSION},
             description = "API | EMC | Issuer | Verify user is not able to create a New External Issuer Account for an existing User")
     @Xray(test = {5714})
     public void verifyUserCANTCreateNewExternalIssuerAccountWithExistingUserTest() {
@@ -468,7 +470,7 @@ public class EMCAPITests extends APITestBase {
         assertTestCase.assertEquals(response.path("message"), "Duplicate resource: "+email, "Response message is verified");
     }
 
-    @Test(groups = {"EMC", "api", "regression"},
+    @Test(groups = {EMC, API, REGRESSION},
             description = "API | EMC | Product | Verify GET Products API Response with Valid Parameters and Products Sort By Name")
     @Xray(test = {3583, 3608})
     public void verifyGETProductsAPIResponseWithValidParametersTest() {
@@ -485,7 +487,7 @@ public class EMCAPITests extends APITestBase {
         assertTestCase.assertEquals(names, response.jsonPath().getList("products.name"), "Products are sorted by name");
     }
 
-    @Test(groups = {"EMC", "api", "regression"},
+    @Test(groups = {EMC, API, REGRESSION},
             description = "API | EMC | Product | Verify User does not have Access to GET Products without Access Token")
     @Xray(test = {3606})
     public void verifyUserCantAccessGETProductsWithoutAccessTokenTest() {
@@ -496,7 +498,7 @@ public class EMCAPITests extends APITestBase {
         assertTestCase.assertEquals(response.path("message"), "Unauthorized", "Response message is verified");
     }
 
-    @Test(groups = {"EMC", "api", "regression"},
+    @Test(groups = {EMC, API, REGRESSION},
             description = "API | EMC | Product | Verify User does not have Access to GET Products with Invalid Access Token")
     @Xray(test = {3607})
     public void verifyUserCantAccessGETProductsWithInvalidAccessToken() {
@@ -517,7 +519,7 @@ public class EMCAPITests extends APITestBase {
         }
     }
 
-    @Test(groups = {"EMC", "api", "regression"})
+    @Test(groups = {EMC, UI, REGRESSION})
     @Xray(test = {7399, 7400})
     public void verifyAdminUserCanGETListOfAllAdminUserPermissionsTest() {
         response = apiController.getEMCAllAdminUsersPermissionsResponse();

@@ -31,7 +31,7 @@ public class EntityPageQueries {
                 "                                     '1008'\n" +
                 "                                     ,'1015'\n" +
                 "                                     )\n" +
-                "                             AND ORBIS_ID = '"+orbisId+"'    -- Orbis ID filter here alone\n" +
+                "                             AND ORBIS_ID = '"+ orbisId +"'    -- Orbis ID filter here alone\n" +
                 "                     ) RESEARCH_LINE_ASSOC ON RESEARCH_LINE_ASSOC.ORBIS_ID = SCORE_TABLE.ORBIS_ID\n" +
                 "                     AND RESEARCH_LINE_ASSOC.RESEARCH_LINE_ID = SCORE_TABLE.RESEARCH_LINE_ID\n" +
                 "             WHERE DATA_TYPE IN (\n" +
@@ -65,6 +65,7 @@ public class EntityPageQueries {
                 "                     ,PIVOTED_DATA_FULL.\"'criteria_weight'\" AS DUAL_MATERIALITY_WEIGHT\n" +
                 "                     ,PIVOTED_DATA_FULL.\"'Business Materiality'\" AS BUSINESS_MATERIALITY_WEIGHT\n" +
                 "                     ,PIVOTED_DATA_FULL.\"'Stakeholder Materiality'\" AS STAKEHOLDER_MATERIALITY_WEIGHT\n" +
+                "                     ,PIVOTED_DATA_FULL.\"'oda_less5k_materiality'\" AS SMALL_SME_MATERIALITY_WEIGHT\n" +
                 "             FROM (\n" +
                 "                     SELECT SECTOR_ID\n" +
                 "                             ,INTERNAL_SUB_CATEGORY_ID\n" +
@@ -81,10 +82,11 @@ public class EntityPageQueries {
                 "                                     'Business Materiality'\n" +
                 "                                     ,'Stakeholder Materiality'\n" +
                 "                                     ,'criteria_weight'\n" +
+                "                                       ,'oda_less5k_materiality'\n" +
                 "                                     )) AS PIVOTED_DATA_FULL\n" +
                 "             INNER JOIN ESG_WITH_SECTOR_ID ON PIVOTED_DATA_FULL.SECTOR_ID = ESG_WITH_SECTOR_ID.SECTOR_ID\n" +
                 "                     AND PIVOTED_DATA_FULL.INTERNAL_SUB_CATEGORY_ID = ESG_WITH_SECTOR_ID.CRITERIA\n" +
-                "                     AND ESG_WITH_SECTOR_ID.RESEARCH_LINE_ID = '1015'\n" +
+                "                     AND ESG_WITH_SECTOR_ID.RESEARCH_LINE_ID IN ('1015', '1023')\n" +
                 "             )\n" +
                 "     ,VE_SCORED_CRITERIA_WEIGHTS AS (\n" +
                 "             SELECT ESG_WITH_SECTOR_ID.ORBIS_ID\n" +
@@ -105,7 +107,7 @@ public class EntityPageQueries {
                 "             INNER JOIN ESG_WITH_SECTOR_ID ON VE_SCORED_CRITERIA_WEIGHTS_FULL.ORBIS_ID = ESG_WITH_SECTOR_ID.ORBIS_ID\n" +
                 "                     AND VE_SCORED_CRITERIA_WEIGHTS_FULL.SUB_CATEGORY = ESG_WITH_SECTOR_ID.CRITERIA\n" +
                 "                     AND VE_SCORED_CRITERIA_WEIGHTS_FULL.RESEARCH_LINE_ID = ESG_WITH_SECTOR_ID.RESEARCH_LINE_ID\n" +
-                "                     AND ESG_WITH_SECTOR_ID.RESEARCH_LINE_ID = '1008'\n" +
+                "                     AND ESG_WITH_SECTOR_ID.RESEARCH_LINE_ID ='1008'\n" +
                 "             )\n" +
                 "     ,CRITICAL_CONTROVERSY_DETAILS AS (\n" +
                 "             SELECT DISTINCT ESG_WITH_SECTOR_ID.ORBIS_ID AS ORBIS_ID\n" +
@@ -133,7 +135,12 @@ public class EntityPageQueries {
                 "                                     THEN MESG_SCORED_CRITERIA_WEIGHTS_PIVOTED.DUAL_MATERIALITY_WEIGHT\n" +
                 "                             WHEN ESG_WITH_SECTOR_ID.RESEARCH_LINE_ID = '1008'\n" +
                 "                                     THEN VE_SCORED_CRITERIA_WEIGHTS.criteria_weight\n" +
+                "                            WHEN ESG_WITH_SECTOR_ID.RESEARCH_LINE_ID = '1023' //AND MESG_SCORED_CRITERIA_WEIGHTS_PIVOTED.EMPLOYEE_SIZE >= 5000\n" +
+                "                                                   THEN MESG_SCORED_CRITERIA_WEIGHTS_PIVOTED.DUAL_MATERIALITY_WEIGHT\n" +
+                "                                           WHEN ESG_WITH_SECTOR_ID.RESEARCH_LINE_ID = '1023' //AND MESG_SCORED_CRITERIA_WEIGHTS_PIVOTED.EMPLOYEE_SIZE < 5000\n" +
+                "                                                   THEN MESG_SCORED_CRITERIA_WEIGHTS_PIVOTED.SMALL_SME_MATERIALITY_WEIGHT\n" +
                 "                             END AS DUAL_MATERIALITY_WEIGHT\n" +
+                "       \n" +
                 "                     ,IFF(ESG_WITH_SECTOR_ID.RESEARCH_LINE_ID = '1015', MESG_SCORED_CRITERIA_WEIGHTS_PIVOTED.BUSINESS_MATERIALITY_WEIGHT, NULL) AS BUSINESS_MATERIALITY_WEIGHT\n" +
                 "                     ,IFF(ESG_WITH_SECTOR_ID.RESEARCH_LINE_ID = '1015', MESG_SCORED_CRITERIA_WEIGHTS_PIVOTED.STAKEHOLDER_MATERIALITY_WEIGHT, NULL) AS STAKEHOLDER_MATERIALITY_WEIGHT\n" +
                 "                     ,ESG_WITH_SECTOR_ID.SECTOR_ID\n" +
@@ -145,7 +152,7 @@ public class EntityPageQueries {
                 "             WHERE MESG_SCORED_CRITERIA_WEIGHTS_PIVOTED.DUAL_MATERIALITY_WEIGHT IS NOT NULL\n" +
                 "                     OR VE_SCORED_CRITERIA_WEIGHTS.CRITERIA_WEIGHT IS NOT NULL\n" +
                 "             )\n" +
-                "     ,METRIC AS (\n" +
+                "     ,METRIC AS (select * from(\n" +
                 "             SELECT DISTINCT MSC.RESEARCH_LINE_ID\n" +
                 "                    ,MSC.INTERNAL_SUB_CATEGORY_CODE AS CRITERIA_CODE\n" +
                 "                    ,MSC.SUB_CATEGORY_DESCRIPTION AS CRITERIA_NAME\n" +
@@ -160,11 +167,16 @@ public class EntityPageQueries {
                 "                    SELECT MAX(AS_OF_DATE)\n" +
                 "                    FROM DF_TARGET.ESG_METRIC_FRAMEWORK_DETAIL\n" +
                 "                    )\n" +
-                "            AND EMFD.DATA_SOURCE = 'data_capture'\n" +
-                "            AND EMFD.ITEM_TYPE = 'Input (raw)'\n" +
+                "           -- AND EMFD.DATA_SOURCE = 'data_capture'\n" +
+                "          --  AND EMFD.ITEM_TYPE = 'Input (raw)'\n" +
                 "            AND EMFD.STATUS = 'Active'\n" +
                 "            LEFT JOIN DF_TARGET.ESG_METRIC_FRAMEWORK_SUMMARY EMFS ON EMFD.TAXONOMY_ID = EMFS.TAXONOMY_ID\n" +
                 "            )\n" +
+                "             QUALIFY ROW_NUMBER() OVER (\n" +
+                "                                               PARTITION BY RESEARCH_LINE_ID\n" +
+                "                                               ,CRITERIA_CODE\n" +
+                "                                               ,CRITERIA_NAME, INDICATOR, SUB_CATEGORY_DETAILED_DESCRIPTION  ORDER BY DOMAIN \n" +
+                "                                               ) = 1 )\n" +
                 "SELECT CASE\n" +
                 "             WHEN ESG_WITH_SECTOR_CRITERIA_WEIGHT_DETAILS.RESEARCH_LINE_ID = '1015'\n" +
                 "                     THEN 'mesg'\n" +
@@ -237,7 +249,7 @@ public class EntityPageQueries {
                 "     AND (\n" +
                 "             FLOOR(\"criteria_score\") BETWEEN LOWER_SCORE_THRESHOLD\n" +
                 "                     AND UPPER_SCORE_THRESHOLD\n" +
-                "         )\n";
+                "         )\n" ;
        // System.out.println("query = " + query);
         return getQueryResultMap(query);
     }

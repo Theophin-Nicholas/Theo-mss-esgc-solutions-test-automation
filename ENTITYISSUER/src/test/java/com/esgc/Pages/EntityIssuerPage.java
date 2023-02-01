@@ -74,7 +74,7 @@ public class EntityIssuerPage extends PageBase {
     @FindBy(xpath = "//div[contains(@class,'MuiGrid-root MuiGrid-container MuiGrid-spacing')]/div/div/div[1]")
     public List<WebElement> subHeaders;
 
-    @FindBy(xpath="//div[contains(@class,'MuiGrid-root MuiGrid-container MuiGrid-spacing')]/div")
+    @FindBy(xpath = "//div[contains(@class,'MuiGrid-root MuiGrid-container MuiGrid-spacing')]/div")
     public List<WebElement> subHeadersDIVs;
 
     @FindBy(xpath = "//div/main/div/div/div/div[1]/div/div[1]")
@@ -105,7 +105,7 @@ public class EntityIssuerPage extends PageBase {
     @FindBy(xpath = " //div[contains(@class,'MuiDialogTitle')]//div/div/div//following-sibling::div")
     public WebElement sectorDescriptorElement;
 
-// works for both P2 and P3
+    // works for both P2 and P3
     @FindBy(xpath = "//button[@id='missing-docs-button']")
     public WebElement addMissingdDocumentsButton;
 
@@ -123,6 +123,9 @@ public class EntityIssuerPage extends PageBase {
 
     @FindBy(xpath = "//button//div[contains(text(),'Add a URL')]")
     public WebElement buttonAddURL;
+
+    @FindBy(xpath = "//p[@id='name-helper-text']")
+    public WebElement wrongURLMessage;
 
     @FindBy(xpath = "//div[@role='button']")
     public WebElement DocumentType;
@@ -236,6 +239,9 @@ public class EntityIssuerPage extends PageBase {
     @FindBy(xpath = "//div[normalize-space()='Scoring Methodology']/following-sibling::div")
     public WebElement ScoringMethodologyText;
 
+    @FindBy(xpath = "//div[@id='sourceDocErrors']")
+    public WebElement sourceDocErrors;
+
     //esgSubCategory
     @FindBy(xpath = "//span[normalize-space()='ESG Materiality']")
     public WebElement mainDiv_ESGSubCategory;
@@ -302,7 +308,7 @@ public class EntityIssuerPage extends PageBase {
     @FindBy(xpath = "//div[text()='Controversies']")
     public WebElement Controversies;
 
-        @FindBy(xpath = "//div[text()='Controversies']/..//table")
+    @FindBy(xpath = "//div[text()='Controversies']/..//table")
     public WebElement ControversiesTable;
 
     @FindBy(xpath = "//div[contains(text(),'RESPONSIVENESS UPDATE')]/../..")
@@ -310,7 +316,6 @@ public class EntityIssuerPage extends PageBase {
 
     @FindBy(xpath = "//span[@class='close']//*[name()='svg']")
     public WebElement ControversiesPopupCloseButton;
-
 
 
     @FindBy(xpath = "//button[@id='close-button']")
@@ -323,7 +328,7 @@ public class EntityIssuerPage extends PageBase {
     public WebElement CloseAddMissingDocumentMessage;
 
     @FindBy(xpath = "//span[contains(text(),'Overall Disclosure Ratio')]")
-    public WebElement   P3OverallDisclosureRatio;
+    public WebElement P3OverallDisclosureRatio;
 
     @FindBy(xpath = "//button[@heap_perfchart_id='Materiality']")
     public static WebElement esgMaterialityTab;
@@ -475,12 +480,12 @@ public class EntityIssuerPage extends PageBase {
             actualSubHeaders[i] = subHeaders.get(i).getText();
             // BrowserUtils.wait(1);
         }
-        for(int j=0; j<subHeadersDIVs.size(); j++){
-            List<WebElement> a = subHeadersDIVs.get(0).findElements(By.xpath("div"));
-            if (j==0){
-                assertTestCase.assertTrue(a.size()==3);
-            }else{
-                assertTestCase.assertTrue(a.size()==2);
+        for (int j = 0; j < subHeadersDIVs.size(); j++) {
+            List<WebElement> a = subHeadersDIVs.get(j).findElements(By.xpath("div"));
+            if (j == 0) {
+                assertTestCase.assertTrue(a.size() == 3);
+            } else {
+                assertTestCase.assertTrue(a.size() == 2);
             }
 
         }
@@ -598,53 +603,31 @@ public class EntityIssuerPage extends PageBase {
 
 
     public boolean verifySectorModalPopUpForSubCategories(String Subcategories) {
-        boolean ModalPopUpCheck = true;
+        boolean ModalPopUpCheck = false;
         List<WebElement> SubcategoriesSectors = Driver.getDriver().findElements(By.xpath("//table/thead//th[text()='" + Subcategories + "']//..//..//../tbody//tr"));
         Actions action = new Actions(Driver.getDriver());
-        boolean checkData = Driver.getDriver().findElements(By.xpath("//table/thead//th[text()='" + Subcategories + "']//..//..//../tbody//tr[0]//td[1]")).size() > 0;
-        System.out.println("checkData = " + checkData);
+        //boolean checkData = Driver.getDriver().findElements(By.xpath("//table/thead//th[text()='" + Subcategories + "']//..//..//../tbody//tr[0]//td[1]")).size() > 0;
+        //System.out.println("checkData = " + checkData);
 
         for (int i = 1; i <= SubcategoriesSectors.size(); i++) {
             WebElement SubcategoriesSector = Driver.getDriver().findElement(By.xpath("//table/thead//th[text()='" + Subcategories + "']//..//..//../tbody//tr[" + i + "]//td[1]"));
             String ModalPopupTitle = SubcategoriesSector.getText().split("/")[1].trim();
             wait.until(ExpectedConditions.visibilityOf(SubcategoriesSector));
-
             action.moveToElement(SubcategoriesSector).click().perform();
             BrowserUtils.wait(2);
-            if (checkData) {
-
-                if (modalDialog.isDisplayed()) {
-                    String t = modalDialogTitle.getText();
-                    if (modalDialogTitle.getText().equals(ModalPopupTitle)) {
-                        if (sectorDescriptorElement.isDisplayed()) {
-                            Driver.getDriver().navigate().refresh();
-                            BrowserUtils.wait(2);
-                        } else {
-                            ModalPopUpCheck = false;
-                            break;
-                        }
-
-                    } else {
-                        ModalPopUpCheck = false;
-                        break;
-                    }
-
-                }
-            } else {
-                ModalPopUpCheck = true;
-                pressESCKey();
-               /* logout.click();
-                throw new SkipException("No Data available");*/
-            }
+            ModalPopUpCheck = (modalDialog.isDisplayed() && modalDialogTitle.getText().equals(ModalPopupTitle))? true:false ;
+            BrowserUtils.ActionKeyPress(Keys.ESCAPE);
+            Driver.getDriver().navigate().refresh();
+            if (ModalPopUpCheck == false) break;
         }
         return ModalPopUpCheck;
 
-    }
+}
 
     public void ClickOnaddMissingDocuments() {
         System.out.println("addMissingdDocumentsButton.isDisplayed() = " + addMissingdDocumentsButton.isDisplayed());
         assertTestCase.assertTrue(addMissingdDocumentsButton.getText().equals("Add Information"), "Validating Add Information Button text");
-        addMissingdDocumentsButton.click();
+        BrowserUtils.waitForVisibility(addMissingdDocumentsButton, 5).click();
     }
 
     public void validateopupWindowOpenStatus() {
@@ -658,7 +641,7 @@ public class EntityIssuerPage extends PageBase {
     public void addURL(String url, Boolean disclosureRatioAvailable) {
         PopUpWindowURL.sendKeys(url);
         System.out.println(DocumentType.getText());
-        BrowserUtils.wait(1);
+        BrowserUtils.wait(5);
         DocumentType.click();
         List<WebElement> options = listofDocumentType.findElements(By.tagName("li"));
         for (WebElement option : options) {
@@ -667,15 +650,15 @@ public class EntityIssuerPage extends PageBase {
                 break;
             }
         }
-        Boolean selectorDiv = false ;
-        try{
-            if (disclosureRatioAvailable) selectorDiv= SelectDisclosureDiv.isDisplayed();
-            else selectorDiv = disclosureRatioAvailable ;
-        }catch(Exception e){
-            selectorDiv = false ;
+        Boolean selectorDiv = false;
+        try {
+            if (disclosureRatioAvailable) selectorDiv = SelectDisclosureDiv.isDisplayed();
+            else selectorDiv = disclosureRatioAvailable;
+        } catch (Exception e) {
+            selectorDiv = false;
 
         }
-        if (selectorDiv){
+        if (selectorDiv) {
             SelectDisclosureDiv.click();
             SelectDisclosureList.get(1).click();
         }
@@ -684,6 +667,7 @@ public class EntityIssuerPage extends PageBase {
 
 
     }
+
 
     public void validateAssignedCategories() {
         List<String> listofAssignedcategories = new ArrayList(Arrays.asList(
@@ -742,10 +726,14 @@ public class EntityIssuerPage extends PageBase {
     public void validateWrongURL() {
         String wrongURL = "xyz";
         PopUpWindowURL.sendKeys(wrongURL);
-        assertTestCase.assertTrue(errorMessage.getText().equals("URL invalid"), "Validate the URL");
+        assertTestCase.assertTrue(wrongURLMessage.getText().equals("URL invalid"), "Validate the URL");
         for (int i = 0; i < wrongURL.length(); i++) {
             PopUpWindowURL.sendKeys(Keys.BACK_SPACE);
         }
+    }
+
+    public void validateURL() {
+        assertTestCase.assertTrue(wrongURLMessage.getText().equals("URL should be valid and publicly accessible"), "Validate the URL");
     }
 
     public void validatePopupClose() {
@@ -772,7 +760,7 @@ public class EntityIssuerPage extends PageBase {
 
     public void validateURLDelete(String url) {
         buttonUrlDelete.click();
-        assertTestCase.assertTrue(headerDeleteDocument.isDisplayed(), "Validate if Header is available in Delete document window");
+        assertTestCase.assertTrue(BrowserUtils.waitForVisibility(headerDeleteDocument, 5).isDisplayed(), "Validate if Header is available in Delete document window");
         buttonNokeepThisDocument.click();
         WebElement gridItem = Driver.getDriver().findElement(By.xpath("//div[normalize-space()='" + url + "']"));
         assertTestCase.assertTrue(gridItem.isDisplayed(), "Validate if added URL is still available in list");
@@ -792,25 +780,30 @@ public class EntityIssuerPage extends PageBase {
     }
 
     public void validatePageNoBox() {
-        for (WebElement e : Categories){
+        for (WebElement e : Categories) {
             e.click();
             assertTestCase.assertTrue(e.getText().contains("Page #"), "Validating if Page # lable is available");
-            WebElement inputBox = Driver.getDriver().findElement(By.xpath("//input[@id='"+e.getText().split("\n")[0]+"']"));
-            assertTestCase.assertTrue(inputBox.isDisplayed(),"Validating if Page# input box is visible");
+            WebElement inputBox = Driver.getDriver().findElement(By.xpath("//input[@id='" + e.getText().split("\n")[0] + "']"));
+            assertTestCase.assertTrue(inputBox.isDisplayed(), "Validating if Page# input box is visible");
             Random rand = new Random();
             inputBox.sendKeys(String.valueOf(rand.nextInt((10 - 1) + 1) + 1));
         }
     }
 
     public void saveMissingDocuments() {
-       // WebElement category = assignedCategories.get(0).findElement(By.xpath("//span[text()='Waste and Pollution / Material Flows']"));
-      //  category.click();
+        // WebElement category = assignedCategories.get(0).findElement(By.xpath("//span[text()='Waste and Pollution / Material Flows']"));
+        //  category.click();
         buttonUpload.click();
         wait.until(ExpectedConditions.visibilityOf(alertMessage)).isDisplayed();
         assertTestCase.assertTrue(alertMessage.getText().equals("Documents saved"), "Validate if document is saved sucessfully");
     }
 
     public void validateSourceDocumentWidgetIsAvailable() {
+        boolean noDocument = Driver.getDriver().findElements(xpath("//*[contains(text(),'No source documents available.')]")).size() > 0;
+        if (noDocument) {
+            logout.click();
+            throw new SkipException("No source documents available.");
+        }
         assertTestCase.assertTrue(wait.until(ExpectedConditions.visibilityOf(headingSourceDocuments)).isDisplayed(),
                 "Validate if 'header 2020 Source Documents' is displayed");
         assertTestCase.assertTrue(wait.until(ExpectedConditions.visibilityOf(linkDocuments.get(0))).isDisplayed(), "Validate if document links are available");
@@ -828,7 +821,7 @@ public class EntityIssuerPage extends PageBase {
         WebDriver driver = Driver.getDriver();
         wait.until(ExpectedConditions.visibilityOf(element)).isDisplayed();
         String mainWindowHandler = driver.getWindowHandle();
-        element.click();
+        BrowserUtils.waitForVisibility(element, 5).click();
         Set<String> allWindowHandles = driver.getWindowHandles();
         Iterator<String> iterator = allWindowHandles.iterator();
         while (iterator.hasNext()) {
@@ -867,7 +860,7 @@ public class EntityIssuerPage extends PageBase {
                     Iterator<String> iterator1 = allWindowHandles.iterator();
                     while (iterator1.hasNext()) {
                         ChildWindow = iterator1.next();
-                        if (!mainWindowHandler.equalsIgnoreCase(ChildWindow)&& !mainWindowHandler1.equalsIgnoreCase(ChildWindow)) {
+                        if (!mainWindowHandler.equalsIgnoreCase(ChildWindow) && !mainWindowHandler1.equalsIgnoreCase(ChildWindow)) {
                             driver.switchTo().window(ChildWindow);
                             url = driver.getCurrentUrl();
                             System.out.println("actual url   = " + url);
@@ -1029,8 +1022,8 @@ public class EntityIssuerPage extends PageBase {
         // String esgScoreDate = EsgScoreRange.findElement(By.xpath("../following-sibling::div")).getText();
         assertTestCase.assertTrue(EsgScoreRange.getText().startsWith("Updated on"));
         assertTestCase.assertTrue((isValidFormat("MMMM dd, yyyy", EsgScoreRange.getText().split("on ")[1].toString())), "Validate date format");
-        assertTestCase.assertTrue(Color.fromString(EsgScoreRange.getCssValue("color")).asHex().equals("#ffffff"),"Validate Date text color");
-        assertTestCase.assertTrue(Color.fromString(EsgScoreRange.findElement(By.xpath("..")).getCssValue("background-color")).asHex().equals("#26415e"),"Validate Date text background color");
+        assertTestCase.assertTrue(Color.fromString(EsgScoreRange.getCssValue("color")).asHex().equals("#ffffff"), "Validate Date text color");
+        assertTestCase.assertTrue(Color.fromString(EsgScoreRange.findElement(By.xpath("..")).getCssValue("background-color")).asHex().equals("#26415e"), "Validate Date text background color");
     }
 
     public void validateHeaderAvailability() {
@@ -1114,7 +1107,7 @@ public class EntityIssuerPage extends PageBase {
         wait.until(ExpectedConditions.visibilityOf(linkDocuments.get(0))).isDisplayed();
         for (int i = 0; i < 2; i++) {//linkDocuments.size()
             assertTestCase.assertTrue(svgCopyURLbutton.get(i).isDisplayed(), "Validate if copy button is available");
-            svgCopyURLbutton.get(i+1).click();
+            svgCopyURLbutton.get(i + 1).click();
             try {
                 Thread.sleep(2000);
             } catch (InterruptedException e) {
@@ -1173,12 +1166,12 @@ public class EntityIssuerPage extends PageBase {
             paragraphs.get(paragraphs.size() - 1).getText().equals("Please contact veconnect@vigeo-eiris.com for any log-in queries.");
             paragraphs.get(paragraphs.size() - 2).getText().equals("To respond to an allegation or controversy, please go to: https://veconnect.vigeo-eiris.com.");
             String firstParagraghText = paragraphs.get(0).getText();
-            int startindex = firstParagraghText.indexOf("considered")+11 ;
+            int startindex = firstParagraghText.indexOf("considered") + 11;
             int endIndex = firstParagraghText.indexOf("based");
-            String severity = firstParagraghText.substring(startindex,endIndex).trim();
+            String severity = firstParagraghText.substring(startindex, endIndex).trim();
             ControversiesPopupCloseButton.click();
 
-            if (severity.equals("Critical")){
+            if (severity.equals("Critical")) {
                 WebElement criticalIcon = row.findElement(By.xpath("td[2]/span/div[@data-testid='critical']/*[name()='svg']"));
                 assertTestCase.assertTrue(criticalIcon.isDisplayed());
             }
@@ -1251,21 +1244,21 @@ public class EntityIssuerPage extends PageBase {
         }
     }
 
-    public void validateEsgMaterialityLegends(){
+    public void validateEsgMaterialityLegends() {
 
         String labelXpath = "//button[@heap_perfchart_id='Materiality']/../../..//div[contains(@class,'MuiPaper-elevation1')]//span";
 
-        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("("+labelXpath+")[1]")).getText(),"Weak");
-        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("("+labelXpath+"/div)[1]")).getAttribute("style"),"background: rgb(221, 88, 29);");
+        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("(" + labelXpath + ")[1]")).getText(), "Weak");
+        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("(" + labelXpath + "/div)[1]")).getAttribute("style"), "background: rgb(221, 88, 29);");
 
-        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("("+labelXpath+")[2]")).getText(),"Limited");
-        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("("+labelXpath+"/div)[2]")).getAttribute("style"),"background: rgb(232, 149, 28);");
+        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("(" + labelXpath + ")[2]")).getText(), "Limited");
+        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("(" + labelXpath + "/div)[2]")).getAttribute("style"), "background: rgb(232, 149, 28);");
 
-        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("("+labelXpath+")[3]")).getText(),"Robust");
-        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("("+labelXpath+"/div)[3]")).getAttribute("style"),"background: rgb(234, 197, 80);");
+        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("(" + labelXpath + ")[3]")).getText(), "Robust");
+        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("(" + labelXpath + "/div)[3]")).getAttribute("style"), "background: rgb(234, 197, 80);");
 
-        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("("+labelXpath+")[4]")).getText(),"Advanced");
-        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("("+labelXpath+"/div)[4]")).getAttribute("style"),"background: rgb(219, 229, 163);");
+        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("(" + labelXpath + ")[4]")).getText(), "Advanced");
+        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("(" + labelXpath + "/div)[4]")).getAttribute("style"), "background: rgb(219, 229, 163);");
 
         String criticalControversiesXpath = "//button[@heap_perfchart_id='Materiality']/../../..//div[text()='Critical controversies']";
         assertTestCase.assertTrue(Driver.getDriver().findElement(By.xpath(criticalControversiesXpath)).isDisplayed());
@@ -1339,12 +1332,12 @@ public class EntityIssuerPage extends PageBase {
             section.click();
             assertTestCase.assertTrue(wait.until(ExpectedConditions.visibilityOf(modalDialog)).isDisplayed());
             assertTestCase.assertTrue(wait.until(ExpectedConditions.visibilityOf(modalDialogTitle)).getText().equals(sectionName), "Validate Section name");
-            List<String> expectedMetricValues = Arrays.asList(new String[]{"Yes","No Info", "No"});
-            for (int i =2 ; i<ModalItems.size() ;i++){
-                String[] values = ModalItems.get(i).getText().split("\n") ;
-                if (expectedMetricValues.contains(values[0].toString())){
+            List<String> expectedMetricValues = Arrays.asList(new String[]{"Yes", "No Info", "No"});
+            for (int i = 2; i < ModalItems.size(); i++) {
+                String[] values = ModalItems.get(i).getText().split("\n");
+                if (expectedMetricValues.contains(values[0].toString())) {
                     assertTestCase.assertTrue(true, "Validating if item value is in " + expectedMetricValues);
-                }else{
+                } else {
                     String decimalPattern = "([0-9]*)\\.([0-9]*)";
                     boolean match = Pattern.matches(decimalPattern, values[0].toString());
                     assertTestCase.assertTrue(match, "Validating if Item value is numeric");

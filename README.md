@@ -130,7 +130,7 @@ For Example(for step 1 and 2):
 
 Test Annotation for test scripts
 ```
-@Test(groups = {"smoke", "regression", "ui", "entity_issuer"}, dataProvider = "researchLines")
+@Test(groups = {SMOKE, REGRESSION, UI, ISSUER}, dataProvider = "researchLines")
 ```
 
 3. Add **@XRay** annotation to map test cases which are covering in the test flow
@@ -301,6 +301,6 @@ e.g.:
 <dependency>
 <groupId>org.seleniumhq.selenium</groupId>
 <artifactId>selenium-java</artifactId>
-<version>3.141.59</version>
+<version>4.6.0</version>
 </dependency>
 
