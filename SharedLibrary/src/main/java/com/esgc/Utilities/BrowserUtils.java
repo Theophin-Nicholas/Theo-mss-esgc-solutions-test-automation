@@ -31,7 +31,7 @@ public class BrowserUtils {
         if(isRemote){
             try{
                 System.out.println("System.getProperty(\"os.name\") = " + System.getProperty("os.name"));
-                String command = "pwd";
+                String command = "cd";
                 Process process = Runtime.getRuntime().exec(command);
                 BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
                 String currentPath = reader.readLine();
