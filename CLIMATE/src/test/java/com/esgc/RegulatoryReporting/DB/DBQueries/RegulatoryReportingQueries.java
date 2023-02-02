@@ -1213,6 +1213,7 @@ public class RegulatoryReportingQueries {
                     " \n" +
                     "     SELECT * FROM FINAL_OUTPUT";
         }
+        //System.out.println("query = " + query);
         return getQueryResultMap(query);
     }
 }

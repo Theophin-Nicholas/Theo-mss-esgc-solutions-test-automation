@@ -1211,7 +1211,19 @@ public class RegulatoryReportingPage extends UploadPage {
                     return false;
                 }
             }
-
+            //Validate data for Scope 3 GHG emissions
+            List<Map<String, Object>> dbData = queries.getPortfolioLevelOutput(portfolioId, year.equalsIgnoreCase("latest")?"2020":year, "Annual", year.equalsIgnoreCase("latest")?"Yes":"No");
+            DecimalFormat decimalFormat = new DecimalFormat("##.####");
+            String scope3GHGEmissionsImpactScore = decimalFormat.format(dbData.stream().filter(row -> row.get("SFDR_SUBCATEGORY").toString().equals("Scope 3 GHG emissions")).findFirst().get().get("IMPACT"));
+            System.out.println("scope3GHGEmissionsImpactScore = " + scope3GHGEmissionsImpactScore);
+            String scope3GHGEmissionsScopeOfDisclosure = decimalFormat.format(dbData.stream().filter(row -> row.get("SFDR_SUBCATEGORY").toString().equals("Scope 3 GHG emissions")).findFirst().get().get("SCOPE_OF_DISCLOSURE"));
+            System.out.println("scope3GHGEmissionsScopeOfDisclosure = " + scope3GHGEmissionsScopeOfDisclosure);
+            if(!scope3GHGEmissionsImpactScore.contains(".")) scope3GHGEmissionsImpactScore += ".0";
+            if(!scope3GHGEmissionsScopeOfDisclosure.contains(".")) scope3GHGEmissionsScopeOfDisclosure += ".0";
+            if(!rowData.contains(scope3GHGEmissionsImpactScore) || !rowData.contains(scope3GHGEmissionsScopeOfDisclosure)){
+                System.out.println("Impact score or Scope of disclosure is not found in the excel for Scope 3 GHG emissions");
+                return false;
+            }
         }
         return true;
     }
