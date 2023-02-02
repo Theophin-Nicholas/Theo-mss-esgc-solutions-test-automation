@@ -30,6 +30,7 @@ public class BrowserUtils {
         boolean isRemote = System.getProperty("browser").contains("remote");
         if(isRemote){
             try{
+                System.out.println("System.getProperty(\"os.name\") = " + System.getProperty("os.name"));
                 String command = "pwd";
                 Process process = Runtime.getRuntime().exec(command);
                 BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
