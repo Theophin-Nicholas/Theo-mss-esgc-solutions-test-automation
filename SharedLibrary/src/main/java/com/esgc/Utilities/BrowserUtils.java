@@ -11,9 +11,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 
-import java.io.File;
-import java.io.FilenameFilter;
-import java.io.IOException;
+import java.io.*;
 import java.text.BreakIterator;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
@@ -28,11 +26,28 @@ public class BrowserUtils {
      * @return path
      */
     public static String downloadPath (){
+        String path = "";
+        boolean isRemote = System.getProperty("browser").contains("remote");
+        if(isRemote){
+            try{
+                String command = "pwd";
+                Process process = Runtime.getRuntime().exec(command);
+                BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+                String currentPath = reader.readLine();
+                System.out.println("Current working directory on remote node: " + currentPath);
+                path = currentPath + File.separator + "download";
+            }catch (IOException e) {
+                System.out.println("FILE ERRORRR!!!!");
+                e.printStackTrace();
+            }
 
-        String path = System.getProperty("user.dir") + File.separator + "src" +
-                File.separator + "test" + File.separator + "resources" + File.separator + "download";
+        }else{
+            path = System.getProperty("user.dir") + File.separator + "src" +
+                    File.separator + "test" + File.separator + "resources" + File.separator + "download";
+        }
         System.out.println("Source Path = " + path);
         return path;
+
     }
     /**
      * path to upload folder - all upload files here
