@@ -31,7 +31,7 @@ public class PDFTestMethods extends PageBase {
         // Temp code to remove ------------
        /* String actualFileName = "";
         if (entity.contains("Apple")) {
-            actualFileName = "Apple_ Inc_Profile20-Nov-2022_1668992725855.pdf"; // "Akero Therapeutics_ Inc_Profile3-Oct-2022_1664804963663.pdf";
+            actualFileName = "Apple_ Inc_Profile24-Jan-2023_1674577678251.pdf"; // "Akero Therapeutics_ Inc_Profile3-Oct-2022_1664804963663.pdf";
         } else if (entity.contains("Samsung")) {
             actualFileName = "Samsung Securities Co__ Ltd_Profile8-Nov-2022_1667923793554.pdf";
         } else if (entity.contains("Alibaba")) {
@@ -97,7 +97,7 @@ public class PDFTestMethods extends PageBase {
             assertTestCase.assertTrue(!content.equals("No ParaGraph Found"), "Validating Physical Risk Management widget");
     }
 
-    public void ValidateTempratureAlignmentSummaryScetion() {
+    public void ValidateTemperatureAlignmentSummarySection() {
         EntityClimateProfilePage entityProfilePage = new EntityClimateProfilePage();
         String UIValue = entityProfilePage.getTempratureAlignmentWidget();
         String content = PdfUtil.extractPDFText(pdfFileText, UIValue);
@@ -177,7 +177,7 @@ public class PDFTestMethods extends PageBase {
         EntityClimateProfilePage entityProfilePage = new EntityClimateProfilePage();
         List<String> UIValue = entityProfilePage.getHederValues(companyName);
         int count = PdfUtil.getCountofTextOccurrencesInPdf(pdfFileText, UIValue.get(0).toString() + " " + UIValue.get(1).toString());
-        assertTestCase.assertTrue(documentPageCounts - 1 == count, "Validating Header");
+        assertTestCase.assertEquals(documentPageCounts - 1, count, "Validating Header");
     }
 
     public void ValidateFooter() {
@@ -190,6 +190,7 @@ public class PDFTestMethods extends PageBase {
     public void ValidateESGSummaryData() {
         EntityClimateProfilePage entityProfilePage = new EntityClimateProfilePage();
         List<String> UIValue = entityProfilePage.getESGSummaryDetails();
+        System.out.println("ESG Expected Values: "+UIValue);
         for (String v : UIValue) {
             String PDFValue = PdfUtil.extractPDFText(pdfFileText, v);
             assertTestCase.assertTrue(v.equals(PDFValue), "Validating ESGSummary Data");
@@ -298,24 +299,25 @@ public class PDFTestMethods extends PageBase {
 
     public void ValidateControversies(String orbisId){
         EntityClimateProfilePage entityProfilePage = new EntityClimateProfilePage();
-        String contrverseyAsofDate = "Controversies as of " ;//+ DateTimeUtilities.getFormattedDate(java.time.LocalDate.now().toString(),"MMMM dd, yyy");
-        String content = PdfUtil.extractPDFText(pdfFileText, contrverseyAsofDate);
-        assertTestCase.assertTrue(!content.equals("No ParaGraph Found"), "Validating Controversey As of Date");
-        String ControverseiesTableHeaders = "CRITICAL AND HIGH SEVERITY CONTROVERSIES SEVERITY";
-         content = PdfUtil.extractPDFText(pdfFileText, ControverseiesTableHeaders);
-        assertTestCase.assertTrue(!content.equals("No ParaGraph Found"), "Validating Controversey Headers");
+        String controversyAsOfDate = "Controversies as of " ;//+ DateTimeUtilities.getFormattedDate(java.time.LocalDate.now().toString(),"MMMM dd, yyy");
+        String content = PdfUtil.extractPDFText(pdfFileText, controversyAsOfDate);
+        assertTestCase.assertTrue(!content.equals("No ParaGraph Found"), "Validating Controversy As of Date");
+        String ControversiesTableHeaders = "CRITICAL AND HIGH SEVERITY CONTROVERSIES";
+         content = PdfUtil.extractPDFText(pdfFileText, ControversiesTableHeaders);
+        assertTestCase.assertTrue(!content.equals("No ParaGraph Found"), "Validating Controversy Headers");
 
-        EntityProfileClimatePageAPIController apiContoller = new EntityProfileClimatePageAPIController();
+        EntityProfileClimatePageAPIController apiController = new EntityProfileClimatePageAPIController();
 
-        Controversies controversiesAPI = apiContoller.getControversiesAPI("{\"orbis_id\":\""+orbisId+"\"}").as(Controversies.class);
-        List<ControversiesList> Controlist = controversiesAPI.getControversies_list().stream().filter(i -> i.getSeverity().equals("High") || i.getSeverity().equals("Critical")).collect(Collectors.toList());
+        Controversies controversiesAPI = apiController.getControversiesAPI("{\"orbis_id\":\""+orbisId+"\"}").as(Controversies.class);
+        List<ControversiesList> controlList = controversiesAPI.getControversies_list().stream().filter(i -> i.getSeverity().equals("High") || i.getSeverity().equals("Critical")).collect(Collectors.toList());
         String subCategory = controversiesAPI.getSub_categories().stream().map(SubCategory::getSub_category).collect(Collectors.joining(", "));
-        String summary = "Involved in " + Controlist.size() + " critical or high severity controversies, out of " + controversiesAPI.getControversies_list().size()  +
-                " total controversies as of " + DateTimeUtilities.getFormattedDate(Controlist.stream().min(Comparator.comparing(ControversiesList::getControversy_events)).get().getControversy_events(),"MMMM dd, yyyy")
-                +". Criteria impacted: " ;//+ subCategory;
+        String summary = "Involved in " + controlList.size() + " critical or high severity controversies, out of " + controversiesAPI.getControversies_list().size()  +
+                " total controversies, as of ";
+        //+ DateTimeUtilities.getFormattedDate(controlList.stream().min(Comparator.comparing(ControversiesList::getControversy_events)).get().getControversy_events(),"MMMM dd, yyyy")
+        //        +". Criteria impacted: " ;//+ subCategory;
         String PDFExtractedValue = PdfUtil.extractPDFText(pdfFileText, summary);
         assertTestCase.assertTrue(!PDFExtractedValue.equals("No ParaGraph Found"), "Validating Controversey Data");
-        for(ControversiesList e : Controlist)  {
+        for(ControversiesList e : controlList)  {
             String date = DateTimeUtilities.getFormattedDate(e.getControversy_events(),"MMMM dd, yyyy");
             String contTitle = e.getControversy_title();
             String CriteriaImpacted= "Criteria impacted: " + e.getRelated_domain().toString().substring(1,e.getRelated_domain().toString().indexOf("]"));
