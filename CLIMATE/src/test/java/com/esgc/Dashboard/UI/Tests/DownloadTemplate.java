@@ -4,6 +4,7 @@ import com.esgc.Base.TestBases.DashboardUITestBase;
 import com.esgc.Dashboard.UI.Pages.DashboardPage;
 import com.esgc.PortfolioAnalysis.UI.Pages.ResearchLinePage;
 import com.esgc.Utilities.BrowserUtils;
+import com.esgc.Utilities.Driver;
 import com.esgc.Utilities.ExcelUtil;
 import com.esgc.Utilities.Xray;
 import org.testng.Assert;
@@ -56,6 +57,8 @@ public class DownloadTemplate extends DashboardUITestBase {
         test.info("Clicked on \"Download Template\" link");
         dashboardPage.clickDownloadTemplate();
         BrowserUtils.wait(4);
+        Driver.getDriver().get("chrome://downloads/");
+        BrowserUtils.wait(5);
         assertTestCase.assertTrue(dashboardPage.isTemplateDownloaded(), "Template is saved to user machine", 248);
 
         assertTestCase.assertTrue(ExcelUtil.checkIf2CSVFilesAreSame(BrowserUtils.templatePath(), BrowserUtils.expectedPortfolioTemplateDocumentPath())

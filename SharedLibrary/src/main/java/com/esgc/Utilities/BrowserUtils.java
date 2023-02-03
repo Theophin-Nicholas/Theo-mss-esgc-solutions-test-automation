@@ -27,7 +27,12 @@ public class BrowserUtils {
      */
     public static String downloadPath (){
         String path = "";
-        boolean isRemote = System.getProperty("browser").contains("remote");
+        boolean isRemote = false;
+        try{
+           isRemote = System.getProperty("browser").contains("remote");
+        } catch (Exception e){
+
+        }
         if(isRemote){
             try{
                 System.out.println("System.getProperty(\"os.name\") = " + System.getProperty("os.name"));

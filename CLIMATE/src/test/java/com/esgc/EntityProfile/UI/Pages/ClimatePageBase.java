@@ -4,12 +4,16 @@ import com.esgc.Pages.PageBase;
 import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.Driver;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import java.io.File;
+import java.io.InputStream;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -413,11 +417,40 @@ public abstract class ClimatePageBase extends PageBase {
     }
 
     public boolean isTemplateDownloaded() {
-        File dir = new File(BrowserUtils.downloadPath());
-        File[] dir_contents = dir.listFiles();
 
-        return Arrays.asList(dir_contents).stream().filter(e -> e.getName().startsWith("ESG portfolio import")).findAny().isPresent();
+        String path = "";
+        boolean isRemote = false;
+        try{
+            isRemote = System.getProperty("browser").contains("remote");
+        } catch (Exception e){
 
+        }
+        if(isRemote) {
+            // get the file URL from the "chrome://downloads" URL
+            String fileUrl = (String) ((JavascriptExecutor) Driver.getDriver())
+                    .executeScript("return window.document.querySelector('downloads-manager').shadowRoot.querySelector('#downloadsList downloads-item').shadowRoot.querySelector('#file-link').href");
+
+            System.out.println("fileUrl = " + fileUrl);
+
+            // open the file URL to retrieve the file contents
+            try{
+                URL url = new URL(fileUrl);
+                URLConnection connection = url.openConnection();
+                InputStream inputStream = connection.getInputStream();
+                return true;
+            }catch (Exception e){
+                System.out.println("DOWNLOAD ERROR!!!");
+                return false;
+            }
+
+        } else {
+
+
+            File dir = new File(BrowserUtils.downloadPath());
+            File[] dir_contents = dir.listFiles();
+
+            return Arrays.asList(dir_contents).stream().filter(e -> e.getName().startsWith("ESG portfolio import")).findAny().isPresent();
+        }
     }
 
     public void openSelectionModalPopUp() {
