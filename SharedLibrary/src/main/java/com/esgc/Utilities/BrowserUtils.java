@@ -1,5 +1,6 @@
 package com.esgc.Utilities;
 
+import com.esgc.TestBase.TestBase;
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 import org.apache.commons.io.FileUtils;
@@ -26,31 +27,31 @@ public class BrowserUtils {
      * @return path
      */
     public static String downloadPath (){
-        String path = "";
-        boolean isRemote = false;
-        try{
-           isRemote = System.getProperty("browser").contains("remote");
-        } catch (Exception e){
-
-        }
-        if(isRemote){
-            try{
-                System.out.println("System.getProperty(\"os.name\") = " + System.getProperty("os.name"));
-                String command = "cmd /c echo %cd%";
-                Process process = Runtime.getRuntime().exec(command);
-                BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-                String currentPath = reader.readLine();
-                System.out.println("Current working directory on remote node: " + currentPath);
-                path = currentPath + File.separator + "download";
-            }catch (IOException e) {
-                System.out.println("FILE ERRORRR!!!!");
-                e.printStackTrace();
-            }
-
-        }else{
-            path = System.getProperty("user.dir") + File.separator + "src" +
+//        String path = "";
+//        boolean isRemote = false;
+//        try{
+//           isRemote = System.getProperty("browser").contains("remote");
+//        } catch (Exception e){
+//
+//        }
+//        if(isRemote){
+//            try{
+//                System.out.println("System.getProperty(\"os.name\") = " + System.getProperty("os.name"));
+//                String command = "cmd /c echo %cd%";
+//                Process process = Runtime.getRuntime().exec(command);
+//                BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+//                String currentPath = reader.readLine();
+//                System.out.println("Current working directory on remote node: " + currentPath);
+//                path = currentPath + File.separator + "download";
+//            }catch (IOException e) {
+//                System.out.println("FILE ERRORRR!!!!");
+//                e.printStackTrace();
+//            }
+//
+//        }else{
+        String path = System.getProperty("user.dir") + File.separator + "src" +
                     File.separator + "test" + File.separator + "resources" + File.separator + "download";
-        }
+
         System.out.println("Source Path = " + path);
         return path;
 
@@ -75,6 +76,9 @@ public class BrowserUtils {
         String path = System.getProperty("user.dir") + File.separator + "src" +
                 File.separator + "test" + File.separator + "resources" + File.separator + "download"
                 + File.separator + ConfigurationReader.getProperty("downloadTemplateName");
+        if (TestBase.isRemote){
+           RemoteUtils.downloadDocumentFromRemote();
+        }
         System.out.println("Path "+path);
         return path;
     }

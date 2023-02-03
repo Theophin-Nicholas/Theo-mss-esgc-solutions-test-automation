@@ -42,10 +42,10 @@ public abstract class TestBase {
     @Parameters("reportName")
     public void setupTestBeforeExecution(@Optional String reportName) {
         //Check if execution is in remote environment or local?
-        if (System.getProperty("environment") != null) {
-            isRemote = System.getProperty("environment").contains("remote");
+        if (System.getProperty("browser") != null) {
+            isRemote = System.getProperty("browser").contains("remote");
         } else {
-            isRemote = ConfigurationReader.getProperty("environment").contains("remote");
+            isRemote = ConfigurationReader.getProperty("browser").contains("remote");
         }
 
         System.out.println("Report name: " + reportName);

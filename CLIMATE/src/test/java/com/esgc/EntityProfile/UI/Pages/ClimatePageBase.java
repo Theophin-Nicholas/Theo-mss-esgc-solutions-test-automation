@@ -4,6 +4,7 @@ import com.esgc.Pages.PageBase;
 import com.esgc.TestBase.TestBase;
 import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.Driver;
+import com.esgc.Utilities.RemoteUtils;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -416,35 +417,7 @@ public abstract class ClimatePageBase extends PageBase {
         String path = "";
         boolean isRemote = TestBase.isRemote;
         if (isRemote) {
-            //TODO handle edge and safari
-            WebDriver driver = Driver.getDriver();
-
-            // Open a new tab
-            ((JavascriptExecutor) driver).executeScript("window.open()");
-
-            // Switch to new tab
-            ArrayList<String> tabs = new ArrayList<>(driver.getWindowHandles());
-            driver.switchTo().window(tabs.get(tabs.size() - 1));
-
-            // Navigate to chrome downloads
-            driver.get("chrome://downloads");
-
-            // Get the latest downloaded file name
-            String fileName = (String) ((JavascriptExecutor) driver).executeScript("return document.querySelector('downloads-manager').shadowRoot.querySelector('#downloadsList downloads-item').shadowRoot.querySelector('div#content  #file-link').text");
-
-            // Get the latest downloaded file URL
-            String sourceURL = (String) ((JavascriptExecutor) driver).executeScript("return document.querySelector('downloads-manager').shadowRoot.querySelector('#downloadsList downloads-item').shadowRoot.querySelector('div#content  #file-link').href");
-
-            // Print the details
-            System.out.println("File Name = " + fileName);
-            System.out.println("Source URL = " + sourceURL);
-
-            // Close the downloads tab
-            driver.close();
-
-            // Switch back to main window
-            driver.switchTo().window(tabs.get(0));
-
+            String fileName = RemoteUtils.getDownloadedDocumentFileName();
             return fileName.startsWith("ESG portfolio import");
         } else {
             File dir = new File(BrowserUtils.downloadPath());
