@@ -1,6 +1,5 @@
 package com.esgc.Utilities;
 
-import com.esgc.TestBase.TestBase;
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 import org.apache.commons.io.FileUtils;
@@ -12,7 +11,9 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 
-import java.io.*;
+import java.io.File;
+import java.io.FilenameFilter;
+import java.io.IOException;
 import java.text.BreakIterator;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
@@ -76,9 +77,6 @@ public class BrowserUtils {
         String path = System.getProperty("user.dir") + File.separator + "src" +
                 File.separator + "test" + File.separator + "resources" + File.separator + "download"
                 + File.separator + ConfigurationReader.getProperty("downloadTemplateName");
-        if (TestBase.isRemote){
-           RemoteUtils.downloadDocumentFromRemote();
-        }
         System.out.println("Path "+path);
         return path;
     }

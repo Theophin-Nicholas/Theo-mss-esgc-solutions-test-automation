@@ -1,6 +1,7 @@
 package com.esgc.Utilities;
 
 
+import com.esgc.TestBase.TestBase;
 import com.opencsv.CSVReader;
 import org.apache.poi.ss.usermodel.*;
 import org.testng.Assert;
@@ -199,7 +200,9 @@ public class ExcelUtil {
 
 
     public static boolean checkIf2CSVFilesAreSame(String csvFilePath1, String csvFilePath2) {
-
+        if (TestBase.isRemote){
+            RemoteUtils.downloadDocumentFromRemote();
+        }
         List<String[]> allLines1 = null;
         List<String[]> allLines2 = null;
         try (CSVReader reader1 = new CSVReader(new FileReader(csvFilePath1));
