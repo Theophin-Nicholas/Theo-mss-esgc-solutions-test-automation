@@ -36,10 +36,18 @@ public abstract class TestBase {
     public static boolean isBrowserOpen = false;
     public static StopWatch stopWatch = new StopWatch();
     public static String reportPath = System.getProperty("user.dir") + File.separator + "test-output";
+    public static boolean isRemote = false;
 
     @BeforeTest(alwaysRun = true)
     @Parameters("reportName")
     public void setupTestBeforeExecution(@Optional String reportName) {
+        //Check if execution is in remote environment or local?
+        if (System.getProperty("environment") != null) {
+            isRemote = System.getProperty("environment").contains("remote");
+        } else {
+            isRemote = ConfigurationReader.getProperty("environment").contains("remote");
+        }
+
         System.out.println("Report name: " + reportName);
         reportName = reportName == null ? "report.html" : reportName + ".html";
 
@@ -88,6 +96,7 @@ public abstract class TestBase {
     @AfterSuite(alwaysRun = true)
     @Parameters("reportName")
     public void uploadResultsToJira(@Optional String reportName) {
+        Driver.closeDriver();
         System.out.println("#########################################3");
         System.out.println("Test Cases:");
         testCasesList.forEach(System.out::println);

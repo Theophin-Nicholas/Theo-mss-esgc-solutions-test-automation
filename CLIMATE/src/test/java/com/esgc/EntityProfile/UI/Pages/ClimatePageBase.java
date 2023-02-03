@@ -1,19 +1,14 @@
 package com.esgc.EntityProfile.UI.Pages;
 
 import com.esgc.Pages.PageBase;
+import com.esgc.TestBase.TestBase;
 import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.Driver;
-import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.Keys;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import java.io.File;
-import java.io.InputStream;
-import java.net.URL;
-import java.net.URLConnection;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -419,36 +414,41 @@ public abstract class ClimatePageBase extends PageBase {
     public boolean isTemplateDownloaded() {
 
         String path = "";
-        boolean isRemote = false;
-        try{
-            isRemote = System.getProperty("browser").contains("remote");
-        } catch (Exception e){
+        boolean isRemote = TestBase.isRemote;
+        if (isRemote) {
+            //TODO handle edge and safari
+            WebDriver driver = Driver.getDriver();
 
-        }
-        if(isRemote) {
-            // get the file URL from the "chrome://downloads" URL
-            String fileUrl = (String) ((JavascriptExecutor) Driver.getDriver())
-                    .executeScript("return window.document.querySelector('downloads-manager').shadowRoot.querySelector('#downloadsList downloads-item').shadowRoot.querySelector('#file-link').href");
+            // Open a new tab
+            ((JavascriptExecutor) driver).executeScript("window.open()");
 
-            System.out.println("fileUrl = " + fileUrl);
+            // Switch to new tab
+            ArrayList<String> tabs = new ArrayList<>(driver.getWindowHandles());
+            driver.switchTo().window(tabs.get(tabs.size() - 1));
 
-            // open the file URL to retrieve the file contents
-            try{
-                URL url = new URL(fileUrl);
-                URLConnection connection = url.openConnection();
-                InputStream inputStream = connection.getInputStream();
-                return true;
-            }catch (Exception e){
-                System.out.println("DOWNLOAD ERROR!!!");
-                return false;
-            }
+            // Navigate to chrome downloads
+            driver.get("chrome://downloads");
 
+            // Get the latest downloaded file name
+            String fileName = (String) ((JavascriptExecutor) driver).executeScript("return document.querySelector('downloads-manager').shadowRoot.querySelector('#downloadsList downloads-item').shadowRoot.querySelector('div#content  #file-link').text");
+
+            // Get the latest downloaded file URL
+            String sourceURL = (String) ((JavascriptExecutor) driver).executeScript("return document.querySelector('downloads-manager').shadowRoot.querySelector('#downloadsList downloads-item').shadowRoot.querySelector('div#content  #file-link').href");
+
+            // Print the details
+            System.out.println("File Name = " + fileName);
+            System.out.println("Source URL = " + sourceURL);
+
+            // Close the downloads tab
+            driver.close();
+
+            // Switch back to main window
+            driver.switchTo().window(tabs.get(0));
+
+            return fileName.startsWith("ESG portfolio import");
         } else {
-
-
             File dir = new File(BrowserUtils.downloadPath());
             File[] dir_contents = dir.listFiles();
-
             return Arrays.asList(dir_contents).stream().filter(e -> e.getName().startsWith("ESG portfolio import")).findAny().isPresent();
         }
     }

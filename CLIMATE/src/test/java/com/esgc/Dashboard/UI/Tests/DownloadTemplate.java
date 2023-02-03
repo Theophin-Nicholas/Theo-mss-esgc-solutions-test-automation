@@ -4,7 +4,6 @@ import com.esgc.Base.TestBases.DashboardUITestBase;
 import com.esgc.Dashboard.UI.Pages.DashboardPage;
 import com.esgc.PortfolioAnalysis.UI.Pages.ResearchLinePage;
 import com.esgc.Utilities.BrowserUtils;
-import com.esgc.Utilities.Driver;
 import com.esgc.Utilities.ExcelUtil;
 import com.esgc.Utilities.Xray;
 import org.testng.Assert;
@@ -15,7 +14,8 @@ import static com.esgc.Utilities.Groups.*;
 public class DownloadTemplate extends DashboardUITestBase {
 
 
-    @Test(groups = {DASHBOARD, REGRESSION, UI, SMOKE})
+    @Test(description = "Verify that the downloaded template, when clicked will launch Excel",
+            groups = {DASHBOARD, REGRESSION, UI, SMOKE})
     @Xray(test = {192, 188, 287})
     public void downloadTemplateLinkTest() {
         DashboardPage dashboardPage = new DashboardPage();
@@ -38,27 +38,9 @@ public class DownloadTemplate extends DashboardUITestBase {
         test.pass("\"Download Template\" button's visibility verified.");
         test.pass("Verified: \"Download Template\" link is clickable.");
 
-        BrowserUtils.wait(1);
-    }
-
-
-    @Test(description = "Verify that the downloaded template, when clicked will launch Excel",
-            groups = {DASHBOARD, REGRESSION, UI, SMOKE})
-    public void verifyTemplateIsAccessibleTest() {
-        DashboardPage dashboardPage = new DashboardPage();
-
-        dashboardPage.navigateToPageFromMenu("Dashboard");
-        test.info("Navigated to Dashboard Page");
-        test.info("Clicked on Upload button");
-
-        dashboardPage.clickUploadPortfolioButton();
-        test.info("Navigated to Upload Page");
-
-        test.info("Clicked on \"Download Template\" link");
         dashboardPage.clickDownloadTemplate();
+        test.info("Clicked on \"Download Template\" link");
         BrowserUtils.wait(4);
-        Driver.getDriver().get("chrome://downloads/");
-        BrowserUtils.wait(5);
         assertTestCase.assertTrue(dashboardPage.isTemplateDownloaded(), "Template is saved to user machine", 248);
 
         assertTestCase.assertTrue(ExcelUtil.checkIf2CSVFilesAreSame(BrowserUtils.templatePath(), BrowserUtils.expectedPortfolioTemplateDocumentPath())
