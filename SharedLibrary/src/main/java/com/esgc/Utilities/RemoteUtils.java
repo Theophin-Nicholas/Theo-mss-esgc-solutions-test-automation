@@ -149,10 +149,18 @@ public class RemoteUtils {
 
             // create a File object from the downloaded contents
             File file = new File(BrowserUtils.templatePath());
+            System.out.println("file.getAbsolutePath() = " + file.getAbsolutePath());
+            File parentDir = file.getParentFile();
+            System.out.println("parentDir.getName() = " + parentDir.getName());
+            System.out.println("parentDir.getCanonicalPath() = " + parentDir.getCanonicalPath());
+            if(!parentDir.exists())
+                parentDir.mkdirs();
             FileOutputStream fileOutputStream = new FileOutputStream(file);
             outputStream.writeTo(fileOutputStream);
             fileOutputStream.close();
+            System.out.println("FILE CREATED");
         } catch (Exception e) {
+            System.out.println("FILE CREATION FAILED");
             e.printStackTrace();
         }
     }
