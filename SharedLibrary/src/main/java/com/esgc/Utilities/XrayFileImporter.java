@@ -76,6 +76,10 @@ public class XrayFileImporter {
         Set<String> allTestCases = findTestCases(testCaseList);
         Set<String> failedTestCases = findFailedTestCases(testCaseList);
 
+        if(reportName.contains("Smoke")) {
+            List<String> smokeTestList = getSmokeTestCases();
+            allTestCases = allTestCases.stream().filter(s -> smokeTestList.get(0).contains(s)).collect(Collectors.toSet());
+        }
         List<JiraTestCase> tclist = allTestCases.stream()
                 .map(testCaseNumber -> {
                     String status = "PASS";
@@ -348,5 +352,16 @@ public class XrayFileImporter {
         }
 
     }
+    public static List<String>  getSmokeTestCases(){
+        Response response = configSpec()
+                .contentType("application/json")
+                .when()
+                .log().all()
+                .get("raven/1.0/api/test?jql=project=ESGCA AND 'Smoke/Sanity Test'=Yes").prettyPeek();
+
+        return Arrays.asList(response.getBody().jsonPath().getString("key"));
+
+    }
+
 
 }

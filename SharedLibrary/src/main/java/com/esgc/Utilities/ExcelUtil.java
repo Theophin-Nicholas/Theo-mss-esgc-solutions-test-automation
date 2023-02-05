@@ -316,7 +316,7 @@ public class ExcelUtil {
                 return getRowData(i);
             }
         }
-        System.out.println("Data not found");
+        System.out.println(data+" Data not found");
         return null;
     }
 
@@ -356,5 +356,9 @@ public class ExcelUtil {
             }
         }
         return data;
+    }
+
+    public String getSheetName() {
+        return workSheet.getSheetName();
     }
 }

@@ -1680,11 +1680,10 @@ public class DashboardPage extends UploadPage {
 
     public boolean isTotalControversiesColumAvailable(){
         try{
-        return TotalCriticalControversiesColoumn.isDisplayed();
+            return TotalCriticalControversiesColoumn.isDisplayed();
         } catch(Exception e){
             return false;
         }
     }
 
 }
-

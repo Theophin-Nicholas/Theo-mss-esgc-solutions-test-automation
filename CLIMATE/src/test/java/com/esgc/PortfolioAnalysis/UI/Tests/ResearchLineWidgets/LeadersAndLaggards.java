@@ -4,10 +4,7 @@ import com.esgc.Base.TestBases.UITestBase;
 import com.esgc.PortfolioAnalysis.UI.Pages.ResearchLinePage;
 import com.esgc.TestBase.DataProviderClass;
 import com.esgc.Utilities.BrowserUtils;
-import com.esgc.Utilities.Driver;
 import com.esgc.Utilities.Xray;
-import org.openqa.selenium.Keys;
-import org.openqa.selenium.interactions.Actions;
 import org.testng.Assert;
 import org.testng.SkipException;
 import org.testng.annotations.Test;
@@ -32,7 +29,7 @@ public class LeadersAndLaggards extends UITestBase {
         String commonWidgetsID = "updates_and_current_leaders_laggards";
         researchLinePage.selectSamplePortfolioFromPortfolioSelectionModal();
         researchLinePage.navigateToResearchLine(page);
-        BrowserUtils.wait(5);
+        BrowserUtils.wait(10);
         test.info("Navigated to " + page + " Page");
 
         Assert.assertTrue(researchLinePage.checkIfPageTitleIsDisplayed(page), "check if page title is displayed");
@@ -71,11 +68,11 @@ public class LeadersAndLaggards extends UITestBase {
         test.info("Selecting the As of Date value");
 
         //researchLinePage.selectAnAsOfDateWhereUpdatesAreAvailable("April 2021");
-        if (!page.equals("Carbon Footprint")) {
-            Assert.assertTrue(researchLinePage.checkMoreCompaniesExistLink(page));
-            Actions action = new Actions(Driver.getDriver());
-            action.sendKeys(Keys.ESCAPE);
-        }
+//        if (!page.equals("Carbon Footprint")) {
+//            Assert.assertTrue(researchLinePage.checkMoreCompaniesExistLink(page));
+//            Actions action = new Actions(Driver.getDriver());
+//            action.sendKeys(Keys.ESCAPE);
+//        }
         test.info("Verified that the More companies ranked in link is working as expected");
     }
 

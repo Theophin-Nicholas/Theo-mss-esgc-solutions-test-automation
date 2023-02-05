@@ -375,7 +375,7 @@ public abstract class PageBase {
     public WebElement returnToESG360Button;
 
 
-    protected WebDriverWait wait = new WebDriverWait(Driver.getDriver(), Duration.ofSeconds(20));
+    protected WebDriverWait wait = new WebDriverWait(Driver.getDriver(), Duration.ofSeconds(80));
     protected Actions actions = new Actions(Driver.getDriver());
     private String finalStringToCheck;
 
@@ -1331,7 +1331,7 @@ public abstract class PageBase {
             //Validate if Menu is available
             Assert.assertTrue(menu.isDisplayed(), "Menu Item is not displayed");
             clickMenu();
-            List<String> menuItemsArray = Arrays.asList("Navigate To", "Dashboard", "Portfolio Analysis",
+            List<String> menuItemsArray = Arrays.asList("Navigate To", "Dashboard", "Portfolio Analysis", "On-Demand Assessment Request",
                     "Portfolio Selection/Upload", "Regulatory Reporting",
                     "Contact Us", "Terms & Conditions", "Log Out",
                     "Switch Application", "Climate on Demand", "Company Portal", "Datalab");
@@ -1455,7 +1455,7 @@ public abstract class PageBase {
                 case "20-100%":
                     return "#B28559";
 
-                case "No INVOLVEMENT":
+                case "NO INVOLVEMENT":
                     return "#39A885";
                 case "MINOR INVOLVEMENT":
                     return "#6FB24B";

@@ -788,7 +788,7 @@ public class EntityClimateProfileSummaryTests extends UITestBase {
         //Physical Risk Management No Info Check
         int size = Driver.getDriver().findElements(By.xpath("(//div[@id='phyRskMgmClimate-test-id'])[1]/div/div/div/div[2]")).size();
         if (size == 0) {
-            WebElement physicalManagementNoInfo = Driver.getDriver().findElement(By.xpath("(//div[@id='phyRskMgmClimate-test-id'])[1]/div/div/div[2]"));
+            WebElement physicalManagementNoInfo = Driver.getDriver().findElement(By.xpath("(//div[@id='phyRskMgmClimate-test-id'])[1]/div/div/div/div"));
             assertTestCase.assertEquals(physicalManagementNoInfo.getText(), "No information available.");
             System.out.println("Assertion Successful for Physical Risk Management ");
 
@@ -945,7 +945,7 @@ public class EntityClimateProfileSummaryTests extends UITestBase {
 
     }
 
-    @Test(groups = {REGRESSION, UI, SMOKE}, dataProviderClass = DataProviderClass.class, dataProvider = "entitlementCheckPrd")
+    @Test(groups = {REGRESSION, UI}, dataProviderClass = DataProviderClass.class, dataProvider = "entitlementCheckPrd")
     @Xray(test = {8448, 8449, 8875, 8878, 8879, 8880, 8881, 8884, 8224, 8225, 8226})
     public void verifyEntitlementBaseWidgets(String username, String password, String entitlement) {
         //Trying to log in with only Entitlement User
