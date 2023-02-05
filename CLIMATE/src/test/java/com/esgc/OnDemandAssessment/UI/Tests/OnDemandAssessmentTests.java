@@ -12,7 +12,7 @@ import org.testng.annotations.Test;
 public class OnDemandAssessmentTests extends UITestBase {
 
     @Test(groups = {"regression", "ui"})
-    @Xray(test = {12001,12002,12011})
+    @Xray(test = {11985,12001,12002,12011,12054})
     public void validateOnDemandAssessmentRequest() {
 
         ResearchLinePage researchLinePage = new ResearchLinePage();
@@ -24,9 +24,34 @@ public class OnDemandAssessmentTests extends UITestBase {
         assertTestCase.assertEquals(onDemandAssessmentPage.menuOptionPageHeader.getText(), "Moody's ESG360: Request On-Demand Assessment", "Moody's ESG360: Request On-Demand Assessment page verified");
 
         onDemandAssessmentPage.clickReviewAndSendRequestButton();
+        onDemandAssessmentPage.verifyCompaniesDetails();
+        onDemandAssessmentPage.verifyShowFilterOptions();
+
         onDemandAssessmentPage.confirmRequest();
         onDemandAssessmentPage.clickProceedOnConfirmRequestPopup();
 
+        assertTestCase.assertEquals(onDemandAssessmentPage.menuOptionPageHeader.getText(), "Moody's ESG360: Request On-Demand Assessment", "Moody's ESG360: Request On-Demand Assessment page verified");
+
+    }
+
+    @Test(groups = {"regression", "ui"})
+    @Xray(test = {12054})
+    public void validateErrorMessageOfEmailFieldAndExit() {
+
+        ResearchLinePage researchLinePage = new ResearchLinePage();
+        OnDemandAssessmentPage onDemandAssessmentPage = new OnDemandAssessmentPage();
+        researchLinePage.selectPortfolio("EsgWithPredictedScores");
+
+        researchLinePage.clickMenu();
+        onDemandAssessmentPage.onDemandAssessmentRequest.click();
+        assertTestCase.assertEquals(onDemandAssessmentPage.menuOptionPageHeader.getText(), "Moody's ESG360: Request On-Demand Assessment", "Moody's ESG360: Request On-Demand Assessment page verified");
+
+        onDemandAssessmentPage.clickReviewAndSendRequestButton();
+        String emailConfirmMessage = "Please confirm email addresses. The listed contacts will receive an email prompting them to complete an ESG assessment questionnaire.";
+        onDemandAssessmentPage.verifyConfirmEmailAlert(emailConfirmMessage);
+
+        onDemandAssessmentPage.sendESCkey();
+        BrowserUtils.wait(2);
         assertTestCase.assertEquals(onDemandAssessmentPage.menuOptionPageHeader.getText(), "Moody's ESG360: Request On-Demand Assessment", "Moody's ESG360: Request On-Demand Assessment page verified");
 
     }
