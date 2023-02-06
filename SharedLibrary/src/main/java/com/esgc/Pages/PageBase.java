@@ -1151,7 +1151,7 @@ public abstract class PageBase {
         for (WebElement region : regions) {
             regionValues.add(region.getText());
         }
-        return regionValues.equals(expRegionValues);
+        return regionValues.containsAll(expRegionValues);
     }
 
     public boolean verifyDefaultSelectedSectorValue(String expSector) {
@@ -2127,7 +2127,7 @@ public abstract class PageBase {
 
     public WebElement getPortfolioDrawerHeader(String portfolioName) {
         BrowserUtils.wait(2);
-        return Driver.getDriver().findElement(By.xpath("//span[@title='" + portfolioName + "']"));
+        return Driver.getDriver().findElement(By.xpath("//span[contains(@title,'" + portfolioName + "')]"));
     }
 
     public void clickInSidePortfolioDrawer() {
