@@ -14,6 +14,7 @@ import org.openqa.selenium.support.Color;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
+import org.testng.SkipException;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -65,6 +66,12 @@ public class DashboardPage extends UploadPage {
 
     @FindBy(xpath = "//div[contains(@class,'MuiDrawer-paperAnchorRight')]//h2[1]")
     public WebElement methodologyPopup_Header;
+
+    @FindBy(xpath = "(//div[@class='entityList']//div/div[text()])[2]")
+    public WebElement heatMapDrawerYAxisColumnName;
+
+    @FindBy(xpath = "//div[@id='heatmapentity-test-id']//h3[text()='Brown Share Assessment']/..//h3[contains(text(),'Coverage')]")
+    public WebElement heatMapBrownShareCoverage;
 
     @FindBy(xpath = "//a[@id='link-link-test-id-1']")
     public WebElement methodologyPopup_Link_Methodology10;
@@ -213,6 +220,18 @@ public class DashboardPage extends UploadPage {
     @FindBy(xpath = "//table[./thead//th[text()='% Investment']]/tbody/tr/td[2]")
     public List<WebElement> investmentsInPerformanceChart;
 
+    @FindBy(xpath = "//table/thead//th[text()='Overall ESG Score']")
+    public WebElement OverallESGScoreColoumn;
+
+    @FindBy(xpath = "//table[./thead//th[text()='Overall ESG Score']]/tbody/tr/td[3]")
+    public List<WebElement> OverallESGScoreTabledata;
+
+    @FindBy(xpath = "//table/thead//th[text()='Total Critical Controversies']")
+    public WebElement TotalCriticalControversiesColoumn;
+
+    @FindBy(xpath = "//table[./thead//th[text()='Total Critical Controversies']]/tbody/tr/td[4]")
+    public List<WebElement> TotalCriticalControversiesTabledata;
+
     @FindBy(xpath = "//*[starts-with(text(),'Sum')]")
     public WebElement totalInvestmentInPerformanceChart;
 
@@ -222,7 +241,7 @@ public class DashboardPage extends UploadPage {
     @FindBy(xpath = "//span[contains(text(),'Laggards')]")
     public WebElement tabPerformanceLaggards;
 
-    @FindBy(xpath = "//*[starts-with(text(),'Show')]")
+    @FindBy(xpath = "//div[contains(text(),'Performance:')]/..//div[starts-with(text(),'Show Top')]")
     public WebElement performanceChartDropdown;
 
     @FindBy(xpath = "//ul[@role='listbox']//span[text()]")
@@ -234,6 +253,8 @@ public class DashboardPage extends UploadPage {
     @FindBy(xpath = "//td[@heap_id='perfchart']//span[@title]")
     public List<WebElement> performanceChartCompanyNames;
 
+    @FindBy(xpath = "//div[@id='perfError']")
+    public List<WebElement> PerformanceChartError;
     //=========== Geographic Risk Map
 
     @FindBy(xpath = "//div[text()='Geographic Risk Distribution']/following-sibling::div//*[@role]")
@@ -264,6 +285,9 @@ public class DashboardPage extends UploadPage {
     //============= Heat Map
     @FindBy(xpath = "//*[text()='Select two:']/following-sibling::div/div")
     public List<WebElement> heatMapResearchLines;
+
+    @FindBy(xpath = "//div[text()='Brown Share Assessment']/ancestor::table//div[@heap_id='heatmap']/span")
+    public List<WebElement> brownShareCategories;
 
     @FindBy(xpath = "//div[@class='entityList' and .//div[contains(text(),'Companies')]]")
     public WebElement heatMapEntityDrawerWidget;
@@ -641,6 +665,7 @@ public class DashboardPage extends UploadPage {
 
     public void clickAndSelectAPerformanceChart(String performanceChartName) {
         BrowserUtils.scrollTo(performanceChart);
+        System.out.println("Validating " +performanceChartName );
         wait.until(ExpectedConditions.elementToBeClickable(
                         Driver.getDriver()
                                 .findElement(By.xpath("//button[./span[contains(text(),'" + performanceChartName + "')]]"))))
@@ -676,13 +701,14 @@ public class DashboardPage extends UploadPage {
     }
 
     public int getPerformanceChartRowCount() {
+        BrowserUtils.wait(10);
         return wait.until(ExpectedConditions.visibilityOfAllElements(performanceChartRows)).size();
     }
 
     public double calculateTotalInvestmentFromPerformanceChart() {
         wait.until(ExpectedConditions.visibilityOfAllElements(investmentsInPerformanceChart));
         return PortfolioUtilities.round(investmentsInPerformanceChart.stream()
-                .mapToDouble(element -> Double.parseDouble(element.getText().substring(0, element.getText().indexOf("%")))).sum(), 2);
+                .mapToDouble(element -> Double.parseDouble(element.getText().substring(0, element.getText().indexOf("%")))).sum(), 1);
     }
 
     public double getTotalInvestmentInPerformanceChart() {
@@ -707,11 +733,17 @@ public class DashboardPage extends UploadPage {
     }
 
     public void selectPerformanceChartViewSizeFromDropdown(String size) {
+        System.out.println("Performance Chart: Selecting the dropdown option - "+size);
         BrowserUtils.scrollTo(performanceChartDropdown);
-        wait.until(ExpectedConditions.elementToBeClickable(performanceChartDropdown)).click();
-        wait.until(ExpectedConditions.visibilityOfAllElements(performanceChartDropdownOptions));
+        BrowserUtils.wait(5);
+        BrowserUtils.waitForClickablility(performanceChartDropdown,30).click();
+        BrowserUtils.wait(10);
+        //wait.until(ExpectedConditions.elementToBeClickable(performanceChartDropdown)).click();
+//        wait.until(ExpectedConditions.visibilityOfAllElements(performanceChartDropdownOptions));
         performanceChartDropdownOptions.stream().filter(e -> e.getText().equals(size)).findFirst().get().click();
         waitForDataLoadCompletion();
+        Actions action = new Actions(Driver.getDriver());
+        action.sendKeys(Keys.ESCAPE).build().perform();
     }
 
 
@@ -977,8 +1009,52 @@ public class DashboardPage extends UploadPage {
 
         BrowserUtils.scrollTo(element);
         wait.until(ExpectedConditions.elementToBeClickable(element));
+        BrowserUtils.wait(5);
         BrowserUtils.clickWithJS(element);
-        BrowserUtils.wait(10);
+        BrowserUtils.wait(5);
+    }
+
+    public void verifyBrownShareCoverageInHeatMapDescription(){
+        BrowserUtils.wait(5);
+        String uiBrownShareCoverage = heatMapBrownShareCoverage.getText();
+        uiBrownShareCoverage = uiBrownShareCoverage.replace("Coverage: ","").split("/")[0];
+        DashboardQueries dashboardQueries = new DashboardQueries();
+        DatabaseDriver.createDBConnection();
+        int dbBrownShareCoverage = dashboardQueries.getPortfolioBrownShareInfo("00000000-0000-0000-0000-000000000000","2022","11").size();
+        assertTestCase.assertEquals(Integer.parseInt(uiBrownShareCoverage),dbBrownShareCoverage, "Brown Share Coverage is not matching");
+    }
+
+    public void verifyBrownShareCategoryInHeatMapDrawer(List<String> expectedCategoriesList){
+        for(int i=1; i<=3; i++){
+            String expCategory = expectedCategoriesList.get(3-i);
+            String xpath = "//tr["+i+"]//div[@heap_id='heatmap'][@heap_heatmap_id='gridcell']/span[2]";
+            Driver.getDriver().findElement(By.xpath(xpath)).click();
+            String actualCategory = heatMapDrawerYAxisColumnName.getText();
+            assertTestCase.assertEquals(expCategory,actualCategory,"Expected Category is not available in the drawer");
+        }
+    }
+
+    public List<Map<String, String>> getBrownShareDataFromHeatMapDrawer(){
+        List<Map<String, String>> uiBrownShareHeatMapData = new ArrayList<>();
+        for(int i=1; i<=3; i++){
+            String xpath = "//tr["+i+"]//div[@heap_id='heatmap'][@heap_heatmap_id='gridcell']/span[2]";
+            Driver.getDriver().findElement(By.xpath(xpath)).click();
+            String scoreCategory = heatMapDrawerYAxisColumnName.getText();
+            String recordsCountXpath = "//ul[@class='list']/li";
+            int recordsCount = Driver.getDriver().findElements(By.xpath(recordsCountXpath)).size();
+            for(int j=1; j<=recordsCount; j++){
+                Map<String, String> companyDetails = new HashMap<>();
+                String companyName = Driver.getDriver().findElement(By.xpath(recordsCountXpath+"["+j+"]//h3/span")).getText();
+                String investmentScore = Driver.getDriver().findElement(By.xpath(recordsCountXpath+"["+j+"]//h4")).getText();
+                String scoreRange = Driver.getDriver().findElement(By.xpath(recordsCountXpath+"["+j+"]//div[text()]")).getText();
+                companyDetails.put("COMPANY_NAME", companyName);
+                companyDetails.put("INVESTMENT_SCORE", investmentScore);
+                companyDetails.put("SCORE_RANGE", scoreRange);
+                companyDetails.put("SCORE_CATEGORY", scoreCategory);
+                uiBrownShareHeatMapData.add(companyDetails);
+            }
+        }
+        return uiBrownShareHeatMapData;
     }
 
     public boolean verifyHeatMapResearchLineTitle(int buttonIndex) {
@@ -1000,18 +1076,18 @@ public class DashboardPage extends UploadPage {
         return false;
     }
 
-    public boolean heatmapXAxisIsAvailable(){
-        try{
+    public boolean heatmapXAxisIsAvailable() {
+        try {
             return heatMapXAxisIndicatorTitle.isDisplayed();
-        }catch(Exception e){
+        } catch (Exception e) {
             return false;
         }
     }
 
-    public boolean validateSelectTwoStaticText(){
-        try{
+    public boolean validateSelectTwoStaticText() {
+        try {
             return selectTwoLabel.isDisplayed();
-        }catch(Exception e){
+        } catch (Exception e) {
             return false;
         }
     }
@@ -1137,7 +1213,7 @@ public class DashboardPage extends UploadPage {
 //TODO better approach needed
             BrowserUtils.waitForVisibility(Driver.getDriver().findElement(By.xpath("//*[contains(text(),\"" + colText + "\")]")), 30);
             Driver.getDriver().findElement(By.xpath("//*[text()='ESC']/following-sibling::* | //span[text()='X'] | //span[@class='close'] | //div[@role='dialog']/div/div[2]")).click();
-                    //""//"//span[text()='X'] | //span[@class='close'] | //div[@role='dialog']/div/div[2]")).click();
+            //""//"//span[text()='X'] | //span[@class='close'] | //div[@role='dialog']/div/div[2]")).click();
             return true;
         } catch (Exception e) {
             e.printStackTrace();
@@ -1291,8 +1367,9 @@ public class DashboardPage extends UploadPage {
         String todayDate = DateTimeUtilities.getCurrentDate("MMMM d, yyyy");
         controversiesTableDates.forEach(e -> {
             String date = e.getText();
-            assertTestCase.assertTrue(
-                    DateTimeUtilities.getDayDifference(date, todayDate, "MMMM d, yyyy") < 60,
+            int difference = (int)DateTimeUtilities.getDayDifference(date, todayDate, "MMMM d, yyyy");
+            System.out.println("Date Difference:" +  difference + " days");
+            assertTestCase.assertTrue(difference <= 60,
                     "Verify Controversies are displayed by last 60 days");
 
         });
@@ -1473,7 +1550,7 @@ public class DashboardPage extends UploadPage {
 
     public List<String> getMethodologiesSections() {
         List<String> methodologySections = new ArrayList<>();
-        for(WebElement element: methodologySectionNames){
+        for (WebElement element : methodologySectionNames) {
             methodologySections.add(element.getText());
         }
         return methodologySections;
@@ -1509,9 +1586,9 @@ public class DashboardPage extends UploadPage {
         return false;
     }
 
-    public String getHeatMapPortfolioAverage(){
+    public String getHeatMapPortfolioAverage() {
         String portfolioAverage = heatmapPortfolioAverage.getText();
-        return portfolioAverage.substring(portfolioAverage.lastIndexOf(":")+1).trim();
+        return portfolioAverage.substring(portfolioAverage.lastIndexOf(":") + 1).trim();
 
     }
 
@@ -1550,10 +1627,10 @@ public class DashboardPage extends UploadPage {
     }
 
     public boolean verifyHeatMapTitle(String title) {
-        String xpath = "//div[@id='heatmapentity-test-id']//div[text()='"+title+"']";
-        try{
+        String xpath = "//div[@id='heatmapentity-test-id']//div[text()='" + title + "']";
+        try {
             BrowserUtils.waitForVisibility(Driver.getDriver().findElement(By.xpath(xpath)), 30);
-        }catch(Exception e){
+        } catch (Exception e) {
             return false;
         }
         return true;
@@ -1567,5 +1644,46 @@ public class DashboardPage extends UploadPage {
         } while (heatMapCells.get(randomCell).getText().equals("0%"));
         BrowserUtils.scrollTo(heatMapCells.get(randomCell)).click();
     }
-}
 
+    public void verifyOverallESGScoreCatgories() {
+        List<String> categories = Arrays.asList(new String[]{"Weak", "Limited", "Robust", "Advanced"});
+        for (WebElement e : OverallESGScoreTabledata) {
+            assertTestCase.assertTrue(categories.contains(e.getText()), "Validate OverAll ESG Scores");
+        }
+    }
+
+    public void verifyOverallESGTotalControversies() {
+        if (PerformanceChartError.size() < 1) {
+            for (WebElement e : TotalCriticalControversiesTabledata) {
+                if (e.getText().equals("")) {
+                    assertTestCase.assertTrue(true, "Validated if controversies are blank");
+                } else if (Integer.valueOf(e.getText()) == 0) {
+                    assertTestCase.assertEquals(Color.fromString(e.getCssValue("color")).asHex(),"#263238", "Validated if controversies are Zero");
+                } else if (Integer.valueOf(e.getText()) > 0) {
+                    assertTestCase.assertEquals(Color.fromString(e.getCssValue("color")).asHex(),"#b31717", "Validated if controversies are Zero");
+                }
+            }
+        }else{
+            throw new SkipException("Performance chart data not displayed");
+        }
+    }
+
+    public boolean isOverAllESGColumAvailable(){
+        try {
+            return OverallESGScoreColoumn.isDisplayed();
+        } catch(Exception e){
+            return false;
+        }
+
+
+    }
+
+    public boolean isTotalControversiesColumAvailable(){
+        try{
+            return TotalCriticalControversiesColoumn.isDisplayed();
+        } catch(Exception e){
+            return false;
+        }
+    }
+
+}

@@ -274,4 +274,91 @@ public class ExcelUtil {
     public int getLastRowNum() {
         return workSheet.getLastRowNum();
     }
+
+    public int getRowNumber(String cellData, int colNumber) {
+
+        int totalRows = workSheet.getLastRowNum();
+        Row row = null;
+        int RowNo = 0;
+        for (int rowNo = 1; rowNo <= totalRows; rowNo++) {
+            row = workSheet.getRow(rowNo);
+            RowNo = RowNo + 1;
+            if (row.getCell(colNumber).getStringCellValue().equalsIgnoreCase(cellData)) {
+                break;
+            }
+        }
+        return RowNo;
+    }
+
+    public Row getRow(int rowIndex) {
+        return workSheet.getRow(rowIndex);
+    }
+
+    public List<String> getRowData(int rowIndex, String nullValue) {
+        List<String> data = new ArrayList<>();
+        Row row = workSheet.getRow(rowIndex);
+        if(row == null) return data;
+        for (Cell cell : row) {
+            if (cell.getCellType() == CellType.BLANK) data.add(nullValue);
+            else if (cell.getCellType() == CellType.NUMERIC) data.add(String.valueOf(cell.getNumericCellValue()));
+            else data.add(cell.toString());
+        }
+        return data;
+    }
+    public List<String> getRowData(int rowIndex){
+        return getRowData(rowIndex, "");
+    }
+
+    public List<String> getRowData(String data){
+        //System.out.println("Last Row Num = "+workSheet.getLastRowNum());
+        for (int i = 0; i <=workSheet.getLastRowNum(); i++) {
+            if(getRowData(i).contains(data)){
+                return getRowData(i);
+            }
+        }
+        System.out.println(data+" Data not found");
+        return null;
+    }
+
+    public Map<String,String> getfilteredData(Map<String, String> params, List<String> requiredColumns) {
+        int rows = workSheet.getLastRowNum();
+        int cols = requiredColumns.get(0).equals("All")? columnCount():requiredColumns.size();
+        Map<String, String> data = new HashMap<>();
+        String conditions = "";
+        for (int rowNum = 1; rowNum <= rows; rowNum++) {
+            boolean flag = false;
+            for (Map.Entry<String, String> entry : params.entrySet()) {
+                if (getCellData(rowNum, getColumnNum(entry.getKey())).equalsIgnoreCase(entry.getValue())) {
+                    flag = true;
+                } else {
+                    flag = false;
+                    break;
+                }
+            }
+            if (flag) {
+
+                for (int colNum = 0; colNum < cols; colNum++) {
+                    int coln = requiredColumns.get(0).equals("All")? colNum:getColumnNum(requiredColumns.get(colNum));
+                    data.put(getCellData(0, coln),(getCellData(rowNum, coln)));
+                }
+            }
+        }
+
+        return data;
+    }
+    public List<String> getNumericCells() {
+        List<String> data = new ArrayList<>();
+        for (Row row : workSheet) {
+            for (Cell cell : row) {
+                if (cell.getCellType() == CellType.NUMERIC) {
+                    data.add(cell.toString());
+                }
+            }
+        }
+        return data;
+    }
+
+    public String getSheetName() {
+        return workSheet.getSheetName();
+    }
 }

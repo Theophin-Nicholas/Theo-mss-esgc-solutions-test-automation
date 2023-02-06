@@ -47,7 +47,7 @@ public class EntityClimateProfileSummaryTests extends UITestBase {
         researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
         //BrowserUtils.wait(5);
         researchLinePage.navigateToEntity(Entity);
-        String orbisID = entityClimateProfilePage.getEntityOrbisId();
+        String orbisID = entityClimateProfilePage.getEntityOrbisIdFromUI();
         EntityClimateProfilePageQueries entityClimateProfilepagequeries = new EntityClimateProfilePageQueries();
         Map<String, String> data = entityClimateProfilepagequeries.getGreenShareData(orbisID);
         String scoreUI = entityClimateProfilePage.getGreenShareScoreRange();
@@ -625,7 +625,7 @@ public class EntityClimateProfileSummaryTests extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI}, dataProviderClass = DataProviderClass.class, dataProvider = "orbisID")
-    @Xray(test = {8227, 8228, 9840})
+    @Xray(test = {8227, 8228, 9840,12420})
     public void verify_ESG_Score_Value(String Entity) {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio Analysis page");
@@ -638,6 +638,7 @@ public class EntityClimateProfileSummaryTests extends UITestBase {
         //BrowserUtils.wait(5);
         assertTestCase.assertTrue(profilePage.esgTitle.isDisplayed(), "ESG Score title is displayed");
         assertTestCase.assertTrue(profilePage.verifyESGScoreValue(), "ESG Score is verified");
+        profilePage.verifyESGScoreHeaders();
     }
 
     @Test(groups = {REGRESSION, UI}, dataProviderClass = DataProviderClass.class, dataProvider = "orbisID")
@@ -653,6 +654,7 @@ public class EntityClimateProfileSummaryTests extends UITestBase {
         //BrowserUtils.wait(5);
         assertTestCase.assertTrue(profilePage.esgTitle.isDisplayed(), "ESG Score title is displayed");
         assertTestCase.assertTrue(profilePage.verifyESGScorePillars(Entity), "ESG Score is displayed");
+
     }
 
     @Test(groups = {REGRESSION, UI})
@@ -786,7 +788,7 @@ public class EntityClimateProfileSummaryTests extends UITestBase {
         //Physical Risk Management No Info Check
         int size = Driver.getDriver().findElements(By.xpath("(//div[@id='phyRskMgmClimate-test-id'])[1]/div/div/div/div[2]")).size();
         if (size == 0) {
-            WebElement physicalManagementNoInfo = Driver.getDriver().findElement(By.xpath("(//div[@id='phyRskMgmClimate-test-id'])[1]/div/div/div[2]"));
+            WebElement physicalManagementNoInfo = Driver.getDriver().findElement(By.xpath("(//div[@id='phyRskMgmClimate-test-id'])[1]/div/div/div/div"));
             assertTestCase.assertEquals(physicalManagementNoInfo.getText(), "No information available.");
             System.out.println("Assertion Successful for Physical Risk Management ");
 
@@ -943,7 +945,7 @@ public class EntityClimateProfileSummaryTests extends UITestBase {
 
     }
 
-    @Test(groups = {REGRESSION, UI, SMOKE}, dataProviderClass = DataProviderClass.class, dataProvider = "entitlementCheckPrd")
+    @Test(groups = {REGRESSION, UI}, dataProviderClass = DataProviderClass.class, dataProvider = "entitlementCheckPrd")
     @Xray(test = {8448, 8449, 8875, 8878, 8879, 8880, 8881, 8884, 8224, 8225, 8226})
     public void verifyEntitlementBaseWidgets(String username, String password, String entitlement) {
         //Trying to log in with only Entitlement User
@@ -1131,8 +1133,8 @@ public class EntityClimateProfileSummaryTests extends UITestBase {
         }
     }
 
-
-    @Test(groups = {REGRESSION, UI},
+//TODO disclosure ratio is not valid until 2.0 companies are visiable
+    @Test(enabled = false, groups = {REGRESSION, UI},
             dataProviderClass = DataProviderClass.class, dataProvider = "orbisIDWithDisclosureScore")
     @Xray(test = {8750})
     public void verifyDisclosureScore(String entity) {

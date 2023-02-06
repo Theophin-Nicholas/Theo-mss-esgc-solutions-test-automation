@@ -1,5 +1,7 @@
 package com.esgc.Utilities;
 
+import com.google.common.base.Function;
+import com.google.common.collect.Lists;
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.*;
@@ -520,5 +522,34 @@ public class BrowserUtils {
             ret[i++] = array2[j];
         }
         return ret;
+    }
+
+    public static boolean isNumeric(String strNum) {
+        if (strNum == null) {
+            return false;
+        }
+        try {
+            double d = Double.parseDouble(strNum);
+        } catch (NumberFormatException nfe) {
+            return false;
+        }
+        return true;
+    }
+    public static <T, U> List<U>
+    convertStringListToIntList(List<T> listOfString,
+                               Function<T, U> function)
+    {
+        return Lists.transform(listOfString, function);
+    }
+
+    public static List<String> specialSort(List<String> list) {
+        //sort list with case-insensitive order and ignore special characters
+        list.sort(new Comparator<String>() {
+            @Override
+            public int compare(String o1, String o2) {
+                return o1.replaceAll("[^a-zA-Z0-9 ]", "~").compareToIgnoreCase(o2.replaceAll("[^a-zA-Z0-9 ]", "~"));
+            }
+        });
+        return list;
     }
 }

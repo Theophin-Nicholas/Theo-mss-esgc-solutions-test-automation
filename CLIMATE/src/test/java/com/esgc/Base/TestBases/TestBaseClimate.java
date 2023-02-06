@@ -19,7 +19,7 @@ public class TestBaseClimate extends TestBase {
         DatabaseDriver.createDBConnection();
     }
 
-    public void getNoExportBundleAccessTokenDataValidation() {
+    public synchronized void getNoExportBundleAccessTokenDataValidation() {
         System.out.println("getting token");
         String URL = Environment.URL;
         BrowserUtils.wait(1);
@@ -39,7 +39,7 @@ public class TestBaseClimate extends TestBase {
         System.out.println("token = " + accessToken);
     }
 
-    public void getNoEsgBundleAccessTokenDataValidation() {
+    public synchronized void getNoEsgBundleAccessTokenDataValidation() {
         System.out.println("getting token");
         String URL = Environment.URL;
         BrowserUtils.wait(1);
@@ -56,7 +56,7 @@ public class TestBaseClimate extends TestBase {
         System.out.println("token = " + accessToken);
     }
 
-    public void getNoControversiesBundleAccessTokenDataValidation() {
+    public synchronized void getNoControversiesBundleAccessTokenDataValidation() {
         System.out.println("getting token");
         String URL = Environment.URL;
         BrowserUtils.wait(1);
@@ -76,7 +76,7 @@ public class TestBaseClimate extends TestBase {
         System.out.println("token = " + accessToken);
     }
 
-    public void getAccessTokenDataValidation() {
+    public synchronized void getAccessTokenDataValidation() {
 
         LoginPage loginPage = new LoginPage();
         System.out.println("getting token");
@@ -98,7 +98,7 @@ public class TestBaseClimate extends TestBase {
         }
     }
 
-    public void getAccessTokenDataValidations() {
+    public synchronized void getAccessTokenDataValidations() {
         LoginPage loginPage = new LoginPage();
         System.out.println("getting token");
         if (!loginPage.isSearchIconDisplayed()) {
@@ -119,7 +119,7 @@ public class TestBaseClimate extends TestBase {
         }
     }
 
-    public void refreshToken() {
+    public synchronized void refreshToken() {
         if (stopWatch.getTime() > 3600000) {
             LoginPage loginPage = new LoginPage();
             if (loginPage.isSearchIconDisplayed()) {
@@ -154,11 +154,11 @@ public class TestBaseClimate extends TestBase {
         System.out.println("token = " + accessToken);
     }
 
-    public void setAccessTokenFromUI() {
+    public synchronized void setAccessTokenFromUI() {
         String getAccessTokenScript = "return JSON.parse(localStorage.getItem('okta-token-storage')).accessToken.accessToken";
         accessToken = ((JavascriptExecutor) Driver.getDriver()).executeScript(getAccessTokenScript).toString();
         System.setProperty("token", accessToken);
-        System.out.println("token = " + accessToken);
+        //System.out.println("token = " + accessToken);
     }
 
 }

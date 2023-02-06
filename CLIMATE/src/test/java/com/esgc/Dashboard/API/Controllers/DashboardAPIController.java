@@ -3,18 +3,19 @@ package com.esgc.Dashboard.API.Controllers;
 import com.esgc.Base.API.APIModels.APIFilterPayload;
 import com.esgc.Base.API.APIModels.APIFilterPayloadWithoutBenchmark;
 import com.esgc.Base.API.Controllers.APIController;
-import com.esgc.Dashboard.API.APIModels.APIEntityListPayload;
-import com.esgc.Dashboard.API.APIModels.APIHeatMapPayload;
-import com.esgc.Dashboard.API.APIModels.APIHeatMapSinglePayload;
-import com.esgc.Dashboard.API.APIModels.APIPerformanceChartPayload;
+import com.esgc.Dashboard.API.APIModels.*;
 import com.esgc.Dashboard.API.DashboardEndPoints;
+import com.esgc.EntityProfile.API.APIModels.SectorComparison;
 import com.esgc.EntityProfile.API.EntityProfilePageEndpoints;
 import com.esgc.PortfolioAnalysis.API.PortfolioAnalysisEndpoints;
+import com.esgc.Utilities.Driver;
 import io.restassured.RestAssured;
 import io.restassured.parsing.Parser;
 import io.restassured.response.Response;
+import org.openqa.selenium.By;
 
 import java.time.LocalDate;
+import java.util.*;
 
 public class DashboardAPIController extends APIController {
 
@@ -244,11 +245,24 @@ public class DashboardAPIController extends APIController {
                     .when()
                     .post(DashboardEndPoints.POST_PERFORMANCE_CHART).prettyPeek();
 
-
         } catch (Exception e) {
             System.out.println("Inside exception " + e.getMessage());
         }
 
+        return response;
+    }
+
+    public Response getHeatMapEntitiesData(String portfolioId, String year, String month, String researchLine, String category){
+        Response response = null;
+        try {
+            response = configSpec()
+                    .pathParam("portfolio_id", portfolioId)
+                    .when()
+                    .body("{\"region\":\"all\",\"sector\":\"all\",\"month\":\"" + month + "\",\"year\":\"" + year + "\",\"research_line_1\":\""+researchLine+"\",\"category_1\":\""+category+"\",\"category_2\":\"\"}")
+                    .post(DashboardEndPoints.POST_HEAT_MAP_ENTITY_LIST);
+        } catch (Exception e) {
+            System.out.println("Inside exception " + e.getMessage());
+        }
         return response;
     }
 }

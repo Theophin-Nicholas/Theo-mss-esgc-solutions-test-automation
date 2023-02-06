@@ -176,6 +176,7 @@ public class EntityExportOrSourcesDocumentsTests extends UITestBase {
 
         String filePath = BrowserUtils.downloadPath()+"\\"+actualFileName;
         int numberOfPages = PdfUtil.getNumberOfPages(filePath);
+        //TODO needs to be updated, summary is not first page with esg entitlements
         assertTestCase.assertTrue(PdfUtil.getPdfContent(filePath,1).contains("Summary"),"Verify first page is summary page");
         assertTestCase.assertTrue(PdfUtil.getPdfContent(filePath, 2).contains("Materiality"),"Verify first page is summary page");
         assertTestCase.assertTrue(PdfUtil.getPdfContent(filePath, numberOfPages).contains("Disclaimer and Copyright"),"Verify first page is summary page");
@@ -188,8 +189,8 @@ public class EntityExportOrSourcesDocumentsTests extends UITestBase {
     }
 
     @Test(groups = {ENTITY_PROFILE, REGRESSION, UI}, dataProviderClass = DataProviderClass.class, dataProvider = "exportEntitlements")
-    @Xray(test = {10178, 11041,11153})
-    public void validatePdfContentBasedOnEntitlement(String username, String password, String entitlement){
+    @Xray(test = {10178, 11041,11153, 12015,12016,12018,12271,12272,12438})
+    public void validatePdfContentBasedOnEntitlement(String username, String password, String entitlement, String company){
         LoginPage loginPage = new LoginPage();
         EntityClimateProfilePage entityProfilePage = new EntityClimateProfilePage();
         List<WebElement> check = Driver.getDriver().findElements(By.xpath("//div[@id='RegSector-test-id-1']"));
@@ -200,7 +201,7 @@ public class EntityExportOrSourcesDocumentsTests extends UITestBase {
         }
         loginPage.loginWithParams(username, password);
 
-        String company = "Rogers Corp.";
+//        String company = "Rogers Corp.";
         String companyName = entityProfilePage.searchAndLoadClimateProfilePage(company);
         assertTestCase.assertTrue(entityProfilePage.validateGlobalCompanyNameHeader(companyName),companyName+" Header Verification");
         System.out.println("companyName = " + companyName);
@@ -217,6 +218,7 @@ public class EntityExportOrSourcesDocumentsTests extends UITestBase {
 
         String filePath = BrowserUtils.downloadPath()+"\\"+actualFileName;
         String content = PdfUtil.getPdfContent(filePath);
+        System.out.println("PDF Content: \n"+content);
 
         if (entitlement.equals("Physical Risk")) {
             /* Verify that User is able to see just Physical Risk Entitlement */
@@ -234,29 +236,35 @@ public class EntityExportOrSourcesDocumentsTests extends UITestBase {
             assertTestCase.assertTrue(!content.contains("Physical Risk "));
         } else if (entitlement.equals("Physical Risk and Transition Risk")) {
             /* Verify that User is able to see just Physical Risk and Transition Risk Entitlements  */
-            assertTestCase.assertTrue(content.contains("Physical Risk "));
+            assertTestCase.assertTrue(content.contains("Physical Risk"));
             assertTestCase.assertTrue(content.contains("OPERATIONS RISK"));
             assertTestCase.assertTrue(content.contains("MARKET RISK"));
             assertTestCase.assertTrue(content.contains("SUPPLY CHAIN RISK"));
-            assertTestCase.assertTrue(content.contains("Transition Risk "));
+            assertTestCase.assertTrue(content.contains("Transition Risk"));
             assertTestCase.assertTrue(content.contains("Temperature Alignment"));
             assertTestCase.assertTrue(content.contains("Carbon Footprint"));
             assertTestCase.assertTrue(content.contains("Green Share"));
             assertTestCase.assertTrue(content.contains("Brown Share"));
+            assertTestCase.assertTrue(!content.contains("Materiality: High")); //12016
+            assertTestCase.assertTrue(content.contains("Controversies as of ")); //12439
         } else if (entitlement.equals("ESG")) {
             /* Verify that User is able to see just ESG   */
-            assertTestCase.assertTrue(content.contains("Subcategory Materiality"));
-            assertTestCase.assertTrue(content.contains("Very High Materiality"));
-            assertTestCase.assertTrue(content.contains("High Materiality"));
-            assertTestCase.assertTrue(content.contains("Moderate Materiality"));
-            assertTestCase.assertTrue(content.contains("Low Materiality"));
             assertTestCase.assertTrue(!content.contains("Physical Risk "));
             assertTestCase.assertTrue(!content.contains("Transition Risk "));
+            assertTestCase.assertTrue(!content.contains("Metrics"));
+            assertTestCase.assertTrue(!content.contains("Metrics Materiality: Very High")); //12018
+            assertTestCase.assertTrue(!content.contains("Metrics Materiality: High")); //12015
+            assertTestCase.assertTrue(!content.contains("Metrics Materiality: Moderate"));
+            assertTestCase.assertTrue(!content.contains("Metrics Materiality: Low"));
+            assertTestCase.assertTrue(content.contains("Key Drivers")); //12271
+            assertTestCase.assertTrue(content.contains("Very high and high materiality criteria that score advanced or weak")); //12271
+            assertTestCase.assertTrue(content.contains("STRENGTHS WEAKNESSES")); //12271
+            assertTestCase.assertTrue(content.contains("more criteria receive a")); //12272
 
-        } else if (entitlement.equals("Controversey entitlement")) {
-            assertTestCase.assertTrue(content.contains("Controversies as of "));
+        } else if (entitlement.equals("Controversy entitlement")) {
+            assertTestCase.assertTrue(content.contains("Controversies as of ")); //12438
             assertTestCase.assertTrue(content.contains("CRITICAL AND HIGH SEVERITY CONTROVERSIES SEVERITY"));
-        } else if (entitlement.equals("No Controversey")) {
+        } else if (entitlement.equals("No Controversy")) {
             assertTestCase.assertTrue(!content.contains("Controversies as of "));
             assertTestCase.assertTrue(!content.contains("CRITICAL AND HIGH SEVERITY CONTROVERSIES SEVERITY"));
         }

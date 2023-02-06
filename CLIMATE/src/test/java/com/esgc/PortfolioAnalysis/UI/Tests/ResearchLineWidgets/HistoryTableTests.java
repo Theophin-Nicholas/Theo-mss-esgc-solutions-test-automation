@@ -33,7 +33,7 @@ public class HistoryTableTests extends UITestBase {
         test.info("History Table is present. Test Passed");
     }
 
-    @Test(groups = {REGRESSION, UI, SMOKE},
+    @Test(groups = {REGRESSION, UI},
             description = "Verify History Table not available", dataProvider = "History Table Research Lines")
     @Xray(test = {5815, 5816, 5817, 5820})
     public void verifyHistoryTablbeNotAvailable(String page) {
@@ -51,7 +51,7 @@ public class HistoryTableTests extends UITestBase {
         Assert.assertTrue(!researchLinePage.checkIfBenchMarkHistoryTableExists(), "Validate that history table does not exists");
     }
 
-    @Test(groups = {REGRESSION, UI, SMOKE},
+    @Test(groups = {REGRESSION, UI},
             description = "Verify History Chart include unmatched companies/NULL/Negative values", dataProvider = "History Table Research Lines")
     @Xray(test = {5935})
     public void verifyHistoryChartIncludeUnmatchedCompanies(String page) {
@@ -71,15 +71,14 @@ public class HistoryTableTests extends UITestBase {
         BrowserUtils.wait(5);
     }
 
-    @Test(groups = {REGRESSION, UI, SMOKE}, dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
-    @Xray(test = {9822})
+    @Test(groups = {REGRESSION, UI}, dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
+    @Xray(test = {9822, 12601, 12615})
     public void verifyCategoriesAndColorsOfHistoryTable(String page) {
         ResearchLinePage researchLinePage = new ResearchLinePage();
-
         researchLinePage.navigateToResearchLine(page);
         researchLinePage.waitForDataLoadCompletion();
 
-        if (page.equals("Physical Risk Hazards") || page.equals("Temperature Alignment") || page.equals("ESG Assessment")) {
+        if (page.equals("Physical Risk Hazards") || page.equals("Temperature Alignment") || page.equals("ESG Assessments")) {
             throw new SkipException("History Table is not ready to test in " + page);
         }
         assertTestCase.assertTrue(researchLinePage.checkIfHistoryTableExists(page), "History Table Validation");
@@ -98,8 +97,8 @@ public class HistoryTableTests extends UITestBase {
             assertTestCase.assertTrue(researchLinePage.mouseHoverAndVerifyTooltipHistoryTable("Not Covered", "highcharts-color-0", "#dce1e6"), "History Table Validation");
         } else if (page.equals("Brown Share Assessment")) {
             assertTestCase.assertTrue(researchLinePage.mouseHoverAndVerifyTooltipHistoryTable("0%", "highcharts-color-3", "#39A885"), "History Table Validation");
-            assertTestCase.assertTrue(researchLinePage.mouseHoverAndVerifyTooltipHistoryTable("0-20%", "highcharts-color-2", "#6FB24B"), "History Table Validation");
-            assertTestCase.assertTrue(researchLinePage.mouseHoverAndVerifyTooltipHistoryTable("20-100%", "highcharts-color-1", "#B28559"), "History Table Validation");
+            assertTestCase.assertTrue(researchLinePage.mouseHoverAndVerifyTooltipHistoryTable("0-10%,10-20%", "highcharts-color-2", "#6FB24B"), "History Table Validation");
+            assertTestCase.assertTrue(researchLinePage.mouseHoverAndVerifyTooltipHistoryTable("20-33%,33-50%,>=50%", "highcharts-color-1", "#B28559"), "History Table Validation");
             assertTestCase.assertTrue(researchLinePage.mouseHoverAndVerifyTooltipHistoryTable("Not Covered", "highcharts-color-0", "#dce1e6"), "History Table Validation");
         } else if (page.equals("Physical Risk Management")) {
             assertTestCase.assertTrue(researchLinePage.mouseHoverAndVerifyTooltipHistoryTable("Advanced", "highcharts-color-4", "#229595"), "History Table Validation");

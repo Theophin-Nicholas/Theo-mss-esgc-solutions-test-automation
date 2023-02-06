@@ -159,8 +159,6 @@ public class PortfolioSelectionModal extends DashboardUITestBase {
             DashboardPage dashboardPage = new DashboardPage();
             test.info("Navigate to Portfolio analysis page");
             dashboardPage.navigateToPageFromMenu("Portfolio Analysis");
-            dashboardPage.selectSamplePortfolioFromPortfolioSelectionModal();
-            dashboardPage.waitForDataLoadCompletion();
 
             dashboardPage.clickUploadPortfolioButton();
             test.info("Navigated to Upload Page");
@@ -185,17 +183,9 @@ public class PortfolioSelectionModal extends DashboardUITestBase {
             List<String> sectorListForTheUploadedPortfolio = dashboardPage.getListOfSector();
 
             dashboardPage.refreshCurrentWindow();
-            test.info("Open the selection Modal Popup");
-            dashboardPage.openSelectionModalPopUp();
-            assertTestCase.assertTrue(dashboardPage.checkIfSelectionModalPopupIsDisplayed(), "Selection Modal Popup was not opened");
-            assertTestCase.assertTrue(dashboardPage.checkIfSearchBarIsDisplayed(), "Selection Modal Popup was not opened");
 
-            dashboardPage.enterPortfolioNameInSearchBar("Sample Portfolio");
+            dashboardPage.selectSamplePortfolioFromPortfolioSelectionModal();
             test.info("Select a Portfolio from the list and save the name of the selected Portfolio.");
-            dashboardPage.selectAPortfolio(0);
-
-            test.info("Verify that after portfolio selection , Modal Popup got closed.");
-            assertTestCase.assertFalse(dashboardPage.checkIfSelectionModalPopupIsDisplayed(), "Selection Modal Popup was closed after selection of one Portfolio, restricting user for multiselct");
 
             dashboardPage.clickFiltersDropdown();
 

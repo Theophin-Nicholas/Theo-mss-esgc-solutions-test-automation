@@ -8,7 +8,6 @@ import com.esgc.Dashboard.API.APIModels.APIHeatMapResponse;
 import com.esgc.Dashboard.API.APIModels.APIHeatMapSinglePayload;
 import com.esgc.Dashboard.API.Controllers.DashboardAPIController;
 import com.esgc.Dashboard.UI.Pages.DashboardPage;
-import com.esgc.PortfolioAnalysis.API.APIModels.RangeAndScoreCategory;
 import com.esgc.PortfolioAnalysis.UI.Pages.ResearchLinePage;
 import com.esgc.Utilities.*;
 import com.esgc.Utilities.Database.DatabaseDriver;

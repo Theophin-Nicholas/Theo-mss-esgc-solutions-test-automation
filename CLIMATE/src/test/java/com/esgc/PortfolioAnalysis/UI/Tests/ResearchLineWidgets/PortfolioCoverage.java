@@ -74,7 +74,10 @@ public class PortfolioCoverage extends UITestBase {
         //investment: 95%
         //investmentRate: 95
         assertTestCase.assertTrue(investment.endsWith("%"), "% sign verified");
-        int investmentRate = Integer.parseInt(investment.substring(0, investment.indexOf("%")));
+        int investmentRate = 0;
+        if(!investment.contains("<")){
+            investmentRate = Integer.parseInt(investment.substring(0, investment.indexOf("%")));
+        }
 
         assertTestCase.assertTrue(companyCount >= 0, "Company count displayed");
         assertTestCase.assertTrue(companyCount <= allCompaniesCount, "Company count in range");

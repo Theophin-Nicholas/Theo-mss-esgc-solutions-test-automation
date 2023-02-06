@@ -80,7 +80,7 @@ public class HistoryTableTests extends DataValidationTestBase {
 
         List<String> years = historyTables.get(0).getPortfolio().getYearlydata();
 
-
+        //TODO: Brown share categories need to be incorporated
         List<RangeAndScoreCategory> rangeAndCategoryList = controller.getResearchLineRangesAndScoreCategories(researchLine);
 
 

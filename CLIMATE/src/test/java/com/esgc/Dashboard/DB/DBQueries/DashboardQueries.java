@@ -1,7 +1,10 @@
 package com.esgc.Dashboard.DB.DBQueries;
 
+import com.esgc.DBModels.DashboardPerformanceChart;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -234,6 +237,18 @@ public class DashboardQueries {
         return result;
     }
 
+    public List<Map<String, Object>> getPortfolioBrownShareInfo(String portfolioId, String year, String month) {
+        String query = "WITH p AS (SELECT p.bvd9_number,p.company_name,p.region_name,p.region,p.sector,SUM(p.value) OVER(PARTITION BY p.bvd9_number) value,SUM(p.value) OVER() total_value\n" +
+                "FROM df_target.df_portfolio p WHERE p.portfolio_id = '"+portfolioId+"'\n" +
+                "QUALIFY ROW_NUMBER() OVER(partition by p.BVD9_NUMBER ORDER BY p.REGION_NAME NULLS LAST)=1)\n" +
+                "SELECT s.bvd9_number,p.company_name,p.region_name,p.region,p.sector,p.value, p.total_value,s.YEAR,s.MONTH,s.BS_FOSF_INDUSTRY_REVENUES,s.BS_FOSF_INDUSTRY_REVENUES_ACCURATE_SOURCE,\n" +
+                "s.BS_FOSF_INDUSTRY_REVENUES_ACCURATE,s.SCORE_RANGE,s.SCORE_CATEGORY,s.PRODUCED_DATE,s.PREVIOUS_PRODUCED_DATE\n" +
+                "FROM Brown_Share s JOIN p ON p.bvd9_number=s.BVD9_NUMBER\n" +
+                "WHERE s.YEAR || s.MONTH = '"+year+""+month+"'";
+        List<Map<String, Object>> result = getQueryResultMap(query);
+        return result;
+    }
+
     public List<Map<String, Object>> getCompanyTempAlignInfo(String portfolioId, String bvd9Number, String month, String year) {
         String query = "select ta.* from df_portfolio df" +
                 "    left join temperature_alignment ta on ta.bvd9_number=df.bvd9_number and ta.month=" + month + " and ta.year=" + year + "" +
@@ -433,6 +448,114 @@ public class DashboardQueries {
                 + localDate.format(monthFormatter) + " and es_1.BVD9_NUMBER = p.BVD9_NUMBER )\n";
         System.out.println("query = " + query);
         return getQueryResultMap(query);
+    }
+
+
+    public static List<DashboardPerformanceChart> getPerfomanceChartESGSCORE(String performanceChartTypes) {
+        String Query =
+                " with p as (SELECT bvd9_number, COMPANY_NAME\n" +
+                        ",region, sector, SUM(value) as invvalue, COUNT(*) OVER() total_companies, SUM(SUM(value)) OVER() AS total_value\n" +
+                        "FROM df_target.df_portfolio WHERE 1=1 AND portfolio_id = '00000000-0000-0000-0000-000000000000'  GROUP BY bvd9_number, COMPANY_NAME, region, sector)\n" +
+                        ",contro as (\n" +
+                        "SELECT DISTINCT orbis_id, nvl(sum(case when cd.severity = 'Critical' AND cd.controversy_steps = 'last' then 1 else 0 end), 0) counts FROM CONTROVERSY_DETAILS cd \n" +
+                        " WHERE\n" +
+                        " cd.CONTROVERSY_STATUS='Active'\n" +
+                        " and to_varchar(extract(year from cd.controversy_events)) = 2022\n" +
+                        " and to_varchar(extract(month from cd.controversy_events)) =  to_varchar(11)\n" +
+                        " AND cd.CONTROVERSY_STEPS='last'\n" +
+                        " group by 1\n" +
+                        " ),\n" +
+                        " esg as (\n" +
+                        " select  eos.* from entity_coverage_tracking ect\n" +
+                        " join ESG_OVERALL_SCORES eos on ect.orbis_id=eos.orbis_id and data_type = 'esg_pillar_score'  and sub_category = 'ESG' and eos.year || eos.month <= '202211' //and eos.RESEARCH_LINE_ID=1015\n" +
+                        " where  coverage_status = 'Published' and publish = 'yes' --and  value <> null\n" +
+                        " qualify row_number() OVER (PARTITION BY eos.orbis_id ORDER BY eos.year DESC, eos.month DESC, eos.scored_date DESC) =1\n" +
+                        " )\n" +
+                        " select  top 10 p.bvd9_number,COMPANY_NAME, Round((p.invvalue/p.total_value)*100,2) as invtPer,value as score,contro.counts,\n" +
+                        " case\n" +
+                        " when esg.RESEARCH_LINE_ID=1008 then\n" +
+                        " case\n" +
+                        " when (esg.value < 30) then 1\n" +
+                        " when (esg.value < 50) then 2\n" +
+                        " when (esg.value < 60) then 3\n" +
+                        " when (esg.value >= 60) then 4\n" +
+                        " end\n" +
+                        " when esg.RESEARCH_LINE_ID=1015 then\n" +
+                        " case\n" +
+                        " when (esg.value < 25) then 1\n" +
+                        " when (esg.value < 45 ) then 2\n" +
+                        " when (esg.value < 65 ) then 3\n" +
+                        " when (esg.value >= 65) then 4\n" +
+                        " end\n" +
+                        " end as scale,\n" +
+                        " case\n" +
+                        " when scale = 4 then 'Advanced'\n" +
+                        " when scale = 3 then 'Robust'\n" +
+                        " when scale = 2 then 'Limited'\n" +
+                        " when scale = 1 then 'Weak'\n" +
+                        " end as esgCategories\n" +
+                        " from p\n" +
+                        " join esg on p.bvd9_number=esg.orbis_id\n" +
+                        " left join contro on p.bvd9_number=contro.orbis_id" ;
+
+        String OrderClause = "";
+        switch (performanceChartTypes){
+            case "largest_holdings":
+                OrderClause = " order by p.invvalue desc, p.COMPANY_NAME";
+                break ;
+            case "leaders":
+                OrderClause = " order by scale desc nulls last, score desc nulls last, INVTPER desc, counts asc nulls first,  p.COMPANY_NAME asc nulls last";
+                break ;
+            case "laggards":
+                OrderClause = " order by scale asc nulls last, score asc nulls last, INVTPER asc, counts desc nulls last,  p.COMPANY_NAME asc nulls last";
+                break ;
+        }
+
+        Query = Query + OrderClause ;
+
+        List<DashboardPerformanceChart> performanceChartESGScore = new ArrayList<>();
+        for (Map<String, Object> each : getQueryResultMap(Query)) {
+            DashboardPerformanceChart model = new DashboardPerformanceChart();
+            model.setBVD9_NUMBER(each.get("BVD9_NUMBER").toString());
+            model.setCOMPANY_NAME(each.get("COMPANY_NAME").toString());
+            model.setInvestmentPercentage(Double.valueOf(each.get("INVTPER").toString()));
+            model.setSCORE(Integer.valueOf(each.get("SCORE").toString()));
+            if(each.get("COUNTS") != null)
+                model.setControCounts(Integer.valueOf(each.get("COUNTS").toString()));
+            else
+                model.setControCounts(-1);
+            model.setScale(Integer.valueOf(each.get("SCALE").toString()));
+            model.setESGCATEGORIES(each.get("ESGCATEGORIES").toString());
+            performanceChartESGScore.add(model);
+        }
+        return performanceChartESGScore;
+
+
+    }
+
+    public static List<DashboardPerformanceChart> getBrownShareResultd(String portfolioID, String year, String month) {
+        String Query = "select Portfolio_id,df.bvd9_number,BS_FOSF_INDUSTRY_REVENUES_ACCURATE_SOURCE,BS_FOSF_INDUSTRY_REVENUES_ACCURATE, SCORE_RANGE\n" +
+                "from df_portfolio df\n" +
+                "JOIN BROWN_SHARE bs\n" +
+                "on df.bvd9_number = bs.bvd9_number\n" +
+                "where portfolio_id = '" + portfolioID + "'"+
+                "and year = '" + year + "'"+
+                "and month = '" + month + "'" ;
+        List<DashboardPerformanceChart> performanceChartESGScore = new ArrayList<>();
+
+        for (Map<String, Object> each : getQueryResultMap(Query)) {
+            DashboardPerformanceChart model = new DashboardPerformanceChart();
+            model.setBVD9_NUMBER(each.get("BVD9_NUMBER").toString());
+           model.setBS_FOSF_INDUSTRY_REVENUES_ACCURATE_SOURCE(each.get("BS_FOSF_INDUSTRY_REVENUES_ACCURATE_SOURCE")==null ? "NA":each.get("BS_FOSF_INDUSTRY_REVENUES_ACCURATE_SOURCE").toString());
+           model.setBS_FOSF_INDUSTRY_REVENUES_ACCURATE(each.get("BS_FOSF_INDUSTRY_REVENUES_ACCURATE").toString());
+           model.setSCORE_RANGE(each.get("SCORE_RANGE").toString());
+
+
+            performanceChartESGScore.add(model);
+        }
+        return performanceChartESGScore;
+
+
     }
 
 

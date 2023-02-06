@@ -13,6 +13,7 @@ public class HeatMapTests extends DataValidationTestBase {
 
     @Test(groups = {REGRESSION, "heatmap"}, dataProviderClass = DataProviderClass.class, dataProvider = "Heat Map Research Lines")
     @Xray(test = {10030})
+    //TODO this test case is related to Updates Data Validation not Heat Map
     public void verifyUpdatesTableForAllRLs(String portfolioId, String researchLine, String year, String month) {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         PortfolioQueries portfolioQueries = new PortfolioQueries();
