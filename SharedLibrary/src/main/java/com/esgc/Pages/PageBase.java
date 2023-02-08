@@ -374,6 +374,8 @@ public abstract class PageBase {
     @FindBy(xpath = "//*[text()=\"Return to Moody's ESG360\"]")
     public WebElement returnToESG360Button;
 
+    @FindBy(xpath = "//div[starts-with(@id,'mini')]")
+    public List<WebElement> portfolioCards;
 
     protected WebDriverWait wait = new WebDriverWait(Driver.getDriver(), Duration.ofSeconds(80));
     protected Actions actions = new Actions(Driver.getDriver());
@@ -573,8 +575,10 @@ public abstract class PageBase {
      * Click method for Menu Tab on top left corner
      */
     public void clickMenu() {
-        wait.until(ExpectedConditions.visibilityOf(menu));
+        WebDriverWait wait = new WebDriverWait(Driver.getDriver(), Duration.ofSeconds(60));
+        wait.until(ExpectedConditions.elementToBeClickable(menu));
         BrowserUtils.clickWithJS(menu);
+
     }
 
     /**
@@ -2080,9 +2084,24 @@ public abstract class PageBase {
             BrowserUtils.scrollTo(portfolio);
             portfolio.click();
             System.out.println("Portfolio found : " + portfolioName);
+            BrowserUtils.ActionKeyPress(Keys.ESCAPE);
         } catch (Exception e) {
             System.out.println("Could not find the Portfolio");
         }
+    }
+
+    public void selectPortfolioByNameFromPortfolioSelectionModal(String portfolioName) {
+        clickPortfolioSelectionButton();
+        wait.until(ExpectedConditions.visibilityOfAllElements(portfolioCards));
+        List<WebElement> list =
+                portfolioCards.stream().filter(e -> e.getText().substring(0, e.getText().length() - 11).equals(portfolioName))
+                        .collect(Collectors.toList());
+        if(list.size() == 0) {
+            System.out.println("Portfolio with name " + portfolioName + " is not found");
+            clickAwayinBlankArea();
+            return;
+        }
+        list.get(list.size() - 1).click();
     }
 
     public void selectPortfolioFromPortfolioSettings(String portfolioName) {
