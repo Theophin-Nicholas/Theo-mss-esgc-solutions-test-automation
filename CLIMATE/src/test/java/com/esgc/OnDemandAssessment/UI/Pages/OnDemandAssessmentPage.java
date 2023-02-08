@@ -10,6 +10,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class OnDemandAssessmentPage extends UploadPage {
@@ -46,6 +47,22 @@ public class OnDemandAssessmentPage extends UploadPage {
 
     @FindBy(xpath = "//div[text()='Create New Request']")
     public WebElement btnCreateNewRequest;
+
+    @FindBy(xpath = "//div[contains(text(),'Load More')]")
+    public WebElement lnkLoadMore;
+
+    @FindBy(xpath = "//*[@id='card-test-id-1']//span[@title]")
+    public List<WebElement> locations;
+
+    @FindBy(xpath = "//*[@id='card-test-id-2']//span[@title]")
+    public List<WebElement> sectors;
+
+    @FindBy(xpath = "//div[contains(text(),'assessment eligible')]")
+    public WebElement lblAssessmentEligible;
+
+    @FindBy(xpath = "(//div[contains(text(),'Predicted ESG Score')]/../../../..//div[text()])[2]")
+    public WebElement lblHighestInvestment;
+
 
     public void clickReviewAndSendRequestButton() {
         try{
@@ -110,6 +127,60 @@ public class OnDemandAssessmentPage extends UploadPage {
 
         }
 
+    }
+
+    public ArrayList<HashMap<String, String>> getCompaniesInvestmentInfo(){
+        int noOfRecords = companyRecords.size();
+        ArrayList<HashMap<String, String>> allCompaniesInfo = new ArrayList<>();
+        do{
+            try{
+                BrowserUtils.scrollTo(lnkLoadMore);
+                lnkLoadMore.click();
+                BrowserUtils.wait(3);
+            }catch(Exception e){
+                break;
+            }
+        }while(true);
+
+        for(int i=1; i<=noOfRecords; i++){
+            HashMap<String, String> companyInfo = new HashMap<>();
+            String xpath = "//table[@class='MuiTable-root']//tr["+i+"]/td[2]//div[text()]";
+            String companyName = Driver.getDriver().findElement(By.xpath("("+xpath+")[1]")).getText();
+            companyInfo.put("COMPANY_NAME",companyName);
+
+            String invXpath = "//table[@class='MuiTable-root']//tr["+i+"]/td[3]//div[text()][2]";
+            String investments = Driver.getDriver().findElement(By.xpath(invXpath)).getText();
+            companyInfo.put("InvPerc",investments.split(",")[0].trim());
+            companyInfo.put("VALUE",investments.split(",")[1].trim());
+            allCompaniesInfo.add(companyInfo);
+        }
+        return allCompaniesInfo;
+    }
+
+    public ArrayList<String> getLocationWiseInvestmentInfo(){
+        ArrayList<String> allCompaniesInfo = new ArrayList<>();
+        for(int i=0; i<locations.size(); i++){
+            allCompaniesInfo.add(locations.get(i).getText());
+        }
+        return allCompaniesInfo;
+    }
+
+    public ArrayList<String> getSectorWiseInvestmentInfo(){
+        ArrayList<String> allCompaniesInfo = new ArrayList<>();
+        for(int i=0; i<sectors.size(); i++){
+            allCompaniesInfo.add(sectors.get(i).getText());
+        }
+        return allCompaniesInfo;
+    }
+
+    public String getEligibleAssessment(){
+        String assessmentText = lblAssessmentEligible.getText();
+        return assessmentText.substring(0,assessmentText.indexOf("%")+1);
+    }
+
+    public String getHighestInvestment(){
+        String assessmentText = lblHighestInvestment.getText();
+        return assessmentText.substring(0,assessmentText.indexOf("%")+1);
     }
 
     public void verifyShowFilterOptions(){

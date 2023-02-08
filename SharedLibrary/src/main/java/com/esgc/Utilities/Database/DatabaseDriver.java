@@ -136,6 +136,7 @@ public class DatabaseDriver {
      * key being the column name
      */
     public synchronized static List<Map<String, Object>> getQueryResultMap(String query) {
+        createDBConnection();
         executeQuery(query);
         List<Map<String, Object>> rowList = new ArrayList<>();
         ResultSetMetaData rsmd;
