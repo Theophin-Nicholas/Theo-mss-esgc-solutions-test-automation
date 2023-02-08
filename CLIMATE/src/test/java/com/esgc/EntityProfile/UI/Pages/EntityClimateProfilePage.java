@@ -514,7 +514,7 @@ public class EntityClimateProfilePage extends ClimatePageBase {
     @FindBy(xpath = "//div[normalize-space()='Filter by most impacted categories of ESG:']//following-sibling::div")
     public List<WebElement> subCategoryList;
 
-    @FindBy(xpath = "//tr[@heap_id='event']")
+    @FindBy(xpath = "//tr[@heap_id='event' and @notclickable='false']")
     public List<WebElement> controversiesTableRow;
 
     @FindBy(xpath = "//div[@id='methodologies_modal']//div[@role='dialog']/div[2]/div/div/div/span")
@@ -555,7 +555,7 @@ public class EntityClimateProfilePage extends ClimatePageBase {
 
     public boolean validateGlobalCompanyNameHeader(String companyName) {
         try{
-            return Driver.getDriver().findElement(By.xpath("//li//span[text()='"+companyName+"']")).isDisplayed();
+            return wait.until(ExpectedConditions.visibilityOf(Driver.getDriver().findElement(By.xpath("//li//span[text()='"+companyName+"']")))).isDisplayed();
         }catch(Exception e){
             return false;
         }

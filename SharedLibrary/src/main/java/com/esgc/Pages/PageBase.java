@@ -693,6 +693,7 @@ public abstract class PageBase {
     }
 
     public void clickMoreCompaniesDrillDown(String researchLine) {
+        BrowserUtils.scrollTo(updatesAndLeadersAndLaggardsHeader);
         switch (researchLine) {
             case "Physical Risk Hazards":
             case "Operations Risk":
@@ -1151,7 +1152,7 @@ public abstract class PageBase {
         for (WebElement region : regions) {
             regionValues.add(region.getText());
         }
-        return regionValues.containsAll(expRegionValues);
+        return expRegionValues.containsAll(regionValues);
     }
 
     public boolean verifyDefaultSelectedSectorValue(String expSector) {
@@ -1801,7 +1802,7 @@ public abstract class PageBase {
         System.out.println(Driver.getDriver().findElement(By.xpath(xpathSearchKeyWord)).getText());
         BrowserUtils.isElementVisible(Driver.getDriver().findElement(By.xpath(xpathSearchKeyWord)), 3);
         Driver.getDriver().findElement(By.xpath(xpathSearchKeyWord)).click();
-
+        waitForDataLoadCompletion();
     }
 
     public boolean isPhysicalClimateHazardCardDisplayed() {

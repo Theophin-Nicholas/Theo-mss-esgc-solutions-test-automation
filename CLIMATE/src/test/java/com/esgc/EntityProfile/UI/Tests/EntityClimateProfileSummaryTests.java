@@ -749,10 +749,6 @@ public class EntityClimateProfileSummaryTests extends UITestBase {
             dataProviderClass = DataProviderClass.class, dataProvider = "orbisIDWithoutTempAlignment")
     @Xray(test = {7724, 7725, 7904, 10772})
     public void verifyNoDisplayMessageForNoData(String Entity) {
-        LoginPage loginPage = new LoginPage();
-        if(loginPage.loginButtons.size()>0) {
-            loginPage.login();
-        }
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio Analysis page");
         BrowserUtils.wait(2);

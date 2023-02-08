@@ -326,9 +326,9 @@ public class DashboardHeatMapEntityListTests extends UITestBase {
     }
 
     //Entitlements
-    @Test(groups = {DASHBOARD, UI, REGRESSION, SMOKE})
+    @Test(groups = {DASHBOARD, UI, REGRESSION, SMOKE, ENTITLEMENTS})
     @Xray(test = {8185, 7973})
-    public void heatMapAPIUIVerification() {
+    public void heatMapAPIUIEntitlementsVerification() {
         LoginPage loginPage = new LoginPage();
         //Trying to log in with only Physical Risk Entitlement User
        //WebElement portfolioSelectionButton = Driver.getDriver().findElement(By.id("button-holdings"));

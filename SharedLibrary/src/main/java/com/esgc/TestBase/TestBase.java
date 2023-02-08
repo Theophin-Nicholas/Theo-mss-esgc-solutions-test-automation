@@ -9,6 +9,7 @@ import com.aventstack.extentreports.reporter.ExtentSparkReporter;
 import com.esgc.APIModels.TestCase;
 import com.esgc.Reporting.CustomAssertion;
 import com.esgc.Utilities.*;
+import com.esgc.Utilities.Database.DatabaseDriver;
 import org.apache.commons.lang3.time.StopWatch;
 import org.openqa.selenium.JavascriptExecutor;
 import org.testng.ITestResult;
@@ -41,6 +42,7 @@ public abstract class TestBase {
     @BeforeTest(alwaysRun = true)
     @Parameters("reportName")
     public void setupTestBeforeExecution(@Optional String reportName) {
+        DatabaseDriver.createDBConnection();
         //Check if execution is in remote environment or local?
         if (System.getProperty("browser") != null) {
             isRemote = System.getProperty("browser").contains("remote");
@@ -90,6 +92,7 @@ public abstract class TestBase {
 
     @AfterTest(alwaysRun = true)
     public void tearDownAndGenerateReport() {
+        DatabaseDriver.destroy();
         report.flush();
     }
 

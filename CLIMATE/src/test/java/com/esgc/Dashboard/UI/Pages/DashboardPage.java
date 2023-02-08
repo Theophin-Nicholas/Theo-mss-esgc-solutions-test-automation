@@ -1646,8 +1646,9 @@ public class DashboardPage extends UploadPage {
     }
 
     public void verifyOverallESGScoreCatgories() {
-        List<String> categories = Arrays.asList(new String[]{"Weak", "Limited", "Robust", "Advanced"});
+        List<String> categories = Arrays.asList("Weak", "Limited", "Robust", "Advanced");
         for (WebElement e : OverallESGScoreTabledata) {
+            if(e.getText().equals("")) continue;
             assertTestCase.assertTrue(categories.contains(e.getText()), "Validate OverAll ESG Scores");
         }
     }

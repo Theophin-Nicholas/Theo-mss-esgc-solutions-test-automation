@@ -11,6 +11,7 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.testng.ITestResult;
 import org.testng.annotations.*;
 
+import java.lang.reflect.Method;
 import java.time.Duration;
 
 import static com.esgc.Utilities.Groups.*;
@@ -72,9 +73,9 @@ public abstract class UITestBase extends TestBase {
     }
 
     @BeforeMethod(alwaysRun = true)
-    public synchronized void loginForTestsIfUserLoggedOut() {
+    public synchronized void loginForTestsIfUserLoggedOut(Method method) {
         boolean isPampaTest = this.getClass().getName().contains("Pampa");
-        boolean isEntitlementsTest = this.getClass().getName().contains("Bundle") || this.getClass().getName().contains("Entitlements");
+        boolean isEntitlementsTest = this.getClass().getName().toLowerCase().contains("bundle") || this.getClass().getName().toLowerCase().contains("entitlements") || method.getName().toLowerCase().contains("entitlements");
         LoginPage loginPage = new LoginPage();
         if (Driver.getDriver().getCurrentUrl().endsWith("login")) {
             if (!isPampaTest && !isEntitlementsTest) {
@@ -98,7 +99,8 @@ public abstract class UITestBase extends TestBase {
 
     @AfterMethod(onlyForGroups = {ENTITLEMENTS}, groups = {SMOKE, REGRESSION, ENTITLEMENTS})
     public synchronized void teardownBrowserAfterUITesting() {
-        Driver.closeDriver();
+        LoginPage loginPage = new LoginPage();
+        loginPage.clickOnLogout();
     }
 
 //    @AfterClass(alwaysRun = true)

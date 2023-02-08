@@ -126,7 +126,7 @@ public class XrayFileImporter {
                 .contentType("application/json")
                 .body(payload)
                 .when()
-                .post("raven/1.0/import/execution").prettyPeek();
+                .post("raven/1.0/import/execution");
 
 
         /*
