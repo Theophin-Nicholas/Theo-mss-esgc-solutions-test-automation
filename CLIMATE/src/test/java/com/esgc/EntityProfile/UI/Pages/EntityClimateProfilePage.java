@@ -161,10 +161,10 @@ public class EntityClimateProfilePage extends ClimatePageBase {
     @FindBy(xpath = "//div[@id='phyRskMgmClimate-test-id']//div[@id='chiclet-id']/child::div[2]/span")
     public WebElement PhysicalRiskMgmtWidgetValue;
 
-    @FindBy(xpath = "//div[@id='greenClimate-test-id']//span[2]")
+    @FindBy(xpath = "//div[@id='greenClimate-test-id']//div[text()='Green Share']/following-sibling::div/span[2]")
     public WebElement GreenShareWidgetValue;
 
-    @FindBy(xpath = "//div[@id='brownClimate-test-id']//span[2]")
+    @FindBy(xpath = "//div[@id='brownClimate-test-id']//div[text()='Brown Share']/following-sibling::div/span[2]")
     public WebElement BrownShareWidgetValue;
 
     @FindBy(xpath = "//div[@id='tempAlignclimate-test-id']")
@@ -2730,9 +2730,11 @@ public class EntityClimateProfilePage extends ClimatePageBase {
 
     public String getPhysicalRiskManagement() {
         BrowserUtils.scrollTo(wait.until(ExpectedConditions.visibilityOf(physicalRiskManagementWidget)));
-        String str = physicalRiskManagementWidget.getText().replaceAll("\n", " ");
+        String str = physicalRiskManagementWidget.getText();
+        str=str.replaceAll("\n", " ");
         String Values[] = str.split((" "));
         str = str.replace("Physical Risk Management Anticipation", "Physical Risk Management " + Values[Values.length - 1] + " Anticipation").split("Updated")[0].trim();
+        str=str.replace("Anticipation"," Anticipation").replace("  "," ");
         return str;
     }
 
@@ -2813,7 +2815,7 @@ public class EntityClimateProfilePage extends ClimatePageBase {
     public List<String> getHederValues(String CompanyName) {
         List<String> returnList = new ArrayList<>();
         WebElement companyNameHeader = getCompanyHeader(CompanyName);
-        List<WebElement> companySummary = companyNameHeader.findElements(By.xpath("parent::span/parent::div/following-sibling::div/span"));
+        List<WebElement> companySummary = companyNameHeader.findElements(By.xpath("parent::div/following-sibling::div/span"));
         returnList.add(CompanyName);
         String identifiers = companySummary.get(0).getText().split("\\|")[0].trim();
 
@@ -2846,13 +2848,12 @@ public class EntityClimateProfilePage extends ClimatePageBase {
         BrowserUtils.scrollTo(esgScores.get(0));
         List<String> returnList = new ArrayList<>();
         for (WebElement e : esgScores) {
-            if (e.getText().contains("ESG Score")) {
-                returnList.add(e.getText().replace("\n", " "));
-            } else {
+            if (e.getText().contains("\n")) {
                 String[] a = e.getText().split("\n");
                 returnList.add(a[1] + " " + (a[0].contains("Environment") ? "Environmental" : a[0]));
+            } else {
+                returnList.add(e.getText());
             }
-
         }
         return returnList;
 
