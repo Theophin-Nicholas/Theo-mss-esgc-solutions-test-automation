@@ -12,9 +12,11 @@ import org.testng.annotations.Test;
 
 import java.util.List;
 
+import static com.esgc.Utilities.Groups.*;
+
 public class PortfolioAnalysisEntitlementsTests extends UITestBase {
 
-    @Test(groups = {"regression", "ui", "smoke", "entitlements"})
+    @Test(groups = {REGRESSION, UI, SMOKE, ENTITLEMENTS})
     @Xray(test = {4286, 4296})
     public void validatePhysicalRiskBundleAccess() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
@@ -36,7 +38,7 @@ public class PortfolioAnalysisEntitlementsTests extends UITestBase {
         Assert.assertEquals(currentUrl, "portfolioanalysis/physicalriskhazards");
     }
 
-    @Test(groups = {"regression", "ui", "smoke", "entitlements"})
+    @Test(groups = {REGRESSION, UI, SMOKE, ENTITLEMENTS})
     @Xray(test = {4287, 4297})
     public void validateTransitionRiskBundleAccess() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
@@ -57,7 +59,7 @@ public class PortfolioAnalysisEntitlementsTests extends UITestBase {
         Assert.assertEquals(currentUrl, "portfolioanalysis/temperaturealignment");
     }
 
-    @Test(enabled = false, groups = {"regression", "ui", "smoke", "entitlements"})
+    @Test(enabled = false, groups = {REGRESSION, UI, SMOKE, ENTITLEMENTS})
     @Xray(test = {4291, 4298}) //TODO No climate governance, de-scopped  MAP this ESGCA-11327 with this test case
     public void validateClimateGovernanceBundleAccess() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
@@ -79,7 +81,7 @@ public class PortfolioAnalysisEntitlementsTests extends UITestBase {
 
     }
 
-    @Test(groups = {"regression", "ui", "smoke", "entitlements"})
+    @Test(groups = {REGRESSION, UI, SMOKE, ENTITLEMENTS})
     @Xray(test = {4293, 4320})
     public void validatePhysicalAndTransitionRiskBundleAccess() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
@@ -100,7 +102,7 @@ public class PortfolioAnalysisEntitlementsTests extends UITestBase {
         Assert.assertEquals(currentUrl, "portfolioanalysis/physicalriskhazards");
     }
 
-    @Test(enabled = false, groups = {"regression", "ui", "smoke", "entitlements"})
+    @Test(enabled = false, groups = {REGRESSION, UI, SMOKE, ENTITLEMENTS})
     @Xray(test = {4295, 4322})
     public void validateTransitionRiskAndClimateGovernanceBundleAccess() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
@@ -121,7 +123,7 @@ public class PortfolioAnalysisEntitlementsTests extends UITestBase {
         Assert.assertEquals(currentUrl, "portfolioanalysis/physicalriskhazards");
     }
 
-    @Test(enabled = false, groups = {"regression", "ui", "smoke", "entitlements"})
+    @Test(enabled = false, groups = {REGRESSION, UI, SMOKE, ENTITLEMENTS})
     @Xray(test = {4294, 4321})
     public void validatePhysicalRiskClimateGovernanceBundleAccess() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
@@ -142,7 +144,7 @@ public class PortfolioAnalysisEntitlementsTests extends UITestBase {
         Assert.assertEquals(currentUrl, "portfolioanalysis/physicalriskhazards");
     }
 
-    @Test(groups = {"regression", "ui", "smoke", "entitlements"})
+    @Test(groups = {REGRESSION, UI, SMOKE, ENTITLEMENTS})
     @Xray(test = {1936, 1937, 6093, 6084})
     public void validateExternalUserHasAllResearchLinesBundleAccess() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
@@ -160,7 +162,7 @@ public class PortfolioAnalysisEntitlementsTests extends UITestBase {
     }
 
 
-    @Test(enabled = false, groups = {"regression", "ui", "smoke", "entitlements", "esg"}, description = "Verify research line navigation")
+    @Test(enabled = false, groups = {REGRESSION, UI, SMOKE, ENTITLEMENTS, ESG}, description = "Verify research line navigation")
     @Xray(test = {8214, 8215})
     public void verifyESGAssessmentRL() {//TODO De-scopped
         LoginPage loginPage = new LoginPage();
@@ -176,7 +178,7 @@ public class PortfolioAnalysisEntitlementsTests extends UITestBase {
     }
 
     @Xray(test = {8219})
-    @Test(groups = {"regression", "ui", "smoke", "esg", "entitlements"},
+    @Test(groups = {REGRESSION, UI, SMOKE, ESG, ENTITLEMENTS},
             description = "Verify research line navigation")
     public void verifyESGAssessmentRLIsNotVailable() {
         Driver.getDriver().manage().deleteAllCookies();

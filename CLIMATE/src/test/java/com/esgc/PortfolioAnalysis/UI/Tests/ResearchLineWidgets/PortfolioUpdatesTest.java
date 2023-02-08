@@ -9,7 +9,6 @@ import org.testng.SkipException;
 import org.testng.annotations.Test;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -53,7 +52,8 @@ public class PortfolioUpdatesTest extends UITestBase {
 
         List<WebElement> updatesTableColumns = researchLinePage.selectAnAsOfDateWhereUpdatesAreAvailable("April 2021");
         test.info("Validate the column names in the Updates Table");
-        System.out.println("updatesTableColumns = " + updatesTableColumns);
+        System.out.println("updatesTableColumns = ");
+        updatesTableColumns.forEach( e -> System.out.println("e.getText() = " + e.getText()));
 
         assertTestCase.assertTrue(updatesTableColumns.get(0).getText().equalsIgnoreCase("Company"), "Column name verified: Company", 473, 1017, 1253, 1764);
         assertTestCase.assertTrue(updatesTableColumns.get(1).getText().equalsIgnoreCase("Updated"), "Column name verified: Updated", 473, 1017, 1253, 1764);
