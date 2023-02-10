@@ -1,13 +1,10 @@
-package com.esgc.OnDemandAssessment.DB.DBQueries;
+package com.esgc.DB.DBQueries;
 
 import com.esgc.Utilities.Database.DatabaseDriver;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import static com.esgc.Utilities.Database.DatabaseDriver.*;
 
 
 public class OnDemandAssessmentQueries {

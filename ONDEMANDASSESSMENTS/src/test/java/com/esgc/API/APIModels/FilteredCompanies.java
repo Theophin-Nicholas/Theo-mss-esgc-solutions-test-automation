@@ -1,12 +1,10 @@
-package com.esgc.OnDemandAssessment.API.APIModels;
+package com.esgc.API.APIModels;
 
 
-import com.esgc.EntityProfile.API.APIModels.EntityHeaderSubsidiaryDetails;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 import java.util.ArrayList;
-import java.util.List;
 
 @Data
 

@@ -1,13 +1,12 @@
-package com.esgc.OnDemandAssessment.API.Controllers;
+package com.esgc.API.Controllers;
 
-import com.esgc.EntityProfile.API.EntityProfilePageEndpoints;
-import com.esgc.OnDemandAssessment.API.OnDemandEndpoints;
-import com.esgc.Utilities.Driver;
+import com.esgc.API.OnDemandEndpoints;
 import com.esgc.Utilities.Environment;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
-import org.openqa.selenium.JavascriptExecutor;
+
+import java.util.List;
 
 import static io.restassured.RestAssured.given;
 
@@ -53,6 +52,39 @@ public class OnDemandFilterAPIController {
             System.out.println("Inside exception " + e.getMessage());
         }
         System.out.println(response.prettyPrint());
+        return response;
+    }
+
+    public String getPortfolioId(String portfolioName) {
+        Response response = getPortfolioDetails();
+        List<String> portfolioNames = response.jsonPath().getList("portfolio_name");
+        List<String> portfolioIds = response.jsonPath().getList("portfolio_id");
+        for (int i = 0; i < portfolioNames.size(); i++) {
+            if(portfolioNames.get(i).equals(portfolioName)) {
+                System.out.println("Returning portfolio id: " + portfolioIds.get(i));
+                return portfolioIds.get(i);
+            }
+        }
+        System.out.println("No portfolios found with matching name. Searching portfolios starts with.");
+        for (int i = 0; i < portfolioNames.size(); i++) {
+            if(portfolioNames.get(i).startsWith(portfolioName)) {
+                System.out.println("Returning portfolio id: " + portfolioIds.get(i));
+                return portfolioIds.get(i);
+            }
+        }
+        System.out.println("Portfolio name not found");
+        return "";
+    }
+
+    public Response getPortfolioDetails() {
+        Response response = null;
+        try {
+            response = configSpec()
+                    .when()
+                    .get(OnDemandEndpoints.GET_PORTFOLIO_DETAILS);
+        } catch (Exception e) {
+            System.out.println("Inside exception " + e.getMessage());
+        }
         return response;
     }
 

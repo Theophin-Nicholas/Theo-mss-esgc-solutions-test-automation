@@ -1,40 +1,39 @@
-package com.esgc.OnDemandAssessment.DB.Tests;
+package com.esgc.DB.Tests;
 
-import com.esgc.Base.TestBases.DataValidationTestBase;
-import com.esgc.EntityProfile.API.APIModels.EntityHeader;
-import com.esgc.EntityProfile.API.Controllers.EntityProfileClimatePageAPIController;
-import com.esgc.OnDemandAssessment.DB.DBQueries.OnDemandAssessmentQueries;
-import com.esgc.OnDemandAssessment.UI.Pages.OnDemandAssessmentPage;
-import com.esgc.PortfolioAnalysis.UI.Pages.ResearchLinePage;
-import com.esgc.RegulatoryReporting.API.Controllers.RegulatoryReportingAPIController;
+import com.esgc.API.Controllers.OnDemandFilterAPIController;
+import com.esgc.DB.DBQueries.OnDemandAssessmentQueries;
+import com.esgc.DB.TestBases.DataValidationTestBase;
+import com.esgc.UI.Pages.OnDemandAssessmentPage;
 import com.esgc.TestBase.DataProviderClass;
 import com.esgc.Utilities.Xray;
 import org.testng.annotations.Test;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-import static com.esgc.EntityProfile.DB.DBQueries.EntityClimateProfilePageQueries.getEntityHeaderDetails;
-import static com.esgc.Utilities.Groups.*;
+import static com.esgc.Utilities.Groups.REGRESSION;
+import static com.esgc.Utilities.Groups.UI;
 
 public class OnDemandAssessmentTests extends DataValidationTestBase {
 
     @Xray(test = {12066})
     @Test(groups = {REGRESSION, UI},dataProviderClass = DataProviderClass.class)
     public void verifyPredictedEsgInfo() {
-
-        ResearchLinePage researchLinePage = new ResearchLinePage();
+        String portfolioName = "EsgWithPredictedScores";
         OnDemandAssessmentPage onDemandAssessmentPage = new OnDemandAssessmentPage();
-        researchLinePage.selectPortfolio("EsgWithPredictedScores");
+        onDemandAssessmentPage.selectPortfolioByNameFromPortfolioSelectionModal(portfolioName);
 
-        researchLinePage.clickMenu();
+        onDemandAssessmentPage.clickMenu();
         onDemandAssessmentPage.onDemandAssessmentRequest.click();
         assertTestCase.assertEquals(onDemandAssessmentPage.menuOptionPageHeader.getText(), "Moody's ESG360: Request On-Demand Assessment", "Moody's ESG360: Request On-Demand Assessment page verified");
 
         String uiEligibleAssessment = onDemandAssessmentPage.getEligibleAssessment();
         String uiHighestInvestment = onDemandAssessmentPage.getHighestInvestment();
 
-        RegulatoryReportingAPIController apiController = new RegulatoryReportingAPIController();
-        String portfolioId = apiController.getPortfolioId("EsgWithPredictedScores");
+        OnDemandFilterAPIController controller = new OnDemandFilterAPIController();
+        String portfolioId = controller.getPortfolioId("EsgWithPredictedScores");
         OnDemandAssessmentQueries queries = new OnDemandAssessmentQueries();
         String dbEligibleAssessment = queries.getEligibleAssessment(portfolioId);
         String dbHighestInvestment = queries.getHighestInvestment(portfolioId);
@@ -47,20 +46,19 @@ public class OnDemandAssessmentTests extends DataValidationTestBase {
     @Xray(test = {12068})
     @Test(groups = {REGRESSION, UI},dataProviderClass = DataProviderClass.class)
     public void verifyCompaniesInvestmentInfo() {
-
-        ResearchLinePage researchLinePage = new ResearchLinePage();
+        String portfolioName = "EsgWithPredictedScores";
         OnDemandAssessmentPage onDemandAssessmentPage = new OnDemandAssessmentPage();
-        researchLinePage.selectPortfolio("EsgWithPredictedScores");
+        onDemandAssessmentPage.selectPortfolioByNameFromPortfolioSelectionModal(portfolioName);
 
-        researchLinePage.clickMenu();
+        onDemandAssessmentPage.clickMenu();
         onDemandAssessmentPage.onDemandAssessmentRequest.click();
         assertTestCase.assertEquals(onDemandAssessmentPage.menuOptionPageHeader.getText(), "Moody's ESG360: Request On-Demand Assessment", "Moody's ESG360: Request On-Demand Assessment page verified");
 
         onDemandAssessmentPage.clickReviewAndSendRequestButton();
         ArrayList<HashMap<String, String>> uiCompaniesInfo = onDemandAssessmentPage.getCompaniesInvestmentInfo();
 
-        RegulatoryReportingAPIController apiController = new RegulatoryReportingAPIController();
-        String portfolioId = apiController.getPortfolioId("EsgWithPredictedScores");
+        OnDemandFilterAPIController controller = new OnDemandFilterAPIController();
+        String portfolioId = controller.getPortfolioId("EsgWithPredictedScores");
         OnDemandAssessmentQueries queries = new OnDemandAssessmentQueries();
         List<Map<String, Object>> dbCompaniesInfo = queries.getCompaniesInvestmentInfo(portfolioId);
 
@@ -76,20 +74,19 @@ public class OnDemandAssessmentTests extends DataValidationTestBase {
     @Xray(test = {12457})
     @Test(groups = {REGRESSION, UI},dataProviderClass = DataProviderClass.class)
     public void verifyRegionsSectorsInvestmentInfo() {
-
-        ResearchLinePage researchLinePage = new ResearchLinePage();
+        String portfolioName = "EsgWithPredictedScores";
         OnDemandAssessmentPage onDemandAssessmentPage = new OnDemandAssessmentPage();
-        researchLinePage.selectPortfolio("EsgWithPredictedScores");
+        onDemandAssessmentPage.selectPortfolioByNameFromPortfolioSelectionModal(portfolioName);
 
-        researchLinePage.clickMenu();
+        onDemandAssessmentPage.clickMenu();
         onDemandAssessmentPage.onDemandAssessmentRequest.click();
         assertTestCase.assertEquals(onDemandAssessmentPage.menuOptionPageHeader.getText(), "Moody's ESG360: Request On-Demand Assessment", "Moody's ESG360: Request On-Demand Assessment page verified");
 
         ArrayList<String> uiLocationWiseCompaniesInfo = onDemandAssessmentPage.getLocationWiseInvestmentInfo();
         ArrayList<String> uiSectorWiseCompaniesInfo = onDemandAssessmentPage.getSectorWiseInvestmentInfo();
 
-        RegulatoryReportingAPIController apiController = new RegulatoryReportingAPIController();
-        String portfolioId = apiController.getPortfolioId("EsgWithPredictedScores");
+        OnDemandFilterAPIController controller = new OnDemandFilterAPIController();
+        String portfolioId = controller.getPortfolioId("EsgWithPredictedScores");
         OnDemandAssessmentQueries queries = new OnDemandAssessmentQueries();
         List<String> dbLocationInfo = queries.getLocationWiseInvestmentInfo(portfolioId);
         List<String> dbSectorInfo = queries.getSectorWiseInvestmentInfo(portfolioId);
