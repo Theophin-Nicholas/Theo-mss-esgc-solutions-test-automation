@@ -1,7 +1,8 @@
-package com.esgc.Pages;
+package com.esgc.UI.Pages;
 
 //import com.esgc.Base.TestBases.ClimatePageBase;
 
+import com.esgc.Pages.PageBase;
 import com.esgc.Utilities.*;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;

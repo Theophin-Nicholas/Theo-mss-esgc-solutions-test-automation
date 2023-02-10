@@ -1,7 +1,7 @@
-package com.esgc.Base.TestBases;
+package com.esgc.UI.TestBases;
 
 
-import com.esgc.Pages.LoginPage;
+import com.esgc.UI.Pages.LoginPage;
 import com.esgc.TestBase.TestBase;
 import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.Database.DatabaseDriver;
