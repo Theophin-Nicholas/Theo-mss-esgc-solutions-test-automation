@@ -9,6 +9,7 @@ import com.esgc.UI.Pages.OnDemandAssessmentPage;
 import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.EntitlementsBundles;
 import com.esgc.Utilities.Xray;
+import org.testng.Assert;
 import org.testng.annotations.Test;
 
 public class OnDemandAssessmentTests extends UITestBase {
@@ -37,12 +38,41 @@ public class OnDemandAssessmentTests extends UITestBase {
     }
 
     @Test(groups = {"regression", "ui"})
-    @Xray(test = {12054})
+    @Xray(test = {12808})
+    public void validateExitFromRequestOnDemandAssessmentPage() {
+
+        String portfolioName = "500 predicted portfolio";
+        OnDemandAssessmentPage onDemandAssessmentPage = new OnDemandAssessmentPage();
+        onDemandAssessmentPage.selectPortfolioByNameFromPortfolioSelectionModal(portfolioName);
+        BrowserUtils.wait(10);
+        BrowserUtils.waitForPageToLoad(50);
+
+        onDemandAssessmentPage.clickMenu();
+        onDemandAssessmentPage.onDemandAssessmentRequest.click();
+        assertTestCase.assertEquals(onDemandAssessmentPage.menuOptionPageHeader.getText(), "Moody's ESG360: Request On-Demand Assessment", "Moody's ESG360: Request On-Demand Assessment page verified");
+
+        onDemandAssessmentPage.sendESCkey();
+        BrowserUtils.wait(2);
+        Assert.assertTrue(onDemandAssessmentPage.verifyMainPageHeader("Moody's ESG360: Dashboard"), "Global Header Title is not matched for Dashboard");
+
+        onDemandAssessmentPage.clickMenu();
+        onDemandAssessmentPage.onDemandAssessmentRequest.click();
+        assertTestCase.assertEquals(onDemandAssessmentPage.menuOptionPageHeader.getText(), "Moody's ESG360: Request On-Demand Assessment", "Moody's ESG360: Request On-Demand Assessment page verified");
+
+        onDemandAssessmentPage.clickESCkey();
+        BrowserUtils.wait(2);
+        Assert.assertTrue(onDemandAssessmentPage.verifyMainPageHeader("Moody's ESG360: Dashboard"), "Global Header Title is not matched for Dashboard");
+    }
+
+    @Test(groups = {"regression", "ui"})
+    @Xray(test = {12054,12810,12811,12812})
     public void validateErrorMessageOfEmailFieldAndExit() {
 
         String portfolioName = "500 predicted portfolio";
         OnDemandAssessmentPage onDemandAssessmentPage = new OnDemandAssessmentPage();
         onDemandAssessmentPage.selectPortfolioByNameFromPortfolioSelectionModal(portfolioName);
+        BrowserUtils.wait(10);
+        BrowserUtils.waitForPageToLoad(50);
 
         onDemandAssessmentPage.clickMenu();
         onDemandAssessmentPage.onDemandAssessmentRequest.click();
@@ -53,6 +83,11 @@ public class OnDemandAssessmentTests extends UITestBase {
         onDemandAssessmentPage.verifyConfirmEmailAlert(emailConfirmMessage);
 
         onDemandAssessmentPage.sendESCkey();
+        BrowserUtils.wait(2);
+        assertTestCase.assertEquals(onDemandAssessmentPage.menuOptionPageHeader.getText(), "Moody's ESG360: Request On-Demand Assessment", "Moody's ESG360: Request On-Demand Assessment page verified");
+
+        onDemandAssessmentPage.clickReviewAndSendRequestButton();
+        onDemandAssessmentPage.clickESCkey();
         BrowserUtils.wait(2);
         assertTestCase.assertEquals(onDemandAssessmentPage.menuOptionPageHeader.getText(), "Moody's ESG360: Request On-Demand Assessment", "Moody's ESG360: Request On-Demand Assessment page verified");
 
