@@ -8,6 +8,7 @@ import com.esgc.Utilities.Database.DatabaseDriver;
 import com.esgc.Utilities.Driver;
 import com.esgc.Utilities.Environment;
 import org.openqa.selenium.JavascriptExecutor;
+import org.testng.ITestListener;
 import org.testng.ITestResult;
 import org.testng.annotations.*;
 
@@ -15,7 +16,7 @@ import java.time.Duration;
 
 import static com.esgc.Utilities.Groups.*;
 
-public abstract class UITestBase extends TestBase {
+public abstract class UITestBase extends TestBase implements ITestListener {
     String accessToken;
 
     @BeforeClass(alwaysRun = true)
@@ -84,10 +85,10 @@ public abstract class UITestBase extends TestBase {
         Driver.getDriver().navigate().refresh();
     }
 
-    @AfterMethod(onlyForGroups = {ENTITLEMENTS}, groups = {SMOKE, REGRESSION, ENTITLEMENTS})
+  /*  @AfterMethod(onlyForGroups = {ENTITLEMENTS}, groups = {SMOKE, REGRESSION, ENTITLEMENTS})
     public synchronized void teardownBrowserAfterUITesting() {
         Driver.closeDriver();
-    }
+    }*/
 
 
 

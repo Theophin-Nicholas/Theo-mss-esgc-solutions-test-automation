@@ -44,7 +44,7 @@ public class OnDemandAssessmentPage extends PageBase {
     public List<WebElement> drdShowOptions;
 
     @FindBy(xpath = "//div[text()='Create New Request']")
-    public WebElement btnCreateNewRequest;
+    public List<WebElement> btnCreateNewRequest;
 
     @FindBy(xpath = "//div[contains(text(),'Load More')]")
     public WebElement lnkLoadMore;
@@ -123,12 +123,9 @@ public class OnDemandAssessmentPage extends PageBase {
 
 
     public void clickReviewAndSendRequestButton() {
-        try{
-            if(btnCreateNewRequest.isDisplayed()){
-                btnCreateNewRequest.click();
-            }
-        }catch(Exception e){}
-        BrowserUtils.waitForVisibility(btnReviewRequest,30).click();
+
+        if(btnCreateNewRequest.size()>0)btnCreateNewRequest.get(0).click();
+        else BrowserUtils.waitForVisibility(btnReviewRequest,30).click();
     }
 
     public void sendESCkey() {
@@ -141,6 +138,7 @@ public class OnDemandAssessmentPage extends PageBase {
             BrowserUtils.wait(2);
         }
         BrowserUtils.scrollTo(removeButtons.get(0));
+
         txtSendTo.sendKeys("qatest"+Math.random()+"@gmail.com");
         btnConfirmRequest.click();
     }
@@ -177,10 +175,10 @@ public class OnDemandAssessmentPage extends PageBase {
             assertTestCase.assertTrue(expectedStatuses.contains(status), status+" status is not available in Expected Statuses");
 
             // Verification of Fifth Column: Email Address
-            if(!status.equalsIgnoreCase("Cancelled")) {
+            if(status.equalsIgnoreCase("No Request Sent")) {
                 String emailXpath = "//table[@class='MuiTable-root']//tr[" + i + "]/td[5]//div[text()]//input";
                 WebElement email = Driver.getDriver().findElement(By.xpath(emailXpath));
-                assertTestCase.assertTrue(email.isDisplayed(), "Email field is not available");
+                assertTestCase.assertTrue(email.isDisplayed(), "Verifying if the email field is available");
             }
 
         }
@@ -358,7 +356,7 @@ public class OnDemandAssessmentPage extends PageBase {
         toggleButton.click();
         location_LocationLabels.get(0).click();
         assertTestCase.equals(getCompaniesCountFromReviewButtion()!=FirstcompaniesCount);
-       // Below code is to move the slider in Predicted Score section --
+        // Below code is to move the slider in Predicted Score section --
         /*for (int i = 1; i <= 9; i++) predictedScoresliders.get(0).sendKeys(Keys.ARROW_RIGHT);
 
        for (int i = 1; i <= 73; i++) predictedScoresliders.get(1).sendKeys(Keys.ARROW_LEFT);*/

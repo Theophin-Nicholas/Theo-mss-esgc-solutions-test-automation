@@ -16,7 +16,7 @@ import java.util.Map;
 import static com.esgc.Utilities.Groups.REGRESSION;
 import static com.esgc.Utilities.Groups.UI;
 
-public class OnDemandAssessmentTests extends DataValidationTestBase {
+public class OnDemandAssessmentDBTests extends DataValidationTestBase {
 
     @Xray(test = {12066})
     @Test(groups = {REGRESSION, UI},dataProviderClass = DataProviderClass.class)
