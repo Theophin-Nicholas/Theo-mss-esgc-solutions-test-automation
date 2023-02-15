@@ -1680,7 +1680,7 @@ public class AccountsPageTests extends EMCUITestBase {
 
     @Test(groups = {EMC, UI, REGRESSION, SMOKE},
             description = "UI | EMC | ImportUsers | Verify the Mass Import process validate If file is empty")
-    @Xray(test = {13306, 13308})
+    @Xray(test = {13306, 13307, 13308})
     public void verifyMassImportWithEmptyTemplate() {
         navigateToAccountsPage(accountName, "users");
         EMCAccountDetailsPage detailsPage = new EMCAccountDetailsPage();

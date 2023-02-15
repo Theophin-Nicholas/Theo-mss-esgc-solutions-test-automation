@@ -50,6 +50,9 @@ public class EMCUserImportPage extends EMCBasePage{
     @FindBy(xpath = "//li//p")
     public WebElement foundIssuesStatement;
 
+    @FindBy(xpath = "//span[@id='client-snackbar']")
+    public WebElement invalidFileNotification;
+
     @FindBy(xpath = "//div[@role='dialog']//button[.='Import']")
     public WebElement popupImportButton;
 
@@ -195,6 +198,13 @@ public class EMCUserImportPage extends EMCBasePage{
         verifyTemplateWithData("applicationRole", "", "Must be 1 role or more");
         verifyTemplateWithData("applicationRole", " ", "Must be a valid key xxx-xxx");
 
+        //Try to upload wrong file types
+        verifyFileWithData("user-template.doc", "File type not supported.");
+        verifyFileWithData("user-template.docx", "File type not supported.");
+        verifyFileWithData("user-template.txt", "File type not supported.");
+        verifyFileWithData("user-template.xlsx", "File type not supported.");
+        verifyFileWithData("user-template.xls", "File type not supported.");
+
         clickBackToAccountUsersButton();
         return true;
     }
@@ -231,5 +241,14 @@ public class EMCUserImportPage extends EMCBasePage{
         assertTestCase.assertTrue(foundIssuesStatement.getText().contains(message),"Correct Invalid data message is displayed");
         assertTestCase.assertFalse(importButton.isEnabled(),"Import button is disabled");
         BrowserUtils.waitAndClick(removeFileButton, 10);
+    }
+
+    public void verifyFileWithData(String file, String message){
+        BrowserUtils.refresh();
+        fileInput.sendKeys(BrowserUtils.uploadPath() + File.separator +file);
+        wait(invalidFileNotification, 10);
+        assertTestCase.assertTrue(invalidFileNotification.isDisplayed(),"Invalid file notification is displayed");
+        assertTestCase.assertTrue(invalidFileNotification.getText().contains(message),"File type not supported message is displayed");
+        assertTestCase.assertTrue(invalidFileNotification.getText().contains(file),"Invalid file name is displayed");
     }
 }
