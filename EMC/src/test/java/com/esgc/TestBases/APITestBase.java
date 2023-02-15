@@ -2,6 +2,7 @@ package com.esgc.TestBases;
 
 
 import com.esgc.Pages.LoginPageEMC;
+import com.esgc.Reporting.CustomAssertion;
 import com.esgc.TestBase.TestBase;
 import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.Driver;
@@ -16,6 +17,7 @@ public abstract class APITestBase extends TestBase {
 
     public static String portfolioID = null;
     public static String portfolioName = null;
+    public CustomAssertion assertTestCase = new CustomAssertion();
 
     @BeforeClass(alwaysRun = true)
     public synchronized void setupToGetAPIToken() {

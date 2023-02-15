@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EMCApplicationsPage extends EMCBasePage{
-    @FindBy(tagName = "h4")
+    @FindBy(tagName = "h3")
     public WebElement pageTitle;
 
     @FindBy (xpath = "//tbody//td[1]//a")
@@ -20,6 +20,9 @@ public class EMCApplicationsPage extends EMCBasePage{
 
     @FindBy (xpath = "//button[.='Create application']")
     public WebElement createApplicationButton;
+
+    @FindBy (xpath = "//button[.='Create application']")
+    public List<WebElement> createApplicationButtonList;
 
     @FindBy (tagName = "input")
     public WebElement searchInput;
@@ -111,20 +114,6 @@ public class EMCApplicationsPage extends EMCBasePage{
         return false;
     }
 
-    public void createApplication(String applicationName) {
-        createApplicationButton.click();
-        applicationKeyInput.sendKeys(applicationName.toLowerCase());
-        applicationNameInput.sendKeys(applicationName);
-        applicationUrlInput.sendKeys("https://" + applicationName + ".com");
-        BrowserUtils.waitForClickablility(saveButton,10).click();
-    }
-    public void createApplication(String applicationName,String applicationLink) {
-        createApplicationButton.click();
-        applicationKeyInput.sendKeys(applicationName.toLowerCase());
-        applicationNameInput.sendKeys(applicationName);
-        applicationUrlInput.sendKeys(applicationLink);
-        BrowserUtils.waitForClickablility(saveButton,10).click();
-    }
     public void search(String applicationName) {
         System.out.println("searchInput.isDisplayed() = " + searchInput.isDisplayed());
         searchInput.clear();
@@ -142,6 +131,39 @@ public class EMCApplicationsPage extends EMCBasePage{
     public void clickOnCreateApplicationButton() {
         BrowserUtils.waitForClickablility(createApplicationButton, 5).click();
         System.out.println("Clicked on create application button");
+    }
+
+    public void createApplication(String applicationName, String applicationKey, String applicationUrl, String appType) {
+        clickOnCreateApplicationButton();
+        EMCApplicationCreatePage createPage = new EMCApplicationCreatePage();
+        switch (appType.toLowerCase()){
+            case "single-page":
+                BrowserUtils.doubleClick(createPage.singlePageApplicationRadioButton);
+                assertTestCase.assertTrue(createPage.singlePageApplicationRadioButton.isSelected(), "Single Page Application Radio Button is selected");
+                break;
+            case "external":
+                BrowserUtils.doubleClick(createPage.externalApplicationRadioButton);
+                assertTestCase.assertTrue(createPage.externalApplicationRadioButton.isSelected(), "External Application Radio Button is selected");
+                break;
+            case "web":
+                BrowserUtils.doubleClick(createPage.webApplicationRadioButton);
+                assertTestCase.assertTrue(createPage.webApplicationRadioButton.isSelected(), "Web Application Radio Button is selected");
+                break;
+        }
+
+        assertTestCase.assertTrue(createPage.nextButton.isEnabled(), "Next Button is enabled");
+        BrowserUtils.waitForClickablility(createPage.nextButton, 10).click();
+        createPage.applicationNameInput.sendKeys(applicationName);
+        createPage.applicationKeyInput.sendKeys(applicationKey);
+        createPage.applicationUrlInput.sendKeys(applicationUrl);
+        assertTestCase.assertTrue(createPage.saveButton.isEnabled(), "Save Button is enabled");
+        BrowserUtils.waitForClickablility(createPage.saveButton, 10).click();
+        wait(notification, 10);
+    }
+
+    public void clickOnCancelButton() {
+        BrowserUtils.waitForClickablility(cancelButton, 5).click();
+        System.out.println("Clicked on cancel button");
     }
 }
 

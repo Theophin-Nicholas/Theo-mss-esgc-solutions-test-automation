@@ -13,6 +13,8 @@ public class EMCEndpoints {
 
     //========User
     public static String EMC_USER = "api/users";
+    public static String EMC_ROLE_USERS = "api/admin/roles/{roleId}/users";
+    public static String EMC_ROLE_USER_CRUD = "api/admin/roles/{roleId}/users/{userId}";
 
     //========Account
     public static String EMC_ACCOUNTS = "api/accounts";

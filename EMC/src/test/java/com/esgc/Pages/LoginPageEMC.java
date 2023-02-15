@@ -4,6 +4,7 @@ import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.ConfigurationReader;
 import com.esgc.Utilities.Driver;
 import com.esgc.Utilities.Environment;
+import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -148,11 +149,34 @@ public class LoginPageEMC extends PageBase {
     public void loginWithInternalUser() {
         Driver.getDriver().manage().window().maximize();
         System.out.println("Login with internal user");
+        BrowserUtils.clearCache();
         wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.INTERNAL_USER_USERNAME, Keys.ENTER);
-        if (!ConfigurationReader.getProperty("environment").equalsIgnoreCase("prod")) {
-            wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.INTERNAL_USER_PASSWORD, Keys.ENTER);
+        //check if next button is displayed
+        try{
+            BrowserUtils.wait(5);
+            BrowserUtils.waitAndClick(nextButton, 3);
+        }catch (Exception e){
+            System.out.println("No need to click next button");
         }
-        Driver.getDriver().manage().window().maximize();
+
+        //check if username is displayed and cleared
+        try{
+            BrowserUtils.wait(5);
+            BrowserUtils.clearCache();
+            if(PTusernameBox.getAttribute("value").isEmpty())
+                PTusernameBox.sendKeys(Environment.INTERNAL_USER_USERNAME);
+        } catch (Exception e) {
+            System.out.println("No need to enter username");
+        }
+
+        //check if password is displayed
+        try{
+            //wait.until(ExpectedConditions.visibilityOf(
+            passwordBox.sendKeys(Environment.INTERNAL_USER_PASSWORD, Keys.ENTER);
+        } catch (Exception e) {
+            System.out.println("No need to enter password");
+        }
+        BrowserUtils.waitForPageToLoad(30);
     }
 
     public void loginEMCInternal() {

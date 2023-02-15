@@ -62,6 +62,17 @@ public class DateTimeUtilities {
         return formatter.format(date1);
 
     }
+    public static String getFormattedDate(String date, String inputFormat, String outputFormat) {
+        Date date1 = null;
+        try {
+            date1 = new SimpleDateFormat(inputFormat).parse(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        SimpleDateFormat formatter = new SimpleDateFormat(outputFormat);
+        return formatter.format(date1);
+
+    }
 
     public static String getPreviousMonthAndYear(String currentMonth, String currentYear) throws ParseException {
 
@@ -130,12 +141,21 @@ public class DateTimeUtilities {
      * get a date of a given date plus/minus days
      */
     public static String getDatePlusMinusDays(String date, int days, String format) {
-        date = getFormattedDate(date, format);
+        date = getFormattedDate(date, format, format);
         System.out.println("date = " + date);
         //increase date by days
         LocalDate localDate = LocalDate.parse(date, DateTimeFormatter.ofPattern(format));
         localDate = localDate.plusDays(days);
         return localDate.format(DateTimeFormatter.ofPattern(format));
+    }
+
+    public static String getDatePlusMinusDays(String date, int days, String inputFormat, String outputFormat) {
+        date = getFormattedDate(date, inputFormat, outputFormat);
+        System.out.println("date = " + date);
+        //increase date by days
+        LocalDate localDate = LocalDate.parse(date, DateTimeFormatter.ofPattern(outputFormat));
+        localDate = localDate.plusDays(days);
+        return localDate.format(DateTimeFormatter.ofPattern(outputFormat));
     }
 }
 

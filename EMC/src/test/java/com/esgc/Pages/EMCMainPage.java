@@ -1,5 +1,7 @@
 package com.esgc.Pages;
 
+import com.esgc.Reporting.CustomAssertion;
+import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.Driver;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
@@ -10,11 +12,13 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
+import java.util.List;
 
 public class EMCMainPage {
 
     protected WebDriverWait wait = new WebDriverWait(Driver.getDriver(), Duration.ofSeconds(10));
     protected Actions actions = new Actions(Driver.getDriver());
+    CustomAssertion assertTestCase = new CustomAssertion();
 
     //============== Common Elements for All Pages
 
@@ -27,16 +31,19 @@ public class EMCMainPage {
     @FindBy(xpath = "//button[not(@aria-label)]")
     public WebElement closeSidePanelButton;
 
-    @FindBy(xpath = "//*[text()='Applications']")
+    @FindBy(xpath = "//ul//a")
+    public List<WebElement> menuOptions;
+
+    @FindBy(xpath = "//a[.='Applications']")
     public WebElement applicationsButton;
 
-    @FindBy(xpath = "//*[text()='Accounts']")
+    @FindBy(xpath = "//a[.='Accounts']")
     public WebElement accountsButton;
 
-    @FindBy(xpath = "//*[text()='Users']")
+    @FindBy(xpath = "//a[.='Users']")
     public WebElement usersButton;
 
-    @FindBy(xpath = "//*[text()='Configuration']")
+    @FindBy(xpath = "//a[.='Configuration']")
     public WebElement configurationButton;
 
 
@@ -139,5 +146,42 @@ public class EMCMainPage {
         System.out.println("Side panel is opened");
         clickConfigurationsButton();
         System.out.println("Configurations button is clicked");
+    }
+
+    public void verifyAdminRoleUsersMenuOptions() {
+        try {
+            openSidePanel();
+        } catch (Exception e) {
+            System.out.println("Side panel is not opened");
+        }
+        System.out.println("Side panel is opened");
+        try {
+            wait.until(ExpectedConditions.visibilityOf(menuOptions.get(0)));
+            System.out.println("Menu options are displayed");
+        } catch (Exception e) {
+            System.out.println("Menu options are not displayed");
+        }
+        List<String> menuOptionsList = BrowserUtils.getElementsText(menuOptions);
+        List<String> expectedMenuOptionsList = List.of("Applications", "Accounts", "Users", "Configuration");
+        assertTestCase.assertTrue(menuOptionsList.containsAll(expectedMenuOptionsList), "Menu options are not displayed");
+    }
+
+    public void verifyFulfillmentRoleUsersMenuOptions() {
+        try {
+            openSidePanel();
+        } catch (Exception e) {
+            System.out.println("Side panel is not opened");
+        }
+        System.out.println("Side panel is opened");
+        try {
+            wait.until(ExpectedConditions.visibilityOf(menuOptions.get(0)));
+            System.out.println("Menu options are displayed");
+        } catch (Exception e) {
+            System.out.println("Menu options are not displayed");
+        }
+        List<String> menuOptionsList = BrowserUtils.getElementsText(menuOptions);
+        List<String> expectedMenuOptionsList = List.of("Applications", "Accounts", "Users");
+        assertTestCase.assertTrue(menuOptionsList.containsAll(expectedMenuOptionsList), "Menu options are displayed");
+        assertTestCase.assertFalse(menuOptionsList.contains("Configuration"), "Configuration menu option is displayed");
     }
 }

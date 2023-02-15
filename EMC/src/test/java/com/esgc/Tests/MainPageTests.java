@@ -1,5 +1,6 @@
 package com.esgc.Tests;
 
+import com.esgc.APIModels.EMCAPIController;
 import com.esgc.Pages.EMCMainPage;
 import com.esgc.Pages.LoginPageEMC;
 import com.esgc.TestBases.EMCUITestBase;
@@ -110,5 +111,42 @@ public class MainPageTests extends EMCUITestBase {
         assertTestCase.assertTrue(loginPage.UserNotAssignedApplicationErrorMsg.isDisplayed(),
                 "User is not assigned to client application error message is displayed");
         Driver.closeDriver();
+    }
+
+    @Test(groups = {EMC, UI, REGRESSION, API}, description = "UI | EMC Role | Verify people with Fulfillment EMC role can not See EMC role users")
+    @Xray(test = {12556, 12557})
+    public void verifyUserWithFulfillmentEMCRoleTest() {
+        EMCMainPage mainPage = new EMCMainPage();
+        mainPage.verifyAdminRoleUsersMenuOptions();
+        try{
+            //verify viewer role user's permissions
+            String email = "ferhat.demir-non-empl@moodys.com";
+            String viewerRoleId = "emc-viewer-qa";
+            String adminRoleId = "emc-admin-qa";
+            String fulfillmentRoleId = "emc-fulfillment-qa";
+            EMCAPIController apiController = new EMCAPIController();
+            apiController.deleteUserFromRole(email, viewerRoleId);
+            apiController.deleteUserFromRole(email, adminRoleId);
+            apiController.assignRoleToUser(email, fulfillmentRoleId);
+
+            //close the browser and login with viewer role user
+            Driver.quit();
+            Driver.getDriver().get(Environment.EMC_URL);
+            BrowserUtils.waitForPageToLoad(10);
+            LoginPageEMC loginPageEMC = new LoginPageEMC();
+            loginPageEMC.loginEMCWithParams(email, "Apple@2023??");
+            mainPage.verifyFulfillmentRoleUsersMenuOptions();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            //close the browser and login with admin role user
+            Driver.quit();
+            Driver.getDriver().get(Environment.EMC_URL);
+            BrowserUtils.waitForPageToLoad(10);
+            LoginPageEMC loginPageEMC = new LoginPageEMC();
+            loginPageEMC.loginWithInternalUser();
+            mainPage = new EMCMainPage();
+            mainPage.verifyAdminRoleUsersMenuOptions();
+        }
     }
 }

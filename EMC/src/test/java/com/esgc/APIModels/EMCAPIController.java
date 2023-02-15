@@ -6,22 +6,31 @@ import com.esgc.APIModels.EMC.AssignedUser;
 import com.esgc.APIModels.EMC.User;
 import com.esgc.EMCEndpoints;
 import com.esgc.TestBase.TestBase;
+import com.esgc.TestBases.APITestBase;
+import com.esgc.Utilities.API.Endpoints;
+import com.esgc.Utilities.Driver;
 import com.esgc.Utilities.Environment;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
+import org.openqa.selenium.JavascriptExecutor;
 
 import java.sql.Timestamp;
 import java.util.List;
 
 import static io.restassured.RestAssured.given;
 
-public class EMCAPIController extends TestBase {
+public class EMCAPIController extends APITestBase {
     boolean isInvalidTest = false;
     public String ON_DEMAND_PRODUCT_ID;
 
     RequestSpecification configSpec() {
-        //getAccessToken();
+        if(System.getProperty("token") == null) {
+            String getAccessTokenScript = "return JSON.parse(localStorage.getItem('okta-token-storage')).accessToken.accessToken";
+            String accessToken = ((JavascriptExecutor) Driver.getDriver()).executeScript(getAccessTokenScript).toString();
+            System.setProperty("token", accessToken);
+            System.out.println("token = " + accessToken);
+        }
         if (isInvalidTest) {
             resetInvalid();
             return given().accept(ContentType.JSON)
@@ -233,7 +242,7 @@ public class EMCAPIController extends TestBase {
         try {
             response = configSpec()
                     .when()
-                    .get(EMCEndpoints.EMC_APPS).prettyPeek();
+                    .get(EMCEndpoints.EMC_APPS);
 
         } catch (Exception e) {
             System.out.println("Inside exception " + e.getMessage());
@@ -243,11 +252,26 @@ public class EMCAPIController extends TestBase {
         return response;
     }
 
-    public Response postEMCNewApplicationResponse(String key, String name, String url, String provider) {
+    /**
+     * This method is used to create a new application in EMC
+     * @param key "key is a required field"
+     * @param name "name is a required field"
+     * @param url "url is a required field","url must be a valid URL"
+     * @param provider "provider is a required field","provider must be one of the following values: mss, ma
+     * @param type "type is a required field","type must be one of the following values: SinglePageApplication, ExternalApplication, WebApplication"
+     * @return
+     */
+    public Response postEMCNewApplicationResponse(String key, String name, String url, String provider, String type) {
         System.out.println("Creating new application with key = " + key);
         Response response = null;
         System.out.println("EMC API URL: " + Environment.EMC_URL + EMCEndpoints.EMC_APPS);
-        String payload = "{\"key\":\"" + key + "\",\"name\":\"" + name + "\",\"url\":\"" + url + "\",\"provider\":\"" + provider + "\"}";
+        String payload = "{" +
+                "\"key\":\"" + key + "\"," +
+                "\"name\":\"" + name + "\"," +
+                "\"url\":\"" + url + "\"," +
+                "\"provider\":\"" + provider + "\"," +
+                "\"type\":\"" + type + "\"" +
+                "}";
         System.out.println("payload = " + payload);
         try {
             response = configSpec()
@@ -395,7 +419,7 @@ public class EMCAPIController extends TestBase {
     public boolean verifyApplication(String applicationID) {
         System.out.println("Verifying application with id = " + applicationID);
         Response response = getEMCAllApplicationsResponse();
-        //response.prettyPrint();
+//        response.prettyPrint();
         List<Application> applications = response.jsonPath().getList("", Application.class);
         //System.out.println("applications.size() = " + applications.size());
         for (Application application : applications) {
@@ -588,5 +612,78 @@ public class EMCAPIController extends TestBase {
         }
         System.out.println("Status Code = " + response.statusCode());
         return response;
+    }
+
+    public Response getUsersForRole(String roleId) {
+        Response response = null;
+        System.out.println("EMC API URL: " + Environment.EMC_URL + EMCEndpoints.EMC_ROLE_USERS);
+        try{
+            response = configSpec()
+                    .pathParam("roleId", roleId)
+                    .when().get(EMCEndpoints.EMC_ROLE_USERS);
+        } catch (Exception e) {
+            System.out.println("Inside exception " + e.getMessage());
+        }
+        System.out.println("Status Code = " + response.statusCode());
+        return response;
+    }
+
+    public void assignRoleToUser(String email, String roleId) {
+        if(verifyUserForRole(email, roleId)){
+            System.out.println("User already assigned to role");
+            return;
+        }
+        Response response = null;
+        System.out.println("EMC API URL: " + Environment.EMC_URL + EMCEndpoints.EMC_ROLE_USER_CRUD);
+        try{
+            response = configSpec()
+                    .pathParam("roleId", roleId)
+                    .pathParam("userId", email)
+                    .when().put(EMCEndpoints.EMC_ROLE_USER_CRUD).prettyPeek();
+        } catch (Exception e) {
+            System.out.println("Inside exception " + e.getMessage());
+        }
+        System.out.println("Status Code = " + response.statusCode());
+    }
+
+    public void deleteUserFromRole(String email, String roleId) {
+        if(!verifyUserForRole(email, roleId)){
+            System.out.println("User already not assigned to role");
+            return;
+        }
+        Response response = null;
+        System.out.println("EMC API URL: " + Environment.EMC_URL + EMCEndpoints.EMC_ROLE_USER_CRUD);
+        try{
+            response = configSpec()
+                    .pathParam("roleId", roleId)
+                    .pathParam( "userId", email)
+                    .when().delete(EMCEndpoints.EMC_ROLE_USER_CRUD).prettyPeek();
+        } catch (Exception e) {
+            System.out.println("Inside exception " + e.getMessage());
+        }
+        System.out.println("Status Code = " + response.statusCode());
+    }
+
+    public boolean verifyUserForRole(String email, String roleId) {
+        return getUsersForRole(roleId).jsonPath().getList("userName").contains(email);
+    }
+
+    public void createApplicationAndVerify(String key, String name, String url, String provider, String type) {
+        Response response = postEMCNewApplicationResponse(key, name, url, provider, type);
+        response.prettyPrint();
+        assertTestCase.assertEquals(response.statusCode(), 201, "Status code 201 Created is verified");
+        assertTestCase.assertEquals(response.path("name"), "CreatedResponse", "Application creation response name is verified");
+        assertTestCase.assertEquals(response.path("message"), "Application " + key + " created", "Application creation response message with key is verified");
+        assertTestCase.assertTrue(verifyApplication(key), "Application creation response type is verified");
+    }
+
+    public void deleteApplicationAndVerify(String key) {
+        //Delete Application
+        Response response = deleteEMCApplicationResponse(key);
+        response.prettyPrint();
+        assertTestCase.assertEquals(response.statusCode(), 403, "Status code 204 OK is verified");
+        assertTestCase.assertEquals(response.path("name"), "DeletedResponse", "Application delete response name is verified");
+        //assertTestCase.assertEquals(response.path("message"), "Missing Authentication Token", "Application delete response message is verified");
+        assertTestCase.assertFalse(verifyApplication(key), "Application is deleted successfully");
     }
 }

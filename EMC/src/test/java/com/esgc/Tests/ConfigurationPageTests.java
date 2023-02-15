@@ -380,7 +380,7 @@ public class ConfigurationPageTests extends EMCUITestBase {
     }
 
     @Test(groups = {EMC, UI,REGRESSION}, description = "UI | EMC | Roles | Verify User with Admin Role can view Accounts menu on EMC")
-    @Xray(test = {7314, 7435, 7454, 7555, 7597, 7598})
+    @Xray(test = {7314, 7435, 7554, 7555, 7597, 7598})
     public void verifyUserWithAdminRoleCanViewAccountsMenuTest() {
         navigateToConfigPage("permission roles");
         EMCRolesPage rolesPage = new EMCRolesPage();
@@ -522,7 +522,7 @@ public class ConfigurationPageTests extends EMCUITestBase {
     }
 
     @Test(groups = {EMC, UI,REGRESSION}, description = "UI | EMC | Roles | Verify User with View Role can view Accounts menu on EMC")
-    @Xray(test = {7336, 7434, 7552, 7599, 7389})
+    @Xray(test = {7334, 7436, 7338, 7552, 7599, 7389})
     public void verifyUserWithViewerRoleCanViewAccountsMenuTest() {
         navigateToConfigPage("permission roles");
         EMCRolesPage rolesPage = new EMCRolesPage();

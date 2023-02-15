@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class EMCAccountsPage extends EMCBasePage {
-    @FindBy(tagName = "h4")
+    @FindBy(tagName = "h3")
     public WebElement pageTitle;
 
     @FindBy(xpath = "//button[.='Create account']")

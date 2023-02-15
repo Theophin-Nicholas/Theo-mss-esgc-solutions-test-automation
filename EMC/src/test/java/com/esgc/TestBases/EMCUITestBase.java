@@ -1,11 +1,15 @@
 package com.esgc.TestBases;
 
+import com.esgc.Pages.EMCAccountDetailsPage;
+import com.esgc.Pages.EMCAccountsPage;
+import com.esgc.Pages.EMCMainPage;
 import com.esgc.Pages.LoginPageEMC;
 import com.esgc.TestBase.TestBase;
 import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.ConfigurationReader;
 import com.esgc.Utilities.Driver;
 import com.esgc.Utilities.Environment;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.testng.ITestResult;
 import org.testng.annotations.*;
@@ -68,6 +72,7 @@ public abstract class EMCUITestBase extends TestBase {
         }
         System.out.println("Element is not displayed after " + seconds + " seconds");
     }
+
     public void wait(List<WebElement> elements, int seconds) {
         for (int i = 0; i < seconds; i++) {
             try {
@@ -82,4 +87,28 @@ public abstract class EMCUITestBase extends TestBase {
         System.out.println("Element is not displayed after " + seconds + " seconds");
     }
 
+    public void clear(WebElement element) {
+        while (element.getAttribute("value").length() > 0) {
+            element.sendKeys(Keys.BACK_SPACE);
+        }
+        element.sendKeys(Keys.TAB);
+    }
+
+    public void navigateToMenu(String menuName) {
+        EMCMainPage homePage = new EMCMainPage();
+        switch (menuName) {
+            case "Accounts":
+                homePage.goToAccountsPage();
+                break;
+            case "Applications":
+                homePage.goToApplicationsPage();
+                break;
+            case "Users":
+                homePage.goToUsersPage();
+                break;
+            case "Configuration":
+                homePage.goToConfigurationsPage();
+                break;
+        }
+    }
 }
