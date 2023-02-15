@@ -6,7 +6,9 @@ import com.esgc.Utilities.Driver;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
+import org.testng.Assert;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -125,11 +127,16 @@ public class OnDemandAssessmentPage extends PageBase {
     public void clickReviewAndSendRequestButton() {
 
         if(btnCreateNewRequest.size()>0)btnCreateNewRequest.get(0).click();
-        else BrowserUtils.waitForVisibility(btnReviewRequest,30).click();
+        else {BrowserUtils.waitForVisibility(btnReviewRequest,30).click();
+            BrowserUtils.waitForVisibility(drdShowFilter,30);}
+        }
+    public void clickESCkey() {
+        btnESC.click();
     }
 
     public void sendESCkey() {
-        txtSendTo.sendKeys(Keys.ESCAPE);
+        Actions action = new Actions(Driver.getDriver());
+        action.sendKeys(Keys.ESCAPE).build().perform();
     }
 
     public void confirmRequest() {
@@ -361,6 +368,10 @@ public class OnDemandAssessmentPage extends PageBase {
 
        for (int i = 1; i <= 73; i++) predictedScoresliders.get(1).sendKeys(Keys.ARROW_LEFT);*/
 
+    }
+
+    public boolean verifyMainPageHeader(String header){
+        return menuList.get(0).getText().equals(header);
     }
 
     public int getCompaniesCountFromReviewButtion(){
