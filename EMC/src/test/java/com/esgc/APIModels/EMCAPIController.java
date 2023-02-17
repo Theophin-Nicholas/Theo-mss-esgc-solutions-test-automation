@@ -16,6 +16,7 @@ import io.restassured.specification.RequestSpecification;
 import org.openqa.selenium.JavascriptExecutor;
 
 import java.sql.Timestamp;
+import java.util.Arrays;
 import java.util.List;
 
 import static io.restassured.RestAssured.given;
@@ -685,5 +686,15 @@ public class EMCAPIController extends APITestBase {
         assertTestCase.assertEquals(response.path("name"), "DeletedResponse", "Application delete response name is verified");
         //assertTestCase.assertEquals(response.path("message"), "Missing Authentication Token", "Application delete response message is verified");
         assertTestCase.assertFalse(verifyApplication(key), "Application is deleted successfully");
+    }
+
+    public void assignUserToRoleAndVerify(String email, String roleId) {
+        List<String> roles = Arrays.asList(Environment.ADMIN_ROLE_KEY, Environment.ADMIN_ROLE_KEY, Environment.FULFILLMENT_ROLE_KEY);
+        for(String role : roles){
+            if(role.equals(roleId)) continue;
+            deleteUserFromRole(email, role);
+        }
+        assignRoleToUser(email, roleId);
+        assertTestCase.assertTrue(verifyUserForRole(email, roleId), "User is assigned to role successfully");
     }
 }

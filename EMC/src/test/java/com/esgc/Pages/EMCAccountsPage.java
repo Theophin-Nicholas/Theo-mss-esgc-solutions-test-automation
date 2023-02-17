@@ -48,26 +48,30 @@ public class EMCAccountsPage extends EMCBasePage {
     }
 
     public boolean verifyAccount(String accountName) {
-        try {
-            for (int i = 0; i < accountNames.size(); i++) {
-                if (accountNames.get(i).getText().equalsIgnoreCase(accountName)) {
-                    return true;
-                }
+        wait(accountNames,20);
+        clear(searchInput);
+        searchInput.sendKeys(accountName);
+        for(WebElement account : accountNames){
+            if(account.getText().equalsIgnoreCase(accountName)){
+                return true;
             }
-        } catch (Exception e) {
-            return false;
         }
+        System.out.println("Account " + accountName + " not found!");
         return false;
     }
     public boolean verifyAccount(String accountName, boolean status) {
         String statusString = status ? "Active" : "Inactive";
+        wait(accountNames,20);
+        clear(searchInput);
+        searchInput.sendKeys(accountName);
         for (int i = 0; i < accountNames.size(); i++) {
-            if (accountNames.get(i).getText().equals(accountName)) {
+            if (accountNames.get(i).getText().equalsIgnoreCase(accountName)) {
                 if (accountStatuses.get(i).getText().equals(statusString)) {
                     return true;
                 }
             }
         }
+        System.out.println("Account " + accountName + " not found!");
         return false;
     }
 
@@ -82,15 +86,13 @@ public class EMCAccountsPage extends EMCBasePage {
     }
 
 
-    public void clickOnFirstAccount() {
-        System.out.println("Clicking on first account = " + accountNames.get(0).getText());
-        BrowserUtils.waitForClickablility(accountNames.get(0), 5).click();
-    }
+//    public void clickOnFirstAccount() {
+//        System.out.println("Clicking on first account = " + accountNames.get(0).getText());
+//        BrowserUtils.waitForClickablility(accountNames.get(0), 5).click();
+//    }
   
     public void goToAccount(String accountName){
-        while (searchInput.getAttribute("value").length() > 0) {
-            searchInput.sendKeys(Keys.BACK_SPACE);
-        }
+        clear(searchInput);
         searchInput.sendKeys(accountName);
         for (WebElement account : accountNames) {
             if (account.getText().equalsIgnoreCase(accountName)) {

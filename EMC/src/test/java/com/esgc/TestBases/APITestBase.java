@@ -26,16 +26,25 @@ public abstract class APITestBase extends TestBase {
 
     public void getAccessToken() {
         System.out.println("getting token");
-        Driver.getDriver().get(Environment.URL);
+        Driver.getDriver().get(Environment.EMC_URL);
         Driver.getDriver().manage().window().maximize();
         Driver.getDriver().manage().timeouts().implicitlyWait(Duration.ofSeconds(30));
         LoginPageEMC loginPage = new LoginPageEMC();
         loginPage.loginWithInternalUser();
-        BrowserUtils.wait(20);
-        String getAccessTokenScript = "return JSON.parse(localStorage.getItem('okta-token-storage')).accessToken.accessToken";
-        String accessToken = ((JavascriptExecutor) Driver.getDriver()).executeScript(getAccessTokenScript).toString();
-        System.setProperty("token", accessToken);
-        System.out.println("token = " + accessToken);
+        for (int i = 0; i < 60; i++) {
+            try{
+                String getAccessTokenScript = "return JSON.parse(localStorage.getItem('okta-token-storage')).accessToken.accessToken";
+                String accessToken = ((JavascriptExecutor) Driver.getDriver()).executeScript(getAccessTokenScript).toString();
+                System.setProperty("token", accessToken);
+                System.out.println("token = " + accessToken);
+                break;
+            } catch (Exception e) {
+                BrowserUtils.wait(1);
+            }
+        }
+        if(System.getProperty("token") == null) {
+            throw new RuntimeException("Token is null");
+        }
     }
 }
 

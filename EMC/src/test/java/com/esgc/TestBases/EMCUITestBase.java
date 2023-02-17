@@ -1,5 +1,6 @@
 package com.esgc.TestBases;
 
+import com.esgc.APIModels.EMCAPIController;
 import com.esgc.Pages.EMCAccountDetailsPage;
 import com.esgc.Pages.EMCAccountsPage;
 import com.esgc.Pages.EMCMainPage;
@@ -111,4 +112,20 @@ public abstract class EMCUITestBase extends TestBase {
                 break;
         }
     }
+
+    public void loginAsViewer(){
+        //verify viewer role user's permissions
+        String email = Environment.VIEWER_USER_USERNAME;
+        String viewerRoleId = Environment.VIEWER_ROLE_KEY;
+        EMCAPIController apiController = new EMCAPIController();
+        apiController.assignUserToRoleAndVerify(email, viewerRoleId);
+        System.out.println("Viewer role permissions reset is done");
+        //close the browser and login with viewer role user
+        Driver.quit();
+        Driver.getDriver().get(Environment.EMC_URL);
+        BrowserUtils.waitForPageToLoad(10);
+        LoginPageEMC loginPageEMC = new LoginPageEMC();
+        loginPageEMC.loginEMCWithParams(Environment.VIEWER_USER_USERNAME, Environment.VIEWER_USER_PASSWORD);
+    }
+
 }

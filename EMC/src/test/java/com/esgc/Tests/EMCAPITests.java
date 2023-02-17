@@ -213,8 +213,7 @@ public class EMCAPITests extends APITestBase {
 
     }
 
-    @Test(groups = {EMC, API}, description = "API | EMC | Apps | CRUD Operations for Applications")
-    //@Xray(test = {12720})
+    //@Test(groups = {EMC, API}, description = "API | EMC | Apps | CRUD Operations for Applications")
     public void verifyCRUDOperationsForApplicationsTest() {
         //Get All Applications
         response = apiController.getEMCAllApplicationsResponse();

@@ -119,22 +119,7 @@ public class MainPageTests extends EMCUITestBase {
         EMCMainPage mainPage = new EMCMainPage();
         mainPage.verifyAdminRoleUsersMenuOptions();
         try{
-            //verify viewer role user's permissions
-            String email = "ferhat.demir-non-empl@moodys.com";
-            String viewerRoleId = "emc-viewer-qa";
-            String adminRoleId = "emc-admin-qa";
-            String fulfillmentRoleId = "emc-fulfillment-qa";
-            EMCAPIController apiController = new EMCAPIController();
-            apiController.deleteUserFromRole(email, viewerRoleId);
-            apiController.deleteUserFromRole(email, adminRoleId);
-            apiController.assignRoleToUser(email, fulfillmentRoleId);
-
-            //close the browser and login with viewer role user
-            Driver.quit();
-            Driver.getDriver().get(Environment.EMC_URL);
-            BrowserUtils.waitForPageToLoad(10);
-            LoginPageEMC loginPageEMC = new LoginPageEMC();
-            loginPageEMC.loginEMCWithParams(email, "Apple@2023??");
+            loginAsViewer();
             mainPage.verifyFulfillmentRoleUsersMenuOptions();
         } catch (Exception e) {
             e.printStackTrace();

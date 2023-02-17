@@ -242,9 +242,6 @@ public class EMCAccountDetailsPage extends EMCBasePage {
     @FindBy (xpath = "//button[.='Cancel']")
     public WebElement popupCancelButton;
 
-    @FindBy (xpath = "//div[@id='notistack-snackbar']")
-    public WebElement deleteMessage;
-
     @FindBy (xpath = "//div[@aria-haspopup='listbox']")
     public WebElement rowsPerPageIndicator;
 
@@ -335,12 +332,16 @@ public class EMCAccountDetailsPage extends EMCBasePage {
             BrowserUtils.waitForClickablility(applicationsAssignButtonList.get(0), 15).click();
             System.out.println(applicationName + " application assigned");
             doneButton.click();
+            assertTestCase.assertTrue(notification.isDisplayed(),"Notification is displayed");
             clickOnDetailsTab();
+            BrowserUtils.wait(2);
             clickOnApplicationsTab();
+            BrowserUtils.wait(5);
             return true;
         }
     }
     public boolean verifyUser(String name) {
+        wait(userNamesList, 200);
         expandList();
         for(WebElement user : userNamesList) {
             if(user.getText().equals(name)) {
@@ -352,6 +353,7 @@ public class EMCAccountDetailsPage extends EMCBasePage {
         return false;
     }
     public void expandList() {
+        wait(rowsPerPageIndicator, 200);
         if(!rowsPerPageIndicator.getText().equals("50")){
             BrowserUtils.waitForClickablility(rowsPerPageIndicator, 5).click();
             BrowserUtils.waitForClickablility(numberOfUsers50, 5).click();
@@ -496,18 +498,6 @@ public class EMCAccountDetailsPage extends EMCBasePage {
         BrowserUtils.waitForClickablility(backToAccountsButton,5).click();
     }
 
-    public void addApplication(String applicationName) {
-        System.out.println("Adding application: " + applicationName);
-        BrowserUtils.waitForClickablility(assignApplicationsButton, 5).click();
-        BrowserUtils.waitForVisibility(assignApplicationsModalTitle, 5);
-        assignApplicationsModalSearchInput.sendKeys(applicationName);
-        BrowserUtils.waitForClickablility(assignApplicationsModalAssignButtonsList.get(0),5).click();
-        BrowserUtils.waitForClickablility(doneButton,5).click();
-        clickOnDetailsTab();
-        clickOnApplicationsTab();
-        System.out.println(applicationName + " application added");
-    }
-
     public void addAllProducts(String applicationName) {
         System.out.println("Adding all features of " + applicationName+" application to account");
         BrowserUtils.waitForClickablility(assignProductsButton, 5).click();
@@ -586,6 +576,7 @@ public class EMCAccountDetailsPage extends EMCBasePage {
             if (product.getText().equals(applicationName)) {
                 System.out.println(applicationName + " product found");
                 product.click();
+                wait(currentProductFeaturesDeleteButtons, 5);
                 System.out.println("Number of Features will be deleted = "+currentProductFeaturesDeleteButtons.size());
                 while(currentProductFeaturesDeleteButtons.size()>0) {
                     if(currentProductFeaturesDeleteButtons.get(0).isDisplayed()) {
@@ -600,7 +591,7 @@ public class EMCAccountDetailsPage extends EMCBasePage {
             }
         }
         clickOnDetailsTab();
-        BrowserUtils.wait(1);
+        BrowserUtils.wait(2);
         clickOnProductsTab();
         BrowserUtils.wait(3);
     }
@@ -760,6 +751,20 @@ public class EMCAccountDetailsPage extends EMCBasePage {
         if(accountType.equals("Admin")){
             assertTestCase.assertTrue(editButton.isDisplayed(), "Edit button is displayed");
         }
+        //Account is editable mode
+        editButton.click();
+        assertTestCase.assertTrue(cancelButton.isEnabled(), "Accounts Page - Users Details - Cancel button is enabled for editing");
+        assertTestCase.assertTrue(saveButton.isDisplayed(), "Accounts Page - Users Details - Save button is enabled for editing");
+        assertTestCase.assertTrue(accountNameInput.isEnabled(), "Accounts Page - Users Details - Account Name input is enabled for editing");
+        assertTestCase.assertFalse(accountKeyInput.isEnabled(), "Accounts Page - Users Details - Account Key input is disabled for editing");
+        assertTestCase.assertTrue(statusCheckBox.isEnabled(), "Accounts Page - Users Details - Account status checkbox is enabled for editing");
+        assertTestCase.assertTrue(subscriberInput.isEnabled(), "Accounts Page - Users Details - Account Subscriber Input is enabled for editing");
+        assertTestCase.assertTrue(startDateInput.isEnabled(), "Accounts Page - Users Details - Account start date input is enabled for editing");
+        assertTestCase.assertTrue(endDateInput.isEnabled(), "Accounts Page - Users Details - Account end date input is enabled for editing");
+
+        //Click Cancel button on Account Details editable
+        //Cancel button should take the user back to the Accounts view page
+        cancelButton.click();
     }
 
     public void clickOnUserOptionsMenu() {

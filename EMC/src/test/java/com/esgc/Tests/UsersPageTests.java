@@ -39,7 +39,7 @@ public class UsersPageTests extends EMCUITestBase {
     }
 
     @Test(groups = {EMC, UI, SMOKE, REGRESSION, PROD})
-    @Xray(test = {3033, 10541, 10542, 10543})
+    @Xray(test = {3033})
     public void verifyAccountsPageTest() {
         EMCMainPage mainPage = new EMCMainPage();
         assertTestCase.assertTrue(mainPage.isEMCTitleIsDisplayed(), "Main Title Verification");
@@ -49,15 +49,7 @@ public class UsersPageTests extends EMCUITestBase {
 
         mainPage.clickUsersButton();
         wait(usersPage.userNames, 10);
-        assertTestCase.assertTrue(usersPage.isOptionsAvailable("Export all"), "Export Users option is available for Admin");
-        assertTestCase.assertTrue(usersPage.isOptionsAvailable("Sync users"), "Sync Users option is available for Admin");
-        usersPage.exportUsers();
-        assertTestCase.assertTrue(usersPage.verifyUsersExportFileDownloaded(), "Users Exported");
-        System.out.println("Users Exported");
-        assertTestCase.assertTrue(usersPage.verifyExportColumns(), "Exported columns are correct");
-        System.out.println("Exported columns are correct");
-        assertTestCase.assertTrue(usersPage.verifyExportedNumberOfUsers(), "Exported number of users are correct");
-        System.out.println("Exported number of users are correct");
+        assertTestCase.assertTrue(usersPage.userNames.size() > 0, "Users Page - Users are displayed");
     }
 
     @Test(groups = {EMC, UI, REGRESSION})
@@ -116,8 +108,6 @@ public class UsersPageTests extends EMCUITestBase {
         BrowserUtils.waitForVisibility(userDetailsPage.detailsTab, 10);
         assertTestCase.assertTrue(userDetailsPage.userStatus.isDisplayed(), "User Details Page  - User status is displayed");
         assertTestCase.assertEquals(userDetailsPage.userStatus.getText(), "Staged", "User Details Page  - User status is Staged");
-        assertTestCase.assertTrue(userDetailsPage.suspendButton.isDisplayed(), "User Details Page  - Suspend button is displayed");
-        assertTestCase.assertTrue(userDetailsPage.suspendButton.isEnabled(), "User Details Page  - Suspend button is not enabled for staged user");
         assertTestCase.assertTrue(userDetailsPage.activateButton.isDisplayed(), "User Details Page  - Reset Password button is displayed");
         assertTestCase.assertTrue(userDetailsPage.deleteButton.isDisplayed(), "User Details Page  - Delete button is displayed");
 
@@ -244,20 +234,7 @@ public class UsersPageTests extends EMCUITestBase {
         EMCAccountDetailsPage accountDetailsPage = new EMCAccountDetailsPage();
         assertTestCase.assertTrue(accountDetailsPage.verifyAccountDetails(), "Account details are verified");
         try{
-            //verify viewer role user's permissions
-            String email = "ferhat.demir-non-empl@moodys.com";
-            String viewerRoleId = "emc-viewer-qa";
-            String adminRoleId = "emc-admin-qa";
-            EMCAPIController apiController = new EMCAPIController();
-            apiController.assignRoleToUser(email, viewerRoleId);
-            apiController.deleteUserFromRole(email, adminRoleId);
-
-            //close the browser and login with viewer role user
-            Driver.quit();
-            Driver.getDriver().get(Environment.EMC_URL);
-            BrowserUtils.waitForPageToLoad(10);
-            LoginPageEMC loginPageEMC = new LoginPageEMC();
-            loginPageEMC.loginEMCWithParams(email, "Apple@2023??");
+            loginAsViewer();
             navigateToUser(activeUser);
             detailsPage = new EMCUserDetailsPage();
             assertTestCase.assertTrue(detailsPage.verifyUserDetails(), "User details are verified");

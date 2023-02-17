@@ -153,7 +153,8 @@ public class EMCUsersPage extends EMCBasePage {
         int expectedNumberOfUsers = getTotalUsers();
         System.out.println("expectedNumberOfUsers = " + expectedNumberOfUsers);
         //return true if difference is less than 5
-        return Math.abs(actualNumberOfUsers - expectedNumberOfUsers) < 5;
+        //return Math.abs(actualNumberOfUsers - expectedNumberOfUsers) < 10;
+        return actualNumberOfUsers == expectedNumberOfUsers;
     }
 
     public void syncUsers() {

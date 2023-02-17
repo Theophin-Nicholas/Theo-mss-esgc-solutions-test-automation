@@ -132,9 +132,14 @@ public class LoginPageEMC extends PageBase {
         Driver.getDriver().manage().window().maximize();
 
         wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(userName, Keys.ENTER);
+        try{
+            BrowserUtils.wait(5);
+            BrowserUtils.waitAndClick(nextButton, 3);
+        }catch (Exception e){
+            System.out.println("No need to click next button");
+        }
         wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(password);
-//        if (!termsAndConditionsCheckBox.isSelected())
-//            wait.until(ExpectedConditions.visibilityOf(termsAndConditionsLabel)).click();
+
         wait.until(ExpectedConditions.visibilityOf(loginButton)).click();
         System.out.println("Login with params");
         Driver.getDriver().manage().window().maximize();
@@ -190,6 +195,12 @@ public class LoginPageEMC extends PageBase {
     }
     public void loginWithWrongPass() {
         wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.INTERNAL_USER_USERNAME, Keys.ENTER);
+        try{
+            BrowserUtils.wait(5);
+            BrowserUtils.waitAndClick(nextButton, 3);
+        }catch (Exception e){
+            System.out.println("No need to click next button");
+        }
         wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys("Wrong_Pass_Word", Keys.ENTER);
     }
 

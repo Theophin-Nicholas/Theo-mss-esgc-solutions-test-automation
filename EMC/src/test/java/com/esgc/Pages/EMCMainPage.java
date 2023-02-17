@@ -14,7 +14,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
 import java.util.List;
 
-public class EMCMainPage {
+public class EMCMainPage extends EMCBasePage{
 
     protected WebDriverWait wait = new WebDriverWait(Driver.getDriver(), Duration.ofSeconds(10));
     protected Actions actions = new Actions(Driver.getDriver());
@@ -179,6 +179,7 @@ public class EMCMainPage {
         } catch (Exception e) {
             System.out.println("Menu options are not displayed");
         }
+        wait(menuOptions, 60);
         List<String> menuOptionsList = BrowserUtils.getElementsText(menuOptions);
         List<String> expectedMenuOptionsList = List.of("Applications", "Accounts", "Users");
         assertTestCase.assertTrue(menuOptionsList.containsAll(expectedMenuOptionsList), "Menu options are displayed");

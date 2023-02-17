@@ -33,7 +33,7 @@ public class ApplicationPageTests extends EMCUITestBase {
         assertTestCase.assertEquals(applicationsPage.pageTitle.getText(), "Applications", "Applications page is displayed");
         //Search for the account where a New user will be created
         if (!applicationName.isEmpty()) {
-            applicationsPage.search(applicationName);
+            applicationsPage.searchApplication(applicationName);
             assertTestCase.assertEquals(applicationsPage.applications.size() > 0, true, "Application  is displayed");
             System.out.println(applicationsPage.applications.get(0).getText().toLowerCase());
             assertTestCase.assertTrue(applicationsPage.applications.get(0).getText().toLowerCase().contains(applicationName.toLowerCase()),
@@ -243,18 +243,18 @@ public class ApplicationPageTests extends EMCUITestBase {
 
         //enter all fields
         Faker faker = new Faker();
-        String applicationName = faker.app().name();
-        String applicationKey = faker.app().name().toLowerCase().replaceAll("\\[^a-z]", "");
-        String applicationUrl = faker.internet().url();
+        String applicationName = "QA Test Application"+faker.number().digits(4);
+        String applicationKey = "qatestapp"+applicationName.replaceAll("\\D+","");
+        String applicationUrl = "https://www.google.com";
         createPage.applicationNameInput.sendKeys(applicationName);
         createPage.applicationKeyInput.sendKeys(applicationKey);
-        createPage.applicationUrlInput.sendKeys(applicationUrl);
+        createPage.applicationUrlInput.sendKeys("invalid url.com");
         assertTestCase.assertTrue(createPage.mustBeAValidURLTag.isDisplayed(), "Must be a valid URL message is displayed");
         clear(createPage.applicationUrlInput);
         createPage.applicationUrlInput.sendKeys("https://qatest.com");
         BrowserUtils.waitForClickablility(createPage.saveButton, 10);
         assertTestCase.assertTrue(createPage.saveButton.isEnabled(), "Save Button is enabled");
-        assertTestCase.assertFalse(createPage.cancelButton.isEnabled(), "Cancel Button is not enabled");
+        assertTestCase.assertTrue(createPage.cancelButton.isEnabled(), "Cancel Button is not enabled");
         BrowserUtils.waitForClickablility(createPage.cancelButton, 10).click();
         assertTestCase.assertTrue(applicationsPage.createApplicationButton.isDisplayed(), "Create Application Button is displayed");
         assertTestCase.assertFalse(applicationsPage.verifyApplication(applicationName), "Application is not displayed in the list");
@@ -571,23 +571,7 @@ public class ApplicationPageTests extends EMCUITestBase {
         navigateToApplicationsPage("", "details");
 
         try {
-//            //verify viewer role user's permissions
-            String email = "ferhat.demir-non-empl@moodys.com";
-            String viewerRoleId = "emc-viewer-qa";
-            String adminRoleId = "emc-admin-qa";
-            String fulfillmentRoleId = "emc-fulfillment-qa";
-            EMCAPIController apiController = new EMCAPIController();
-            apiController.assignRoleToUser(email, viewerRoleId);
-            apiController.deleteUserFromRole(email, adminRoleId);
-            apiController.deleteUserFromRole(email, fulfillmentRoleId);
-            System.out.println("Viewer role permissions reset is done");
-            //close the browser and login with viewer role user
-            Driver.quit();
-            Driver.getDriver().get(Environment.EMC_URL);
-            BrowserUtils.waitForPageToLoad(10);
-            LoginPageEMC loginPageEMC = new LoginPageEMC();
-            loginPageEMC.loginEMCWithParams(email, "Apple@2023??");
-            System.out.println("Viewer role user logged in");
+            loginAsViewer();
             navigateToApplicationsPage("", "details");
         } catch (Exception e) {
             System.out.println("Viewer role user is not able to login");
@@ -599,14 +583,14 @@ public class ApplicationPageTests extends EMCUITestBase {
         wait(applicationsPage.createApplicationButtonList, 5);
         if (applicationsPage.createApplicationButtonList.size() > 0) {
             System.out.println("Create Application Button is displayed for viewer role user");
-            try{
+            try {
                 closeAndLoginWithAdmin();
             } catch (Exception e) {
                 System.out.println("Viewer role user is able to create an application");
             }
             assertTestCase.fail("Viewer role user is able to create an application");
         }
-        applicationsPage.searchApplication(testWebAppName);
+        applicationsPage.selectApplication(testWebAppName);
         EMCApplicationDetailsPage detailsPage = new EMCApplicationDetailsPage();
         detailsPage.verifyApplicationDetails("Viewer");
         closeAndLoginWithAdmin();

@@ -64,9 +64,10 @@ public class EMCApplicationsPage extends EMCBasePage{
                 System.out.println("Application found: " + applicationName);
                 System.out.println("Application name: " + element.getText());
                 element.click();
-                break;
+                return;
             }
         }
+        System.out.println("Application not found: " + applicationName);
     }
     public void clearSearchInput() {
         while (!searchInput.getAttribute("value").isEmpty()) {
@@ -114,15 +115,6 @@ public class EMCApplicationsPage extends EMCBasePage{
         return false;
     }
 
-    public void search(String applicationName) {
-        System.out.println("searchInput.isDisplayed() = " + searchInput.isDisplayed());
-        searchInput.clear();
-        searchInput.sendKeys(applicationName);
-        searchButton.click();
-        System.out.println("Searching for account: " + applicationName);
-        System.out.println(applications.size() + " accounts found");
-    }
-
     public void clickOnFirstApplication() {
         System.out.println("Clicking on first account = " + applications.get(0).getText());
         BrowserUtils.waitForClickablility(applications.get(0), 5).click();
@@ -155,7 +147,7 @@ public class EMCApplicationsPage extends EMCBasePage{
         BrowserUtils.waitForClickablility(createPage.nextButton, 10).click();
         createPage.applicationNameInput.sendKeys(applicationName);
         createPage.applicationKeyInput.sendKeys(applicationKey);
-        createPage.applicationUrlInput.sendKeys(applicationUrl);
+        createPage.applicationUrlInput.sendKeys(applicationUrl+Keys.TAB);
         assertTestCase.assertTrue(createPage.saveButton.isEnabled(), "Save Button is enabled");
         BrowserUtils.waitForClickablility(createPage.saveButton, 10).click();
         wait(notification, 10);
