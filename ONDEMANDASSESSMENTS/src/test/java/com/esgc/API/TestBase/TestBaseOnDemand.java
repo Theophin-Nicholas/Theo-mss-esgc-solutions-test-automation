@@ -7,6 +7,7 @@ import com.esgc.Utilities.Database.DatabaseDriver;
 import com.esgc.Utilities.Driver;
 import com.esgc.Utilities.Environment;
 import org.openqa.selenium.JavascriptExecutor;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeTest;
 
 import java.time.Duration;
@@ -19,6 +20,7 @@ public class TestBaseOnDemand extends TestBase {
         DatabaseDriver.createDBConnection();
     }
 
+    @BeforeClass(alwaysRun = true)
     public synchronized void getAccessTokenDataValidation() {
 
         LoginPage loginPage = new LoginPage();

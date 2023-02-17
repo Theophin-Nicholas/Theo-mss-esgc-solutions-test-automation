@@ -88,4 +88,37 @@ public class OnDemandFilterAPIController {
         return response;
     }
 
+    public Response getDashboardCoverage(String portfolioId) {
+        String region = "all";
+        String sector = "all";
+        String month = "02";
+        String year = "2023";
+        Response response = null;
+        try {
+            response = configSpec()
+                    .pathParam("portfolioId", portfolioId)
+                    .body("{\"region\":\"" + region + "\",\"sector\":\"" + sector + "\",\"month\":\"" + month + "\",\"year\":\"" + year + "\"}")
+                    .log().all()
+                    .when()
+                    .post(OnDemandEndpoints.DASHBOARD_COVERAGE).prettyPeek();
+
+        } catch (Exception e) {
+            System.out.println("Inside exception " + e.getMessage());
+        }
+        System.out.println(response.prettyPrint());
+        return response;
+    }
+
+    public String getLandingPage(String portfolioName){
+        String landingPage = "";
+        String portfolioId = getPortfolioId(portfolioName);
+        Response response = getDashboardCoverage(portfolioId);
+        if (response.jsonPath().getBoolean("assessment_requested") ==false){
+            landingPage = "filterPage" ;
+        }else{
+            landingPage = "batchProcessingPage" ;
+        }
+        return landingPage ;
+    }
+
 }

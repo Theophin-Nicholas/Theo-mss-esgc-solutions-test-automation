@@ -1328,7 +1328,7 @@ public abstract class PageBase {
     }
 
     public void waitForDataLoadCompletion() {
-        BrowserUtils.waitForInvisibility(allLoadMasks, 30);
+        BrowserUtils.waitForInvisibility(allLoadMasks, 120);
         // wait.until(ExpectedConditions.invisibilityOfAllElements(allLoadMasks));
     }
 
@@ -2093,6 +2093,7 @@ public abstract class PageBase {
     }
 
     public void selectPortfolioByNameFromPortfolioSelectionModal(String portfolioName) {
+        BrowserUtils.waitFor(3);
         clickPortfolioSelectionButton();
         BrowserUtils.wait(1);
         wait.until(ExpectedConditions.visibilityOfAllElements(portfolioCards));
