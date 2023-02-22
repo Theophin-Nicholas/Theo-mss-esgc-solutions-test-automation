@@ -8,7 +8,6 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.testng.Assert;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -35,9 +34,6 @@ public class OnDemandAssessmentPage extends PageBase {
 
     @FindBy(xpath = "//button[@id='ondemand-assessment']")
     public WebElement btnConfirmRequest;
-
-    @FindBy(xpath = "//button[@id='ondemand-assessment-confirmation']")
-    public WebElement btnProceed;
 
     @FindBy(xpath = "//div[@role='button'][text()='All Statuses']")
     public WebElement drdShowFilter;
@@ -124,6 +120,19 @@ public class OnDemandAssessmentPage extends PageBase {
     @FindBy(xpath = "//*[contains(text(),'Please confirm email addresses. The listed contacts will receive an email prompting them to complete an ESG assessment questionnaire.')]")
     public WebElement emailAlertMessage;
 
+    @FindBy(xpath="//div[text()='Confirm Request']")
+    public WebElement confirmRequestPopupHeader ;
+
+    @FindBy(xpath="//div[text()='Confirm Request']//following-sibling::div")
+    public WebElement confirmRequestPopupSubHeader ;
+
+    @FindBy(xpath="//button[@id='ondemand-assessment-cancel']")
+    public WebElement confirmRequestPopupBtnCancel ;
+
+    @FindBy(xpath = "//button[@id='ondemand-assessment-confirmation']")
+    public WebElement confirmRequestPopupBtnProceed;
+
+
     public String landingPage = "";
 
     public void goToSendRequestPage(String portfolioName) {
@@ -157,12 +166,15 @@ public class OnDemandAssessmentPage extends PageBase {
         BrowserUtils.ActionKeyPress(Keys.ESCAPE);
     }
 
-    public void confirmRequest() {
+    public String confirmRequestAndGetCompaniesCount() {
 
         KeepOnlyOneRequest();
         BrowserUtils.scrollTo(removeButtons.get(0));
         txtSendTo.sendKeys("qatest" + Math.random() + "@gmail.com");
+        String compniesCountForRequest = getCompaniesCountFromConfirmRequestButton();
         btnConfirmRequest.click();
+        return compniesCountForRequest;
+
     }
 
     public void selectFilter(String filterOption) {
@@ -302,7 +314,7 @@ public class OnDemandAssessmentPage extends PageBase {
     }
 
     public void clickProceedOnConfirmRequestPopup() {
-        BrowserUtils.waitForVisibility(btnProceed, 30).click();
+        BrowserUtils.waitForVisibility(confirmRequestPopupBtnProceed, 30).click();
     }
 
     public boolean isOnDemandAssessmentRequestAvailableInMenu() {
@@ -412,6 +424,11 @@ public class OnDemandAssessmentPage extends PageBase {
 
     public int getCompaniesCountFromReviewButtion() {
         return new Scanner(btnReviewRequest.getText()).useDelimiter("\\D+").nextInt();
+
+    }
+
+    public String getCompaniesCountFromConfirmRequestButton() {
+        return new Scanner(btnConfirmRequest.getText()).useDelimiter("\\D+").toString();
     }
 
     public boolean validateIfOndemandmenuOptionIsEnabled() {
@@ -433,5 +450,15 @@ public class OnDemandAssessmentPage extends PageBase {
         assertTestCase.assertEquals(BrowserUtils.waitForVisibility(menuOptionPageHeader, 90).getText(), "Moody's ESG360: Request On-Demand Assessment", "Moody's ESG360: Request On-Demand Assessment page verified");
     }
 
+    public void validateProceedOnConfirmRequestPopup(String countOfCompanies) {
+        assertTestCase.assertTrue(BrowserUtils.waitForVisibility(confirmRequestPopupHeader,10).getText().equals("Confirm Request"),"Validate Confirm Request header");
+        assertTestCase.assertTrue(BrowserUtils.waitForVisibility(confirmRequestPopupSubHeader,10).getText().equals("Assessment request will be sent to " + countOfCompanies + " company. You will receive confirmation when all requests have been sent."),"Validate Sub Header Count and Text");
+        assertTestCase.assertTrue(confirmRequestPopupBtnCancel.isDisplayed(),"Validate Cancel button is available in popup");
+        assertTestCase.assertTrue(confirmRequestPopupBtnProceed.isDisplayed(),"Validate proceed button is available in popup");
+    }
+    public void clickCancelButtonAndValidateRequestPage(){
+        BrowserUtils.waitForVisibility(confirmRequestPopupBtnCancel,10).click();
+        assertTestCase.assertTrue(BrowserUtils.waitForVisibility(btnConfirmRequest,30).isDisplayed(),"Validate it is back on Confirm euest page");
+    }
 
 }

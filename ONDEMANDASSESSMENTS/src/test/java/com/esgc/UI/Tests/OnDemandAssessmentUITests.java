@@ -16,7 +16,7 @@ import static com.esgc.Utilities.Groups.*;
 public class OnDemandAssessmentUITests extends UITestBase {
 
     @Test(groups = {REGRESSION,UI,COMMON })
-    @Xray(test = {11985,12001,12002,12011,12054})
+    @Xray(test = {11985,12001,12002,12011,12054,12092})
     public void validateOnDemandAssessmentRequest() {
 
         String portfolioName = "500 predicted portfolio";
@@ -32,8 +32,12 @@ public class OnDemandAssessmentUITests extends UITestBase {
         onDemandAssessmentPage.verifyCompaniesDetails();
         onDemandAssessmentPage.verifyShowFilterOptions();
 
+        String CompaniesCount = onDemandAssessmentPage.confirmRequestAndGetCompaniesCount();
 
-        onDemandAssessmentPage.confirmRequest();
+        onDemandAssessmentPage.validateProceedOnConfirmRequestPopup(CompaniesCount);
+        onDemandAssessmentPage.clickCancelButtonAndValidateRequestPage();
+
+        onDemandAssessmentPage.confirmRequestAndGetCompaniesCount();
         onDemandAssessmentPage.clickProceedOnConfirmRequestPopup();
 
         onDemandAssessmentPage.validateOnDemandPageHeader();
