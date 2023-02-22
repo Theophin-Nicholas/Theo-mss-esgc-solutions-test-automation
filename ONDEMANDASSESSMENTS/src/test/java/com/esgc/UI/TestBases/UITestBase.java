@@ -3,11 +3,13 @@ package com.esgc.UI.TestBases;
 
 import com.esgc.UI.Pages.LoginPage;
 import com.esgc.TestBase.TestBase;
+import com.esgc.UI.Pages.OnDemandAssessmentPage;
 import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.Database.DatabaseDriver;
 import com.esgc.Utilities.Driver;
 import com.esgc.Utilities.Environment;
 import org.openqa.selenium.JavascriptExecutor;
+import org.testng.ITestListener;
 import org.testng.ITestResult;
 import org.testng.annotations.*;
 
@@ -15,8 +17,9 @@ import java.time.Duration;
 
 import static com.esgc.Utilities.Groups.*;
 
-public abstract class UITestBase extends TestBase {
+public abstract class UITestBase extends TestBase implements ITestListener {
     String accessToken;
+    public String portfolioName ;
 
     @BeforeClass(alwaysRun = true)
     @Parameters("browser")
@@ -32,7 +35,7 @@ public abstract class UITestBase extends TestBase {
         }
 
         Driver.getDriver().manage().window().maximize();
-        Driver.getDriver().manage().timeouts().implicitlyWait(Duration.ofSeconds(80));
+       // Driver.getDriver().manage().timeouts().implicitlyWait(Duration.ofSeconds(80));
 
         isUITest = true;
 
@@ -61,34 +64,45 @@ public abstract class UITestBase extends TestBase {
 
     @BeforeMethod(alwaysRun = true)
     public synchronized void loginForTestsIfUserLoggedOut() {
-        boolean isPampaTest = this.getClass().getName().contains("Pampa");
         boolean isEntitlementsTest = this.getClass().getName().contains("Bundle") || this.getClass().getName().contains("Entitlements");
         LoginPage loginPage = new LoginPage();
         if (Driver.getDriver().getCurrentUrl().endsWith("login")) {
-            if (!isPampaTest && !isEntitlementsTest) {
+            if (!isEntitlementsTest) {
                 loginPage.login();
+                BrowserUtils.wait(20);
             }
+            setAccessTokenFromUI();
         }
+
     }
 
-    @BeforeMethod(onlyForGroups = {API}, groups = {SMOKE, REGRESSION, ENTITLEMENTS}, alwaysRun = true)
-    public synchronized void setupForAPITesting(@Optional String browser) {
-        BrowserUtils.wait(10);
+
+    public synchronized void setAccessTokenFromUI() {
         String getAccessTokenScript = "return JSON.parse(localStorage.getItem('okta-token-storage')).accessToken.accessToken";
-        String accessToken = ((JavascriptExecutor) Driver.getDriver()).executeScript(getAccessTokenScript).toString();
+        accessToken = ((JavascriptExecutor) Driver.getDriver()).executeScript(getAccessTokenScript).toString();
         System.setProperty("token", accessToken);
     }
+
     @AfterMethod(onlyForGroups = {UI}, groups = {SMOKE, REGRESSION, UI})
     public void refreshPageToContinueUITesting(ITestResult result) {
         getScreenshot(result);
         Driver.getDriver().navigate().refresh();
     }
 
-    @AfterMethod(onlyForGroups = {ENTITLEMENTS}, groups = {SMOKE, REGRESSION, ENTITLEMENTS})
+  /*  @AfterMethod(onlyForGroups = {ENTITLEMENTS}, groups = {SMOKE, REGRESSION, ENTITLEMENTS})
     public synchronized void teardownBrowserAfterUITesting() {
         Driver.closeDriver();
-    }
+    }*/
 
-
+   /* @BeforeMethod(onlyForGroups = {COMMON} )
+    public void commonStarttup() {
+        portfolioName = "500 predicted portfolio";
+        OnDemandAssessmentPage onDemandAssessmentPage = new OnDemandAssessmentPage();
+        onDemandAssessmentPage.selectPortfolioByNameFromPortfolioSelectionModal(portfolioName);
+        onDemandAssessmentPage.clickMenu();
+        BrowserUtils.wait(5);
+        onDemandAssessmentPage.clickonOnOndemandMenuOption();
+        onDemandAssessmentPage.validateOnDemandPageHeader();
+    }*/
 
 }

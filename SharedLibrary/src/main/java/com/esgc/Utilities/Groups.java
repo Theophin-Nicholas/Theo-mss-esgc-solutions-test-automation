@@ -18,4 +18,5 @@ public class Groups {
     public static final String ESG = "esg";
     public static final String REGULATORY_REPORTING = "regulatoryReporting";
     public static final String SEARCH_ENTITY = "search_entity";
+    public static final String COMMON = "common";
 }

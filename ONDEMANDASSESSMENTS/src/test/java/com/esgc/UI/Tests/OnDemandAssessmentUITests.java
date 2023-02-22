@@ -11,29 +11,36 @@ import com.esgc.Utilities.EntitlementsBundles;
 import com.esgc.Utilities.Xray;
 import org.testng.Assert;
 import org.testng.annotations.Test;
+import static com.esgc.Utilities.Groups.*;
 
-public class OnDemandAssessmentTests extends UITestBase {
+public class OnDemandAssessmentUITests extends UITestBase {
 
-    @Test(groups = {"regression", "ui"})
-    @Xray(test = {11985,12001,12002,12011,12054})
+    @Test(groups = {REGRESSION,UI,COMMON })
+    @Xray(test = {11985,12001,12002,12011,12054,12092})
     public void validateOnDemandAssessmentRequest() {
 
         String portfolioName = "500 predicted portfolio";
         OnDemandAssessmentPage onDemandAssessmentPage = new OnDemandAssessmentPage();
         onDemandAssessmentPage.selectPortfolioByNameFromPortfolioSelectionModal(portfolioName);
-
         onDemandAssessmentPage.clickMenu();
-        onDemandAssessmentPage.onDemandAssessmentRequest.click();
-        assertTestCase.assertEquals(onDemandAssessmentPage.menuOptionPageHeader.getText(), "Moody's ESG360: Request On-Demand Assessment", "Moody's ESG360: Request On-Demand Assessment page verified");
-
+        BrowserUtils.wait(5);
+        onDemandAssessmentPage.clickonOnOndemandMenuOption();
+        onDemandAssessmentPage.validateOnDemandPageHeader();
+        onDemandAssessmentPage.goToSendRequestPage(portfolioName);
         onDemandAssessmentPage.clickReviewAndSendRequestButton();
+
         onDemandAssessmentPage.verifyCompaniesDetails();
         onDemandAssessmentPage.verifyShowFilterOptions();
 
-        onDemandAssessmentPage.confirmRequest();
+        String CompaniesCount = onDemandAssessmentPage.confirmRequestAndGetCompaniesCount();
+
+        onDemandAssessmentPage.validateProceedOnConfirmRequestPopup(CompaniesCount);
+        onDemandAssessmentPage.clickCancelButtonAndValidateRequestPage();
+
+        onDemandAssessmentPage.confirmRequestAndGetCompaniesCount();
         onDemandAssessmentPage.clickProceedOnConfirmRequestPopup();
 
-        assertTestCase.assertEquals(onDemandAssessmentPage.menuOptionPageHeader.getText(), "Moody's ESG360: Request On-Demand Assessment", "Moody's ESG360: Request On-Demand Assessment page verified");
+        onDemandAssessmentPage.validateOnDemandPageHeader();
 
     }
 
@@ -44,56 +51,53 @@ public class OnDemandAssessmentTests extends UITestBase {
         String portfolioName = "500 predicted portfolio";
         OnDemandAssessmentPage onDemandAssessmentPage = new OnDemandAssessmentPage();
         onDemandAssessmentPage.selectPortfolioByNameFromPortfolioSelectionModal(portfolioName);
-        BrowserUtils.wait(10);
-        BrowserUtils.waitForPageToLoad(50);
-
         onDemandAssessmentPage.clickMenu();
-        onDemandAssessmentPage.onDemandAssessmentRequest.click();
-        assertTestCase.assertEquals(onDemandAssessmentPage.menuOptionPageHeader.getText(), "Moody's ESG360: Request On-Demand Assessment", "Moody's ESG360: Request On-Demand Assessment page verified");
+        BrowserUtils.wait(5);
+        onDemandAssessmentPage.clickonOnOndemandMenuOption();
+        onDemandAssessmentPage.validateOnDemandPageHeader();
 
         onDemandAssessmentPage.sendESCkey();
         BrowserUtils.wait(2);
         Assert.assertTrue(onDemandAssessmentPage.verifyMainPageHeader("Moody's ESG360: Dashboard"), "Global Header Title is not matched for Dashboard");
 
         onDemandAssessmentPage.clickMenu();
-        onDemandAssessmentPage.onDemandAssessmentRequest.click();
-        assertTestCase.assertEquals(onDemandAssessmentPage.menuOptionPageHeader.getText(), "Moody's ESG360: Request On-Demand Assessment", "Moody's ESG360: Request On-Demand Assessment page verified");
+        onDemandAssessmentPage.clickonOnOndemandMenuOption();
+        onDemandAssessmentPage.validateOnDemandPageHeader();
 
         onDemandAssessmentPage.clickESCkey();
         BrowserUtils.wait(2);
         Assert.assertTrue(onDemandAssessmentPage.verifyMainPageHeader("Moody's ESG360: Dashboard"), "Global Header Title is not matched for Dashboard");
     }
 
-    @Test(groups = {"regression", "ui"})
+    @Test(groups = {REGRESSION,UI })
     @Xray(test = {12054,12810,12811,12812})
     public void validateErrorMessageOfEmailFieldAndExit() {
 
         String portfolioName = "500 predicted portfolio";
         OnDemandAssessmentPage onDemandAssessmentPage = new OnDemandAssessmentPage();
         onDemandAssessmentPage.selectPortfolioByNameFromPortfolioSelectionModal(portfolioName);
-        BrowserUtils.wait(10);
-        BrowserUtils.waitForPageToLoad(50);
-
         onDemandAssessmentPage.clickMenu();
-        onDemandAssessmentPage.onDemandAssessmentRequest.click();
-        assertTestCase.assertEquals(onDemandAssessmentPage.menuOptionPageHeader.getText(), "Moody's ESG360: Request On-Demand Assessment", "Moody's ESG360: Request On-Demand Assessment page verified");
+        BrowserUtils.wait(5);
+        onDemandAssessmentPage.clickonOnOndemandMenuOption();
+        onDemandAssessmentPage.validateOnDemandPageHeader();
 
+        onDemandAssessmentPage.goToSendRequestPage(portfolioName);
         onDemandAssessmentPage.clickReviewAndSendRequestButton();
-        String emailConfirmMessage = "Please confirm email addresses. The listed contacts will receive an email prompting them to complete an ESG assessment questionnaire.";
-        onDemandAssessmentPage.verifyConfirmEmailAlert(emailConfirmMessage);
+
+        onDemandAssessmentPage.verifyConfirmEmailAlert();
 
         onDemandAssessmentPage.sendESCkey();
         BrowserUtils.wait(2);
-        assertTestCase.assertEquals(onDemandAssessmentPage.menuOptionPageHeader.getText(), "Moody's ESG360: Request On-Demand Assessment", "Moody's ESG360: Request On-Demand Assessment page verified");
+        onDemandAssessmentPage.validateOnDemandPageHeader();
 
-        onDemandAssessmentPage.clickReviewAndSendRequestButton();
+        onDemandAssessmentPage.clickReviewAndSendRequestButton();;
+        BrowserUtils.wait(3);
         onDemandAssessmentPage.clickESCkey();
         BrowserUtils.wait(2);
-        assertTestCase.assertEquals(onDemandAssessmentPage.menuOptionPageHeader.getText(), "Moody's ESG360: Request On-Demand Assessment", "Moody's ESG360: Request On-Demand Assessment page verified");
-
+        onDemandAssessmentPage.validateOnDemandPageHeader();
     }
 
-    @Test(groups = {"regression", "ui"})
+    @Test(groups = {REGRESSION,UI })
     @Xray(test = {12010})
     public void verifyOnDemandAssessmentRequestIsNotAvailable() {
         LoginPage login = new LoginPage();
@@ -106,23 +110,25 @@ public class OnDemandAssessmentTests extends UITestBase {
 
         onDemandAssessmentPage.clickMenu();
         assertTestCase.assertFalse(onDemandAssessmentPage.isOnDemandAssessmentRequestAvailableInMenu(), "On-Demand Assessment Request option should not be available");
+        login.clickOnLogout();
     }
 
-    @Test(groups = {"regression", "ui", "smoke"})
+    @Test(groups = {REGRESSION,UI , SMOKE})
     @Xray(test = {12440,12456})
     public void verifyHeaderAndFilterFunctionality() {
 
         String portfolioName = "500 predicted portfolio";
         OnDemandAssessmentPage onDemandAssessmentPage = new OnDemandAssessmentPage();
         onDemandAssessmentPage.selectPortfolioByNameFromPortfolioSelectionModal(portfolioName);
-
         onDemandAssessmentPage.clickMenu();
+        BrowserUtils.wait(5);
+        onDemandAssessmentPage.clickonOnOndemandMenuOption();
+        onDemandAssessmentPage.validateOnDemandPageHeader();
 
-        BrowserUtils.waitForVisibility(onDemandAssessmentPage.onDemandAssessmentRequest,60).click();
-        assertTestCase.assertEquals(onDemandAssessmentPage.menuOptionPageHeader.getText(), "Moody's ESG360: Request On-Demand Assessment", "Moody's ESG360: Request On-Demand Assessment page verified");
+        onDemandAssessmentPage.goToSendRequestPage(portfolioName);
         onDemandAssessmentPage.onDemandCoverageHeaderValidation(portfolioName);
-        onDemandAssessmentPage.isCancelButtonAvailable();
-        onDemandAssessmentPage.isReviewButtonAvailable();
+        assertTestCase.assertTrue(onDemandAssessmentPage.isCancelButtonAvailable(),"Validate if Cancel button is available");
+        assertTestCase.assertTrue(onDemandAssessmentPage.isReviewButtonAvailable(),"Validate if Review button is available");
 
         //Validating Predicted Score Graph Slider
         onDemandAssessmentPage.validatePredictedScore();
@@ -133,41 +139,43 @@ public class OnDemandAssessmentTests extends UITestBase {
 
     }
 
-    @Test(groups = {"regression", "ui", "smoke"})
+    @Test(groups = {REGRESSION,UI , SMOKE})
     @Xray(test = {12455})
     public void verifyPageNavigation() {
+
 
         String portfolioName = "500 predicted portfolio";
         OnDemandAssessmentPage onDemandAssessmentPage = new OnDemandAssessmentPage();
         onDemandAssessmentPage.selectPortfolioByNameFromPortfolioSelectionModal(portfolioName);
 
         onDemandAssessmentPage.clickMenu();
-        BrowserUtils.waitForVisibility(onDemandAssessmentPage.onDemandAssessmentRequest,60).click();
-        assertTestCase.assertEquals(onDemandAssessmentPage.menuOptionPageHeader.getText(), "Moody's ESG360: Request On-Demand Assessment", "Moody's ESG360: Request On-Demand Assessment page verified");
+        BrowserUtils.wait(5);
+        onDemandAssessmentPage.clickonOnOndemandMenuOption();
+        onDemandAssessmentPage.validateOnDemandPageHeader();
 
         onDemandAssessmentPage.clickOnESCButton();
-        onDemandAssessmentPage.clickOnDemagPagelinkFromDashboardPage();
-        assertTestCase.assertEquals(onDemandAssessmentPage.menuOptionPageHeader.getText(), "Moody's ESG360: Request On-Demand Assessment", "Moody's ESG360: Request On-Demand Assessment page verified");
+        onDemandAssessmentPage.clickOnDemandPagelinkFromDashboardPage();
+        onDemandAssessmentPage.validateOnDemandPageHeader();
 
     }
 
 
 
-    @Test(groups = {"regression", "ui", "smoke"})
+    @Test(groups = {REGRESSION,UI , SMOKE})
     @Xray(test = {12703})
     public void verifyFilterCriteriaWithAndORLogic() {
 
         String portfolioName = "500 predicted portfolio";
         OnDemandAssessmentPage onDemandAssessmentPage = new OnDemandAssessmentPage();
         onDemandAssessmentPage.selectPortfolioByNameFromPortfolioSelectionModal(portfolioName);
-
         onDemandAssessmentPage.clickMenu();
+        BrowserUtils.wait(5);
+        onDemandAssessmentPage.clickonOnOndemandMenuOption();
+        onDemandAssessmentPage.validateOnDemandPageHeader();
 
-        BrowserUtils.waitForVisibility(onDemandAssessmentPage.onDemandAssessmentRequest,60).click();
-        assertTestCase.assertEquals(onDemandAssessmentPage.menuOptionPageHeader.getText(), "Moody's ESG360: Request On-Demand Assessment", "Moody's ESG360: Request On-Demand Assessment page verified");
+        onDemandAssessmentPage.goToSendRequestPage(portfolioName);
 
-
-        onDemandAssessmentPage.validateAndORLogic("And");
+        onDemandAssessmentPage.validateAndORLogic();
 
 
 

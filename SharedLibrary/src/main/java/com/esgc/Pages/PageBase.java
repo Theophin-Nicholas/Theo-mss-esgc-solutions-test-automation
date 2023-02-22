@@ -575,8 +575,9 @@ public abstract class PageBase {
      * Click method for Menu Tab on top left corner
      */
     public void clickMenu() {
-        WebDriverWait wait = new WebDriverWait(Driver.getDriver(), Duration.ofSeconds(60));
-        wait.until(ExpectedConditions.elementToBeClickable(menu));
+        //WebDriverWait wait = new WebDriverWait(Driver.getDriver(), Duration.ofSeconds(60));
+        //wait.until(ExpectedConditions.elementToBeClickable(menu));
+        BrowserUtils.waitForClickablility(menu,120);
         BrowserUtils.clickWithJS(menu);
 
     }
@@ -645,6 +646,7 @@ public abstract class PageBase {
      * Clicks the portfolio selection button on Page to select or upload a portfolio
      */
     public void clickPortfolioSelectionButton() {
+        BrowserUtils.waitForVisibility(portfolioSelectionButton,60);
         wait.until(ExpectedConditions.elementToBeClickable(portfolioSelectionButton)).click();
         BrowserUtils.waitFor(3);
     }
@@ -1326,7 +1328,7 @@ public abstract class PageBase {
     }
 
     public void waitForDataLoadCompletion() {
-        BrowserUtils.waitForInvisibility(allLoadMasks, 30);
+        BrowserUtils.waitForInvisibility(allLoadMasks, 120);
         // wait.until(ExpectedConditions.invisibilityOfAllElements(allLoadMasks));
     }
 
@@ -2091,7 +2093,9 @@ public abstract class PageBase {
     }
 
     public void selectPortfolioByNameFromPortfolioSelectionModal(String portfolioName) {
+        BrowserUtils.waitFor(3);
         clickPortfolioSelectionButton();
+        BrowserUtils.wait(1);
         wait.until(ExpectedConditions.visibilityOfAllElements(portfolioCards));
         List<WebElement> list =
                 portfolioCards.stream().filter(e -> e.getText().substring(0, e.getText().length() - 11).equals(portfolioName))
