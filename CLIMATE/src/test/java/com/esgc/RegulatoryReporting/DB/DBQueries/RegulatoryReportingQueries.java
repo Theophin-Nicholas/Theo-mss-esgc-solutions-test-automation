@@ -1,12 +1,10 @@
 package com.esgc.RegulatoryReporting.DB.DBQueries;
 
-import com.esgc.Utilities.DateTimeUtilities;
-import com.esgc.Utilities.PortfolioUtilities;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.text.DecimalFormat;
-import java.util.*;
-import static com.esgc.Utilities.Database.DatabaseDriver.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import static com.esgc.Utilities.Database.DatabaseDriver.getQueryResultMap;
 
 public class RegulatoryReportingQueries {
 
@@ -77,9 +75,9 @@ public class RegulatoryReportingQueries {
         String query = "";
         if(year.toLowerCase().equals("latest"))
             query = "with p as (SELECT COMPANY_NAME , IDENTIFIER_TYPE, YEAR, VE_ID,FACTSET_ID,HIGH_IMPACT_CHK,SFDR_1TXNMYID_1,SFDR_1TXNMYID_2,SFDR_1TXNMYID_3,SFDR_1TXNMYID_4,RPTNG_YR_FOR_SFDR_1,SFDR_2TXNMYID_27,\n" +
-                    "RPTNG_YR_FOR_SFDR_2,SFDR_3TXNMYID_28, RPTNG_YR_FOR_SFDR_3,SFDR_4TXNMYID_23,RPTNG_YR_FOR_SFDR_4,SFDR_5TXNMYID_5,SFDR_5TXNMYID_7,SFDR_5TXNMYID_11, SFDR_5TXNMYID_6,SFDR_5TXNMYID_8,\n" +
-                    "SFDR_5TXNMYID_12,RPTNG_YR_FOR_SFDR_5,SFDR_6TXNMYID_35, RPTNG_YR_FOR_SFDR_6,SFDR_7TXNMYID_25,RPTNG_YR_FOR_SFDR_7, SFDR_8TXNMYID_13,RPTNG_YR_FOR_SFDR_8,SFDR_9TXNMYID_14,RPTNG_YR_FOR_SFDR_9,\n" +
-                    "SFDR_10TXNMYID_29,RPTNG_YR_FOR_SFDR_10,SFDR_12TXNMYID_16, SFDR_12TXNMYID_15, RPTNG_YR_FOR_SFDR_12,SFDR_13TXNMYID_20,SFDR_13TXNMYID_21,SFDR_13TXNMYID_22,SFDR_13TXNMYID_19,SFDR_13FemByMen,\n" +
+                    "RPTNG_YR_FOR_SFDR_2,SFDR_3TXNMYID_28, RPTNG_YR_FOR_SFDR_3,SFDR_4TXNMYID_23,RPTNG_YR_FOR_SFDR_4,SFDR_5TXNMYID_445,SFDR_5TXNMYID_294,SFDR_5TXNMYID_555, SFDR_5TXNMYID_446,SFDR_5TXNMYID_447,\n" +
+                    "SFDR_5TXNMYID_556,RPTNG_YR_FOR_SFDR_5,SFDR_6TXNMYID_35, RPTNG_YR_FOR_SFDR_6,SFDR_7TXNMYID_25,RPTNG_YR_FOR_SFDR_7, SFDR_8TXNMYID_345,RPTNG_YR_FOR_SFDR_8,SFDR_9TXNMYID_377,RPTNG_YR_FOR_SFDR_9,\n" +
+                    "SFDR_10TXNMYID_29,RPTNG_YR_FOR_SFDR_10,SFDR_12TXNMYID_449, SFDR_12TXNMYID_448, RPTNG_YR_FOR_SFDR_12,SFDR_13TXNMYID_450,SFDR_13TXNMYID_451,SFDR_13TXNMYID_452,SFDR_13TXNMYID_66,SFDR_13FemByMen,\n" +
                     "RPTNG_YR_FOR_SFDR_13,SFDR_14TXNMYID_24, RPTNG_YR_FOR_SFDR_14, SFDR_17TXNMYID_26,RPTNG_YR_FOR_SFDR_17 FROM VW_SFDR_REPORT_COMPANY_OUTPUT WHERE PORTFOLIO_ID='"+portfolioId+"' \n" +
                     "AND DATE_BASED_DATA_TYPE='yearly'),\n" +
                     "q as (select * from p where SFDR_1TXNMYID_1<>'NULL' or SFDR_1TXNMYID_2<>'NULL' or SFDR_1TXNMYID_3<>'NULL' qualify row_number() OVER (partition BY FACTSET_ID ORDER BY FACTSET_ID, YEAR DESC) =1)\n" +
@@ -87,16 +85,17 @@ public class RegulatoryReportingQueries {
                     "union all \n" +
                     "select * from q";
         else query = "SELECT COMPANY_NAME , IDENTIFIER_TYPE, YEAR, VE_ID,FACTSET_ID,HIGH_IMPACT_CHK,SFDR_1TXNMYID_1,SFDR_1TXNMYID_2,SFDR_1TXNMYID_3,SFDR_1TXNMYID_4,RPTNG_YR_FOR_SFDR_1,SFDR_2TXNMYID_27,\n" +
-                "RPTNG_YR_FOR_SFDR_2,SFDR_3TXNMYID_28,RPTNG_YR_FOR_SFDR_3,SFDR_4TXNMYID_23,RPTNG_YR_FOR_SFDR_4,SFDR_5TXNMYID_5,SFDR_5TXNMYID_7,SFDR_5TXNMYID_11,\n" +
-                "SFDR_5TXNMYID_6,SFDR_5TXNMYID_8,SFDR_5TXNMYID_12,RPTNG_YR_FOR_SFDR_5,SFDR_6TXNMYID_35,RPTNG_YR_FOR_SFDR_6,SFDR_7TXNMYID_25,RPTNG_YR_FOR_SFDR_7,\n" +
-                "SFDR_8TXNMYID_13,RPTNG_YR_FOR_SFDR_8,SFDR_9TXNMYID_14,RPTNG_YR_FOR_SFDR_9,SFDR_10TXNMYID_29,RPTNG_YR_FOR_SFDR_10,SFDR_12TXNMYID_16,SFDR_12TXNMYID_15,\n" +
-                "RPTNG_YR_FOR_SFDR_12,SFDR_13TXNMYID_20,SFDR_13TXNMYID_21,SFDR_13TXNMYID_22,SFDR_13TXNMYID_19,SFDR_13FemByMen,RPTNG_YR_FOR_SFDR_13,SFDR_14TXNMYID_24,\n" +
+                "RPTNG_YR_FOR_SFDR_2,SFDR_3TXNMYID_28,RPTNG_YR_FOR_SFDR_3,SFDR_4TXNMYID_23,RPTNG_YR_FOR_SFDR_4,SFDR_5TXNMYID_445,SFDR_5TXNMYID_294,SFDR_5TXNMYID_555,\n" +
+                "SFDR_5TXNMYID_446,SFDR_5TXNMYID_447,SFDR_5TXNMYID_556,RPTNG_YR_FOR_SFDR_5,SFDR_6TXNMYID_35,RPTNG_YR_FOR_SFDR_6,SFDR_7TXNMYID_25,RPTNG_YR_FOR_SFDR_7,\n" +
+                "SFDR_8TXNMYID_345,RPTNG_YR_FOR_SFDR_8,SFDR_9TXNMYID_377,RPTNG_YR_FOR_SFDR_9,SFDR_10TXNMYID_29,RPTNG_YR_FOR_SFDR_10,SFDR_12TXNMYID_449,SFDR_12TXNMYID_448,\n" +
+                "RPTNG_YR_FOR_SFDR_12,SFDR_13TXNMYID_450,SFDR_13TXNMYID_451,SFDR_13TXNMYID_452,SFDR_13TXNMYID_66,SFDR_13FemByMen,RPTNG_YR_FOR_SFDR_13,SFDR_14TXNMYID_24,\n" +
                 "RPTNG_YR_FOR_SFDR_14,SFDR_17TXNMYID_26,RPTNG_YR_FOR_SFDR_17\n" +
                 "FROM VW_SFDR_REPORT_COMPANY_OUTPUT\n" +
                 "--where COMPANY_NAME like '%Vantage Towers AG%' SFDR_13FemByTot,\n" +
                 "WHERE PORTFOLIO_ID='"+portfolioId+"'\n" +
                 "AND YEAR = '"+year+"'\n" +
                 "AND DATE_BASED_DATA_TYPE='yearly'";
+        System.out.println("query = " + query);
         return getQueryResultMap(query);
     }
 
@@ -972,17 +971,17 @@ public class RegulatoryReportingQueries {
                     "UNION ALL\n" +
                     "   \n" +
                     "SELECT PORTFOLIO_ID, INDICATOR, TAXONOMY_ID, SUM(VALUE * EXPOSURE_AMOUNT/TOTAL_EXPOSURE_AMOUNT) * 100 AS IMPACT , SUM(Scope_of_Disclosure), TOTAL_CELLS FROM   (select PORTFOLIO_ID, INDICATOR, TAXONOMY_ID, Value,  EXPOSURE_AMOUNT , SUM(EXPOSURE_AMOUNT) OVER (partition by portfolio_id) AS TOTAL_EXPOSURE_AMOUNT,  1  AS Scope_of_Disclosure ,TOTAL_CELLS\n" +
-                    "from all_columns  where INDICATOR = 'SFDR_5' AND  TAXONOMY_ID = 11  AND  (VALUE <> 'NI' OR VALUE IS NULL)) GROUP BY PORTFOLIO_ID, INDICATOR, TAXONOMY_ID, TOTAL_CELLS\n" +
+                    "from all_columns  where INDICATOR = 'SFDR_5' AND  TAXONOMY_ID = 555  AND  (VALUE <> 'NI' OR VALUE IS NULL)) GROUP BY PORTFOLIO_ID, INDICATOR, TAXONOMY_ID, TOTAL_CELLS\n" +
                     "\n" +
                     "UNION ALL\n" +
                     "SELECT PORTFOLIO_ID, INDICATOR, TAXONOMY_ID, SUM(VALUE * EXPOSURE_AMOUNT/TOTAL_EXPOSURE_AMOUNT) * 100 AS IMPACT , SUM(Scope_of_Disclosure), TOTAL_CELLS FROM   (select PORTFOLIO_ID, INDICATOR, TAXONOMY_ID, Value,  EXPOSURE_AMOUNT , SUM(EXPOSURE_AMOUNT) OVER (partition by portfolio_id) AS TOTAL_EXPOSURE_AMOUNT,  1  AS Scope_of_Disclosure ,TOTAL_CELLS\n" +
-                    "from all_columns  where INDICATOR = 'SFDR_5' AND  TAXONOMY_ID = 12  AND  (VALUE <> 'NI' OR VALUE IS NULL)) GROUP BY PORTFOLIO_ID, INDICATOR, TAXONOMY_ID, TOTAL_CELLS  \n" +
+                    "from all_columns  where INDICATOR = 'SFDR_5' AND  TAXONOMY_ID = 556  AND  (VALUE <> 'NI' OR VALUE IS NULL)) GROUP BY PORTFOLIO_ID, INDICATOR, TAXONOMY_ID, TOTAL_CELLS  \n" +
                     "   \n" +
                     "\n" +
                     "UNION ALL\n" +
                     "SELECT PORTFOLIO_ID, INDICATOR, TAXONOMY_ID, SUM(CASE WHEN HIGH_IMPACT_CHECK = 'N' THEN 0 ELSE (EXPOSURE_AMOUNT/TOTAL_EXPOSURE_AMOUNT) * VALUE END) AS IMPACT , SUM(Scope_of_Disclosure), TOTAL_CELLS FROM ( \n" +
                     "  select PORTFOLIO_ID, INDICATOR, TAXONOMY_ID, Value,  EXPOSURE_AMOUNT , SUM(EXPOSURE_AMOUNT) OVER (partition by portfolio_id) AS TOTAL_EXPOSURE_AMOUNT,  1  AS Scope_of_Disclosure ,TOTAL_CELLS, HIGH_IMPACT_CHECK\n" +
-                    "from all_columns  where INDICATOR = 'SFDR_6'  AND  (VALUE <> 'NI' OR VALUE IS NULL)) GROUP BY PORTFOLIO_ID, INDICATOR, TAXONOMY_ID, TOTAL_CELLS     \n" +
+                    "from all_columns  where INDICATOR = 'SFDR_6'  AND  (VALUE <> 'NI' OR VALUE IS NULL) AND   VALUE NOT IN ('Yes', 'No')) GROUP BY PORTFOLIO_ID, INDICATOR, TAXONOMY_ID, TOTAL_CELLS     \n" +
                     "   \n" +
                     "   \n" +
                     "UNION ALL\n" +
@@ -1009,22 +1008,22 @@ public class RegulatoryReportingQueries {
                     "\n" +
                     " UNION ALL \n" +
                     "SELECT PORTFOLIO_ID, INDICATOR, TAXONOMY_ID, SUM(VALUE * EXPOSURE_AMOUNT/TOTAL_EXPOSURE_AMOUNT) * 100 AS IMPACT , SUM(Scope_of_Disclosure), TOTAL_CELLS FROM   (select PORTFOLIO_ID, INDICATOR, TAXONOMY_ID, Value,  EXPOSURE_AMOUNT , SUM(EXPOSURE_AMOUNT) OVER (partition by portfolio_id) AS TOTAL_EXPOSURE_AMOUNT,  1  AS Scope_of_Disclosure ,TOTAL_CELLS\n" +
-                    "from all_columns  where INDICATOR = 'SFDR_12' AND  TAXONOMY_ID = 15  AND  (VALUE <> 'NI' OR VALUE IS NULL)) GROUP BY PORTFOLIO_ID, INDICATOR, TAXONOMY_ID, TOTAL_CELLS\n" +
+                    "from all_columns  where INDICATOR = 'SFDR_12' AND  TAXONOMY_ID = 448  AND  (VALUE <> 'NI' OR VALUE IS NULL)) GROUP BY PORTFOLIO_ID, INDICATOR, TAXONOMY_ID, TOTAL_CELLS\n" +
                     "\n" +
                     " UNION ALL\n" +
                     "SELECT PORTFOLIO_ID, INDICATOR, TAXONOMY_ID, SUM(VALUE * EXPOSURE_AMOUNT/TOTAL_EXPOSURE_AMOUNT) * 100 AS IMPACT , SUM(Scope_of_Disclosure), TOTAL_CELLS FROM   (select PORTFOLIO_ID, INDICATOR, TAXONOMY_ID, Value,  EXPOSURE_AMOUNT , SUM(EXPOSURE_AMOUNT) OVER (partition by portfolio_id) AS TOTAL_EXPOSURE_AMOUNT,  1  AS Scope_of_Disclosure ,TOTAL_CELLS\n" +
-                    "from all_columns  where INDICATOR = 'SFDR_12' AND  TAXONOMY_ID = 16  AND  (VALUE <> 'NI' OR VALUE IS NULL)) GROUP BY PORTFOLIO_ID, INDICATOR, TAXONOMY_ID, TOTAL_CELLS  \n" +
+                    "from all_columns  where INDICATOR = 'SFDR_12' AND  TAXONOMY_ID = 449  AND  (VALUE <> 'NI' OR VALUE IS NULL)) GROUP BY PORTFOLIO_ID, INDICATOR, TAXONOMY_ID, TOTAL_CELLS  \n" +
                     "     \n" +
                     "   \n" +
                     "   \n" +
                     "       UNION ALL\n" +
-                    "SELECT PORTFOLIO_ID, INDICATOR, 20 as TAXONOMY_ID, SUM((VALUE/(1-VALUE)) * EXPOSURE_AMOUNT/TOTAL_EXPOSURE_AMOUNT) * 100 AS IMPACT , SUM(Scope_of_Disclosure), TOTAL_CELLS FROM   (select PORTFOLIO_ID, INDICATOR, TAXONOMY_ID, Value,  EXPOSURE_AMOUNT , SUM(EXPOSURE_AMOUNT) OVER (partition by portfolio_id) AS TOTAL_EXPOSURE_AMOUNT,  1  AS Scope_of_Disclosure ,TOTAL_CELLS\n" +
-                    "from all_columns  where INDICATOR = 'SFDR_13' AND  TAXONOMY_ID = 19  AND  (VALUE <> 'NI' OR VALUE IS NULL)) GROUP BY PORTFOLIO_ID, INDICATOR, TAXONOMY_ID, TOTAL_CELLS  \n" +
+                    "SELECT PORTFOLIO_ID, INDICATOR, 450 as TAXONOMY_ID, SUM((VALUE/(1-VALUE)) * EXPOSURE_AMOUNT/TOTAL_EXPOSURE_AMOUNT) * 100 AS IMPACT , SUM(Scope_of_Disclosure), TOTAL_CELLS FROM   (select PORTFOLIO_ID, INDICATOR, TAXONOMY_ID, Value,  EXPOSURE_AMOUNT , SUM(EXPOSURE_AMOUNT) OVER (partition by portfolio_id) AS TOTAL_EXPOSURE_AMOUNT,  1  AS Scope_of_Disclosure ,TOTAL_CELLS\n" +
+                    "from all_columns  where INDICATOR = 'SFDR_13' AND  TAXONOMY_ID = 66  AND  (VALUE <> 'NI' OR VALUE IS NULL)) GROUP BY PORTFOLIO_ID, INDICATOR, TAXONOMY_ID, TOTAL_CELLS  \n" +
                     "\n" +
                     "   \n" +
                     "    UNION ALL\n" +
-                    "SELECT PORTFOLIO_ID, INDICATOR, 21 as TAXONOMY_ID, SUM(VALUE * EXPOSURE_AMOUNT/TOTAL_EXPOSURE_AMOUNT) * 100 AS IMPACT , SUM(Scope_of_Disclosure), TOTAL_CELLS FROM   (select PORTFOLIO_ID, INDICATOR, TAXONOMY_ID, Value,  EXPOSURE_AMOUNT , SUM(EXPOSURE_AMOUNT) OVER (partition by portfolio_id) AS TOTAL_EXPOSURE_AMOUNT,  1  AS Scope_of_Disclosure ,TOTAL_CELLS\n" +
-                    "from all_columns  where INDICATOR = 'SFDR_13' AND  TAXONOMY_ID = 19  AND  (VALUE <> 'NI' OR VALUE IS NULL)) GROUP BY PORTFOLIO_ID, INDICATOR, TAXONOMY_ID, TOTAL_CELLS  \n" +
+                    "SELECT PORTFOLIO_ID, INDICATOR, 451 as TAXONOMY_ID, SUM(VALUE * EXPOSURE_AMOUNT/TOTAL_EXPOSURE_AMOUNT) * 100 AS IMPACT , SUM(Scope_of_Disclosure), TOTAL_CELLS FROM   (select PORTFOLIO_ID, INDICATOR, TAXONOMY_ID, Value,  EXPOSURE_AMOUNT , SUM(EXPOSURE_AMOUNT) OVER (partition by portfolio_id) AS TOTAL_EXPOSURE_AMOUNT,  1  AS Scope_of_Disclosure ,TOTAL_CELLS\n" +
+                    "from all_columns  where INDICATOR = 'SFDR_13' AND  TAXONOMY_ID = 66  AND  (VALUE <> 'NI' OR VALUE IS NULL)) GROUP BY PORTFOLIO_ID, INDICATOR, TAXONOMY_ID, TOTAL_CELLS  \n" +
                     "\n" +
                     "   \n" +
                     " UNION ALL\n" +
@@ -1138,17 +1137,17 @@ public class RegulatoryReportingQueries {
                     "UNION ALL\n" +
                     "   \n" +
                     "SELECT PORTFOLIO_ID, INDICATOR, TAXONOMY_ID, SUM(VALUE * EXPOSURE_AMOUNT/TOTAL_EXPOSURE_AMOUNT) * 100 AS IMPACT , SUM(Scope_of_Disclosure), TOTAL_CELLS FROM   (select PORTFOLIO_ID, INDICATOR, TAXONOMY_ID, Value,  EXPOSURE_AMOUNT , SUM(EXPOSURE_AMOUNT) OVER (partition by portfolio_id) AS TOTAL_EXPOSURE_AMOUNT,  1  AS Scope_of_Disclosure ,TOTAL_CELLS\n" +
-                    "from all_columns  where INDICATOR = 'SFDR_5' AND  TAXONOMY_ID = 11  AND  (VALUE <> 'NI' OR VALUE IS NULL)) GROUP BY PORTFOLIO_ID, INDICATOR, TAXONOMY_ID, TOTAL_CELLS\n" +
+                    "from all_columns  where INDICATOR = 'SFDR_5' AND  TAXONOMY_ID = 555  AND  (VALUE <> 'NI' OR VALUE IS NULL)) GROUP BY PORTFOLIO_ID, INDICATOR, TAXONOMY_ID, TOTAL_CELLS\n" +
                     "\n" +
                     "UNION ALL\n" +
                     "SELECT PORTFOLIO_ID, INDICATOR, TAXONOMY_ID, SUM(VALUE * EXPOSURE_AMOUNT/TOTAL_EXPOSURE_AMOUNT) * 100 AS IMPACT , SUM(Scope_of_Disclosure), TOTAL_CELLS FROM   (select PORTFOLIO_ID, INDICATOR, TAXONOMY_ID, Value,  EXPOSURE_AMOUNT , SUM(EXPOSURE_AMOUNT) OVER (partition by portfolio_id) AS TOTAL_EXPOSURE_AMOUNT,  1  AS Scope_of_Disclosure ,TOTAL_CELLS\n" +
-                    "from all_columns  where INDICATOR = 'SFDR_5' AND  TAXONOMY_ID = 12  AND  (VALUE <> 'NI' OR VALUE IS NULL)) GROUP BY PORTFOLIO_ID, INDICATOR, TAXONOMY_ID, TOTAL_CELLS  \n" +
+                    "from all_columns  where INDICATOR = 'SFDR_5' AND  TAXONOMY_ID = 556  AND  (VALUE <> 'NI' OR VALUE IS NULL)) GROUP BY PORTFOLIO_ID, INDICATOR, TAXONOMY_ID, TOTAL_CELLS  \n" +
                     "   \n" +
                     "\n" +
                     "UNION ALL\n" +
                     "SELECT PORTFOLIO_ID, INDICATOR, TAXONOMY_ID, SUM(CASE WHEN HIGH_IMPACT_CHECK = 'N' THEN 0 ELSE (EXPOSURE_AMOUNT/TOTAL_EXPOSURE_AMOUNT) * VALUE END) AS IMPACT , SUM(Scope_of_Disclosure), TOTAL_CELLS FROM ( \n" +
                     "  select PORTFOLIO_ID, INDICATOR, TAXONOMY_ID, Value,  EXPOSURE_AMOUNT , SUM(EXPOSURE_AMOUNT) OVER (partition by portfolio_id) AS TOTAL_EXPOSURE_AMOUNT,  1  AS Scope_of_Disclosure ,TOTAL_CELLS, HIGH_IMPACT_CHECK\n" +
-                    "from all_columns  where INDICATOR = 'SFDR_6'  AND  (VALUE <> 'NI' OR VALUE IS NULL)) GROUP BY PORTFOLIO_ID, INDICATOR, TAXONOMY_ID, TOTAL_CELLS     \n" +
+                    "from all_columns  where INDICATOR = 'SFDR_6'  AND  (VALUE <> 'NI' OR VALUE IS NULL) AND   VALUE NOT IN ('Yes', 'No')) GROUP BY PORTFOLIO_ID, INDICATOR, TAXONOMY_ID, TOTAL_CELLS     \n" +
                     "   \n" +
                     "   \n" +
                     "UNION ALL\n" +
@@ -1175,21 +1174,21 @@ public class RegulatoryReportingQueries {
                     "\n" +
                     " UNION ALL \n" +
                     "SELECT PORTFOLIO_ID, INDICATOR, TAXONOMY_ID, SUM(VALUE * EXPOSURE_AMOUNT/TOTAL_EXPOSURE_AMOUNT) * 100 AS IMPACT , SUM(Scope_of_Disclosure), TOTAL_CELLS FROM   (select PORTFOLIO_ID, INDICATOR, TAXONOMY_ID, Value,  EXPOSURE_AMOUNT , SUM(EXPOSURE_AMOUNT) OVER (partition by portfolio_id) AS TOTAL_EXPOSURE_AMOUNT,  1  AS Scope_of_Disclosure ,TOTAL_CELLS\n" +
-                    "from all_columns  where INDICATOR = 'SFDR_12' AND  TAXONOMY_ID = 15  AND  (VALUE <> 'NI' OR VALUE IS NULL)) GROUP BY PORTFOLIO_ID, INDICATOR, TAXONOMY_ID, TOTAL_CELLS\n" +
+                    "from all_columns  where INDICATOR = 'SFDR_12' AND  TAXONOMY_ID = 448  AND  (VALUE <> 'NI' OR VALUE IS NULL)) GROUP BY PORTFOLIO_ID, INDICATOR, TAXONOMY_ID, TOTAL_CELLS\n" +
                     "\n" +
                     " UNION ALL\n" +
                     "SELECT PORTFOLIO_ID, INDICATOR, TAXONOMY_ID, SUM(VALUE * EXPOSURE_AMOUNT/TOTAL_EXPOSURE_AMOUNT) * 100 AS IMPACT , SUM(Scope_of_Disclosure), TOTAL_CELLS FROM   (select PORTFOLIO_ID, INDICATOR, TAXONOMY_ID, Value,  EXPOSURE_AMOUNT , SUM(EXPOSURE_AMOUNT) OVER (partition by portfolio_id) AS TOTAL_EXPOSURE_AMOUNT,  1  AS Scope_of_Disclosure ,TOTAL_CELLS\n" +
-                    "from all_columns  where INDICATOR = 'SFDR_12' AND  TAXONOMY_ID = 16  AND  (VALUE <> 'NI' OR VALUE IS NULL)) GROUP BY PORTFOLIO_ID, INDICATOR, TAXONOMY_ID, TOTAL_CELLS  \n" +
+                    "from all_columns  where INDICATOR = 'SFDR_12' AND  TAXONOMY_ID = 449  AND  (VALUE <> 'NI' OR VALUE IS NULL)) GROUP BY PORTFOLIO_ID, INDICATOR, TAXONOMY_ID, TOTAL_CELLS  \n" +
                     "     \n" +
                     " \n" +
                     "        UNION ALL\n" +
-                    "SELECT PORTFOLIO_ID, INDICATOR, 20 as TAXONOMY_ID, SUM((VALUE/(1-VALUE)) * EXPOSURE_AMOUNT/TOTAL_EXPOSURE_AMOUNT) * 100 AS IMPACT , SUM(Scope_of_Disclosure), TOTAL_CELLS FROM   (select PORTFOLIO_ID, INDICATOR, TAXONOMY_ID, Value,  EXPOSURE_AMOUNT , SUM(EXPOSURE_AMOUNT) OVER (partition by portfolio_id) AS TOTAL_EXPOSURE_AMOUNT,  1  AS Scope_of_Disclosure ,TOTAL_CELLS\n" +
-                    "from all_columns  where INDICATOR = 'SFDR_13' AND  TAXONOMY_ID = 19  AND  (VALUE <> 'NI' OR VALUE IS NULL)) GROUP BY PORTFOLIO_ID, INDICATOR, TAXONOMY_ID, TOTAL_CELLS  \n" +
+                    "SELECT PORTFOLIO_ID, INDICATOR, 450 as TAXONOMY_ID, SUM((VALUE/(1-VALUE)) * EXPOSURE_AMOUNT/TOTAL_EXPOSURE_AMOUNT) * 100 AS IMPACT , SUM(Scope_of_Disclosure), TOTAL_CELLS FROM   (select PORTFOLIO_ID, INDICATOR, TAXONOMY_ID, Value,  EXPOSURE_AMOUNT , SUM(EXPOSURE_AMOUNT) OVER (partition by portfolio_id) AS TOTAL_EXPOSURE_AMOUNT,  1  AS Scope_of_Disclosure ,TOTAL_CELLS\n" +
+                    "from all_columns  where INDICATOR = 'SFDR_13' AND  TAXONOMY_ID = 66  AND  (VALUE <> 'NI' OR VALUE IS NULL)) GROUP BY PORTFOLIO_ID, INDICATOR, TAXONOMY_ID, TOTAL_CELLS  \n" +
                     "   \n" +
                     "\n" +
                     "    UNION ALL\n" +
-                    "SELECT PORTFOLIO_ID, INDICATOR, 21 as TAXONOMY_ID, SUM(VALUE * EXPOSURE_AMOUNT/TOTAL_EXPOSURE_AMOUNT) * 100 AS IMPACT , SUM(Scope_of_Disclosure), TOTAL_CELLS FROM   (select PORTFOLIO_ID, INDICATOR, TAXONOMY_ID, Value,  EXPOSURE_AMOUNT , SUM(EXPOSURE_AMOUNT) OVER (partition by portfolio_id) AS TOTAL_EXPOSURE_AMOUNT,  1  AS Scope_of_Disclosure ,TOTAL_CELLS\n" +
-                    "from all_columns  where INDICATOR = 'SFDR_13' AND  TAXONOMY_ID = 19  AND  (VALUE <> 'NI' OR VALUE IS NULL)) GROUP BY PORTFOLIO_ID, INDICATOR, TAXONOMY_ID, TOTAL_CELLS  \n" +
+                    "SELECT PORTFOLIO_ID, INDICATOR, 451 as TAXONOMY_ID, SUM(VALUE * EXPOSURE_AMOUNT/TOTAL_EXPOSURE_AMOUNT) * 100 AS IMPACT , SUM(Scope_of_Disclosure), TOTAL_CELLS FROM   (select PORTFOLIO_ID, INDICATOR, TAXONOMY_ID, Value,  EXPOSURE_AMOUNT , SUM(EXPOSURE_AMOUNT) OVER (partition by portfolio_id) AS TOTAL_EXPOSURE_AMOUNT,  1  AS Scope_of_Disclosure ,TOTAL_CELLS\n" +
+                    "from all_columns  where INDICATOR = 'SFDR_13' AND  TAXONOMY_ID = 66  AND  (VALUE <> 'NI' OR VALUE IS NULL)) GROUP BY PORTFOLIO_ID, INDICATOR, TAXONOMY_ID, TOTAL_CELLS  \n" +
                     "   \n" +
                     "   \n" +
                     " UNION ALL\n" +

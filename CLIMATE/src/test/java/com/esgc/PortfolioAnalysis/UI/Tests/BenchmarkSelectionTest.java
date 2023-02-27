@@ -39,6 +39,8 @@ public class BenchmarkSelectionTest extends UITestBase {
 
         assertTestCase.assertTrue(researchLinePage.IsBenchmarkListBoxDisplayed(), "Portfolio Analysis page was loaded successfully after Benchmark selection.", 1433, 2254);
         BrowserUtils.wait(3);
+        assertTestCase.assertTrue(researchLinePage.isBenchmarkPortfolioScoreWidgetDisplayed(), "Benchmark Score validation", 425);
+
         researchLinePage.clickOnBenchmarkDropdown()
                 .SelectAPortfolioFromBenchmark("No Benchmark");
         //researchLinePage.waitForDataLoadCompletion();
@@ -167,7 +169,7 @@ public class BenchmarkSelectionTest extends UITestBase {
     }
 
 
-    @Test(enabled = false, groups = {REGRESSION, UI}, //TODO disabled till ESG assessment scoped back.
+    @Test(enabled = false, groups = {REGRESSION, UI, ESG}, //TODO disabled till ESG assessment scoped back.
             description = "Verify that Benchmark can be selected and displayed on Summary Section")
     @Xray(test = {8387})
     public void verifyESGAssessmentsBenchmarkSection() {

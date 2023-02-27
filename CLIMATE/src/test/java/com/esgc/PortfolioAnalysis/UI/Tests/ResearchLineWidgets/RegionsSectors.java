@@ -77,8 +77,6 @@ public class RegionsSectors extends UITestBase {
         assertTestCase.assertTrue(researchLinePage.checkIfPageTitleIsDisplayed(page), "check if page title is displayed");
         test.pass("User is on " + page + " Page");
 
-        researchLinePage.selectRandomPortfolioFromPortfolioSelectionModal();
-
         assertTestCase.assertTrue(researchLinePage.checkIfDrillDownPanelsAreClosed(), "Regions & Sectors Drill Downs are closed", 468);
         test.pass("Regions & Sectors Drill Down Panels closed by clicking out of panel");
     }
@@ -116,10 +114,7 @@ public class RegionsSectors extends UITestBase {
         ResearchLinePage researchLinePage = new ResearchLinePage();
 
         researchLinePage.navigateToResearchLine(page);
-        BrowserUtils.wait(5);
         researchLinePage.selectSamplePortfolioFromPortfolioSelectionModal();
-
-        test.info("Navigated to " + page + " Page");
         researchLinePage.Is_MoM_QoQ_TextAvailable(page);
 
     }

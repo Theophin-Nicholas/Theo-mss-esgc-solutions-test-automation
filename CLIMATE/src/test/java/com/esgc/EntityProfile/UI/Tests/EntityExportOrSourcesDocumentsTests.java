@@ -61,7 +61,7 @@ public class EntityExportOrSourcesDocumentsTests extends UITestBase {
         assertTestCase.assertTrue(!entityProfilePage.verifyPopup(), "Verify Export Sources Documents popup is closed");
     }
 
-    @Test(groups = {ENTITY_PROFILE, REGRESSION, UI})
+    @Test(groups = {ENTITY_PROFILE, REGRESSION, UI, ESG})
     @Xray(test = {9381, 10175})
     public void validateExportSourceDocumentsPopupWithNoDocsMessage(){
 
@@ -128,6 +128,7 @@ public class EntityExportOrSourcesDocumentsTests extends UITestBase {
 
         String company = "Rogers Corp.";
         EntityClimateProfilePage entityProfilePage = new EntityClimateProfilePage();
+        entityProfilePage.waitForDataLoadCompletion();
         String companyName = entityProfilePage.searchAndLoadClimateProfilePage(company);
         assertTestCase.assertTrue(entityProfilePage.validateGlobalCompanyNameHeader(companyName),companyName+" Header Verification");
         System.out.println("companyName = " + companyName);

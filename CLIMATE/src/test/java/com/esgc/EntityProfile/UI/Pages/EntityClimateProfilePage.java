@@ -435,7 +435,7 @@ public class EntityClimateProfilePage extends ClimatePageBase {
     @FindBy(xpath = "//div[normalize-space()='PHYSICAL RISK MANAGEMENT']")
     public WebElement header_PhysicalRiskManagement;
 
-    @FindBy(xpath = "//div[normalize-space()='PHYSICAL RISK MANAGEMENT']")
+    @FindBy(xpath = "//div[contains(text(),'Physical Risk Management') and .//*[starts-with(text(),'Anticipation,')]]")
     public WebElement PhysicalRiskManagementTable;
     //ESG Monitoring Section
 
@@ -546,7 +546,8 @@ public class EntityClimateProfilePage extends ClimatePageBase {
     private Pattern pattern = Pattern.compile("-?\\d+(\\.\\d+)?");
 
     public String searchAndLoadClimateProfilePage(String companyToSearch) {
-        searchIcon.click();
+        waitForDataLoadCompletion();
+        clickSearchIcon();
         searchInputBox.sendKeys(companyToSearch);
         String companyName = wait.until(ExpectedConditions.visibilityOf(firstElementOfSearch)).getText().split("\n")[0];
         firstElementOfSearch.click();
@@ -2675,6 +2676,7 @@ public class EntityClimateProfilePage extends ClimatePageBase {
         String dbDate = getFormattedDate(entityClimateProfilepagequeries.getUpdatedDateforPhysicalRiskManagement(orbisID), "MMMM d, yyyy");
         if (!dbDate.equals("")) {
             BrowserUtils.scrollTo(physicalRiskManagementWidgetDescription);
+            //TODO check here
             validateUpdatedOndate(physicalRiskManagementWidgetDescription.getText().split("\n")[1], dbDate);
             navigateToPhysicalRisk();
             BrowserUtils.scrollTo(PhysicalRisk_PhysicalRiskManagement_UpdatedDate_Span);

@@ -115,7 +115,7 @@ public class TestBaseClimate extends TestBase {
     public synchronized void refreshToken() {
         if (stopWatch.getTime() > 3600000) {
             LoginPage loginPage = new LoginPage();
-            if (loginPage.isSearchIconDisplayed()) {
+            if (!Driver.getDriver().getCurrentUrl().endsWith("login")) {
                 loginPage.clickOnLogout();
                 BrowserUtils.wait(5);
             }

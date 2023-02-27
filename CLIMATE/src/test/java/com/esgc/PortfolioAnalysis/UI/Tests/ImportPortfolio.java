@@ -366,7 +366,7 @@ public class ImportPortfolio extends UITestBase {
         BrowserUtils.wait(2);
 
         String popUpMessage = researchLinePage.getUnknownIdentifierPopUpMessage();
-        String expectedErrorMessage = "124/126 unique identifiers matched; the system was unable to match 2 identifiers for: Invalid Identifier Included Portfolio  Included Portfolio";
+        String expectedErrorMessage = "124/126 unique identifiers matched; the system was unable to match 2 identifiers for: InvalidIdentifier";
 
         Assert.assertTrue(researchLinePage.checkIfUnknownIdentifierPopUpDisplayed());
         Assert.assertEquals(popUpMessage, expectedErrorMessage);

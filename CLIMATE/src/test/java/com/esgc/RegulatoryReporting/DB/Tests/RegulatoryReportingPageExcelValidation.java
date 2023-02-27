@@ -1,18 +1,16 @@
 package com.esgc.RegulatoryReporting.DB.Tests;
 
 import com.esgc.Base.TestBases.UITestBase;
-import com.esgc.Dashboard.UI.Pages.*;
+import com.esgc.Dashboard.UI.Pages.DashboardPage;
 import com.esgc.PortfolioAnalysis.UI.Pages.PhysicalRiskPages.PhysicalRiskManagementPages.PhysicalRiskManagementPage;
 import com.esgc.RegulatoryReporting.UI.Pages.RegulatoryReportingPage;
 import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.DateTimeUtilities;
 import com.esgc.Utilities.Xray;
-import org.openqa.selenium.WebElement;
 import org.testng.annotations.Test;
 
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import static com.esgc.Utilities.Groups.*;
 
@@ -55,7 +53,7 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
             System.out.println("Reports are downloaded");
             assertTestCase.assertTrue(reportingPage.unzipReports(), "Reports are extracted");
             System.out.println("Reports are extracted");
-            assertTestCase.assertTrue(reportingPage.verifyReportsContentForData(selectedPortfolios, 2, "Exposure Amount in EUR"),
+            assertTestCase.assertTrue(reportingPage.verifyReportsContentForData(selectedPortfolios, "User Input History", "Exposure Amount in EUR"),
                     "Reports content is verified");
         } catch (Exception e) {
             e.printStackTrace();
@@ -78,6 +76,7 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
         test.info("Navigated to Regulatory Reporting Page");
         assertTestCase.assertTrue(reportingPage.interimReportsOption.isDisplayed(), "Interim reports option is displayed");
         assertTestCase.assertTrue(reportingPage.useLatestDataOption.isDisplayed(), "Use latest data option is displayed");
+        reportingPage.selectUseLatestData();
         String currentWindow = BrowserUtils.getCurrentWindowHandle();
         reportingPage.selectAllPortfolioOptions();
         reportingPage.selectInterimReports();

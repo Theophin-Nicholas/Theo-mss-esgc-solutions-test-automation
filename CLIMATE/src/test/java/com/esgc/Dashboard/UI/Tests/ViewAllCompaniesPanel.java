@@ -74,7 +74,7 @@ public class ViewAllCompaniesPanel extends UITestBase {
         assertTestCase.assertTrue(dashboardPage.verifyViewByRegionTableSectorColumnsValues(expectedSectorValues),
                 "Verify sector column values for all the companies");
 
-        dashboardPage.closePanelBtn.click();
+        dashboardPage.closePortfolioExportDrawer();
     }
 
 }

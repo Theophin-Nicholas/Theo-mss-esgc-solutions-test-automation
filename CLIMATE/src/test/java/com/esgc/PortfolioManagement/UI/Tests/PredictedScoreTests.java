@@ -17,7 +17,7 @@ import static com.esgc.Utilities.Groups.*;
 public class PredictedScoreTests extends UITestBase {
 
 
-    @Test(groups = {REGRESSION, UI})
+    @Test(groups = {REGRESSION, UI, ESG})
     @Xray(test = {11892, 11909, 11910})
     public static void validatePredictedScoredCompanies() {
 

@@ -330,8 +330,8 @@ public class EntityClimateProfilePageQueries {
     public static String getUpdatedDateforPhysicalRiskManagement(String orbisId) {
 
         String query = "select TO_VARCHAR(PRODUCED_DATE) as PRODUCED_DATE  from PHYSICAL_RISK_MANAGEMENT where bvd9_number in\n" +
-                "(Select BVD9_ID from \"QA_MESGC\".\"DF_TARGET\".\"VW_ENTITY_DATA\" where bvd_ID in\n" +
-                "(select bvd_id_number from \"QA_MESGC\".\"DF_TARGET\".\"ESG_ENTITY_MASTER\" where orbis_id='" + orbisId + "') )\n" +
+                "(Select BVD9_ID from VW_ENTITY_DATA where bvd_ID in\n" +
+                "(select bvd_id_number from ESG_ENTITY_MASTER where orbis_id='" + orbisId + "') )\n" +
                 " order by produced_date desc limit  1";
         try {
             return getQueryResultMap(query).get(0).get("PRODUCED_DATE").toString();
@@ -343,8 +343,8 @@ public class EntityClimateProfilePageQueries {
 
 
     public static String getUpdatedDateforPhysicalClimateHazard(String orbisId) {
-        String query = " Select * from ENTITY_SCORE where entity_id_bvd9 in (Select BVD9_ID from \"QA_MESGC\".\"DF_TARGET\".\"VW_ENTITY_DATA\" where bvd_ID in\n" +
-                "(select bvd_id_number from \"QA_MESGC\".\"DF_TARGET\".\"ESG_ENTITY_MASTER\" where orbis_id='" + orbisId + "') )\n" +
+        String query = " Select * from ENTITY_SCORE where entity_id_bvd9 in (Select BVD9_ID from VW_ENTITY_DATA where bvd_ID in\n" +
+                "(select bvd_id_number from ESG_ENTITY_MASTER where orbis_id='" + orbisId + "') )\n" +
                 " order by Release_date desc limit 1;";
         try {
             return getQueryResultMap(query).get(0).get("RELEASE_DATE").toString();

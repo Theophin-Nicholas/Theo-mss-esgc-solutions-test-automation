@@ -68,6 +68,7 @@ public class PortfolioUpdatesTest extends UITestBase {
         assertTestCase.assertTrue(updatesTableColumns.get(8).getText().equalsIgnoreCase("Region"), "Column name verified: Region", 473, 1017, 1253, 1764);
 
         assertTestCase.assertTrue(researchLinePage.verifyUpdatesHasMax10Companies(), "Updates has Max 10 companies", 476, 1518);
+        //TODO failure will be fixed under https://esjira/browse/ESGCA-13552
         assertTestCase.assertTrue(researchLinePage.verifyUpdatesSortingOrder(page), "Updates sorting order of companies", 2291,2471);
 
     }

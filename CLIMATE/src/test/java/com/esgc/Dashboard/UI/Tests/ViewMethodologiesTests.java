@@ -66,7 +66,7 @@ public class ViewMethodologiesTests extends DashboardUITestBase {
 
     }
 
-    @Test(groups = {DASHBOARD, REGRESSION, UI})
+    @Test(groups = {DASHBOARD, REGRESSION, UI, ESG})
     @Xray(test = {8304})
     public void verifyViewMethodologiesEsg_Bundle() {
         LoginPage login = new LoginPage();

@@ -145,16 +145,15 @@ public class ExportTests extends UITestBase {
     @Test(groups = {REGRESSION, SMOKE, EXPORT},
             dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
     @Xray(test = {2883, 2962})
-    public void verifyBenchMarkExportFunctionalityandExcelFieldsWithUI(String researchLine) {
+    public void verifyBenchMarkExportFunctionalityExcelFieldsWithUI(String researchLine) {
 
         ResearchLinePage researchLinePage = new ResearchLinePage();
 
+        researchLinePage.navigateToResearchLine(researchLine);
         if (researchLine.equals("ESG Assessments") || researchLine.equals("Physical Risk Hazards") || researchLine.equals("Temperature Alignment")
                 || researchLine.equals("Physical Risk Management")) {
             throw new SkipException("Export is not ready to test in " + researchLine);
         }
-
-        researchLinePage.navigateToResearchLine(researchLine);
         researchLinePage.selectSamplePortfolioFromPortfolioSelectionModal();
         researchLinePage.clickFiltersDropdown();
         researchLinePage.selectOptionFromFiltersDropdown("as_of_date", "May 2022");
@@ -253,13 +252,10 @@ public class ExportTests extends UITestBase {
     @Test(groups = {"regression", "export"}, dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
     @Xray(test = {2846})
     public void verifyCompaniesOrderInRegionsAndSectors(String researchLine) {
-
-        //TODO item for Brown Share, once https://esjira/browse/ESGCA-12562 is fixed we need to check Brown Share
-
         ResearchLinePage researchLinePage = new ResearchLinePage();
         researchLinePage.navigateToResearchLine(researchLine);
         if (researchLine.equals("Physical Risk Hazards") || researchLine.equals("Temperature Alignment")
-                || researchLine.equals("Physical Risk Management") || researchLine.equals("Brown Share Assessment")) {
+                || researchLine.equals("Physical Risk Management")) {
             throw new SkipException("Export is not ready to test in " + researchLine);
         }
         researchLinePage.selectSamplePortfolioFromPortfolioSelectionModal();

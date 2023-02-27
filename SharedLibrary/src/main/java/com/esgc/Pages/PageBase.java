@@ -4,6 +4,7 @@ import com.esgc.Reporting.CustomAssertion;
 import com.esgc.TestBase.TestBase;
 import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.Driver;
+import com.esgc.Utilities.Environment;
 import com.esgc.Utilities.ExcelUtil;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
@@ -281,7 +282,7 @@ public abstract class PageBase {
     @FindBy(xpath = "//header[.//*[contains(text(),'Companies in')]]//*[name()='svg']")
     public WebElement closeIconInCompanySummariesDrawer;
 
-    @FindBy(xpath = "//*[text()='Entities:']//div[starts-with(@id,'mini')]")
+    @FindBy(xpath = "//*[.//text()='Entities:']//div[starts-with(@id,'mini')]")
     public List<WebElement> searchItems;
 
     @FindBy(xpath = "//mark")
@@ -499,7 +500,7 @@ public abstract class PageBase {
     }
 
     public String getLastUpdatedDateContainsSearchKeyWord(String searchKeyword) {
-        String lastUpdateXpath = "//span[@title='" + searchKeyword + "']/../following-sibling::div/span";
+        String lastUpdateXpath = "//*[@heap_entity='" + searchKeyword + "']//*[starts-with(text(),'Last Update:')]";
         String lastUpdatedDate = Driver.getDriver().findElement(By.xpath(lastUpdateXpath)).getText();
         return lastUpdatedDate;
     }
@@ -1332,10 +1333,13 @@ public abstract class PageBase {
             //Validate if Menu is available
             Assert.assertTrue(menu.isDisplayed(), "Menu Item is not displayed");
             clickMenu();
-            List<String> menuItemsArray = Arrays.asList("Navigate To", "Dashboard", "Portfolio Analysis", "On-Demand Assessment Request",
+            List<String> menuItemsArray = Arrays.asList("Navigate To", "Dashboard", "Portfolio Analysis",
                     "Portfolio Selection/Upload", "Regulatory Reporting",
-                    "Contact Us", "Terms & Conditions", "Log Out",
-                    "Switch Application", "Climate on Demand", "Company Portal", "Datalab");
+                    "Contact Us", "Terms & Conditions", "Log Out");
+            //TODO on demand is only in QA as of Feb 2023
+            if(Environment.environment.equalsIgnoreCase("qa")){
+                menuItemsArray.add(3,"On-Demand Assessment Request");
+            }
 
             //Validate if all menu items are available
             for (String m : menuItemsArray) {
@@ -1722,7 +1726,7 @@ public abstract class PageBase {
 
     public void closePortfolioExportDrawer() {
         Actions actionBuilder = new Actions(Driver.getDriver());
-        actionBuilder.click(closeIconInCompanySummariesDrawer).build().perform();
+        actionBuilder.moveToElement(closeIconInCompanySummariesDrawer).pause(1000).click().build().perform();
     }
 
     public void clickCloseXIconWithJs() {

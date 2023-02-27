@@ -266,7 +266,7 @@ public class ExcelUtil {
 //                        return true;
 //                    }
 //                }
-                if(cell.getStringCellValue().equals(data)){
+                if(new DataFormatter().formatCellValue(cell).equals(data)){
                     return true;
                 }
             }

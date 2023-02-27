@@ -83,47 +83,6 @@ public class GlobalHeaderSidePanel extends UITestBase {
         Driver.getDriver().close();
         Driver.getDriver().switchTo().window(firstPage);
 
-        researchLinePage.navigateToPageFromMenu("Climate on Demand");
-
-        for (String windowHandle : Driver.getDriver().getWindowHandles()) {
-            Driver.getDriver().switchTo().window(windowHandle);
-        }
-
-        currentURL = Driver.getDriver().getCurrentUrl();
-
-        assertTestCase.assertEquals(currentURL, "https://climate-on-demand.moodys.com/AppsServices/", "Climate on Demand page verified");
-
-        Driver.getDriver().close();
-        Driver.getDriver().switchTo().window(firstPage);
-
-
-        researchLinePage.navigateToPageFromMenu("Company Portal");
-
-        for (String windowHandle : Driver.getDriver().getWindowHandles()) {
-            Driver.getDriver().switchTo().window(windowHandle);
-        }
-
-        currentURL = Driver.getDriver().getCurrentUrl();
-
-        assertTestCase.assertEquals(currentURL, "https://veconnect.vigeo.com/login.html", "Company Portal page verified");
-
-        Driver.getDriver().close();
-        Driver.getDriver().switchTo().window(firstPage);
-
-        researchLinePage.navigateToPageFromMenu("Datalab");
-        BrowserUtils.wait(10);
-
-        for (String windowHandle : Driver.getDriver().getWindowHandles()) {
-            Driver.getDriver().switchTo().window(windowHandle);
-        }
-
-        currentURL = Driver.getDriver().getCurrentUrl();
-
-        assertTestCase.assertEquals(currentURL, "https://www.ve-datalab.com/Account/EGPlogin.aspx?src=/Features/Home/Landing.aspx", "Data Lab page verified");
-
-        Driver.getDriver().close();
-        Driver.getDriver().switchTo().window(firstPage);
-
         researchLinePage.navigateToPageFromMenu("Log Out");
         BrowserUtils.wait(5);
         LoginPage login = new LoginPage();

@@ -23,6 +23,7 @@ import java.util.*;
 
 import static com.esgc.Utilities.Groups.*;
 
+//TODO synchronization issues
 public class DashboardHeatMapEntityListTests extends UITestBase {
     @Test(groups = {DASHBOARD, UI, SMOKE})
     @Xray(test = {4843, 4844, 4829, 6221, 7475, 7943, 9268, 9269, 9270})
@@ -154,6 +155,9 @@ public class DashboardHeatMapEntityListTests extends UITestBase {
         //Verify the applicable research lines
         assertTestCase.assertTrue(dashboardPage.verifyResearchLines(), "Applicable research lines verified");
 
+        dashboardPage.refreshCurrentWindow();
+        dashboardPage.waitForDataLoadCompletion();
+        BrowserUtils.scrollTo(dashboardPage.heatMapResearchLines.get(0));
         //Verify the chart's selectable research lines
         for (int i = 0; i < dashboardPage.heatMapResearchLines.size(); i++) {
             dashboardPage.selectOneResearchLineOnHeatMap(i);
@@ -332,11 +336,7 @@ public class DashboardHeatMapEntityListTests extends UITestBase {
         LoginPage loginPage = new LoginPage();
         //Trying to log in with only Physical Risk Entitlement User
        //WebElement portfolioSelectionButton = Driver.getDriver().findElement(By.id("button-holdings"));
-        BrowserUtils.wait(3);
         //if (portfolioSelectionButton.getAttribute("title").equals("Sample Portfolio"))
-        loginPage.clickOnLogout();
-        Driver.getDriver().manage().deleteAllCookies();
-        Driver.getDriver().navigate().refresh();
 
         loginPage.loginWithParams(Environment.PHYSICAL_RISK_USERNAME, Environment.PHYSICAL_RISK_PASSWORD);
         BrowserUtils.wait(5);
@@ -575,7 +575,7 @@ public class DashboardHeatMapEntityListTests extends UITestBase {
         assertTestCase.assertEquals(groupTotal + "", expGroupTotal, "Verified the group total in the widget matches the group total in the database.");
     }
 
-    @Test(groups = {DASHBOARD, UI, REGRESSION})
+    @Test(groups = {DASHBOARD, UI, REGRESSION, ESG})
     @Xray(test = {9201, 9202, 11218})
     public void verifyOverallEsgScoreHeatMap() {
 
@@ -630,7 +630,7 @@ public class DashboardHeatMapEntityListTests extends UITestBase {
         }
     }
 
-    @Test(groups = {DASHBOARD, UI, REGRESSION})
+    @Test(groups = {DASHBOARD, UI, REGRESSION, ESG})
     @Xray(test = {9204})
     public void verifyCompareEsgScoreHeatMap() {
 
@@ -679,7 +679,7 @@ public class DashboardHeatMapEntityListTests extends UITestBase {
         }
     }
 
-    @Test(groups = {DASHBOARD, UI, REGRESSION})
+    @Test(groups = {DASHBOARD, UI, REGRESSION, ESG})
     @Xray(test = {9214})
     public void verifyOnlyOverallEsgScoreInHeatMap() {
         DashboardPage dashboardPage = new DashboardPage();

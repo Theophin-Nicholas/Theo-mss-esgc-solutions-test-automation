@@ -78,7 +78,7 @@ public class EsgPDFExportEntitlements extends UITestBase {
 
 
 
-    @Test(groups = {REGRESSION, UI, ENTITLEMENTS},dataProviderClass= DataProviderClass.class, dataProvider = "PDFEntitlements")
+    @Test(groups = {REGRESSION, UI, ENTITLEMENTS, ESG},dataProviderClass= DataProviderClass.class, dataProvider = "PDFEntitlements")
     @Xray(test = {11765})
     public void validateBrownShareExportEntitlement(String... data){
         LoginPage login = new LoginPage();

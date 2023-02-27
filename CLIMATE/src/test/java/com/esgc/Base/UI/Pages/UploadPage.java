@@ -76,7 +76,7 @@ public class UploadPage extends ClimatePageBase {
     @FindBy(xpath = "//span[text()='Uploading']/../..")
     public WebElement uploadingLoadMask;
 
-    @FindBy(xpath = "//*[@role='dialog']")
+    @FindBy(xpath = "//*[@role='dialog' and .//h2[text()='Import Portfolio']]")
     public WebElement uploadModal;
 
     @FindBy(tagName = "h2")
@@ -264,6 +264,14 @@ public class UploadPage extends ClimatePageBase {
             return false;
         }
     }
+    public boolean checkifSuccessPopUpDisappearedAfterACertainTime() {
+        try {
+            BrowserUtils.waitForInvisibility(successMessagePopUP, 60);
+            return successMessagePopUP.isDisplayed();
+        } catch (Exception e) {
+            return false;
+        }
+    }
 
     /**
      * The method should return portfolio name if Successful upload popup is displayed otherwise returns null
@@ -374,7 +382,7 @@ public class UploadPage extends ClimatePageBase {
 
     public boolean checkIfPortfolioUploadModalIsDisplayed() {
         try {
-            return uploadModal.isDisplayed();
+            return BrowserUtils.waitForVisibility(uploadModal).isDisplayed();
         } catch (NoSuchElementException e) {
             return false;
         }

@@ -5,7 +5,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 @Data @AllArgsConstructor @NoArgsConstructor
 public class PortfolioDetails {
@@ -17,5 +16,8 @@ public class PortfolioDetails {
     public ArrayList<String> reporting_years;
     public double sfdr_coverage;
     public double taxonomy_coverage;
+    public String cash_and_liquidities;
+    public String non_sovereign_derivatives;
+
 
 }

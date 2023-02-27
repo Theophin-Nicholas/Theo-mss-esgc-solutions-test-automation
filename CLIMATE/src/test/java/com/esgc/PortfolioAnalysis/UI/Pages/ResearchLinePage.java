@@ -407,6 +407,9 @@ public class ResearchLinePage extends UploadPage {
     @FindBy(xpath = "//div[@id='BenchmarkScoreESG-test-id']//child::div[contains(text(),'Weighted')]")
     public List<WebElement> benchmarkPortfolioScoreWidget;
 
+    @FindBy(xpath = "//div[@id='BenchmarkScoreESG-test-id']")
+    public WebElement benchmarkPortfolioScore;
+
     @FindBy(css = "g.highcharts-label > text")
     public List<WebElement> maptooltip;
 
@@ -651,16 +654,16 @@ public class ResearchLinePage extends UploadPage {
                 System.out.println("Actual Tooltip Text: " + tooltipText);
                 int numberOfCompanies = Integer.parseInt(tooltipText.substring(tooltipText.lastIndexOf(" ") + 1));
                 boolean categoryCheck = true;
-                if(scoreCategory.contains(",")){
+                if (scoreCategory.contains(",")) {
                     List<String> categories = Arrays.asList(scoreCategory.split(","));
-                    for(String category:categories){
-                        if(!tooltipText.contains(category)) {
-                            System.out.println(category+" is not available in tooltip text: "+tooltipText);
+                    for (String category : categories) {
+                        if (!tooltipText.contains(category)) {
+                            System.out.println(category + " is not available in tooltip text: " + tooltipText);
                             categoryCheck = false;
                             break;
                         }
                     }
-                }else{
+                } else {
                     categoryCheck = tooltipText.contains(scoreCategory);
                 }
                 boolean flag = actColor.equalsIgnoreCase(expColor) && categoryCheck && numberOfCompanies >= 0;
@@ -1524,6 +1527,7 @@ public class ResearchLinePage extends UploadPage {
             System.out.println("Check if Drill Down Panel is closed by a click on out of Panel");
             for (int i = 0; i < regionSectorChartNames.size(); i++) {
                 WebElement regionSectorChart = regionSectorChartNames.get(i);
+                BrowserUtils.scrollTo(regionSectorChart);
                 wait.until(ExpectedConditions.elementToBeClickable(regionSectorChart)).click();
                 System.out.println("Clicked on " + regionSectorChart.getText() + " chart");
                 wait.until(ExpectedConditions.visibilityOf(drillDownPanel));
@@ -1566,9 +1570,9 @@ public class ResearchLinePage extends UploadPage {
     public boolean checkIfHideButtonIsDisplayedInDrillDownPanel() {
         try {
             System.out.println("Check if hide button Is Displayed");
-            wait.until(ExpectedConditions.visibilityOf(hideButton));
+            BrowserUtils.waitForVisibility(hideButton, 10);
             System.out.println("TEST PASSED");
-            return hideButton.isDisplayed();
+            return true;
         } catch (Exception e) {
             System.out.println("FAILED");
             e.printStackTrace();
@@ -1577,9 +1581,12 @@ public class ResearchLinePage extends UploadPage {
     }
 
     public void clickHideButtonInDrillDownPanel() {
-        wait.until(ExpectedConditions.visibilityOf(hideButton)).click();
-        clickAwayinBlankArea();
-        pressESCKey();
+        boolean isHideButtonVisible = checkIfHideButtonIsDisplayedInDrillDownPanel();
+        if (isHideButtonVisible) {
+            new Actions(Driver.getDriver()).moveToElement(hideButton).pause(1000).click().pause(1000).build().perform();
+            clickAwayinBlankArea();
+            pressESCKey();
+        }
     }
 
 
@@ -2371,12 +2378,13 @@ public class ResearchLinePage extends UploadPage {
     public boolean VerifyIfScoreLogicIsCorrectForLeaders(String page) {
         boolean LeadersScoreLogicStatus = false;
 
-        List<WebElement> LeadersTableScores = Driver.getDriver().findElements(By.xpath("//*[text()='Leaders by Score']//..//table//tbody//tr//td[4]"));
-        if (LeadersTableScores.size() > 0) {
-            for (int i = 0; i < LeadersTableScores.size() - 1; i++) {
-                if ((Integer.parseInt(LeadersTableScores.get(i).getText().replaceAll("[^a-zA-Z0-9]", "")) <= Integer.parseInt(LeadersTableScores.get(i + 1).getText().replaceAll("[^a-zA-Z0-9]", ""))) && (page.equals("Physical Risk Hazards") || page.equals("Operations Risk") || page.equals("Market Risk") || page.equals("Supply Chain Risk") || page.equals("Carbon Footprint") || page.equals("Brown Share Assessment"))) {
+        List<WebElement> leadersTableScores = Driver.getDriver().findElements(By.xpath("//*[text()='Leaders by Score']//..//table//tbody//tr//td[4]"));
+        BrowserUtils.scrollTo(leadersTableScores.get(0));
+        if (leadersTableScores.size() > 0) {
+            for (int i = 0; i < leadersTableScores.size() - 1; i++) {
+                if ((Integer.parseInt(leadersTableScores.get(i).getText().replaceAll("[^a-zA-Z0-9]", "")) <= Integer.parseInt(leadersTableScores.get(i + 1).getText().replaceAll("[^a-zA-Z0-9]", ""))) && (page.equals("Physical Risk Hazards") || page.equals("Operations Risk") || page.equals("Market Risk") || page.equals("Supply Chain Risk") || page.equals("Carbon Footprint") || page.equals("Brown Share Assessment"))) {
                     LeadersScoreLogicStatus = true;
-                } else if ((Integer.parseInt(LeadersTableScores.get(i).getText().replaceAll("[^a-zA-Z0-9]", "")) >= Integer.parseInt(LeadersTableScores.get(i + 1).getText().replaceAll("[^a-zA-Z0-9]", ""))) && (page.equals("Physical Risk Management") || page.equals("Energy Transition Management") || page.equals("TCFD Strategy") || page.equals("Green Share Assessment"))) {
+                } else if ((Integer.parseInt(leadersTableScores.get(i).getText().replaceAll("[^a-zA-Z0-9]", "")) >= Integer.parseInt(leadersTableScores.get(i + 1).getText().replaceAll("[^a-zA-Z0-9]", ""))) && (page.equals("Physical Risk Management") || page.equals("Energy Transition Management") || page.equals("TCFD Strategy") || page.equals("Green Share Assessment"))) {
                     LeadersScoreLogicStatus = true;
                 } else {
                     LeadersScoreLogicStatus = false;
@@ -2648,6 +2656,15 @@ public class ResearchLinePage extends UploadPage {
 
     }
 
+    public boolean isBenchmarkPortfolioScoreWidgetDisplayed() {
+        try {
+            BrowserUtils.waitForVisibility(benchmarkPortfolioScore);
+            return benchmarkPortfolioScore.isDisplayed();
+        } catch (Exception e) {
+            return false;
+        }
+
+    }
 
     public void validateCarbonFootPrint() {
 
@@ -2808,7 +2825,7 @@ public class ResearchLinePage extends UploadPage {
         Driver.getDriver().findElement(By.xpath("(" + tableXpath + "//tr/td/div)[1]")).click();
         BrowserUtils.wait(5);
         BrowserUtils.waitForVisibility(Driver.getDriver().findElement(By.xpath("//span[contains(text(),'" + entityName + "')]")), 30);
-        clickCloseIcon();
+        clickHideButtonInDrillDownPanel();
 
         return true;
     }
@@ -2858,8 +2875,7 @@ public class ResearchLinePage extends UploadPage {
                             return false;
                         checkDrawerBehavior = true;
                     }
-                    Driver.getDriver().findElement(By.xpath("(//a[text()='hide'])[2]")).click();
-                    BrowserUtils.wait(2);
+                    clickHideButtonInDrillDownPanel();
                 } else {
                     return false;
                 }

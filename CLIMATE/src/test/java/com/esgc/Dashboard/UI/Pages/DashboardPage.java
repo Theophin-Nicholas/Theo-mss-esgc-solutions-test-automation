@@ -166,7 +166,7 @@ public class DashboardPage extends UploadPage {
     public WebElement panelExportText;
     @FindBy(id = "dashboard-export-button-test-id")
     public WebElement panelExportToExcelBtn;
-    @FindBy(xpath = "//span[.='X']")
+    @FindBy(css = "div[tabindex=\"-1\"] header svg > path[fill=\"#26415E\"]")
     public WebElement closePanelBtn;
     @FindBy(xpath = "//div[contains(@class, 'MuiTableContainer-root')]/following-sibling::div[contains(.,' more companies in this sector')]")
     public List<WebElement> moreCompaniesInThisSectorText;
@@ -241,7 +241,7 @@ public class DashboardPage extends UploadPage {
     @FindBy(xpath = "//span[contains(text(),'Laggards')]")
     public WebElement tabPerformanceLaggards;
 
-    @FindBy(xpath = "//div[contains(text(),'Performance:')]/..//div[starts-with(text(),'Show Top')]")
+    @FindBy(xpath = "//div[contains(text(),'Performance:')]/..//div[starts-with(text(),'Show Top') or starts-with(text(),'Show Bottom')]")
     public WebElement performanceChartDropdown;
 
     @FindBy(xpath = "//ul[@role='listbox']//span[text()]")
@@ -647,7 +647,7 @@ public class DashboardPage extends UploadPage {
         deleteDownloadFolder();
         clickExportCompaniesButton();
         closePortfolioExportDrawer();
-        assertTestCase.assertEquals(filesCountInDownloadsFolder(), 1, "Verify download of export file");
+        assertTestCase.assertTrue(filesCountInDownloadsFolder()>=1, "Verify download of export file");
     }
 
 

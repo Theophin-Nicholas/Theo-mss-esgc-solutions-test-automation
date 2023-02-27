@@ -2,8 +2,8 @@ package com.esgc.RegulatoryReporting.UI.Pages;
 
 import com.esgc.Base.UI.Pages.UploadPage;
 import com.esgc.RegulatoryReporting.API.Controllers.RegulatoryReportingAPIController;
-import com.esgc.Utilities.*;
 import com.esgc.RegulatoryReporting.DB.DBQueries.RegulatoryReportingQueries;
+import com.esgc.Utilities.*;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
@@ -13,6 +13,7 @@ import org.openqa.selenium.support.FindBy;
 import java.io.File;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.time.Year;
 import java.util.*;
 
 
@@ -120,6 +121,14 @@ public class RegulatoryReportingPage extends UploadPage {
 
     @FindBy(xpath = "//fieldset[@id='eu_taxonomy']")
     public WebElement EUTaxonomy;
+
+    public boolean isRegulatoryReportingOptionIsAvailableInSidePanel(){
+        try{
+            return BrowserUtils.waitForVisibility(regulatoryReporting,10).isDisplayed();
+        }catch (Exception e){
+            return false;
+        }
+    }
 
     public List<WebElement> getEUTaxonomyInputBox(String portfolio) {
         return Driver.getDriver().findElements(By.xpath("//div[.='Select Portfolios']/..//span[contains(text(),'" + portfolio + "')]/../../../../../div[4]/div"));
@@ -586,10 +595,10 @@ public class RegulatoryReportingPage extends UploadPage {
         return excelUtil;
     }
 
-    public boolean verifyReportsContentForData(List<String> selectedPortfolios, int sheetIndex, String data) {
+    public boolean verifyReportsContentForData(List<String> selectedPortfolios, String sheetName, String data) {
         String excelName = rrStatusPage_PortfoliosList.get(0).getText().replaceAll("ready", "").trim();
-        System.out.println("Verifying reports content for sheet " + sheetIndex);
-        ExcelUtil excelData = getExcelData(excelName, sheetIndex);
+        System.out.println("Verifying reports content for sheet " + sheetName);
+        ExcelUtil excelData = getExcelData(excelName, sheetName);
         if (!excelData.searchData(data)) {
             System.out.println("Data " + data + " is not found in the excel");
         }
@@ -769,6 +778,8 @@ public class RegulatoryReportingPage extends UploadPage {
                 templateData.addAll(BrowserUtils.splitToSentences(template.getCellData(i, j)));
             }
         }
+
+        templateData.set(0, templateData.get(0).replace("© 2022 Moody’s","© " + Year.now() + " Moody’s" ));
 //        System.out.println("\n===================================\n");
 //        templateData.forEach(System.out::println);
         for (String sentence : templateData) {

@@ -7,15 +7,13 @@ import com.esgc.RegulatoryReporting.API.APIModels.PortfolioDetails;
 import com.esgc.RegulatoryReporting.API.Controllers.RegulatoryReportingAPIController;
 import com.esgc.RegulatoryReporting.UI.Pages.RegulatoryReportingPage;
 import com.esgc.Utilities.BrowserUtils;
-import com.esgc.Utilities.Driver;
 import com.esgc.Utilities.EntitlementsBundles;
 import com.esgc.Utilities.Xray;
-import org.openqa.selenium.JavascriptExecutor;
 import org.testng.annotations.Test;
 
-import java.util.*;
-//import java.util.function.Function;
-//import com.google.common.collect.Lists;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static com.esgc.Utilities.Groups.*;
 
@@ -47,6 +45,7 @@ public class RegulatoryReportingAPITests extends UITestBase {
         assertTestCase.assertTrue(dropDownOptions.contains("2019"), "Reporting for option oldest year is 2019 is verified");
         assertTestCase.assertFalse(dropDownOptions.contains("2018"), "Reporting for option oldest year is 2019 is verified");
         reportingPage.reportingForDropdownOptionsList.get(0).click();
+        getExistingUsersAccessTokenFromUI();
         RegulatoryReportingAPIController apiController = new RegulatoryReportingAPIController();
         List<String> apiPortfoliosList = apiController.getPortfolioNames();
         //sort the list
@@ -61,7 +60,7 @@ public class RegulatoryReportingAPITests extends UITestBase {
     }
 
     //TODO should be in API package
-    @Test(groups = {"regression", "regulatoryReporting", "api"})
+    @Test(groups = {REGRESSION, REGULATORY_REPORTING, API})
     @Xray(test = {11681})
     public void verifyDownloadHistory() {
         RegulatoryReportingAPIController apiController = new RegulatoryReportingAPIController();
@@ -70,17 +69,13 @@ public class RegulatoryReportingAPITests extends UITestBase {
 
     }
 
-    @Test(groups = {"regression", "regulatoryReporting", "api"})
+    @Test(groups = {REGRESSION, REGULATORY_REPORTING, API, ENTITLEMENTS})
     @Xray(test = {11681})
     public void verifyDownloadHistoryWhenNoDownloadReports() {
         LoginPage login = new LoginPage();
-        login.clickOnLogout();
         login.entitlementsLogin(EntitlementsBundles.NO_PREVIOUSLY_DOWNLOADED_REGULATORY_REPORTS);
-        BrowserUtils.wait(10);
-
-        String getAccessTokenScript = "return JSON.parse(localStorage.getItem('okta-token-storage')).accessToken.accessToken";
-        String accessToken = ((JavascriptExecutor) Driver.getDriver()).executeScript(getAccessTokenScript).toString();
-        System.setProperty("token", accessToken);
+        BrowserUtils.wait(20);
+        getExistingUsersAccessTokenFromUI();
 
         RegulatoryReportingAPIController apiController = new RegulatoryReportingAPIController();
         List<String> apiReportsList1 = apiController.getDownloadHistory().jsonPath().getList("report_name");
@@ -95,13 +90,14 @@ public class RegulatoryReportingAPITests extends UITestBase {
         DashboardPage dashboardPage = new DashboardPage();
         dashboardPage.navigateToPageFromMenu("Regulatory Reporting");
         test.info("Navigated to Regulatory Reporting Page");
+        getExistingUsersAccessTokenFromUI();
         RegulatoryReportingAPIController apiController = new RegulatoryReportingAPIController();
         PortfolioDetails[] apiResponse = apiController.getPortfolioDetails().as(PortfolioDetails[].class);
         for (PortfolioDetails portfolio : apiResponse) {
             String portfolioName = portfolio.getPortfolio_name();
             int index = reportingPage.selectPortfolioOptionByName(portfolioName);
             List<Integer> UIYears = BrowserUtils.convertStringListToIntList(reportingPage.getReportingFor_YearList(portfolioName, index), Integer::parseInt);
-            if (BrowserUtils.convertStringListToIntList(portfolio.getReporting_years(), Integer::parseInt).stream().min(Integer::compare).get() < 2019) {
+            if (portfolio.getReporting_years().size() > 0 && BrowserUtils.convertStringListToIntList(portfolio.getReporting_years(), Integer::parseInt).stream().min(Integer::compare).get() < 2019) {
                 assertTestCase.assertTrue(UIYears.stream().min(Integer::compare).get() > 2018, "Validating that years are not showing less tyhan 2019");
             }
             reportingPage.deSelectPortfolioOptionByName(portfolioName);
@@ -122,9 +118,11 @@ public class RegulatoryReportingAPITests extends UITestBase {
                 portfolioNumbers.put(portfolioName, 1);
             }
         }
-        portfolioNumbers.forEach((key, value) -> {if (value > 1) System.out.println(key+" = "+value);});
+        portfolioNumbers.forEach((key, value) -> {
+            if (value > 1) System.out.println(key + " = " + value);
+        });
         for (String portfolioName : portfolioNumbers.keySet()) {
-            for(int i = 1; i < portfolioNumbers.get(portfolioName); i++) {
+            for (int i = 1; i < portfolioNumbers.get(portfolioName); i++) {
                 apiController.deletePortfolio(apiController.getPortfolioId(portfolioName));
             }
         }

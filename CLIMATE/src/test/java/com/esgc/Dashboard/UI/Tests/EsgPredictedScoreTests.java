@@ -248,7 +248,7 @@ public class EsgPredictedScoreTests extends UITestBase {
 
     }
 
-    @Test(groups = {DASHBOARD, REGRESSION, UI})
+    @Test(groups = {DASHBOARD, REGRESSION, UI, ESG})
     @Xray(test = {11427})
     public void verifyScoreTypeOfPredictedEntities() {
 
@@ -272,7 +272,7 @@ public class EsgPredictedScoreTests extends UITestBase {
         dashboardPage.deleteDownloadFolder();
     }
 
-    @Test(groups = {DASHBOARD, REGRESSION, UI})
+    @Test(groups = {DASHBOARD, REGRESSION, UI, ESG})
     @Xray(test = {11398})
     public void verifyScoreTypeIsEmptyForPredictedEntities() {
 
