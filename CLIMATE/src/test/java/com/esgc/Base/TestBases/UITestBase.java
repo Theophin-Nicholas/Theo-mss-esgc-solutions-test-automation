@@ -7,7 +7,6 @@ import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.Database.DatabaseDriver;
 import com.esgc.Utilities.Driver;
 import com.esgc.Utilities.Environment;
-import org.openqa.selenium.JavascriptExecutor;
 import org.testng.ITestResult;
 import org.testng.annotations.*;
 
@@ -33,7 +32,7 @@ public abstract class UITestBase extends TestBase {
         }
 
         Driver.getDriver().manage().window().maximize();
-        Driver.getDriver().manage().timeouts().implicitlyWait(Duration.ofSeconds(80));
+        Driver.getDriver().manage().timeouts().implicitlyWait(Duration.ofSeconds(30));
 
 //        LoginPage loginPage = new LoginPage();
 //
@@ -70,6 +69,11 @@ public abstract class UITestBase extends TestBase {
         Driver.getDriver().manage().window().maximize();
         Driver.getDriver().manage().timeouts().implicitlyWait(Duration.ofSeconds(30));
         isUITest = true;
+
+        if(!Driver.getDriver().getCurrentUrl().endsWith("login")){
+            LoginPage loginPage = new LoginPage();
+            loginPage.clickOnLogout();
+        }
     }
 
     @BeforeMethod(alwaysRun = true)
@@ -84,13 +88,6 @@ public abstract class UITestBase extends TestBase {
         }
     }
 
-    @BeforeMethod(onlyForGroups = {API}, groups = {SMOKE, REGRESSION, ENTITLEMENTS}, alwaysRun = true)
-    public synchronized void setupForAPITesting(@Optional String browser) {
-        BrowserUtils.wait(10);
-        String getAccessTokenScript = "return JSON.parse(localStorage.getItem('okta-token-storage')).accessToken.accessToken";
-        String accessToken = ((JavascriptExecutor) Driver.getDriver()).executeScript(getAccessTokenScript).toString();
-        System.setProperty("token", accessToken);
-    }
     @AfterMethod(onlyForGroups = {UI}, groups = {SMOKE, REGRESSION, UI})
     public void refreshPageToContinueUITesting(ITestResult result) {
         getScreenshot(result);
@@ -99,8 +96,10 @@ public abstract class UITestBase extends TestBase {
 
     @AfterMethod(onlyForGroups = {ENTITLEMENTS}, groups = {SMOKE, REGRESSION, ENTITLEMENTS})
     public synchronized void teardownBrowserAfterUITesting() {
-        LoginPage loginPage = new LoginPage();
-        loginPage.clickOnLogout();
+        if (!Driver.getDriver().getCurrentUrl().endsWith("login")) {
+            LoginPage loginPage = new LoginPage();
+            loginPage.clickOnLogout();
+        }
     }
 
 //    @AfterClass(alwaysRun = true)
