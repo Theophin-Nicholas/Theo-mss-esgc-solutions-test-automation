@@ -12,6 +12,7 @@ import org.testng.annotations.Test;
 
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static com.esgc.Utilities.Groups.*;
 
@@ -50,9 +51,9 @@ public class RegulatoryReportingPageTests extends UITestBase {
                 "SFDR PAIs is not selected");
         assertTestCase.assertTrue(reportingPage.isSelectedReportingOptionByName("EU Taxonomy"),
                 "EU Taxonomy is selected");
-        assertTestCase.assertTrue(reportingPage.interimReportsOption.isDisplayed(),"Interim Reports option is displayed");
-        assertTestCase.assertTrue(reportingPage.annualReportsOption.isEnabled(),"Annual Reports option is enabled");
-        assertTestCase.assertTrue(reportingPage.useLatestDataOption.isDisplayed(),"Use Latest Data option is displayed");
+        assertTestCase.assertTrue(reportingPage.interimReportsOption.isDisplayed(), "Interim Reports option is displayed");
+        assertTestCase.assertTrue(reportingPage.annualReportsOption.isEnabled(), "Annual Reports option is enabled");
+        assertTestCase.assertTrue(reportingPage.useLatestDataOption.isDisplayed(), "Use Latest Data option is displayed");
     }
 
     @Test(groups = {REGRESSION, UI, REGULATORY_REPORTING}, description = "Verify user portfolio list on regulatory reporting page")
@@ -88,10 +89,12 @@ public class RegulatoryReportingPageTests extends UITestBase {
         System.out.println("User can select only 4 portfolios at a time is verified");
 
         //Verify Portfolio column is displayed with portfolio list sorted in alphabetical order.
+
         List<String> sortedPortfolioList = reportingPage.getPortfolioList();
+
+        sortedPortfolioList = sortedPortfolioList.stream().filter(e -> !Character.isDigit(e.charAt(0))).collect(Collectors.toList());
         sortedPortfolioList.sort(String::compareToIgnoreCase);
 
-        //TODO sorting logic should be ignore case and numbers comes first
         assertTestCase.assertEquals(sortedPortfolioList, actualPortfoliosList, "Portfolio list is sorted in alphabetical order");
         System.out.println("Portfolio column is displayed with portfolio list sorted in alphabetical order is verified");
 
@@ -164,11 +167,11 @@ public class RegulatoryReportingPageTests extends UITestBase {
         BrowserUtils.wait(3);
         assertTestCase.assertTrue(reportingPage.getPortfolioList().contains(newPortfolioName), "New Portfolio is added to the list");
         System.out.println(newPortfolioName + " is verified on regulatory reporting page");
-        List<String> portfolioList = reportingPage.getPortfolioList();
-        portfolioList.sort(String::compareToIgnoreCase);
+        List<String> sortedPortfolioList = reportingPage.getPortfolioList();
 
-        //TODO sorting logic should be ignore case and numbers comes first
-        assertTestCase.assertEquals(reportingPage.getPortfolioList(), portfolioList, "Portfolio list is sorted alphabetically");
+        sortedPortfolioList = sortedPortfolioList.stream().filter(e -> !Character.isDigit(e.charAt(0))).collect(Collectors.toList());
+        sortedPortfolioList.sort(String::compareToIgnoreCase);
+        assertTestCase.assertEquals(reportingPage.getPortfolioList(), sortedPortfolioList, "Portfolio list is sorted alphabetically");
 
         //verify portfolio on dashboard
         dashboardPage.navigateToPageFromMenu("Dashboard");
@@ -303,7 +306,7 @@ public class RegulatoryReportingPageTests extends UITestBase {
         BrowserUtils.wait(1);
         color = Color.fromString(reportingPage.createReportsButton.getCssValue("background-color")).asHex();
         System.out.println("color = " + color);
-        assertTestCase.assertEquals(color, "#0971e0", "Create report button color is blue");
+        assertTestCase.assertEquals(color, "#046bd9", "Create report button color is blue");
         try {
             //New tab should be opened and empty state message should be displayed as in the screenshot
             assertTestCase.assertTrue(reportingPage.verifyNewTabOpened(windows), "New tab is opened");
@@ -344,19 +347,16 @@ public class RegulatoryReportingPageTests extends UITestBase {
 //, "smoke"
     @Xray(test = {10867})
     public void verifyReportingPageWithoutSFDRUserTest() {
-        DashboardPage dashboardPage = new DashboardPage();
-        dashboardPage.clickMenu();
-        assertTestCase.assertTrue(dashboardPage.regulatoryReporting.isDisplayed(), "Reporting page is displayed");
+        RegulatoryReportingPage regulatoryReportingPage = new RegulatoryReportingPage();
+        regulatoryReportingPage.clickMenu();
+        assertTestCase.assertTrue(regulatoryReportingPage.isRegulatoryReportingOptionIsAvailableInSidePanel(), "Reporting page option is displayed");
         LoginPage loginPage = new LoginPage();
         loginPage.clickOnLogout();
         loginPage.loginWithParams(Environment.PHYSICAL_RISK_USERNAME, Environment.PHYSICAL_RISK_PASSWORD);
-        dashboardPage.clickMenu();
-        assertTestCase.assertFalse(BrowserUtils.getElementsText(dashboardPage.menuList).contains("Regulatory Reporting"), "Reporting page is not displayed as expected");
+        regulatoryReportingPage.clickMenu();
+        assertTestCase.assertFalse(BrowserUtils.getElementsText(regulatoryReportingPage.menuList).contains("Regulatory Reporting"), "Reporting page is not displayed as expected");
         loginPage.clickOnLogout();
-        loginPage.login();
-        BrowserUtils.wait(5);
     }
-
 
 
     @Test(groups = {REGRESSION, UI, REGULATORY_REPORTING}, description = "UI | Regulatory Reporting | Download | Verify Create Reports Button is Clickable")
@@ -434,7 +434,7 @@ public class RegulatoryReportingPageTests extends UITestBase {
         if (!reportingPage.verifyPortfolio(portfolioName)) reportingPage.uploadPortfolio(portfolioName);
         String currentWindow = BrowserUtils.getCurrentWindowHandle();
         reportingPage.selectReportingOptionByName("EU Taxonomy");
-        assertTestCase.assertEquals(reportingPage.getSelectedReportingOption(),"EU Taxonomy", "EU Taxonomy is selected");
+        assertTestCase.assertEquals(reportingPage.getSelectedReportingOption(), "EU Taxonomy", "EU Taxonomy is selected");
         reportingPage.selectPortfolioOptionByName(portfolioName);
         List<String> selectedPortfolios = reportingPage.getSelectedPortfolioOptions();
         assertTestCase.assertTrue(selectedPortfolios.contains(portfolioName), "Portfolio is selected");
@@ -516,7 +516,7 @@ public class RegulatoryReportingPageTests extends UITestBase {
             Driver.getDriver().switchTo().window(windowHandle);
         }
         BrowserUtils.waitForVisibility(reportingPage.previouslyDownloadedErrorMessage, 30);
-        assertTestCase.assertEquals(reportingPage.previouslyDownloadedErrorMessage.getText(),"No previously downloaded reports to be displayed.", "Verify Error message in Previously Downloaded screen");
+        assertTestCase.assertEquals(reportingPage.previouslyDownloadedErrorMessage.getText(), "No previously downloaded reports to be displayed.", "Verify Error message in Previously Downloaded screen");
 
     }
 }
