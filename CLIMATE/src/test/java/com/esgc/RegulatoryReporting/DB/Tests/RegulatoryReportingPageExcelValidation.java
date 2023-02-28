@@ -26,7 +26,7 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
         dashboardPage.navigateToPageFromMenu("Regulatory Reporting");
         test.info("Navigated to Regulatory Reporting Page");
         //verify portfolio upload modal
-        assertTestCase.assertTrue(reportingPage.uploadAnotherPortfolioLink.isDisplayed(), "Portfolio Upload button is displayed");
+        assertTestCase.assertTrue(reportingPage.isUploadAnotherPortfolioLinkDisplayed(), "Portfolio Upload button is displayed");
 
         //upload a portfolio
         String newPortfolioName = "PortfolioWithValidData2";
@@ -41,7 +41,7 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
         List<String> selectedPortfolios = reportingPage.getSelectedPortfolioOptions();
         Set<String> currentWindows = BrowserUtils.getWindowHandles();
         //verify create reports button before clicking
-        assertTestCase.assertTrue(reportingPage.createReportsButton.isEnabled(), "Create report button is enabled");
+        assertTestCase.assertTrue(reportingPage.isCreateReportsButtonEnabled(), "Create report button is enabled");
         reportingPage.createReportsButton.click();
 
         try {
@@ -76,15 +76,15 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
         DashboardPage dashboardPage = new DashboardPage();
         dashboardPage.navigateToPageFromMenu("Regulatory Reporting");
         test.info("Navigated to Regulatory Reporting Page");
-        assertTestCase.assertTrue(reportingPage.interimReportsOption.isDisplayed(), "Interim reports option is displayed");
-        assertTestCase.assertTrue(reportingPage.useLatestDataOption.isDisplayed(), "Use latest data option is displayed");
+        assertTestCase.assertTrue(reportingPage.isInterimReportsOptionDisplayed(), "Interim reports option is displayed");
+        assertTestCase.assertTrue(reportingPage.isUseLatestDataOptionDisplayed(), "Use latest data option is displayed");
         String currentWindow = BrowserUtils.getCurrentWindowHandle();
         reportingPage.selectAllPortfolioOptions();
         reportingPage.selectInterimReports();
         List<String> selectedPortfolios = reportingPage.getSelectedPortfolioOptions();
         Set<String> currentWindows = BrowserUtils.getWindowHandles();
         //verify create reports button before clicking
-        assertTestCase.assertTrue(reportingPage.createReportsButton.isEnabled(), "Create report button is enabled");
+        assertTestCase.assertTrue(reportingPage.isCreateReportsButtonEnabled(), "Create report button is enabled");
 
         reportingPage.createReportsButton.click();
         try {
@@ -107,7 +107,7 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
             System.out.println("=============================");
         }
         reportingPage.selectAnnualReports();
-        assertTestCase.assertTrue(reportingPage.createReportsButton.isEnabled(), "Create report button is enabled");
+        assertTestCase.assertTrue(reportingPage.isCreateReportsButtonEnabled(), "Create report button is enabled");
         currentWindows = BrowserUtils.getWindowHandles();
         reportingPage.createReportsButton.click();
         BrowserUtils.wait(2);
@@ -138,7 +138,7 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
         dashboardPage.navigateToPageFromMenu("Regulatory Reporting");
         test.info("Navigated to Regulatory Reporting Page");
         //verify portfolio upload modal
-        assertTestCase.assertTrue(reportingPage.uploadAnotherPortfolioLink.isDisplayed(), "Portfolio Upload button is displayed");
+        assertTestCase.assertTrue(reportingPage.isUploadAnotherPortfolioLinkDisplayed(), "Portfolio Upload button is displayed");
 
         //upload a portfolio
         String portfolioName = "SFDRPortfolio";
@@ -153,7 +153,7 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
         Set<String> currentWindows = BrowserUtils.getWindowHandles();
         reportingPage.selectReportingFor(portfolioName,"2021");
         //verify create reports button before clicking
-        assertTestCase.assertTrue(reportingPage.createReportsButton.isEnabled(), "Create report button is enabled");
+        assertTestCase.assertTrue(reportingPage.isCreateReportsButtonEnabled(), "Create report button is enabled");
         reportingPage.createReportsButton.click();
 
         try {
@@ -187,7 +187,7 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
         dashboardPage.navigateToPageFromMenu("Regulatory Reporting");
         test.info("Navigated to Regulatory Reporting Page");
         //verify portfolio upload modal
-        assertTestCase.assertTrue(reportingPage.uploadAnotherPortfolioLink.isDisplayed(), "Portfolio Upload button is displayed");
+        assertTestCase.assertTrue(reportingPage.isUploadAnotherPortfolioLinkDisplayed(), "Portfolio Upload button is displayed");
 
         //upload a portfolio
         String portfolioName = "SFDRPortfolio";
@@ -203,7 +203,7 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
                 "EU Taxonomy portfolio coverage is verified for UI vs DB");
         List<String> selectedPortfolios = reportingPage.getSelectedPortfolioOptions();
         //verify create reports button before clicking
-        assertTestCase.assertTrue(reportingPage.createReportsButton.isEnabled(), "Create report button is enabled");
+        assertTestCase.assertTrue(reportingPage.isCreateReportsButtonEnabled(), "Create report button is enabled");
         Set<String> currentWindows = BrowserUtils.getWindowHandles();
         reportingPage.createReportsButton.click();
         try {
@@ -238,7 +238,7 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
         String year = "2021";
         test.info("Navigated to Regulatory Reporting Page");
         //verify portfolio upload modal
-        assertTestCase.assertTrue(reportingPage.uploadAnotherPortfolioLink.isDisplayed(), "Portfolio Upload button is displayed");
+        assertTestCase.assertTrue(reportingPage.isUploadAnotherPortfolioLinkDisplayed(), "Portfolio Upload button is displayed");
 
         //upload a portfolio
         String portfolioName = "SFDRPortfolio";
@@ -253,7 +253,7 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
 
         List<String> selectedPortfolios = reportingPage.getSelectedPortfolioOptions();
         //verify create reports button before clicking
-        assertTestCase.assertTrue(reportingPage.createReportsButton.isEnabled(), "Create report button is enabled");
+        assertTestCase.assertTrue(reportingPage.isCreateReportsButtonEnabled(), "Create report button is enabled");
         Set<String> currentWindows = BrowserUtils.getWindowHandles();
         reportingPage.createReportsButton.click();
         try {
@@ -293,7 +293,7 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
         String year = "2021";
         test.info("Navigated to Regulatory Reporting Page");
         //verify portfolio upload modal
-        assertTestCase.assertTrue(reportingPage.uploadAnotherPortfolioLink.isDisplayed(), "Portfolio Upload button is displayed");
+        assertTestCase.assertTrue(reportingPage.isUploadAnotherPortfolioLinkDisplayed(), "Portfolio Upload button is displayed");
 
         //upload a portfolio
         String portfolioName = "SFDRPortfolio";
@@ -309,7 +309,7 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
 
         List<String> selectedPortfolios = reportingPage.getSelectedPortfolioOptions();
         //verify create reports button before clicking
-        assertTestCase.assertTrue(reportingPage.createReportsButton.isEnabled(), "Create report button is enabled");
+        assertTestCase.assertTrue(reportingPage.isCreateReportsButtonEnabled(), "Create report button is enabled");
         Set<String> currentWindows = BrowserUtils.getWindowHandles();
         reportingPage.createReportsButton.click();
         try {
@@ -350,7 +350,7 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
         String year = "2020";
         test.info("Navigated to Regulatory Reporting Page");
         //verify portfolio upload modal
-        assertTestCase.assertTrue(reportingPage.uploadAnotherPortfolioLink.isDisplayed(), "Portfolio Upload button is displayed");
+        assertTestCase.assertTrue(reportingPage.isUploadAnotherPortfolioLinkDisplayed(), "Portfolio Upload button is displayed");
 
         //upload a portfolio
         String portfolioName = "SFDRPortfolio";
@@ -362,7 +362,7 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
 
         List<String> selectedPortfolios = reportingPage.getSelectedPortfolioOptions();
         //verify create reports button before clicking
-        assertTestCase.assertTrue(reportingPage.createReportsButton.isEnabled(), "Create report button is enabled");
+        assertTestCase.assertTrue(reportingPage.isCreateReportsButtonEnabled(), "Create report button is enabled");
         Set<String> currentWindows = BrowserUtils.getWindowHandles();
         reportingPage.createReportsButton.click();
         try {
@@ -402,7 +402,7 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
         String year = "2021";
         test.info("Navigated to Regulatory Reporting Page");
         //verify portfolio upload modal
-        assertTestCase.assertTrue(reportingPage.uploadAnotherPortfolioLink.isDisplayed(), "Portfolio Upload button is displayed");
+        assertTestCase.assertTrue(reportingPage.isUploadAnotherPortfolioLinkDisplayed(), "Portfolio Upload button is displayed");
 
         //upload a portfolio
         String portfolioName = "SFDRPortfolio";
@@ -414,7 +414,7 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
 
         List<String> selectedPortfolios = reportingPage.getSelectedPortfolioOptions();
         //verify create reports button before clicking
-        assertTestCase.assertTrue(reportingPage.createReportsButton.isEnabled(), "Create report button is enabled");
+        assertTestCase.assertTrue(reportingPage.isCreateReportsButtonEnabled(), "Create report button is enabled");
         Set<String> currentWindows = BrowserUtils.getWindowHandles();
         reportingPage.createReportsButton.click();
         try {
@@ -453,7 +453,7 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
         dashboardPage.navigateToPageFromMenu("Regulatory Reporting");
         test.info("Navigated to Regulatory Reporting Page");
         //verify portfolio upload modal
-        assertTestCase.assertTrue(reportingPage.uploadAnotherPortfolioLink.isDisplayed(), "Portfolio Upload button is displayed");
+        assertTestCase.assertTrue(reportingPage.isUploadAnotherPortfolioLinkDisplayed(), "Portfolio Upload button is displayed");
 
         //upload a portfolio
         String portfolioName = "SFDRPortfolio";
@@ -464,7 +464,7 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
 
         List<String> selectedPortfolios = reportingPage.getSelectedPortfolioOptions();
         //verify create reports button before clicking
-        assertTestCase.assertTrue(reportingPage.createReportsButton.isEnabled(), "Create report button is enabled");
+        assertTestCase.assertTrue(reportingPage.isCreateReportsButtonEnabled(), "Create report button is enabled");
         Set<String> currentWindows = BrowserUtils.getWindowHandles();
         reportingPage.createReportsButton.click();
         try {
@@ -489,7 +489,7 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
         }
         reportingPage.selectUseLatestData();
         currentWindows = BrowserUtils.getWindowHandles();
-        reportingPage.createReportsButton.click();
+        reportingPage.clickOnCreateReportsButton();
         try {
             //New tab should be opened and empty state message should be displayed as in the screenshot
             assertTestCase.assertTrue(reportingPage.verifyNewTabOpened(currentWindows), "New tab is opened");

@@ -112,6 +112,7 @@ public class CustomAssertion extends SoftAssert {
      * @param condition
      */
     public void assertTrue(boolean condition, String comment) {
+        System.out.println(comment);
         message = comment;
         super.assertTrue(condition, message);
     }
@@ -124,6 +125,7 @@ public class CustomAssertion extends SoftAssert {
      * @param ticketNumbers
      */
     public void assertEquals(String actual, String expected, String comment, Integer... ticketNumbers) {
+        System.out.println(comment);
         testCaseNumber = Arrays.asList(ticketNumbers);
         message = comment;
         super.assertEquals(actual, expected, message);
@@ -136,6 +138,7 @@ public class CustomAssertion extends SoftAssert {
      * @param expected
      */
     public void assertEquals(String actual, String expected, String comment) {
+        System.out.println(comment);
         message = comment;
         super.assertEquals(actual, expected, message);
     }
@@ -148,6 +151,7 @@ public class CustomAssertion extends SoftAssert {
      * @param ticketNumbers
      */
     public void assertEquals(Integer actual, Integer expected, String comment, Integer... ticketNumbers) {
+        System.out.println(comment);
         testCaseNumber = Arrays.asList(ticketNumbers);
         message = comment;
         super.assertEquals(actual, expected, message);
@@ -160,16 +164,19 @@ public class CustomAssertion extends SoftAssert {
      * @param expected
      */
     public void assertEquals(Integer actual, Integer expected, String comment) {
+        System.out.println(comment);
         message = comment;
         super.assertEquals(actual, expected, message);
     }
 
     public void assertEquals(Double actual, Double expected, String comment) {
+        System.out.println(comment);
         message = comment;
         super.assertEquals(actual, expected, message);
     }
 
     public void assertEquals(Double actual, Double expected, String comment, Integer... ticketNumbers) {
+        System.out.println(comment);
         testCaseNumber = Arrays.asList(ticketNumbers);
         message = comment;
         super.assertEquals(actual, expected, message);
@@ -184,6 +191,7 @@ public class CustomAssertion extends SoftAssert {
      * @param ticketNumbers
      */
     public void assertEquals(List<String> actual, List<String> expected, String comment, Integer... ticketNumbers) {
+        System.out.println(comment);
         testCaseNumber = Arrays.asList(ticketNumbers);
         message = comment;
         super.assertEquals(actual, expected, message);
@@ -196,6 +204,7 @@ public class CustomAssertion extends SoftAssert {
      * @param expected
      */
     public void assertEquals(List<String> actual, List<String> expected, String comment) {
+        System.out.println(comment);
         message = comment;
         super.assertEquals(actual, expected, message);
     }
@@ -207,6 +216,7 @@ public class CustomAssertion extends SoftAssert {
      * @param ticketNumbers
      */
     public void assertFalse(boolean condition, String comment, Integer... ticketNumbers) {
+        System.out.println(comment);
         testCaseNumber = Arrays.asList(ticketNumbers);
         message = comment;
         super.assertFalse(condition, message);
@@ -218,6 +228,7 @@ public class CustomAssertion extends SoftAssert {
      * @param condition
      */
     public void assertFalse(boolean condition, String comment) {
+        System.out.println(comment);
         message = comment;
         super.assertFalse(condition, message);
     }

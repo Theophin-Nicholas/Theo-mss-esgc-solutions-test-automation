@@ -411,6 +411,15 @@ public abstract class PageBase {
     }
     //=================Common Methods for Navigation Tabs on Top of the Page ============================================
 
+
+
+    public boolean isRegulatoryReportingDisplayed(){
+        return regulatoryReporting.isDisplayed();
+    }
+
+    public void clickOnRegulatoryReporting(){
+        regulatoryReporting.click();
+    }
     /*
      * This method will verify if Regions Sections and As Of Date drop down
      */
