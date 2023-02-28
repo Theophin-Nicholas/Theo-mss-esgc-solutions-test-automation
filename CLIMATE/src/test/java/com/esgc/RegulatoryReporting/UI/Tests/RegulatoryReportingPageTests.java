@@ -242,6 +242,7 @@ public class RegulatoryReportingPageTests extends UITestBase {
         List<String> dropDownOptions = BrowserUtils.getElementsText(reportingPage.reportingForDropdownOptionsList);
         assertTestCase.assertTrue(dropDownOptions.contains("2019"), "Reporting for option oldest year is 2019 is verified");
         assertTestCase.assertFalse(dropDownOptions.contains("2018"), "Reporting for option oldest year is 2019 is verified");
+        BrowserUtils.wait(5);
         reportingPage.reportingForDropdownOptionsList.get(0).click();
         assertTestCase.assertTrue(reportingPage.isCreateReportsButtonEnabled(), "Create 1 report button is enabled");
 
