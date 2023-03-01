@@ -7,6 +7,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.List;
 
 public class EMCUserImportPage extends EMCBasePage{
@@ -90,7 +91,7 @@ public class EMCUserImportPage extends EMCBasePage{
         CSVUtil csvUtil = new CSVUtil(BrowserUtils.downloadPath(), "user-template.csv");
         List<String> columnNames = csvUtil.getColumnNames();
         System.out.println("columnNames = " + columnNames);
-        List<String> expectedColumnNames = List.of("FirstName","LastName","Email","ApplicationRoles","SendActivationEmail");
+        List<String> expectedColumnNames = Arrays.asList("FirstName", "LastName", "Email", "ApplicationRoles", "SendActivationEmail");
         return columnNames.containsAll(expectedColumnNames);
     }
 
@@ -193,6 +194,7 @@ public class EMCUserImportPage extends EMCBasePage{
         //verifyTemplateWithData("email", "test@gmail.c", "Must be a valid email Address");
         verifyTemplateWithData("email", "test@gmail#test.com", "Must be a valid email Address");
         verifyTemplateWithData("email", "test@gmail..com", "Must be a valid email Address");
+        verifyTemplateWithData("email", "example1@moodys.com", "Moody's email accounts are not allowed.");
 
         //Template file have users with Wrong Application Role
         verifyTemplateWithData("applicationRole", "", "Must be 1 role or more");

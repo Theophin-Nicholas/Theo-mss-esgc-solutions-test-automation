@@ -12,6 +12,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
+import java.util.Arrays;
 import java.util.List;
 
 public class EMCMainPage extends EMCBasePage{
@@ -162,7 +163,7 @@ public class EMCMainPage extends EMCBasePage{
             System.out.println("Menu options are not displayed");
         }
         List<String> menuOptionsList = BrowserUtils.getElementsText(menuOptions);
-        List<String> expectedMenuOptionsList = List.of("Applications", "Accounts", "Users", "Configuration");
+        List<String> expectedMenuOptionsList = Arrays.asList("Applications", "Accounts", "Users", "Configuration");
         assertTestCase.assertTrue(menuOptionsList.containsAll(expectedMenuOptionsList), "Menu options are not displayed");
     }
 
@@ -181,7 +182,7 @@ public class EMCMainPage extends EMCBasePage{
         }
         wait(menuOptions, 60);
         List<String> menuOptionsList = BrowserUtils.getElementsText(menuOptions);
-        List<String> expectedMenuOptionsList = List.of("Applications", "Accounts", "Users");
+        List<String> expectedMenuOptionsList = Arrays.asList("Applications", "Accounts", "Users");
         assertTestCase.assertTrue(menuOptionsList.containsAll(expectedMenuOptionsList), "Menu options are displayed");
         assertTestCase.assertFalse(menuOptionsList.contains("Configuration"), "Configuration menu option is displayed");
     }

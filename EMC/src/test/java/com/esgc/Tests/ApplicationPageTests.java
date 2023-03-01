@@ -13,12 +13,16 @@ import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.testng.annotations.Test;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static com.esgc.Utilities.Groups.*;
 
 public class ApplicationPageTests extends EMCUITestBase {
-    String applicationName = "TestQA";
+    String applicationName = "TestQA";//singlePageApplication
+    String webApplicationName = "QA Test Web Application";
+    String externalApplicationName = "QA Test External Application";
     String testApplicationName = "TestQA2";
     String testWebAppName = "Test Web Application";
     Faker faker = new Faker();
@@ -118,31 +122,48 @@ public class ApplicationPageTests extends EMCUITestBase {
         BrowserUtils.waitForClickablility(detailsPage.saveButton, 5).click();
     }
 
-    @Test(groups = {EMC, UI, REGRESSION})//no smoke
-    @Xray(test = {5173, 7657})
+    @Test(groups = {EMC, UI, REGRESSION, SMOKE})
+    @Xray(test = {5173, 7657, 13413})
     public void verifyUserCreateNewRoleForApplicationTest() {
-        EMCMainPage emcMainPage = new EMCMainPage();
-        //Navigate to EMC Application Panel
-        emcMainPage.openSidePanel();
-        //Click on Application
-        emcMainPage.clickApplicationsButton();
-        //Navigate to the Application Name on table.
+        List<String> applicationNames = Arrays.asList(applicationName, externalApplicationName, webApplicationName);
+        for (String appType:applicationNames){
+            System.out.println(appType);
+            navigateToApplicationsPage(appType, "roles");
+            EMCApplicationDetailsPage detailsPage = new EMCApplicationDetailsPage();
+            assertTestCase.assertTrue(detailsPage.addRoleButton.isDisplayed(), "Application Name is displayed");
+            BrowserUtils.waitForClickablility(detailsPage.addRoleButton, 5).click();
+            BrowserUtils.waitForVisibility(detailsPage.addRolePopUpTitle, 5);
+            assertTestCase.assertTrue(detailsPage.addRolePopUpTitle.isDisplayed(), "Add Role Pop Up is displayed");
+            String now = java.time.LocalDateTime.now().format(java.time.format.DateTimeFormatter.ofPattern("ddhhmmss"));
+            detailsPage.roleNameInput.sendKeys("QATest" + now);
+            detailsPage.roleKeyInput.sendKeys(now, Keys.TAB);
+            BrowserUtils.waitForClickablility(detailsPage.saveButton, 10).click();
+            BrowserUtils.waitForVisibility(detailsPage.notification, 10);
+            assertTestCase.assertTrue(detailsPage.getApplicationRolesNames().contains("QATest" + now), "Role Name is displayed");
+        }
+    }
 
-        //Click on Application Name
-        applicationsPage.selectApplication(applicationName);
-        //Verify that User is Able to See Application Details.
-        EMCApplicationDetailsPage detailsPage = new EMCApplicationDetailsPage();
-        detailsPage.clickOnRolesTab();
-        assertTestCase.assertTrue(detailsPage.addRoleButton.isDisplayed(), "Application Name is displayed");
-        BrowserUtils.waitForClickablility(detailsPage.addRoleButton, 5).click();
-        BrowserUtils.waitForVisibility(detailsPage.addRolePopUpTitle, 5);
-        assertTestCase.assertTrue(detailsPage.addRolePopUpTitle.isDisplayed(), "Add Role Pop Up is displayed");
-        String now = java.time.LocalDateTime.now().format(java.time.format.DateTimeFormatter.ofPattern("ddhhmmss"));
-        detailsPage.roleNameInput.sendKeys("QATest" + now);
-        detailsPage.roleKeyInput.sendKeys(now, Keys.TAB);
-        BrowserUtils.waitForClickablility(detailsPage.saveButton, 10).click();
-        BrowserUtils.waitForVisibility(detailsPage.notification, 10);
-        assertTestCase.assertTrue(detailsPage.getApplicationRolesNames().contains("QATest" + now), "Role Name is displayed");
+    @Test(groups = {EMC, UI, REGRESSION, SMOKE, PROD})
+    @Xray(test = {13449})
+    public void verifyUserCancelCreateNewRoleForApplicationTest() {
+        List<String> applicationNames = Arrays.asList(applicationName, externalApplicationName, webApplicationName);
+        for (String appType:applicationNames){
+            System.out.println(appType);
+            navigateToApplicationsPage(appType, "roles");
+            EMCApplicationDetailsPage detailsPage = new EMCApplicationDetailsPage();
+            assertTestCase.assertTrue(detailsPage.addRoleButton.isDisplayed(), "Application Name is displayed");
+            BrowserUtils.waitForClickablility(detailsPage.addRoleButton, 5).click();
+            BrowserUtils.waitForVisibility(detailsPage.addRolePopUpTitle, 5);
+            assertTestCase.assertTrue(detailsPage.addRolePopUpTitle.isDisplayed(), "Add Role Pop Up is displayed");
+            String now = java.time.LocalDateTime.now().format(java.time.format.DateTimeFormatter.ofPattern("ddhhmmss"));
+            detailsPage.roleNameInput.sendKeys("QATest" + now);
+            detailsPage.roleKeyInput.sendKeys(now, Keys.TAB);
+            assertTestCase.assertTrue(detailsPage.cancelButton.isEnabled(), "Cancel button is enabled");
+            assertTestCase.assertTrue(detailsPage.saveButton.isEnabled(), "Save button is enabled");
+            BrowserUtils.waitForClickablility(detailsPage.cancelButton, 10).click();
+            assertTestCase.assertFalse(detailsPage.getApplicationRolesNames().contains("QATest" + now), "New role is not created");
+        }
+
     }
 
     @Test(groups = {EMC, UI, REGRESSION})

@@ -336,7 +336,7 @@ public class AccountsPageTests extends EMCUITestBase {
         assertTestCase.assertTrue(currentInfo.get("modifiedBy").split(" ").length >= 5, "Modified by info is displayed");
     }
 
-    @Test(groups = {EMC, UI, SMOKE, REGRESSION, "test"})
+    @Test(groups = {EMC, UI, SMOKE, REGRESSION})
     @Xray(test = {5044, 4809})
     public void verifyAllUsersSortedByNameTest() {
         navigateToAccountsPage(accountName, "users");
@@ -1545,7 +1545,7 @@ public class AccountsPageTests extends EMCUITestBase {
 
     @Test(groups = {EMC, UI, REGRESSION, SMOKE},
             description = "UI | EMC | ImportUsers | Import Users modal should display the link to Download Template")
-    @Xray(test = {13258, 13259, 13260, 13299, 13303, 13305})
+    @Xray(test = {13258, 13259, 13260, 13299, 13303, 13305, 13391})
     public void ImportUsersModalDownloadTemplateTest() {
         navigateToAccountsPage(accountName, "users");
         EMCAccountDetailsPage detailsPage = new EMCAccountDetailsPage();
@@ -1572,7 +1572,7 @@ public class AccountsPageTests extends EMCUITestBase {
 
     @Test(groups = {EMC, UI, REGRESSION, SMOKE},
             description = "UI | EMC | ImportUsers | Verify the Mass Import process validate If file is empty")
-    @Xray(test = {13306, 13307, 13308})
+    @Xray(test = {13306, 13307, 13308, 13399})
     public void verifyMassImportWithEmptyTemplate() {
         navigateToAccountsPage(accountName, "users");
         EMCAccountDetailsPage detailsPage = new EMCAccountDetailsPage();

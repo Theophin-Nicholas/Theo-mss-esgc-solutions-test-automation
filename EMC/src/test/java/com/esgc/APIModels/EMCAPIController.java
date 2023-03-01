@@ -12,6 +12,7 @@ import com.esgc.Utilities.Driver;
 import com.esgc.Utilities.Environment;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
+import io.restassured.response.ResponseBodyExtractionOptions;
 import io.restassured.specification.RequestSpecification;
 import org.openqa.selenium.JavascriptExecutor;
 
@@ -237,9 +238,9 @@ public class EMCAPIController extends APITestBase {
     }
 
     public Response getEMCAllApplicationsResponse() {
-        System.out.println("Getting all applications");
+//        System.out.println("Getting all applications");
         Response response = null;
-        System.out.println("EMC API URL: " + Environment.EMC_URL + EMCEndpoints.EMC_APPS);
+//        System.out.println("EMC API URL: " + Environment.EMC_URL + EMCEndpoints.EMC_APPS);
         try {
             response = configSpec()
                     .when()
@@ -248,8 +249,8 @@ public class EMCAPIController extends APITestBase {
         } catch (Exception e) {
             System.out.println("Inside exception " + e.getMessage());
         }
-        System.out.println("Status Code = " + response.statusCode());
-        System.out.println();
+//        System.out.println("Status Code = " + response.statusCode());
+//        System.out.println();
         return response;
     }
 
@@ -678,16 +679,6 @@ public class EMCAPIController extends APITestBase {
         assertTestCase.assertTrue(verifyApplication(key), "Application creation response type is verified");
     }
 
-    public void deleteApplicationAndVerify(String key) {
-        //Delete Application
-        Response response = deleteEMCApplicationResponse(key);
-        response.prettyPrint();
-        assertTestCase.assertEquals(response.statusCode(), 403, "Status code 204 OK is verified");
-        assertTestCase.assertEquals(response.path("name"), "DeletedResponse", "Application delete response name is verified");
-        //assertTestCase.assertEquals(response.path("message"), "Missing Authentication Token", "Application delete response message is verified");
-        assertTestCase.assertFalse(verifyApplication(key), "Application is deleted successfully");
-    }
-
     public void assignUserToRoleAndVerify(String email, String roleId) {
         List<String> roles = Arrays.asList(Environment.ADMIN_ROLE_KEY, Environment.ADMIN_ROLE_KEY, Environment.FULFILLMENT_ROLE_KEY);
         for(String role : roles){
@@ -696,5 +687,39 @@ public class EMCAPIController extends APITestBase {
         }
         assignRoleToUser(email, roleId);
         assertTestCase.assertTrue(verifyUserForRole(email, roleId), "User is assigned to role successfully");
+    }
+
+    public String getApplicationKey(String applicationName) {
+        String applicationId = getApplicationId(applicationName);
+        if(applicationId == null)
+            return null;
+        return getEMCApplicationResponse(applicationId).jsonPath().getString("key");
+    }
+
+    public Response getEMCApplicationResponse(String applicationId) {
+        Response response = null;
+        try {
+            response = configSpec()
+                    .when()
+//                    .pathParam("applicationId", applicationId)
+                    .get(EMCEndpoints.GET_APPLICATIONS+"/"+applicationId).prettyPeek();
+
+        } catch (Exception e) {
+            System.out.println("Inside exception " + e.getMessage());
+        }
+        System.out.println("Status Code = " + response.statusCode());
+        return response;
+    }
+
+    public String getApplicationId(String applicationName) {
+        List<Application> applications = getEMCAllApplicationsResponse().jsonPath().getList("", Application.class);
+        return applications.stream().anyMatch(app -> app.getName().equals(applicationName)) ?
+                applications.stream().filter(app -> app.getName().equals(applicationName)).findFirst().get().getId() : null;
+    }
+
+    public String getApplicationUrl(String applicationName) {
+        List<Application> applications = getEMCAllApplicationsResponse().jsonPath().getList("", Application.class);
+        return applications.stream().anyMatch(app -> app.getName().equals(applicationName)) ?
+                applications.stream().filter(app -> app.getName().equals(applicationName)).findFirst().get().getUrl() : null;
     }
 }

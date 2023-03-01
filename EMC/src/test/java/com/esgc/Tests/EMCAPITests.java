@@ -284,29 +284,106 @@ public class EMCAPITests extends APITestBase {
     }
 
     @Test(groups = {EMC, API, REGRESSION, SMOKE}, description = "API | EMC | API | Application | Verify user can Create a new External Application")
-    @Xray(test = {12720})
-    public void verifyUserCreateExternalAndInternalApplicationTest() {
+    @Xray(test = {12720, 13186})
+    public void verifyUserCreateApplicationsTest() {
         //Get All Applications
         response = apiController.getEMCAllApplicationsResponse();
         //response.prettyPrint();
 
-        //Create Application
+        //Create External Application
         String key = "test-app-external-qa" + faker.number().digits(4);
         String name = "QA Test External API" + key.replaceAll("\\D", "");
         String url = "https://test.com.mx/";
         String provider = "ma";
         String type = "ExternalApplication";//SinglePageApplication, ExternalApplication, WebApplication
         apiController.createApplicationAndVerify(key, name, url, provider, type);
-        //apiController.deleteApplicationAndVerify(key);
 
-        //Create Application
+        //Create Web Application
         key = "test-app-internal-qa" + faker.number().digits(4);
         name = "QA Test internal API" + key.replaceAll("\\D", "");
         url = "https://test.com.mx/";
         provider = "mss";
         type = "WebApplication";//SinglePageApplication, ExternalApplication, WebApplication
         apiController.createApplicationAndVerify(key, name, url, provider, type);
-        //apiController.deleteApplicationAndVerify(key);
+
+        //Create Single Page Application
+        key = "test-app-single-qa" + faker.number().digits(4);
+        name = "QA Test Single Page API" + key.replaceAll("\\D", "");
+        url = "https://test.com.mx/";
+        provider = "mss";
+        type = "SinglePageApplication";//SinglePageApplication, ExternalApplication, WebApplication
+        apiController.createApplicationAndVerify(key, name, url, provider, type);
+    }
+
+    @Test(groups = {EMC, API, REGRESSION}, description = "API | EMC | API | Application | Verify user can't Create a new Application with duplicate key")
+    @Xray(test = {13191, 13192})
+    public void verifyUserCantCreateApplicationsWithDuplicateKeyTest() {
+        //Get All Applications
+        response = apiController.getEMCAllApplicationsResponse();
+        //response.prettyPrint();
+
+        String applicationName = Environment.MESG_APPLICATION_NAME;
+        System.out.println("applicationName = " + applicationName);
+        String applicationKey = apiController.getApplicationKey(applicationName);
+        System.out.println("applicationKey = " + applicationKey);
+        String applicationUrl = apiController.getApplicationUrl(applicationName);
+        System.out.println("applicationUrl = " + applicationUrl);
+        assertTestCase.assertTrue(apiController.verifyApplication(apiController.getApplicationId(applicationName)), "Application creation response type is verified");
+
+        //Create External Application with duplicate name
+        String provider = "mss";
+        String type = "ExternalApplication";//SinglePageApplication, ExternalApplication, WebApplication
+        Response response = apiController.postEMCNewApplicationResponse(applicationKey, applicationName, applicationUrl, provider, type);
+        response.prettyPrint();
+        assertTestCase.assertEquals(response.statusCode(), 409, "Status code 409 Created is verified");
+        assertTestCase.assertEquals(response.path("name"), "DuplicateException", "Application creation failed response name is verified");
+        assertTestCase.assertEquals(response.path("message"), "An application with name "+applicationName+" already exists.", "Application creation failed response message is verified");
+
+
+        //Create Web Application with duplicate name
+        type = "WebApplication";//SinglePageApplication, ExternalApplication, WebApplication
+        response = apiController.postEMCNewApplicationResponse(applicationKey, applicationName, applicationUrl, provider, type);
+        response.prettyPrint();
+        assertTestCase.assertEquals(response.statusCode(), 409, "Status code 409 Created is verified");
+        assertTestCase.assertEquals(response.path("name"), "DuplicateException", "Application creation failed response name is verified");
+        assertTestCase.assertEquals(response.path("message"), "An application with name "+applicationName+" already exists.", "Application creation failed response message is verified");
+
+
+        //Create Single Page Application with duplicate name
+        type = "SinglePageApplication";//SinglePageApplication, ExternalApplication, WebApplication
+        response = apiController.postEMCNewApplicationResponse(applicationKey, applicationName, applicationUrl, provider, type);
+        response.prettyPrint();
+        assertTestCase.assertEquals(response.statusCode(), 409, "Status code 409 Created is verified");
+        assertTestCase.assertEquals(response.path("name"), "DuplicateException", "Application creation failed response name is verified");
+        assertTestCase.assertEquals(response.path("message"), "An application with name "+applicationName+" already exists.", "Application creation failed response message is verified");
+
+        applicationName ="Random Name";
+        assertTestCase.assertFalse(apiController.verifyApplication(apiController.getApplicationId(applicationName)), "Application creation response type is verified");
+        //Create External Application with duplicate key
+        type = "ExternalApplication";//SinglePageApplication, ExternalApplication, WebApplication
+        response = apiController.postEMCNewApplicationResponse(applicationKey, applicationName, applicationUrl, provider, type);
+        response.prettyPrint();
+        assertTestCase.assertEquals(response.statusCode(), 409, "Status code 409 Created is verified");
+        assertTestCase.assertEquals(response.path("name"), "DuplicateException", "Application creation failed response name is verified");
+        assertTestCase.assertEquals(response.path("message"), "An application with Key "+applicationKey+" already exists.", "Application creation failed response message is verified");
+
+
+        //Create Web Application with duplicate key
+        type = "WebApplication";//SinglePageApplication, ExternalApplication, WebApplication
+        response = apiController.postEMCNewApplicationResponse(applicationKey, applicationName, applicationUrl, provider, type);
+        response.prettyPrint();
+        assertTestCase.assertEquals(response.statusCode(), 409, "Status code 409 Created is verified");
+        assertTestCase.assertEquals(response.path("name"), "DuplicateException", "Application creation failed response name is verified");
+        assertTestCase.assertEquals(response.path("message"), "An application with Key "+applicationKey+" already exists.", "Application creation failed response message is verified");
+
+
+        //Create Single Page Application with duplicate key
+        type = "SinglePageApplication";//SinglePageApplication, ExternalApplication, WebApplication
+        response = apiController.postEMCNewApplicationResponse(applicationKey, applicationName, applicationUrl, provider, type);
+        response.prettyPrint();
+        assertTestCase.assertEquals(response.statusCode(), 409, "Status code 409 Created is verified");
+        assertTestCase.assertEquals(response.path("name"), "DuplicateException", "Application creation failed response name is verified");
+        assertTestCase.assertEquals(response.path("message"), "An application with Key "+applicationKey+" already exists.", "Application creation failed response message is verified");
     }
 
     @Test(groups = {EMC, API, REGRESSION}, description = "API | EMC | Accounts Applications | Validate User is Able to Delete the Relation between Account and Application")
