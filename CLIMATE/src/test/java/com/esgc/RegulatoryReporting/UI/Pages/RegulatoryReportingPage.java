@@ -4,10 +4,8 @@ import com.esgc.Base.UI.Pages.UploadPage;
 import com.esgc.RegulatoryReporting.API.Controllers.RegulatoryReportingAPIController;
 import com.esgc.Utilities.*;
 import com.esgc.RegulatoryReporting.DB.DBQueries.RegulatoryReportingQueries;
-import com.esgc.Utilities.*;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.openqa.selenium.By;
-import com.esgc.Utilities.*;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -1103,6 +1101,137 @@ public class RegulatoryReportingPage extends UploadPage {
                     }
                 }
 
+            }
+        }
+        return true;
+    }
+
+    public boolean verifyScope3GHGEmissionsForCompanyOutput(List<String> selectedPortfolios, String year) {
+        for (String portfolioName : selectedPortfolios) {
+            System.out.println("\nportfolioName = " + portfolioName);
+            String portfolioId = apiController.getPortfolioId(portfolioName);
+            //add  each SFDR_1TXNMYID_2 data to dbData list
+            List<String> dbData = new ArrayList<>();
+            queries.getSFDRCompanyOutput(portfolioId, year).forEach(row -> {
+                if (row.get("SFDR_1TXNMYID_3") == null) dbData.add("");
+                else if (row.get("SFDR_1TXNMYID_3").toString().isEmpty()) dbData.add("NI");
+                else dbData.add(row.get("SFDR_1TXNMYID_3").toString());
+            });
+            //open Excel file
+            String excelName = "";
+            ExcelUtil excelData = null;
+            //if multiple portfolios are selected and
+            // if interim report selected, then multiple Excel files will be downloaded and sheet index will be always 1
+            // if annual report selected, then one Excel file will be downloaded and sheet index will be index of selected portfolios
+            if (rrStatusPage_PortfoliosList.size() > 1) {
+                excelName = rrStatusPage_PortfoliosList.get(selectedPortfolios.indexOf(portfolioName)).getText().replaceAll("ready", "").trim();
+                excelData = getExcelData(excelName, 1);
+            } else {
+                excelName = rrStatusPage_PortfoliosList.get(0).getText().replaceAll("ready", "").trim();
+                excelData = getExcelData(excelName, selectedPortfolios.indexOf(portfolioName) + 1);//we skip index 0 because it is for Portfolio Level Output
+            }
+            System.out.println("Sheet Name = " + excelData.getSheetName());
+            if (!excelData.getColumnsNames().contains("Scope 3 Emissions")) {
+                System.out.println("Scope 3 Emissions column is not found in the excel");
+                return false;
+            }
+            List<String> columnData = excelData.getColumnData(excelData.getColumnsNames().indexOf("Scope 3 Emissions"));
+            if (!columnData.contains("Metric Tons CO2 Equivalent")) {
+                System.out.println("Metric Tons CO2 Equivalent is not found in the excel");
+                return false;
+            }
+            columnData.remove("Metric Tons CO2 Equivalent");
+            for (String cell : columnData) {
+                //if a cell is not a number that greater than or equal to 0, or not equals Ni or not null return false
+                try {
+                    if (cell == null || cell.equals("NI") || cell.equals("") || Double.parseDouble(cell) >= 0) {
+                        //cell data is verified
+                    } else {
+                        System.out.println("Wrong cell data = " + cell);
+                        return false;
+                    }
+                } catch (Exception e) {
+                    System.out.println("Failed at cell = " + cell);
+                    return false;
+                }
+            }
+
+            //sort and print excel data
+//            System.out.println("excelData = " + BrowserUtils.specialSort(columnData));
+//            System.out.println("dbData = " + BrowserUtils.specialSort(dbData));
+
+            for (String cell : columnData) {
+                if (!dbData.contains(cell)) {
+                    System.out.println("cell not found = " + cell);
+                    //return false;
+                }
+            }
+        }//end of portfolios
+        return true;
+    }
+
+    public boolean verifyScope3GHGEmissionsForPortfolioLevelOutput(List<String> selectedPortfolios, String year) {
+        for (String portfolioName : selectedPortfolios) {
+            System.out.println("\nportfolioName = " + portfolioName);
+            String portfolioId = apiController.getPortfolioId(portfolioName);
+
+            //open Excel file
+            String excelName = "";
+            ExcelUtil excelData = null;
+            //if multiple portfolios are selected and
+            // if interim report selected, then multiple Excel files will be downloaded and sheet index will be always 1
+            // if annual report selected, then one Excel file will be downloaded and sheet index will be index of selected portfolios
+            if (rrStatusPage_PortfoliosList.size() > 1) {
+                excelName = rrStatusPage_PortfoliosList.get(selectedPortfolios.indexOf(portfolioName)).getText().replaceAll("ready", "").trim();
+                excelData = getExcelData(excelName, 0);
+            } else {
+                excelName = rrStatusPage_PortfoliosList.get(0).getText().replaceAll("ready", "").trim();
+                excelData = getExcelData(excelName, 0);//we skip index 0 because it is for Portfolio Level Output
+            }
+            System.out.println("Sheet Name = " + excelData.getSheetName());
+
+            List<String> rowData = excelData.getRowData(excelData.getRowNumber("Scope 3 GHG emissions", 2));
+            System.out.println("rowData = " + rowData);
+
+            if (!rowData.contains("Scope 3 GHG emissions")) {
+                System.out.println("Scope 3 emissions cell is not found in the excel");
+                return false;
+            }
+            if (!rowData.contains("Metric tons of CO2 equivalent")) {
+                System.out.println("Metric tons of CO2 equivalent cell is not found in the excel");
+                return false;
+            }
+
+            //In the case of an Annual Report - The Average Impact Q1-Q2-Q3-Q4 of Scope 3 GHG emissions is a positive number [0; + infinity].
+            rowData.remove("Scope 3 GHG emissions");
+            rowData.remove("Metric tons of CO2 equivalent");
+            for (String cell : rowData) {
+                //Scope of Disclosure for Scope 3 GHG Emissions. is calculated with the same formula of Scope of disclosure.
+                //As for the other indicators, scope of disclosure is a percentage with up to 2 decimal points. Maximum value = 100 Minimum value = 0
+                try {
+                    if (cell.equals("") || Double.parseDouble(cell) >= 0) {
+                        //cell data is verified
+                    } else {
+                        System.out.println("Wrong cell data = " + cell);
+                        //return false;
+                    }
+                } catch (Exception e) {
+                    System.out.println("Failed at cell = " + cell);
+                    return false;
+                }
+            }
+            //Validate data for Scope 3 GHG emissions
+            List<Map<String, Object>> dbData = queries.getPortfolioLevelOutput(portfolioId, year.equalsIgnoreCase("latest")?"2020":year, "Annual", year.equalsIgnoreCase("latest")?"Yes":"No");
+            DecimalFormat decimalFormat = new DecimalFormat("##.####");
+            String scope3GHGEmissionsImpactScore = decimalFormat.format(dbData.stream().filter(row -> row.get("SFDR_SUBCATEGORY").toString().equals("Scope 3 GHG emissions")).findFirst().get().get("IMPACT"));
+            System.out.println("scope3GHGEmissionsImpactScore = " + scope3GHGEmissionsImpactScore);
+            String scope3GHGEmissionsScopeOfDisclosure = decimalFormat.format(dbData.stream().filter(row -> row.get("SFDR_SUBCATEGORY").toString().equals("Scope 3 GHG emissions")).findFirst().get().get("SCOPE_OF_DISCLOSURE"));
+            System.out.println("scope3GHGEmissionsScopeOfDisclosure = " + scope3GHGEmissionsScopeOfDisclosure);
+            if(!scope3GHGEmissionsImpactScore.contains(".")) scope3GHGEmissionsImpactScore += ".0";
+            if(!scope3GHGEmissionsScopeOfDisclosure.contains(".")) scope3GHGEmissionsScopeOfDisclosure += ".0";
+            if(!rowData.contains(scope3GHGEmissionsImpactScore) || !rowData.contains(scope3GHGEmissionsScopeOfDisclosure)){
+                System.out.println("Impact score or Scope of disclosure is not found in the excel for Scope 3 GHG emissions");
+                return false;
             }
         }
         return true;
