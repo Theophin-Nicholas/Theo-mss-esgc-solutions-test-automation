@@ -367,7 +367,7 @@ public class EMCAPITests extends APITestBase {
         assertTestCase.assertEquals(response.path("name"), "DuplicateException", "Application creation failed response name is verified");
         assertTestCase.assertEquals(response.path("message"), "An application with Key "+applicationKey+" already exists.", "Application creation failed response message is verified");
 
-
+        //todo: verify this part later
         //Create Web Application with duplicate key
         type = "WebApplication";//SinglePageApplication, ExternalApplication, WebApplication
         response = apiController.postEMCNewApplicationResponse(applicationKey, applicationName, applicationUrl, provider, type);
@@ -659,5 +659,37 @@ public class EMCAPITests extends APITestBase {
         apiController.assignRoleToUser(email, viewerRoleId);
         apiController.deleteUserFromRole(email, adminRoleId);
         System.out.println("apiController.verifyUserForRole(email, viewerRoleId) = " + apiController.verifyUserForRole(email, viewerRoleId));
+    }
+
+    @Test(groups = {"EMC", "api", "regression"}, description = "API | EMC | Applications | Roles | Verify the user is able to create a new role for an application")
+    @Xray(test = {5175})
+    public void createRoleForApplicationTest() {
+        response = apiController.getAllRolesForApplicationResponse(applicationId);
+        String roleName = "qatestrole"+faker.number().digits(4);
+        response = apiController.createRoleForApplicationResponse(applicationId, roleName, roleName);
+        response.prettyPrint();
+        assertTestCase.assertEquals(response.statusCode(), 201, "Status code 201 Created is verified");
+        assertTestCase.assertEquals(response.path("name"), "CreatedResponse", "Response name is verified");
+        assertTestCase.assertEquals(response.path("message"), "Application Role "+roleName+" created", "Response message is verified");
+        assertTestCase.assertTrue(apiController.verifyRoleForApplication(applicationId, roleName), "Role is verified for application");
+    }
+
+    @Test(groups = {"EMC", "api", "regression"}, description = "API | EMC | Applications | Roles | Verify that a role for an application can be assigned to a user")
+    @Xray(test = {5175, 5187})
+    public void assignRoleToUserTest() {
+        //get email of user with name Active User
+        String email = apiController.getUserId(accountId, "Active User");
+        System.out.println("email = " + email);
+        String mesgAppId = apiController.getApplicationId(Environment.MESG_APPLICATION_NAME);
+        System.out.println("mesgAppId = " + mesgAppId);
+
+        //get Investor role id for MESG application
+        String roleId = apiController.getRoleId(mesgAppId, "Investor");
+        System.out.println("roleId = " + roleId);
+        apiController.deleteApplicationRoleFromUser(roleId, email);
+        assertTestCase.assertFalse(apiController.verifyApplicationRoleForUser(email, roleId), "User don't have that role");
+        apiController.assignApplicationRoleToUser(roleId, email);
+        assertTestCase.assertTrue(apiController.verifyApplicationRoleForUser(email, roleId), "User have that role");
+
     }
 }

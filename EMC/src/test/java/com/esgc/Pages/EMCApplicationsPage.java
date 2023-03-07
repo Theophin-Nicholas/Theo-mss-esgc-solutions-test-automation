@@ -12,11 +12,29 @@ public class EMCApplicationsPage extends EMCBasePage{
     @FindBy(tagName = "h3")
     public WebElement pageTitle;
 
-    @FindBy (xpath = "//tbody//td[1]//a")
+    @FindBy (xpath = "//tbody//td[1]//input")
+    public List<WebElement> checkBoxes;
+
+    @FindBy (xpath = "//tbody//td[1]/p")////tbody//th/a
     public List<WebElement> applications;
 
     @FindBy (xpath = "//tbody//td[2]")
     public List<WebElement> applicationLinks;
+
+    @FindBy (xpath = "//tbody//td[3]")
+    public List<WebElement> providerList;
+
+    @FindBy (xpath = "//tbody//td[4]")
+    public List<WebElement> typeList;
+
+    @FindBy (xpath = "//tbody//td[5]")
+    public List<WebElement> createdInfoList;
+
+    @FindBy (xpath = "//tbody//td[6]")
+    public List<WebElement> createdByList;
+
+    @FindBy (xpath = "//tbody//td[7]")
+    public List<WebElement> modifiedList;
 
     @FindBy (xpath = "//button[.='Create application']")
     public WebElement createApplicationButton;
@@ -57,8 +75,7 @@ public class EMCApplicationsPage extends EMCBasePage{
     }
 
     public void selectApplication(String applicationName ) {
-        clearSearchInput();
-        searchInput.sendKeys(applicationName);
+        searchApplication(applicationName);
         for (WebElement element : applications) {
             if (element.getText().equals(applicationName)) {
                 System.out.println("Application found: " + applicationName);
@@ -98,13 +115,27 @@ public class EMCApplicationsPage extends EMCBasePage{
             searchInput.sendKeys(Keys.BACK_SPACE);
         }
         searchInput.sendKeys(applicationName);
-        searchButton.click();
+        BrowserUtils.wait(1);
         return applications;
     }
 
     public boolean verifyApplication(String applicationName) {
         clearSearchInput();
         List<WebElement> applications = searchApplication(applicationName);
+        for (WebElement element : applications) {
+            if (element.getText().equals(applicationName)) {
+                System.out.println("Application found: " + applicationName);
+                System.out.println("Application name: " + element.getText());
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean verifyApplication(String applicationName, boolean isSearch) {
+        if (isSearch) {
+            searchApplication(applicationName);
+        }
         for (WebElement element : applications) {
             if (element.getText().equals(applicationName)) {
                 System.out.println("Application found: " + applicationName);

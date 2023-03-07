@@ -3,10 +3,7 @@ package com.esgc.Tests;
 import com.esgc.APIModels.EMCAPIController;
 import com.esgc.Pages.*;
 import com.esgc.TestBases.EMCUITestBase;
-import com.esgc.Utilities.BrowserUtils;
-import com.esgc.Utilities.Driver;
-import com.esgc.Utilities.Environment;
-import com.esgc.Utilities.Xray;
+import com.esgc.Utilities.*;
 import com.github.javafaker.Faker;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
@@ -37,14 +34,10 @@ public class ApplicationPageTests extends EMCUITestBase {
         assertTestCase.assertEquals(applicationsPage.pageTitle.getText(), "Applications", "Applications page is displayed");
         //Search for the account where a New user will be created
         if (!applicationName.isEmpty()) {
-            applicationsPage.searchApplication(applicationName);
-            assertTestCase.assertEquals(applicationsPage.applications.size() > 0, true, "Application  is displayed");
-            System.out.println(applicationsPage.applications.get(0).getText().toLowerCase());
-            assertTestCase.assertTrue(applicationsPage.applications.get(0).getText().toLowerCase().contains(applicationName.toLowerCase()),
-                    "Application is displayed");
+            assertTestCase.assertTrue(applicationsPage.verifyApplication(applicationName), "Application is displayed");
 
             //On Account Details view, select USERS tab
-            applicationsPage.clickOnFirstApplication();
+            applicationsPage.selectApplication(applicationName);
             //BrowserUtils.wait(10);
             EMCApplicationDetailsPage detailsPage = new EMCApplicationDetailsPage();
             switch (tabName.toLowerCase()) {
@@ -62,7 +55,7 @@ public class ApplicationPageTests extends EMCUITestBase {
     }
 
     @Test(groups = {EMC, UI, SMOKE, REGRESSION, PROD})
-    @Xray(test = {2330, 5101, 5103, 2153})
+    @Xray(test = {2330, 5101, 5103, 2153, 2154, 2155})
     public void applicationDetailsVerificationTests() {
         EMCMainPage emcMainPage = new EMCMainPage();
         //Navigate to EMC Application Panel
@@ -84,7 +77,10 @@ public class ApplicationPageTests extends EMCUITestBase {
         assertTestCase.assertTrue(emcApplicationDetailsPage.rolesTab.isDisplayed(), "Roles tab is displayed");
         //Verify that User is Able to See Application Details.
         emcApplicationDetailsPage.clickOnDetailsTab();
-
+        assertTestCase.assertTrue(emcApplicationDetailsPage.ApplicationName.isDisplayed(), "Application Name is displayed");
+        assertTestCase.assertTrue(emcApplicationDetailsPage.ApplicationURL.isDisplayed(), "Application URL is displayed");
+        assertTestCase.assertTrue(emcApplicationDetailsPage.createdByText.isDisplayed(), "Created info is displayed");
+        assertTestCase.assertTrue(emcApplicationDetailsPage.modifiedByText.isDisplayed(), "Modified info is displayed");
         String actApplicationName = emcApplicationDetailsPage.getApplicationName();
         String actApplicationURL = emcApplicationDetailsPage.getApplicationURL();
         assertTestCase.assertEquals(expApplicationName, actApplicationName, "Application name is verified");
@@ -123,7 +119,7 @@ public class ApplicationPageTests extends EMCUITestBase {
     }
 
     @Test(groups = {EMC, UI, REGRESSION, SMOKE})
-    @Xray(test = {5173, 7657, 13413})
+    @Xray(test = {5173, 5174, 7657, 13413})
     public void verifyUserCreateNewRoleForApplicationTest() {
         List<String> applicationNames = Arrays.asList(applicationName, externalApplicationName, webApplicationName);
         for (String appType:applicationNames){
@@ -134,19 +130,24 @@ public class ApplicationPageTests extends EMCUITestBase {
             BrowserUtils.waitForClickablility(detailsPage.addRoleButton, 5).click();
             BrowserUtils.waitForVisibility(detailsPage.addRolePopUpTitle, 5);
             assertTestCase.assertTrue(detailsPage.addRolePopUpTitle.isDisplayed(), "Add Role Pop Up is displayed");
-            String now = java.time.LocalDateTime.now().format(java.time.format.DateTimeFormatter.ofPattern("ddhhmmss"));
-            detailsPage.roleNameInput.sendKeys("QATest" + now);
-            detailsPage.roleKeyInput.sendKeys(now, Keys.TAB);
+            String roleName = "QATest"+faker.number().digits(5);
+            detailsPage.roleNameInput.sendKeys(roleName);
+            detailsPage.roleKeyInput.sendKeys(roleName.toLowerCase(), Keys.TAB);
             BrowserUtils.waitForClickablility(detailsPage.saveButton, 10).click();
             BrowserUtils.waitForVisibility(detailsPage.notification, 10);
-            assertTestCase.assertTrue(detailsPage.getApplicationRolesNames().contains("QATest" + now), "Role Name is displayed");
+            assertTestCase.assertTrue(detailsPage.getApplicationRolesNames().contains(roleName), "Role Name is displayed");
+            detailsPage.selectRole(roleName);
+            assertTestCase.assertTrue(detailsPage.verifyRoleDetails(), "Role Details are displayed");
         }
     }
 
     @Test(groups = {EMC, UI, REGRESSION, SMOKE, PROD})
-    @Xray(test = {13449})
+    @Xray(test = {3720, 13449})
     public void verifyUserCancelCreateNewRoleForApplicationTest() {
         List<String> applicationNames = Arrays.asList(applicationName, externalApplicationName, webApplicationName);
+        if(ConfigurationReader.getProperty("environment").equals("prod")){
+            applicationNames = Arrays.asList(applicationName);
+        }
         for (String appType:applicationNames){
             System.out.println(appType);
             navigateToApplicationsPage(appType, "roles");
@@ -440,7 +441,7 @@ public class ApplicationPageTests extends EMCUITestBase {
         //Application Details page is displayed with Products and Roles tab
         assertTestCase.assertTrue(detailsPage.ProductsTab.isDisplayed(), "Products Tab is displayed");
         assertTestCase.assertTrue(detailsPage.rolesTab.isDisplayed(), "Roles Tab is displayed");
-        assertTestCase.assertTrue(detailsPage.detailsTab.isDisplayed(), "Roles Tab is displayed");
+        assertTestCase.assertTrue(detailsPage.detailsTab.isDisplayed(), "Details Tab is displayed");
 
         //Click Add Role button
         assertTestCase.assertTrue(detailsPage.addRoleButton.isDisplayed(), "Add Role Button is displayed");
@@ -637,5 +638,48 @@ public class ApplicationPageTests extends EMCUITestBase {
         EMCAccountsPage accountsPage = new EMCAccountsPage();
         wait(accountsPage.accountNames, 20);
         assertTestCase.assertTrue(accountsPage.accountNames.size() > 0, "Accounts are displayed");
+    }
+
+    @Test(groups = {EMC, UI, REGRESSION, PROD}, description = "UI | EMC | Verify Applications Page")
+    @Xray(test = {2314})
+    public void verifyApplicationsPageTest() {
+        navigateToApplicationsPage("", "details");
+        wait(applicationsPage.applications, 20);
+        assertTestCase.assertTrue(applicationsPage.pageTitle.isDisplayed(), "Page Title is displayed");
+        assertTestCase.assertTrue(applicationsPage.createApplicationButton.isDisplayed(), "Create Application Button is displayed");
+        assertTestCase.assertTrue(applicationsPage.searchInput.isDisplayed(), "Search Input is displayed");
+        assertTestCase.assertTrue(applicationsPage.applications.size() > 0, "Applications are displayed");
+        assertTestCase.assertTrue(applicationsPage.applicationLinks.size()>0, "Application Links are displayed");
+        assertTestCase.assertTrue(applicationsPage.providerList.size()>0, "Provider List is displayed");
+        assertTestCase.assertTrue(applicationsPage.typeList.size()>0, "Type List is displayed");
+        assertTestCase.assertTrue(applicationsPage.createdInfoList.size()>0, "Created Info List is displayed");
+        assertTestCase.assertTrue(applicationsPage.createdByList.size()>0, "Created By List is displayed");
+        assertTestCase.assertTrue(applicationsPage.modifiedList.size()>0, "Modified List is displayed");
+        //assertTestCase.assertTrue(applicationsPage.checkBoxes.size()>0, "Check Boxes are displayed");
+    }
+
+    @Test(groups = {EMC, UI, REGRESSION, SMOKE, PROD}, description = "UI | EMC | Applications | Verify the ability to search for an application")
+    @Xray(test = {4519})
+    public void verifyApplicationSearchTest() {
+        navigateToApplicationsPage("", "details");
+        wait(applicationsPage.applications, 20);
+        applicationsPage.searchApplication(applicationName);
+        assertTestCase.assertTrue(applicationsPage.verifyApplication(applicationName, false), "Applications are displayed");
+        applicationsPage.searchApplication(applicationName.toLowerCase());
+        assertTestCase.assertTrue(applicationsPage.verifyApplication(applicationName, false), "Applications are displayed");
+        applicationsPage.searchApplication(applicationName.toUpperCase());
+        assertTestCase.assertTrue(applicationsPage.verifyApplication(applicationName, false), "Applications are displayed");
+        //switch lower to upper/ upper case to lower case
+        applicationsPage.searchApplication(applicationName.substring(0, 1).toUpperCase() + applicationName.substring(1).toLowerCase());
+        assertTestCase.assertTrue(applicationsPage.verifyApplication(applicationName, false), "Applications are displayed");
+        applicationsPage.searchApplication(applicationName.substring(0, 1).toLowerCase() + applicationName.substring(1).toUpperCase());
+        assertTestCase.assertTrue(applicationsPage.verifyApplication(applicationName, false), "Applications are displayed");
+        //search with partial name
+        applicationsPage.searchApplication(applicationName.substring(0, 5));
+        assertTestCase.assertTrue(applicationsPage.verifyApplication(applicationName, false), "Applications are displayed");
+        applicationsPage.searchApplication(applicationName.substring(0, 5).toLowerCase());
+        assertTestCase.assertTrue(applicationsPage.verifyApplication(applicationName, false), "Applications are displayed");
+        applicationsPage.searchApplication(applicationName.substring(0, 5).toUpperCase());
+        assertTestCase.assertTrue(applicationsPage.verifyApplication(applicationName, false), "Applications are displayed");
     }
 }

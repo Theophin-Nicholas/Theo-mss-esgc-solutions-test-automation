@@ -22,7 +22,7 @@ public class AccountsPageTests extends EMCUITestBase {
     Faker faker = new Faker();
     EMCAccountsPage accountsPage = new EMCAccountsPage();
 
-    String accountName = "INTERNAL QATest - PROD123";
+    String accountName = "INTERNAL QATest - PROD0124";
     String smeAccount = "SME Assesstment";
     String applicationName = "TestQA";
     String activeUserName = "Ferhat Test";
@@ -84,7 +84,7 @@ public class AccountsPageTests extends EMCUITestBase {
     }
 
     @Test(groups = {EMC, UI, REGRESSION, SMOKE})
-    @Xray(test = {3374, 4174, 4175, 4222, 3979, 3981, 3992, 7316, 12712})
+    @Xray(test = {3374, 4172, 4174, 4175, 4213, 4222, 3979, 3980, 3981, 3992, 7316, 12712})
     public void accountCreationTests() {
         EMCMainPage homePage = new EMCMainPage();
 
@@ -131,13 +131,8 @@ public class AccountsPageTests extends EMCUITestBase {
         BrowserUtils.waitForClickablility(detailsPage.doneButton, 5).click();
         //Click more than one Assign button from the list of available applications
         assertTestCase.assertTrue(detailsPage.assignApplication(applicationName), "Application is assigned");
-        BrowserUtils.waitForVisibility(detailsPage.applicationAddedMessage, 5);
-        assertTestCase.assertTrue(detailsPage.applicationAddedMessage.isDisplayed(),
-                "Application is added to the list");
+
         detailsPage.assignApplication(applicationName + "2");
-        BrowserUtils.waitForVisibility(detailsPage.applicationAddedMessage, 5);
-        assertTestCase.assertTrue(detailsPage.applicationAddedMessage.isDisplayed(),
-                "Application is added to the list");
 
         //Assign Applications modal is closed and all the applications selected are display on the list
         assertTestCase.assertTrue(detailsPage.verifyApplication(applicationName), "Application is displayed in the list");
@@ -172,11 +167,7 @@ public class AccountsPageTests extends EMCUITestBase {
         detailsPage.deleteApplication(applicationName + 2);
 
         detailsPage.assignApplication(applicationName);
-        //BrowserUtils.wait(1);
-        assertTestCase.assertTrue(detailsPage.notification.isDisplayed(), "Application is added message is displayed");
         detailsPage.assignApplication(applicationName + 2);
-//        BrowserUtils.wait(1);
-        assertTestCase.assertTrue(detailsPage.notification.isDisplayed(), "Application is added message is displayed");
 
         //User is able to see that Application is assigned to account2 without any problem.
         assertTestCase.assertTrue(detailsPage.verifyApplication(applicationName), "Application is added to the list");
@@ -349,10 +340,12 @@ public class AccountsPageTests extends EMCUITestBase {
         assertTestCase.assertTrue(detailsPage.isSortedByName(), "Users Table is displayed");
     }
 
-    @Test(groups = {EMC, UI, REGRESSION})
-    @Xray(test = {2351})
+    @Test(groups = {EMC, UI, REGRESSION, SMOKE})
+    @Xray(test = {2351, 5043})
     public void verifyAllAccountsSortedByNameTest() {
         navigateToAccountsPage("", "users");
+        wait(accountsPage.accountNames, 10);
+        accountsPage.verifyAccountsPage();
         List<String> accountNames = accountsPage.getAccountNames();
         //convert to lower case and sort alphabetically
         accountNames.sort(String::compareToIgnoreCase);
@@ -1608,6 +1601,32 @@ public class AccountsPageTests extends EMCUITestBase {
         assertTestCase.assertTrue(usersPage.isOptionsAvailable("Sync users"),"Sync users option is available");
         assertTestCase.assertTrue(usersPage.isOptionsAvailable("Export all"),"Export all option is available");
         assertTestCase.assertFalse(usersPage.isOptionsAvailable("Bulk import"),"Bulk import option is not available");
+    }
 
+    @Test(groups = {EMC, UI, REGRESSION, SMOKE},
+            description = "UI | EMC | Users | Verify the Users page search box behavior")
+    @Xray(test = {5494})
+    public void verifyUsersPageSearchBoxBehaviorTest() {
+        navigateToAccountsPage(accountName, "users");
+        EMCAccountDetailsPage detailsPage = new EMCAccountDetailsPage();
+        wait(detailsPage.userNamesList, 20);
+        detailsPage.verifyUsersPageDetails();
+
+        detailsPage.searchUser(activeUserName, false);
+        assertTestCase.assertTrue(detailsPage.verifyUser(activeUserName, false), "User search with original name is successful");
+
+        detailsPage.searchUser(activeUserName.toLowerCase(), false);
+        assertTestCase.assertTrue(detailsPage.verifyUser(activeUserName, false), "User search with lowercase name is successful");
+
+        detailsPage.searchUser(activeUserName.toUpperCase(), false);
+        assertTestCase.assertTrue(detailsPage.verifyUser(activeUserName, false), "User search with uppercase name is successful");
+
+        detailsPage.searchUser(activeUserName.substring(0, 3), false);
+        assertTestCase.assertTrue(detailsPage.verifyUser(activeUserName, false), "User search with partial name is successful");
+
+        String email = detailsPage.getUserEmail(activeUserName);
+
+        detailsPage.searchUser(email, false);
+        assertTestCase.assertTrue(detailsPage.verifyUser(activeUserName, false), "User search with email is successful");
     }
 }

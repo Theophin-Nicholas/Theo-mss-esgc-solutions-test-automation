@@ -86,6 +86,18 @@ public class EMCApplicationDetailsPage extends EMCBasePage{
     @FindBy (xpath = "//input[@name='key']")
     public WebElement roleKeyInput;
 
+    @FindBy (xpath = "(//h6/../following-sibling::div//input)[1]")
+    public WebElement roleDetailNameInput;
+
+    @FindBy (xpath = "(//h6/../following-sibling::div//input)[2]")
+    public WebElement roleDetailKeyInput;
+
+    @FindBy (xpath = "//span[starts-with(.,'Created by')]")
+    public WebElement roleDetailCreatedInfo;
+
+    @FindBy (xpath = "//span[starts-with(.,'Modified by')]")
+    public WebElement roleDetailModifiedInfo;
+
     //Products tab elements - Add product pop up elements
 
     @FindBy (xpath = "//h4[.='Add product']")
@@ -274,5 +286,27 @@ public class EMCApplicationDetailsPage extends EMCBasePage{
         assertTestCase.assertTrue(applicationType.isDisplayed(), "Application type is displayed");
         assertTestCase.assertFalse(ApplicationName.isEnabled(), "Application name is not editable");
         assertTestCase.assertFalse(ApplicationURL.isEnabled(), "Application URL is not editable");
+    }
+
+    public void selectRole(String roleName) {
+        clickOnRolesTab();
+        for (WebElement element : applicationRolesNames) {
+            System.out.println("Role name = "+element.getText());
+            if (element.getText().equals(roleName)) {
+                System.out.println("Found " + roleName + " in the list");
+                element.click();
+                BrowserUtils.wait(2);
+                break;
+            }
+        }
+    }
+
+    public boolean verifyRoleDetails() {
+        assertTestCase.assertTrue(pageTitle.isDisplayed(), "Page title is displayed");
+        assertTestCase.assertTrue(createdByText.isDisplayed(), "Created by text is displayed");
+        assertTestCase.assertTrue(modifiedByText.isDisplayed(), "Modified by text is displayed");
+        assertTestCase.assertTrue(roleDetailNameInput.isDisplayed(), "Role name input is displayed");
+        assertTestCase.assertTrue(roleDetailKeyInput.isDisplayed(), "Role key input is displayed");
+        return true;
     }
 }

@@ -1,18 +1,13 @@
 package com.esgc.APIModels;
 
-import com.esgc.APIModels.EMC.Application;
-import com.esgc.APIModels.EMC.AssignedApplication;
-import com.esgc.APIModels.EMC.AssignedUser;
-import com.esgc.APIModels.EMC.User;
+import com.esgc.APIModels.EMC.*;
 import com.esgc.EMCEndpoints;
-import com.esgc.TestBase.TestBase;
 import com.esgc.TestBases.APITestBase;
 import com.esgc.Utilities.API.Endpoints;
 import com.esgc.Utilities.Driver;
 import com.esgc.Utilities.Environment;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
-import io.restassured.response.ResponseBodyExtractionOptions;
 import io.restassured.specification.RequestSpecification;
 import org.openqa.selenium.JavascriptExecutor;
 
@@ -105,36 +100,6 @@ public class EMCAPIController extends APITestBase {
         return response;
     }
 
-    public Response getEMCUserRolesResponse(String userID) {
-        Response response = null;
-        System.out.println("EMC API URL: " + Environment.EMC_URL + EMCEndpoints.EMC_ADMIN_USERS + "/" + userID + "/roles");
-        try {
-            response = configSpec()
-                    .when()
-                    .get(EMCEndpoints.EMC_ADMIN_USERS + "/" + userID + "/roles");
-
-        } catch (Exception e) {
-            System.out.println("Inside exception " + e.getMessage());
-        }
-        System.out.println("Status Code = " + response.statusCode());
-        return response;
-    }
-
-    public Response getEMCRoleUsersResponse(String roleID) {
-        Response response = null;
-        System.out.println("EMC API URL: " + Environment.EMC_URL + EMCEndpoints.EMC_ADMIN_ROLES + "/" + roleID + "/users");
-        try {
-            response = configSpec()
-                    .when()
-                    .get(EMCEndpoints.EMC_ADMIN_ROLES + "/" + roleID + "/users");
-
-        } catch (Exception e) {
-            System.out.println("Inside exception " + e.getMessage());
-        }
-        System.out.println("Status Code = " + response.statusCode());
-        return response;
-    }
-
     public Response postEMCNewUserResponse(String provider, String firstName, String lastName, String userName, String email, boolean isActive, String accountId) {
         System.out.println("Creating new user");
         Response response = null;
@@ -153,6 +118,32 @@ public class EMCAPIController extends APITestBase {
         System.out.println("Status Code = " + response.statusCode());
         System.out.println();
         return response;
+    }
+
+    public Response getAllUsersForAccount(String accountId) {
+        System.out.println("Getting all users for account " + accountId);
+        Response response = null;
+        try {
+            response = configSpec()
+                    .when()
+                    .pathParam("account-id", accountId)
+                    .get(EMCEndpoints.GET_USERS);
+
+        } catch (Exception e) {
+            System.out.println("Inside exception " + e.getMessage());
+        }
+        System.out.println("Status Code = " + response.statusCode());
+        return response;
+    }
+
+    public String getUserId(String accountId, String name) {
+        List<AssignedUser> users = getAllUsersForAccount(accountId).jsonPath().getList("", AssignedUser.class);
+        for(AssignedUser user : users){
+            if(user.getName().equals(name))
+                return user.getId();
+        }
+        System.out.println("User with name " + name + " not found");
+        return null;
     }
 
     public Response postEMCNewUserResponse(String provider, String firstName, String lastName, String userName, String email, boolean isActive, String accountId, boolean isInvalid) {
@@ -197,7 +188,7 @@ public class EMCAPIController extends APITestBase {
         try {
             response = configSpec()
                     .when()
-                    .get(EMCEndpoints.EMC_ACCOUNTS).prettyPeek();
+                    .get(EMCEndpoints.EMC_ACCOUNTS);
 
         } catch (Exception e) {
             System.out.println("Inside exception " + e.getMessage());
@@ -489,23 +480,6 @@ public class EMCAPIController extends APITestBase {
         return getEMCProductsForApplicationResponse(applicationId);
     }
 
-    public Response putRoleToUser(String applicationRoleId, String email) {
-        Response response = null;
-        System.out.println("EMC API URL: " + Environment.EMC_URL + EMCEndpoints.PUT_APPLICATION_ROLE);
-        try {
-            response = configSpec()
-                    .when()
-                    .pathParam(applicationRoleId, "application-role-id")
-                    .pathParam(email, "email")
-                    .put(EMCEndpoints.PUT_APPLICATION_ROLE).prettyPeek();
-
-        } catch (Exception e) {
-            System.out.println("Inside exception " + e.getMessage());
-        }
-        System.out.println("Status Code = " + response.statusCode());
-        return response;
-    }
-
     public Response postAccount(String name) {
         Response response = null;
         System.out.println("EMC API URL: " + Environment.EMC_URL + EMCEndpoints.EMC_ACCOUNTS);
@@ -524,7 +498,7 @@ public class EMCAPIController extends APITestBase {
             response = configSpec()
                     .when()
                     .body(body)
-                    .post(EMCEndpoints.EMC_ACCOUNTS).prettyPeek();
+                    .post(EMCEndpoints.EMC_ACCOUNTS);
 
         } catch (Exception e) {
             System.out.println("Inside exception " + e.getMessage());
@@ -540,7 +514,7 @@ public class EMCAPIController extends APITestBase {
         try {
             response = configSpec()
                     .when()
-                    .get(EMCEndpoints.GET_APPLICATIONS).prettyPeek();
+                    .get(EMCEndpoints.GET_APPLICATIONS);
 
         } catch (Exception e) {
             System.out.println("Inside exception " + e.getMessage());
@@ -558,7 +532,7 @@ public class EMCAPIController extends APITestBase {
                     .when()
                     .pathParam(applicationId, "application-id")
                     .pathParam(accountId, "account-id")
-                    .put(EMCEndpoints.PUT_APPLICATION_TO_ACCOUNT).prettyPeek();
+                    .put(EMCEndpoints.PUT_APPLICATION_TO_ACCOUNT);
 
         } catch (Exception e) {
             System.out.println("Inside exception " + e.getMessage());
@@ -590,7 +564,7 @@ public class EMCAPIController extends APITestBase {
                     .pathParam(accountId, "account-id")
                     .pathParam(applicationId, "application-id")
                     .pathParam(productId, "product-id")
-                    .put(EMCEndpoints.PUT_PRODUCT_TO_ACCOUNT).prettyPeek();
+                    .put(EMCEndpoints.PUT_PRODUCT_TO_ACCOUNT);
 
         } catch (Exception e) {
             System.out.println("Inside exception " + e.getMessage());
@@ -607,7 +581,7 @@ public class EMCAPIController extends APITestBase {
             response = configSpec()
                     .when()
                     .pathParam(productId, "product-id")
-                    .get(EMCEndpoints.GET_PRODUCT_SECTIONS).prettyPeek();
+                    .get(EMCEndpoints.GET_PRODUCT_SECTIONS);
 
         } catch (Exception e) {
             System.out.println("Inside exception " + e.getMessage());
@@ -615,6 +589,10 @@ public class EMCAPIController extends APITestBase {
         System.out.println("Status Code = " + response.statusCode());
         return response;
     }
+
+    /**
+     * METHODS BELOW ARE RELATED TO CONFIGURATION PAGE - PERMISSION ROLES OPERATIONS
+     */
 
     public Response getUsersForRole(String roleId) {
         Response response = null;
@@ -641,7 +619,7 @@ public class EMCAPIController extends APITestBase {
             response = configSpec()
                     .pathParam("roleId", roleId)
                     .pathParam("userId", email)
-                    .when().put(EMCEndpoints.EMC_ROLE_USER_CRUD).prettyPeek();
+                    .when().put(EMCEndpoints.EMC_ROLE_USER_CRUD);
         } catch (Exception e) {
             System.out.println("Inside exception " + e.getMessage());
         }
@@ -654,12 +632,12 @@ public class EMCAPIController extends APITestBase {
             return;
         }
         Response response = null;
-        System.out.println("EMC API URL: " + Environment.EMC_URL + EMCEndpoints.EMC_ROLE_USER_CRUD);
+        System.out.println("Removing application role from user...");
         try{
             response = configSpec()
                     .pathParam("roleId", roleId)
                     .pathParam( "userId", email)
-                    .when().delete(EMCEndpoints.EMC_ROLE_USER_CRUD).prettyPeek();
+                    .when().delete(EMCEndpoints.EMC_ROLE_USER_CRUD);
         } catch (Exception e) {
             System.out.println("Inside exception " + e.getMessage());
         }
@@ -670,6 +648,10 @@ public class EMCAPIController extends APITestBase {
         return getUsersForRole(roleId).jsonPath().getList("userName").contains(email);
     }
 
+    /**
+     * METHODS BELOW ARE RELATED TO APPLICATIONS PAGE - APPLICATIONS OPERATIONS
+     */
+
     public void createApplicationAndVerify(String key, String name, String url, String provider, String type) {
         Response response = postEMCNewApplicationResponse(key, name, url, provider, type);
         response.prettyPrint();
@@ -677,16 +659,6 @@ public class EMCAPIController extends APITestBase {
         assertTestCase.assertEquals(response.path("name"), "CreatedResponse", "Application creation response name is verified");
         assertTestCase.assertEquals(response.path("message"), "Application " + key + " created", "Application creation response message with key is verified");
         assertTestCase.assertTrue(verifyApplication(key), "Application creation response type is verified");
-    }
-
-    public void assignUserToRoleAndVerify(String email, String roleId) {
-        List<String> roles = Arrays.asList(Environment.ADMIN_ROLE_KEY, Environment.ADMIN_ROLE_KEY, Environment.FULFILLMENT_ROLE_KEY);
-        for(String role : roles){
-            if(role.equals(roleId)) continue;
-            deleteUserFromRole(email, role);
-        }
-        assignRoleToUser(email, roleId);
-        assertTestCase.assertTrue(verifyUserForRole(email, roleId), "User is assigned to role successfully");
     }
 
     public String getApplicationKey(String applicationName) {
@@ -702,7 +674,7 @@ public class EMCAPIController extends APITestBase {
             response = configSpec()
                     .when()
 //                    .pathParam("applicationId", applicationId)
-                    .get(EMCEndpoints.GET_APPLICATIONS+"/"+applicationId).prettyPeek();
+                    .get(EMCEndpoints.GET_APPLICATIONS+"/"+applicationId);
 
         } catch (Exception e) {
             System.out.println("Inside exception " + e.getMessage());
@@ -722,4 +694,128 @@ public class EMCAPIController extends APITestBase {
         return applications.stream().anyMatch(app -> app.getName().equals(applicationName)) ?
                 applications.stream().filter(app -> app.getName().equals(applicationName)).findFirst().get().getUrl() : null;
     }
+
+    public Response getAllRolesForApplicationResponse(String applicationId) {
+        Response response = null;
+        try {
+            response = configSpec()
+                    .when()
+                    .pathParam("application-id", applicationId)
+                    .get(EMCEndpoints.GET_APPLICATION_ROLES);
+
+        } catch (Exception e) {
+            System.out.println("Inside exception " + e.getMessage());
+        }
+        System.out.println("Status Code = " + response.statusCode());
+        return response;
+    }
+    public void assignUserToRoleAndVerify(String email, String roleId) {
+        List<String> roles = Arrays.asList(Environment.ADMIN_ROLE_KEY, Environment.ADMIN_ROLE_KEY, Environment.FULFILLMENT_ROLE_KEY);
+        for(String role : roles){
+            if(role.equals(roleId)) continue;
+            deleteUserFromRole(email, role);
+        }
+        assignRoleToUser(email, roleId);
+        assertTestCase.assertTrue(verifyUserForRole(email, roleId), "User is assigned to role successfully");
+    }
+
+    public Response createRoleForApplicationResponse(String applicationId, String roleName, String roleKey) {
+        Response response = null;
+        String payload = "{\n" +
+                "  \"name\": \""+roleName+"\",\n" +
+                "  \"key\": \""+roleKey+"\",\n" +
+                "  \"applicationId\": \""+applicationId+"\"\n" +
+                "}";
+        try {
+            response = configSpec()
+                    .when()
+                    .body(payload)
+                    .post(EMCEndpoints.APPLICATION_ROLE);
+
+        } catch (Exception e) {
+            System.out.println("Inside exception " + e.getMessage());
+        }
+        System.out.println("Status Code = " + response.statusCode());
+        return response;
+    }
+
+    public boolean verifyRoleForApplication(String applicationId, String roleName) {
+        return getAllRolesForApplicationResponse(applicationId).jsonPath().getList("name").contains(roleName);
+    }
+
+    /**
+     * METHODS BELOW ARE FOR APPLICATION ROLE MANAGEMENT FOR USERS UNDER AN ACCOUNT
+     */
+
+    public Response getApplicationRolesForUser(String email) {
+        Response response = null;
+        try {
+            response = configSpec()
+                    .when()
+                    .pathParam("user-id", email)
+                    .get(EMCEndpoints.GET_APPLICATION_ROLE_FOR_USER);
+
+        } catch (Exception e) {
+            System.out.println("Inside exception " + e.getMessage());
+        }
+        System.out.println("Status Code = " + response.statusCode());
+        return response;
+    }
+
+    public String getRoleId(String applicationId, String roleName) {
+        List<Role> roles = getAllRolesForApplicationResponse(applicationId).jsonPath().getList("", Role.class);
+        for(Role role : roles){
+            if(role.getName().equals(roleName))
+                return role.getId();
+        }
+        System.out.println("Role with name " + roleName + " not found");
+        return null;
+    }
+
+    public void deleteApplicationRoleFromUser(String roleId, String email) {
+        System.out.println("Deleting role " + roleId + " from user " + email);
+        Response response = null;
+        try {
+            response = configSpec()
+                    .when()
+                    .pathParam("application-role-id", roleId)
+                    .pathParam("email", email)
+                    .delete(EMCEndpoints.PUT_APPLICATION_ROLE);
+
+        } catch (Exception e) {
+            System.out.println("Inside exception " + e.getMessage());
+        }
+        System.out.println("Status Code = " + response.statusCode());
+        response.prettyPrint();
+    }
+
+    public boolean verifyApplicationRoleForUser(String email, String roleId) {
+        System.out.println("Verifying role " + roleId + " for user " + email);
+        List<UserApplicationRole> roles = getApplicationRolesForUser(email).jsonPath().getList("", UserApplicationRole.class);
+        for(UserApplicationRole role : roles){
+            if(role.getRole().getId().equals(roleId))
+                return true;
+        }
+        return false;
+    }
+
+    public Response assignApplicationRoleToUser(String applicationRoleId, String email) {
+        System.out.println("Assigning application role to user");
+        Response response = null;
+        System.out.println("ASSIGNING APPLICATION ROLE TO USER");
+        try {
+            response = configSpec()
+                    .when()
+                    .pathParam("application-role-id", applicationRoleId)
+                    .pathParam("email", email)
+                    .put(EMCEndpoints.PUT_APPLICATION_ROLE);
+
+        } catch (Exception e) {
+            System.out.println("Inside exception " + e.getMessage());
+        }
+        System.out.println("Status Code = " + response.statusCode());
+        response.prettyPrint();
+        return response;
+    }
+
 }

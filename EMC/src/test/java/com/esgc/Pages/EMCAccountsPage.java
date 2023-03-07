@@ -111,4 +111,17 @@ public class EMCAccountsPage extends EMCBasePage {
         System.out.println("Clicking on create account button");
         BrowserUtils.waitForClickablility(createAccountButton, 25).click();
     }
+
+    public void verifyAccountsPage() {
+        assertTestCase.assertTrue(pageTitle.getText().equals("Accounts"), "Page title is verified");
+        assertTestCase.assertTrue(createAccountButton.isDisplayed(), "Create account button is displayed");
+        assertTestCase.assertTrue(searchInput.isDisplayed(), "Search input is displayed");
+        assertTestCase.assertTrue(searchButton.isDisplayed(), "Search button is displayed");
+        assertTestCase.assertTrue(accountNames.size() > 0, "Account names are displayed");
+        assertTestCase.assertTrue(accountStatuses.size() > 0, "Account statuses are displayed");
+        assertTestCase.assertTrue(accountCreatedDates.size() > 0, "Account created dates are displayed");
+        assertTestCase.assertTrue(accountCreatedByEmails.size() > 0, "Account created by emails are displayed");
+        assertTestCase.assertTrue(accountModifiedDates.size() > 0, "Account modified dates are displayed");
+        assertTestCase.assertTrue(accountModifiedByEmails.size() > 0, "Account modified by emails are displayed");
+    }
 }

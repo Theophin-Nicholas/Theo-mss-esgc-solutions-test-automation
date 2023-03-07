@@ -140,7 +140,7 @@ public class EMCAccountDetailsPage extends EMCBasePage {
     @FindBy (xpath = "//button[.='Assign products']")
     public WebElement assignProductsButton;
 
-    @FindBy (xpath = "//ul/div//p[2]")
+    @FindBy (xpath = "//ul/div//p")
     public List<WebElement> currentProductsList;
 
     @FindBy (xpath = "//div[@aria-expanded='true']//following-sibling::div//li//p/../span")
@@ -193,6 +193,9 @@ public class EMCAccountDetailsPage extends EMCBasePage {
 
     @FindBy (xpath = "//td/a")
     public List<WebElement> userEmailsList;
+
+    @FindBy (xpath = "//td/div/span")
+    public List<WebElement> providerList;
 
     @FindBy (xpath = "//td//input")
     public List<WebElement> userCheckboxList;
@@ -300,16 +303,20 @@ public class EMCAccountDetailsPage extends EMCBasePage {
         String userName = faker.internet().emailAddress();
         return createUser(firstName, lastName, userName, sendActivationEmail);
     }
-    public void searchUser(String test) {
+    public void searchUser(String userName) {
+        searchUser(userName, true);
+    }
+
+    public void searchUser(String userName, boolean gotoUser) {
         wait(searchInput,20);
         clear(searchInput);
-        System.out.println("Searching for the user : "+test);
-        searchInput.sendKeys(test);
+        System.out.println("Searching for the user : "+userName);
+        searchInput.sendKeys(userName);
         if(userNamesList.size()==0) {
             System.out.println("user not found");
             return;
         }
-        userNamesList.get(0).click();
+        if (gotoUser) userNamesList.get(0).click();
     }
 
     public boolean isSortedByName() {
@@ -332,6 +339,7 @@ public class EMCAccountDetailsPage extends EMCBasePage {
             BrowserUtils.waitForClickablility(applicationsAssignButtonList.get(0), 15).click();
             System.out.println(applicationName + " application assigned");
             doneButton.click();
+            BrowserUtils.waitForVisibility(notification, 5);
             assertTestCase.assertTrue(notification.isDisplayed(),"Notification is displayed");
             clickOnDetailsTab();
             BrowserUtils.wait(2);
@@ -340,9 +348,14 @@ public class EMCAccountDetailsPage extends EMCBasePage {
             return true;
         }
     }
+
     public boolean verifyUser(String name) {
+        return verifyUser(name, true);
+    }
+
+    public boolean verifyUser(String name, boolean expand) {
         wait(userNamesList, 200);
-        expandList();
+        if (expand) expandList();
         for(WebElement user : userNamesList) {
             if(user.getText().equals(name)) {
                 System.out.println("user "+name+" found");
@@ -352,6 +365,7 @@ public class EMCAccountDetailsPage extends EMCBasePage {
         System.out.println("user "+name+" not found");
         return false;
     }
+
     public void expandList() {
         wait(rowsPerPageIndicator, 200);
         if(!rowsPerPageIndicator.getText().equals("50")){
@@ -579,12 +593,10 @@ public class EMCAccountDetailsPage extends EMCBasePage {
                 wait(currentProductFeaturesDeleteButtons, 5);
                 System.out.println("Number of Features will be deleted = "+currentProductFeaturesDeleteButtons.size());
                 while(currentProductFeaturesDeleteButtons.size()>0) {
-                    if(currentProductFeaturesDeleteButtons.get(0).isDisplayed()) {
-                        currentProductFeaturesDeleteButtons.get(0).click();
-                        System.out.println("Feature deleted");
-                    } else {
-                        break;
-                    }
+                    BrowserUtils.waitForClickablility(currentProductFeaturesDeleteButtons.get(0),5).click();
+                    BrowserUtils.wait(1);
+                    assertTestCase.assertTrue(deleteApplicationsProceedButton.isDisplayed(), "Delete Product Confirmation Popup is displayed");
+                    BrowserUtils.waitForClickablility(deleteApplicationsProceedButton,5).click();
                 }
                 System.out.println("all features of " + applicationName + " product deleted");
                 break;
@@ -787,5 +799,25 @@ public class EMCAccountDetailsPage extends EMCBasePage {
         wait(userOptionsList, 10);
         assertTestCase.assertTrue(userOptionsList.stream().anyMatch(option -> option.getText().equals(optionName)), optionName + " option is displayed");
         clickAwayInBlankArea();
+    }
+
+    public void verifyUsersPageDetails() {
+        if(userNamesList.size()==0) createUser();
+        assertTestCase.assertTrue(usersTab.isDisplayed(), "Users tab is displayed");
+        assertTestCase.assertTrue(pageTitle.isDisplayed(), "Page title is displayed");
+        assertTestCase.assertTrue(addUserButton.isDisplayed(), "Add User button is displayed");
+        assertTestCase.assertTrue(userOptionsButton.isDisplayed(), "User Options button is displayed");
+        assertTestCase.assertTrue(searchInput.isDisplayed(), "Search input is displayed");
+        assertTestCase.assertTrue(userCheckboxList.size()>0, "Users checkboxes are displayed");
+        assertTestCase.assertTrue(userNamesList.size()>0, "Users names are displayed");
+        assertTestCase.assertTrue(userEmailsList.size()>0, "Users emails are displayed");
+        assertTestCase.assertTrue(providerList.size()>0, "Users providers are displayed");
+    }
+
+    public String getUserEmail(String userName) {
+        wait(userNamesList, 10);
+        WebElement userElement = userNamesList.stream().filter(user -> user.getText().equals(userName)).findFirst().get();
+        int index = userNamesList.indexOf(userElement);
+        return userEmailsList.get(index).getText();
     }
 }

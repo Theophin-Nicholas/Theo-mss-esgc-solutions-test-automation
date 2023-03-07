@@ -41,15 +41,9 @@ public class UsersPageTests extends EMCUITestBase {
     @Test(groups = {EMC, UI, SMOKE, REGRESSION, PROD})
     @Xray(test = {3033})
     public void verifyAccountsPageTest() {
-        EMCMainPage mainPage = new EMCMainPage();
-        assertTestCase.assertTrue(mainPage.isEMCTitleIsDisplayed(), "Main Title Verification");
-        test.pass("User is on landing page");
-
-        mainPage.openSidePanel();
-
-        mainPage.clickUsersButton();
-        wait(usersPage.userNames, 10);
-        assertTestCase.assertTrue(usersPage.userNames.size() > 0, "Users Page - Users are displayed");
+        navigateToUser("");
+        wait(usersPage.names, 10);
+        assertTestCase.assertTrue(usersPage.names.size() > 0, "Users Page - Users are displayed");
     }
 
     @Test(groups = {EMC, UI, REGRESSION})
