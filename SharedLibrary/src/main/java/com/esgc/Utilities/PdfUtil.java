@@ -73,14 +73,14 @@ public class PdfUtil {
         }
     }
 
-    public static String extractPDFText(String pdfFileInText, String strStartIndentifier, String strEndIdentifier) {
+    public static String extractPDFText(String pdfFileInText, String strStartIdentifier, String strEndIdentifier) {
         String returnString = "";
         try {
-            String strStart = strStartIndentifier;
+            String strStart = strStartIdentifier;
             String strEnd = strEndIdentifier;
-            int startInddex = pdfFileInText.indexOf(strStart);
-            int endInddex = pdfFileInText.indexOf(strEnd);
-            returnString = pdfFileInText.substring(startInddex, endInddex) + strEnd;
+            int startIndex = pdfFileInText.indexOf(strStart);
+            int endIndex = pdfFileInText.indexOf(strEnd);
+            returnString = pdfFileInText.substring(startIndex, endIndex) + strEnd;
 
         } catch (Exception e) {
             returnString = "No ParaGraph Found";
@@ -92,8 +92,11 @@ public class PdfUtil {
         String returnString = "";
         try {
             pdfFileInText = pdfFileInText.replaceAll("\n", " ");
-            int startInddex = pdfFileInText.indexOf(str);
-            returnString = pdfFileInText.substring(startInddex, startInddex + str.length());
+            pdfFileInText = pdfFileInText.replaceAll("\r", "");
+            System.out.println("PDF File Text: "+pdfFileInText);
+            System.out.println("Expected Text: "+str);
+            int startIndex = pdfFileInText.indexOf(str);
+            returnString = pdfFileInText.substring(startIndex, startIndex + str.length());
 
         } catch (Exception e) {
             returnString = "No ParaGraph Found";
@@ -106,6 +109,8 @@ public class PdfUtil {
         int count = 0;
         try {
             pdfFileInText = pdfFileInText.replaceAll("\n", " ");
+            System.out.println("PDF File Text: "+pdfFileInText);
+            System.out.println("Expected Text: "+str);
             int index = 0;
             while (index != -1) {
                 index = pdfFileInText.indexOf(str, index + str.length());

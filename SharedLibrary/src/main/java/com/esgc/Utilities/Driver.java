@@ -382,5 +382,12 @@ public class Driver {
             //driverPool.remove();
         }
     }
+
+    public static void quit() {
+        if (driverPool.get() != null) {
+            driverPool.get().quit();
+            driverPool.remove();
+        }
+    }
 }
 
