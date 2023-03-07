@@ -514,7 +514,7 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
 
     @Test(groups = {"regression", "DataValidation", "regulatoryReporting"},
             description = "Data Validation | UI | Regulatory Reporting | SFDR | Company Level Outputs | Verify Scope 3 GHG Emissions Column is Reflected to report")
-    @Xray(test = {12892, 12893, 12895})
+    @Xray(test = {12892, 12893, 12895,1276})
     public void verifyScope3GHGEmissionsColumnTest() {
         DashboardPage dashboardPage = new DashboardPage();
         dashboardPage.navigateToPageFromMenu("Regulatory Reporting");
@@ -547,6 +547,7 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
             assertTestCase.assertTrue(reportingPage.verifyScope3GHGEmissionsForPortfolioLevelOutput(selectedPortfolios,"latest"),
                     "SFDR Portfolio Level output for portfolio coverage is verified for Excel vs DB");
             System.out.println("SFDR Scope 3 GHG Emissions output for portfolio coverage is verified for Excel vs DB");
+            assertTestCase.assertTrue(reportingPage.verifyPortfolioLevelOutput(selectedPortfolios,"2020","Interim","Yes"));
         } catch (Exception e) {
             e.printStackTrace();
             assertTestCase.assertTrue(false, "New tab verification failed");
@@ -578,6 +579,7 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
             assertTestCase.assertTrue(reportingPage.verifyScope3GHGEmissionsForPortfolioLevelOutput(selectedPortfolios,"latest"),
                     "SFDR Portfolio Level output for portfolio coverage is verified for Excel vs DB");
             System.out.println("SFDR Scope 3 GHG Emissions output for portfolio coverage is verified for Excel vs DB");
+            assertTestCase.assertTrue(reportingPage.verifyPortfolioLevelOutput(selectedPortfolios,"2020","Annual","Yes"));
         } catch (Exception e) {
             e.printStackTrace();
             assertTestCase.assertTrue(false, "New tab verification failed");

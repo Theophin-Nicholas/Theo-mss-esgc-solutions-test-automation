@@ -56,4 +56,59 @@ public class RegulatoryReportingAPIController extends APIController {
         List<String> portfolioNames = response.jsonPath().getList("portfolio_name");
         return portfolioNames;
     }
+
+    public Response getAysncGenerationAPIReposnse() {
+        Response response = null;
+        try {
+            response = configSpec()
+                    .when()
+                    .body("{\n" +
+                            "    \"report_name\": \"SFDR_Interim_03_07_2023_1678212318878\",\n" +
+                            "    \"regulation\": \"sfdr\",\n" +
+                            "    \"report_type\": \"interim\",\n" +
+                            "    \"use_latest_data\": \"0\",\n" +
+                            "    \"portfolios\": [\n" +
+                            "        {\n" +
+                            "            \"portfolio_id\": \"78597308-8e69-4cd5-b8c9-53d64b598e19\",\n" +
+                            "            \"year\": \"2023\",\n" +
+                            "            \"file_name\": \"SFDR_0_03_07_2023\"\n" +
+                            "        }\n" +
+                            "    ]\n" +
+                            "}")
+                    .log().all()
+                    .post(RegulatoryReportingEndPoints.GET_ASYNC_GENERATION);
+        } catch (Exception e) {
+            System.out.println("Inside exception " + e.getMessage());
+        }
+        return response;
+    }
+    public Response getStatusAPIReposnse(String requestID) {
+        Response response = null;
+        try {
+            response = configSpec()
+                    .when()
+                    .body("{ \"request_id\": \""+requestID+"\" } ")
+                    .log().all()
+                    .post(RegulatoryReportingEndPoints.GET_STATUS);
+        } catch (Exception e) {
+            System.out.println("Inside exception " + e.getMessage());
+        }
+        return response;
+    }
+
+    public Response getDownload(String requestID) {
+        Response response = null;
+        try {
+            response = configSpec()
+                    .when()
+                    .body("{ \"request_id\": \""+requestID+"\" } ")
+                    .log().all()
+                    .post(RegulatoryReportingEndPoints.GET_DOWNLOAD);
+        } catch (Exception e) {
+            System.out.println("Inside exception " + e.getMessage());
+        }
+        return response;
+    }
+
+
 }

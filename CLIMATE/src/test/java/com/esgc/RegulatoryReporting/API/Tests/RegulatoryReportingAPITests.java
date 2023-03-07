@@ -10,6 +10,8 @@ import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.Driver;
 import com.esgc.Utilities.EntitlementsBundles;
 import com.esgc.Utilities.Xray;
+import io.restassured.http.ContentType;
+import io.restassured.response.Response;
 import org.openqa.selenium.JavascriptExecutor;
 import org.testng.annotations.Test;
 
@@ -128,6 +130,33 @@ public class RegulatoryReportingAPITests extends UITestBase {
                 apiController.deletePortfolio(apiController.getPortfolioId(portfolioName));
             }
         }
+    }
+
+    @Test(groups = {REGRESSION, REGULATORY_REPORTING, API}, description = "Data Validation| MT | Regulatory Reporting | Verify API Response with Valid Parameters")
+    @Xray(test = {11408})
+    public void VerifyAPIsResponseWithValidParameters() {
+
+        RegulatoryReportingAPIController apiController = new RegulatoryReportingAPIController();
+        Response response = apiController.getAysncGenerationAPIReposnse();
+        response.prettyPrint();
+        response.then().assertThat()
+                .statusCode(200)
+                .contentType(ContentType.JSON);
+        String reqID = response.jsonPath().getString("request_id");
+        System.out.println(reqID);
+
+        Response statusAPIResponse = apiController.getStatusAPIReposnse(reqID);
+        statusAPIResponse.prettyPrint();
+        statusAPIResponse.then().assertThat()
+                .statusCode(200)
+                .contentType(ContentType.JSON);
+
+        Response DownloadAPIResponse = apiController.getDownload(reqID);
+        DownloadAPIResponse.prettyPrint();
+        DownloadAPIResponse.then().assertThat()
+                .statusCode(200)
+                .contentType(ContentType.JSON);
+
     }
 }
 
