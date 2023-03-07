@@ -259,7 +259,8 @@ public class ExcelUtil {
 //                        return true;
 //                    }
 //                }
-                if(cell.getStringCellValue().equals(data)){
+
+                if(cell.toString().equals(data)){
                     return true;
                 }
             }

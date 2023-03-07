@@ -597,6 +597,15 @@ public class RegulatoryReportingPage extends UploadPage {
         }
         return excelData.searchData(data);
     }
+    public boolean verifyReportsContentForData(List<String> selectedPortfolios, String sheetName, String data) {
+        String excelName = rrStatusPage_PortfoliosList.get(0).getText().replaceAll("ready", "").trim();
+        System.out.println("Verifying reports content for sheet " + sheetName);
+        ExcelUtil excelData = getExcelData(excelName, sheetName);
+        if (!excelData.searchData(data)) {
+            System.out.println("Data " + data + " is not found in the excel");
+        }
+        return excelData.searchData(data);
+    }
 
     public boolean verifySFDRPortfolioCoverageForUI(String portfolioName) {
         RegulatoryReportingAPIController apiController = new RegulatoryReportingAPIController();
