@@ -1,27 +1,28 @@
 package com.esgc.UI.Tests;
 
+import com.esgc.API.Controllers.OnDemandFilterAPIController;
 import com.esgc.UI.TestBases.UITestBase;
 
 import com.esgc.UI.Pages.LoginPage;
 import com.esgc.UI.Pages.OnDemandAssessmentPage;
 
 
-import com.esgc.Utilities.BrowserUtils;
-import com.esgc.Utilities.EntitlementsBundles;
-import com.esgc.Utilities.Xray;
+import com.esgc.Utilities.*;
 import org.testng.Assert;
 import org.testng.annotations.Test;
+
 import static com.esgc.Utilities.Groups.*;
 
 public class OnDemandAssessmentUITests extends UITestBase {
 
     @Test(groups = {REGRESSION,UI,COMMON })
-    @Xray(test = {11985,12001,12002,12011,12054,12092})
+    @Xray(test = {11985,12001,12002,12011,12054,12092,12822,12824})
     public void validateOnDemandAssessmentRequest() {
 
         String portfolioName = "500 predicted portfolio";
         OnDemandAssessmentPage onDemandAssessmentPage = new OnDemandAssessmentPage();
         onDemandAssessmentPage.selectPortfolioByNameFromPortfolioSelectionModal(portfolioName);
+        onDemandAssessmentPage.validateDashboardPageButtonForOnDemand();
         onDemandAssessmentPage.clickMenu();
         BrowserUtils.wait(5);
         onDemandAssessmentPage.clickonOnOndemandMenuOption();
@@ -32,12 +33,12 @@ public class OnDemandAssessmentUITests extends UITestBase {
         onDemandAssessmentPage.verifyCompaniesDetails();
         onDemandAssessmentPage.verifyShowFilterOptions();
 
-        String CompaniesCount = onDemandAssessmentPage.confirmRequestAndGetCompaniesCount();
+        String CompaniesCount = onDemandAssessmentPage.confirmRequestAndGetCompaniesCount("qatest" + Math.random() + "@gmail.com");
 
         onDemandAssessmentPage.validateProceedOnConfirmRequestPopup(CompaniesCount);
         onDemandAssessmentPage.clickCancelButtonAndValidateRequestPage();
 
-        onDemandAssessmentPage.confirmRequestAndGetCompaniesCount();
+        onDemandAssessmentPage.confirmRequestAndGetCompaniesCount("qatest" + Math.random() + "@gmail.com");
         onDemandAssessmentPage.clickProceedOnConfirmRequestPopup();
 
         onDemandAssessmentPage.validateOnDemandPageHeader();
@@ -98,7 +99,7 @@ public class OnDemandAssessmentUITests extends UITestBase {
     }
 
     @Test(groups = {REGRESSION,UI })
-    @Xray(test = {12010})
+    @Xray(test = {12010,12827})
     public void verifyOnDemandAssessmentRequestIsNotAvailable() {
         LoginPage login = new LoginPage();
         login.clickOnLogout();
@@ -178,6 +179,52 @@ public class OnDemandAssessmentUITests extends UITestBase {
         onDemandAssessmentPage.validateAndORLogic();
 
 
+
+    }
+
+    @Test(groups = {"regression", "ui"})
+    @Xray(test = {12826, 12974,12828})
+    public void validateFirstTimeUser() {
+
+        OnDemandAssessmentPage onDemandAssessmentPage = new OnDemandAssessmentPage();
+        String inputFile = ConfigurationReader.getProperty("OnDemandPortfolio");
+        OnDemandFilterAPIController apiController = new OnDemandFilterAPIController();
+        String PortfolioId = apiController.uploadPortfolio(inputFile);
+        Driver.getDriver().navigate().refresh();
+
+        onDemandAssessmentPage.selectPortfolioByNameFromPortfolioSelectionModal(inputFile);
+        onDemandAssessmentPage.validateDashboardPageButtonForOnDemand();
+        onDemandAssessmentPage.validateDashboardPageButtonCoverage(PortfolioId);
+
+        onDemandAssessmentPage.clickMenu();
+        BrowserUtils.wait(5);
+        onDemandAssessmentPage.clickonOnOndemandMenuOption();
+        onDemandAssessmentPage.validateOnDemandPageHeader();
+        assertTestCase.assertTrue(onDemandAssessmentPage.isReviewButtonAvailable(), " Validating first time user landed on Filter page");
+
+        onDemandAssessmentPage.clickReviewAndSendRequestButton();
+
+        onDemandAssessmentPage.confirmRequestAndGetCompaniesCount(Environment.DATA_USERNAME);
+        onDemandAssessmentPage.clickProceedOnConfirmRequestPopup();
+
+        onDemandAssessmentPage.validateErrormessage();
+
+        onDemandAssessmentPage.clickESCkey();
+
+        test.info("Validating second time user is going back to filter screen when there was an error in first time submission");
+        System.out.println("Validating second time user is going back to filter screen when there was an error in first time submission");
+        Driver.getDriver().navigate().refresh();
+
+        onDemandAssessmentPage.selectPortfolioByNameFromPortfolioSelectionModal(inputFile);
+        onDemandAssessmentPage.validateDashboardPageButtonForOnDemand();
+
+        onDemandAssessmentPage.clickMenu();
+        BrowserUtils.wait(5);
+        onDemandAssessmentPage.clickonOnOndemandMenuOption();
+        onDemandAssessmentPage.validateOnDemandPageHeader();
+        assertTestCase.assertTrue(onDemandAssessmentPage.isReviewButtonAvailable(), " Validating first time user landed on Filter page");
+        System.out.println("Validated all first time user test");
+        apiController.deletePortfolio(PortfolioId);
 
     }
 

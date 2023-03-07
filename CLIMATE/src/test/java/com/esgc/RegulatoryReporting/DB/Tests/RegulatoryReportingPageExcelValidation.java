@@ -3,6 +3,7 @@ package com.esgc.RegulatoryReporting.DB.Tests;
 import com.esgc.Base.TestBases.UITestBase;
 import com.esgc.Dashboard.UI.Pages.*;
 import com.esgc.PortfolioAnalysis.UI.Pages.PhysicalRiskPages.PhysicalRiskManagementPages.PhysicalRiskManagementPage;
+import com.esgc.RegulatoryReporting.API.Controllers.RegulatoryReportingAPIController;
 import com.esgc.RegulatoryReporting.UI.Pages.RegulatoryReportingPage;
 import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.DateTimeUtilities;
@@ -51,12 +52,13 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
             assertTestCase.assertTrue(reportingPage.verifyReportsReadyToDownload(selectedPortfolios), "Reports are ready to download");
             System.out.println("Reports are ready to download");
             reportingPage.deleteFilesInDownloadsFolder();
+            reportingPage.deleteFilesInDownloadsFolder();
             assertTestCase.assertTrue(reportingPage.verifyIfReportsDownloaded(), "Reports are downloaded");
             System.out.println("Reports are downloaded");
             assertTestCase.assertTrue(reportingPage.unzipReports(), "Reports are extracted");
             System.out.println("Reports are extracted");
-            assertTestCase.assertTrue(reportingPage.verifyReportsContentForData(selectedPortfolios, 2, "Exposure Amount in EUR"),
-                    "Reports content is verified");
+            assertTestCase.assertTrue(reportingPage.verifyReportsContentForData(selectedPortfolios, "User Input History", "Exposure Amount in EUR"),
+                    "Reports Dats is verified with snowflake");
         } catch (Exception e) {
             e.printStackTrace();
             assertTestCase.assertTrue(false, "New tab verification failed");
@@ -64,9 +66,11 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
             BrowserUtils.switchWindowsTo(currentWindow);
             System.out.println("=============================");
         }
-        reportingPage.navigateToPageFromMenu("Portfolio Analysis");
+        /*reportingPage.navigateToPageFromMenu("Portfolio Analysis");*//*
         PhysicalRiskManagementPage portfolioAnalysisPage = new PhysicalRiskManagementPage();
-        portfolioAnalysisPage.deletePortfolio(newPortfolioName);
+        portfolioAnalysisPage.deletePortfolio(newPortfolioName);*/
+        RegulatoryReportingAPIController apiController = new RegulatoryReportingAPIController();
+        apiController.deletePortfolio(apiController.getPortfolioId(newPortfolioName));
     }
 
     @Test(groups = {REGRESSION, DATA_VALIDATION, REGULATORY_REPORTING},

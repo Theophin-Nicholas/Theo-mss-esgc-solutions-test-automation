@@ -132,6 +132,9 @@ public class OnDemandAssessmentPage extends PageBase {
     @FindBy(xpath = "//button[@id='ondemand-assessment-confirmation']")
     public WebElement confirmRequestPopupBtnProceed;
 
+    @FindBy(xpath = "//div[@class='MuiAlert-message']//div[text()='Something went wrong, please try again later.']")
+    public WebElement SomeThingWentWrongErrorMessage;
+
 
     public String landingPage = "";
 
@@ -166,11 +169,11 @@ public class OnDemandAssessmentPage extends PageBase {
         BrowserUtils.ActionKeyPress(Keys.ESCAPE);
     }
 
-    public String confirmRequestAndGetCompaniesCount() {
+    public String confirmRequestAndGetCompaniesCount(String emailid) {
 
         KeepOnlyOneRequest();
         BrowserUtils.scrollTo(removeButtons.get(0));
-        txtSendTo.sendKeys("qatest" + Math.random() + "@gmail.com");
+        txtSendTo.sendKeys(emailid);
         String compniesCountForRequest = getCompaniesCountFromConfirmRequestButton();
         btnConfirmRequest.click();
         return compniesCountForRequest;
@@ -179,8 +182,8 @@ public class OnDemandAssessmentPage extends PageBase {
 
     public void selectFilter(String filterOption) {
         // BrowserUtils.waitForVisibility(drdShowFilter,30).click();
-        drdShowOptions.get(0).click();
-
+       // drdShowOptions.get(0).click();
+        BrowserUtils.waitForVisibility(drdShowFilter,30).click();
         for (WebElement option : drdShowOptions) {
             if (option.getText().equals(filterOption)) {
                 option.click();
@@ -336,7 +339,7 @@ public class OnDemandAssessmentPage extends PageBase {
     }
 
     public boolean isReviewButtonAvailable() {
-        return btnReviewRequest.isDisplayed();
+        return BrowserUtils.waitForVisibility(btnReviewRequest,60).isDisplayed();
     }
 
     public void clickOnESCButton() {
@@ -459,6 +462,26 @@ public class OnDemandAssessmentPage extends PageBase {
     public void clickCancelButtonAndValidateRequestPage(){
         BrowserUtils.waitForVisibility(confirmRequestPopupBtnCancel,10).click();
         assertTestCase.assertTrue(BrowserUtils.waitForVisibility(btnConfirmRequest,30).isDisplayed(),"Validate it is back on Confirm euest page");
+    }
+
+    public void validateDashboardPageButtonForOnDemand(){
+        BrowserUtils.waitForVisibility(dashboardPageMenuOption,60);
+        assertTestCase.assertTrue(dashboardPageMenuOption.isDisplayed(), "Validate that Dasboard on demand button is visible");
+        assertTestCase.assertTrue(dashboardPageMenuOption.getText().matches("\\d+% On-Demand Assessment Eligible"), "Validate that Dasboard on demand button is visible");
+    }
+
+    public void validateDashboardPageButtonCoverage(String portfolioID){
+        BrowserUtils.waitForVisibility(dashboardPageMenuOption,60);
+        assertTestCase.assertTrue(dashboardPageMenuOption.isDisplayed(), "Validate that Dasboard on demand button is visible");
+        double uiValue = Double.valueOf(dashboardPageMenuOption.getText().substring(0,dashboardPageMenuOption.getText().indexOf("%")));
+        OnDemandFilterAPIController apiController = new OnDemandFilterAPIController();
+       double apiValue =  apiController.getDashboardCoverage(portfolioID).jsonPath().getDouble("perc_avail_for_assessment")*100;
+       assertTestCase.assertEquals(uiValue,apiValue,"Validating Coverage %");
+
+    }
+
+    public void validateErrormessage(){
+        assertTestCase.assertTrue(BrowserUtils.waitForVisibility(SomeThingWentWrongErrorMessage,20).isDisplayed(), "Validating if error message has displayed");
     }
 
 }
