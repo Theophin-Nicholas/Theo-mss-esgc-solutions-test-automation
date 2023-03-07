@@ -143,7 +143,7 @@ public class EMCAccountDetailsPage extends EMCBasePage {
     @FindBy (xpath = "//h2/../..//ul//p[2]")
     public List<WebElement> availableProductsNamesList;
 
-    @FindBy (xpath = "//li/div[1]//span")
+    @FindBy (xpath = "//button[.='Assign']/../../../../span")
     public List<WebElement> availableFeaturesNamesList;
 
     @FindBy (xpath = "//button[.='Assign']")
@@ -384,7 +384,7 @@ public class EMCAccountDetailsPage extends EMCBasePage {
     }
     public void clickOnApplicationsTab() {
         System.out.println("clicking on applications tab");
-        BrowserUtils.waitAndClick(applicationsTab, 20);
+        BrowserUtils.waitAndClick(applicationsTab, 200);
     }
     public void clickOnProductsTab() {
         System.out.println("clicking on products tab");

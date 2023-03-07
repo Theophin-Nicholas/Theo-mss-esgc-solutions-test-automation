@@ -58,6 +58,8 @@ public class Environment {
     public static final String USER_WITH_OUT_ESG_ENTITLEMENT_PASSWORD;
     public static final String USER_WITH_OUT_EXPORT_ENTITLEMENT_USERNAME;
     public static final String USER_WITH_OUT_EXPORT_ENTITLEMENT_PASSWORD;
+    public static final String USER_WITH_ESG_WITHOUT_EXPORT_USERNAME;
+    public static final String USER_WITH_ESG_WITHOUT_EXPORT_PASSWORD;
     public static final String USER_WITH_ESG_PS_ENTITLEMENT_USERNAME;
     public static final String USER_WITH_ESG_PS_ENTITLEMENT_PASSWORD;
     public static final String USER_WITH_ESG_ENTITLEMENT_USERNAME;
@@ -71,10 +73,12 @@ public class Environment {
     public static final String PDF_EXPORT_BUNDLE_PASSWORD;
     public static final String PDF_EXPORT_ONLY_SOURCEDOCUMENTS_USERNAME;
     public static final String PDF_EXPORT_ONLY_SOURCEDOCUMENTS_PASSWORD;
+    public static final String NO_PREVIOUSLY_DOWNLOADED_REGULATORY_REPORTS_USERNAME;
+    public static final String NO_PREVIOUSLY_DOWNLOADED_REGULATORY_REPORTS_PASSWORD;
     public static final String PDF_EXPORT_ONLY_PDF_USERNAME;
     public static final String PDF_EXPORT_ONLY_PDF_PASSWORD;
-
-
+    public static final String MESG_APPLICATION_NAME;
+    public static  String environment ;
 
 
     static String getPropertiesPath() {
@@ -85,7 +89,7 @@ public class Environment {
 
     static {
         Properties properties = null;
-        String environment = ConfigurationReader.getProperty("environment");
+        environment = ConfigurationReader.getProperty("environment");
         if (System.getProperty("environment")!=null){
             environment=System.getProperty("environment");
 
@@ -137,6 +141,8 @@ public class Environment {
         USER_WITH_CONTROVERSIES_ENTITLEMENT_PASSWORD = properties.getProperty("controversies_bundle_password");
         USER_WITH_OUT_CONTROVERSIES_ENTITLEMENT_USERNAME = properties.getProperty("no_controversies_bundle_username");
         USER_WITH_OUT_CONTROVERSIES_ENTITLEMENT_PASSWORD = properties.getProperty("no_controversies_bundle_password");
+        USER_WITH_ESG_WITHOUT_EXPORT_USERNAME = properties.getProperty("user_with_esg_without_export_username");
+        USER_WITH_ESG_WITHOUT_EXPORT_PASSWORD = properties.getProperty("user_with_esg_without_export_password");
         USER_WITH_OUT_ESG_ENTITLEMENT_USERNAME = properties.getProperty("tr_bundle_username");
         USER_WITH_OUT_ESG_ENTITLEMENT_PASSWORD = properties.getProperty("tr_bundle_password");
         USER_WITH_EXPORT_ENTITLEMENT_USERNAME = properties.getProperty("export_bundle_username");
@@ -151,13 +157,16 @@ public class Environment {
         p3OrbisId = properties.getProperty("p3Orbisid");
         QA_TEST_ACCOUNT_ID = properties.getProperty("account_id");
         QA_TEST_APPLICATION_ID = properties.getProperty("application_id");
-
+        MESG_APPLICATION_NAME = properties.getProperty("mesg_application_name");
         PDF_EXPORT_BUNDLE_USERNAME = properties.getProperty("PDFexport_bundle_username");
         PDF_EXPORT_BUNDLE_PASSWORD = properties.getProperty("PDFexport_bundle_password");
         PDF_EXPORT_ONLY_SOURCEDOCUMENTS_USERNAME = properties.getProperty("PDFexport_OnlySourceDocument_username");
         PDF_EXPORT_ONLY_SOURCEDOCUMENTS_PASSWORD = properties.getProperty("PDFexport_OnlySourceDocument_password");
         PDF_EXPORT_ONLY_PDF_USERNAME = properties.getProperty("PDFexport_OnlyPDF_username");
         PDF_EXPORT_ONLY_PDF_PASSWORD = properties.getProperty("PDFexport_OnlyPDF_password");
+        NO_PREVIOUSLY_DOWNLOADED_REGULATORY_REPORTS_USERNAME = properties.getProperty("NoPreviouslyDownloadedRegulatoryReports_username");
+        NO_PREVIOUSLY_DOWNLOADED_REGULATORY_REPORTS_PASSWORD = properties.getProperty("NoPreviouslyDownloadedRegulatoryReports_password");
+
 
     }
 }

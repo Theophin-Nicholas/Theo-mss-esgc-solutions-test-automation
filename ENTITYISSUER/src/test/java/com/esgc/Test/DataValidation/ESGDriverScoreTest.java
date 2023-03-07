@@ -8,7 +8,6 @@ import com.esgc.Test.TestBases.EntityIssuerPageDataValidationTestBase;
 import com.esgc.Utilities.Database.EntityIssuerQueries;
 import com.esgc.Utilities.Xray;
 import org.testng.annotations.DataProvider;
-import org.testng.annotations.Optional;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
 
@@ -16,10 +15,14 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.esgc.Pages.LoginPageIssuer.OrbisID;
+import static com.esgc.Utilities.Groups.ISSUER;
+import static com.esgc.Utilities.Groups.REGRESSION;
+
 
 public class ESGDriverScoreTest extends EntityIssuerPageDataValidationTestBase {
 
-   /* @Test(enabled = false, dataProvider = "orbisID", groups = {"entity_page"})
+   /* @Test(enabled = false, dataProvider = "orbisID", groups = {ISSUER})
     @Xray(test = {4049, 4065})
     public void validateScoreRange(@Optional String orbisID) {
         SoftAssert softAssert = new SoftAssert();
@@ -74,17 +77,20 @@ public class ESGDriverScoreTest extends EntityIssuerPageDataValidationTestBase {
 
     }*/
 
-    @Test(dataProvider = "orbisID", groups = {"regression", "entity_issuer"})
+  //  @Test(dataProvider = "orbisID", groups = {REGRESSION, ISSUER})
+  @Test( groups = {REGRESSION, ISSUER})
     @Xray(test = {4049,5868, 5869})
-    public void validateSubSectorDrivers(@Optional String orbisID) {
+    //public void validateSubSectorDrivers(@Optional String orbisID) {
+  public void validateSubSectorDrivers() {
+
         SoftAssert softAssert = new SoftAssert();
-        String sector = EntityIssuerQueries.getSectorFromOrbisId(orbisID);
+        String sector = EntityIssuerQueries.getSectorFromOrbisId(OrbisID);
         System.out.println("Sector:" + sector);
 
         List<SectorDriverDBModel> sectorDriversFromDB = EntityIssuerQueries.getSectorDrivers(sector);
         System.out.println(sectorDriversFromDB.size());
         List<SectorDriversWrapper> sectorDriversList = Arrays.asList(
-                controller.getSectorDrivers(orbisID)
+                controller.getSectorDrivers(OrbisID)
                         .as(SectorDriversWrapper[].class));
         softAssert.assertEquals(sectorDriversList.get(0).getDriver_details().size(), 3, "3 Driver Group Verified");
 
@@ -124,11 +130,11 @@ public class ESGDriverScoreTest extends EntityIssuerPageDataValidationTestBase {
                 SectorDriverDBModel expectedDriver = driversInSectorIndicator.stream().filter(p -> p.getCRITERIA().equals(criteriaID)
                         && p.getNAME().equals(actualName)
                 ).findFirst().get();
-
-                softAssert.assertEquals(c.getIndicator(), expectedDriver.getINDICATOR(), c.getIndicator() + "Drivers Indicator Matching");
-                softAssert.assertEquals(actualName, expectedDriver.getNAME(), "Driver name matching");
-                softAssert.assertEquals(driver.getCriteria_weight_value(), expectedDriver.getVALUE(), "Weight Value matching");
-                softAssert.assertEquals(driver.getCriteria_weight(), expectedDriver.getCritteria_weight(), "Validate Weight Text");
+                System.out.println(expectedDriver.toString());
+                assertTestCase.assertEquals(c.getIndicator(), expectedDriver.getINDICATOR(), c.getIndicator() + "Drivers Indicator Matching");
+                assertTestCase.assertEquals(actualName, expectedDriver.getNAME(), "Driver name matching");
+                assertTestCase.assertEquals(driver.getCriteria_weight_value(), expectedDriver.getVALUE(), "Weight Value matching");
+                assertTestCase.assertEquals(driver.getCriteria_weight(), expectedDriver.getCritteria_weight(), "Validate Weight Text");
 
             }
 

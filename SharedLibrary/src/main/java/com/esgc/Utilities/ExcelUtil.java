@@ -22,6 +22,17 @@ public class ExcelUtil {
     private Workbook workBook;
     private String path;
 
+    public ExcelUtil(String path) {
+        this.path = path;
+        try {
+            FileInputStream ExcelFile = new FileInputStream(path);
+            workBook = WorkbookFactory.create(ExcelFile);
+            workSheet = workBook.getSheetAt(0);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public ExcelUtil(String path, String sheetName) {
         this.path = path;
         try {
@@ -29,6 +40,18 @@ public class ExcelUtil {
             workBook = WorkbookFactory.create(ExcelFile);
             workSheet = workBook.getSheet(sheetName);
             Assert.assertNotNull(workSheet, String.format("Sheet: '%s' does not exist", sheetName));
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public ExcelUtil(String path, int sheetIndex) {
+        this.path = path;
+        try {
+            FileInputStream ExcelFile = new FileInputStream(path);
+            workBook = WorkbookFactory.create(ExcelFile);
+            workSheet = workBook.getSheetAt(sheetIndex);
+            Assert.assertNotNull(workSheet, String.format("Sheet: '%s' does not exist", sheetIndex));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -140,18 +163,29 @@ public class ExcelUtil {
         List<String> columns = new ArrayList<>();
 
         for (Cell cell : workSheet.getRow(0)) {
-            columns.add(cell.toString());
+            columns.add(cell.toString().trim());
         }
         return columns;
     }
-
 
     public int columnCount() {
         return workSheet.getRow(0).getLastCellNum();
     }
 
-    public int rowCount() {
+    public int columnCount(int columnIndex) {
+        return workSheet.getRow(columnIndex).getLastCellNum();
+    }
 
+    public int getColumnNum (String colName){
+        Row row = workSheet.getRow(0);
+        for (int i = 0; i < row.getLastCellNum(); i++){
+            if (row.getCell(i).getStringCellValue().trim().equals(colName))
+                return i;
+        }
+        return -1 ;
+    }
+
+    public int rowCount() {
         return workSheet.getPhysicalNumberOfRows();
     }
 
@@ -215,5 +249,116 @@ public class ExcelUtil {
             }
         }
         return false;
+    }
+
+    public boolean searchData(String data) {
+        for (Row row : workSheet) {
+            for (Cell cell : row) {
+//                if (cell.getCellType() == CellType.STRING) {
+//                    if (cell.getStringCellValue().equals(data)) {
+//                        return true;
+//                    }
+//                }
+                if(cell.getStringCellValue().equals(data)){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public void removeRow(int index) {
+        workSheet.removeRow(workSheet.getRow(index));
+    }
+
+    public int getLastRowNum() {
+        return workSheet.getLastRowNum();
+    }
+
+    public int getRowNumber(String cellData, int colNumber) {
+
+        int totalRows = workSheet.getLastRowNum();
+        Row row = null;
+        int RowNo = 0;
+        for (int rowNo = 1; rowNo <= totalRows; rowNo++) {
+            row = workSheet.getRow(rowNo);
+            RowNo = RowNo + 1;
+            if (row.getCell(colNumber).getStringCellValue().equalsIgnoreCase(cellData)) {
+                break;
+            }
+        }
+        return RowNo;
+    }
+
+    public Row getRow(int rowIndex) {
+        return workSheet.getRow(rowIndex);
+    }
+
+    public List<String> getRowData(int rowIndex, String nullValue) {
+        List<String> data = new ArrayList<>();
+        Row row = workSheet.getRow(rowIndex);
+        if(row == null) return data;
+        for (Cell cell : row) {
+            if (cell.getCellType() == CellType.BLANK) data.add(nullValue);
+            else if (cell.getCellType() == CellType.NUMERIC) data.add(String.valueOf(cell.getNumericCellValue()));
+            else data.add(cell.toString());
+        }
+        return data;
+    }
+    public List<String> getRowData(int rowIndex){
+        return getRowData(rowIndex, "");
+    }
+
+    public List<String> getRowData(String data){
+        //System.out.println("Last Row Num = "+workSheet.getLastRowNum());
+        for (int i = 0; i <=workSheet.getLastRowNum(); i++) {
+            if(getRowData(i).contains(data)){
+                return getRowData(i);
+            }
+        }
+        System.out.println(data+" Data not found");
+        return null;
+    }
+
+    public Map<String,String> getfilteredData(Map<String, String> params, List<String> requiredColumns) {
+        int rows = workSheet.getLastRowNum();
+        int cols = requiredColumns.get(0).equals("All")? columnCount():requiredColumns.size();
+        Map<String, String> data = new HashMap<>();
+        String conditions = "";
+        for (int rowNum = 1; rowNum <= rows; rowNum++) {
+            boolean flag = false;
+            for (Map.Entry<String, String> entry : params.entrySet()) {
+                if (getCellData(rowNum, getColumnNum(entry.getKey())).equalsIgnoreCase(entry.getValue())) {
+                    flag = true;
+                } else {
+                    flag = false;
+                    break;
+                }
+            }
+            if (flag) {
+
+                for (int colNum = 0; colNum < cols; colNum++) {
+                    int coln = requiredColumns.get(0).equals("All")? colNum:getColumnNum(requiredColumns.get(colNum));
+                    data.put(getCellData(0, coln),(getCellData(rowNum, coln)));
+                }
+            }
+        }
+
+        return data;
+    }
+    public List<String> getNumericCells() {
+        List<String> data = new ArrayList<>();
+        for (Row row : workSheet) {
+            for (Cell cell : row) {
+                if (cell.getCellType() == CellType.NUMERIC) {
+                    data.add(cell.toString());
+                }
+            }
+        }
+        return data;
+    }
+
+    public String getSheetName() {
+        return workSheet.getSheetName();
     }
 }

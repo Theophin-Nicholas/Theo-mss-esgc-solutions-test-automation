@@ -2,15 +2,17 @@ package com.esgc.Tests;
 
 import com.esgc.Pages.*;
 import com.esgc.TestBases.EMCUITestBase;
-import com.esgc.Utilities.*;
+import com.esgc.Utilities.BrowserUtils;
+import com.esgc.Utilities.Driver;
+import com.esgc.Utilities.Xray;
 import com.github.javafaker.Faker;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.annotations.Test;
 
 import java.util.List;
+
+import static com.esgc.Utilities.Groups.*;
 
 public class ApplicationPageTests extends EMCUITestBase {
     String applicationName = "TestQA";
@@ -47,7 +49,7 @@ public class ApplicationPageTests extends EMCUITestBase {
         }
     }
 
-    @Test(groups = {"EMC", "ui", "smoke", "regression", "prod"})
+    @Test(groups = {EMC, UI, SMOKE, REGRESSION, PROD})
     @Xray(test = {2330, 5101, 5103,2153})
     public void applicationDetailsVerificationTests() {
         EMCMainPage emcMainPage = new EMCMainPage();
@@ -88,7 +90,7 @@ public class ApplicationPageTests extends EMCUITestBase {
         emcApplicationDetailsPage.backToApplicationsButton.click();
     }
 
-    @Test(groups = {"EMC", "ui", "regression"})//no smoke
+    @Test(groups = {EMC, UI, REGRESSION})//no smoke
     @Xray(test = {2346, 2322, 2323})
     public void verifyUserEnterApplicationNameTest() {
         navigateToApplicationsPage(testApplicationName,"details");
@@ -108,7 +110,7 @@ public class ApplicationPageTests extends EMCUITestBase {
         BrowserUtils.waitForClickablility(detailsPage.saveButton,5).click();
     }
 
-    @Test(groups = {"EMC", "ui", "regression"})//no smoke
+    @Test(groups = {EMC, UI, REGRESSION})//no smoke
     @Xray(test = {5173,7657})
     public void verifyUserCreateNewRoleForApplicationTest() {
         EMCMainPage emcMainPage = new EMCMainPage();
@@ -135,7 +137,7 @@ public class ApplicationPageTests extends EMCUITestBase {
         assertTestCase.assertTrue(detailsPage.getApplicationRolesNames().contains("QATest" + now), "Role Name is displayed");
     }
 
-    @Test(groups = {"EMC", "ui", "regression"})
+    @Test(groups = {EMC, UI, REGRESSION})
     @Xray(test = {2312})
     public void verifyEMCApplicationsSortedAlphabeticallyByNameTest() {
         navigateToApplicationsPage("", "roles");
@@ -146,7 +148,7 @@ public class ApplicationPageTests extends EMCUITestBase {
         assertTestCase.assertEquals(applicationNames, applicationsPage.getApplicationNames(), "Applications are sorted alphabetically");
     }
 
-    @Test(groups = {"EMC", "ui", "regression"})
+    @Test(groups = {EMC, UI, REGRESSION})
     @Xray(test = {2332})
     public void verifyApplicationURLClickableTest() {
         navigateToApplicationsPage("", "roles");
@@ -165,7 +167,7 @@ public class ApplicationPageTests extends EMCUITestBase {
         Driver.getDriver().switchTo().window(currentWindowsHandle);
     }
 
-    @Test(groups = {"EMC", "ui", "regression"})
+    @Test(groups = {EMC, UI, REGRESSION})
     @Xray(test = {2333})
     public void verifyApplicationCreatedAndModifiedDetails() {
         navigateToApplicationsPage(applicationName, "details");
@@ -188,7 +190,7 @@ public class ApplicationPageTests extends EMCUITestBase {
         assertTestCase.assertTrue(actApplicationModifiedBy.contains("/"), "Modified By has a date");
     }
 
-    @Test(groups = {"EMC", "ui", "regression"})
+    @Test(groups = {EMC, UI, REGRESSION})
     @Xray(test = {2324,2347,2348,2349,7649})
     public void verifyInformationRequiredForCreatingApplicationFulfilledTest() {
         navigateToApplicationsPage("", "details");
@@ -240,7 +242,7 @@ public class ApplicationPageTests extends EMCUITestBase {
         element.sendKeys(Keys.TAB);
     }
 
-    @Test(groups = {"EMC", "ui", "regression"})
+    @Test(groups = {EMC, UI, REGRESSION})
     @Xray(test = {2624,7655})
     public void verifyUserSaveNewProductTest() {
         navigateToApplicationsPage(applicationName, "products");
@@ -257,7 +259,7 @@ public class ApplicationPageTests extends EMCUITestBase {
         assertTestCase.assertTrue(detailsPage.notification.isDisplayed(), "Success Confirmation message is displayed on the Screen");
     }
 
-    @Test(groups = {"EMC", "ui", "regression", "smoke", "prod"})
+    @Test(groups = {EMC, UI, REGRESSION, SMOKE, PROD})
     @Xray(test = {3537, 3539})
     public void verifyProductDetailsTest() {
         navigateToApplicationsPage(applicationName, "products");
@@ -273,7 +275,7 @@ public class ApplicationPageTests extends EMCUITestBase {
         assertTestCase.assertTrue(productDetailsPage.editedButton.isEnabled(), "Edit Button is enabled");
     }
 
-    @Test(groups = {"EMC", "ui", "regression"})
+    @Test(groups = {EMC, UI, REGRESSION})
     @Xray(test = {7656})
     public void editProductDetailsTest() {
         navigateToApplicationsPage(applicationName, "products");
@@ -322,7 +324,7 @@ public class ApplicationPageTests extends EMCUITestBase {
         BrowserUtils.waitForClickablility(detailsPage.backToApplicationsButton, 10).click();
     }
 
-    @Test(groups = {"EMC", "ui", "regression"})
+    @Test(groups = {EMC, UI, REGRESSION})
     @Xray(test = {7654,2151,2156})
     public void verifyAdminUserEditApplicationTest() {
         //String applicationName = "TestQA";
@@ -355,7 +357,7 @@ public class ApplicationPageTests extends EMCUITestBase {
 
     }
 
-    @Test(groups = {"EMC", "ui", "regression"})
+    @Test(groups = {EMC, UI, REGRESSION})
     @Xray(test = {2152})
     public void verifyAllApplicationsVisibleInListViewOnApplicationPanelTest() {
         navigateToApplicationsPage("", "details");
@@ -366,7 +368,7 @@ public class ApplicationPageTests extends EMCUITestBase {
         }
     }
 
-    @Test(groups = {"EMC", "ui", "regression"}, description = "UI | EMC | OKTA | Application Role | Verify App Role Key is unique in EMC and OKTA")
+    @Test(groups = {EMC, UI, REGRESSION}, description = "UI | EMC | OKTA | Application Role | Verify App Role Key is unique in EMC and OKTA")
     @Xray(test = {5691})
     public void verifyAppRoleKeyUniqueForEMCAndOKTA() {
         navigateToApplicationsPage(applicationName, "roles");
@@ -402,7 +404,7 @@ public class ApplicationPageTests extends EMCUITestBase {
         detailsPage.clickOnCancelButton();
     }
 
-    @Test(groups = {"EMC", "ui", "regression"}, description = "UI | EMC | Products | Validate User can View the Product Details View Sorting")
+    @Test(groups = {EMC, UI, REGRESSION}, description = "UI | EMC | Products | Validate User can View the Product Details View Sorting")
     @Xray(test = {3538})
     public void verifyUserViewProductDetailsSortedTest() {
         navigateToApplicationsPage(applicationName, "products");

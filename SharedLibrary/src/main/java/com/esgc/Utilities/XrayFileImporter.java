@@ -3,6 +3,7 @@ package com.esgc.Utilities;
 import com.esgc.APIModels.JiraTestCase;
 import com.esgc.APIModels.TestCase;
 import com.esgc.APIModels.TestEvidence;
+import com.esgc.TestBase.TestBase;
 import com.github.seratch.jslack.Slack;
 import com.github.seratch.jslack.api.webhook.Payload;
 import com.github.seratch.jslack.api.webhook.WebhookResponse;
@@ -83,7 +84,7 @@ public class XrayFileImporter {
                         String screenshotLocation = "";
                         screenshotLocation = findFailedScreenshot(testCaseList, testCaseNumber);
                         if (screenshotLocation != null) {
-                            String screenshot = screenshot = encodeFileToBase64Binary(screenshotLocation);
+                            String screenshot = encodeFileToBase64Binary(screenshotLocation);
                             List<TestEvidence> evidences = new ArrayList<>();
                             TestEvidence testEvidence = new TestEvidence(screenshot);
                             evidences.add(testEvidence);
@@ -211,6 +212,8 @@ public class XrayFileImporter {
                     .log().ifError();
         }
 
+        attachHTMLReportToTestExecutionTicket(testExecutionKey,reportName);
+
         int totalTCsCount = allTestCases.size();
         int failedTCsCount = failedTestCases.size();
         int passedTCsCount = totalTCsCount - failedTCsCount;
@@ -328,6 +331,22 @@ public class XrayFileImporter {
             e.printStackTrace();
         }
         return new String(encoded, StandardCharsets.US_ASCII);
+    }
+
+    public static void attachHTMLReportToTestExecutionTicket(String tickedNumber, String reportName) {
+        System.out.println("File Attachment Started");
+        try {
+            String filepath = TestBase.reportPath + File.separator + reportName + ".html";
+
+            configSpec()
+                    .header("Content-Type", "multipart/form-data")
+                    .multiPart("file", "Execution Report", FileUtils.readFileToByteArray(new File(filepath)), "text/csv")
+                    .when().log().all()
+                    .post("api/2/issue/" + tickedNumber + "/attachments");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
 }

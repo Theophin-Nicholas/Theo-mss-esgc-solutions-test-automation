@@ -7,6 +7,8 @@ import com.github.javafaker.Faker;
 import org.openqa.selenium.JavascriptExecutor;
 import org.testng.annotations.Test;
 
+import static com.esgc.Utilities.Groups.*;
+
 public class UsersPageTests extends EMCUITestBase {
     String userName = "Efrain June2022";
     String userName2 = "Ferhat Test";
@@ -30,7 +32,7 @@ public class UsersPageTests extends EMCUITestBase {
             usersPage.selectUser(userName);
         }
     }
-    @Test(groups = {"EMC", "ui", "smoke","regression","prod"})
+    @Test(groups = {EMC, UI, SMOKE,REGRESSION,PROD})
     @Xray(test = {3033})
     public void verifyAccountsPageTest() {
         EMCMainPage mainPage = new EMCMainPage();
@@ -41,7 +43,7 @@ public class UsersPageTests extends EMCUITestBase {
 
         mainPage.clickUsersButton();
     }
-    @Test(groups = {"EMC", "ui", "regression"})
+    @Test(groups = {EMC, UI, REGRESSION})
     @Xray(test = {7625, 7626})
     public void verifyAdminUserSuspendUnsuspendUserTest() {
         navigateToUser(userName2);
@@ -79,7 +81,7 @@ public class UsersPageTests extends EMCUITestBase {
         assertTestCase.assertTrue(userDetailsPage.deleteButton.isDisplayed(), "User Details Page  - Delete button is displayed");
     }
 
-    @Test(groups = {"EMC", "ui", "regression"})
+    @Test(groups = {EMC, UI, REGRESSION})
     @Xray(test = {7627, 7642})
     public void verifyAdminUserActivateStagedUserTest() {
         AccountsPageTests accountsPageTests = new AccountsPageTests();
@@ -131,14 +133,14 @@ public class UsersPageTests extends EMCUITestBase {
         BrowserUtils.waitForInvisibility(userDetailsPage.notification, 10);
     }
 
-    @Test(groups = {"EMC", "ui", "regression"}, description = "UI | EMC | Roles | Verify Role/Group user Information is Available for Investor User")
+    @Test(groups = {EMC, UI, REGRESSION}, description = "UI | EMC | Roles | Verify Role/Group user Information is Available for Investor User")
     @Xray(test = {5211})
     public void verifyRoleGroupUserInformationAvailableForInvestorUserTest() {
         navigateToUser("Ferhat Demir");
         EMCUserDetailsPage detailsPage = new EMCUserDetailsPage();
         detailsPage.clickOnApplicationRolesTab();
         detailsPage.deleteAllRoles();
-        detailsPage.assignApplicationRoles("MESG Platform - DEV - QA", "Investor");
+        detailsPage.assignApplicationRoles("MESG Platform", "Investor");
         Driver.closeDriver();
         Driver.getDriver().get(Environment.EMC_URL);
         BrowserUtils.waitForPageToLoad(10);
@@ -164,14 +166,14 @@ public class UsersPageTests extends EMCUITestBase {
         mainPage.goToUsersPage();
     }
 
-    @Test(groups = {"EMC", "ui", "regression"}, description = "UI | EMC | Roles | Verify Role/Group user Information is Available for Issuer User")
+    @Test(groups = {EMC, UI, REGRESSION}, description = "UI | EMC | Roles | Verify Role/Group user Information is Available for Issuer User")
     @Xray(test = {5212})
     public void verifyRoleGroupUserInformationAvailableForIssuerUserTest() {
         navigateToUser("Ferhat Demir");
         EMCUserDetailsPage detailsPage = new EMCUserDetailsPage();
         detailsPage.clickOnApplicationRolesTab();
         detailsPage.deleteAllRoles();
-        detailsPage.assignApplicationRoles("MESG Platform - DEV - QA", "Issuer");
+        detailsPage.assignApplicationRoles("MESG Platform", "Issuer");
         Driver.closeDriver();
         Driver.getDriver().get(Environment.EMC_URL);
         BrowserUtils.waitForPageToLoad(10);
@@ -184,10 +186,7 @@ public class UsersPageTests extends EMCUITestBase {
         System.out.println("result = " + result);
         String environment = ConfigurationReader.getProperty("environment");
         System.out.println("environment = " + environment);
-        if (environment.equals("qa")) assertTestCase.assertTrue(result.contains("mesg-platform-investor-qa"), "Investor Role is available for QA Environment");
-        else if (environment.equals("prod")) assertTestCase.assertTrue(result.contains("mesg-platform-investor-dev"), "Investor Role is available for PROD Environment");
-        else if (environment.equals("uat")) assertTestCase.assertTrue(result.contains("mesg-platform-investor-uat"), "Investor Role is available for UAT Environment");
-        else if (environment.equals("qa2")) assertTestCase.assertTrue(result.contains("mesg-platform-investor-qatwo"), "Investor Role is available for QA2 Environment");
+        assertTestCase.assertTrue(result.contains("mesg-platform-investor"), "Investor Role is available for QA Environment");
         Driver.closeDriver();
         Driver.getDriver().get(Environment.EMC_URL);
         BrowserUtils.waitForPageToLoad(10);

@@ -163,7 +163,7 @@ public class EntityIssuerQueries {
                 "                            and g.criteria = s2.criteria\n" +
                 "                            and s2.DATA_TYPE='esg_pillar_score'\n" +
                 "                            and s2.criteria in ('ESG', 'Environmental', 'Governance', 'Social'))\n" +
-                "\t  QUALIFY row_number() over(partition by (criteria,data_type) order by SCORED_TIMESTAMP desc) = 1";
+                "  QUALIFY row_number() over(partition by (criteria,data_type) order by SCORED_TIMESTAMP desc) = 1";
         System.out.println(query);
         return serializeIssuerSummary(getQueryResultMap(String.format(query, orbisID)));
     }
@@ -480,7 +480,7 @@ public class EntityIssuerQueries {
                 ",METRIC AS ( SELECT DISTINCT EMFD.CATEGORY AS CRITERIA_CODE, EMFS.CATEGORY AS CRITERIA_NAME,\n" +
                 "EMFS.DOMAIN ,EMFS.INDICATOR,MSC.SUB_CATEGORY_DETAILED_DESCRIPTION FROM DF_TARGET.ESG_METRIC_FRAMEWORK_DETAIL EMFD JOIN DF_TARGET.ESG_METRIC_FRAMEWORK_SUMMARY EMFS \n" +
                 "on emfd.taxonomy_id = emfs.taxonomy_id LEFT JOIN df_lookup.MESG_SUB_CATEGORY msc on emfd.category = msc.INTERNAL_SUB_CATEGORY_CODE WHERE 1=1 \n" +
-                "AND EMFD.AS_OF_DATE = (SELECT MAX(AS_OF_DATE) FROM DF_TARGET.ESG_METRIC_FRAMEWORK_DETAIL)  AND EMFD.DATA_SOURCE = 'data_capture' AND EMFD.ITEM_TYPE = 'Input (raw)'  \n" +
+                "AND EMFD.AS_OF_DATE = (SELECT MAX(AS_OF_DATE) FROM DF_TARGET.ESG_METRIC_FRAMEWORK_DETAIL) \n" + //AND EMFD.DATA_SOURCE = 'data_capture' AND EMFD.ITEM_TYPE = 'Input (raw)'
                 "AND EMFD.STATUS='Active' AND msc.RESEARCH_LINE_ID = '1015')\n" +
                 "SELECT EMS.ORBIS_ID AS \"orbis_id\", EMS.CRITERIA as \"criteria_code\", METRIC.CRITERIA_NAME AS \"criteria_name\", METRIC.INDICATOR AS \"indicator\", " +
                 "METRIC.DOMAIN AS \"domain\", METRIC.SUB_CATEGORY_DETAILED_DESCRIPTION AS \"sub_catg_desc\" ,NVL(MAX(CCONT.FLAG), 'false') AS \"critical_controversy_exists_flag\", " +
