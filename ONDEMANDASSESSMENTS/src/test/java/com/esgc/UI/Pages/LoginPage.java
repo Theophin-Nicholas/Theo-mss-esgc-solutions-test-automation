@@ -322,7 +322,8 @@ public class LoginPage extends PageBase {
         BrowserUtils.wait(10);
         wait.until(ExpectedConditions.visibilityOf(menu));
         BrowserUtils.clickWithJS(menu);
-        logout.click();
+
+        BrowserUtils.clickWithJS(BrowserUtils.waitForVisibility(logout,10));
     }
 
     public void checkTermsAndConditions(){
