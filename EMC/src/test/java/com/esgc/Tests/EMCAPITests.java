@@ -621,7 +621,7 @@ public class EMCAPITests extends APITestBase {
         }
     }
 
-    @Test(groups = {"EMC", "api", "regression"})
+    @Test(groups = {EMC, UI, REGRESSION})
     @Xray(test = {7399, 7400})
     public void verifyAdminUserCanGETListOfAllAdminUserPermissionsTest() {
         response = apiController.getEMCAllAdminUsersPermissionsResponse();

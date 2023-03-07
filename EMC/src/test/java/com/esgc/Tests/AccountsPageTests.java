@@ -22,8 +22,7 @@ public class AccountsPageTests extends EMCUITestBase {
     Faker faker = new Faker();
     EMCAccountsPage accountsPage = new EMCAccountsPage();
 
-    String accountName = "INTERNAL QATest - PROD0124";
-    String smeAccount = "SME Assesstment";
+    String accountName = "INTERNAL QATest - PROD123";
     String applicationName = "TestQA";
     String activeUserName = "Ferhat Test";
 
@@ -1383,7 +1382,7 @@ public class AccountsPageTests extends EMCUITestBase {
         return link.endsWith("issuerworkspace") || link.endsWith("dashboard");
     }
 
-    @Test(groups = {"EMC", "ui", "regression"}, description = "UI | EMC | Roles | Verify User with Admin Role is able to Edit and Save Account Details")
+    @Test(groups = {EMC, UI, REGRESSION}, description = "UI | EMC | Roles | Verify User with Admin Role is able to Edit and Save Account Details")
     @Xray(test = {7322, 7323})
     public void editAccountTest() {
         navigateToAccountsPage("Test Account", "details");
