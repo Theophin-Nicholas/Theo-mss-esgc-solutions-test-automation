@@ -142,11 +142,6 @@ public class LoginPage extends ClimatePageBase {
      */
     public void loginWithParams(String userName, String password) {
         wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(userName, Keys.ENTER);
-        BrowserUtils.wait(5);
-        boolean isUserOnNewLoginPage = Driver.getDriver().getCurrentUrl().contains("auth.moodys.com");
-        if (isUserOnNewLoginPage) {
-            clickOnNextButton();
-        }
         wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(password);
       /*  if (!termsAndConditionsCheckBox.isSelected())
             wait.until(ExpectedConditions.visibilityOf(termsAndConditionsLabel)).click();*/
@@ -186,10 +181,12 @@ public class LoginPage extends ClimatePageBase {
         wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys("Wrong_User_Name", Keys.ENTER);
         wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.INTERNAL_USER_PASSWORD, Keys.ENTER);
     }
+
     public void loginWithWrongPass() {
         wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.INTERNAL_USER_USERNAME, Keys.ENTER);
         wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys("Wrong_Pass_Word", Keys.ENTER);
     }
+
     /*
      *Method for login - version #2
      * Login as a default user
@@ -197,14 +194,14 @@ public class LoginPage extends ClimatePageBase {
      */
     public void login() {
         System.out.println("Login with default user");
-        wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.UI_USERNAME, Keys.ENTER);
+        wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.DATA_USERNAME, Keys.ENTER);
         BrowserUtils.wait(5);
-    //    boolean isUserOnNewLoginPage = Driver.getDriver().getCurrentUrl().contains("auth.moodys.com");
-     //   if (isUserOnNewLoginPage) {
-     //       clickOnNextButton();
-     //   }
-        wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.UI_PASSWORD);
-        
+        boolean isUserOnNewLoginPage = Driver.getDriver().getCurrentUrl().contains("auth.moodys.com");
+        if (isUserOnNewLoginPage) {
+            clickOnNextButton();
+        }
+        wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.DATA_PASSWORD);
+
 //        wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.UI_USERNAME, Keys.ENTER);
 //        wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.UI_PASSWORD);
        /* if (!termsAndConditionsCheckBox.isSelected())
@@ -223,6 +220,7 @@ public class LoginPage extends ClimatePageBase {
             wait.until(ExpectedConditions.visibilityOf(termsAndConditionsLabel)).click();*/
         wait.until(ExpectedConditions.visibilityOf(loginButton)).click();
     }
+
     public void userLoginWithNoEsgBundle() {
         wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.USER_WITH_OUT_ESG_ENTITLEMENT_USERNAME, Keys.ENTER);
         wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.USER_WITH_OUT_ESG_ENTITLEMENT_PASSWORD);
@@ -230,6 +228,7 @@ public class LoginPage extends ClimatePageBase {
             wait.until(ExpectedConditions.visibilityOf(termsAndConditionsLabel)).click();*/
         wait.until(ExpectedConditions.visibilityOf(loginButton)).click();
     }
+
     public void userLoginWithNoExportBundle() {
         wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.USER_WITH_OUT_EXPORT_ENTITLEMENT_USERNAME, Keys.ENTER);
         wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.USER_WITH_OUT_EXPORT_ENTITLEMENT_PASSWORD);
@@ -246,8 +245,8 @@ public class LoginPage extends ClimatePageBase {
     public void dataValidationLogin() {
         wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.DATA_USERNAME, Keys.ENTER);
         wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.DATA_PASSWORD);
-       // if (!termsAndConditionsCheckBox.isSelected()) //TODO This is removed
-         //   wait.until(ExpectedConditions.visibilityOf(termsAndConditionsLabel)).click();
+        // if (!termsAndConditionsCheckBox.isSelected()) //TODO This is removed
+        //   wait.until(ExpectedConditions.visibilityOf(termsAndConditionsLabel)).click();
         wait.until(ExpectedConditions.visibilityOf(loginButton)).click();
     }
 
@@ -530,7 +529,7 @@ public class LoginPage extends ClimatePageBase {
         logout.click();
     }
 
-    public void checkTermsAndConditions(){
+    public void checkTermsAndConditions() {
         wait.until(ExpectedConditions.visibilityOf(termsAndConditionsLabel)).click();
     }
 }

@@ -3,6 +3,7 @@ package com.esgc.RegulatoryReporting.DB.Tests;
 import com.esgc.Base.TestBases.UITestBase;
 import com.esgc.Dashboard.UI.Pages.*;
 import com.esgc.PortfolioAnalysis.UI.Pages.PhysicalRiskPages.PhysicalRiskManagementPages.PhysicalRiskManagementPage;
+import com.esgc.RegulatoryReporting.API.Controllers.RegulatoryReportingAPIController;
 import com.esgc.RegulatoryReporting.UI.Pages.RegulatoryReportingPage;
 import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.DateTimeUtilities;
@@ -51,12 +52,13 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
             assertTestCase.assertTrue(reportingPage.verifyReportsReadyToDownload(selectedPortfolios), "Reports are ready to download");
             System.out.println("Reports are ready to download");
             reportingPage.deleteFilesInDownloadsFolder();
+            reportingPage.deleteFilesInDownloadsFolder();
             assertTestCase.assertTrue(reportingPage.verifyIfReportsDownloaded(), "Reports are downloaded");
             System.out.println("Reports are downloaded");
             assertTestCase.assertTrue(reportingPage.unzipReports(), "Reports are extracted");
             System.out.println("Reports are extracted");
-            assertTestCase.assertTrue(reportingPage.verifyReportsContentForData(selectedPortfolios, 2, "Exposure Amount in EUR"),
-                    "Reports content is verified");
+            assertTestCase.assertTrue(reportingPage.verifyReportsContentForData(selectedPortfolios, "User Input History", "Exposure Amount in EUR"),
+                    "Reports Dats is verified with snowflake");
         } catch (Exception e) {
             e.printStackTrace();
             assertTestCase.assertTrue(false, "New tab verification failed");
@@ -64,9 +66,11 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
             BrowserUtils.switchWindowsTo(currentWindow);
             System.out.println("=============================");
         }
-        reportingPage.navigateToPageFromMenu("Portfolio Analysis");
+        /*reportingPage.navigateToPageFromMenu("Portfolio Analysis");*//*
         PhysicalRiskManagementPage portfolioAnalysisPage = new PhysicalRiskManagementPage();
-        portfolioAnalysisPage.deletePortfolio(newPortfolioName);
+        portfolioAnalysisPage.deletePortfolio(newPortfolioName);*/
+        RegulatoryReportingAPIController apiController = new RegulatoryReportingAPIController();
+        apiController.deletePortfolio(apiController.getPortfolioId(newPortfolioName));
     }
 
     @Test(groups = {REGRESSION, DATA_VALIDATION, REGULATORY_REPORTING},
@@ -503,6 +507,81 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
             System.out.println("Reports are extracted");
             assertTestCase.assertTrue(reportingPage.verifySFDRCompanyOutput(selectedPortfolios,"latest"),
                     "SFDR Company output for portfolio coverage is verified for Excel vs DB");
+        } catch (Exception e) {
+            e.printStackTrace();
+            assertTestCase.assertTrue(false, "New tab verification failed");
+        } finally {
+            BrowserUtils.switchWindowsTo(currentWindow);
+            System.out.println("=============================");
+        }
+    }
+
+    @Test(groups = {"regression", "DataValidation", "regulatoryReporting"},
+            description = "Data Validation | UI | Regulatory Reporting | SFDR | Company Level Outputs | Verify Scope 3 GHG Emissions Column is Reflected to report")
+    @Xray(test = {12892, 12893, 12895})
+    public void verifyScope3GHGEmissionsColumnTest() {
+        DashboardPage dashboardPage = new DashboardPage();
+        dashboardPage.navigateToPageFromMenu("Regulatory Reporting");
+        test.info("Navigated to Regulatory Reporting Page");
+        //verify portfolio upload modal
+        assertTestCase.assertTrue(reportingPage.uploadAnotherPortfolioLink.isDisplayed(), "Portfolio Upload button is displayed");
+
+        String currentWindow = BrowserUtils.getCurrentWindowHandle();
+        reportingPage.selectAllPortfolioOptions();
+        reportingPage.selectUseLatestData();
+        List<String> selectedPortfolios = reportingPage.getSelectedPortfolioOptions();
+        //verify create reports button before clicking
+        assertTestCase.assertTrue(reportingPage.createReportsButton.isEnabled(), "Create report button is enabled");
+        Set<String> currentWindows = BrowserUtils.getWindowHandles();
+        reportingPage.createReportsButton.click();
+        try {
+            //New tab should be opened and empty state message should be displayed as in the screenshot
+            assertTestCase.assertTrue(reportingPage.verifyNewTabOpened(currentWindows), "New tab is opened");
+            System.out.println("New tab is opened");
+            assertTestCase.assertTrue(reportingPage.verifyReportsReadyToDownload(selectedPortfolios), "Reports are ready to download");
+            System.out.println("Reports are ready to download");
+            reportingPage.deleteFilesInDownloadsFolder();
+            assertTestCase.assertTrue(reportingPage.verifyIfReportsDownloaded(), "Reports are downloaded");
+            System.out.println("Reports are downloaded");
+            assertTestCase.assertTrue(reportingPage.unzipReports(), "Reports are extracted");
+            System.out.println("Reports are extracted");
+            assertTestCase.assertTrue(reportingPage.verifyScope3GHGEmissionsForCompanyOutput(selectedPortfolios,"latest"),
+                    "SFDR Company output for portfolio coverage is verified for Excel vs DB");
+            System.out.println("SFDR Scope 3 GHG Emissions output for portfolio coverage is verified for Excel vs DB");
+            assertTestCase.assertTrue(reportingPage.verifyScope3GHGEmissionsForPortfolioLevelOutput(selectedPortfolios,"latest"),
+                    "SFDR Portfolio Level output for portfolio coverage is verified for Excel vs DB");
+            System.out.println("SFDR Scope 3 GHG Emissions output for portfolio coverage is verified for Excel vs DB");
+        } catch (Exception e) {
+            e.printStackTrace();
+            assertTestCase.assertTrue(false, "New tab verification failed");
+        } finally {
+            BrowserUtils.switchWindowsTo(currentWindow);
+            System.out.println("=============================");
+        }
+
+        reportingPage.selectAnnualReports();
+        selectedPortfolios = reportingPage.getSelectedPortfolioOptions();
+        //verify create reports button before clicking
+        assertTestCase.assertTrue(reportingPage.createReportsButton.isEnabled(), "Create report button is enabled");
+        currentWindows = BrowserUtils.getWindowHandles();
+        reportingPage.createReportsButton.click();
+        try {
+            //New tab should be opened and empty state message should be displayed as in the screenshot
+            assertTestCase.assertTrue(reportingPage.verifyNewTabOpened(currentWindows), "New tab is opened");
+            System.out.println("New tab is opened");
+            assertTestCase.assertTrue(reportingPage.verifyReportsReadyToDownload(selectedPortfolios), "Reports are ready to download");
+            System.out.println("Reports are ready to download");
+            reportingPage.deleteFilesInDownloadsFolder();
+            assertTestCase.assertTrue(reportingPage.verifyIfReportsDownloaded(), "Reports are downloaded");
+            System.out.println("Reports are downloaded");
+            assertTestCase.assertTrue(reportingPage.unzipReports(), "Reports are extracted");
+            System.out.println("Reports are extracted");
+            assertTestCase.assertTrue(reportingPage.verifyScope3GHGEmissionsForCompanyOutput(selectedPortfolios,"latest"),
+                    "SFDR Company output for portfolio coverage is verified for Excel vs DB");
+            System.out.println("SFDR Scope 3 GHG Emissions output for portfolio coverage is verified for Excel vs DB");
+            assertTestCase.assertTrue(reportingPage.verifyScope3GHGEmissionsForPortfolioLevelOutput(selectedPortfolios,"latest"),
+                    "SFDR Portfolio Level output for portfolio coverage is verified for Excel vs DB");
+            System.out.println("SFDR Scope 3 GHG Emissions output for portfolio coverage is verified for Excel vs DB");
         } catch (Exception e) {
             e.printStackTrace();
             assertTestCase.assertTrue(false, "New tab verification failed");
