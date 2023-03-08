@@ -7,6 +7,7 @@ import com.esgc.PortfolioAnalysis.UI.Pages.PhysicalRiskPages.PhysicalRiskManagem
 import com.esgc.RegulatoryReporting.UI.Pages.RegReportingUITestBase;
 import com.esgc.RegulatoryReporting.UI.Pages.RegulatoryReportingPage;
 import com.esgc.Utilities.*;
+import org.apache.commons.collections.bag.SynchronizedSortedBag;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.Color;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -61,10 +62,11 @@ public class RegulatoryReportingPageTests extends RegReportingUITestBase {
         assertTestCase.assertTrue(reportingPage.isInterimReportsOptionDisplayed(), "Interim Reports option is displayed");
         assertTestCase.assertTrue(reportingPage.isAnnualReportsOptionEnabled(), "Annual Reports option is enabled");
         assertTestCase.assertTrue(reportingPage.isUseLatestDataOptionDisplayed(), "Use Latest Data option is displayed");
-        assertTestCase.assertAll("verifyReportingListTest is done");
+        assertTestCase.assertAll();
     }
 
-    @Test(groups = {REGRESSION, UI, REGULATORY_REPORTING, "issam"}, description = "Verify user portfolio list on regulatory reporting page")
+    @Test( groups = {REGRESSION, UI, REGULATORY_REPORTING, "issam"}, description = "Verify user portfolio list on regulatory reporting page")
+
     @Xray(test = {11063, 11604, 11093, 11332})
     public void verifyPortfolioListForUserTest() {
         LoginPage login = new LoginPage();
@@ -76,6 +78,9 @@ public class RegulatoryReportingPageTests extends RegReportingUITestBase {
         dashboardPage.clickOnPortfolioSelectionUploadButton();
 
         List<String> expectedPortfoliosList = BrowserUtils.getElementsText(dashboardPage.portfolioNameList);
+        System.out.println("size of expected portfolio list"+expectedPortfoliosList.size());
+
+
         assertTestCase.assertTrue(expectedPortfoliosList.size() >= 0, "Dashboard Page - Portfolio list is verified");
 
         dashboardPage.clickOnReturnButton();
@@ -85,9 +90,15 @@ public class RegulatoryReportingPageTests extends RegReportingUITestBase {
         test.info("Navigated to Regulatory Reporting Page");
         //get portfolios' list on regulatory reporting page
         List<String> actualPortfoliosList = reportingPage.getPortfolioList();
+
+        System.out.println("size of actual  portfolio list"+actualPortfoliosList.size());
+        List <String> actualEnabledPorfoliosList = reportingPage.selectEnabledPortfolioOption();
+
+        System.out.println("size of actual enabled portfolio list"+actualEnabledPorfoliosList.size());
+        //List<String> actualPortfoliosList = BrowserUtils.getElementsText(dashboardPage.portfolioNameList);
         assertTestCase.assertTrue(actualPortfoliosList.size() > 4, "Regulatory Reporting Page - Portfolio list is verified");
-        //assertTestCase.assertTrue(expectedPortfoliosList.containsAll(actualPortfoliosList), "Regulatory Reporting Page - Portfolio list is verified");
         assertTestCase.assertTrue(expectedPortfoliosList.containsAll(actualPortfoliosList), "Regulatory Reporting Page - Portfolio list is verified");
+        assertTestCase.assertTrue(actualPortfoliosList.containsAll(expectedPortfoliosList), "Regulatory Reporting Page - Portfolio list is verified");
 
         //verify user selects only 4 portfolios at a time
         assertTestCase.assertFalse(reportingPage.isCreateReportsButtonEnabled(), "Create Reports button is disabled");
@@ -168,6 +179,8 @@ public class RegulatoryReportingPageTests extends RegReportingUITestBase {
         //reportingPage.selectPortfolioOptionByIndex(5);
         reportingPage.selectAllPortfolioOptions();
         assertTestCase.assertEquals(reportingPage.getCreateReportsButtonText(), "Create 4 Reports", "Create Reports button is verified for 4 portfolio selected");
+        assertTestCase.assertAll();
+
         dashboardPage.navigateToPageFromMenu("Dashboard");
     }
 
@@ -363,12 +376,13 @@ public class RegulatoryReportingPageTests extends RegReportingUITestBase {
             assertTestCase.assertTrue(false, "New tab verification failed");
             e.printStackTrace();
         } finally {
+            assertTestCase.assertAll();
             BrowserUtils.switchWindowsTo(currentWindow);
         }
         BrowserUtils.wait(5);
         dashboardPage.clickOnMenuButton();
         dashboardPage.clickOnRegulatoryReporting();
-        dashboardPage.navigateToPageFromMenu("Dashboard");
+        //dashboardPage.navigateToPageFromMenu("Dashboard");
         //Create Report button should not be clickable until progress is done, button should be greyed out
         //This part is not automated since button turn back to blue in a short time
     }
@@ -447,6 +461,7 @@ public class RegulatoryReportingPageTests extends RegReportingUITestBase {
         DashboardPage dashboardPage = new DashboardPage();
         BrowserUtils.wait(1);
         //dashboardPage.clickOnRegulatoryReporting();
+        dashboardPage.navigateToDashboardPage();
         dashboardPage.clickOnMenuButton();
         dashboardPage.clickOnRegulatoryReporting();
         //dashboardPage.navigateToPageFromMenu("Regulatory Reporting");
@@ -500,8 +515,10 @@ public class RegulatoryReportingPageTests extends RegReportingUITestBase {
     public void verifyEUTaxonomyReportSheetsTest() {
         DashboardPage dashboardPage = new DashboardPage();
         dashboardPage.navigateToDashboardPage();
-        dashboardPage.refreshCurrentWindow();
+        //dashboardPage.refreshCurrentWindow();
         // dashboardPage.clickOnRegulatoryReporting();
+        dashboardPage.navigateToDashboardPage();
+
         dashboardPage.clickOnMenuButton();
         dashboardPage.clickOnRegulatoryReporting();
         //dashboardPage.navigateToPageFromMenu("Regulatory Reporting");
