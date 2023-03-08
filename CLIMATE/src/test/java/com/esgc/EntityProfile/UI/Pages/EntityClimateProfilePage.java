@@ -2895,5 +2895,19 @@ public class EntityClimateProfilePage extends ClimatePageBase {
 
     }
 
+    public void verifyStrengthsAndWeakness(String content){
+        ArrayList<String> expStrengthsAndWeaknessOrder = new ArrayList<>();
+        expStrengthsAndWeaknessOrder.add("Social Standards in the Supply Chain");
+        expStrengthsAndWeaknessOrder.add("Social Dialogue");
+        expStrengthsAndWeaknessOrder.add("Information to Customers");
+        expStrengthsAndWeaknessOrder.add("Career Management");
+        expStrengthsAndWeaknessOrder.add("Anti-Competition");
+        int currentIndex = 0;
+        for(String str: expStrengthsAndWeaknessOrder){
+            assertTestCase.assertTrue(currentIndex<content.indexOf(str), "Strengths or Weaknesses are not in Expected Order");
+            currentIndex = content.indexOf(str);
+        }
+    }
+
 
 }

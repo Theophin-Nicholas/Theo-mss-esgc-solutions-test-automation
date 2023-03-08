@@ -375,6 +375,8 @@ public abstract class PageBase {
     @FindBy(xpath = "//*[text()=\"Return to Moody's ESG360\"]")
     public WebElement returnToESG360Button;
 
+    @FindBy(xpath = "//div[starts-with(@id,'mini')]")
+    public List<WebElement> portfolioCards;
 
     protected WebDriverWait wait = new WebDriverWait(Driver.getDriver(), Duration.ofSeconds(80));
     protected Actions actions = new Actions(Driver.getDriver());
@@ -410,6 +412,15 @@ public abstract class PageBase {
     }
     //=================Common Methods for Navigation Tabs on Top of the Page ============================================
 
+
+
+    public boolean isRegulatoryReportingDisplayed(){
+        return regulatoryReporting.isDisplayed();
+    }
+
+    public void clickOnRegulatoryReporting(){
+        regulatoryReporting.click();
+    }
     /*
      * This method will verify if Regions Sections and As Of Date drop down
      */
@@ -574,8 +585,11 @@ public abstract class PageBase {
      * Click method for Menu Tab on top left corner
      */
     public void clickMenu() {
-        wait.until(ExpectedConditions.visibilityOf(menu));
+        //WebDriverWait wait = new WebDriverWait(Driver.getDriver(), Duration.ofSeconds(60));
+        //wait.until(ExpectedConditions.elementToBeClickable(menu));
+        BrowserUtils.waitForClickablility(menu,120);
         BrowserUtils.clickWithJS(menu);
+
     }
 
     /**
@@ -642,6 +656,7 @@ public abstract class PageBase {
      * Clicks the portfolio selection button on Page to select or upload a portfolio
      */
     public void clickPortfolioSelectionButton() {
+        BrowserUtils.waitForVisibility(portfolioSelectionButton,60);
         wait.until(ExpectedConditions.elementToBeClickable(portfolioSelectionButton)).click();
         BrowserUtils.waitFor(3);
     }
@@ -1324,7 +1339,7 @@ public abstract class PageBase {
     }
 
     public void waitForDataLoadCompletion() {
-        BrowserUtils.waitForInvisibility(allLoadMasks, 30);
+        BrowserUtils.waitForInvisibility(allLoadMasks, 120);
         // wait.until(ExpectedConditions.invisibilityOfAllElements(allLoadMasks));
     }
 
@@ -2085,9 +2100,26 @@ public abstract class PageBase {
             BrowserUtils.scrollTo(portfolio);
             portfolio.click();
             System.out.println("Portfolio found : " + portfolioName);
+            BrowserUtils.ActionKeyPress(Keys.ESCAPE);
         } catch (Exception e) {
             System.out.println("Could not find the Portfolio");
         }
+    }
+
+    public void selectPortfolioByNameFromPortfolioSelectionModal(String portfolioName) {
+        BrowserUtils.waitFor(3);
+        clickPortfolioSelectionButton();
+        BrowserUtils.wait(1);
+        wait.until(ExpectedConditions.visibilityOfAllElements(portfolioCards));
+        List<WebElement> list =
+                portfolioCards.stream().filter(e -> e.getText().substring(0, e.getText().length() - 11).equals(portfolioName))
+                        .collect(Collectors.toList());
+        if(list.size() == 0) {
+            System.out.println("Portfolio with name " + portfolioName + " is not found");
+            clickAwayinBlankArea();
+            return;
+        }
+        list.get(list.size() - 1).click();
     }
 
     public void selectPortfolioFromPortfolioSettings(String portfolioName) {

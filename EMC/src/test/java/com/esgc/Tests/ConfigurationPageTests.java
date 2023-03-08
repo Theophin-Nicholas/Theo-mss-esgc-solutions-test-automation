@@ -522,7 +522,7 @@ public class ConfigurationPageTests extends EMCUITestBase {
     }
 
     @Test(groups = {EMC, UI,REGRESSION}, description = "UI | EMC | Roles | Verify User with View Role can view Accounts menu on EMC")
-    @Xray(test = {7336, 7434, 7552, 7599})
+    @Xray(test = {7336, 7434, 7552, 7599, 7389})
     public void verifyUserWithViewerRoleCanViewAccountsMenuTest() {
         navigateToConfigPage("permission roles");
         EMCRolesPage rolesPage = new EMCRolesPage();
@@ -536,7 +536,7 @@ public class ConfigurationPageTests extends EMCUITestBase {
             detailsPage.assignMember("Ferhat Demir");
         }
         assertTestCase.assertTrue(detailsPage.verifyUser("Ferhat Demir"),"User is assigned to the role");
-        Driver.closeDriver();
+        Driver.quit();
         Driver.getDriver().get(Environment.EMC_URL);
         BrowserUtils.waitForPageToLoad(10);
         LoginPageEMC loginPageEMC = new LoginPageEMC();
@@ -544,8 +544,9 @@ public class ConfigurationPageTests extends EMCUITestBase {
         EMCMainPage homePage = new EMCMainPage();
         homePage.goToAccountsPage();
         EMCAccountsPage accountsPage = new EMCAccountsPage();
-        BrowserUtils.wait(5);
+        BrowserUtils.waitForVisibility(accountsPage.pageTitle, 20);
         assertTestCase.assertEquals(accountsPage.pageTitle.getText(), "Accounts", "Accounts page is displayed");
+        BrowserUtils.wait(10);
         assertTestCase.assertEquals(accountsPage.accountNames.size() > 0, true, "Account is displayed");
 
         accountsPage.goToAccount(accountName);

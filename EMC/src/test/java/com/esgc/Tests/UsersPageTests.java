@@ -145,7 +145,7 @@ public class UsersPageTests extends EMCUITestBase {
         Driver.getDriver().get(Environment.EMC_URL);
         BrowserUtils.waitForPageToLoad(10);
         LoginPageEMC loginPageEMC = new LoginPageEMC();
-        loginPageEMC.loginEMCWithParams("ferhat.demir-non-empl@moodys.com", "Odessa2022??");
+        loginPageEMC.loginEMCWithParams("ferhat.demir-non-empl@moodys.com", "Apple@2023??");
         EMCMainPage mainPage = new EMCMainPage();
         BrowserUtils.waitForVisibility(mainPage.EMCTitle, 10);
         String getAccessTokenScript = "return JSON.parse(localStorage.getItem('okta-token-storage')).accessToken.claims.groups";
@@ -178,7 +178,7 @@ public class UsersPageTests extends EMCUITestBase {
         Driver.getDriver().get(Environment.EMC_URL);
         BrowserUtils.waitForPageToLoad(10);
         LoginPageEMC loginPageEMC = new LoginPageEMC();
-        loginPageEMC.loginEMCWithParams("ferhat.demir-non-empl@moodys.com", "Odessa2022??");
+        loginPageEMC.loginEMCWithParams("ferhat.demir-non-empl@moodys.com", "Apple@2023??");
         EMCMainPage mainPage = new EMCMainPage();
         BrowserUtils.waitForVisibility(mainPage.EMCTitle, 10);
         String getAccessTokenScript = "return JSON.parse(localStorage.getItem('okta-token-storage')).accessToken.claims.groups";

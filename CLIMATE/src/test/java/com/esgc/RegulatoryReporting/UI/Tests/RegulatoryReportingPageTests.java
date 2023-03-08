@@ -25,18 +25,18 @@ public class RegulatoryReportingPageTests extends UITestBase {
         DashboardPage dashboardPage = new DashboardPage();
         dashboardPage.clickMenu();
         // Dynamic xpath - Helps us to pass page names "Dashboard", "Portfolio Analysis"
-        assertTestCase.assertTrue(dashboardPage.regulatoryReporting.isDisplayed(),
+        assertTestCase.assertTrue(dashboardPage.isRegulatoryReportingDisplayed(),
                 "Verify that user can navigate to Regulatory Reporting page");
-        dashboardPage.regulatoryReporting.click();
+        dashboardPage.clickOnRegulatoryReporting();
         //dashboardPage.navigateToPageFromMenu("Regulatory Reporting");
         test.info("Navigated to Regulatory Reporting Page");
-        assertTestCase.assertTrue(reportingPage.pageTitle.isDisplayed(),
+        assertTestCase.assertTrue(reportingPage.isPageTitleDisplayed(),
                 "Regulatory Reporting page title is verified");
-        assertTestCase.assertEquals(reportingPage.pageTitle.getText(), "Moody's ESG360: Reporting Service",
+        assertTestCase.assertEquals(reportingPage.getPageTitleText(), "Moody's ESG360: Reporting Service",
                 "Regulatory Reporting page title is verified");
-        assertTestCase.assertEquals(reportingPage.reportingTitle.getText(), "Select Reporting",
+        assertTestCase.assertEquals(reportingPage.getReportingTitleText(), "Select Reporting",
                 "Regulatory Reporting Page - Reporting Title is verified");
-        assertTestCase.assertEquals(reportingPage.reportingSubtitle.getText(), "Reporting",
+        assertTestCase.assertEquals(reportingPage.getReportingSubtitleText(), "Reporting",
                 "Regulatory Reporting Page - Reporting SubTitle is verified");
         assertTestCase.assertTrue(reportingPage.getReportingList().size() > 0,
                 "Regulatory Reporting Page - Reporting list is verified");
@@ -51,9 +51,9 @@ public class RegulatoryReportingPageTests extends UITestBase {
                 "SFDR PAIs is not selected");
         assertTestCase.assertTrue(reportingPage.isSelectedReportingOptionByName("EU Taxonomy"),
                 "EU Taxonomy is selected");
-        assertTestCase.assertTrue(reportingPage.interimReportsOption.isDisplayed(), "Interim Reports option is displayed");
-        assertTestCase.assertTrue(reportingPage.annualReportsOption.isEnabled(), "Annual Reports option is enabled");
-        assertTestCase.assertTrue(reportingPage.useLatestDataOption.isDisplayed(), "Use Latest Data option is displayed");
+        assertTestCase.assertTrue(reportingPage.isInterimReportsOptionDisplayed(),"Interim Reports option is displayed");
+        assertTestCase.assertTrue(reportingPage.isAnnualReportsOptionEnabled(),"Annual Reports option is enabled");
+        assertTestCase.assertTrue(reportingPage.isUseLatestDataOptionDisplayed(),"Use Latest Data option is displayed");
     }
 
     @Test(groups = {REGRESSION, UI, REGULATORY_REPORTING}, description = "Verify user portfolio list on regulatory reporting page")
@@ -74,15 +74,15 @@ public class RegulatoryReportingPageTests extends UITestBase {
         assertTestCase.assertTrue(expectedPortfoliosList.containsAll(actualPortfoliosList), "Regulatory Reporting Page - Portfolio list is verified");
 
         //verify user selects only 4 portfolios at a time
-        assertTestCase.assertFalse(reportingPage.createReportsButton.isEnabled(), "Create Reports button is disabled");
-        assertTestCase.assertEquals(reportingPage.createReportsButton.getText(), "Create 0 Report", "Create Reports button is verified");
+        assertTestCase.assertFalse(reportingPage.isCreateReportsButtonEnabled(), "Create Reports button is disabled");
+        assertTestCase.assertEquals(reportingPage.getCreateReportsButtonText(), "Create 0 Report", "Create Reports button is verified");
         String color = Color.fromString(reportingPage.createReportsButton.getCssValue("background-color")).asHex();
         assertTestCase.assertEquals(color.toLowerCase(), "#c1c6cc", "Create Reports button color is verified");
 
         reportingPage.selectAllPortfolioOptions();
         assertTestCase.assertEquals(reportingPage.numberOfSelectedPortfolioOptions(), 4, "All Portfolio options are selected");
-        assertTestCase.assertEquals(reportingPage.createReportsButton.getText(), "Create 4 Reports", "All Portfolio options are selected");
-        assertTestCase.assertTrue(reportingPage.createReportsButton.isEnabled(), "Create Reports button is enabled");
+        assertTestCase.assertEquals(reportingPage.getCreateReportsButtonText(), "Create 4 Reports", "All Portfolio options are selected");
+        assertTestCase.assertTrue(reportingPage.isCreateReportsButtonEnabled(), "Create Reports button is enabled");
         assertTestCase.assertFalse(reportingPage.portfolioRadioButtonList.get(4).isEnabled(), "Radio button is disabled if already 4 button selected");
         color = Color.fromString(reportingPage.createReportsButton.getCssValue("background-color")).asHex();
         assertTestCase.assertEquals(color.toUpperCase(), "#1F8CFF", "Create Reports button color is verified");
@@ -137,13 +137,13 @@ public class RegulatoryReportingPageTests extends UITestBase {
         //-Button should have download icon and 'Create 1 Report' by the number of selected portfolio. (If there are more than 1 portfolio selected, then should be 'Create 2 Reports')
         reportingPage.deselectAllPortfolioOptions();
         reportingPage.selectPortfolioOptionByIndex(1);
-        assertTestCase.assertEquals(reportingPage.createReportsButton.getText(), "Create 1 Report", "Create Reports button is verified for 1 portfolio selected");
+        assertTestCase.assertEquals(reportingPage.getCreateReportsButtonText(), "Create 1 Report", "Create Reports button is verified for 1 portfolio selected");
         reportingPage.selectPortfolioOptionByIndex(2);
-        assertTestCase.assertEquals(reportingPage.createReportsButton.getText(), "Create 2 Reports", "Create Reports button is verified for 2 portfolio selected");
+        assertTestCase.assertEquals(reportingPage.getCreateReportsButtonText(), "Create 2 Reports", "Create Reports button is verified for 2 portfolio selected");
         reportingPage.selectPortfolioOptionByIndex(3);
-        assertTestCase.assertEquals(reportingPage.createReportsButton.getText(), "Create 3 Reports", "Create Reports button is verified for 3 portfolio selected");
+        assertTestCase.assertEquals(reportingPage.getCreateReportsButtonText(), "Create 3 Reports", "Create Reports button is verified for 3 portfolio selected");
         reportingPage.selectPortfolioOptionByIndex(4);
-        assertTestCase.assertEquals(reportingPage.createReportsButton.getText(), "Create 4 Reports", "Create Reports button is verified for 4 portfolio selected");
+        assertTestCase.assertEquals(reportingPage.getCreateReportsButtonText(), "Create 4 Reports", "Create Reports button is verified for 4 portfolio selected");
     }
 
     @Test(groups = {REGRESSION, UI, REGULATORY_REPORTING}, description = "Verify user portfolio list on regulatory reporting page")
@@ -153,9 +153,9 @@ public class RegulatoryReportingPageTests extends UITestBase {
         dashboardPage.navigateToPageFromMenu("Regulatory Reporting");
         test.info("Navigated to Regulatory Reporting Page");
         //verify portfolio upload modal
-        assertTestCase.assertTrue(reportingPage.uploadAnotherPortfolioLink.isDisplayed(), "Portfolio Upload button is displayed");
+        assertTestCase.assertTrue(reportingPage.isUploadAnotherPortfolioLinkDisplayed(), "Portfolio Upload button is displayed");
         reportingPage.openPortfolioUploadModal();
-        assertTestCase.assertTrue(reportingPage.importPortfolioPopUp.isDisplayed(), "Portfolio Upload Modal is displayed");
+        assertTestCase.assertTrue(reportingPage.isImportPortfolioPopUpDisplayed(), "Portfolio Upload Modal is displayed");
         reportingPage.closeUploadModal();
 
         //upload a portfolio
@@ -229,11 +229,11 @@ public class RegulatoryReportingPageTests extends UITestBase {
         reportingPage.selectPortfolioOptionByIndex(1);
 
         //verify "Create 1 report" button should be enabled
-        assertTestCase.assertTrue(reportingPage.createReportsButton.isEnabled(), "Create 1 report button is enabled");
+        assertTestCase.assertTrue(reportingPage.isCreateReportsButtonEnabled(), "Create 1 report button is enabled");
 
         //Uncheck "SFDR PAI" reporting option and select multiple portfolios
         reportingPage.deselectAllPortfolioOptions();
-        assertTestCase.assertFalse(reportingPage.createReportsButton.isEnabled(), "Create 1 report button is disabled");
+        assertTestCase.assertFalse(reportingPage.isCreateReportsButtonEnabled(), "Create 1 report button is disabled");
 
         //Select a portfolio and validate the reporting for column is listed with year option dropdown.
         // The oldest available option should be 2019 and should not list any year before that
@@ -245,8 +245,9 @@ public class RegulatoryReportingPageTests extends UITestBase {
         List<String> dropDownOptions = BrowserUtils.getElementsText(reportingPage.reportingForDropdownOptionsList);
         assertTestCase.assertTrue(dropDownOptions.contains("2019"), "Reporting for option oldest year is 2019 is verified");
         assertTestCase.assertFalse(dropDownOptions.contains("2018"), "Reporting for option oldest year is 2019 is verified");
+        BrowserUtils.wait(5);
         reportingPage.reportingForDropdownOptionsList.get(0).click();
-        assertTestCase.assertTrue(reportingPage.createReportsButton.isEnabled(), "Create 1 report button is enabled");
+        assertTestCase.assertTrue(reportingPage.isCreateReportsButtonEnabled(), "Create 1 report button is enabled");
 
         //verify reporting dropdown options are not listed if portfolio is not selected
         reportingPage.pressESCKey();
@@ -260,9 +261,9 @@ public class RegulatoryReportingPageTests extends UITestBase {
 
         //verify reporting dropdown options are not listed if use latest data toggle is selected
         reportingPage.selectPortfolioOptionByIndex(1);
-        assertTestCase.assertTrue(reportingPage.interimReportsOption.isDisplayed(), "Interim reports toggle is displayed");
-        assertTestCase.assertTrue(reportingPage.annualReportsOption.isDisplayed(), "Annual reports toggle is displayed");
-        assertTestCase.assertTrue(reportingPage.useLatestDataOption.isDisplayed(), "Use latest data toggle is displayed");
+        assertTestCase.assertTrue(reportingPage.isInterimReportsOptionDisplayed(), "Interim reports toggle is displayed");
+        assertTestCase.assertTrue(reportingPage.isAnnualReportsOptionDisplayed(), "Annual reports toggle is displayed");
+        assertTestCase.assertTrue(reportingPage.iaUseLatestDataOptionDisplayed(), "Use latest data toggle is displayed");
         reportingPage.selectUseLatestData();
         assertTestCase.assertTrue(reportingPage.isUseLatestDataSelected(), "Use latest data toggle is selected");
         assertTestCase.assertFalse(reportingPage.reportingForListButtons.get(0).isEnabled(), "Reporting year dropdown is enabled");
@@ -294,7 +295,7 @@ public class RegulatoryReportingPageTests extends UITestBase {
         List<String> selectedPortfolios = reportingPage.getSelectedPortfolioOptions();
 
         //verify create reports button before clicking
-        assertTestCase.assertTrue(reportingPage.createReportsButton.isEnabled(), "Create report button is enabled");
+        assertTestCase.assertTrue(reportingPage.isCreateReportsButtonEnabled(), "Create report button is enabled");
         String color = Color.fromString(reportingPage.createReportsButton.getCssValue("background-color")).asHex();
         System.out.println("color = " + color);
         assertTestCase.assertEquals(color, "#1f8cff", "Create report button color is blue");
@@ -340,7 +341,7 @@ public class RegulatoryReportingPageTests extends UITestBase {
         reportingPage.selectPortfolioOptionByName(portfolioName);
         assertTestCase.assertFalse(reportingPage.isPortfolioSelected(portfolioName), "PredictedScoresPortfolio is not selected");
         assertTestCase.assertFalse(reportingPage.isPortfolioSelectionEnabled(portfolioName), "PredictedScoresPortfolio is disabled");
-        assertTestCase.assertFalse(reportingPage.createReportsButton.isEnabled(), "Create report button is disabled");
+        assertTestCase.assertFalse(reportingPage.isCreateReportsButtonEnabled(), "Create report button is disabled");
     }
 
     @Test(groups = {REGRESSION, UI, REGULATORY_REPORTING}, description = "Verify user can't see reporting page if is not entitled to SFDR")
@@ -366,9 +367,9 @@ public class RegulatoryReportingPageTests extends UITestBase {
         DashboardPage dashboardPage = new DashboardPage();
         dashboardPage.navigateToPageFromMenu("Regulatory Reporting");
         test.info("Navigated to Regulatory Reporting Page");
-        assertTestCase.assertTrue(reportingPage.interimReportsOption.isDisplayed(), "Interim reports option is displayed");
-        assertTestCase.assertTrue(reportingPage.annualReportsOption.isDisplayed(), "Annual reports option is displayed");
-        assertTestCase.assertTrue(reportingPage.useLatestDataOption.isDisplayed(), "Use latest data option is displayed");
+        assertTestCase.assertTrue(reportingPage.isInterimReportsOptionDisplayed(), "Interim reports option is displayed");
+        assertTestCase.assertTrue(reportingPage.isAnnualReportsOptionDisplayed(), "Annual reports option is displayed");
+        assertTestCase.assertTrue(reportingPage.isUseLatestDataOptionDisplayed(), "Use latest data option is displayed");
         reportingPage.selectAllPortfolioOptions();
         List<String> selectedPortfolios = reportingPage.getSelectedPortfolioOptions();
         reportingPage.selectReportingFor(selectedPortfolios.get(0), "2019");
@@ -385,42 +386,42 @@ public class RegulatoryReportingPageTests extends UITestBase {
         dashboardPage.navigateToPageFromMenu("Regulatory Reporting");
         test.info("Navigated to Regulatory Reporting Page");
         //verify Title
-        assertTestCase.assertTrue(reportingPage.reportingOptionsTitle.isDisplayed(), "Reporting options title is displayed");
-        assertTestCase.assertEquals(reportingPage.reportingOptionsTitle.getText(), "Reporting Options", "Reporting options title is displayed as expected");
+        assertTestCase.assertTrue(reportingPage.isReportingOptionsTitleDisplayed(), "Reporting options title is displayed");
+        assertTestCase.assertEquals(reportingPage.getReportingOptionsTitleText(), "Reporting Options", "Reporting options title is displayed as expected");
 
         //verify Interim Options
-        assertTestCase.assertTrue(reportingPage.interimReportsOption.isDisplayed(), "Interim reports option is displayed");
-        assertTestCase.assertEquals(reportingPage.interimReportsOption.getText(), "Interim Reports", "Interim reports option is displayed as expected");
-        assertTestCase.assertTrue(reportingPage.interimOptionSubtitle.isDisplayed(), "Interim reports option subtitle is displayed");
-        assertTestCase.assertEquals(reportingPage.interimOptionSubtitle.getText(), "Separate reports across selected portfolios",
+        assertTestCase.assertTrue(reportingPage.isInterimReportsOptionDisplayed(), "Interim reports option is displayed");
+        assertTestCase.assertEquals(reportingPage.isInterimReportsOptionText(), "Interim Reports", "Interim reports option is displayed as expected");
+        assertTestCase.assertTrue(reportingPage.isInterimOptionSubtitleDisplayed(), "Interim reports option subtitle is displayed");
+        assertTestCase.assertEquals(reportingPage.isInterimOptionSubtitleText(), "Separate reports across selected portfolios",
                 "Interim reports option subtitle is displayed as expected");
         assertTestCase.assertTrue(reportingPage.isInterimReportsSelected(), "Interim reports option selected by default");
         reportingPage.selectAllPortfolioOptions();
-        assertTestCase.assertEquals(reportingPage.createReportsButton.getText(), "Create 4 Reports", "Interim reports option subtitle is displayed");
+        assertTestCase.assertEquals(reportingPage.isCreateReportsButtonText(), "Create 4 Reports", "Interim reports option subtitle is displayed");
 
         //verify Annual Options
-        assertTestCase.assertTrue(reportingPage.annualReportsOption.isDisplayed(), "Annual reports option is displayed");
-        assertTestCase.assertEquals(reportingPage.annualReportsOption.getText(), "Annual Reports", "Annual reports option is displayed as expected");
-        assertTestCase.assertTrue(reportingPage.annualOptionSubtitle.isDisplayed(), "Annual reports option subtitle is displayed");
-        assertTestCase.assertEquals(reportingPage.annualOptionSubtitle.getText(), "Annual report averaging across selected portfolios",
+        assertTestCase.assertTrue(reportingPage.isAnnualReportsOptionDisplayed(), "Annual reports option is displayed");
+        assertTestCase.assertEquals(reportingPage.iaAnnualReportsOptionText(), "Annual Reports", "Annual reports option is displayed as expected");
+        assertTestCase.assertTrue(reportingPage.isAnnualOptionSubtitleDisplayed(), "Annual reports option subtitle is displayed");
+        assertTestCase.assertEquals(reportingPage.isAnnualOptionSubtitleText(), "Annual report averaging across selected portfolios",
                 "Annual reports option subtitle is displayed as expected");
         assertTestCase.assertFalse(reportingPage.isAnnualReportsSelected(), "Annual reports option is not selected by default");
         reportingPage.selectAnnualReports("2020");
-        assertTestCase.assertEquals(reportingPage.createReportsButton.getText(), "Create 1 Report", "Annual reports option subtitle is displayed");
+        assertTestCase.assertEquals(reportingPage.isCreateReportsButtonText(), "Create 1 Report", "Annual reports option subtitle is displayed");
         assertTestCase.assertFalse(reportingPage.isInterimReportsSelected(), "Interim reports option is not selected when annual reports option is selected");
 
 
         //verify Use Latest Data Options
-        assertTestCase.assertTrue(reportingPage.useLatestDataOption.isDisplayed(), "Use latest data option is displayed");
-        assertTestCase.assertEquals(reportingPage.useLatestDataOption.getText(), "Use Latest Data", "Use latest data option is displayed as expected");
-        assertTestCase.assertTrue(reportingPage.useLatestDataOptionSubtitle.isDisplayed(), "Use latest data option subtitle is displayed");
-        assertTestCase.assertEquals(reportingPage.useLatestDataOptionSubtitle.getText(), "Only use latest data as of today. Data will not align to report date.",
+        assertTestCase.assertTrue(reportingPage.isUseLatestDataOptionDisplayed(), "Use latest data option is displayed");
+        assertTestCase.assertEquals(reportingPage.isUseLatestDataOptionText(), "Use Latest Data", "Use latest data option is displayed as expected");
+        assertTestCase.assertTrue(reportingPage.isUseLatestDataOptionSubtitleDisplayed(), "Use latest data option subtitle is displayed");
+        assertTestCase.assertEquals(reportingPage.getUseLatestDataOptionSubtitleText(), "Only use latest data as of today. Data will not align to report date.",
                 "Use latest data option subtitle is displayed as expected");
         assertTestCase.assertFalse(reportingPage.isUseLatestDataSelected(), "Use latest data option is not selected by default");
         reportingPage.selectUseLatestData();
         assertTestCase.assertTrue(reportingPage.isUseLatestDataSelected(), "Use latest data option is selected when selected");
         assertTestCase.assertFalse(reportingPage.reportingForListButtons.get(0).isEnabled(), "reporting for dropdown is disabled when use latest data option is selected");
-        assertTestCase.assertTrue(reportingPage.createReportsButton.isEnabled(), "Create reports button is enabled when use latest data option is selected");
+        assertTestCase.assertTrue(reportingPage.isCreateReportsButtonEnabled(), "Create reports button is enabled when use latest data option is selected");
     }
 
     @Test(groups = {REGRESSION, UI, REGULATORY_REPORTING, SMOKE},
@@ -441,7 +442,7 @@ public class RegulatoryReportingPageTests extends UITestBase {
         Set<String> tabs = BrowserUtils.getWindowHandles();
 
         //verify create reports button before clicking
-        assertTestCase.assertTrue(reportingPage.createReportsButton.isEnabled(), "Create report button is enabled");
+        assertTestCase.assertTrue(reportingPage.isCreateReportsButtonEnabled(), "Create report button is enabled");
         reportingPage.createReportsButton.click();
 
         //verify create reports button after clicking
@@ -516,7 +517,7 @@ public class RegulatoryReportingPageTests extends UITestBase {
             Driver.getDriver().switchTo().window(windowHandle);
         }
         BrowserUtils.waitForVisibility(reportingPage.previouslyDownloadedErrorMessage, 30);
-        assertTestCase.assertEquals(reportingPage.previouslyDownloadedErrorMessage.getText(), "No previously downloaded reports to be displayed.", "Verify Error message in Previously Downloaded screen");
+        assertTestCase.assertEquals(reportingPage.getPreviouslyDownloadedErrorMessageText(),"No previously downloaded reports to be displayed.", "Verify Error message in Previously Downloaded screen");
 
     }
 }

@@ -4,7 +4,13 @@ package com.esgc.Utilities.API;
  * This utility class created to store all Endpoints for API calls
  */
 public class Endpoints {
-    //    public static String POST_EMC_NEW_USER = "api/users";
+    public static String EMC_USER = "api/users";
+    public static String EMC_APPS = "api/applications";
+    public static String EMC_ACCOUNTS = "api/accounts";
+    public static String EMC_ADMIN_ROLES = "api/admin/roles";
+    public static String EMC_ADMIN_USERS = "api/admin/users";
+    public static String EMC_ADMIN_USERS_PERMISSIONS = "api/admin/users/permissions";
+//    public static String POST_EMC_NEW_USER = "api/users";
     public static String GET_PORTFOLIOS_FOR_USER = "api/portfolios";
     public static String IMPORT_PORTFOLIO = "api/portfolio/upload";
     public static String POST_FILTER_OPTIONS_IN_PORTFOLIO = "api/portfolios/{portfolio_id}/filter";

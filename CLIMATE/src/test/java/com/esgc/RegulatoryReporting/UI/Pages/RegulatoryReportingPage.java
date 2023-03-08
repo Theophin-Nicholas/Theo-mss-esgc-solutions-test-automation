@@ -137,6 +137,205 @@ public class RegulatoryReportingPage extends UploadPage {
 
     //METHODS
 
+    // this methods returns is the create report button is enabled or not
+    //
+    public boolean isCreateReportsButtonEnabled(){
+
+        return createReportsButton.isEnabled();
+    }
+
+    public void clickOnCreateReportsButton(){
+        createReportsButton.click();
+    }
+
+    public void clickOnEUTaxonomy(){
+        EUTaxonomy.click();
+    }
+
+    //
+    public void isCreateReportsButtonClicked(){
+
+        createReportsButton.click();
+    }
+
+    //
+    public boolean isUploadAnotherPortfolioLinkDisplayed(){
+
+        return uploadAnotherPortfolioLink.isDisplayed();
+
+    }
+
+    //
+    public boolean isImportPortfolioPopUpDisplayed(){
+        return importPortfolioPopUp.isDisplayed();
+    }
+
+
+    // this method get the text value of the create report button webelement
+    public String getCreateReportsButtonText(){
+        return createReportsButton.getText();
+    }
+
+    // this method returns the text value of use latest data option webelement
+    public String getUseLatestDataOptionText(){
+
+        return useLatestDataOption.getText();
+
+    }
+
+    //gets the string value of previously downloaded error message webelement
+
+    public String getPreviouslyDownloadedErrorMessageText(){
+        return previouslyDownloadedErrorMessage.getText();
+    }
+
+    //
+    public boolean isUseLatestDataOptionSubtitleDisplayed(){
+        return useLatestDataOptionSubtitle.isDisplayed();
+    }
+
+    //
+    public String getUseLatestDataOptionSubtitleText(){
+        return useLatestDataOptionSubtitle.getText();
+    }
+
+    // this method checks if reporting options webelement is displayed or not
+    public boolean isReportingOptionsTitleDisplayed(){
+        return reportingOptionsTitle.isDisplayed();
+    }
+
+    // this method returns the string value of the webelement reporting options title
+    public String getReportingOptionsTitleText(){
+
+        return reportingOptionsTitle.getText();
+    }
+
+    // this method helps get the webelement pageTitle text value
+    public String getPageTitleText(){
+
+        return pageTitle.getText();
+    }
+
+    //reportingTitle
+    // this method helps get the reporting title webelement text value
+
+    public String getReportingTitleText(){
+
+        return reportingTitle.getText();
+    }
+
+    // reportingSubtitle
+    // this method is used to get the text value of reporting subtitle webelement
+
+    public String getReportingSubtitleText(){
+        return reportingSubtitle.getText();
+    }
+
+    // this method verifies if the interim Reports Option is displayed
+    public boolean isInterimReportsOptionDisplayed() {
+        try {
+            return interimReportsOption.isDisplayed();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+
+    //
+    public String getInterimReportsOptionText(){
+        return interimReportsOption.getText();
+    }
+    // annualReportsOption
+    // this method verifies if the annual reports option is displayed
+
+    public boolean isAnnualReportsOptionEnabled(){
+        try {
+            return  annualReportsOption.isEnabled();
+        }
+        catch(Exception e){
+            e.printStackTrace();
+            return false;
+        }
+
+    }
+
+    // useLatestDataOption
+    //  this method verifies if the use Latest data option is displayed
+    public boolean isUseLatestDataOptionDisplayed(){
+        try{
+            return useLatestDataOption.isDisplayed();
+        } catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    //
+    public boolean isInterimOptionSubtitleDisplayed(){
+        return interimOptionSubtitle.isDisplayed();
+    }
+
+    // method that returns the string value of interim option subtitle webelement
+    public String getInterimOptionSubtitleText(){
+        return interimOptionSubtitle.getText();
+    }
+
+    //
+
+    public boolean isAnnualReportsOptionDisplayed(){
+        return annualReportsOption.isDisplayed();
+    }
+
+    //
+    public String getAnnualReportsOptionText(){
+        return annualReportsOption.getText();
+    }
+
+    // method checks if annual option susbtitle is displayed or not
+    public boolean isAnnualOptionSubtitleDisplayed(){
+        return annualOptionSubtitle.isDisplayed();
+    }
+
+    // methods returns the string value of the annual option subtitle webelement
+    public String getAnnualOptionSubtitleText(){
+        return annualOptionSubtitle.getText();
+    }
+
+    public boolean isPageTitleDisplayed() {
+        return pageTitle.isDisplayed();
+    }
+
+
+    public String isCreateReportsButtonText() {
+        return createReportsButton.getText();
+    }
+
+    public String iaAnnualReportsOptionText() {
+        return annualReportsOption.getText();
+    }
+
+    public String isAnnualOptionSubtitleText() {
+        return annualOptionSubtitle.getText();
+    }
+
+    public String isInterimOptionSubtitleText() {
+        return interimOptionSubtitle.getText();
+    }
+
+    public boolean iaUseLatestDataOptionDisplayed() {
+        return useLatestDataOption.isDisplayed();
+    }
+
+    public String isInterimReportsOptionText() {
+        return interimReportsOption.getText();
+    }
+
+    public String isUseLatestDataOptionText() {
+        return useLatestDataOption.getText();
+    }
+
+
     public void enterEUTaxonomyValues(String portfolioName, String NonSovereignDerivatives, String Cashandliquidities) {
 
         WebElement element_NonSovereignDerivatives = getEUTaxonomyInputBox(portfolioName).get(0).findElement(By.xpath("div/div/input"));
@@ -595,6 +794,15 @@ public class RegulatoryReportingPage extends UploadPage {
         return excelUtil;
     }
 
+    public boolean verifyReportsContentForData(List<String> selectedPortfolios, String sheetName, String data) {
+        String excelName = rrStatusPage_PortfoliosList.get(0).getText().replaceAll("ready", "").trim();
+        System.out.println("Verifying reports content for sheet " + sheetName);
+        ExcelUtil excelData = getExcelData(excelName, sheetName);
+        if (!excelData.searchData(data)) {
+            System.out.println("Data " + data + " is not found in the excel");
+        }
+        return excelData.searchData(data);
+    }
     public boolean verifyReportsContentForData(List<String> selectedPortfolios, String sheetName, String data) {
         String excelName = rrStatusPage_PortfoliosList.get(0).getText().replaceAll("ready", "").trim();
         System.out.println("Verifying reports content for sheet " + sheetName);
