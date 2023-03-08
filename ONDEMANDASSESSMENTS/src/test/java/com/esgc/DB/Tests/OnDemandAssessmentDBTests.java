@@ -50,7 +50,7 @@ public class OnDemandAssessmentDBTests extends DataValidationTestBase {
 
     // TODO : There is an error in UI values and bug has been created
     @Xray(test = {12068})
-    @Test(enabled = false , groups = {REGRESSION, DATA_VALIDATION},dataProviderClass = DataProviderClass.class)
+    @Test(enabled = false , groups = {REGRESSION, DATA_VALIDATION})
     public void verifyCompaniesInvestmentInfo() {
         String portfolioName = "500 predicted portfolio";
         OnDemandAssessmentPage onDemandAssessmentPage = new OnDemandAssessmentPage();
@@ -81,7 +81,7 @@ public class OnDemandAssessmentDBTests extends DataValidationTestBase {
     }
 
     @Xray(test = {12457})
-    @Test(groups = {REGRESSION, DATA_VALIDATION},dataProviderClass = DataProviderClass.class)
+    @Test(groups = {REGRESSION, DATA_VALIDATION})
     public void verifyRegionsSectorsInvestmentInfo() {
         String portfolioName = "500 predicted portfolio";
         OnDemandAssessmentPage onDemandAssessmentPage = new OnDemandAssessmentPage();
