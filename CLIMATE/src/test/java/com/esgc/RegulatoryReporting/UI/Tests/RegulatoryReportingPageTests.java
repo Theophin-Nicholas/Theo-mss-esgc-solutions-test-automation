@@ -57,7 +57,7 @@ public class RegulatoryReportingPageTests extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI, REGULATORY_REPORTING}, description = "Verify user portfolio list on regulatory reporting page")
-    @Xray(test = {11063, 11604, 11093, 11332})
+    @Xray(test = {11063, 11064, 11093, 11332})
     public void verifyPortfolioListForUserTest() {
         DashboardPage dashboardPage = new DashboardPage();
         //get portfolios' list on dashboard page
@@ -477,7 +477,7 @@ public class RegulatoryReportingPageTests extends UITestBase {
         }
     }
 
-    @Test(groups = {"regression", "ui", "regulatoryReporting"})
+    @Test(groups = {REGRESSION, UI, REGULATORY_REPORTING})
     @Xray(test = {11654, 11657})
     public void verifyPreviouslyDownloadedFeature() {
         DashboardPage dashboardPage = new DashboardPage();
@@ -496,7 +496,7 @@ public class RegulatoryReportingPageTests extends UITestBase {
         reportingPage.verifyFileDownloadFromPreviouslyDownloadedScreen();
     }
 
-    @Test(groups = {"regression", "ui", "regulatoryReporting"})
+    @Test(groups = {REGRESSION, UI, REGULATORY_REPORTING})
     @Xray(test = {11712})
     public void verifyNoFilesInPreviouslyDownloadedScreen() {
 

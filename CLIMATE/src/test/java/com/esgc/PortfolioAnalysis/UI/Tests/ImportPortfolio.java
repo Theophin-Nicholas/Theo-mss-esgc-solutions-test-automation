@@ -68,7 +68,7 @@ public class ImportPortfolio extends UITestBase {
 //1027
     @Test(groups = {REGRESSION, UI, SMOKE, ROBOT_DEPENDENCY},dataProviderClass = DataProviderClass.class,
             dataProvider = "Valid Portfolios")
-    @Xray(test = {493, 497, 500, 1027, 3044, 11069})
+    @Xray(test = {493, 497, 500, 1027, 1297, 3044, 11069})
     public void VerifyFileUploadSuccessPopup(String portfolio) {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         researchLinePage.navigateToPageFromMenu("Portfolio Analysis");

@@ -1334,10 +1334,9 @@ public class DashboardPage extends UploadPage {
         int numberInExportText = Integer.parseInt(panelExportText.getText().replaceAll("\\D", ""));
         if (Integer.parseInt(numbers[2]) != numberInExportText) return false;
 
-        //TODO - Remove Finance
         //Remove Finance from from expSectorTitles.
         //A bug ticket created for it, It is just added to complete automation. Normally there shouldn't be such sector title.
-        List<String> expSectorTitles = Arrays.asList("Basic Materials", "Consumer Discretionary", "Communication", "Financials", "Energy", "Real Estate", "Sovereign", "Technology", "Utilities", "Health Care", "Consumer Staples", "Industry", "Finance");
+        List<String> expSectorTitles = Arrays.asList("Basic Materials", "Consumer Discretionary", "Communication", "Financials", "Energy", "Real Estate", "Sovereign", "Technology", "Utilities", "Health Care", "Consumer Staples", "Industry");
         List<String> expRegionTitles = Arrays.asList("Americas", "Asia Pacific", "Europe, Middle East & Africa");
         if (filterBy.toLowerCase().equals("sector")) {
             for (int i = 0; i < panelClassNames.size() - 1; i++) {

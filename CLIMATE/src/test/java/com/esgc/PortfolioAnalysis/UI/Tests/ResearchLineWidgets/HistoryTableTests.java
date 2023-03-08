@@ -34,7 +34,7 @@ public class HistoryTableTests extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI},
-            description = "Verify History Table not available", dataProvider = "History Table Research Lines")
+            description = "Verify History Table not available", dataProvider = "History Table Not Available Research Lines")
     @Xray(test = {5815, 5816, 5817, 5820})
     public void verifyHistoryTablbeNotAvailable(String page) {
         ResearchLinePage researchLinePage = new ResearchLinePage();
@@ -72,16 +72,21 @@ public class HistoryTableTests extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI}, dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
-    @Xray(test = {9822, 12601, 12615})
+    @Xray(test = {9822, 10034, 12601, 12615})
     public void verifyCategoriesAndColorsOfHistoryTable(String page) {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         researchLinePage.navigateToResearchLine(page);
-        researchLinePage.waitForDataLoadCompletion();
 
         if (page.equals("Physical Risk Hazards") || page.equals("Temperature Alignment") || page.equals("ESG Assessments")) {
             throw new SkipException("History Table is not ready to test in " + page);
         }
+
+        researchLinePage.clickOnBenchmarkDropdown();
+        researchLinePage.SelectAPortfolioFromBenchmark("Sample Portfolio");
+        researchLinePage.waitForDataLoadCompletion();
+
         assertTestCase.assertTrue(researchLinePage.checkIfHistoryTableExists(page), "History Table Validation");
+        assertTestCase.assertTrue(researchLinePage.checkIfBenchMarkHistoryTableExists(), "History Table Benchmark Validation");
 
         if (page.equals("Carbon Footprint")) {
             assertTestCase.assertTrue(researchLinePage.mouseHoverAndVerifyTooltipHistoryTable("Moderate", "highcharts-color-4", "#87C097"), "History Table Validation");
@@ -109,7 +114,7 @@ public class HistoryTableTests extends UITestBase {
         }
     }
 
-    @DataProvider(name = "History Table Research Lines")
+    @DataProvider(name = "History Table Not Available Research Lines")
     public Object[][] availableResearchLines() {
 
         return new Object[][]{

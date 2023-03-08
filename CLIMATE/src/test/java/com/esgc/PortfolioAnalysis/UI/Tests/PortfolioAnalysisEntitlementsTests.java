@@ -145,7 +145,7 @@ public class PortfolioAnalysisEntitlementsTests extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI, SMOKE, ENTITLEMENTS})
-    @Xray(test = {1936, 1937, 6093, 6084})
+    @Xray(test = {1936, 1937, 6083, 6084})
     public void validateExternalUserHasAllResearchLinesBundleAccess() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         LoginPage login = new LoginPage();
@@ -153,8 +153,8 @@ public class PortfolioAnalysisEntitlementsTests extends UITestBase {
         researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
         List<String> actualAvailableResearchLines = researchLinePage.getAvailableResearchLines();
         test.info("Available research lines " + actualAvailableResearchLines);
-//        Assert.assertEquals(actualAvailableResearchLines, researchLinePage.getExpectedListOfResearchLines(EntitlementsBundles.ALL),
-//                "Validating list of accessible research lines");
+        Assert.assertEquals(actualAvailableResearchLines, researchLinePage.getExpectedListOfPortfolioAnalysisResearchLines(EntitlementsBundles.ALL),
+                "Validating list of accessible research lines");
         String currentUrl = Driver.getDriver().getCurrentUrl();
         currentUrl = currentUrl.substring(currentUrl.indexOf("portfolioanalysis"));
         Assert.assertEquals(currentUrl, "portfolioanalysis/physicalriskhazards");

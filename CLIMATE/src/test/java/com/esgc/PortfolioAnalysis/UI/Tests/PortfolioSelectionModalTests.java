@@ -185,7 +185,7 @@ public class PortfolioSelectionModalTests extends UITestBase {
 
     @Test(groups = {REGRESSION, UI, SMOKE},
             description = "ESGCA -3430 : Verify the Sorting logic for Portfolios on Selection modal popup.")
-    @Xray(test = {3430})
+    @Xray(test = {1299, 3430})
     public void verifyPortfolioSortingOnSelectionModalPopup() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio Analysis page");

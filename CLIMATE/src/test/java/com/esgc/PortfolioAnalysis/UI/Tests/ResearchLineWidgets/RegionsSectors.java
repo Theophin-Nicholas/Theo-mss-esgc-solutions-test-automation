@@ -87,7 +87,7 @@ public class RegionsSectors extends UITestBase {
     @Test(groups = {REGRESSION, UI},
             description = "Verify if Region and Sector Drill Downs are Clickable and Highlighted with Hover",
             dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
-    @Xray(test = {1278, 2209})
+    @Xray(test = {1278, 2209, 2487})
     public void verifyRegionSectorChartsHighlightedWithHover(String page) {
         ResearchLinePage researchLinePage = new ResearchLinePage();
 
@@ -99,6 +99,8 @@ public class RegionsSectors extends UITestBase {
         test.pass("User is on " + page + " Page");
 
         researchLinePage.selectSamplePortfolioFromPortfolioSelectionModal();
+
+        researchLinePage.verifyRegionComesFirstThenSectors();
 
         assertTestCase.assertTrue(researchLinePage.checkIfRegionSectorChartClickableAndHighlightedWithHover(),
                 "Regions & Sectors charts highlighted with hover", 411, 420, 1199, 1278, 1746, 2209);
@@ -121,7 +123,7 @@ public class RegionsSectors extends UITestBase {
 
     @Test(groups = {REGRESSION, UI},
             dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
-    @Xray(test = 412)
+    @Xray(test = {412, 1270, 2486})
     public void verify_RegionCardsOrder(String page) {
         ResearchLinePage researchLinePage = new ResearchLinePage();
 
@@ -136,7 +138,7 @@ public class RegionsSectors extends UITestBase {
 
     @Test(groups = {REGRESSION, UI},
             dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
-    @Xray(test = 423)
+    @Xray(test = {423, 1200})
     public void verify_SectorCardsOrder(String page) {
         ResearchLinePage researchLinePage = new ResearchLinePage();
 

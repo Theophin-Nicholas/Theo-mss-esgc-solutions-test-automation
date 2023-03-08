@@ -30,7 +30,7 @@ public class BenchmarkSelectionTest extends UITestBase {
         researchLinePage.navigateToResearchLine(researchLine);
         BrowserUtils.wait(5);
 
-        assertTestCase.assertEquals(researchLinePage.benchmarkDropdown.getText(), "Select Benchmark", "Benchmark dropdown verified", 671);
+        assertTestCase.assertEquals(researchLinePage.benchmarkDropdown.getText(), "Select Benchmark", "Benchmark dropdown verified", 671, 1331);
         test.info("Select Benchmark is in dropdown");
 
         researchLinePage.clickOnBenchmarkDropdown();
@@ -39,13 +39,16 @@ public class BenchmarkSelectionTest extends UITestBase {
 
         assertTestCase.assertTrue(researchLinePage.IsBenchmarkListBoxDisplayed(), "Portfolio Analysis page was loaded successfully after Benchmark selection.", 1433, 2254);
         BrowserUtils.wait(3);
-        assertTestCase.assertTrue(researchLinePage.isBenchmarkPortfolioScoreWidgetDisplayed(), "Benchmark Score validation", 425);
+        assertTestCase.assertTrue(researchLinePage.isBenchmarkPortfolioScoreWidgetDisplayed(), "Benchmark Score validation", 425, 1437);
+        assertTestCase.assertTrue(researchLinePage.isBenchmarkPortfolioCoverageWidgetDisplayed(), "Benchmark Coverage validation", 2429);
+        assertTestCase.assertTrue(researchLinePage.isBenchmarkColumnsAreDisplayedOnRegionAndSectorWidgets(), "Benchmark Columns validation", 2564, 2718);
+        assertTestCase.assertTrue(researchLinePage.isBenchmarkMarksAreDisplayedOnRegionAndSectorWidgets(), "Benchmark Marks validation", 1512, 2146);
 
         researchLinePage.clickOnBenchmarkDropdown()
                 .SelectAPortfolioFromBenchmark("No Benchmark");
         //researchLinePage.waitForDataLoadCompletion();
 
-        assertTestCase.assertTrue(researchLinePage.isNoBenchmarkMessageDisplayed(), " No Benchmark message is displayed", 1329);
+        assertTestCase.assertTrue(researchLinePage.isNoBenchmarkMessageDisplayed(), " No Benchmark message is displayed", 1329, 1434);
         assertTestCase.assertEquals(researchLinePage.benchmarkDropdown.getText(), "Select Benchmark", "Benchmark dropdown verified", 671);
         test.info("Select Benchmark is in dropdown");
 

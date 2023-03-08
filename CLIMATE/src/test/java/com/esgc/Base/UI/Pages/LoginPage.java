@@ -3,6 +3,7 @@ package com.esgc.Base.UI.Pages;
 import com.esgc.EntityProfile.UI.Pages.ClimatePageBase;
 import com.esgc.Utilities.*;
 import org.openqa.selenium.Keys;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -53,7 +54,7 @@ public class LoginPage extends ClimatePageBase {
     public WebElement forgotPassword;
 
     @FindBy(xpath = "//a[text()='Help']")
-    public WebElement help;
+    public WebElement helpLink;
 
     @FindBy(xpath = "//p[text()='Unable to sign in']")
     public WebElement UnauthorisedUserErrorMsg;
@@ -102,6 +103,37 @@ public class LoginPage extends ClimatePageBase {
     @FindBy(xpath = "//a[text()='← Back to Sign-In Page']")
     public WebElement backToSignInButton;
 
+    // ======================================== Help Page
+
+    @FindBy(xpath = "//*[text()='Sign-In Help']")
+    public WebElement helpPageSubTitle;
+
+    @FindBy(xpath = "//*[text()='Okta is an on-demand service that allows you to easily sign-in to all the applications your organization uses through a single login.']")
+    public WebElement helpPageSignInHelpText;
+
+    @FindBy(xpath = "//*[text()='Table of Contents']")
+    public WebElement helpPageSubTitle2;
+
+    @FindBy(xpath = "//div[./p[text()='Frequently Asked Questions'] and ./p[text()='How Tos']]")
+    public WebElement helpPageTableOfContentsText;
+
+    @FindBy(xpath = "//p[text()='Frequently Asked Questions' and contains(@style,'font-size: 18px;')]")
+    public WebElement helpPageSubTitle3;
+
+    @FindBy(xpath = "//*[contains(text(),'Click ')]")
+    public WebElement helpPageFrequentlyAskedQuestionsText;
+
+    @FindBy(xpath = "//*[contains(text(),'Sign-in to your Organization') and contains(@style,'Bold')]")
+    public WebElement helpPageSubTitle4;
+
+    @FindBy(xpath = "//*[contains(text(),'john.smith@mycompany.com')]")
+    public WebElement helpPageEmail1;
+
+    @FindBy(xpath = "//*[contains(text(),'If you see the error message Sign in failed! your username and password do not match those specified for your profile, or you do not have access permission. Please contact your system administrator.')]")
+    public WebElement helpPageHowTosText1;
+
+    @FindBy(xpath = "//p[text()='If you continue to experience difficulties accessing your account, please contact us at']/*[contains(text(),'clientservices@moodys.com')]")
+    public WebElement helpPageHowTosText2;
 
     // ========================================== MESG Platform
 
@@ -340,6 +372,11 @@ public class LoginPage extends ClimatePageBase {
 
     }
 
+    public void clickHelpLink() {
+        wait.until(ExpectedConditions.visibilityOf(helpLink));
+        helpLink.click();
+    }
+
 
     /*
      Method to get the warning message after invalid login attempt
@@ -373,11 +410,52 @@ public class LoginPage extends ClimatePageBase {
         return true;
     }
 
+    public boolean checkIfHelpLinkIsClickable() {
+        try {
+            return BrowserUtils.waitForClickablility(helpLink, 5).isDisplayed();
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
     public boolean resetViaEmailButtonIsDisplayed() {
         try {
             return resetViaEmailButton.isDisplayed();
         } catch (Exception e) {
             return false;
+        }
+
+    }
+
+    public void checkIfUserIsOnHelpPage() {
+        try {
+            BrowserUtils.wait(3);
+            WebDriver driver = Driver.getDriver();
+            Set<String> openedWindows = BrowserUtils.getWindowHandles();
+            String currentWindow = driver.getWindowHandle();
+            String helpWindow = openedWindows.stream().filter(e -> !e.equalsIgnoreCase(currentWindow)).findFirst().get();
+            driver.switchTo().window(helpWindow);
+            String actualURL = driver.getCurrentUrl();
+            String expectedURL = Environment.URL + "help";
+            assertTestCase.assertEquals(actualURL, expectedURL, "User should be on HELP page");
+            assertTestCase.assertTrue(helpPageSubTitle.isDisplayed());
+            assertTestCase.assertTrue(helpPageSignInHelpText.isDisplayed());
+            assertTestCase.assertTrue(helpPageSubTitle2.isDisplayed());
+            assertTestCase.assertTrue(helpPageTableOfContentsText.isDisplayed());
+            assertTestCase.assertTrue(helpPageSubTitle3.isDisplayed());
+            assertTestCase.assertTrue(helpPageFrequentlyAskedQuestionsText.isDisplayed());
+            assertTestCase.assertTrue(helpPageSubTitle4.isDisplayed());
+            assertTestCase.assertTrue(helpPageEmail1.isDisplayed());
+            assertTestCase.assertTrue(helpPageHowTosText1.isDisplayed());
+            assertTestCase.assertTrue(helpPageHowTosText2.isDisplayed());
+            backToSignInButton.click();
+            BrowserUtils.wait(3);
+            assertTestCase.assertTrue(isUsernameBoxDisplayed());
+            driver.close();
+            BrowserUtils.wait(2);
+            driver.switchTo().window(currentWindow);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
     }

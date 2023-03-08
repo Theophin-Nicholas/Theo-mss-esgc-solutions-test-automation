@@ -1096,13 +1096,12 @@ public class EntityClimateProfilePage extends ClimatePageBase {
     }
 
     public void validateTemperatureAlignmentUpdatedOn() {
-        if (temperatureAlignmentDetailDivs.get(2).isDisplayed()) {
-            Assert.assertTrue(temperatureAlignmentDetailDivs.get(2).getText().contains("The company reports a target"));
-            Assert.assertEquals(Color.fromString(temperatureAlignmentDetailDivs.get(2).getCssValue("color")).asHex(), "#263238");
-            Assert.assertEquals(temperatureAlignmentDetailDivs.get(2).getCssValue("font-size"), "12px");
-            Assert.assertEquals(temperatureAlignmentDetailDivs.get(2).getCssValue("font-family"),
-                    ("WhitneyNarrMedium, Roboto, Arial, sans-serif"));
-
+        if (temperatureAlignmentDetailDivs.get(3).isDisplayed()) {
+            Assert.assertTrue(temperatureAlignmentDetailDivs.get(3).getText().contains("Updated on"));
+            Assert.assertEquals(Color.fromString(temperatureAlignmentDetailDivs.get(3).getCssValue("color")).asHex(), "#999999");
+            Assert.assertEquals(temperatureAlignmentDetailDivs.get(3).getCssValue("font-size"), "10px");
+            Assert.assertEquals(temperatureAlignmentDetailDivs.get(3).getCssValue("font-family"),
+                    ("WhitneyNarrSemiBold, Roboto, Arial, sans-serif"));
         }
     }
 

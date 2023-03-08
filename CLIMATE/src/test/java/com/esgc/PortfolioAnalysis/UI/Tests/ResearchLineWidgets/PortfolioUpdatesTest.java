@@ -9,6 +9,7 @@ import org.testng.SkipException;
 import org.testng.annotations.Test;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -18,7 +19,7 @@ public class PortfolioUpdatesTest extends UITestBase {
 
     @Test(groups = {REGRESSION, UI, SMOKE}, description = "Verify if Updates Header is displayed as expected when filter is changed",
             dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
-    @Xray(test = {477, 1951, 2466})
+    @Xray(test = {477, 1251, 1951, 2030, 2287, 2288, 2466, 2282})
     public void verifyPortfolioUpdatesHeader(String page) {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         researchLinePage.navigateToResearchLine(page);
@@ -32,7 +33,7 @@ public class PortfolioUpdatesTest extends UITestBase {
     @Test(groups = {REGRESSION, UI, SMOKE},
             description = "Verify if Portfolio Updates Table is Displayed as Expected",
             dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
-    @Xray(test = {1243, 2027, 2291, 2466, 2471})
+    @Xray(test = {1243, 1252, 2027, 2291, 2466, 2471, 2551})
     public void verifyPortfolioUpdates(String page) {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         if (page.equals("Temperature Alignment") ) {
@@ -67,16 +68,15 @@ public class PortfolioUpdatesTest extends UITestBase {
         assertTestCase.assertTrue(updatesTableColumns.get(7).getText().equalsIgnoreCase("Country"), "Column name verified: Country", 473, 1017, 1253, 1764);
         assertTestCase.assertTrue(updatesTableColumns.get(8).getText().equalsIgnoreCase("Region"), "Column name verified: Region", 473, 1017, 1253, 1764);
 
-        assertTestCase.assertTrue(researchLinePage.verifyUpdatesHasMax10Companies(), "Updates has Max 10 companies", 476, 1518);
-        //TODO failure will be fixed under https://esjira/browse/ESGCA-13552
-        assertTestCase.assertTrue(researchLinePage.verifyUpdatesSortingOrder(page), "Updates sorting order of companies", 2291,2471);
+        assertTestCase.assertTrue(researchLinePage.verifyUpdatesHasMax10Companies(), "Updates has Max 10 companies", 476, 1518, 2285, 2553);
+        assertTestCase.assertTrue(researchLinePage.verifyUpdatesSortingOrder(page), "Updates sorting order of companies", 2291,2471, 2472, 2552);
 
     }
 
     @Test(groups = {REGRESSION, UI},
             description = "Verify if Updates As Of Modal Window is Displayed as Expected",
             dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
-    @Xray(test = {1776, 2035, 2289, 2474, 12606})
+    @Xray(test = {1776, 1777, 1956, 2035, 2289, 2377, 2474, 2554, 12606})
     public void verifyPortfolioUpdatesDrillDown(String page) {
         if (page.equals("Temperature Alignment") ) {
             throw new SkipException(page +" - Portfolio Distribution is not ready to test");
@@ -98,8 +98,11 @@ public class PortfolioUpdatesTest extends UITestBase {
         researchLinePage.clickMoreCompaniesDrillDown(page);
 
         assertTestCase.assertTrue(researchLinePage.checkIfUpdatesAsOfModalWindowPresent(), "Updates Expand verified", 1776);
-        assertTestCase.assertEquals(researchLinePage.drillDownTitle.getText(), "Updates as of April 2021", "Updates Drilldown Title Verification", 2034);
-
+        if (Arrays.asList(new String[]{"Physical Risk Hazards", "Operations Risk", "Market Risk", "Supply Chain Risk","Brown Share Assessment"}).contains(page)) {
+            assertTestCase.assertEquals(researchLinePage.drillDownTitle.getText(), "Updates as of April 2021", "Updates Drilldown Title Verification", 2034);
+        } else {
+            assertTestCase.assertEquals(researchLinePage.drillDownTitle.getText(), "Updates in April 2021", "Updates Drilldown Title Verification", 2034);
+        }
         test.info("Found Updates as of April 2021");
 
         List<String> expectedColumnNames = new ArrayList<>();

@@ -15,7 +15,7 @@ import static com.esgc.Utilities.Groups.*;
 public class ControversiesModalTests extends DashboardUITestBase {
 
     @Test(groups = {REGRESSION, DASHBOARD, UI})
-    @Xray(test = {3170, 3171, 3932, 3953, 4020, 4025, 4033, 4036, 4059, 7381})
+    @Xray(test = {3170, 3171, 3932, 3953, 4020, 4025, 4033, 4036, 4059, 7381, 8042})
     public void controversiesModalUIAutomationTest() {
         DashboardPage dashboardPage = new DashboardPage();
         dashboardPage.selectSamplePortfolioFromPortfolioSelectionModal();
@@ -98,7 +98,7 @@ public class ControversiesModalTests extends DashboardUITestBase {
     }
 
     @Test(groups = {REGRESSION, DASHBOARD, UI})
-    @Xray(test = {3191, 3935, 7764, 7765, 7766, 7769, 7770})
+    @Xray(test = {3191, 3953, 7764, 7765, 7766, 7769, 7770})
     public void verifyCriticalAndNonCriticalControversies() {
         DashboardPage dashboardPage = new DashboardPage();
         dashboardPage.selectSamplePortfolioFromPortfolioSelectionModal();

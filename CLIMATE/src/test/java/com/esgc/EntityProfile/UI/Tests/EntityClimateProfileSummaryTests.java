@@ -1023,7 +1023,7 @@ public class EntityClimateProfileSummaryTests extends UITestBase {
 
 
     @Test(groups = {REGRESSION, UI}, dataProviderClass = DataProviderClass.class, dataProvider = "Entity")
-    @Xray(test = {7089, 7091, 7092, 7093})
+    @Xray(test = {7089, 7091, 7092, 7093, 7095})
     public void verifyPhysicalRiskDropDownMenusTest(String Entity) {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio Analysis page");

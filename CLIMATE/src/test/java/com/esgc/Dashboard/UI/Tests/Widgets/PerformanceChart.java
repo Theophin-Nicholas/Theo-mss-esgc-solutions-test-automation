@@ -4,7 +4,6 @@ import com.esgc.Base.TestBases.DashboardUITestBase;
 import com.esgc.Dashboard.UI.Pages.DashboardPage;
 import com.esgc.TestBase.DataProviderClass;
 import com.esgc.Utilities.BrowserUtils;
-import com.esgc.Utilities.Environment;
 import com.esgc.Utilities.PortfolioUtilities;
 import com.esgc.Utilities.Xray;
 import org.openqa.selenium.By;
@@ -32,20 +31,10 @@ public class PerformanceChart extends DashboardUITestBase {
 
         BrowserUtils.scrollTo(dashboardPage.performanceChart);
 
-        List<String> expectedColumnNames = new ArrayList<>();
-
-        //TODO: ESG Assessment is not available in Prod as of Jan 2023
-        if (Environment.environment.equalsIgnoreCase("qa") || Environment.environment.equalsIgnoreCase("uat")) {
-            expectedColumnNames = Arrays.asList("Company", "% Investment", "Overall ESG Score", "Total Critical Controversies",
+        List<String> expectedColumnNames = Arrays.asList("Company", "% Investment", "Total Critical Controversies",
                     "Highest Risk Hazard", "Facilities Exposed to High Risk/Red Flag",
                     "Physical Risk Management", "Temperature Alignment",
                     "Carbon Footprint (tCO2eq)", "Green Share Assessment", "Brown Share Assessment");
-        } else {
-            expectedColumnNames = Arrays.asList("Company", "% Investment", "Total Critical Controversies",
-                    "Highest Risk Hazard", "Facilities Exposed to High Risk/Red Flag",
-                    "Physical Risk Management", "Temperature Alignment",
-                    "Carbon Footprint (tCO2eq)", "Green Share Assessment", "Brown Share Assessment");
-        }
 
 
         dashboardPage.clickAndSelectAPerformanceChart("Leaders");
