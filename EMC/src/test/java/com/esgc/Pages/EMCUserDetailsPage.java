@@ -10,6 +10,12 @@ public class EMCUserDetailsPage extends EMCBasePage {
     @FindBy(tagName = "h4")
     public WebElement userDetailsPageTitle;
 
+    @FindBy(xpath = "//h4/following-sibling::div[1]//span")
+    public WebElement accountInfoButton;
+
+    @FindBy(xpath = "//h4/following-sibling::div/div[1]")
+    public WebElement providerInfo;
+
     @FindBy(xpath = "(//h6)[2]")
     public WebElement userStatus;
 
@@ -47,7 +53,7 @@ public class EMCUserDetailsPage extends EMCBasePage {
     public WebElement lastNameInput;
 
     @FindBy(xpath = "(//input)[3]")
-    public WebElement emailNameInput;
+    public WebElement emailInput;
 
     @FindBy(xpath = "//span[starts-with(.,'Created by')]")
     public WebElement createdByInfo;
@@ -248,5 +254,16 @@ public class EMCUserDetailsPage extends EMCBasePage {
             }
         }
         System.out.println("application role not found in available applications list");
+    }
+
+    public boolean verifyUserDetails() {
+        assertTestCase.assertTrue(firstNameInput.isDisplayed(), "First Name is displayed");
+        assertTestCase.assertTrue(lastNameInput.isDisplayed(), "Last Name is displayed");
+        assertTestCase.assertTrue(emailInput.isDisplayed(), "Email is displayed");
+        assertTestCase.assertTrue(userStatus.isDisplayed(), "User Status is displayed");
+        assertTestCase.assertTrue(lastLoginInfo.isDisplayed(), "Last Login Info is displayed");
+        assertTestCase.assertTrue(providerInfo.isDisplayed(), "Last Login Date is displayed");
+        assertTestCase.assertTrue(userDetailsPageTitle.isDisplayed(), "User Details Page Title is displayed");
+        return true;
     }
 }

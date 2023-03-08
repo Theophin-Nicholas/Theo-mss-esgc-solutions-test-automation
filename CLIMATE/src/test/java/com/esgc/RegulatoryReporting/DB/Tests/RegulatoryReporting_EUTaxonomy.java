@@ -27,7 +27,7 @@ public class RegulatoryReporting_EUTaxonomy extends UITestBase {
         dashboardPage.navigateToPageFromMenu("Regulatory Reporting");
         test.info("Navigated to Regulatory Reporting Page");
         //verify portfolio upload modal
-        assertTestCase.assertTrue(reportingPage.uploadAnotherPortfolioLink.isDisplayed(), "Portfolio Upload button is displayed");
+        assertTestCase.assertTrue(reportingPage.isUploadAnotherPortfolioLinkDisplayed(), "Portfolio Upload button is displayed");
 
         //upload a portfolio
         String portfolioPropertyName = "PortfolioWithValidData2";
@@ -42,12 +42,12 @@ public class RegulatoryReporting_EUTaxonomy extends UITestBase {
 
         RegulatoryReportingAPIController apiController = new RegulatoryReportingAPIController();
         String portfolioId = apiController.getPortfolioId(portfolioName);
-        reportingPage.EUTaxonomy.click();
+        reportingPage.clickOnEUTaxonomy();
         reportingPage.selectPortfolioOptionByName(portfolioName);
         reportingPage.enterEUTaxonomyValues(portfolioName, "100", "1000");
         //verify create reports button before clicking
-        assertTestCase.assertTrue(reportingPage.createReportsButton.isEnabled(), "Create report button is enabled");
-        reportingPage.createReportsButton.click();
+        assertTestCase.assertTrue(reportingPage.isCreateReportsButtonEnabled(), "Create report button is enabled");
+        reportingPage.clickOnCreateReportsButton();
         BrowserUtils.wait(2);
         String newTab1 = "";
         for (String tab : BrowserUtils.getWindowHandles()) {

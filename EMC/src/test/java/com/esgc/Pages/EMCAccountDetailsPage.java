@@ -1,6 +1,7 @@
 package com.esgc.Pages;
 
 import com.esgc.Utilities.BrowserUtils;
+import com.esgc.Utilities.Environment;
 import com.github.javafaker.Faker;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
@@ -12,6 +13,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class EMCAccountDetailsPage extends EMCBasePage {
+
+    String mesgApp = Environment.MESG_APPLICATION_NAME;
+    String product = "ESG On-Demand Assessment";
+
+
     @FindBy (tagName = "h4")
     public WebElement pageTitle;
 
@@ -22,6 +28,9 @@ public class EMCAccountDetailsPage extends EMCBasePage {
 
     @FindBy (name = "name")
     public WebElement accountNameInput;
+
+    @FindBy (name = "key")
+    public WebElement accountKeyInput;
 
     @FindBy (tagName = "label")
     public WebElement statusLabel;
@@ -131,16 +140,23 @@ public class EMCAccountDetailsPage extends EMCBasePage {
     @FindBy (xpath = "//button[.='Assign products']")
     public WebElement assignProductsButton;
 
-    @FindBy (xpath = "//ul/div")
+    @FindBy (xpath = "//ul/div//p")
     public List<WebElement> currentProductsList;
 
-    @FindBy (xpath = "//li/div[1]//span")
+    @FindBy (xpath = "//div[@aria-expanded='true']//following-sibling::div//li//p/../span")
     public List<WebElement> currentProductFeaturesList;
 
     @FindBy (xpath = "//div[.='Products']/following-sibling::div//ul//button")
     public List<WebElement> currentProductFeaturesDeleteButtons;
+
+    @FindBy (xpath = "//input[@name='PurchasedAssessments']")
+    public WebElement smePurchasedAssessmentInput;
+
+    @FindBy (xpath = "//input[@name='UsedAssessments']")
+    public WebElement smeUsedAssessmentInput;
+
 //after add product button clicked
-    @FindBy (xpath = "//h2/../..//ul//p[2]")
+    @FindBy (xpath = "//h2/../..//ul/div")
     public List<WebElement> availableProductsNamesList;
 
     @FindBy (xpath = "//button[.='Assign']/../../../../span")
@@ -152,7 +168,8 @@ public class EMCAccountDetailsPage extends EMCBasePage {
     @FindBy (xpath = "//button[.='Done']")
     public WebElement doneButton;
 
-
+    @FindBy (xpath = "//p[.='PurchasedAssessments is a required field']")
+    public WebElement purchasedAssessmentsRequiredMessage;
 
     //USERS TAB
 
@@ -162,6 +179,12 @@ public class EMCAccountDetailsPage extends EMCBasePage {
     @FindBy (xpath = "//button[.='Add User']")
     public WebElement addUserButton;
 
+    @FindBy (xpath = "//button[.='Add User']/../div/button")
+    public WebElement userOptionsButton;
+
+    @FindBy (xpath = "//div[@id='long-menu']//li")
+    public List<WebElement> userOptionsList;
+
     @FindBy (xpath = "//input[@type='text']")
     public WebElement searchInput;
 
@@ -170,6 +193,9 @@ public class EMCAccountDetailsPage extends EMCBasePage {
 
     @FindBy (xpath = "//td/a")
     public List<WebElement> userEmailsList;
+
+    @FindBy (xpath = "//td/div/span")
+    public List<WebElement> providerList;
 
     @FindBy (xpath = "//td//input")
     public List<WebElement> userCheckboxList;
@@ -219,22 +245,32 @@ public class EMCAccountDetailsPage extends EMCBasePage {
     @FindBy (xpath = "//button[.='Cancel']")
     public WebElement popupCancelButton;
 
-    @FindBy (xpath = "//div[@id='notistack-snackbar']")
-    public WebElement deleteMessage;
+    @FindBy (xpath = "//div[@aria-haspopup='listbox']")
+    public WebElement rowsPerPageIndicator;
 
     @FindBy (xpath = "//div[.='10']")
     public WebElement numberOfUsers10;
 
     @FindBy (xpath = "//li[.='50']")
     public WebElement numberOfUsers50;
+
     //create user under accounts with required fields
-    public boolean createUser(String firstName, String lastName, String userName, boolean sendActivationEmail) {
+    @FindBy (xpath = "//input[@value='ma']")
+    public WebElement maCheckbox;
+
+    @FindBy (xpath = "//input[@value='mss']")
+    public WebElement mssCheckbox;
+
+    //create user under accounts with required fields
+    public boolean createUser(String firstName, String lastName, String userName, boolean sendActivationEmail, boolean MAUser) {
+        BrowserUtils.waitAndClick(addUserButton,5);
         try {
             firstNameInput.sendKeys(firstName);
             lastNameInput.sendKeys(lastName);
             //emailInput.sendKeys(userName);
             userNameInput.sendKeys(userName, Keys.TAB);
             if(!sendActivationEmail) sendActivationEmailCheckbox.click();
+            if(MAUser) maCheckbox.click();
             BrowserUtils.waitForClickablility(saveButton, 5).click();
             System.out.println("save button clicked");
             BrowserUtils.waitForClickablility(backToUsersButton, 5).click();
@@ -245,6 +281,7 @@ public class EMCAccountDetailsPage extends EMCBasePage {
             return false;
         }
     }
+
     public boolean createUser() {
         Faker faker = new Faker();
         addUserButton.click();
@@ -253,6 +290,11 @@ public class EMCAccountDetailsPage extends EMCBasePage {
         String userName = faker.internet().emailAddress();
         return createUser(firstName, lastName, userName, true);
     }
+
+    public boolean createUser(String firstName, String lastName, String userName, boolean activationEmail) {
+        return createUser(firstName, lastName, userName, activationEmail, false);
+    }
+
     public boolean createUser(boolean sendActivationEmail) {
         Faker faker = new Faker();
         addUserButton.click();
@@ -261,17 +303,20 @@ public class EMCAccountDetailsPage extends EMCBasePage {
         String userName = faker.internet().emailAddress();
         return createUser(firstName, lastName, userName, sendActivationEmail);
     }
+    public void searchUser(String userName) {
+        searchUser(userName, true);
+    }
 
-    public void searchUser(String test) {
+    public void searchUser(String userName, boolean gotoUser) {
         wait(searchInput,20);
         clear(searchInput);
-        System.out.println("Searching for the user : "+test);
-        searchInput.sendKeys(test);
+        System.out.println("Searching for the user : "+userName);
+        searchInput.sendKeys(userName);
         if(userNamesList.size()==0) {
             System.out.println("user not found");
             return;
         }
-        userNamesList.get(0).click();
+        if (gotoUser) userNamesList.get(0).click();
     }
 
     public boolean isSortedByName() {
@@ -281,6 +326,7 @@ public class EMCAccountDetailsPage extends EMCBasePage {
     }
 
     public boolean assignApplication(String applicationName) {
+        clickOnApplicationsTab();
         System.out.println("assigning application: "+applicationName);
         BrowserUtils.waitForClickablility(assignApplicationsButton,5).click();
         BrowserUtils.waitForClickablility(assignApplicationsModalSearchInput, 5).sendKeys(applicationName);
@@ -293,13 +339,23 @@ public class EMCAccountDetailsPage extends EMCBasePage {
             BrowserUtils.waitForClickablility(applicationsAssignButtonList.get(0), 15).click();
             System.out.println(applicationName + " application assigned");
             doneButton.click();
+            BrowserUtils.waitForVisibility(notification, 5);
+            assertTestCase.assertTrue(notification.isDisplayed(),"Notification is displayed");
             clickOnDetailsTab();
+            BrowserUtils.wait(2);
             clickOnApplicationsTab();
+            BrowserUtils.wait(5);
             return true;
         }
     }
+
     public boolean verifyUser(String name) {
-        expandList();
+        return verifyUser(name, true);
+    }
+
+    public boolean verifyUser(String name, boolean expand) {
+        wait(userNamesList, 200);
+        if (expand) expandList();
         for(WebElement user : userNamesList) {
             if(user.getText().equals(name)) {
                 System.out.println("user "+name+" found");
@@ -309,9 +365,14 @@ public class EMCAccountDetailsPage extends EMCBasePage {
         System.out.println("user "+name+" not found");
         return false;
     }
+
     public void expandList() {
-        BrowserUtils.waitForClickablility(numberOfUsers10, 5).click();
-        BrowserUtils.waitForClickablility(numberOfUsers50, 5).click();
+        wait(rowsPerPageIndicator, 200);
+        if(!rowsPerPageIndicator.getText().equals("50")){
+            BrowserUtils.waitForClickablility(rowsPerPageIndicator, 5).click();
+            BrowserUtils.waitForClickablility(numberOfUsers50, 5).click();
+        }
+        BrowserUtils.scrollTo(pageTitle);
     }
     public boolean deleteUser(String name) {
         BrowserUtils.scrollTo(usersTab);
@@ -408,6 +469,7 @@ public class EMCAccountDetailsPage extends EMCBasePage {
             System.out.println("All random users deleted");
         }
         BrowserUtils.wait(waitTime);
+        BrowserUtils.scrollTo(pageTitle);
     }
     public boolean addTestApplications(String applicationName) {
         try{
@@ -450,18 +512,6 @@ public class EMCAccountDetailsPage extends EMCBasePage {
         BrowserUtils.waitForClickablility(backToAccountsButton,5).click();
     }
 
-    public void addApplication(String applicationName) {
-        System.out.println("Adding application: " + applicationName);
-        BrowserUtils.waitForClickablility(assignApplicationsButton, 5).click();
-        BrowserUtils.waitForVisibility(assignApplicationsModalTitle, 5);
-        assignApplicationsModalSearchInput.sendKeys(applicationName);
-        BrowserUtils.waitForClickablility(assignApplicationsModalAssignButtonsList.get(0),5).click();
-        BrowserUtils.waitForClickablility(doneButton,5).click();
-        clickOnDetailsTab();
-        clickOnApplicationsTab();
-        System.out.println(applicationName + " application added");
-    }
-
     public void addAllProducts(String applicationName) {
         System.out.println("Adding all features of " + applicationName+" application to account");
         BrowserUtils.waitForClickablility(assignProductsButton, 5).click();
@@ -494,11 +544,43 @@ public class EMCAccountDetailsPage extends EMCBasePage {
         BrowserUtils.wait(2);
         for (WebElement product : currentProductsList) {
             if (product.getText().equals(applicationName)) {
-                System.out.println(applicationName + " product found");
+                //System.out.println(applicationName + " product found");
                 return true;
             }
         }
         return false;
+    }
+
+    public boolean verifyProduct(String applicationName, String productName) {
+        if(!verifyProduct(applicationName)) {
+            System.out.println(applicationName + " application not found");
+            return false;
+        }
+        //System.out.println("Application Found. Now verifying product: " + productName);
+        selectApplication(applicationName);
+        BrowserUtils.wait(2);
+        System.out.println("Available products:"+BrowserUtils.getElementsText(currentProductFeaturesList));
+        for (WebElement product : currentProductFeaturesList) {
+            if (product.getText().equals(productName)) {
+                //System.out.println(productName + " product found");
+                return true;
+            }
+        }
+        System.out.println(productName + " product not found");
+        return false;
+    }
+
+    public void selectApplication(String applicationName) {
+        clickOnDetailsTab();
+        BrowserUtils.wait(1);
+        clickOnProductsTab();
+        BrowserUtils.wait(2);
+        for (WebElement application : currentProductsList) {
+            if (application.getText().equals(applicationName)) {
+                application.click();
+                break;
+            }
+        }
     }
 
     public void deleteProduct(String applicationName) {
@@ -508,17 +590,37 @@ public class EMCAccountDetailsPage extends EMCBasePage {
             if (product.getText().equals(applicationName)) {
                 System.out.println(applicationName + " product found");
                 product.click();
+                wait(currentProductFeaturesDeleteButtons, 5);
                 System.out.println("Number of Features will be deleted = "+currentProductFeaturesDeleteButtons.size());
                 while(currentProductFeaturesDeleteButtons.size()>0) {
-                    if(currentProductFeaturesDeleteButtons.get(0).isDisplayed()) {
-                        currentProductFeaturesDeleteButtons.get(0).click();
-                        System.out.println("Feature deleted");
-                    } else {
-                        break;
-                    }
+                    BrowserUtils.waitForClickablility(currentProductFeaturesDeleteButtons.get(0),5).click();
+                    BrowserUtils.wait(1);
+                    assertTestCase.assertTrue(deleteApplicationsProceedButton.isDisplayed(), "Delete Product Confirmation Popup is displayed");
+                    BrowserUtils.waitForClickablility(deleteApplicationsProceedButton,5).click();
                 }
                 System.out.println("all features of " + applicationName + " product deleted");
                 break;
+            }
+        }
+        clickOnDetailsTab();
+        BrowserUtils.wait(2);
+        clickOnProductsTab();
+        BrowserUtils.wait(3);
+    }
+
+    public void deleteProduct(String applicationName, String productName) {
+        if(!verifyProduct(applicationName, productName)){
+            System.out.println(applicationName + " application not found");
+            return;
+        }
+        System.out.println("Application Found. Now deleting product: " + productName);
+        selectApplication(applicationName);
+        BrowserUtils.wait(2);
+        for (WebElement product :currentProductFeaturesList ) {
+            if (product.getText().equals(productName)) {
+                System.out.println(productName + " product found");
+                BrowserUtils.waitForClickablility(currentProductFeaturesDeleteButtons.get(currentProductFeaturesList.indexOf(product)),5).click();
+                System.out.println(productName + " product deleted");
             }
         }
         clickOnDetailsTab();
@@ -550,5 +652,172 @@ public class EMCAccountDetailsPage extends EMCBasePage {
     public void clickOnCancelButton() {
         System.out.println("clicking on cancel button");
         BrowserUtils.waitAndClick(cancelButton,10);
+    }
+
+    public boolean verifyAccountDetails() {
+        wait(accountKeyInput, 10);
+        assertTestCase.assertTrue(pageTitle.isDisplayed(), "Accounts Page - Details Tab is title displayed");
+        assertTestCase.assertTrue(detailsTab.isDisplayed(), "Accounts Page - Details Tab is displayed");
+        assertTestCase.assertTrue(applicationsTab.isDisplayed(), "Accounts Page - Applications Tab is displayed");
+        assertTestCase.assertTrue(productsTab.isDisplayed(), "Accounts Page - Products Tab is displayed");
+        assertTestCase.assertTrue(usersTab.isDisplayed(), "Accounts Page - Users Tab is displayed");
+        assertTestCase.assertTrue(accountKeyInput.isDisplayed(), "Accounts Page - Account Key Input is displayed");
+        assertTestCase.assertTrue(accountNameInput.isDisplayed(), "Accounts Page - Account Name Input is displayed");
+        assertTestCase.assertTrue(statusLabel.isDisplayed(), "Accounts Page - Status Check Box is displayed");
+        assertTestCase.assertTrue(subscriberInput.isDisplayed(), "Accounts Page - Subscriber Input is displayed");
+        assertTestCase.assertTrue(contractStartDateInput.isDisplayed(), "Accounts Page - Contract Start Date Input is displayed");
+        assertTestCase.assertTrue(contractEndDateInput.isDisplayed(), "Accounts Page - Contract End Date Input is displayed");
+        assertTestCase.assertTrue(creationInfo.isDisplayed(), "Accounts Page - Creation Info is displayed");
+        assertTestCase.assertTrue(modificationInfo.isDisplayed(), "Accounts Page - Modification Info is displayed");
+        return true;
+    }
+
+    public void assignProduct(String applicationName, String productName) {
+        clickOnProductsTab();
+        BrowserUtils.wait(3);
+        if(!verifyProduct(applicationName)) {
+            System.out.println("Application is not assigned to account. Assigning application: " + applicationName);
+            assignApplication(applicationName);
+            clickOnProductsTab();
+        }
+        System.out.println("Application Found. Now verifying product: " + productName);
+        if(verifyProduct(applicationName, productName)) {
+            //System.out.println(productName + " product already assigned to account");
+            return;
+        }
+        System.out.println("Application is assigned but product is not assigned. Assigning product: " + productName);
+        clickOnAssignProductsButton();
+        BrowserUtils.wait(2);
+        System.out.println("Available products:"+BrowserUtils.getElementsText(availableProductsNamesList));
+        availableProductsNamesList.stream().filter(application -> application.getText().equals(applicationName)).findFirst().get().click();
+        BrowserUtils.wait(5);
+        wait(availableFeaturesNamesList, 15);
+        System.out.println("Available features:"+BrowserUtils.getElementsText(availableFeaturesNamesList));
+        for(WebElement product : availableFeaturesNamesList) {
+            if(product.getText().equals(productName)) {
+                System.out.println(productName + " product found in available features");
+                BrowserUtils.waitForClickablility(availableFeaturesAssignButtonsList.get(availableFeaturesNamesList.indexOf(product)), 5).click();
+                System.out.println("Assign button clicked.");
+                break;
+            }
+        }
+        BrowserUtils.waitForClickablility(doneButton,5).click();
+        clickOnDetailsTab();
+        BrowserUtils.wait(1);
+        clickOnProductsTab();
+        BrowserUtils.wait(3);
+    }
+
+    public void clickOnAssignProductsButton() {
+        System.out.println("clicking on assign products button");
+        BrowserUtils.waitAndClick(assignProductsButton,10);
+    }
+
+    public void addAndVerifySMEAssessmentLimit(String limit) {
+        clickOnAssignProductsButton();
+        BrowserUtils.wait(2);
+        System.out.println("Available products:"+BrowserUtils.getElementsText(availableProductsNamesList));
+        availableProductsNamesList.stream().filter(application -> application.getText().equals(mesgApp)).findFirst().get().click();
+        wait(availableFeaturesNamesList, 15);
+        BrowserUtils.wait(5);
+        System.out.println("Available features:"+BrowserUtils.getElementsText(availableFeaturesNamesList));
+        WebElement productElement = availableFeaturesNamesList.stream().filter(feature -> feature.getText().equals(product)).findFirst().get();
+        BrowserUtils.scrollTo(productElement);
+        assertTestCase.assertTrue(smePurchasedAssessmentInput.isDisplayed(), "SME Purchased Assessments Limit is present");
+        assertTestCase.assertTrue(smeUsedAssessmentInput.isDisplayed(), "SME Used Assessments Limit is present");
+        assertTestCase.assertFalse(smeUsedAssessmentInput.isEnabled(), "SME Used Assessments Limit is not enabled");
+        assertTestCase.assertTrue(smePurchasedAssessmentInput.isEnabled(), "SME Purchased Assessments Limit is enabled");
+        assertTestCase.assertEquals(smePurchasedAssessmentInput.getAttribute("value"), "0", "SME Purchased Assessments Limit is set to 0 by default");
+        smePurchasedAssessmentInput.sendKeys(Keys.BACK_SPACE, Keys.TAB);
+        assertTestCase.assertTrue(purchasedAssessmentsRequiredMessage.isDisplayed(), "Purchased Assessments Required Message is displayed");
+        smePurchasedAssessmentInput.sendKeys(limit);
+        BrowserUtils.scrollTo(availableFeaturesAssignButtonsList.get(availableFeaturesNamesList.indexOf(productElement))).click();
+        assertTestCase.assertTrue(doneButton.isEnabled(), "Save button is enabled");
+        BrowserUtils.scrollTo(doneButton).click();
+        clickOnDetailsTab();
+        BrowserUtils.wait(2);
+        clickOnProductsTab();
+        BrowserUtils.wait(3);
+        assertTestCase.assertTrue(verifyProduct(mesgApp, product), "ESG On-Demand Assessment product is assigned");
+        assertTestCase.assertEquals(smePurchasedAssessmentInput.getAttribute("value"), limit, "SME Purchased Assessments Limit is set to 10");
+    }
+
+    public void verifyDetailsPage() {
+        assertTestCase.assertTrue(detailsTab.isDisplayed(), "Details tab is displayed");
+        assertTestCase.assertTrue(applicationsTab.isDisplayed(), "Applications tab is displayed");
+        assertTestCase.assertTrue(productsTab.isDisplayed(), "Products tab is displayed");
+        assertTestCase.assertTrue(usersTab.isDisplayed(), "Users tab is displayed");
+        assertTestCase.assertTrue(backToAccountsButton.isDisplayed(), "Edit button is displayed");
+        assertTestCase.assertTrue(pageTitle.isDisplayed(), "Page title is displayed");
+        assertTestCase.assertTrue(accountKeyInput.isDisplayed(), "Account Key input is displayed");
+        assertTestCase.assertTrue(accountNameInput.isDisplayed(), "Account Name input is displayed");
+        assertTestCase.assertTrue(statusLabel.isDisplayed(), "Status label is displayed");
+        assertTestCase.assertTrue(subscriberInput.isDisplayed(), "Subscriber input is displayed");
+        assertTestCase.assertTrue(contractStartDateInput.isDisplayed(), "Contract Start Date input is displayed");
+        assertTestCase.assertTrue(contractEndDateInput.isDisplayed(), "Contract End Date input is displayed");
+        assertTestCase.assertTrue(creationInfo.isDisplayed(), "Creation Info is displayed");
+        assertTestCase.assertTrue(modificationInfo.isDisplayed(), "Modification Info is displayed");
+    }
+    public void verifyDetailsPage(String accountType) {
+        verifyDetailsPage();
+        if(accountType.equals("Admin")){
+            assertTestCase.assertTrue(editButton.isDisplayed(), "Edit button is displayed");
+        }
+        //Account is editable mode
+        editButton.click();
+        assertTestCase.assertTrue(cancelButton.isEnabled(), "Accounts Page - Users Details - Cancel button is enabled for editing");
+        assertTestCase.assertTrue(saveButton.isDisplayed(), "Accounts Page - Users Details - Save button is enabled for editing");
+        assertTestCase.assertTrue(accountNameInput.isEnabled(), "Accounts Page - Users Details - Account Name input is enabled for editing");
+        assertTestCase.assertFalse(accountKeyInput.isEnabled(), "Accounts Page - Users Details - Account Key input is disabled for editing");
+        assertTestCase.assertTrue(statusCheckBox.isEnabled(), "Accounts Page - Users Details - Account status checkbox is enabled for editing");
+        assertTestCase.assertTrue(subscriberInput.isEnabled(), "Accounts Page - Users Details - Account Subscriber Input is enabled for editing");
+        assertTestCase.assertTrue(startDateInput.isEnabled(), "Accounts Page - Users Details - Account start date input is enabled for editing");
+        assertTestCase.assertTrue(endDateInput.isEnabled(), "Accounts Page - Users Details - Account end date input is enabled for editing");
+
+        //Click Cancel button on Account Details editable
+        //Cancel button should take the user back to the Accounts view page
+        cancelButton.click();
+    }
+
+    public void clickOnUserOptionsMenu() {
+        System.out.println("clicking on user options menu");
+        assertTestCase.assertTrue(userOptionsButton.isDisplayed(), "User Options button is displayed");
+        BrowserUtils.waitAndClick(userOptionsButton, 10);
+    }
+
+    public void clickOnMenuOption(String optionName) {
+        clickAwayInBlankArea();
+        clickOnUserOptionsMenu();
+        System.out.println("clicking on bulk import option");
+        wait(userOptionsList, 10);
+        userOptionsList.stream().filter(option -> option.getText().equals(optionName)).findFirst().get().click();
+    }
+
+    public void verifyUsersMenuOption(String optionName) {
+        clickOnUserOptionsMenu();
+        System.out.println("verifying bulk import option");
+        wait(userOptionsList, 10);
+        assertTestCase.assertTrue(userOptionsList.stream().anyMatch(option -> option.getText().equals(optionName)), optionName + " option is displayed");
+        clickAwayInBlankArea();
+    }
+
+    public void verifyUsersPageDetails() {
+        if(userNamesList.size()==0) createUser();
+        assertTestCase.assertTrue(usersTab.isDisplayed(), "Users tab is displayed");
+        assertTestCase.assertTrue(pageTitle.isDisplayed(), "Page title is displayed");
+        assertTestCase.assertTrue(addUserButton.isDisplayed(), "Add User button is displayed");
+        assertTestCase.assertTrue(userOptionsButton.isDisplayed(), "User Options button is displayed");
+        assertTestCase.assertTrue(searchInput.isDisplayed(), "Search input is displayed");
+        assertTestCase.assertTrue(userCheckboxList.size()>0, "Users checkboxes are displayed");
+        assertTestCase.assertTrue(userNamesList.size()>0, "Users names are displayed");
+        assertTestCase.assertTrue(userEmailsList.size()>0, "Users emails are displayed");
+        assertTestCase.assertTrue(providerList.size()>0, "Users providers are displayed");
+    }
+
+    public String getUserEmail(String userName) {
+        wait(userNamesList, 10);
+        WebElement userElement = userNamesList.stream().filter(user -> user.getText().equals(userName)).findFirst().get();
+        int index = userNamesList.indexOf(userElement);
+        return userEmailsList.get(index).getText();
     }
 }

@@ -28,6 +28,7 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
         test.info("Navigated to Regulatory Reporting Page");
         //verify portfolio upload modal
         assertTestCase.assertTrue(reportingPage.uploadAnotherPortfolioLink.isDisplayed(), "Portfolio Upload button is displayed");
+        reportingPage.selectReportingOptionByName("SFDR PAIs");
 
         //upload a portfolio
         String newPortfolioName = "PortfolioWithValidData2";
@@ -43,7 +44,7 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
         Set<String> currentWindows = BrowserUtils.getWindowHandles();
         //verify create reports button before clicking
         assertTestCase.assertTrue(reportingPage.createReportsButton.isEnabled(), "Create report button is enabled");
-        reportingPage.createReportsButton.click();
+        reportingPage.clickOnCreateReportsButton();
 
         try {
             //New tab should be opened and empty state message should be displayed as in the screenshot
@@ -80,17 +81,19 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
         DashboardPage dashboardPage = new DashboardPage();
         dashboardPage.navigateToPageFromMenu("Regulatory Reporting");
         test.info("Navigated to Regulatory Reporting Page");
+        reportingPage.selectReportingOptionByName("SFDR PAIs");
         assertTestCase.assertTrue(reportingPage.interimReportsOption.isDisplayed(), "Interim reports option is displayed");
         assertTestCase.assertTrue(reportingPage.useLatestDataOption.isDisplayed(), "Use latest data option is displayed");
+
         String currentWindow = BrowserUtils.getCurrentWindowHandle();
         reportingPage.selectAllPortfolioOptions();
         reportingPage.selectInterimReports();
         List<String> selectedPortfolios = reportingPage.getSelectedPortfolioOptions();
         Set<String> currentWindows = BrowserUtils.getWindowHandles();
         //verify create reports button before clicking
-        assertTestCase.assertTrue(reportingPage.createReportsButton.isEnabled(), "Create report button is enabled");
+        assertTestCase.assertTrue(reportingPage.isCreateReportsButtonEnabled(), "Create report button is enabled");
 
-        reportingPage.createReportsButton.click();
+        reportingPage.clickOnCreateReportsButton();
         try {
             //New tab should be opened and empty state message should be displayed as in the screenshot
             assertTestCase.assertTrue(reportingPage.verifyNewTabOpened(currentWindows), "New tab is opened");
@@ -111,9 +114,9 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
             System.out.println("=============================");
         }
         reportingPage.selectAnnualReports();
-        assertTestCase.assertTrue(reportingPage.createReportsButton.isEnabled(), "Create report button is enabled");
+        assertTestCase.assertTrue(reportingPage.isCreateReportsButtonEnabled(), "Create report button is enabled");
         currentWindows = BrowserUtils.getWindowHandles();
-        reportingPage.createReportsButton.click();
+        reportingPage.clickOnCreateReportsButton();
         BrowserUtils.wait(2);
         try {
             //New tab should be opened and empty state message should be displayed as in the screenshot
@@ -143,6 +146,7 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
         test.info("Navigated to Regulatory Reporting Page");
         //verify portfolio upload modal
         assertTestCase.assertTrue(reportingPage.uploadAnotherPortfolioLink.isDisplayed(), "Portfolio Upload button is displayed");
+        reportingPage.selectReportingOptionByName("SFDR PAIs");
 
         //upload a portfolio
         String portfolioName = "SFDRPortfolio";
@@ -158,7 +162,7 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
         reportingPage.selectReportingFor(portfolioName,"2021");
         //verify create reports button before clicking
         assertTestCase.assertTrue(reportingPage.createReportsButton.isEnabled(), "Create report button is enabled");
-        reportingPage.createReportsButton.click();
+        reportingPage.clickOnCreateReportsButton();
 
         try {
             //New tab should be opened and empty state message should be displayed as in the screenshot
@@ -192,6 +196,7 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
         test.info("Navigated to Regulatory Reporting Page");
         //verify portfolio upload modal
         assertTestCase.assertTrue(reportingPage.uploadAnotherPortfolioLink.isDisplayed(), "Portfolio Upload button is displayed");
+        reportingPage.selectReportingOptionByName("SFDR PAIs");
 
         //upload a portfolio
         String portfolioName = "SFDRPortfolio";
@@ -207,9 +212,9 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
                 "EU Taxonomy portfolio coverage is verified for UI vs DB");
         List<String> selectedPortfolios = reportingPage.getSelectedPortfolioOptions();
         //verify create reports button before clicking
-        assertTestCase.assertTrue(reportingPage.createReportsButton.isEnabled(), "Create report button is enabled");
+        assertTestCase.assertTrue(reportingPage.isCreateReportsButtonEnabled(), "Create report button is enabled");
         Set<String> currentWindows = BrowserUtils.getWindowHandles();
-        reportingPage.createReportsButton.click();
+        reportingPage.clickOnCreateReportsButton();
         try {
             //New tab should be opened and empty state message should be displayed as in the screenshot
             assertTestCase.assertTrue(reportingPage.verifyNewTabOpened(currentWindows), "New tab is opened");
@@ -243,6 +248,7 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
         test.info("Navigated to Regulatory Reporting Page");
         //verify portfolio upload modal
         assertTestCase.assertTrue(reportingPage.uploadAnotherPortfolioLink.isDisplayed(), "Portfolio Upload button is displayed");
+        reportingPage.selectReportingOptionByName("SFDR PAIs");
 
         //upload a portfolio
         String portfolioName = "SFDRPortfolio";
@@ -257,9 +263,9 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
 
         List<String> selectedPortfolios = reportingPage.getSelectedPortfolioOptions();
         //verify create reports button before clicking
-        assertTestCase.assertTrue(reportingPage.createReportsButton.isEnabled(), "Create report button is enabled");
+        assertTestCase.assertTrue(reportingPage.isCreateReportsButtonEnabled(), "Create report button is enabled");
         Set<String> currentWindows = BrowserUtils.getWindowHandles();
-        reportingPage.createReportsButton.click();
+        reportingPage.clickOnCreateReportsButton();
         try {
             //New tab should be opened and empty state message should be displayed as in the screenshot
             assertTestCase.assertTrue(reportingPage.verifyNewTabOpened(currentWindows), "New tab is opened");
@@ -298,6 +304,7 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
         test.info("Navigated to Regulatory Reporting Page");
         //verify portfolio upload modal
         assertTestCase.assertTrue(reportingPage.uploadAnotherPortfolioLink.isDisplayed(), "Portfolio Upload button is displayed");
+        reportingPage.selectReportingOptionByName("SFDR PAIs");
 
         //upload a portfolio
         String portfolioName = "SFDRPortfolio";
@@ -313,9 +320,9 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
 
         List<String> selectedPortfolios = reportingPage.getSelectedPortfolioOptions();
         //verify create reports button before clicking
-        assertTestCase.assertTrue(reportingPage.createReportsButton.isEnabled(), "Create report button is enabled");
+        assertTestCase.assertTrue(reportingPage.isCreateReportsButtonEnabled(), "Create report button is enabled");
         Set<String> currentWindows = BrowserUtils.getWindowHandles();
-        reportingPage.createReportsButton.click();
+        reportingPage.clickOnCreateReportsButton();
         try {
             //New tab should be opened and empty state message should be displayed as in the screenshot
             assertTestCase.assertTrue(reportingPage.verifyNewTabOpened(currentWindows), "New tab is opened");
@@ -355,6 +362,7 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
         test.info("Navigated to Regulatory Reporting Page");
         //verify portfolio upload modal
         assertTestCase.assertTrue(reportingPage.uploadAnotherPortfolioLink.isDisplayed(), "Portfolio Upload button is displayed");
+        reportingPage.selectReportingOptionByName("SFDR PAIs");
 
         //upload a portfolio
         String portfolioName = "SFDRPortfolio";
@@ -366,9 +374,9 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
 
         List<String> selectedPortfolios = reportingPage.getSelectedPortfolioOptions();
         //verify create reports button before clicking
-        assertTestCase.assertTrue(reportingPage.createReportsButton.isEnabled(), "Create report button is enabled");
+        assertTestCase.assertTrue(reportingPage.isCreateReportsButtonEnabled(), "Create report button is enabled");
         Set<String> currentWindows = BrowserUtils.getWindowHandles();
-        reportingPage.createReportsButton.click();
+        reportingPage.clickOnCreateReportsButton();
         try {
             //New tab should be opened and empty state message should be displayed as in the screenshot
             assertTestCase.assertTrue(reportingPage.verifyNewTabOpened(currentWindows), "New tab is opened");
@@ -407,6 +415,7 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
         test.info("Navigated to Regulatory Reporting Page");
         //verify portfolio upload modal
         assertTestCase.assertTrue(reportingPage.uploadAnotherPortfolioLink.isDisplayed(), "Portfolio Upload button is displayed");
+        reportingPage.selectReportingOptionByName("SFDR PAIs");
 
         //upload a portfolio
         String portfolioName = "SFDRPortfolio";
@@ -418,9 +427,9 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
 
         List<String> selectedPortfolios = reportingPage.getSelectedPortfolioOptions();
         //verify create reports button before clicking
-        assertTestCase.assertTrue(reportingPage.createReportsButton.isEnabled(), "Create report button is enabled");
+        assertTestCase.assertTrue(reportingPage.isCreateReportsButtonEnabled(), "Create report button is enabled");
         Set<String> currentWindows = BrowserUtils.getWindowHandles();
-        reportingPage.createReportsButton.click();
+        reportingPage.clickOnCreateReportsButton();
         try {
             //New tab should be opened and empty state message should be displayed as in the screenshot
             assertTestCase.assertTrue(reportingPage.verifyNewTabOpened(currentWindows), "New tab is opened");
@@ -458,6 +467,7 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
         test.info("Navigated to Regulatory Reporting Page");
         //verify portfolio upload modal
         assertTestCase.assertTrue(reportingPage.uploadAnotherPortfolioLink.isDisplayed(), "Portfolio Upload button is displayed");
+        reportingPage.selectReportingOptionByName("SFDR PAIs");
 
         //upload a portfolio
         String portfolioName = "SFDRPortfolio";
@@ -468,9 +478,9 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
 
         List<String> selectedPortfolios = reportingPage.getSelectedPortfolioOptions();
         //verify create reports button before clicking
-        assertTestCase.assertTrue(reportingPage.createReportsButton.isEnabled(), "Create report button is enabled");
+        assertTestCase.assertTrue(reportingPage.isCreateReportsButtonEnabled(), "Create report button is enabled");
         Set<String> currentWindows = BrowserUtils.getWindowHandles();
-        reportingPage.createReportsButton.click();
+        reportingPage.clickOnCreateReportsButton();
         try {
             //New tab should be opened and empty state message should be displayed as in the screenshot
             assertTestCase.assertTrue(reportingPage.verifyNewTabOpened(currentWindows), "New tab is opened");
@@ -493,7 +503,7 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
         }
         reportingPage.selectUseLatestData();
         currentWindows = BrowserUtils.getWindowHandles();
-        reportingPage.createReportsButton.click();
+        reportingPage.clickOnCreateReportsButton();
         try {
             //New tab should be opened and empty state message should be displayed as in the screenshot
             assertTestCase.assertTrue(reportingPage.verifyNewTabOpened(currentWindows), "New tab is opened");
@@ -525,15 +535,16 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
         test.info("Navigated to Regulatory Reporting Page");
         //verify portfolio upload modal
         assertTestCase.assertTrue(reportingPage.uploadAnotherPortfolioLink.isDisplayed(), "Portfolio Upload button is displayed");
-
+        reportingPage.selectReportingOptionByName("SFDR PAIs");
         String currentWindow = BrowserUtils.getCurrentWindowHandle();
+        reportingPage.selectInterimReports();
         reportingPage.selectAllPortfolioOptions();
         reportingPage.selectUseLatestData();
         List<String> selectedPortfolios = reportingPage.getSelectedPortfolioOptions();
         //verify create reports button before clicking
         assertTestCase.assertTrue(reportingPage.createReportsButton.isEnabled(), "Create report button is enabled");
         Set<String> currentWindows = BrowserUtils.getWindowHandles();
-        reportingPage.createReportsButton.click();
+        reportingPage.clickOnCreateReportsButton();
         try {
             //New tab should be opened and empty state message should be displayed as in the screenshot
             assertTestCase.assertTrue(reportingPage.verifyNewTabOpened(currentWindows), "New tab is opened");
@@ -548,10 +559,13 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
             assertTestCase.assertTrue(reportingPage.verifyScope3GHGEmissionsForCompanyOutput(selectedPortfolios,"latest"),
                     "SFDR Company output for portfolio coverage is verified for Excel vs DB");
             System.out.println("SFDR Scope 3 GHG Emissions output for portfolio coverage is verified for Excel vs DB");
-            assertTestCase.assertTrue(reportingPage.verifyScope3GHGEmissionsForPortfolioLevelOutput(selectedPortfolios,"latest"),
+            assertTestCase.assertTrue(reportingPage.verifyScope3GHGEmissionsForPortfolioLevelOutput(selectedPortfolios,"latest", "Interim"),
                     "SFDR Portfolio Level output for portfolio coverage is verified for Excel vs DB");
             System.out.println("SFDR Scope 3 GHG Emissions output for portfolio coverage is verified for Excel vs DB");
-            assertTestCase.assertTrue(reportingPage.verifyPortfolioLevelOutput(selectedPortfolios,"2020","Interim","Yes"));
+
+            assertTestCase.assertTrue(reportingPage.verifyPortfolioLevelOutput(selectedPortfolios,"2020", "Interim", "latest"),
+                    "SFDR Portfolio Level Output is verified for Excel vs DB");
+            System.out.println("SFDR Portfolio Level Output is verified for Excel vs DB");
         } catch (Exception e) {
             e.printStackTrace();
             assertTestCase.assertTrue(false, "New tab verification failed");
@@ -565,7 +579,7 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
         //verify create reports button before clicking
         assertTestCase.assertTrue(reportingPage.createReportsButton.isEnabled(), "Create report button is enabled");
         currentWindows = BrowserUtils.getWindowHandles();
-        reportingPage.createReportsButton.click();
+        reportingPage.clickOnCreateReportsButton();
         try {
             //New tab should be opened and empty state message should be displayed as in the screenshot
             assertTestCase.assertTrue(reportingPage.verifyNewTabOpened(currentWindows), "New tab is opened");
@@ -580,10 +594,13 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
             assertTestCase.assertTrue(reportingPage.verifyScope3GHGEmissionsForCompanyOutput(selectedPortfolios,"latest"),
                     "SFDR Company output for portfolio coverage is verified for Excel vs DB");
             System.out.println("SFDR Scope 3 GHG Emissions output for portfolio coverage is verified for Excel vs DB");
-            assertTestCase.assertTrue(reportingPage.verifyScope3GHGEmissionsForPortfolioLevelOutput(selectedPortfolios,"latest"),
+            assertTestCase.assertTrue(reportingPage.verifyScope3GHGEmissionsForPortfolioLevelOutput(selectedPortfolios,"latest", "Annual"),
                     "SFDR Portfolio Level output for portfolio coverage is verified for Excel vs DB");
             System.out.println("SFDR Scope 3 GHG Emissions output for portfolio coverage is verified for Excel vs DB");
-            assertTestCase.assertTrue(reportingPage.verifyPortfolioLevelOutput(selectedPortfolios,"2020","Annual","Yes"));
+
+            assertTestCase.assertTrue(reportingPage.verifyPortfolioLevelOutput(selectedPortfolios,"2020", "Annual", "latest"),
+                    "SFDR Portfolio Level Output is verified for Excel vs DB");
+            System.out.println("SFDR Portfolio Level Output is verified for Excel vs DB");
         } catch (Exception e) {
             e.printStackTrace();
             assertTestCase.assertTrue(false, "New tab verification failed");

@@ -13,18 +13,22 @@ public class EMCEndpoints {
 
     //========User
     public static String EMC_USER = "api/users";
+    public static String EMC_ROLE_USERS = "api/admin/roles/{roleId}/users";
+    public static String EMC_ROLE_USER_CRUD = "api/admin/roles/{roleId}/users/{userId}";
 
     //========Account
     public static String EMC_ACCOUNTS = "api/accounts";
     public static final String PUT_APPLICATION_TO_ACCOUNT = "api/accounts/{account-id}/applications/{application-id}";
     public static String PUT_PRODUCT_TO_ACCOUNT = "api/accounts/{account-id}/applications/{application-id}/products/{product-id}";
-
+    public static String GET_USERS = "api/accounts/{account-id}/users";
     public static String GET_APPLICATIONS = "api/applications";
 
     //========Application Roles==========
     //to set Investor or Issuer role to a user
+    public static String APPLICATION_ROLE = "api/applicationroles";
     public static String PUT_APPLICATION_ROLE = "api/applicationroles/{application-role-id}/users/{email}";
-
+    public static String GET_APPLICATION_ROLES = "api/applications/{application-id}/roles";
+    public static String GET_APPLICATION_ROLE_FOR_USER = "api/users/{user-id}/applicationroles";
     //========Application Products==========
     public static String GET_APPLICATION_PRODUCTS = "api/applications/{application-role-id}/products";
     public static String GET_PRODUCT_SECTIONS = "api/products/{product-id}/sections";
