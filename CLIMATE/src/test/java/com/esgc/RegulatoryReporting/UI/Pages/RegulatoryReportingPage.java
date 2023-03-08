@@ -32,10 +32,10 @@ public class RegulatoryReportingPage extends UploadPage {
     @FindBy(xpath = "//div[.='Reporting']")
     public WebElement reportingSubtitle;
 
-    @FindBy(xpath = "//div[.='Reporting']/following-sibling::div//span[2]")
+    @FindBy(xpath = "//div[.='Select Action']/..//span[2]")
     public List<WebElement> reportingNamesList;
 
-    @FindBy(xpath = "//div[.='Reporting']/following-sibling::div//input")
+    @FindBy(xpath = "//div[.='Select Action']/..//input")
     public List<WebElement> reportingRadioButtonList;
 
     @FindBy(xpath = "//div[.='Select Portfolios']/../div[2]/following-sibling::div/div[1]//span[2]")
@@ -1120,16 +1120,36 @@ public class RegulatoryReportingPage extends UploadPage {
     public boolean verifyPortfolioLevelOutput(List<String> selectedPortfolios, String reportingYear, String reportFormat, String useLatestData) {
         for (String portfolioName : selectedPortfolios) {
             RegulatoryReportingAPIController apiController = new RegulatoryReportingAPIController();
+            System.out.println("portfolioName = " + portfolioName);
             String portfolioId = apiController.getPortfolioId(portfolioName);
             RegulatoryReportingQueries queries = new RegulatoryReportingQueries();
             //open Excel file
-            String excelName = rrStatusPage_PortfoliosList.get(0).getText().replaceAll("ready", "").trim();
-            ExcelUtil excelData = getExcelData(excelName, "Portfolio Level Output");
+            String excelName = "";
+            ExcelUtil excelData = null;
+            //if multiple portfolios are selected and
+            // if interim report selected, then multiple Excel files will be downloaded and sheet index will be always 1
+            // if annual report selected, then one Excel file will be downloaded and sheet index will be index of selected portfolios
+            if (rrStatusPage_PortfoliosList.size() > 1) {
+                excelName = rrStatusPage_PortfoliosList.get(selectedPortfolios.indexOf(portfolioName)).getText().replaceAll("ready", "").trim();
+            } else {
+                excelName = rrStatusPage_PortfoliosList.get(0).getText().replaceAll("ready", "").trim();
+            }
+            excelData = getExcelData(excelName, "Portfolio Level Output");
+            System.out.println("Sheet Name = " + excelData.getSheetName());
 
             List<Map<String, Object>> dbData = queries.getPortfolioLevelOutput(portfolioId, reportingYear, reportFormat, useLatestData);
             //get number cells from excel file
-            List<String> excelNumberCells = excelData.getNumericCells();
-            //System.out.println("excelNumberCells = " + excelNumberCells);
+            List<String> excelNumberCells = new ArrayList<>();
+            if (selectedPortfolios.size() > 1 && reportFormat.equals("Annual")){
+                int columnNumber = selectedPortfolios.indexOf(portfolioName)*2+5;
+                System.out.println("columnNumber = " + columnNumber);
+                excelNumberCells = excelData.getNumericCells(columnNumber);
+                excelNumberCells.addAll(excelData.getNumericCells(columnNumber+1));
+            } else {
+                excelNumberCells = excelData.getNumericCells();
+            }
+            System.out.println("excelNumberCells = " + excelNumberCells);
+
             DecimalFormat decimalFormat = new DecimalFormat("##.####");
             //get number cells from db
             List<String> dbNumberCells = new ArrayList<>();
@@ -1144,6 +1164,7 @@ public class RegulatoryReportingPage extends UploadPage {
             System.out.println("dbNumberCells = " + dbNumberCells);
             //verify db number cells list contains all values of excelnumbercells list
             for (String cell : excelNumberCells) {
+                System.out.println("cell = " + cell);
                 if (!dbNumberCells.contains(cell)) {
                     if (!dbNumberCells.contains(cell.replaceAll("\\.0", ""))) {
                         System.out.println(cell + " is not in DB");
@@ -1369,7 +1390,7 @@ public class RegulatoryReportingPage extends UploadPage {
         return true;
     }
 
-    public boolean verifyScope3GHGEmissionsForPortfolioLevelOutput(List<String> selectedPortfolios, String year) {
+    public boolean verifyScope3GHGEmissionsForPortfolioLevelOutput(List<String> selectedPortfolios, String year, String reportingFormat) {
         for (String portfolioName : selectedPortfolios) {
             System.out.println("\nportfolioName = " + portfolioName);
             String portfolioId = apiController.getPortfolioId(portfolioName);
@@ -1420,9 +1441,11 @@ public class RegulatoryReportingPage extends UploadPage {
                 }
             }
             //Validate data for Scope 3 GHG emissions
-            List<Map<String, Object>> dbData = queries.getPortfolioLevelOutput(portfolioId, year.equalsIgnoreCase("latest")?"2020":year, "Annual", year.equalsIgnoreCase("latest")?"Yes":"No");
+            List<Map<String, Object>> dbData = queries.getPortfolioLevelOutput(portfolioId, year.equalsIgnoreCase("latest")?"2020":year, reportingFormat, year.equalsIgnoreCase("latest")?"Yes":"No");
             DecimalFormat decimalFormat = new DecimalFormat("##.####");
-            String scope3GHGEmissionsImpactScore = decimalFormat.format(dbData.stream().filter(row -> row.get("SFDR_SUBCATEGORY").toString().equals("Scope 3 GHG emissions")).findFirst().get().get("IMPACT"));
+            String scope3GHGEmissionsImpactScore = dbData.stream().filter(row -> row.get("SFDR_SUBCATEGORY").toString().equals("Scope 3 GHG emissions")).findFirst().get().get("IMPACT").toString();
+            System.out.println("scope3GHGEmissionsImpactScore = " + scope3GHGEmissionsImpactScore);
+            scope3GHGEmissionsImpactScore = decimalFormat.format(Double.parseDouble(scope3GHGEmissionsImpactScore));
             System.out.println("scope3GHGEmissionsImpactScore = " + scope3GHGEmissionsImpactScore);
             String scope3GHGEmissionsScopeOfDisclosure = decimalFormat.format(dbData.stream().filter(row -> row.get("SFDR_SUBCATEGORY").toString().equals("Scope 3 GHG emissions")).findFirst().get().get("SCOPE_OF_DISCLOSURE"));
             System.out.println("scope3GHGEmissionsScopeOfDisclosure = " + scope3GHGEmissionsScopeOfDisclosure);
@@ -1434,5 +1457,10 @@ public class RegulatoryReportingPage extends UploadPage {
             }
         }
         return true;
+    }
+
+    public void clickOnCreateReportsButton() {
+        System.out.println("Clicking on Create Reports button");
+        BrowserUtils.waitForClickablility(createReportsButton, 5).click();
     }
 }

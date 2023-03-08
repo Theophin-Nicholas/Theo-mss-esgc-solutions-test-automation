@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class EMCAccountsPage extends EMCBasePage {
-    @FindBy(tagName = "h4")
+    @FindBy(tagName = "h3")
     public WebElement pageTitle;
 
     @FindBy(xpath = "//button[.='Create account']")
@@ -48,26 +48,30 @@ public class EMCAccountsPage extends EMCBasePage {
     }
 
     public boolean verifyAccount(String accountName) {
-        try {
-            for (int i = 0; i < accountNames.size(); i++) {
-                if (accountNames.get(i).getText().equalsIgnoreCase(accountName)) {
-                    return true;
-                }
+        wait(accountNames,20);
+        clear(searchInput);
+        searchInput.sendKeys(accountName);
+        for(WebElement account : accountNames){
+            if(account.getText().equalsIgnoreCase(accountName)){
+                return true;
             }
-        } catch (Exception e) {
-            return false;
         }
+        System.out.println("Account " + accountName + " not found!");
         return false;
     }
     public boolean verifyAccount(String accountName, boolean status) {
         String statusString = status ? "Active" : "Inactive";
+        wait(accountNames,20);
+        clear(searchInput);
+        searchInput.sendKeys(accountName);
         for (int i = 0; i < accountNames.size(); i++) {
-            if (accountNames.get(i).getText().equals(accountName)) {
+            if (accountNames.get(i).getText().equalsIgnoreCase(accountName)) {
                 if (accountStatuses.get(i).getText().equals(statusString)) {
                     return true;
                 }
             }
         }
+        System.out.println("Account " + accountName + " not found!");
         return false;
     }
 
@@ -82,15 +86,13 @@ public class EMCAccountsPage extends EMCBasePage {
     }
 
 
-    public void clickOnFirstAccount() {
-        System.out.println("Clicking on first account = " + accountNames.get(0).getText());
-        BrowserUtils.waitForClickablility(accountNames.get(0), 5).click();
-    }
+//    public void clickOnFirstAccount() {
+//        System.out.println("Clicking on first account = " + accountNames.get(0).getText());
+//        BrowserUtils.waitForClickablility(accountNames.get(0), 5).click();
+//    }
   
     public void goToAccount(String accountName){
-        while (searchInput.getAttribute("value").length() > 0) {
-            searchInput.sendKeys(Keys.BACK_SPACE);
-        }
+        clear(searchInput);
         searchInput.sendKeys(accountName);
         for (WebElement account : accountNames) {
             if (account.getText().equalsIgnoreCase(accountName)) {
@@ -108,5 +110,18 @@ public class EMCAccountsPage extends EMCBasePage {
     public void clickOnCreateAccountButton() {
         System.out.println("Clicking on create account button");
         BrowserUtils.waitForClickablility(createAccountButton, 25).click();
+    }
+
+    public void verifyAccountsPage() {
+        assertTestCase.assertTrue(pageTitle.getText().equals("Accounts"), "Page title is verified");
+        assertTestCase.assertTrue(createAccountButton.isDisplayed(), "Create account button is displayed");
+        assertTestCase.assertTrue(searchInput.isDisplayed(), "Search input is displayed");
+        assertTestCase.assertTrue(searchButton.isDisplayed(), "Search button is displayed");
+        assertTestCase.assertTrue(accountNames.size() > 0, "Account names are displayed");
+        assertTestCase.assertTrue(accountStatuses.size() > 0, "Account statuses are displayed");
+        assertTestCase.assertTrue(accountCreatedDates.size() > 0, "Account created dates are displayed");
+        assertTestCase.assertTrue(accountCreatedByEmails.size() > 0, "Account created by emails are displayed");
+        assertTestCase.assertTrue(accountModifiedDates.size() > 0, "Account modified dates are displayed");
+        assertTestCase.assertTrue(accountModifiedByEmails.size() > 0, "Account modified by emails are displayed");
     }
 }

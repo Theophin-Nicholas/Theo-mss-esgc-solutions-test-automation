@@ -16,6 +16,7 @@ public class UnzipUtil {
      * Size of the buffer to read/write data
      */
     private static final int BUFFER_SIZE = 4096;
+
     /**
      * Extracts a zip file specified by the zipFilePath to a directory specified by
      * destDirectory (will be created if does not exists)
@@ -60,6 +61,20 @@ public class UnzipUtil {
             bos.write(bytesIn, 0, read);
         }
         bos.close();
+    }
+
+    public static void deleteFilesInDownloadFolder() {
+
+        File dir = new File(BrowserUtils.downloadPath());
+        File[] dir_contents = dir.listFiles();
+        if (dir_contents == null) {
+            System.out.println("No files in the directory");
+            return;
+        }
+        for (File file : dir_contents) {
+            file.delete();
+        }
+        System.out.println("All files in the directory are deleted");
     }
 
 }
