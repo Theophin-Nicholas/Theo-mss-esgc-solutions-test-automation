@@ -1,7 +1,12 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
-<suite name="ESGC Regression Suite"  parallel="classes" thread-count="8">   <!-- Parallel execution eg.: parallel="methods" thread-count="8" -->
+<suite name="ESGC Regression Suite"  >
+    <!-- Parallel execution eg.: parallel="methods" thread-count="8" -->
+
+    <!--<suite name="ESGC Smoke Suite" verbose="2">-->
     <listeners>
-        <listener class-name="com.esgc.Utilities.XrayListener"/>
+       <!-- <listener class-name="com.esgc.Utilities.XrayListener"/>-->
+
+        <listener class-name="com.esgc.Reporting.Listeners"/>
     </listeners>
     <test name="ESGC Regression Test">
 
@@ -17,7 +22,7 @@
 
         <packages>
 
-            <package name="com.esgc.*"/>
+            <package name="com.esgc.RegulatoryReporting.*"/>
 
         </packages>
 

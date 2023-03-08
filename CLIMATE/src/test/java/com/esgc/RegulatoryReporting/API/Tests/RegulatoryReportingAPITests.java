@@ -2,6 +2,7 @@ package com.esgc.RegulatoryReporting.API.Tests;
 
 import com.esgc.Base.TestBases.UITestBase;
 import com.esgc.Base.UI.Pages.LoginPage;
+import com.esgc.Dashboard.API.Controllers.DashboardAPIController;
 import com.esgc.Dashboard.UI.Pages.DashboardPage;
 import com.esgc.RegulatoryReporting.API.APIModels.PortfolioDetails;
 import com.esgc.RegulatoryReporting.API.Controllers.RegulatoryReportingAPIController;
@@ -10,7 +11,9 @@ import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.Driver;
 import com.esgc.Utilities.EntitlementsBundles;
 import com.esgc.Utilities.Xray;
+import io.restassured.path.json.JsonPath;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebElement;
 import org.testng.annotations.Test;
 
 import java.util.*;
@@ -34,11 +37,15 @@ public class RegulatoryReportingAPITests extends UITestBase {
         List<String> expectedPortfoliosList = BrowserUtils.getElementsText(dashboardPage.portfolioNameList);
         dashboardPage.navigateToPageFromMenu("Regulatory Reporting");
         List<String> actualPortfoliosList = reportingPage.getPortfolioList();
+      assertTestCase.assertTrue(expectedPortfoliosList.containsAll(actualPortfoliosList), "Regulatory Reporting Page - Portfolio list is verified");
+
+        reportingPage.selectPortfolioOptionByIndex2(0);
+        reportingPage.selectPortfolioOptionByIndex(2);
         assertTestCase.assertTrue(expectedPortfoliosList.containsAll(actualPortfoliosList), "Regulatory Reporting Page - Portfolio list is verified");
 
         //Select a portfolio and validate the reporting for column is listed with year option dropdown.
         // The oldest available option should be 2019 and should not list any year before that
-        reportingPage.selectPortfolioOptionByIndex(1);
+        //reportingPage.selectPortfolioOptionByIndex(2);
         assertTestCase.assertTrue(reportingPage.reportingForListButtons.get(0).isEnabled(), "Reporting year dropdown is enabled");
         BrowserUtils.wait(2);
         reportingPage.reportingForList.get(0).click();
@@ -102,7 +109,7 @@ public class RegulatoryReportingAPITests extends UITestBase {
             int index = reportingPage.selectPortfolioOptionByName(portfolioName);
             List<Integer> UIYears = BrowserUtils.convertStringListToIntList(reportingPage.getReportingFor_YearList(portfolioName, index), Integer::parseInt);
             if (BrowserUtils.convertStringListToIntList(portfolio.getReporting_years(), Integer::parseInt).stream().min(Integer::compare).get() < 2019) {
-                assertTestCase.assertTrue(UIYears.stream().min(Integer::compare).get() > 2018, "Validating that years are not showing less tyhan 2019");
+                assertTestCase.assertTrue(UIYears.stream().min(Integer::compare).get() > 2018, "Validating that years are not showing less than 2019");
             }
             reportingPage.deSelectPortfolioOptionByName(portfolioName);
         }
@@ -128,6 +135,30 @@ public class RegulatoryReportingAPITests extends UITestBase {
                 apiController.deletePortfolio(apiController.getPortfolioId(portfolioName));
             }
         }
+    }
+@Test
+    public void verifyBenchmarkFieldDashboard(){
+        RegulatoryReportingPage reportingPage = new RegulatoryReportingPage();
+        DashboardPage dashboardPage = new DashboardPage();
+    dashboardPage.navigateToPageFromMenu("Dashboard");
+
+    RegulatoryReportingAPIController apiController = new RegulatoryReportingAPIController();
+    List<String> portfolioFields = apiController.getPortfolioFields();
+
+    BrowserUtils.wait(10);
+
+    assertTestCase.assertFalse(portfolioFields.contains("benchmark"), "the benchmark field is not present");
+    for (String name : portfolioFields ){
+        System.out.println(name);
+    }
+
+    BrowserUtils.wait(10);
+
+    //JsonPath benchmarkTest = apiController.getDashboardPortfolioDetails().jsonPath();
+   // assertTestCase.assertEquals(benchmarkTest.getString("benchmark"), "benchmark", "benchmark field is present");
+
+
+
     }
 }
 

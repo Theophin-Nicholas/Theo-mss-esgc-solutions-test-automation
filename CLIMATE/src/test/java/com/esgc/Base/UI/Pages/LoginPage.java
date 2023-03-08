@@ -102,6 +102,8 @@ public class LoginPage extends ClimatePageBase {
     @FindBy(xpath = "//a[text()='← Back to Sign-In Page']")
     public WebElement backToSignInButton;
 
+    @FindBy(xpath = "//*[@id='idp-discovery-submit']")
+    public WebElement nextButtonToEnterNoPreviousDownload;
 
     // ========================================== MESG Platform
 
@@ -171,6 +173,15 @@ public class LoginPage extends ClimatePageBase {
         }
     }
 
+    public void loginToVerifyNoPreviouslyDownloaded(){
+        wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.NO_PREVIOUSLY_DOWNLOADED_REGULATORY_REPORTS_USERNAME, Keys.ENTER);
+        wait.until(ExpectedConditions.elementToBeClickable(nextButtonToEnterNoPreviousDownload)).click();
+        //wait.until()nextButtonToEnterNoPreviousDownload.click();
+        //passwordBox.sendKeys(Environment.NO_PREVIOUSLY_DOWNLOADED_REGULATORY_REPORTS_PASSWORD);
+        wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.NO_PREVIOUSLY_DOWNLOADED_REGULATORY_REPORTS_PASSWORD, Keys.ENTER);
+
+    }
+
     public void loginWithWrongUser() {
         wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys("Wrong_User_Name", Keys.ENTER);
         wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.INTERNAL_USER_PASSWORD, Keys.ENTER);
@@ -188,10 +199,10 @@ public class LoginPage extends ClimatePageBase {
         System.out.println("Login with default user");
         wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.DATA_USERNAME, Keys.ENTER);
         BrowserUtils.wait(5);
-        boolean isUserOnNewLoginPage = Driver.getDriver().getCurrentUrl().contains("auth.moodys.com");
-        if (isUserOnNewLoginPage) {
-            clickOnNextButton();
-        }
+    //    boolean isUserOnNewLoginPage = Driver.getDriver().getCurrentUrl().contains("auth.moodys.com");
+     //   if (isUserOnNewLoginPage) {
+     //       clickOnNextButton();
+     //   }
         wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.DATA_PASSWORD);
         
 //        wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.UI_USERNAME, Keys.ENTER);

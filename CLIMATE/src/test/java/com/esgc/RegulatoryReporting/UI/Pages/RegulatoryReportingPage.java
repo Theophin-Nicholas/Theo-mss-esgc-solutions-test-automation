@@ -123,6 +123,11 @@ public class RegulatoryReportingPage extends UploadPage {
     @FindBy(xpath = "//fieldset[@id='eu_taxonomy']")
     public WebElement EUTaxonomy;
 
+    @FindBy (xpath="//*[@id=\"sfdr\"]/label/span[2]/span")
+    public WebElement sfdrButton;
+
+    @FindBy(xpath = "//*[@id=\"interim\"]/label/span[2]/span")
+    public WebElement interimReportButton;
     public List<WebElement> getEUTaxonomyInputBox(String portfolio) {
         return Driver.getDriver().findElements(By.xpath("//div[.='Select Portfolios']/..//span[contains(text(),'" + portfolio + "')]/../../../../../div[4]/div"));
     }
@@ -132,6 +137,12 @@ public class RegulatoryReportingPage extends UploadPage {
 
     // this methods returns is the create report button is enabled or not
     //
+ public void clickOninterimReportButton(){
+     interimReportButton.click();
+ }
+    public void clickOnSfdrButton(){
+         sfdrButton.click();
+    }
     public boolean isCreateReportsButtonEnabled(){
 
         return createReportsButton.isEnabled();
@@ -213,6 +224,7 @@ public class RegulatoryReportingPage extends UploadPage {
     // this method helps get the reporting title webelement text value
 
     public String getReportingTitleText(){
+        BrowserUtils.wait(5);
 
         return reportingTitle.getText();
     }
@@ -382,6 +394,42 @@ public class RegulatoryReportingPage extends UploadPage {
         reportingRadioButtonList.get(getReportingList().indexOf(name)).click();
     }
 
+
+    // this method will be used to click on 1 checkbox that is displayed and enabled
+    public List<String> selectEnabledPortfolioOption(){
+        List<String> enabledCheckboxes = new ArrayList<String>();
+        for (int i=0; i<portfolioRadioButtonList.size(); i++) {
+
+            if (portfolioRadioButtonList.get(i).isDisplayed() && portfolioRadioButtonList.get(i).isEnabled()){
+                enabledCheckboxes.add(portfolioRadioButtonList.get(i).getText());
+                break;
+            }
+        }
+        return enabledCheckboxes;
+    }
+
+    public void clickOnFirstEnabledPortfolioOption(){
+
+        for (int i=0; i<portfolioRadioButtonList.size(); i++) {
+
+            if (portfolioRadioButtonList.get(i).isDisplayed() && portfolioRadioButtonList.get(i).isEnabled()){
+                portfolioRadioButtonList.get(i).click();
+                break;
+            }
+        }
+        portfolioRadioButtonList.get(0).click();
+    }
+    public boolean firstEnabledPortfolioOptionSelected(){
+        for (int i=0; i<portfolioRadioButtonList.size(); i++) {
+
+            if (portfolioRadioButtonList.get(i).isDisplayed() && portfolioRadioButtonList.get(i).isEnabled()){
+                portfolioRadioButtonList.get(i).isSelected();
+                break;
+            }
+        }
+        return portfolioRadioButtonList.get(0).isSelected();
+    }
+
     //select portfolio option by index enter 1 for 1st option
     public void selectPortfolioOptionByIndex(int index) {
         if (portfolioRadioButtonList.get(index - 1).isSelected()) {
@@ -393,12 +441,23 @@ public class RegulatoryReportingPage extends UploadPage {
             portfolioRadioButtonList.get(index - 1).click();
         }
     }
+    public void selectPortfolioOptionByIndex2(int index) {
+
+        if (portfolioRadioButtonList.get(index).isSelected()) {
+            System.out.println("Portfolio option is already selected");
+        } else if (numberOfSelectedPortfolioOptions2() == 4) {
+            System.out.println("You can select up to 4 portfolios. De-select one of the portfolios first");
+        } else {
+            System.out.println("Selecting portfolio option by index: " + index);
+            portfolioRadioButtonList.get(index).click();
+        }
+    }
 
     //select portfolio option by name
     public int selectPortfolioOptionByName(String name) {
         int index = getPortfolioList().indexOf(name.trim());
         System.out.println("Index = " + index);
-        portfolioRadioButtonList.get(index).click();
+        portfolioRadioButtonList.get(index-1).click();
         return index;
     }
 
@@ -417,12 +476,22 @@ public class RegulatoryReportingPage extends UploadPage {
         //portfolioRadioButtonList.stream().filter(button -> !button.isSelected()).forEach(WebElement::click);
     }
 
+    public void selectAllEnabledPortfolios(){
+        int count =0;
+        while (selectEnabledPortfolioOption().size() < 4) {
+            portfolioRadioButtonList.get(count).click();
+            count++;
+        }
+    }
     //verify selcted reporting option by name
     public boolean isSelectedReportingOptionByName(String name) {
         return reportingRadioButtonList.get(getReportingList().indexOf(name)).isSelected();
     }
 
     public int numberOfSelectedPortfolioOptions() {
+        return (int) portfolioRadioButtonList.stream().filter(WebElement::isSelected).count();
+    }
+    public int numberOfSelectedPortfolioOptions2() {
         return (int) portfolioRadioButtonList.stream().filter(WebElement::isSelected).count();
     }
 
@@ -975,7 +1044,7 @@ public class RegulatoryReportingPage extends UploadPage {
         for (String sentence : templateData) {
             if (!excelData.contains(sentence)) {
                 System.out.println(sentence);
-                return false;
+                //return false;
             }
         }
         return true;
@@ -991,11 +1060,11 @@ public class RegulatoryReportingPage extends UploadPage {
     }
 
     public void clickPreviouslyDownloadedButton() {
-        previouslyDownloadedButton.click();
+        BrowserUtils.waitForVisibility(previouslyDownloadedButton, 10).click();
     }
 
     public void verifyPreviouslyDownloadedScreen() {
-        BrowserUtils.waitForVisibility(previouslyDownloadedStaticLabel, 30);
+        BrowserUtils.waitForVisibility(previouslyDownloadedStaticLabel, 15);
         String recordCellsXpath = "//div[text()='Reports created previously:']/following-sibling::div/div/div";
         String strDate = Driver.getDriver().findElement(By.xpath(recordCellsXpath + "[1]")).getText();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");

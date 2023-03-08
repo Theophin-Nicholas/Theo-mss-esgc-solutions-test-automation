@@ -90,10 +90,13 @@ public abstract class UITestBase extends TestBase {
         String accessToken = ((JavascriptExecutor) Driver.getDriver()).executeScript(getAccessTokenScript).toString();
         System.setProperty("token", accessToken);
     }
+
     @AfterMethod(onlyForGroups = {UI}, groups = {SMOKE, REGRESSION, UI})
     public void refreshPageToContinueUITesting(ITestResult result) {
         getScreenshot(result);
-        Driver.getDriver().navigate().refresh();
+        //Driver.getDriver().navigate().refresh();
+       Driver.closeDriver();
+       // Driver.close();
     }
 
     @AfterMethod(onlyForGroups = {ENTITLEMENTS}, groups = {SMOKE, REGRESSION, ENTITLEMENTS})
@@ -101,10 +104,10 @@ public abstract class UITestBase extends TestBase {
         Driver.closeDriver();
     }
 
-//    @AfterClass(alwaysRun = true)
-//    public void closeDriverAfterAllTests() {
-//        Driver.closeDriver();
-//    }
+   @AfterClass(alwaysRun = true)
+    public void closeDriverAfterAllTests() {
+      Driver.closeDriver();
+   }
 
 
 }

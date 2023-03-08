@@ -1,26 +1,24 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
-<suite name="ESGC Smoke Suite" verbose="2"> <!-- parallel="classes" thread-count="8">-->
+<suite name="ESGC Smoke Suite" verbose="2"  parallel="methods" thread-count="5">
     <!--<suite name="ESGC Smoke Suite" verbose="2">-->
     <listeners>
-        <listener class-name="com.esgc.Utilities.XrayListener"/>
+
         <listener class-name="com.esgc.Reporting.Listeners"/>
     </listeners>
     <test name="Regulatory Reporting Regression Test Results" >
 
-        <parameter name="reportName" value="Reg. Reporting Regression Test Report"/>
+        <parameter name="reportName" value="Reg reporting UI issam Test Report"/>
 
         <groups>
             <run>
-                <include name="regulatoryReporting"/>
-                <include name="regression"/>
+
+                <include name="issam"/>
                 <exclude name="robot_dependency"></exclude>
             </run>
         </groups>
 
         <packages>
-            <package name="com.esgc.Tests.UI.RegulatoryReporting"/>
-            <package name="com.esgc.Tests.API.RegulatoryReporting"/>
-            <package name="com.esgc.Tests.DataValidation.RegulatoryReportingPage"/>
+            <package name="com.esgc.RegulatoryReporting.*"/>
         </packages>
 
 
