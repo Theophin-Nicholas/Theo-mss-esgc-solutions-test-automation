@@ -2,11 +2,18 @@ package com.esgc.RegulatoryReporting.API.Controllers;
 
 import com.esgc.Base.API.Controllers.APIController;
 import com.esgc.RegulatoryReporting.API.RegulatoryReportingEndPoints;
+import com.esgc.Utilities.BrowserUtils;
+import com.esgc.Utilities.DateTimeUtilities;
 import io.restassured.response.Response;
 
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
+
 public class RegulatoryReportingAPIController extends APIController {
+    boolean isInvalidTest = false;
     public Response getPortfolioDetails() {
         Response response = null;
         try {
@@ -57,24 +64,45 @@ public class RegulatoryReportingAPIController extends APIController {
         return portfolioNames;
     }
 
-    public Response getAysncGenerationAPIReposnse() {
+    public Response getAysncGenerationAPIReposnse(String portfolioID, String year, String requestType) {
         Response response = null;
+        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+       String CurrDate =  DateTimeUtilities.getCurrentDate("MM_dd_yyyy") ;
+        String timeStamp = String.valueOf(timestamp.getTime());
+        String body = "";
+        if (requestType.contains("Invalid")){
+            body = "{\n" +
+                    "    \"report_name\": \"SFDR_Interim" + CurrDate + "_" + timeStamp +"\",\n" +
+                    "    \"regulation\": \"sfdr\",\n" +
+                    "    \"report_type\": \"interim\",\n" +
+                    "    \"use_latest_data\": \"0\",\n" +
+                    "    \"portfolios\": [\n" +
+                    "        {\n" +
+                    "            \"portfolio_id\": ,\n" +
+                    "            \"year\": \""+year+"\",\n" +
+                    "            \"file_name\": \"SFDR_0_" + CurrDate +"\"\n" +
+                    "        }\n" +
+                    "    ]\n" +
+                    "}";
+        }else{
+            body = "{\n" +
+                    "    \"report_name\": \"SFDR_Interim" + CurrDate + "_" + timeStamp +"\",\n" +
+                    "    \"regulation\": \"sfdr\",\n" +
+                    "    \"report_type\": \"interim\",\n" +
+                    "    \"use_latest_data\": \"0\",\n" +
+                    "    \"portfolios\": [\n" +
+                    "        {\n" +
+                    "            \"portfolio_id\": \""+portfolioID+"\",\n" +
+                    "            \"year\": \""+year+"\",\n" +
+                    "            \"file_name\": \"SFDR_0_" + CurrDate +"\"\n" +
+                    "        }\n" +
+                    "    ]\n" +
+                    "}";
+        }
         try {
             response = configSpec()
                     .when()
-                    .body("{\n" +
-                            "    \"report_name\": \"SFDR_Interim_03_07_2023_1678212318878\",\n" +
-                            "    \"regulation\": \"sfdr\",\n" +
-                            "    \"report_type\": \"interim\",\n" +
-                            "    \"use_latest_data\": \"0\",\n" +
-                            "    \"portfolios\": [\n" +
-                            "        {\n" +
-                            "            \"portfolio_id\": \"78597308-8e69-4cd5-b8c9-53d64b598e19\",\n" +
-                            "            \"year\": \"2023\",\n" +
-                            "            \"file_name\": \"SFDR_0_03_07_2023\"\n" +
-                            "        }\n" +
-                            "    ]\n" +
-                            "}")
+                    .body(body)
                     .log().all()
                     .post(RegulatoryReportingEndPoints.GET_ASYNC_GENERATION);
         } catch (Exception e) {
@@ -82,12 +110,18 @@ public class RegulatoryReportingAPIController extends APIController {
         }
         return response;
     }
-    public Response getStatusAPIReposnse(String requestID) {
+    public Response getStatusAPIReposnse(String requestID, String requestType) {
         Response response = null;
+        String body = "";
+        if (requestType.contains("Invalid")){
+            body = "{ \"request_id\": } ";
+        }else {
+            body = "{ \"request_id\": \""+requestID+"\" } " ;
+        }
         try {
             response = configSpec()
                     .when()
-                    .body("{ \"request_id\": \""+requestID+"\" } ")
+                    .body(body)
                     .log().all()
                     .post(RegulatoryReportingEndPoints.GET_STATUS);
         } catch (Exception e) {
@@ -96,12 +130,18 @@ public class RegulatoryReportingAPIController extends APIController {
         return response;
     }
 
-    public Response getDownload(String requestID) {
+    public Response getDownload(String requestID, String requestType) {
         Response response = null;
+        String body = "";
+        if (requestType.contains("Invalid")){
+            body = "{ \"request_id\": } ";
+        }else {
+            body = "{ \"request_id\": \""+requestID+"\" } " ;
+        }
         try {
             response = configSpec()
                     .when()
-                    .body("{ \"request_id\": \""+requestID+"\" } ")
+                    .body(body)
                     .log().all()
                     .post(RegulatoryReportingEndPoints.GET_DOWNLOAD);
         } catch (Exception e) {

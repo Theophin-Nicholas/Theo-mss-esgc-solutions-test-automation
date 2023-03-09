@@ -528,7 +528,7 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
 
     @Test(groups = {"regression", "DataValidation", "regulatoryReporting"},
             description = "Data Validation | UI | Regulatory Reporting | SFDR | Company Level Outputs | Verify Scope 3 GHG Emissions Column is Reflected to report")
-    @Xray(test = {12892, 12893, 12895,1276})
+    @Xray(test = {12892, 12893, 12895,11276})
     public void verifyScope3GHGEmissionsColumnTest() {
         DashboardPage dashboardPage = new DashboardPage();
         dashboardPage.navigateToPageFromMenu("Regulatory Reporting");
@@ -563,7 +563,7 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
                     "SFDR Portfolio Level output for portfolio coverage is verified for Excel vs DB");
             System.out.println("SFDR Scope 3 GHG Emissions output for portfolio coverage is verified for Excel vs DB");
 
-            assertTestCase.assertTrue(reportingPage.verifyPortfolioLevelOutput(selectedPortfolios,"2020", "Interim", "latest"),
+            assertTestCase.assertTrue(reportingPage.verifyPortfolioLevelOutput(selectedPortfolios,"2020", "Interim", "Yes"),
                     "SFDR Portfolio Level Output is verified for Excel vs DB");
             System.out.println("SFDR Portfolio Level Output is verified for Excel vs DB");
         } catch (Exception e) {
@@ -598,7 +598,7 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
                     "SFDR Portfolio Level output for portfolio coverage is verified for Excel vs DB");
             System.out.println("SFDR Scope 3 GHG Emissions output for portfolio coverage is verified for Excel vs DB");
 
-            assertTestCase.assertTrue(reportingPage.verifyPortfolioLevelOutput(selectedPortfolios,"2020", "Annual", "latest"),
+            assertTestCase.assertTrue(reportingPage.verifyPortfolioLevelOutput(selectedPortfolios,"2020", "Annual", "Yes"),
                     "SFDR Portfolio Level Output is verified for Excel vs DB");
             System.out.println("SFDR Portfolio Level Output is verified for Excel vs DB");
         } catch (Exception e) {
