@@ -221,7 +221,7 @@ public class ApplicationPageTests extends EMCUITestBase {
     }
 
     @Test(groups = {EMC, UI, REGRESSION, SMOKE})
-    @Xray(test = {2324, 2347, 2348, 2349, 7649, 12716, 12717, 13181, 13185})
+    @Xray(test = {2324, 2347, 2348, 2349, 5782, 5783, 7649, 12716, 12717, 13181, 13185})
     public void verifyInformationRequiredForCreatingApplicationFulfilledTest() {
         navigateToApplicationsPage("", "details");
 
@@ -284,6 +284,16 @@ public class ApplicationPageTests extends EMCUITestBase {
         wait(applicationsPage.notification, 10);
         assertTestCase.assertTrue(applicationsPage.notification.isDisplayed(), "Application Created Notification is displayed");
         assertTestCase.assertTrue(applicationsPage.verifyApplication(applicationName), "Application is displayed in the list");
+        applicationsPage.selectApplication(applicationName);
+        EMCApplicationDetailsPage detailsPage = new EMCApplicationDetailsPage();
+        detailsPage.clickOnProductsTab();
+        assertTestCase.assertTrue(detailsPage.addProductButton.isDisplayed(), "Add Product Button is displayed");
+        assertTestCase.assertTrue(detailsPage.productsList.size()==0, "Products List is empty for new application");
+
+        detailsPage.clickOnRolesTab();
+        assertTestCase.assertTrue(detailsPage.addRoleButton.isDisplayed(), "Add Role Button is displayed");
+        assertTestCase.assertTrue(detailsPage.applicationRolesNames.size()==0, "Roles List is empty for new application");
+        assertTestCase.assertTrue(detailsPage.noProductMessages.size()>0, "No Products messages are displayed");
     }
 
     @Test(groups = {EMC, UI, REGRESSION})

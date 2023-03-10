@@ -47,6 +47,8 @@ public class EMCAccountsEditUserPage extends EMCBasePage {
     public WebElement saveButton;
     @FindBy (xpath = "(//h6)[2]")
     public WebElement status;
+    @FindBy (xpath = "(//h6)[4]")
+    public WebElement lastLoginInfo;
     @FindBy (xpath = "//span[starts-with(.,'Created by')]")
     public WebElement createdByInfo;
     @FindBy (xpath = "//span[starts-with(.,'Modified by')]")

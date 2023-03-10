@@ -191,6 +191,9 @@ public class EMCAccountDetailsPage extends EMCBasePage {
     @FindBy (xpath = "//th/a")
     public List<WebElement> userNamesList;
 
+    @FindBy (xpath = "//main//h6")
+    public WebElement noUsersMessage;
+
     @FindBy (xpath = "//td/a")
     public List<WebElement> userEmailsList;
 
@@ -270,7 +273,11 @@ public class EMCAccountDetailsPage extends EMCBasePage {
             //emailInput.sendKeys(userName);
             userNameInput.sendKeys(userName, Keys.TAB);
             if(!sendActivationEmail) sendActivationEmailCheckbox.click();
-            if(MAUser) maCheckbox.click();
+            if(MAUser) BrowserUtils.waitForClickablility(maCheckbox, 5).click();
+            else {
+                BrowserUtils.waitForClickablility(mssCheckbox, 5).click();
+                assertTestCase.assertTrue(sendActivationEmailCheckbox.isDisplayed(), "Send Activation Email checkbox is displayed");
+            }
             BrowserUtils.waitForClickablility(saveButton, 5).click();
             System.out.println("save button clicked");
             BrowserUtils.waitForClickablility(backToUsersButton, 5).click();
@@ -297,7 +304,7 @@ public class EMCAccountDetailsPage extends EMCBasePage {
 
     public boolean createUser(boolean sendActivationEmail) {
         Faker faker = new Faker();
-        addUserButton.click();
+        BrowserUtils.waitForClickablility(addUserButton, 5).click();
         String firstName = "QATESTUSER";
         String lastName = faker.name().lastName();
         String userName = faker.internet().emailAddress();

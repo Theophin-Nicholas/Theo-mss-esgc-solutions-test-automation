@@ -135,10 +135,6 @@ public class RegulatoryReportingPage extends UploadPage {
         return createReportsButton.isEnabled();
     }
 
-    public void clickOnCreateReportsButton(){
-        createReportsButton.click();
-    }
-
     public void clickOnEUTaxonomy(){
         EUTaxonomy.click();
     }
@@ -377,6 +373,7 @@ public class RegulatoryReportingPage extends UploadPage {
 
     //select reporting option by name
     public void selectReportingOptionByName(String name) {
+        //todo: add more flexibility to the method
         reportingRadioButtonList.get(getReportingList().indexOf(name)).click();
     }
 
@@ -1462,5 +1459,57 @@ public class RegulatoryReportingPage extends UploadPage {
     public void clickOnCreateReportsButton() {
         System.out.println("Clicking on Create Reports button");
         BrowserUtils.waitForClickablility(createReportsButton, 5).click();
+    }
+
+    public boolean verifyBVD9IDInCompanyLevelOutput(List<String> selectedPortfolios, String reportFormat, String reportYear) {
+        for (String portfolioName : selectedPortfolios) {
+            System.out.println("\nportfolioName = " + portfolioName);
+            String portfolioId = apiController.getPortfolioId(portfolioName);
+
+            //open Excel file
+            String excelName = "";
+            ExcelUtil excelData = null;
+            //if multiple portfolios are selected and
+            // if interim report selected, then multiple Excel files will be downloaded and sheet index will be always 1
+            // if annual report selected, then one Excel file will be downloaded and sheet index will be index of selected portfolios
+            if (rrStatusPage_PortfoliosList.size() > 1) {
+                excelName = rrStatusPage_PortfoliosList.get(selectedPortfolios.indexOf(portfolioName)).getText().replaceAll("ready", "").trim();
+                excelData = getExcelData(excelName, 1);
+            } else {
+                excelName = rrStatusPage_PortfoliosList.get(0).getText().replaceAll("ready", "").trim();
+                excelData = getExcelData(excelName, selectedPortfolios.indexOf(portfolioName) + 1);//we skip index 0 because it is for Portfolio Level Output
+            }
+            System.out.println("Sheet Name = " + excelData.getSheetName());
+            //get column names and verify it has BVD9 ID but nor Factset ID
+            List<String> columnNames = excelData.getColumnsNames();
+            System.out.println("columnNames = " + columnNames);
+            if (!columnNames.contains("BVD9 ID")) {
+                System.out.println("BVD9 ID column is not found in the excel");
+                return false;
+            }
+            if (columnNames.contains("Factset ID")) {
+                System.out.println("Factset ID column is found in the excel");
+                return false;
+            }
+            //Data Validation
+            RegulatoryReportingQueries queries = new RegulatoryReportingQueries();
+            List<Map<String, Object>> dbData = queries.getSFDRCompanyOutput(portfolioId,reportYear);
+            System.out.println("dbData.get() = " + dbData.get(0));
+            for(Map<String, Object> dbRow: dbData){
+                String bvd9Id = dbRow.get("BVD9_NUMBER").toString();
+                String companyName = dbRow.get("COMPANY_NAME").toString();
+                List<String> excelRow = excelData.getRowData(companyName);
+                System.out.println("excelRow = " + excelRow);
+                if(!excelRow.contains(bvd9Id)){
+                    System.out.println("BVD9 ID is not found in the excel for company = " + companyName);
+                    return false;
+                }
+                if(!excelRow.contains(companyName)){
+                    System.out.println("Company name is not found in the excel for company = " + companyName);
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 }

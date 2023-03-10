@@ -71,6 +71,9 @@ public class EMCApplicationDetailsPage extends EMCBasePage{
     @FindBy (xpath = "//button[.='Add Role']")
     public WebElement addRoleButton;
 
+    @FindBy (xpath = "//main//h6")
+    public List<WebElement> noProductMessages;
+
     @FindBy (xpath = "//tbody//a")
     public List<WebElement> applicationRolesNames;
 

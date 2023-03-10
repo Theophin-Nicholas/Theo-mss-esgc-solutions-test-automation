@@ -218,7 +218,7 @@ public class ConfigurationPageTests extends EMCUITestBase {
     }
 
     @Test(groups = {EMC, UI,REGRESSION})
-    @Xray(test = {6668})
+    @Xray(test = {6668, 6635})
     public void verifyAdminUserCreateRoleWithoutOptionalFieldsTest() {
         navigateToConfigPage("permission roles");
         EMCRolesPage rolesPage = new EMCRolesPage();
