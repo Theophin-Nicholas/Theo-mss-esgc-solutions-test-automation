@@ -14,4 +14,5 @@ public class Application {
     private String masteredBy;
     private String provider;
     private String key;
+    private String type;
 }

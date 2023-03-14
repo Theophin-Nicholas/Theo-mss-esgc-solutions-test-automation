@@ -7,28 +7,39 @@ import org.openqa.selenium.support.FindBy;
 import java.util.List;
 
 public class EMCApplicationDetailsPage extends EMCBasePage{
+    @FindBy (xpath = "//h4")
+    public WebElement pageTitle;
+
     @FindBy (xpath = "//button[.='Details']")
     public WebElement detailsTab;
+
     @FindBy (xpath = "//button[.='Products']")
     public WebElement ProductsTab;
+
     @FindBy (xpath = "//button[.='Roles']")
     public WebElement rolesTab;
 
-    @FindBy(id = "notistack-snackbar")
-    public WebElement notification;
+    @FindBy (xpath = "//h4/following-sibling::div[1]")
+    public WebElement providerType;
+
+    @FindBy (xpath = "//h4/following-sibling::div[2]")
+    public WebElement applicationType;
 
     @FindBy (xpath = "//button[.='Back to Applications']")
     public WebElement backToApplicationsButton;
+
     //Details tab elements
     @FindBy (xpath = "(//input)[1]")
     public WebElement ApplicationName;
+
     @FindBy (xpath = "(//input)[2]")
     public WebElement ApplicationURL;
+
     @FindBy (xpath = "//span[starts-with(.,'Created by')]")
     public WebElement createdByText;
+
     @FindBy (xpath = "//span[starts-with(.,'Modified by')]")
     public WebElement modifiedByText;
-
 
     @FindBy (xpath = "//button[.='Edit']")
     public WebElement editButton;
@@ -39,14 +50,29 @@ public class EMCApplicationDetailsPage extends EMCBasePage{
     @FindBy (xpath = "//button[.='Cancel']")
     public WebElement cancelButton;
 
+    @FindBy (xpath = "//button[.='Delete']")
+    public WebElement deleteButton;
+
     @FindBy (xpath = "//button[.='Add product']")
     public WebElement addProductButton;
+
+    @FindBy (xpath = "//input[@placeholder='Search by name, email, etc...']")
+    public WebElement searchInput;
 
     @FindBy (xpath = "//tbody//a")
     public List<WebElement> productsList;
 
+    @FindBy (xpath = "//tbody//td//input")
+    public List<WebElement> productsCheckboxList;
+
+    @FindBy (xpath = "//button[@title='Delete']")
+    public WebElement deleteProductsButton;
+
     @FindBy (xpath = "//button[.='Add Role']")
     public WebElement addRoleButton;
+
+    @FindBy (xpath = "//main//h6")
+    public List<WebElement> noProductMessages;
 
     @FindBy (xpath = "//tbody//a")
     public List<WebElement> applicationRolesNames;
@@ -62,6 +88,18 @@ public class EMCApplicationDetailsPage extends EMCBasePage{
 
     @FindBy (xpath = "//input[@name='key']")
     public WebElement roleKeyInput;
+
+    @FindBy (xpath = "(//h6/../following-sibling::div//input)[1]")
+    public WebElement roleDetailNameInput;
+
+    @FindBy (xpath = "(//h6/../following-sibling::div//input)[2]")
+    public WebElement roleDetailKeyInput;
+
+    @FindBy (xpath = "//span[starts-with(.,'Created by')]")
+    public WebElement roleDetailCreatedInfo;
+
+    @FindBy (xpath = "//span[starts-with(.,'Modified by')]")
+    public WebElement roleDetailModifiedInfo;
 
     //Products tab elements - Add product pop up elements
 
@@ -206,5 +244,72 @@ public class EMCApplicationDetailsPage extends EMCBasePage{
     public void clickOnCancelButton() {
         System.out.println("Clicking on Cancel button");
         BrowserUtils.waitForClickablility(cancelButton, 5).click();
+    }
+
+    public void searchProduct(String productName) {
+        System.out.println("Searching for product " + productName);
+        clear(searchInput);
+        BrowserUtils.waitForClickablility(searchInput, 5).sendKeys(productName);
+    }
+
+    public void verifyApplicationDetails(String roleType) {
+        verifyApplicationDetails();
+        if (roleType.equals("Admin")) {
+            assertTestCase.assertTrue(editButton.isDisplayed(), "Edit button is displayed");
+            BrowserUtils.waitForClickablility(editButton, 5).click();
+            assertTestCase.assertTrue(ApplicationName.isEnabled(), "Application name is enabled");
+            assertTestCase.assertTrue(ApplicationURL.isEnabled(), "Application URL is enabled");
+            assertTestCase.assertTrue(saveButton.isDisplayed(), "Save button is displayed");
+            assertTestCase.assertTrue(cancelButton.isDisplayed(), "Cancel button is displayed");
+            clickOnCancelButton();
+        } else {
+            try {
+                if(editButton.isDisplayed()) {
+                    System.out.println("Edit button shouldn't be displayed");
+                    assertTestCase.assertTrue(false, "Edit button shouldn't be displayed");
+                }
+            } catch (Exception e) {
+                System.out.println("Edit button is not displayed as expected");
+            }
+        }
+    }
+
+    public void verifyApplicationDetails() {
+        wait(ApplicationURL, 250);
+        assertTestCase.assertTrue(ApplicationName.isDisplayed(), "Application name is displayed");
+        assertTestCase.assertTrue(ApplicationURL.isDisplayed(), "Application URL is displayed");
+        assertTestCase.assertTrue(detailsTab.isDisplayed(), "Details tab is displayed");
+        assertTestCase.assertTrue(ProductsTab.isDisplayed(), "Products tab is displayed");
+        assertTestCase.assertTrue(rolesTab.isDisplayed(), "Roles tab is displayed");
+        assertTestCase.assertTrue(pageTitle.isDisplayed(), "Page title is displayed");
+        assertTestCase.assertTrue(createdByText.isDisplayed(), "Created by text is displayed");
+        assertTestCase.assertTrue(modifiedByText.isDisplayed(), "Modified by text is displayed");
+        assertTestCase.assertTrue(backToApplicationsButton.isDisplayed(), "Back to Applications button is displayed");
+        assertTestCase.assertTrue(providerType.isDisplayed(), "Provider type is displayed");
+        assertTestCase.assertTrue(applicationType.isDisplayed(), "Application type is displayed");
+        assertTestCase.assertFalse(ApplicationName.isEnabled(), "Application name is not editable");
+        assertTestCase.assertFalse(ApplicationURL.isEnabled(), "Application URL is not editable");
+    }
+
+    public void selectRole(String roleName) {
+        clickOnRolesTab();
+        for (WebElement element : applicationRolesNames) {
+            System.out.println("Role name = "+element.getText());
+            if (element.getText().equals(roleName)) {
+                System.out.println("Found " + roleName + " in the list");
+                element.click();
+                BrowserUtils.wait(2);
+                break;
+            }
+        }
+    }
+
+    public boolean verifyRoleDetails() {
+        assertTestCase.assertTrue(pageTitle.isDisplayed(), "Page title is displayed");
+        assertTestCase.assertTrue(createdByText.isDisplayed(), "Created by text is displayed");
+        assertTestCase.assertTrue(modifiedByText.isDisplayed(), "Modified by text is displayed");
+        assertTestCase.assertTrue(roleDetailNameInput.isDisplayed(), "Role name input is displayed");
+        assertTestCase.assertTrue(roleDetailKeyInput.isDisplayed(), "Role key input is displayed");
+        return true;
     }
 }

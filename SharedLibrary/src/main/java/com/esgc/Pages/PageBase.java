@@ -691,6 +691,18 @@ public abstract class PageBase {
         return wait.until(ExpectedConditions.visibilityOf(menuHeader)).getText();
     }
 
+    public Boolean ValidateMenuItemIsAvailable(String menuItem) {
+        try {
+            clickMenu();
+            String pageXpath = "//li[text()='" + menuItem + "']";
+            WebElement pageElement = Driver.getDriver().findElement(By.xpath(pageXpath));
+            return wait.until(ExpectedConditions.elementToBeClickable(pageElement)).isDisplayed();
+        }catch(Exception e){
+            e.printStackTrace();
+            return false;
+        }
+    }
+
 
     public void navigateToPageFromMenu(String page) {
         String pageName = getPageNameFromMenuHeader();

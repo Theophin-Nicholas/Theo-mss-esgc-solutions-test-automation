@@ -563,4 +563,48 @@ public class BrowserUtils {
         });
         return list;
     }
+
+    public static void clearCache() {
+        Driver.getDriver().manage().deleteAllCookies();
+    }
+
+    public static List<WebElement> getElementAsList(WebElement element) {
+        List<WebElement> list = new ArrayList<>();
+        list.add(element);
+        return list;
+    }
+
+    public static void deleteFilesInDownloadsFolder() {
+        File dir = new File(BrowserUtils.downloadPath());
+        File[] dir_contents = dir.listFiles();
+        if (dir_contents == null) {
+            System.out.println("No files in the directory");
+            return;
+        }
+        for (File file : dir_contents) {
+            file.delete();
+        }
+        System.out.println("All files in the directory are deleted");
+    }
+
+    public static boolean verifyFileDownloaded(String fileName) {
+        String extension = fileName.substring(fileName.lastIndexOf("."));
+        System.out.println("extension = " + extension);
+        fileName = fileName.substring(0, fileName.lastIndexOf("."));
+        File dir = new File(BrowserUtils.downloadPath());
+        File[] dir_contents = dir.listFiles();
+        if (dir_contents == null) {
+            System.out.println("No files in the directory");
+            return false;
+        }
+        System.out.println("Files in the directory are: " + Arrays.toString(dir_contents));
+        String finalFileName = fileName;
+        System.out.println("finalFileName = " + finalFileName);
+        return Arrays.stream(dir_contents).anyMatch(e -> ((e.getName().startsWith(finalFileName) || e.getName().contains(finalFileName)) &&
+                e.getName().endsWith(extension)));
+    }
+
+    public static void refresh() {
+        Driver.getDriver().navigate().refresh();
+    }
 }

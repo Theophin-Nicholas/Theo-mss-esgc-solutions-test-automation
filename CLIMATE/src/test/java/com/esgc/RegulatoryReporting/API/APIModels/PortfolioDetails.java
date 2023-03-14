@@ -9,15 +9,14 @@ import java.util.ArrayList;
 @Data @AllArgsConstructor @NoArgsConstructor
 public class PortfolioDetails {
 
-    public String portfolio_id;
-    public String portfolio_name;
-    public String upload_date_utc;
-    public String as_of_date;
-    public ArrayList<String> reporting_years;
-    public double sfdr_coverage;
-    public double taxonomy_coverage;
-    public String cash_and_liquidities;
-    public String non_sovereign_derivatives;
-
+    private String portfolio_id;
+    private String portfolio_name;
+    private String upload_date_utc;
+    private String as_of_date;
+    private ArrayList<String> reporting_years;
+    private double sfdr_coverage;
+    private double taxonomy_coverage;
+    private Object non_sovereign_derivatives;
+    private Object cash_and_liquidities;
 
 }

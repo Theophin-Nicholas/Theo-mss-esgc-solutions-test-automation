@@ -359,6 +359,7 @@ public class ExcelUtil {
 
         return data;
     }
+
     public List<String> getNumericCells() {
         List<String> data = new ArrayList<>();
         for (Row row : workSheet) {
@@ -366,6 +367,17 @@ public class ExcelUtil {
                 if (cell.getCellType() == CellType.NUMERIC) {
                     data.add(cell.toString());
                 }
+            }
+        }
+        return data;
+    }
+
+    public List<String> getNumericCells(int colNum) {
+        List<String> data = new ArrayList<>();
+        for (Row row : workSheet) {
+            Cell cell = row.getCell(colNum);
+            if (cell != null && cell.getCellType() == CellType.NUMERIC) {
+                data.add(cell.toString());
             }
         }
         return data;
