@@ -520,4 +520,18 @@ public class RegulatoryReportingPageTests extends UITestBase {
         assertTestCase.assertEquals(reportingPage.getPreviouslyDownloadedErrorMessageText(),"No previously downloaded reports to be displayed.", "Verify Error message in Previously Downloaded screen");
 
     }
+
+    @Test(groups = {"regression", "ui", "regulatoryReporting"})
+    @Xray(test = {10858})
+    public void verifyEntitlementForNonSFDRusers() {
+
+        LoginPage login = new LoginPage();
+        login.clickOnLogout();
+        login.entitlementsLogin(EntitlementsBundles.PHYSICAL_RISK);
+
+        DashboardPage dashboardPage = new DashboardPage();
+        assertTestCase.assertTrue(!dashboardPage.ValidateMenuItemIsAvailable("Regulatory Reporting"), "Validating that Regulatory Reporting option is not visble to unentititleed person ");
+
+    }
+
 }

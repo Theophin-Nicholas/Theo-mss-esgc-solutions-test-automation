@@ -6,10 +6,9 @@ import com.esgc.Dashboard.UI.Pages.DashboardPage;
 import com.esgc.RegulatoryReporting.API.APIModels.PortfolioDetails;
 import com.esgc.RegulatoryReporting.API.Controllers.RegulatoryReportingAPIController;
 import com.esgc.RegulatoryReporting.UI.Pages.RegulatoryReportingPage;
-import com.esgc.Utilities.BrowserUtils;
-import com.esgc.Utilities.Driver;
-import com.esgc.Utilities.EntitlementsBundles;
-import com.esgc.Utilities.Xray;
+import com.esgc.Utilities.*;
+import io.restassured.http.ContentType;
+import io.restassured.response.Response;
 import org.openqa.selenium.JavascriptExecutor;
 import org.testng.annotations.Test;
 
@@ -18,6 +17,7 @@ import java.util.*;
 //import com.google.common.collect.Lists;
 
 import static com.esgc.Utilities.Groups.*;
+import static org.hamcrest.Matchers.*;
 
 public class RegulatoryReportingAPITests extends UITestBase {
 
@@ -129,5 +129,125 @@ public class RegulatoryReportingAPITests extends UITestBase {
             }
         }
     }
+
+    @Test(groups = {REGRESSION, REGULATORY_REPORTING, API}, description = "Data Validation| MT | Regulatory Reporting | Verify API Response with Valid Parameters")
+    @Xray(test = {11408})
+    public void VerifyAPIsResponseWithValidParameters() {
+
+        RegulatoryReportingAPIController apiController = new RegulatoryReportingAPIController();
+
+       List<PortfolioDetails> portfolio = Arrays.asList(apiController.getPortfolioDetails().as(PortfolioDetails[].class));
+        String portfolioId =  portfolio.stream().filter(i -> !(i.getPortfolio_name().contains("Sample"))).findFirst().get().getPortfolio_id();
+        Response response = apiController.getAysncGenerationAPIReposnse(portfolioId, DateTimeUtilities.getCurrentYear(),"Valid");
+        response.prettyPrint();
+        response.then().assertThat()
+                .statusCode(200)
+                .contentType(ContentType.JSON);
+        String reqID = response.jsonPath().getString("request_id");
+        System.out.println(reqID);
+
+        Response statusAPIResponse = apiController.getStatusAPIReposnse(reqID,"Valid");
+        statusAPIResponse.prettyPrint();
+        statusAPIResponse.then().assertThat()
+                .statusCode(200)
+                .contentType(ContentType.JSON);
+
+        Response DownloadAPIResponse = apiController.getDownload(reqID,"Valid");
+        DownloadAPIResponse.prettyPrint();
+        DownloadAPIResponse.then().assertThat()
+                .statusCode(200)
+                .contentType(ContentType.JSON);
+
+    }
+
+    @Test(groups = {REGRESSION, REGULATORY_REPORTING, API}, description = "Data Validation| MT | Regulatory Reporting | Verify API Response with InValid Parameters")
+    @Xray(test = {11411})
+    public void VerifyAPIsResponseWithInvalidParameters() {
+        RegulatoryReportingAPIController apiController = new RegulatoryReportingAPIController();
+        Response response = apiController.getAysncGenerationAPIReposnse("", DateTimeUtilities.getCurrentYear(),"Invalid");
+        response.prettyPrint();
+        response.then().assertThat()
+                .statusCode(400)
+                .contentType(ContentType.JSON)
+                .body("errorType", equalTo("ValueError"))
+                .body("errorMessage", equalTo("Request Invalid. "));
+
+        Response statusAPIResponse = apiController.getStatusAPIReposnse("","Invalid" );
+        statusAPIResponse.prettyPrint();
+        statusAPIResponse.then().assertThat()
+                .statusCode(400)
+                .contentType(ContentType.JSON)
+                .body("errorType", equalTo("ValueError"))
+                .body("errorMessage", equalTo("Request Invalid. "));
+
+        Response DownloadAPIResponse = apiController.getDownload("","Invalid");
+        DownloadAPIResponse.prettyPrint();
+        DownloadAPIResponse.then().assertThat()
+                .statusCode(400)
+                .contentType(ContentType.JSON)
+                .body("errorType", equalTo("ValueError"))
+                .body("errorMessage", equalTo("Request Invalid. "));
+    }
+
+    @Test(groups = {REGRESSION, REGULATORY_REPORTING, API}, description = "Data Validation| MT | Regulatory Reporting | Verify API Response with InValid Token")
+    @Xray(test = {11412})
+    public void VerifyAPIsResponseWithinvalidToken() {
+        RegulatoryReportingAPIController apiController = new RegulatoryReportingAPIController();
+        apiController.setInvalid();
+        Response response = apiController.getAysncGenerationAPIReposnse("123456", DateTimeUtilities.getCurrentYear(),"Valid");
+        response.prettyPrint();
+        response.then().assertThat()
+                .statusCode(401)
+                .contentType(ContentType.JSON)
+                .body("message", equalTo("Forbidden"));
+
+        Response statusAPIResponse = apiController.getStatusAPIReposnse("11111","Valid" );
+        statusAPIResponse.prettyPrint();
+        statusAPIResponse.then().assertThat()
+                .statusCode(401)
+                .contentType(ContentType.JSON)
+                .body("message", equalTo("Forbidden"));
+
+        Response DownloadAPIResponse = apiController.getDownload("11111","Valid");
+        DownloadAPIResponse.prettyPrint();
+        DownloadAPIResponse.then().assertThat()
+                .statusCode(401)
+                .contentType(ContentType.JSON)
+                .body("message", equalTo("Forbidden"));
+    }
+
+    //TODO : Need to check with dev team to revise Status code and error messange in this method
+    @Test(groups = {REGRESSION, REGULATORY_REPORTING, API}, description = "Data Validation| MT | Regulatory Reporting | Verify API Response in case of Different User's Portfolios and Request Ids")
+    @Xray(test = {11424})
+    public void VerifyAPIsResponseWithDifferentUserPortfolioAndRequestID() {
+
+        RegulatoryReportingAPIController apiController = new RegulatoryReportingAPIController();
+        String portfolioId =  "0ba40cc2-4268-449d-91cc-98d1ae67a9e9";
+        Response response = apiController.getAysncGenerationAPIReposnse(portfolioId, DateTimeUtilities.getCurrentYear(),"Valid");
+        response.prettyPrint();
+        response.then().assertThat()
+                .statusCode(403)
+                .contentType(ContentType.JSON);
+                //.body("message", equalTo("Forbidden"));
+        String reqID = "r-7d901735-839a-449e-abb9-68ee7587c2a5";
+        System.out.println(reqID);
+
+        Response statusAPIResponse = apiController.getStatusAPIReposnse(reqID,"Valid");
+        statusAPIResponse.prettyPrint();
+        statusAPIResponse.then().assertThat()
+                .statusCode(401)
+                .contentType(ContentType.JSON);
+                //.body("message", equalTo("Forbidden"))
+
+        Response DownloadAPIResponse = apiController.getDownload(reqID,"Valid");
+        DownloadAPIResponse.prettyPrint();
+        DownloadAPIResponse.then().assertThat()
+                .statusCode(500)
+                .contentType(ContentType.JSON);
+                //.body("message", equalTo("Forbidden"));
+
+    }
+
+
 }
 
