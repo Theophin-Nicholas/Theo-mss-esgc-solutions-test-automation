@@ -81,7 +81,7 @@ public abstract class UITestBase extends TestBase {
         boolean isPampaTest = this.getClass().getName().contains("Pampa");
         boolean isEntitlementsTest = this.getClass().getName().toLowerCase().contains("bundle") || this.getClass().getName().toLowerCase().contains("entitlements") || method.getName().toLowerCase().contains("entitlements");
         LoginPage loginPage = new LoginPage();
-        if (Driver.getDriver().getCurrentUrl().endsWith("login")) {
+        if (Driver.getDriver().getCurrentUrl().endsWith("login") || Driver.getDriver().getCurrentUrl().endsWith("signin")) {
             if (!isPampaTest && !isEntitlementsTest) {
                 loginPage.login();
             }
@@ -96,15 +96,15 @@ public abstract class UITestBase extends TestBase {
 
     @AfterMethod(onlyForGroups = {ENTITLEMENTS}, groups = {SMOKE, REGRESSION, ENTITLEMENTS})
     public synchronized void teardownBrowserAfterUITesting() {
-        if (!Driver.getDriver().getCurrentUrl().endsWith("login")) {
+        if (!Driver.getDriver().getCurrentUrl().endsWith("login") && !Driver.getDriver().getCurrentUrl().endsWith("signin")) {
             LoginPage loginPage = new LoginPage();
             loginPage.clickOnLogout();
         }
     }
 
-//    @AfterClass(alwaysRun = true)
-//    public void closeDriverAfterAllTests() {
-//        Driver.closeDriver();
+//    @BeforeClass(alwaysRun = true)
+//    public void deleteImportedPortfoliosAfterTest() {
+//        APIUtilities.deleteImportedPortfoliosAfterTest();
 //    }
 
 
