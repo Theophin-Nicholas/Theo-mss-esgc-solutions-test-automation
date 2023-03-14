@@ -39,11 +39,17 @@ public class UsersPageTests extends EMCUITestBase {
     }
 
     @Test(groups = {EMC, UI, SMOKE, REGRESSION, PROD})
-    @Xray(test = {3033})
-    public void verifyAccountsPageTest() {
+    @Xray(test = {3033, 6153, 6156, 6254, 6255})
+    public void verifyUsersPageTest() {
         navigateToUser("");
         wait(usersPage.names, 10);
+        assertTestCase.assertTrue(usersPage.pageTitle.isDisplayed(), "Users Page - Page title is displayed");
         assertTestCase.assertTrue(usersPage.names.size() > 0, "Users Page - Users are displayed");
+        assertTestCase.assertTrue(usersPage.userNames.size() > 0, "Users Page - User names are displayed");
+        assertTestCase.assertTrue(usersPage.accountNames.size() > 0, "Users Page - Account names are displayed");
+        assertTestCase.assertTrue(usersPage.providerList.size() > 0, "Users Page - Total users are displayed");
+        assertTestCase.assertTrue(usersPage.searchInput.isDisplayed(), "Users Page - Search input is displayed");
+        assertTestCase.assertTrue(usersPage.userCheckBoxes.size() > 0, "Users Page - User checkboxes are displayed");
     }
 
     @Test(groups = {EMC, UI, REGRESSION})
@@ -219,7 +225,7 @@ public class UsersPageTests extends EMCUITestBase {
     }
 
     @Test(groups = {EMC, UI, REGRESSION, API}, description = "UI | EMC | User details | Verify User details have the Account information")
-    @Xray(test = {12229, 12280})
+    @Xray(test = {6157, 12229, 12280})
     public void verifyUserDetailsAccountInformationTest() {
         navigateToUser(activeUser);
         EMCUserDetailsPage detailsPage = new EMCUserDetailsPage();
@@ -246,5 +252,64 @@ public class UsersPageTests extends EMCUITestBase {
             loginPageEMC.loginWithInternalUser();
             navigateToUser(activeUser);
         }
+    }
+
+    @Test(groups = {EMC, UI, REGRESSION, SMOKE}, description = "EMC | UI | Users | Verify the search bar behavior")
+    @Xray(test = {6166})
+    public void verifySearchFunctionalityTest() {
+        navigateToUser("");
+        wait(usersPage.userNames, 10);
+        assertTestCase.assertTrue(usersPage.searchInput.isDisplayed(), "Search input is displayed");
+        assertTestCase.assertTrue(usersPage.verifyUser(userName), "User is displayed");
+        usersPage.searchUser(userName);
+        assertTestCase.assertTrue(usersPage.verifyUser(userName, false), "User is displayed");
+        usersPage.searchUser(userName.toLowerCase());
+        assertTestCase.assertTrue(usersPage.verifyUser(userName, false), "User is verified with lower case");
+        usersPage.searchUser(userName.toUpperCase());
+        assertTestCase.assertTrue(usersPage.verifyUser(userName, false), "User is verified with upper case");
+        usersPage.searchUser(userName.substring(0, 7));
+        assertTestCase.assertTrue(usersPage.verifyUser(userName, false), "User is verified with partial name");
+        usersPage.searchUser(userName.substring(0, 7).toLowerCase());
+        assertTestCase.assertTrue(usersPage.verifyUser(userName, false), "User is verified with partial name and lower case");
+        usersPage.searchUser(userName.substring(0, 7).toUpperCase());
+        assertTestCase.assertTrue(usersPage.verifyUser(userName, false), "User is verified with partial name and upper case");
+        usersPage.searchUser(userName);
+        String email = usersPage.userNames.get(0).getText();
+        System.out.println("email = " + email);
+        usersPage.searchUser(email);
+        assertTestCase.assertTrue(usersPage.verifyUser(userName, false), "User is verified with email");
+        usersPage.searchUser(email.toLowerCase());
+        assertTestCase.assertTrue(usersPage.verifyUser(userName, false), "User is verified with email and lower case");
+        usersPage.searchUser(email.toUpperCase());
+        assertTestCase.assertTrue(usersPage.verifyUser(userName, false), "User is verified with email and upper case");
+        usersPage.searchUser(email.substring(0, 7));
+        assertTestCase.assertTrue(usersPage.verifyUser(userName, false), "User is verified with partial email");
+        usersPage.searchUser(email.substring(0, 7).toLowerCase());
+        assertTestCase.assertTrue(usersPage.verifyUser(userName, false), "User is verified with partial email and lower case");
+        usersPage.searchUser(email.substring(0, 7).toUpperCase());
+        assertTestCase.assertTrue(usersPage.verifyUser(userName, false), "User is verified with partial email and upper case");
+        usersPage.searchUser(userName);
+        String accountName = usersPage.accountNames.get(0).getText();
+        System.out.println("accountName = " + accountName);
+        usersPage.searchUser(accountName);
+        assertTestCase.assertTrue(usersPage.verifyUser(userName, false), "User is verified with account name");
+        usersPage.searchUser(accountName.toLowerCase());
+        assertTestCase.assertTrue(usersPage.verifyUser(userName, false), "User is verified with account name and lower case");
+        usersPage.searchUser(accountName.toUpperCase());
+        assertTestCase.assertTrue(usersPage.verifyUser(userName, false), "User is verified with account name and upper case");
+        usersPage.searchUser(accountName.substring(0, 10));
+        assertTestCase.assertTrue(usersPage.verifyUser(userName, false), "User is verified with partial account name");
+        usersPage.searchUser(accountName.substring(0, 10).toLowerCase());
+        assertTestCase.assertTrue(usersPage.verifyUser(userName, false), "User is verified with partial account name and lower case");
+        usersPage.searchUser(accountName.substring(0, 10).toUpperCase());
+        assertTestCase.assertTrue(usersPage.verifyUser(userName, false), "User is verified with partial account name and upper case");
+    }
+
+    @Test(groups = {EMC, UI, REGRESSION, SMOKE}, description = "UI | EMC | Users | Verify the Sorting in User section")
+    @Xray(test = {6256})
+    public void verifyUserListSortedTest() {
+        navigateToUser("");
+        wait(usersPage.userNames, 10);
+        assertTestCase.assertTrue(usersPage.verifyUserListSorted(), "User list is sorted");
     }
 }

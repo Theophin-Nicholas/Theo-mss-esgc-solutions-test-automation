@@ -232,6 +232,7 @@ public class EMCUserDetailsPage extends EMCBasePage {
     }
 
     public void assignApplicationRoles(String applicationName) {
+        BrowserUtils.waitForClickablility(applicationRolesTab, 15).click();
         System.out.println("Assigning application roles");
         BrowserUtils.waitForClickablility(assignApplicationRolesButton, 15).click();
         for (WebElement applicationRole : newApplicationRolesList) {

@@ -543,17 +543,20 @@ public class EMCAPIController extends APITestBase {
 
 
     public Response putProductToAccount(String accountId, String applicationId, String productId) {
+        if(!verifyApplication(accountId, applicationId))
+            putApplicationToAccount(accountId, applicationId);
         Response response = null;
-        System.out.println("EMC API URL: " + Environment.EMC_URL + EMCEndpoints.PUT_PRODUCT_TO_ACCOUNT);
         String body = "";
-        if (productId.equals(ON_DEMAND_PRODUCT_ID)) {
+        ProductSection[] productSection = getSectionsOfProduct(productId).as(ProductSection[].class);
+        if(productSection[0].getName().equals("AssessmentsInfo")) {
+            System.out.println("Assigning SME Assessments to account by default parameters.");
             body = "{\n" +
-                    "    \"info\": {\n" +
-                    "        \"AssessmentsInfo\": {\n" +
-                    "            \"UsedAssessments\": 0,\n" +
-                    "            \"PurchasedAssessments\": 100\n" +
-                    "        }\n" +
+                    "  \"info\": {\n" +
+                    "    \"AssessmentsInfo\": {\n" +
+                    "      \"PurchasedAssessments\": 100,\n" +
+                    "      \"UsedAssessments\": 0\n" +
                     "    }\n" +
+                    "  }\n" +
                     "}";
         }
 
@@ -561,15 +564,16 @@ public class EMCAPIController extends APITestBase {
             response = configSpec()
                     .when()
                     .body(body)
-                    .pathParam(accountId, "account-id")
-                    .pathParam(applicationId, "application-id")
-                    .pathParam(productId, "product-id")
+                    .pathParam("account-id", accountId)
+                    .pathParam("application-id", applicationId)
+                    .pathParam("product-id", productId)
                     .put(EMCEndpoints.PUT_PRODUCT_TO_ACCOUNT);
 
         } catch (Exception e) {
             System.out.println("Inside exception " + e.getMessage());
         }
-        System.out.println("Status Code = " + response.statusCode());
+        System.out.println("Put Product To Account Status Code = " + response.statusCode());
+        response.prettyPrint();
         return response;
     }
 
@@ -580,13 +584,14 @@ public class EMCAPIController extends APITestBase {
         try {
             response = configSpec()
                     .when()
-                    .pathParam(productId, "product-id")
+                    .pathParam( "product-id", productId)
                     .get(EMCEndpoints.GET_PRODUCT_SECTIONS);
 
         } catch (Exception e) {
             System.out.println("Inside exception " + e.getMessage());
         }
-        System.out.println("Status Code = " + response.statusCode());
+        System.out.println("getSectionsOfProduct Status Code = " + response.statusCode());
+//        response.prettyPrint();
         return response;
     }
 
@@ -709,6 +714,7 @@ public class EMCAPIController extends APITestBase {
         System.out.println("Status Code = " + response.statusCode());
         return response;
     }
+
     public void assignUserToRoleAndVerify(String email, String roleId) {
         List<String> roles = Arrays.asList(Environment.ADMIN_ROLE_KEY, Environment.ADMIN_ROLE_KEY, Environment.FULFILLMENT_ROLE_KEY);
         for(String role : roles){
@@ -818,4 +824,114 @@ public class EMCAPIController extends APITestBase {
         return response;
     }
 
+    public Response getAllProductsForApplicationResponse(String applicationId) {
+        Response response = null;
+        try {
+            response = configSpec()
+                    .when()
+                    .pathParam("application-role-id", applicationId)
+                    .get(EMCEndpoints.GET_APPLICATION_PRODUCTS);
+
+        } catch (Exception e) {
+            System.out.println("Inside exception " + e.getMessage());
+        }
+        System.out.println("Status Code = " + response.statusCode());
+        return response;
+    }
+
+    public Response createProductForApplicationResponse(String applicationId, String productName, String productKey) {
+        Response response = null;
+        String payload = "{\n" +
+                "  \"name\": \""+productName+"\",\n" +
+                "  \"key\": \""+productKey+"\",\n" +
+                "  \"code\": \"123\",\n" +
+                "  \"sfdcId\": \"123\",\n" +
+                "  \"type\": \"Bundle\",\n" +
+                "  \"deliveryChannel\": \"API\",\n" +
+                "  \"pricingModel\": \"Subscription\",\n" +
+                "  \"application\": \""+applicationId+"\"\n" +
+                "}";
+        try {
+            response = configSpec()
+                    .when()
+                    .body(payload)
+                    .post(EMCEndpoints.GET_PRODUCTS);
+
+        } catch (Exception e) {
+            System.out.println("Inside exception " + e.getMessage());
+        }
+        System.out.println("Status Code = " + response.statusCode());
+        return response;
+    }
+
+    public boolean verifyProductForApplication(String applicationId, String productName) {
+        return getAllProductsForApplicationResponse(applicationId).jsonPath().getList("name").contains(productName);
+    }
+
+    public String getProductId(String applicationId, String productName) {
+        List<Product> products = getAllProductsForApplicationResponse(applicationId).jsonPath().getList("", Product.class);
+        for(Product product : products){
+            if(product.getName().equals(productName))
+                return product.getId();
+        }
+        System.out.println("Product with name " + productName + " not found");
+        return null;
+    }
+
+    public Response deleteProductForApplicationResponse(String applicationId, String productId) {
+        Response response = null;
+        try {
+            response = configSpec()
+                    .when()
+                    .delete(EMCEndpoints.GET_PRODUCTS + "/" + productId);
+
+        } catch (Exception e) {
+            System.out.println("Inside exception " + e.getMessage());
+        }
+        System.out.println("Status Code = " + response.statusCode());
+        return response;
+    }
+
+    public void deleteProductFromAccount(String accountId, String productId) {
+        System.out.println("Deleting product " + productId + " from account " + accountId);
+        Response response = null;
+        try {
+            response = configSpec()
+                    .when()
+                    .pathParam("account-id", accountId)
+                    .pathParam("product-id", productId)
+                    .delete(EMCEndpoints.DELETE_PRODUCTS_FROM_ACCOUNT);
+
+        } catch (Exception e) {
+            System.out.println("Inside exception " + e.getMessage());
+        }
+        System.out.println("Delete Product From Account Status Code = " + response.statusCode());
+        response.prettyPrint();
+    }
+
+    public boolean verifyProductForAccount(String accountId, String productId) {
+        System.out.println("Verifying product " + productId + " for account " + accountId);
+        List<AssignedProduct> products = getProductsForAccount(accountId).jsonPath().getList("", AssignedProduct.class);
+        for(AssignedProduct product : products){
+            if(product.getProduct().getId().equals(productId))
+                return true;
+        }
+        return false;
+    }
+
+    public Response getProductsForAccount(String accountId) {
+        Response response = null;
+        try {
+            response = configSpec()
+                    .when()
+                    .pathParam("account-id", accountId)
+                    .get(EMCEndpoints.GET_PRODUCTS_FOR_ACCOUNT);
+
+        } catch (Exception e) {
+            System.out.println("Inside exception " + e.getMessage());
+        }
+        System.out.println("Status Code = " + response.statusCode());
+//        response.prettyPrint();
+        return response;
+    }
 }

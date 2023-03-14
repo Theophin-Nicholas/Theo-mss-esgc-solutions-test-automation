@@ -690,6 +690,50 @@ public class EMCAPITests extends APITestBase {
         assertTestCase.assertFalse(apiController.verifyApplicationRoleForUser(email, roleId), "User don't have that role");
         apiController.assignApplicationRoleToUser(roleId, email);
         assertTestCase.assertTrue(apiController.verifyApplicationRoleForUser(email, roleId), "User have that role");
+    }
 
+    @Test(groups = {"EMC", "api", "regression"}, description = "API | EMC | Applications | Products | CRUD Operations for Products")
+    @Xray(test = {6538})
+    public void verifyCRUDOperationsForApplicationsProductsTest() {
+        String applicationId = apiController.getApplicationId("TestQA");
+        System.out.println("appId = " + applicationId);
+
+        //get all products for application
+        response = apiController.getAllProductsForApplicationResponse(applicationId);
+        response.prettyPrint();
+
+        //create new product for application
+        String productName = "qatestproduct"+faker.number().digits(4);
+        response = apiController.createProductForApplicationResponse(applicationId, productName, productName);
+        response.prettyPrint();
+        assertTestCase.assertEquals(response.statusCode(), 200, "Status code 201 Created is verified");
+        assertTestCase.assertEquals(response.path("statusCode")+"", "201", "Response name is verified");
+        assertTestCase.assertTrue(apiController.verifyProductForApplication(applicationId, productName), "Product is verified for application");
+        String productId = apiController.getProductId(applicationId, productName);
+        System.out.println("productId = " + productId);
+
+        //delete product for application
+        response = apiController.deleteProductForApplicationResponse(applicationId, productId);
+        response.prettyPrint();
+        assertTestCase.assertEquals(response.statusCode(), 204, "Status code 200 OK is verified");
+        assertTestCase.assertFalse(apiController.verifyProductForApplication(applicationId, productName), "Product is not verified for application");
+    }
+
+    @Test(groups = {EMC, API, REGRESSION, SMOKE}, description = "API | EMC | SME Assessment | Add SME Product to Account")
+    @Xray(test = {11920, 11921})
+    public void verifyAddSMEProductToAccountTest() {
+        String accountId = Environment.QA_TEST_ACCOUNT_ID;
+        System.out.println("accountId = " + accountId);
+        String applicationId = apiController.getApplicationId(Environment.MESG_APPLICATION_NAME);
+        System.out.println("applicationId = " + applicationId);
+        String productId = apiController.getProductId(applicationId, "ESG On-Demand Assessment");
+        System.out.println("productId = " + productId);
+        if (apiController.verifyProductForAccount(accountId, productId)) {
+            System.out.println("Product is already added to account. Deleting it.");
+            apiController.deleteProductFromAccount(accountId, productId);
+        }
+        assertTestCase.assertFalse(apiController.verifyProductForAccount(accountId, productId), "Product is verified for account");
+        apiController.putProductToAccount(accountId, applicationId, productId);
+        assertTestCase.assertTrue(apiController.verifyProductForAccount(accountId, productId), "Product is verified for account");
     }
 }

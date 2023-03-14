@@ -609,4 +609,46 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
             System.out.println("=============================");
         }
     }
+
+    @Test(groups = {"regression", "DataValidation", "regulatoryReporting"},
+            description = "Data Validation | SFDR - Regulatory reporting | Verify the BVD9 ID for the entities is displayed correctly in the Portfolio Level Output Sheet of generated Interim report without Use latest data filter")
+    @Xray(test = {13566})
+    public void verifyBVD9IDForInterimPortfolioLevelOutputWithoutLatestDataTest() {
+        DashboardPage dashboardPage = new DashboardPage();
+        dashboardPage.navigateToPageFromMenu("Regulatory Reporting");
+        test.info("Navigated to Regulatory Reporting Page");
+        //verify portfolio upload modal
+        assertTestCase.assertTrue(reportingPage.uploadAnotherPortfolioLink.isDisplayed(), "Portfolio Upload button is displayed");
+        //reportingPage.selectReportingOptionByName("SFDR PAIs");
+        String currentWindow = BrowserUtils.getCurrentWindowHandle();
+        reportingPage.selectInterimReports();//reportingPage.selectAnnualReports();
+        reportingPage.selectAllPortfolioOptions();
+        //reportingPage.selectUseLatestData();
+        List<String> selectedPortfolios = reportingPage.getSelectedPortfolioOptions();
+        //verify create reports button before clicking
+        assertTestCase.assertTrue(reportingPage.createReportsButton.isEnabled(), "Create report button is enabled");
+        Set<String> currentWindows = BrowserUtils.getWindowHandles();
+        reportingPage.clickOnCreateReportsButton();
+        try {
+            //New tab should be opened and empty state message should be displayed as in the screenshot
+            assertTestCase.assertTrue(reportingPage.verifyNewTabOpened(currentWindows), "New tab is opened");
+            System.out.println("New tab is opened");
+            assertTestCase.assertTrue(reportingPage.verifyReportsReadyToDownload(selectedPortfolios), "Reports are ready to download");
+            System.out.println("Reports are ready to download");
+            reportingPage.deleteFilesInDownloadsFolder();
+            assertTestCase.assertTrue(reportingPage.verifyIfReportsDownloaded(), "Reports are downloaded");
+            System.out.println("Reports are downloaded");
+            assertTestCase.assertTrue(reportingPage.unzipReports(), "Reports are extracted");
+            System.out.println("Reports are extracted");
+            assertTestCase.assertTrue(reportingPage.verifyBVD9IDInCompanyLevelOutput(selectedPortfolios,"Interim", "2022"),
+                    "BVD9 ID for Portfolio Level output is verified for Excel vs DB");
+            System.out.println("BVD9 ID for Portfolio Level output is verified for Excel vs DB");
+        } catch (Exception e) {
+            e.printStackTrace();
+            assertTestCase.assertTrue(false, "New tab verification failed");
+        } finally {
+            BrowserUtils.switchWindowsTo(currentWindow);
+            System.out.println("=============================");
+        }
+    }
 }

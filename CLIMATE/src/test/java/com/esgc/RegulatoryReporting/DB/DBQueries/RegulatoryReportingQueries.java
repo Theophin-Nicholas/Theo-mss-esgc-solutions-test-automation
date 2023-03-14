@@ -84,7 +84,7 @@ public class RegulatoryReportingQueries {
                 "WHERE PORTFOLIO_ID='"+portfolioId+"'\n" +
                 "AND YEAR = '"+year+"'\n" +
                 "AND DATE_BASED_DATA_TYPE='yearly'";
-//        System.out.println("query = " + query);
+        System.out.println("query = " + query);
         return getQueryResultMap(query);
     }
 

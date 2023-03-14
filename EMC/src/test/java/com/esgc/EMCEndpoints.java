@@ -20,6 +20,8 @@ public class EMCEndpoints {
     public static String EMC_ACCOUNTS = "api/accounts";
     public static final String PUT_APPLICATION_TO_ACCOUNT = "api/accounts/{account-id}/applications/{application-id}";
     public static String PUT_PRODUCT_TO_ACCOUNT = "api/accounts/{account-id}/applications/{application-id}/products/{product-id}";
+    public static String GET_PRODUCTS_FOR_ACCOUNT = "api/accounts/{account-id}/products";
+    public static String DELETE_PRODUCTS_FROM_ACCOUNT = "api/accounts/{account-id}/products/{product-id}";
     public static String GET_USERS = "api/accounts/{account-id}/users";
     public static String GET_APPLICATIONS = "api/applications";
 
@@ -32,4 +34,7 @@ public class EMCEndpoints {
     //========Application Products==========
     public static String GET_APPLICATION_PRODUCTS = "api/applications/{application-role-id}/products";
     public static String GET_PRODUCT_SECTIONS = "api/products/{product-id}/sections";
+
+    //======== Products==========
+    public static String GET_PRODUCTS = "api/products";
 }

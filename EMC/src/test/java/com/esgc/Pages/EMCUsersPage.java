@@ -10,7 +10,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static com.esgc.Utilities.BrowserUtils.scrollTo;
@@ -29,8 +31,20 @@ public class EMCUsersPage extends EMCBasePage {
     @FindBy(xpath = "//tbody//td[3]/a")
     public List<WebElement> accountNames;
 
+    @FindBy(xpath = "//tbody//td[4]//span")
+    public List<WebElement> providerList;
+
+    @FindBy(xpath = "//tbody//td//input")
+    public List<WebElement> userCheckBoxes;
+
     @FindBy(xpath = "//p[2]")
     public WebElement totalUsers;
+
+    @FindBy(xpath = "//button[@title='Next page']")
+    public WebElement nextPageButton;
+
+    @FindBy(xpath = "//button[@title='Previous page']")
+    public WebElement previousPageButton;
 
     @FindBy(tagName = "h3")
     public WebElement pageTitle;
@@ -173,9 +187,15 @@ public class EMCUsersPage extends EMCBasePage {
     }
 
     public boolean verifyUser(String userName) {
-        wait(searchInput, 15);
-        clear(searchInput);
-        searchInput.sendKeys(userName);
+        return verifyUser(userName, true);
+    }
+
+    public boolean verifyUser(String userName, boolean search) {
+        if(search) {
+            wait(searchInput, 15);
+            clear(searchInput);
+            searchInput.sendKeys(userName);
+        }
         for (WebElement name : names) {
             scrollTo(name);
             if (name.getText().equalsIgnoreCase(userName)) {
@@ -185,6 +205,31 @@ public class EMCUsersPage extends EMCBasePage {
         }
         System.out.println("User not found: " + userName);
         return false;
+    }
+
+    public void searchUser(String userName) {
+        wait(searchInput, 15);
+        clear(searchInput);
+        searchInput.sendKeys(userName);
+    }
+
+    public boolean verifyUserListSorted() {
+        int counter = 0;
+        while (nextPageButton.isEnabled()){
+            counter++;
+            List<String> names = getNames();
+//            System.out.println("names = " + names);
+            List<String> sortedNames = BrowserUtils.specialSort(names);
+            if(!names.equals(sortedNames)){
+                System.out.println("List is not sorted");
+                System.out.println("sortedNames = " + sortedNames);
+                System.out.println("counter = " + counter);
+                return false;
+            }
+            waitAndClick(nextPageButton, 5);
+            BrowserUtils.wait(1);
+        }
+        return true;
     }
 }
 
