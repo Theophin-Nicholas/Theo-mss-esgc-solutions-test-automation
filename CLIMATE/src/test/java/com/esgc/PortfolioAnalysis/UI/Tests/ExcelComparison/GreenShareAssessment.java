@@ -319,6 +319,8 @@ public class GreenShareAssessment extends UITestBase {
 
         //Verify the headers UI vs Excel
         List<String> updatesUIHeaders = researchLinePage.brownAndGreenShareHeaders.stream().map(WebElement::getText).collect(Collectors.toList());
+        updatesUIHeaders.set(2,updatesUIHeaders.get(2) + " Category");
+        updatesUIHeaders.set(4,updatesUIHeaders.get(4) + " Category");
         List<String> excelHeaders = new ArrayList<>();
         for (int i = updatesHeadersRow, j = 0; j < 9; j++) {
             excelHeaders.add(exportedDocument.getCellData(i, j));

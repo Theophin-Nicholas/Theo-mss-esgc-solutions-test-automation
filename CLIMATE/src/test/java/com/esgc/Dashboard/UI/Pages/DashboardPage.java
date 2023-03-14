@@ -671,6 +671,7 @@ public class DashboardPage extends UploadPage {
                                 .findElement(By.xpath("//button[./span[contains(text(),'" + performanceChartName + "')]]"))))
                 .click();
         waitForDataLoadCompletion();
+        BrowserUtils.scrollTo(performanceChart);
     }
 
     public boolean checkIfPerformanceChartHeaderIsHighlighted(String headerName) {

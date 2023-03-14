@@ -33,9 +33,7 @@ public class UnderLyingDataMetrics extends UITestBase {
             researchLinePage.waitForDataLoadCompletion();
             researchLinePage.selectSamplePortfolioFromPortfolioSelectionModal();
 
-
             test.info("Navigated to " + page + " Page");
-            researchLinePage.checkIfUnderLyingDataMetricsIsAvailable(page);
             assertTestCase.assertTrue(researchLinePage.checkIfUnderLyingDataMetricsIsAvailable(page), "Underlying Data Metrics Verified");
             test.pass("User is on " + page + " Page");
         }

@@ -383,7 +383,7 @@ public class UploadPage extends ClimatePageBase {
     public boolean checkIfPortfolioUploadModalIsDisplayed() {
         try {
             return BrowserUtils.waitForVisibility(uploadModal).isDisplayed();
-        } catch (NoSuchElementException e) {
+        } catch (Exception e) {
             return false;
         }
     }

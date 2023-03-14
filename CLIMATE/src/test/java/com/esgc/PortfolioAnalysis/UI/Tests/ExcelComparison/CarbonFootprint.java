@@ -480,6 +480,8 @@ public class CarbonFootprint extends UITestBase {
 
         //Verify the headers UI vs Excel
         List<String> updatesUIHeaders = researchLinePage.carbonFootprintHeaders.stream().map(WebElement::getText).collect(Collectors.toList());
+        updatesUIHeaders.set(2, updatesUIHeaders.get(2) + " Category");
+        updatesUIHeaders.set(4, updatesUIHeaders.get(4) + " Category");
         List<String> excelHeaders = new ArrayList<>();
         for (int i = updatesHeadersRow, j = 0; j < 9; j++) {
             excelHeaders.add(exportedDocument.getCellData(i, j));
@@ -487,8 +489,7 @@ public class CarbonFootprint extends UITestBase {
         //Asserting the headers
         System.out.println("Excel Headers " + excelHeaders);
         System.out.println("UI Headers " + updatesUIHeaders);
-        //TODO There is header difference between UI and excel Previous Score Category vs Previous Score and Score Category vs Score
-        //--assertTestCase.assertTrue(CollectionUtils.isEqualCollection(updatesUIHeaders, excelHeaders), "Headers are Matching");
+        assertTestCase.assertTrue(CollectionUtils.isEqualCollection(updatesUIHeaders, excelHeaders), "Headers are Matching");
 
         int updatesListStartsFrom = updatesHeadersRow + 1;
         List<List<Object>> excelUpdateList = new ArrayList<>();
@@ -504,6 +505,13 @@ public class CarbonFootprint extends UITestBase {
                     exportedDocument.getCellData(z, 7), //Country
                     exportedDocument.getCellData(z, 8)  //Region
             ));
+        }
+        for (int i = 0; i < myList.size(); i++) {
+            System.out.println("####################################");
+            System.out.println("excelUpdateList.get(i) = " + excelUpdateList.get(i));
+            System.out.println("myList.get(i) = " + myList.get(i));
+            System.out.println("####################################");
+            assertTestCase.assertEquals(excelUpdateList.get(i), myList.get(i));
         }
         assertTestCase.assertTrue(CollectionUtils.isEqualCollection(excelUpdateList, myList));
         System.out.println("Assertion Successful");

@@ -36,14 +36,12 @@ public class PortfolioUpdatesTest extends UITestBase {
     @Xray(test = {1243, 1252, 2027, 2291, 2466, 2471, 2551})
     public void verifyPortfolioUpdates(String page) {
         ResearchLinePage researchLinePage = new ResearchLinePage();
-        if (page.equals("Temperature Alignment") ) {
-            throw new SkipException(page +" - has no updates");
-        }
-        if ( page.equals("ESG Assessments")) {
-            throw new SkipException("not ready to test in " + page);
-        }
         researchLinePage.navigateToResearchLine(page);
         test.info("Navigated to " + page + " Page");
+
+        if (page.equals("Temperature Alignment") || page.equals("ESG Assessments") ) {
+            throw new SkipException(page +" - has no updates");
+        }
 
         researchLinePage.selectSamplePortfolioFromPortfolioSelectionModal();
         test.info("Selected Sample Portfolio");

@@ -256,11 +256,12 @@ public class EntityClimateProfilePageQueries {
                     "and AS_OF_DATE = ( select MAX(AS_OF_DATE) from brown_share where bvd9_number = "+orbisId+" )";
             result = getQueryResultListUDBrownShare(query);
         } else if (researchLine.equalsIgnoreCase("Green Share")) {
-            query = "select \n" +
+            query = "select top 1 \n" +
                     "GS_BUILDING_MATERIALS_WOOD_ESTIMATE_OF_INCORPORATION_SOURCE SOURCE,\n" +
                     "GS_BUILDING_MATERIALS_WOOD_ESTIMATE_OF_INCORPORATION MAIN,\n" +
                     "GS_BUILDING_MATERIALS_WOOD_SCALE_OF_INCORPORATION SCALE\n" +
-                    "from GREEN_SHARE As C where bvd9_number =039634868 and C.Year ='2022' and C.Month ='08'";
+                    "from GREEN_SHARE As C where bvd9_number = " + orbisId +
+                    "  order by C.Year desc, C.Month desc";
             result = getQueryResultListUDGreenShare(query);
         }
         System.out.println("result = " + result);

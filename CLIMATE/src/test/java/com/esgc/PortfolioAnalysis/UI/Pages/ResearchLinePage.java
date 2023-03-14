@@ -417,7 +417,7 @@ public class ResearchLinePage extends UploadPage {
     @FindBy(xpath = "//th[text()='% Benchmark']")
     public List<WebElement> benchmarkColumnsRegionSectorTables;
 
-    @FindBy(xpath = "//td/div[contains(@class,'jss4573')]")
+    @FindBy(xpath = "//td/div[2]")
     public List<WebElement> benchmarkMarksOnRegionSectorTables;
 
     @FindBy(css = "g.highcharts-label > text")
@@ -1161,7 +1161,7 @@ public class ResearchLinePage extends UploadPage {
         //li[contains(text(),'Data - Carbon Footprint')]
         String xpath = "";
         if (dataType.toLowerCase().equals("pdf"))
-            xpath = String.format("//li[contains(text(),'%s (%s)')]", researchLine, dataType);
+            xpath = String.format("//li[contains(text(),'PDF - %s (.%s)')]", researchLine, dataType);
         else {
             xpath = String.format("//li[contains(text(),'%s - %s')]", dataType, researchLine);
             if (researchLine.equals("ESG Assessments"))
@@ -1173,9 +1173,12 @@ public class ResearchLinePage extends UploadPage {
     }
 
     public void verifyExportOptions(String researchLine) {
-        String pdfOptionXpath = "//li[starts-with(@id,'ExportDropdown')][@data-value='pdf'][text()='" + researchLine + " (pdf)']";
+        //TODO PDF is not available for environments, follow up PDF stories
+        if (Environment.environment.equalsIgnoreCase("qa") || Environment.environment.equalsIgnoreCase("uat")) {
+            String pdfOptionXpath = "//li[starts-with(@id,'ExportDropdown')][@data-value='pdf'][text()='PDF - " + researchLine + " (.pdf)']";
+            wait.until(ExpectedConditions.numberOfElementsToBe(By.xpath(pdfOptionXpath), 1));
+        }
         String excelOptionXpath = "//li[starts-with(@id,'ExportDropdown')][@data-value='individual'][text()='Data - " + researchLine + " (.xlsx)']";
-        wait.until(ExpectedConditions.numberOfElementsToBe(By.xpath(pdfOptionXpath), 1));
         wait.until(ExpectedConditions.numberOfElementsToBe(By.xpath(excelOptionXpath), 1));
     }
 
@@ -1337,8 +1340,7 @@ public class ResearchLinePage extends UploadPage {
                     System.out.println("updatedDate2 = " + updatedDate2);
                     if (updatedDate1.isBefore(updatedDate2)) {
                         return false;
-                    }
-                    else if (updatedDate1.equals(updatedDate2)) {
+                    } else if (updatedDate1.equals(updatedDate2)) {
                         float row1Investment = Float.parseFloat(Driver.getDriver().findElement(By.xpath("(//td[@heap_id='updates']/following-sibling::td[5])[" + i + "]")).getText().replace("%", ""));
                         float row2Investment = Float.parseFloat(Driver.getDriver().findElement(By.xpath("(//td[@heap_id='updates']/following-sibling::td[5])[" + (i + 1) + "]")).getText().replace("%", ""));
                         System.out.println("row1Investment = " + row1Investment);
@@ -1662,12 +1664,13 @@ public class ResearchLinePage extends UploadPage {
             String headerDivId = "";
             List<String> dataRows = new ArrayList<String>();
             List<String> dataHeaders = new ArrayList<String>();
+            List<String> dataHeaders2 = new ArrayList<String>();
             String followingXpath = "div/div/div/span";
             String followingXpath1 = "";
 
             switch (page) {
                 case "Physical Risk Hazards":
-                    headerDivId = "Physical Risk Hazards";
+                    headerDivId = "//div[@id='Physical Risk Hazards']/div//parent::div/parent::header";
                     headerName = "Additional Physical Risk Hazards";
                     dataRows.add("Country of Sales");
                     dataRows.add("Weather Sensitivity");
@@ -1708,10 +1711,12 @@ public class ResearchLinePage extends UploadPage {
                     dataRows.add("Scope 1 (t CO2 eq)");
                     dataRows.add("Scope 2 (t CO2 eq)");
                     dataRows.add("Scope 3 (t CO2 eq)");
-                    dataHeaders.add("Total Scope 1 Emissions");
-                    dataHeaders.add("624,063,885 (t CO2 eq)");
-                    dataHeaders.add("Total Scope");
-                    dataHeaders.add("(t CO2 eq)");
+                    dataHeaders.add("Scope 1 (t CO2 eq)");
+                    dataHeaders.add("Scope 2 (t CO2 eq)");
+                    dataHeaders.add("Scope 3 (t CO2 eq)");
+                    dataHeaders2.add("Total Scope 1 Emissions");
+                    dataHeaders2.add("Total Scope 2 Emissions");
+                    dataHeaders2.add("Total Scope 3 Emissions");
                     followingXpath = "div/div/div/div/span";
                     followingXpath1 = "div/div[2]/span";
                     break;
@@ -1798,10 +1803,12 @@ public class ResearchLinePage extends UploadPage {
                 if (spanForDataRows.size() == dataRows.size()) {
                     for (int i = 0; i < dataRows.size(); i++) {
                         String[] spanData = spanForDataRows.get(i).getText().split("\n");
-                        if (i == 0 && !headerDivId.equals("Physical Risk Hazards")) {
+                        if (i == 0 && !headerDivId.contains("Physical Risk Hazards")) {
                             if (page.equals("Carbon Footprint")) {
-                                for (String headerValue : dataHeaders) {
-                                    if (spanForDataRows.get(i).getText().contains(headerValue)) {
+                                for (int j = 0; j < dataHeaders.size(); j++) {
+                                    String headerValue = dataHeaders.get(j);
+                                    String headerValue2 = dataHeaders2.get(j);
+                                    if (spanForDataRows.get(j).getText().startsWith(headerValue) && spanForDataRows.get(j).getText().contains(headerValue2)) {
                                         System.out.println("MATCHED " + headerValue);
                                         matched = true;
                                     } else {
@@ -3583,32 +3590,27 @@ public class ResearchLinePage extends UploadPage {
     }
 
     public void isUpdatesAndLeadersAndLaggardsHeaderDisplayUpdatedHeader(String page, CustomAssertion assertionTestCase) {
-        try {
-            clickFiltersDropdown();
-            selectRandomOptionFromFiltersDropdown("as_of_date");
-            closeFilterByKeyboard();
+        clickFiltersDropdown();
+        selectRandomOptionFromFiltersDropdown("as_of_date");
+        closeFilterByKeyboard();
 
-            String filters = getRegionsSectionAndAsOfDateDropdownSelectedValue();
-            String monthDate = filters.substring(filters.indexOf("at the end of") + 14);
-            String whatToValidate = "";
-            switch (page) {
-                case "Physical Risk Hazards":
-                case "Operations Risk":
-                case "Market Risk":
-                case "Brown Share Assessment":
-                case "Supply Chain Risk":
-                    whatToValidate = "Updates as of " + monthDate + ", Impact, and Current Leaders/Laggards";
-                    break;
-                case "Temperature Alignment":
-                    whatToValidate = "Impact";
-                    break;
-                default:
-                    whatToValidate = "Updates in " + monthDate + ", Impact, and Current Leaders/Laggards";
-            }
-            assertionTestCase.assertTrue(whatToValidate.contains(updatesAndLeadersAndLaggardsHeader.getText()), "Header message validation", 477, 592);
-        } catch (Exception e) {
-            e.printStackTrace();
+        String filters = getRegionsSectionAndAsOfDateDropdownSelectedValue();
+        String monthDate = filters.substring(filters.indexOf("at the end of") + 14);
+        String whatToValidate = "";
+        switch (page) {
+            case "Physical Risk Hazards":
+            case "Operations Risk":
+            case "Market Risk":
+            case "Supply Chain Risk":
+                whatToValidate = "Updates as of " + monthDate + ", Impact, and Current Leaders/Laggards";
+                break;
+            case "Temperature Alignment":
+                whatToValidate = "Impact";
+                break;
+            default:
+                whatToValidate = "Updates in " + monthDate + ", Impact, and Current Leaders/Laggards";
         }
+        assertionTestCase.assertTrue(whatToValidate.contains(updatesAndLeadersAndLaggardsHeader.getText()), "Header message validation", 477, 592);
     }
 
     //Portfolio Selection Side Panel

@@ -10,9 +10,6 @@ import com.esgc.Utilities.Xray;
 import org.openqa.selenium.Keys;
 import org.testng.annotations.Test;
 
-import java.util.List;
-import java.util.Set;
-
 import static com.esgc.Utilities.Groups.*;
 
 public class RegulatoryReporting_EUTaxonomy extends UITestBase {
@@ -42,7 +39,7 @@ public class RegulatoryReporting_EUTaxonomy extends UITestBase {
 
         RegulatoryReportingAPIController apiController = new RegulatoryReportingAPIController();
         String portfolioId = apiController.getPortfolioId(portfolioName);
-        reportingPage.clickOnEUTaxonomy();
+        reportingPage.clickOnEUTaxonomyOption();
         reportingPage.selectPortfolioOptionByName(portfolioName);
         reportingPage.enterEUTaxonomyValues(portfolioName, "100", "1000");
         //verify create reports button before clicking
