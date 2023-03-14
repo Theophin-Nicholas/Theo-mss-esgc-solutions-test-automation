@@ -33,10 +33,11 @@ public class RegulatoryReportingPage extends UploadPage {
     @FindBy(xpath = "//div[.='Reporting']")
     public WebElement reportingSubtitle;
 
-    @FindBy(xpath = "//div[.='Select Action']/..//span[2]")
+    //TODO after march release, update them to 'Select Action'
+    @FindBy(xpath = "//div[.='Select Reporting']/..//span[2]")
     public List<WebElement> reportingNamesList;
 
-    @FindBy(xpath = "//div[.='Select Action']/..//input")
+    @FindBy(xpath = "//div[.='Select Reporting']/..//input")
     public List<WebElement> reportingRadioButtonList;
 
     @FindBy(xpath = "//div[.='Select Portfolios']/../div[2]/following-sibling::div/div[1]//span[2]")
@@ -44,6 +45,9 @@ public class RegulatoryReportingPage extends UploadPage {
 
     @FindBy(xpath = "//div[.='Select Portfolios']/../div[2]/following-sibling::div/div[1]//input")
     public List<WebElement> portfolioRadioButtonList;
+
+    @FindBy(xpath = "//div[.='Select Portfolios']/../div[2]/following-sibling::div/div[1]//input[not(@disabled)]")
+    public List<WebElement> activePortfolioRadioButtonList;
 
     @FindBy(xpath = "//div[.='Reporting for']/../following-sibling::div/div[2]/span")
     public List<WebElement> lastUploadedList;
@@ -125,6 +129,12 @@ public class RegulatoryReportingPage extends UploadPage {
     @FindBy(xpath = "//fieldset[@id='sfdr']")
     public WebElement SFDRPAIs;
 
+    @FindBy(xpath = "//*[text()='Select Portfolios']/following-sibling::div[1]//*[text()]")
+    public List<WebElement> tableHeaders;
+
+    @FindBy(xpath = "//label[.//input[@disabled and @type='radio']]//span[2]")
+    public List<WebElement> deactivatedOptions;
+
     public boolean isRegulatoryReportingOptionIsAvailableInSidePanel() {
         try {
             return BrowserUtils.waitForVisibility(regulatoryReporting, 10).isDisplayed();
@@ -166,7 +176,7 @@ public class RegulatoryReportingPage extends UploadPage {
         }
     }
 
-    public void clickOnEUTaxonomy(){
+    public void clickOnEUTaxonomy() {
         EUTaxonomy.click();
     }
 
@@ -174,6 +184,14 @@ public class RegulatoryReportingPage extends UploadPage {
     public void isCreateReportsButtonClicked() {
 
         createReportsButton.click();
+    }
+
+    public boolean isSFDROptionNotClickable() {
+        return deactivatedOptions.stream().anyMatch(e -> e.getText().equals("SFDR PAIs"));
+    }
+
+    public boolean isEUTaxonomyOptionNotClickable() {
+        return deactivatedOptions.stream().anyMatch(e -> e.getText().equals("EU Taxonomy"));
     }
 
     //
@@ -419,6 +437,18 @@ public class RegulatoryReportingPage extends UploadPage {
         }
     }
 
+    public void selectActivePortfolioOptionByIndex(int index) {
+        if (portfolioRadioButtonList.get(index - 1).isSelected()) {
+            System.out.println("Portfolio option is already selected");
+        } else if (numberOfSelectedPortfolioOptions() == 4) {
+            System.out.println("You can select up to 4 portfolios. De-select one of the portfolios first");
+        } else {
+            System.out.println("Selecting portfolio option by index: " + index);
+            activePortfolioRadioButtonList.get(index - 1).click();
+        }
+    }
+
+
     //select portfolio option by name
     public int selectPortfolioOptionByName(String name) {
         int index = getPortfolioList().indexOf(name.trim());
@@ -510,6 +540,10 @@ public class RegulatoryReportingPage extends UploadPage {
         if (!isUseLatestDataSelected()) {
             useLatestDataOption.click();
         }
+    }
+
+    public void clickOnUseLatestData() {
+        useLatestDataOption.click();
     }
 
     //deselect interim reports
@@ -1160,11 +1194,11 @@ public class RegulatoryReportingPage extends UploadPage {
             List<Map<String, Object>> dbData = queries.getPortfolioLevelOutput(portfolioId, reportingYear, reportFormat, useLatestData);
             //get number cells from excel file
             List<String> excelNumberCells = new ArrayList<>();
-            if (selectedPortfolios.size() > 1 && reportFormat.equals("Annual")){
-                int columnNumber = selectedPortfolios.indexOf(portfolioName)*2+5;
+            if (selectedPortfolios.size() > 1 && reportFormat.equals("Annual")) {
+                int columnNumber = selectedPortfolios.indexOf(portfolioName) * 2 + 5;
                 System.out.println("columnNumber = " + columnNumber);
                 excelNumberCells = excelData.getNumericCells(columnNumber);
-                excelNumberCells.addAll(excelData.getNumericCells(columnNumber+1));
+                excelNumberCells.addAll(excelData.getNumericCells(columnNumber + 1));
             } else {
                 excelNumberCells = excelData.getNumericCells();
             }
@@ -1461,7 +1495,7 @@ public class RegulatoryReportingPage extends UploadPage {
                 }
             }
             //Validate data for Scope 3 GHG emissions
-            List<Map<String, Object>> dbData = queries.getPortfolioLevelOutput(portfolioId, year.equalsIgnoreCase("latest")?"2020":year, reportingFormat, year.equalsIgnoreCase("latest")?"Yes":"No");
+            List<Map<String, Object>> dbData = queries.getPortfolioLevelOutput(portfolioId, year.equalsIgnoreCase("latest") ? "2020" : year, reportingFormat, year.equalsIgnoreCase("latest") ? "Yes" : "No");
             DecimalFormat decimalFormat = new DecimalFormat("##.####");
             String scope3GHGEmissionsImpactScore = dbData.stream().filter(row -> row.get("SFDR_SUBCATEGORY").toString().equals("Scope 3 GHG emissions")).findFirst().get().get("IMPACT").toString();
             System.out.println("scope3GHGEmissionsImpactScore = " + scope3GHGEmissionsImpactScore);
@@ -1516,18 +1550,18 @@ public class RegulatoryReportingPage extends UploadPage {
             }
             //Data Validation
             RegulatoryReportingQueries queries = new RegulatoryReportingQueries();
-            List<Map<String, Object>> dbData = queries.getSFDRCompanyOutput(portfolioId,reportYear);
+            List<Map<String, Object>> dbData = queries.getSFDRCompanyOutput(portfolioId, reportYear);
             System.out.println("dbData.get() = " + dbData.get(0));
-            for(Map<String, Object> dbRow: dbData){
+            for (Map<String, Object> dbRow : dbData) {
                 String bvd9Id = dbRow.get("BVD9_NUMBER").toString();
                 String companyName = dbRow.get("COMPANY_NAME").toString();
                 List<String> excelRow = excelData.getRowData(companyName);
                 System.out.println("excelRow = " + excelRow);
-                if(!excelRow.contains(bvd9Id)){
+                if (!excelRow.contains(bvd9Id)) {
                     System.out.println("BVD9 ID is not found in the excel for company = " + companyName);
                     return false;
                 }
-                if(!excelRow.contains(companyName)){
+                if (!excelRow.contains(companyName)) {
                     System.out.println("Company name is not found in the excel for company = " + companyName);
                     return false;
                 }
