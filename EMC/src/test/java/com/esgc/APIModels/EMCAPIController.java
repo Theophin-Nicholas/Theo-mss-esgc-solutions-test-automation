@@ -4,6 +4,7 @@ import com.esgc.APIModels.EMC.*;
 import com.esgc.EMCEndpoints;
 import com.esgc.TestBases.APITestBase;
 import com.esgc.Utilities.API.Endpoints;
+import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.Driver;
 import com.esgc.Utilities.Environment;
 import io.restassured.http.ContentType;
@@ -22,11 +23,16 @@ public class EMCAPIController extends APITestBase {
     public String ON_DEMAND_PRODUCT_ID;
 
     RequestSpecification configSpec() {
-        if(System.getProperty("token") == null) {
-            String getAccessTokenScript = "return JSON.parse(localStorage.getItem('okta-token-storage')).accessToken.accessToken";
-            String accessToken = ((JavascriptExecutor) Driver.getDriver()).executeScript(getAccessTokenScript).toString();
-            System.setProperty("token", accessToken);
-            System.out.println("token = " + accessToken);
+        while (System.getProperty("token") == null) {
+            try {
+                String getAccessTokenScript = "return JSON.parse(localStorage.getItem('okta-token-storage')).accessToken.accessToken";
+                String accessToken = ((JavascriptExecutor) Driver.getDriver()).executeScript(getAccessTokenScript).toString();
+                System.setProperty("token", accessToken);
+                System.out.println("token = " + accessToken);
+            } catch (Exception e) {
+                System.out.println("Waiting for token to be set");
+                BrowserUtils.wait(1);
+            }
         }
         if (isInvalidTest) {
             resetInvalid();
@@ -46,6 +52,53 @@ public class EMCAPIController extends APITestBase {
                     .header("Content-Type", "application/json")
                     .log().ifValidationFails();
         }
+    }
+
+    RequestSpecification configSpec(String tokenName) {
+        if (System.getProperty("token") == null) {
+            String getAccessTokenScript = "return JSON.parse(localStorage.getItem('okta-token-storage')).accessToken.accessToken";
+            String accessToken = ((JavascriptExecutor) Driver.getDriver()).executeScript(getAccessTokenScript).toString();
+            System.setProperty("token", accessToken);
+            System.out.println("token = " + accessToken);
+        }
+        if (isInvalidTest) {
+            resetInvalid();
+            return given().accept(ContentType.JSON)
+                    .baseUri(Environment.EMC_URL)
+                    .relaxedHTTPSValidation()
+                    .header("Accept", "application/json")
+                    .header("Content-Type", "application/json")
+                    .log().ifValidationFails();
+        } else {
+            return given().accept(ContentType.JSON)
+                    .baseUri(Environment.EMC_URL)
+                    .relaxedHTTPSValidation()
+                    .header(tokenName, "Bearer " + System.getProperty("token"))
+                    //.header("Authorization", "Bearer " + System.getProperty("token"))
+                    .header("Accept", "application/json")
+                    .header("Content-Type", "application/json")
+                    .log().ifValidationFails();
+        }
+    }
+
+    RequestSpecification configSpec(String tokenName, String tokenValue) {
+        if (isInvalidTest) {
+            resetInvalid();
+            return given().accept(ContentType.JSON)
+                    .baseUri(Environment.EMC_URL)
+                    .relaxedHTTPSValidation()
+                    .header("Accept", "application/json")
+                    .header("Content-Type", "application/json")
+                    .log().ifValidationFails();
+        }
+        return given().accept(ContentType.JSON)
+                .baseUri(Environment.EMC_URL)
+                .relaxedHTTPSValidation()
+                .header(tokenName, tokenValue)
+                //.header("Authorization", "Bearer " + System.getProperty("token"))
+                .header("Accept", "application/json")
+                .header("Content-Type", "application/json")
+                .log().ifValidationFails();
     }
 
     public void setInvalid() {
@@ -70,6 +123,7 @@ public class EMCAPIController extends APITestBase {
         System.out.println("Status Code = " + response.statusCode());
         return response;
     }
+
     public Response getEMCAllAdminUsersPermissionsResponse() {
         Response response = null;
         System.out.println("EMC API URL: " + Environment.EMC_URL + Endpoints.EMC_ADMIN_USERS_PERMISSIONS);
@@ -138,8 +192,8 @@ public class EMCAPIController extends APITestBase {
 
     public String getUserId(String accountId, String name) {
         List<AssignedUser> users = getAllUsersForAccount(accountId).jsonPath().getList("", AssignedUser.class);
-        for(AssignedUser user : users){
-            if(user.getName().equals(name))
+        for (AssignedUser user : users) {
+            if (user.getName().equals(name))
                 return user.getId();
         }
         System.out.println("User with name " + name + " not found");
@@ -247,11 +301,12 @@ public class EMCAPIController extends APITestBase {
 
     /**
      * This method is used to create a new application in EMC
-     * @param key "key is a required field"
-     * @param name "name is a required field"
-     * @param url "url is a required field","url must be a valid URL"
+     *
+     * @param key      "key is a required field"
+     * @param name     "name is a required field"
+     * @param url      "url is a required field","url must be a valid URL"
      * @param provider "provider is a required field","provider must be one of the following values: mss, ma
-     * @param type "type is a required field","type must be one of the following values: SinglePageApplication, ExternalApplication, WebApplication"
+     * @param type     "type is a required field","type must be one of the following values: SinglePageApplication, ExternalApplication, WebApplication"
      * @return
      */
     public Response postEMCNewApplicationResponse(String key, String name, String url, String provider, String type) {
@@ -543,12 +598,12 @@ public class EMCAPIController extends APITestBase {
 
 
     public Response putProductToAccount(String accountId, String applicationId, String productId) {
-        if(!verifyApplication(accountId, applicationId))
+        if (!verifyApplication(accountId, applicationId))
             putApplicationToAccount(accountId, applicationId);
         Response response = null;
         String body = "";
         ProductSection[] productSection = getSectionsOfProduct(productId).as(ProductSection[].class);
-        if(productSection[0].getName().equals("AssessmentsInfo")) {
+        if (productSection[0].getName().equals("AssessmentsInfo")) {
             System.out.println("Assigning SME Assessments to account by default parameters.");
             body = "{\n" +
                     "  \"info\": {\n" +
@@ -584,7 +639,7 @@ public class EMCAPIController extends APITestBase {
         try {
             response = configSpec()
                     .when()
-                    .pathParam( "product-id", productId)
+                    .pathParam("product-id", productId)
                     .get(EMCEndpoints.GET_PRODUCT_SECTIONS);
 
         } catch (Exception e) {
@@ -602,7 +657,7 @@ public class EMCAPIController extends APITestBase {
     public Response getUsersForRole(String roleId) {
         Response response = null;
         System.out.println("EMC API URL: " + Environment.EMC_URL + EMCEndpoints.EMC_ROLE_USERS);
-        try{
+        try {
             response = configSpec()
                     .pathParam("roleId", roleId)
                     .when().get(EMCEndpoints.EMC_ROLE_USERS);
@@ -610,17 +665,18 @@ public class EMCAPIController extends APITestBase {
             System.out.println("Inside exception " + e.getMessage());
         }
         System.out.println("Status Code = " + response.statusCode());
+//        response.prettyPrint();
         return response;
     }
 
     public void assignRoleToUser(String email, String roleId) {
-        if(verifyUserForRole(email, roleId)){
+        if (verifyUserForRole(email, roleId)) {
             System.out.println("User already assigned to role");
             return;
         }
         Response response = null;
         System.out.println("EMC API URL: " + Environment.EMC_URL + EMCEndpoints.EMC_ROLE_USER_CRUD);
-        try{
+        try {
             response = configSpec()
                     .pathParam("roleId", roleId)
                     .pathParam("userId", email)
@@ -632,16 +688,16 @@ public class EMCAPIController extends APITestBase {
     }
 
     public void deleteUserFromRole(String email, String roleId) {
-        if(!verifyUserForRole(email, roleId)){
+        if (!verifyUserForRole(email, roleId)) {
             System.out.println("User already not assigned to role");
             return;
         }
         Response response = null;
         System.out.println("Removing application role from user...");
-        try{
+        try {
             response = configSpec()
                     .pathParam("roleId", roleId)
-                    .pathParam( "userId", email)
+                    .pathParam("userId", email)
                     .when().delete(EMCEndpoints.EMC_ROLE_USER_CRUD);
         } catch (Exception e) {
             System.out.println("Inside exception " + e.getMessage());
@@ -668,7 +724,7 @@ public class EMCAPIController extends APITestBase {
 
     public String getApplicationKey(String applicationName) {
         String applicationId = getApplicationId(applicationName);
-        if(applicationId == null)
+        if (applicationId == null)
             return null;
         return getEMCApplicationResponse(applicationId).jsonPath().getString("key");
     }
@@ -679,7 +735,7 @@ public class EMCAPIController extends APITestBase {
             response = configSpec()
                     .when()
 //                    .pathParam("applicationId", applicationId)
-                    .get(EMCEndpoints.GET_APPLICATIONS+"/"+applicationId);
+                    .get(EMCEndpoints.GET_APPLICATIONS + "/" + applicationId);
 
         } catch (Exception e) {
             System.out.println("Inside exception " + e.getMessage());
@@ -717,8 +773,8 @@ public class EMCAPIController extends APITestBase {
 
     public void assignUserToRoleAndVerify(String email, String roleId) {
         List<String> roles = Arrays.asList(Environment.ADMIN_ROLE_KEY, Environment.ADMIN_ROLE_KEY, Environment.FULFILLMENT_ROLE_KEY);
-        for(String role : roles){
-            if(role.equals(roleId)) continue;
+        for (String role : roles) {
+            if (role.equals(roleId)) continue;
             deleteUserFromRole(email, role);
         }
         assignRoleToUser(email, roleId);
@@ -728,9 +784,9 @@ public class EMCAPIController extends APITestBase {
     public Response createRoleForApplicationResponse(String applicationId, String roleName, String roleKey) {
         Response response = null;
         String payload = "{\n" +
-                "  \"name\": \""+roleName+"\",\n" +
-                "  \"key\": \""+roleKey+"\",\n" +
-                "  \"applicationId\": \""+applicationId+"\"\n" +
+                "  \"name\": \"" + roleName + "\",\n" +
+                "  \"key\": \"" + roleKey + "\",\n" +
+                "  \"applicationId\": \"" + applicationId + "\"\n" +
                 "}";
         try {
             response = configSpec()
@@ -770,8 +826,8 @@ public class EMCAPIController extends APITestBase {
 
     public String getRoleId(String applicationId, String roleName) {
         List<Role> roles = getAllRolesForApplicationResponse(applicationId).jsonPath().getList("", Role.class);
-        for(Role role : roles){
-            if(role.getName().equals(roleName))
+        for (Role role : roles) {
+            if (role.getName().equals(roleName))
                 return role.getId();
         }
         System.out.println("Role with name " + roleName + " not found");
@@ -798,8 +854,8 @@ public class EMCAPIController extends APITestBase {
     public boolean verifyApplicationRoleForUser(String email, String roleId) {
         System.out.println("Verifying role " + roleId + " for user " + email);
         List<UserApplicationRole> roles = getApplicationRolesForUser(email).jsonPath().getList("", UserApplicationRole.class);
-        for(UserApplicationRole role : roles){
-            if(role.getRole().getId().equals(roleId))
+        for (UserApplicationRole role : roles) {
+            if (role.getRole().getId().equals(roleId))
                 return true;
         }
         return false;
@@ -842,14 +898,14 @@ public class EMCAPIController extends APITestBase {
     public Response createProductForApplicationResponse(String applicationId, String productName, String productKey) {
         Response response = null;
         String payload = "{\n" +
-                "  \"name\": \""+productName+"\",\n" +
-                "  \"key\": \""+productKey+"\",\n" +
+                "  \"name\": \"" + productName + "\",\n" +
+                "  \"key\": \"" + productKey + "\",\n" +
                 "  \"code\": \"123\",\n" +
                 "  \"sfdcId\": \"123\",\n" +
                 "  \"type\": \"Bundle\",\n" +
                 "  \"deliveryChannel\": \"API\",\n" +
                 "  \"pricingModel\": \"Subscription\",\n" +
-                "  \"application\": \""+applicationId+"\"\n" +
+                "  \"application\": \"" + applicationId + "\"\n" +
                 "}";
         try {
             response = configSpec()
@@ -870,8 +926,8 @@ public class EMCAPIController extends APITestBase {
 
     public String getProductId(String applicationId, String productName) {
         List<Product> products = getAllProductsForApplicationResponse(applicationId).jsonPath().getList("", Product.class);
-        for(Product product : products){
-            if(product.getName().equals(productName))
+        for (Product product : products) {
+            if (product.getName().equals(productName))
                 return product.getId();
         }
         System.out.println("Product with name " + productName + " not found");
@@ -912,8 +968,8 @@ public class EMCAPIController extends APITestBase {
     public boolean verifyProductForAccount(String accountId, String productId) {
         System.out.println("Verifying product " + productId + " for account " + accountId);
         List<AssignedProduct> products = getProductsForAccount(accountId).jsonPath().getList("", AssignedProduct.class);
-        for(AssignedProduct product : products){
-            if(product.getProduct().getId().equals(productId))
+        for (AssignedProduct product : products) {
+            if (product.getProduct().getId().equals(productId))
                 return true;
         }
         return false;
@@ -932,6 +988,74 @@ public class EMCAPIController extends APITestBase {
         }
         System.out.println("Status Code = " + response.statusCode());
 //        response.prettyPrint();
+        return response;
+    }
+
+    public Response getAppIntegrationResponse(String application_key) {
+        Response response = null;
+        try {
+            response = configSpec("Authorization")
+                    .when()
+                    .pathParam("appkey", application_key)
+                    .get(EMCEndpoints.GET_APP_INTEGRATION);
+
+        } catch (Exception e) {
+            System.out.println("Inside exception " + e.getMessage());
+        }
+        System.out.println("Status Code = " + response.statusCode());
+        return response;
+    }
+
+    public Response getAccountInfo(String accountId) {
+        Response response = null;
+        try {
+            response = configSpec()
+                    .when()
+//                    .pathParam("account-id", accountId)
+                    .get(EMCEndpoints.GET_EMC_ALL_ACCOUNTS + "/" + accountId);
+
+        } catch (Exception e) {
+            System.out.println("Inside exception " + e.getMessage());
+        }
+        System.out.println("Status Code = " + response.statusCode());
+        return response;
+    }
+
+    public Response putAssessmentUsageInfo(String accountKey, int value) {
+        Response response = null;
+        String payload = "{\n" +
+                "\"usedAssessmentsDelta\": "+value+"\n" +
+                "}";
+        try {
+            response = configSpec("x-api-key", "455TEbpBTO4vMaW0NVGcF3EqhHbLhoCu4PMPAFqX")
+                    .when()
+                    .body(payload)
+                    .pathParam("accountKey", accountKey)
+                    .put(EMCEndpoints.ASSESSMENT_USAGE);
+
+        } catch (Exception e) {
+            System.out.println("Inside exception " + e.getMessage());
+        }
+        System.out.println("Status Code = " + response.statusCode());
+        return response;
+    }
+
+    public Response putAssessmentUsageInfo(String accountKey, String value) {
+        Response response = null;
+        String payload = "{\n" +
+                "\"usedAssessmentsDelta\": 0\n" +
+                "}";
+        try {
+            response = configSpec("x-api-key", value)
+                    .when()
+                    .body(payload)
+                    .pathParam("accountKey", accountKey)
+                    .put(EMCEndpoints.ASSESSMENT_USAGE);
+
+        } catch (Exception e) {
+            System.out.println("Inside exception " + e.getMessage());
+        }
+        System.out.println("Status Code = " + response.statusCode());
         return response;
     }
 }

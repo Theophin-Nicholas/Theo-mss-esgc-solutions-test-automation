@@ -21,6 +21,12 @@ public class EMCAccountsPage extends EMCBasePage {
     @FindBy(xpath = "//input/../following-sibling::button")
     public WebElement searchButton;
 
+    @FindBy(xpath = "//th")
+    public List<WebElement> tableHeaders;
+
+    @FindBy(xpath = "//th")
+    public List<WebElement> firstRow;
+
     @FindBy(xpath = "//td//a")
     public List<WebElement> accountNames;
 
