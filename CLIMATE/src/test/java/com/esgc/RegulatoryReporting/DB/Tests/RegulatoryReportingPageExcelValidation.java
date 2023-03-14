@@ -3,6 +3,7 @@ package com.esgc.RegulatoryReporting.DB.Tests;
 import com.esgc.Base.TestBases.UITestBase;
 import com.esgc.Dashboard.UI.Pages.*;
 import com.esgc.PortfolioAnalysis.UI.Pages.PhysicalRiskPages.PhysicalRiskManagementPages.PhysicalRiskManagementPage;
+import com.esgc.RegulatoryReporting.API.Controllers.RegulatoryReportingAPIController;
 import com.esgc.RegulatoryReporting.UI.Pages.RegulatoryReportingPage;
 import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.DateTimeUtilities;
@@ -27,6 +28,7 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
         test.info("Navigated to Regulatory Reporting Page");
         //verify portfolio upload modal
         assertTestCase.assertTrue(reportingPage.uploadAnotherPortfolioLink.isDisplayed(), "Portfolio Upload button is displayed");
+        reportingPage.selectReportingOptionByName("SFDR PAIs");
 
         //upload a portfolio
         String newPortfolioName = "PortfolioWithValidData2";
@@ -42,7 +44,7 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
         Set<String> currentWindows = BrowserUtils.getWindowHandles();
         //verify create reports button before clicking
         assertTestCase.assertTrue(reportingPage.createReportsButton.isEnabled(), "Create report button is enabled");
-        reportingPage.createReportsButton.click();
+        reportingPage.clickOnCreateReportsButton();
 
         try {
             //New tab should be opened and empty state message should be displayed as in the screenshot
@@ -51,12 +53,13 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
             assertTestCase.assertTrue(reportingPage.verifyReportsReadyToDownload(selectedPortfolios), "Reports are ready to download");
             System.out.println("Reports are ready to download");
             reportingPage.deleteFilesInDownloadsFolder();
+            reportingPage.deleteFilesInDownloadsFolder();
             assertTestCase.assertTrue(reportingPage.verifyIfReportsDownloaded(), "Reports are downloaded");
             System.out.println("Reports are downloaded");
             assertTestCase.assertTrue(reportingPage.unzipReports(), "Reports are extracted");
             System.out.println("Reports are extracted");
-            assertTestCase.assertTrue(reportingPage.verifyReportsContentForData(selectedPortfolios, 2, "Exposure Amount in EUR"),
-                    "Reports content is verified");
+            assertTestCase.assertTrue(reportingPage.verifyReportsContentForData(selectedPortfolios, "User Input History", "Exposure Amount in EUR"),
+                    "Reports Dats is verified with snowflake");
         } catch (Exception e) {
             e.printStackTrace();
             assertTestCase.assertTrue(false, "New tab verification failed");
@@ -64,9 +67,11 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
             BrowserUtils.switchWindowsTo(currentWindow);
             System.out.println("=============================");
         }
-        reportingPage.navigateToPageFromMenu("Portfolio Analysis");
+        /*reportingPage.navigateToPageFromMenu("Portfolio Analysis");*//*
         PhysicalRiskManagementPage portfolioAnalysisPage = new PhysicalRiskManagementPage();
-        portfolioAnalysisPage.deletePortfolio(newPortfolioName);
+        portfolioAnalysisPage.deletePortfolio(newPortfolioName);*/
+        RegulatoryReportingAPIController apiController = new RegulatoryReportingAPIController();
+        apiController.deletePortfolio(apiController.getPortfolioId(newPortfolioName));
     }
 
     @Test(groups = {REGRESSION, DATA_VALIDATION, REGULATORY_REPORTING},
@@ -76,17 +81,19 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
         DashboardPage dashboardPage = new DashboardPage();
         dashboardPage.navigateToPageFromMenu("Regulatory Reporting");
         test.info("Navigated to Regulatory Reporting Page");
+        reportingPage.selectReportingOptionByName("SFDR PAIs");
         assertTestCase.assertTrue(reportingPage.interimReportsOption.isDisplayed(), "Interim reports option is displayed");
         assertTestCase.assertTrue(reportingPage.useLatestDataOption.isDisplayed(), "Use latest data option is displayed");
+
         String currentWindow = BrowserUtils.getCurrentWindowHandle();
         reportingPage.selectAllPortfolioOptions();
         reportingPage.selectInterimReports();
         List<String> selectedPortfolios = reportingPage.getSelectedPortfolioOptions();
         Set<String> currentWindows = BrowserUtils.getWindowHandles();
         //verify create reports button before clicking
-        assertTestCase.assertTrue(reportingPage.createReportsButton.isEnabled(), "Create report button is enabled");
+        assertTestCase.assertTrue(reportingPage.isCreateReportsButtonEnabled(), "Create report button is enabled");
 
-        reportingPage.createReportsButton.click();
+        reportingPage.clickOnCreateReportsButton();
         try {
             //New tab should be opened and empty state message should be displayed as in the screenshot
             assertTestCase.assertTrue(reportingPage.verifyNewTabOpened(currentWindows), "New tab is opened");
@@ -107,9 +114,9 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
             System.out.println("=============================");
         }
         reportingPage.selectAnnualReports();
-        assertTestCase.assertTrue(reportingPage.createReportsButton.isEnabled(), "Create report button is enabled");
+        assertTestCase.assertTrue(reportingPage.isCreateReportsButtonEnabled(), "Create report button is enabled");
         currentWindows = BrowserUtils.getWindowHandles();
-        reportingPage.createReportsButton.click();
+        reportingPage.clickOnCreateReportsButton();
         BrowserUtils.wait(2);
         try {
             //New tab should be opened and empty state message should be displayed as in the screenshot
@@ -139,6 +146,7 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
         test.info("Navigated to Regulatory Reporting Page");
         //verify portfolio upload modal
         assertTestCase.assertTrue(reportingPage.uploadAnotherPortfolioLink.isDisplayed(), "Portfolio Upload button is displayed");
+        reportingPage.selectReportingOptionByName("SFDR PAIs");
 
         //upload a portfolio
         String portfolioName = "SFDRPortfolio";
@@ -154,7 +162,7 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
         reportingPage.selectReportingFor(portfolioName,"2021");
         //verify create reports button before clicking
         assertTestCase.assertTrue(reportingPage.createReportsButton.isEnabled(), "Create report button is enabled");
-        reportingPage.createReportsButton.click();
+        reportingPage.clickOnCreateReportsButton();
 
         try {
             //New tab should be opened and empty state message should be displayed as in the screenshot
@@ -188,6 +196,7 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
         test.info("Navigated to Regulatory Reporting Page");
         //verify portfolio upload modal
         assertTestCase.assertTrue(reportingPage.uploadAnotherPortfolioLink.isDisplayed(), "Portfolio Upload button is displayed");
+        reportingPage.selectReportingOptionByName("SFDR PAIs");
 
         //upload a portfolio
         String portfolioName = "SFDRPortfolio";
@@ -203,9 +212,9 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
                 "EU Taxonomy portfolio coverage is verified for UI vs DB");
         List<String> selectedPortfolios = reportingPage.getSelectedPortfolioOptions();
         //verify create reports button before clicking
-        assertTestCase.assertTrue(reportingPage.createReportsButton.isEnabled(), "Create report button is enabled");
+        assertTestCase.assertTrue(reportingPage.isCreateReportsButtonEnabled(), "Create report button is enabled");
         Set<String> currentWindows = BrowserUtils.getWindowHandles();
-        reportingPage.createReportsButton.click();
+        reportingPage.clickOnCreateReportsButton();
         try {
             //New tab should be opened and empty state message should be displayed as in the screenshot
             assertTestCase.assertTrue(reportingPage.verifyNewTabOpened(currentWindows), "New tab is opened");
@@ -239,6 +248,7 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
         test.info("Navigated to Regulatory Reporting Page");
         //verify portfolio upload modal
         assertTestCase.assertTrue(reportingPage.uploadAnotherPortfolioLink.isDisplayed(), "Portfolio Upload button is displayed");
+        reportingPage.selectReportingOptionByName("SFDR PAIs");
 
         //upload a portfolio
         String portfolioName = "SFDRPortfolio";
@@ -253,9 +263,9 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
 
         List<String> selectedPortfolios = reportingPage.getSelectedPortfolioOptions();
         //verify create reports button before clicking
-        assertTestCase.assertTrue(reportingPage.createReportsButton.isEnabled(), "Create report button is enabled");
+        assertTestCase.assertTrue(reportingPage.isCreateReportsButtonEnabled(), "Create report button is enabled");
         Set<String> currentWindows = BrowserUtils.getWindowHandles();
-        reportingPage.createReportsButton.click();
+        reportingPage.clickOnCreateReportsButton();
         try {
             //New tab should be opened and empty state message should be displayed as in the screenshot
             assertTestCase.assertTrue(reportingPage.verifyNewTabOpened(currentWindows), "New tab is opened");
@@ -294,6 +304,7 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
         test.info("Navigated to Regulatory Reporting Page");
         //verify portfolio upload modal
         assertTestCase.assertTrue(reportingPage.uploadAnotherPortfolioLink.isDisplayed(), "Portfolio Upload button is displayed");
+        reportingPage.selectReportingOptionByName("SFDR PAIs");
 
         //upload a portfolio
         String portfolioName = "SFDRPortfolio";
@@ -309,9 +320,9 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
 
         List<String> selectedPortfolios = reportingPage.getSelectedPortfolioOptions();
         //verify create reports button before clicking
-        assertTestCase.assertTrue(reportingPage.createReportsButton.isEnabled(), "Create report button is enabled");
+        assertTestCase.assertTrue(reportingPage.isCreateReportsButtonEnabled(), "Create report button is enabled");
         Set<String> currentWindows = BrowserUtils.getWindowHandles();
-        reportingPage.createReportsButton.click();
+        reportingPage.clickOnCreateReportsButton();
         try {
             //New tab should be opened and empty state message should be displayed as in the screenshot
             assertTestCase.assertTrue(reportingPage.verifyNewTabOpened(currentWindows), "New tab is opened");
@@ -351,6 +362,7 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
         test.info("Navigated to Regulatory Reporting Page");
         //verify portfolio upload modal
         assertTestCase.assertTrue(reportingPage.uploadAnotherPortfolioLink.isDisplayed(), "Portfolio Upload button is displayed");
+        reportingPage.selectReportingOptionByName("SFDR PAIs");
 
         //upload a portfolio
         String portfolioName = "SFDRPortfolio";
@@ -362,9 +374,9 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
 
         List<String> selectedPortfolios = reportingPage.getSelectedPortfolioOptions();
         //verify create reports button before clicking
-        assertTestCase.assertTrue(reportingPage.createReportsButton.isEnabled(), "Create report button is enabled");
+        assertTestCase.assertTrue(reportingPage.isCreateReportsButtonEnabled(), "Create report button is enabled");
         Set<String> currentWindows = BrowserUtils.getWindowHandles();
-        reportingPage.createReportsButton.click();
+        reportingPage.clickOnCreateReportsButton();
         try {
             //New tab should be opened and empty state message should be displayed as in the screenshot
             assertTestCase.assertTrue(reportingPage.verifyNewTabOpened(currentWindows), "New tab is opened");
@@ -403,6 +415,7 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
         test.info("Navigated to Regulatory Reporting Page");
         //verify portfolio upload modal
         assertTestCase.assertTrue(reportingPage.uploadAnotherPortfolioLink.isDisplayed(), "Portfolio Upload button is displayed");
+        reportingPage.selectReportingOptionByName("SFDR PAIs");
 
         //upload a portfolio
         String portfolioName = "SFDRPortfolio";
@@ -414,9 +427,9 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
 
         List<String> selectedPortfolios = reportingPage.getSelectedPortfolioOptions();
         //verify create reports button before clicking
-        assertTestCase.assertTrue(reportingPage.createReportsButton.isEnabled(), "Create report button is enabled");
+        assertTestCase.assertTrue(reportingPage.isCreateReportsButtonEnabled(), "Create report button is enabled");
         Set<String> currentWindows = BrowserUtils.getWindowHandles();
-        reportingPage.createReportsButton.click();
+        reportingPage.clickOnCreateReportsButton();
         try {
             //New tab should be opened and empty state message should be displayed as in the screenshot
             assertTestCase.assertTrue(reportingPage.verifyNewTabOpened(currentWindows), "New tab is opened");
@@ -454,6 +467,7 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
         test.info("Navigated to Regulatory Reporting Page");
         //verify portfolio upload modal
         assertTestCase.assertTrue(reportingPage.uploadAnotherPortfolioLink.isDisplayed(), "Portfolio Upload button is displayed");
+        reportingPage.selectReportingOptionByName("SFDR PAIs");
 
         //upload a portfolio
         String portfolioName = "SFDRPortfolio";
@@ -464,9 +478,9 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
 
         List<String> selectedPortfolios = reportingPage.getSelectedPortfolioOptions();
         //verify create reports button before clicking
-        assertTestCase.assertTrue(reportingPage.createReportsButton.isEnabled(), "Create report button is enabled");
+        assertTestCase.assertTrue(reportingPage.isCreateReportsButtonEnabled(), "Create report button is enabled");
         Set<String> currentWindows = BrowserUtils.getWindowHandles();
-        reportingPage.createReportsButton.click();
+        reportingPage.clickOnCreateReportsButton();
         try {
             //New tab should be opened and empty state message should be displayed as in the screenshot
             assertTestCase.assertTrue(reportingPage.verifyNewTabOpened(currentWindows), "New tab is opened");
@@ -489,7 +503,7 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
         }
         reportingPage.selectUseLatestData();
         currentWindows = BrowserUtils.getWindowHandles();
-        reportingPage.createReportsButton.click();
+        reportingPage.clickOnCreateReportsButton();
         try {
             //New tab should be opened and empty state message should be displayed as in the screenshot
             assertTestCase.assertTrue(reportingPage.verifyNewTabOpened(currentWindows), "New tab is opened");
@@ -503,6 +517,132 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
             System.out.println("Reports are extracted");
             assertTestCase.assertTrue(reportingPage.verifySFDRCompanyOutput(selectedPortfolios,"latest"),
                     "SFDR Company output for portfolio coverage is verified for Excel vs DB");
+        } catch (Exception e) {
+            e.printStackTrace();
+            assertTestCase.assertTrue(false, "New tab verification failed");
+        } finally {
+            BrowserUtils.switchWindowsTo(currentWindow);
+            System.out.println("=============================");
+        }
+    }
+
+    @Test(groups = {"regression", "DataValidation", "regulatoryReporting"},
+            description = "Data Validation | UI | Regulatory Reporting | SFDR | Company Level Outputs | Verify Scope 3 GHG Emissions Column is Reflected to report")
+    @Xray(test = {12892, 12893, 12895,11276})
+    public void verifyScope3GHGEmissionsColumnTest() {
+        DashboardPage dashboardPage = new DashboardPage();
+        dashboardPage.navigateToPageFromMenu("Regulatory Reporting");
+        test.info("Navigated to Regulatory Reporting Page");
+        //verify portfolio upload modal
+        assertTestCase.assertTrue(reportingPage.uploadAnotherPortfolioLink.isDisplayed(), "Portfolio Upload button is displayed");
+        reportingPage.selectReportingOptionByName("SFDR PAIs");
+        String currentWindow = BrowserUtils.getCurrentWindowHandle();
+        reportingPage.selectInterimReports();
+        reportingPage.selectAllPortfolioOptions();
+        reportingPage.selectUseLatestData();
+        List<String> selectedPortfolios = reportingPage.getSelectedPortfolioOptions();
+        //verify create reports button before clicking
+        assertTestCase.assertTrue(reportingPage.createReportsButton.isEnabled(), "Create report button is enabled");
+        Set<String> currentWindows = BrowserUtils.getWindowHandles();
+        reportingPage.clickOnCreateReportsButton();
+        try {
+            //New tab should be opened and empty state message should be displayed as in the screenshot
+            assertTestCase.assertTrue(reportingPage.verifyNewTabOpened(currentWindows), "New tab is opened");
+            System.out.println("New tab is opened");
+            assertTestCase.assertTrue(reportingPage.verifyReportsReadyToDownload(selectedPortfolios), "Reports are ready to download");
+            System.out.println("Reports are ready to download");
+            reportingPage.deleteFilesInDownloadsFolder();
+            assertTestCase.assertTrue(reportingPage.verifyIfReportsDownloaded(), "Reports are downloaded");
+            System.out.println("Reports are downloaded");
+            assertTestCase.assertTrue(reportingPage.unzipReports(), "Reports are extracted");
+            System.out.println("Reports are extracted");
+            assertTestCase.assertTrue(reportingPage.verifyScope3GHGEmissionsForCompanyOutput(selectedPortfolios,"latest"),
+                    "SFDR Company output for portfolio coverage is verified for Excel vs DB");
+            System.out.println("SFDR Scope 3 GHG Emissions output for portfolio coverage is verified for Excel vs DB");
+            assertTestCase.assertTrue(reportingPage.verifyScope3GHGEmissionsForPortfolioLevelOutput(selectedPortfolios,"latest", "Interim"),
+                    "SFDR Portfolio Level output for portfolio coverage is verified for Excel vs DB");
+            System.out.println("SFDR Scope 3 GHG Emissions output for portfolio coverage is verified for Excel vs DB");
+
+            assertTestCase.assertTrue(reportingPage.verifyPortfolioLevelOutput(selectedPortfolios,"2020", "Interim", "Yes"),
+                    "SFDR Portfolio Level Output is verified for Excel vs DB");
+            System.out.println("SFDR Portfolio Level Output is verified for Excel vs DB");
+        } catch (Exception e) {
+            e.printStackTrace();
+            assertTestCase.assertTrue(false, "New tab verification failed");
+        } finally {
+            BrowserUtils.switchWindowsTo(currentWindow);
+            System.out.println("=============================");
+        }
+
+        reportingPage.selectAnnualReports();
+        selectedPortfolios = reportingPage.getSelectedPortfolioOptions();
+        //verify create reports button before clicking
+        assertTestCase.assertTrue(reportingPage.createReportsButton.isEnabled(), "Create report button is enabled");
+        currentWindows = BrowserUtils.getWindowHandles();
+        reportingPage.clickOnCreateReportsButton();
+        try {
+            //New tab should be opened and empty state message should be displayed as in the screenshot
+            assertTestCase.assertTrue(reportingPage.verifyNewTabOpened(currentWindows), "New tab is opened");
+            System.out.println("New tab is opened");
+            assertTestCase.assertTrue(reportingPage.verifyReportsReadyToDownload(selectedPortfolios), "Reports are ready to download");
+            System.out.println("Reports are ready to download");
+            reportingPage.deleteFilesInDownloadsFolder();
+            assertTestCase.assertTrue(reportingPage.verifyIfReportsDownloaded(), "Reports are downloaded");
+            System.out.println("Reports are downloaded");
+            assertTestCase.assertTrue(reportingPage.unzipReports(), "Reports are extracted");
+            System.out.println("Reports are extracted");
+            assertTestCase.assertTrue(reportingPage.verifyScope3GHGEmissionsForCompanyOutput(selectedPortfolios,"latest"),
+                    "SFDR Company output for portfolio coverage is verified for Excel vs DB");
+            System.out.println("SFDR Scope 3 GHG Emissions output for portfolio coverage is verified for Excel vs DB");
+            assertTestCase.assertTrue(reportingPage.verifyScope3GHGEmissionsForPortfolioLevelOutput(selectedPortfolios,"latest", "Annual"),
+                    "SFDR Portfolio Level output for portfolio coverage is verified for Excel vs DB");
+            System.out.println("SFDR Scope 3 GHG Emissions output for portfolio coverage is verified for Excel vs DB");
+
+            assertTestCase.assertTrue(reportingPage.verifyPortfolioLevelOutput(selectedPortfolios,"2020", "Annual", "Yes"),
+                    "SFDR Portfolio Level Output is verified for Excel vs DB");
+            System.out.println("SFDR Portfolio Level Output is verified for Excel vs DB");
+        } catch (Exception e) {
+            e.printStackTrace();
+            assertTestCase.assertTrue(false, "New tab verification failed");
+        } finally {
+            BrowserUtils.switchWindowsTo(currentWindow);
+            System.out.println("=============================");
+        }
+    }
+
+    @Test(groups = {"regression", "DataValidation", "regulatoryReporting"},
+            description = "Data Validation | SFDR - Regulatory reporting | Verify the BVD9 ID for the entities is displayed correctly in the Portfolio Level Output Sheet of generated Interim report without Use latest data filter")
+    @Xray(test = {13566})
+    public void verifyBVD9IDForInterimPortfolioLevelOutputWithoutLatestDataTest() {
+        DashboardPage dashboardPage = new DashboardPage();
+        dashboardPage.navigateToPageFromMenu("Regulatory Reporting");
+        test.info("Navigated to Regulatory Reporting Page");
+        //verify portfolio upload modal
+        assertTestCase.assertTrue(reportingPage.uploadAnotherPortfolioLink.isDisplayed(), "Portfolio Upload button is displayed");
+        //reportingPage.selectReportingOptionByName("SFDR PAIs");
+        String currentWindow = BrowserUtils.getCurrentWindowHandle();
+        reportingPage.selectInterimReports();//reportingPage.selectAnnualReports();
+        reportingPage.selectAllPortfolioOptions();
+        //reportingPage.selectUseLatestData();
+        List<String> selectedPortfolios = reportingPage.getSelectedPortfolioOptions();
+        //verify create reports button before clicking
+        assertTestCase.assertTrue(reportingPage.createReportsButton.isEnabled(), "Create report button is enabled");
+        Set<String> currentWindows = BrowserUtils.getWindowHandles();
+        reportingPage.clickOnCreateReportsButton();
+        try {
+            //New tab should be opened and empty state message should be displayed as in the screenshot
+            assertTestCase.assertTrue(reportingPage.verifyNewTabOpened(currentWindows), "New tab is opened");
+            System.out.println("New tab is opened");
+            assertTestCase.assertTrue(reportingPage.verifyReportsReadyToDownload(selectedPortfolios), "Reports are ready to download");
+            System.out.println("Reports are ready to download");
+            reportingPage.deleteFilesInDownloadsFolder();
+            assertTestCase.assertTrue(reportingPage.verifyIfReportsDownloaded(), "Reports are downloaded");
+            System.out.println("Reports are downloaded");
+            assertTestCase.assertTrue(reportingPage.unzipReports(), "Reports are extracted");
+            System.out.println("Reports are extracted");
+            assertTestCase.assertTrue(reportingPage.verifyBVD9IDInCompanyLevelOutput(selectedPortfolios,"Interim", "2022"),
+                    "BVD9 ID for Portfolio Level output is verified for Excel vs DB");
+            System.out.println("BVD9 ID for Portfolio Level output is verified for Excel vs DB");
         } catch (Exception e) {
             e.printStackTrace();
             assertTestCase.assertTrue(false, "New tab verification failed");

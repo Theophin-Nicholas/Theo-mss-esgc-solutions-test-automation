@@ -229,16 +229,20 @@ public class ExcelUtil {
     }
 
     public List<String> getColumnData(int columnIndex) {
-        // get all columns
-        List<String> columns = getColumnsNames();
+        return getColumnData(columnIndex, "");
+    }
+
+    public List<String> getColumnData(int columnIndex, String nullValue) {
         // this will be returned
         List<String> data = new ArrayList<>();
-
         for (int i = 1; i < rowCount(); i++) {
             // get each row
             Cell cell = workSheet.getRow(i).getCell(columnIndex);
-            data.add(cell.getStringCellValue());
-            }
+            if (cell == null || cell.getCellType() == CellType.BLANK)
+                data.add(nullValue);
+            else
+                data.add(cell.getStringCellValue());
+        }
         return data;
     }
 
@@ -259,7 +263,8 @@ public class ExcelUtil {
 //                        return true;
 //                    }
 //                }
-                if(cell.getStringCellValue().equals(data)){
+
+                if(cell.toString().equals(data)){
                     return true;
                 }
             }
@@ -283,11 +288,17 @@ public class ExcelUtil {
         for (int rowNo = 1; rowNo <= totalRows; rowNo++) {
             row = workSheet.getRow(rowNo);
             RowNo = RowNo + 1;
-            if (row.getCell(colNumber).getStringCellValue().equalsIgnoreCase(cellData)) {
-                break;
+            if (row == null || row.getCell(colNumber) == null) continue;
+            if (row.getCell(colNumber).toString().equalsIgnoreCase(cellData)) {
+                return RowNo;
             }
         }
-        return RowNo;
+        System.out.println("Row not found");
+        return -1;
+    }
+
+    public int getRowNumber(String cellData) {
+        return getRowNumber(cellData, 0);
     }
 
     public Row getRow(int rowIndex) {
@@ -346,6 +357,7 @@ public class ExcelUtil {
 
         return data;
     }
+
     public List<String> getNumericCells() {
         List<String> data = new ArrayList<>();
         for (Row row : workSheet) {
@@ -353,6 +365,17 @@ public class ExcelUtil {
                 if (cell.getCellType() == CellType.NUMERIC) {
                     data.add(cell.toString());
                 }
+            }
+        }
+        return data;
+    }
+
+    public List<String> getNumericCells(int colNum) {
+        List<String> data = new ArrayList<>();
+        for (Row row : workSheet) {
+            Cell cell = row.getCell(colNum);
+            if (cell != null && cell.getCellType() == CellType.NUMERIC) {
+                data.add(cell.toString());
             }
         }
         return data;
