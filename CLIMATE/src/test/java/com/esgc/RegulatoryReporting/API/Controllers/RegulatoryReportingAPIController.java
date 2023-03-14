@@ -2,13 +2,10 @@ package com.esgc.RegulatoryReporting.API.Controllers;
 
 import com.esgc.Base.API.Controllers.APIController;
 import com.esgc.RegulatoryReporting.API.RegulatoryReportingEndPoints;
-import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.DateTimeUtilities;
 import io.restassured.response.Response;
 
 import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 

@@ -7,20 +7,20 @@ import com.esgc.RegulatoryReporting.API.APIModels.PortfolioDetails;
 import com.esgc.RegulatoryReporting.API.Controllers.RegulatoryReportingAPIController;
 import com.esgc.RegulatoryReporting.UI.Pages.RegulatoryReportingPage;
 import com.esgc.Utilities.BrowserUtils;
+import com.esgc.Utilities.DateTimeUtilities;
 import com.esgc.Utilities.EntitlementsBundles;
 import com.esgc.Utilities.Xray;
-import com.esgc.Utilities.*;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
-import org.openqa.selenium.JavascriptExecutor;
 import org.testng.annotations.Test;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import static com.esgc.Utilities.Groups.*;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.equalTo;
 
 public class RegulatoryReportingAPITests extends UITestBase {
 

@@ -383,6 +383,12 @@ public class Driver {
         }
     }
 
+    public static void closeBrowserTab() {
+        if (driverPool.get() != null) {
+            driverPool.get().close();
+        }
+    }
+
     public static void quit() {
         if (driverPool.get() != null) {
             driverPool.get().quit();

@@ -2,7 +2,6 @@ package com.esgc.RegulatoryReporting.DB.Tests;
 
 import com.esgc.Base.TestBases.UITestBase;
 import com.esgc.Dashboard.UI.Pages.DashboardPage;
-import com.esgc.PortfolioAnalysis.UI.Pages.PhysicalRiskPages.PhysicalRiskManagementPages.PhysicalRiskManagementPage;
 import com.esgc.RegulatoryReporting.API.Controllers.RegulatoryReportingAPIController;
 import com.esgc.RegulatoryReporting.UI.Pages.RegulatoryReportingPage;
 import com.esgc.Utilities.BrowserUtils;

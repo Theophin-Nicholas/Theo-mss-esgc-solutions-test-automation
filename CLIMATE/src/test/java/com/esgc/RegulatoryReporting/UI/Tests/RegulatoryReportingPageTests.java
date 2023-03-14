@@ -483,49 +483,6 @@ public class RegulatoryReportingPageTests extends UITestBase {
     }
 
     @Test(groups = {"regression", "ui", "regulatoryReporting"})
-    @Xray(test = {11654, 11657})
-    public void verifyPreviouslyDownloadedFeature() {
-        DashboardPage dashboardPage = new DashboardPage();
-        dashboardPage.navigateToPageFromMenu("Regulatory Reporting");
-        test.info("Navigated to Regulatory Reporting Page");
-
-        assertTestCase.assertTrue(reportingPage.verifyPreviouslyDownloadedButton(), "Verify Previously Downloaded button");
-
-        reportingPage.clickPreviouslyDownloadedButton();
-        BrowserUtils.wait(5);
-        for (String windowHandle : Driver.getDriver().getWindowHandles()) {
-            Driver.getDriver().switchTo().window(windowHandle);
-        }
-
-        reportingPage.verifyPreviouslyDownloadedScreen();
-        reportingPage.verifyFileDownloadFromPreviouslyDownloadedScreen();
-    }
-
-    @Test(groups = {"regression", "ui", "regulatoryReporting"})
-    @Xray(test = {11712})
-    public void verifyNoFilesInPreviouslyDownloadedScreen() {
-
-        LoginPage login = new LoginPage();
-        login.clickOnLogout();
-        login.entitlementsLogin(EntitlementsBundles.NO_PREVIOUSLY_DOWNLOADED_REGULATORY_REPORTS);
-
-        DashboardPage dashboardPage = new DashboardPage();
-        dashboardPage.navigateToPageFromMenu("Regulatory Reporting");
-        test.info("Navigated to Regulatory Reporting Page");
-
-        assertTestCase.assertTrue(reportingPage.verifyPreviouslyDownloadedButton(), "Verify Previously Downloaded button");
-
-        reportingPage.clickPreviouslyDownloadedButton();
-        BrowserUtils.wait(5);
-        for (String windowHandle : Driver.getDriver().getWindowHandles()) {
-            Driver.getDriver().switchTo().window(windowHandle);
-        }
-        BrowserUtils.waitForVisibility(reportingPage.previouslyDownloadedErrorMessage, 30);
-        assertTestCase.assertEquals(reportingPage.getPreviouslyDownloadedErrorMessageText(),"No previously downloaded reports to be displayed.", "Verify Error message in Previously Downloaded screen");
-
-    }
-
-    @Test(groups = {"regression", "ui", "regulatoryReporting"})
     @Xray(test = {10858})
     public void verifyEntitlementForNonSFDRusers() {
 

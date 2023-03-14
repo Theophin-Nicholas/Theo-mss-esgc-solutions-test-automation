@@ -1,6 +1,5 @@
 package com.esgc.Tests;
 
-import com.esgc.APIModels.EMCAPIController;
 import com.esgc.Pages.*;
 import com.esgc.TestBases.EMCUITestBase;
 import com.esgc.Utilities.BrowserUtils;

@@ -7,7 +7,10 @@ import com.esgc.PortfolioManagement.DB.DBQueries.PredictedScoreQueries;
 import com.esgc.PortfolioManagement.UI.Pages.PortfolioManagementPage;
 import com.esgc.RegulatoryReporting.API.Controllers.RegulatoryReportingAPIController;
 import com.esgc.Reporting.CustomAssertion;
-import com.esgc.Utilities.*;
+import com.esgc.Utilities.BrowserUtils;
+import com.esgc.Utilities.PortfolioFilePaths;
+import com.esgc.Utilities.RobotRunner;
+import com.esgc.Utilities.Xray;
 import org.testng.annotations.Test;
 
 import java.util.ArrayList;

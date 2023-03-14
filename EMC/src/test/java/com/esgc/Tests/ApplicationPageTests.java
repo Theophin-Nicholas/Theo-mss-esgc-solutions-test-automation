@@ -1,16 +1,13 @@
 package com.esgc.Tests;
 
-import com.esgc.APIModels.EMCAPIController;
 import com.esgc.Pages.*;
 import com.esgc.TestBases.EMCUITestBase;
 import com.esgc.Utilities.*;
 import com.github.javafaker.Faker;
-import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.testng.annotations.Test;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 

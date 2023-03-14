@@ -1,10 +1,8 @@
 package com.esgc.Pages;
 
 import com.esgc.Utilities.BrowserUtils;
-import com.esgc.Utilities.ConfigurationReader;
 import com.esgc.Utilities.Driver;
 import com.esgc.Utilities.Environment;
-import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;

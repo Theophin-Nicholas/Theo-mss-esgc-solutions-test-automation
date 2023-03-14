@@ -2,7 +2,10 @@ package com.esgc.PortfolioAnalysis.UI.Tests;
 
 import com.esgc.Base.TestBases.UITestBase;
 import com.esgc.PortfolioAnalysis.UI.Pages.ResearchLinePage;
-import com.esgc.Utilities.*;
+import com.esgc.Utilities.BrowserUtils;
+import com.esgc.Utilities.PortfolioFilePaths;
+import com.esgc.Utilities.RobotRunner;
+import com.esgc.Utilities.Xray;
 import org.testng.annotations.Test;
 
 import java.text.DateFormat;

@@ -3,19 +3,18 @@ package com.esgc.Dashboard.API.Controllers;
 import com.esgc.Base.API.APIModels.APIFilterPayload;
 import com.esgc.Base.API.APIModels.APIFilterPayloadWithoutBenchmark;
 import com.esgc.Base.API.Controllers.APIController;
-import com.esgc.Dashboard.API.APIModels.*;
+import com.esgc.Dashboard.API.APIModels.APIEntityListPayload;
+import com.esgc.Dashboard.API.APIModels.APIHeatMapPayload;
+import com.esgc.Dashboard.API.APIModels.APIHeatMapSinglePayload;
+import com.esgc.Dashboard.API.APIModels.APIPerformanceChartPayload;
 import com.esgc.Dashboard.API.DashboardEndPoints;
-import com.esgc.EntityProfile.API.APIModels.SectorComparison;
 import com.esgc.EntityProfile.API.EntityProfilePageEndpoints;
 import com.esgc.PortfolioAnalysis.API.PortfolioAnalysisEndpoints;
-import com.esgc.Utilities.Driver;
 import io.restassured.RestAssured;
 import io.restassured.parsing.Parser;
 import io.restassured.response.Response;
-import org.openqa.selenium.By;
 
 import java.time.LocalDate;
-import java.util.*;
 
 public class DashboardAPIController extends APIController {
 

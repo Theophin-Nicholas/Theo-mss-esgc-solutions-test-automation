@@ -3,7 +3,10 @@ package com.esgc.UI.Pages;
 //import com.esgc.Base.TestBases.ClimatePageBase;
 
 import com.esgc.Pages.PageBase;
-import com.esgc.Utilities.*;
+import com.esgc.Utilities.BrowserUtils;
+import com.esgc.Utilities.Driver;
+import com.esgc.Utilities.EntitlementsBundles;
+import com.esgc.Utilities.Environment;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -11,7 +14,6 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
 
 import java.util.List;
-import java.util.Set;
 
 public class LoginPage extends PageBase {
 

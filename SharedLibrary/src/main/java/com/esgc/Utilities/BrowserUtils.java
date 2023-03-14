@@ -205,6 +205,12 @@ public class BrowserUtils {
         return wait.until(ExpectedConditions.elementToBeClickable(element));
     }
 
+    public static WebElement waitForClickability(WebElement element) {
+        WebDriverWait wait = new WebDriverWait(Driver.getDriver(), Duration.ofSeconds(10));
+        return wait.until(ExpectedConditions.elementToBeClickable(element));
+    }
+
+
     /**
      * Tries to click on the element every second until it is clicked
      *

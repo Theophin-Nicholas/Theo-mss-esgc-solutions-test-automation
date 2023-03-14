@@ -1,12 +1,9 @@
 package com.esgc.UI.Tests;
 
 import com.esgc.API.Controllers.OnDemandFilterAPIController;
-import com.esgc.UI.TestBases.UITestBase;
-
 import com.esgc.UI.Pages.LoginPage;
 import com.esgc.UI.Pages.OnDemandAssessmentPage;
-
-
+import com.esgc.UI.TestBases.UITestBase;
 import com.esgc.Utilities.*;
 import org.testng.Assert;
 import org.testng.annotations.Test;
