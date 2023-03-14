@@ -135,7 +135,9 @@ public class RegulatoryReportingPage extends UploadPage {
         return createReportsButton.isEnabled();
     }
 
-
+    public void clickOnCreateReportsButton(){
+        createReportsButton.click();
+    }
 
     public void clickOnEUTaxonomy(){
         EUTaxonomy.click();
