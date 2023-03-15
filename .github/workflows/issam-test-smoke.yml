@@ -60,5 +60,5 @@ jobs:
         xray-client: 'xray_client'
         xray-token: 'xray_token'
         issue-summary: '"[Automated Tests] This is a test for reports from github actions"'
-        project: 'PJ'
+        project: 'ESGCA'
         report-folder: 'reports'       
