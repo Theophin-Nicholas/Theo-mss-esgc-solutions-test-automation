@@ -1,11 +1,14 @@
 package com.esgc.TestBases;
 
+import com.esgc.APIModels.EMCAPIController;
+import com.esgc.Pages.EMCMainPage;
 import com.esgc.Pages.LoginPageEMC;
 import com.esgc.TestBase.TestBase;
 import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.ConfigurationReader;
 import com.esgc.Utilities.Driver;
 import com.esgc.Utilities.Environment;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.testng.ITestResult;
 import org.testng.annotations.*;
@@ -68,6 +71,7 @@ public abstract class EMCUITestBase extends TestBase {
         }
         System.out.println("Element is not displayed after " + seconds + " seconds");
     }
+
     public void wait(List<WebElement> elements, int seconds) {
         for (int i = 0; i < seconds; i++) {
             try {
@@ -80,6 +84,46 @@ public abstract class EMCUITestBase extends TestBase {
             }
         }
         System.out.println("Element is not displayed after " + seconds + " seconds");
+    }
+
+    public void clear(WebElement element) {
+        while (element.getAttribute("value").length() > 0) {
+            element.sendKeys(Keys.BACK_SPACE);
+        }
+        element.sendKeys(Keys.TAB);
+    }
+
+    public void navigateToMenu(String menuName) {
+        EMCMainPage homePage = new EMCMainPage();
+        switch (menuName) {
+            case "Accounts":
+                homePage.goToAccountsPage();
+                break;
+            case "Applications":
+                homePage.goToApplicationsPage();
+                break;
+            case "Users":
+                homePage.goToUsersPage();
+                break;
+            case "Configuration":
+                homePage.goToConfigurationsPage();
+                break;
+        }
+    }
+
+    public void loginAsViewer(){
+        //verify viewer role user's permissions
+        String email = Environment.VIEWER_USER_USERNAME;
+        String viewerRoleId = Environment.VIEWER_ROLE_KEY;
+        EMCAPIController apiController = new EMCAPIController();
+        apiController.assignUserToRoleAndVerify(email, viewerRoleId);
+        System.out.println("Viewer role permissions reset is done");
+        //close the browser and login with viewer role user
+        Driver.quit();
+        Driver.getDriver().get(Environment.EMC_URL);
+        BrowserUtils.waitForPageToLoad(10);
+        LoginPageEMC loginPageEMC = new LoginPageEMC();
+        loginPageEMC.loginEMCWithParams(Environment.VIEWER_USER_USERNAME, Environment.VIEWER_USER_PASSWORD);
     }
 
 }

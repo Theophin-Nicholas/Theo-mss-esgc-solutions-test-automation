@@ -217,7 +217,7 @@ public class ConfigurationPageTests extends EMCUITestBase {
     }
 
     @Test(groups = {EMC, UI,REGRESSION})
-    @Xray(test = {6668})
+    @Xray(test = {6668, 6635})
     public void verifyAdminUserCreateRoleWithoutOptionalFieldsTest() {
         navigateToConfigPage("permission roles");
         EMCRolesPage rolesPage = new EMCRolesPage();
@@ -380,7 +380,7 @@ public class ConfigurationPageTests extends EMCUITestBase {
     }
 
     @Test(groups = {EMC, UI,REGRESSION}, description = "UI | EMC | Roles | Verify User with Admin Role can view Accounts menu on EMC")
-    @Xray(test = {7314, 7435, 7454, 7555, 7597, 7598})
+    @Xray(test = {7314, 7435, 7554, 7555, 7597, 7598})
     public void verifyUserWithAdminRoleCanViewAccountsMenuTest() {
         navigateToConfigPage("permission roles");
         EMCRolesPage rolesPage = new EMCRolesPage();
@@ -396,7 +396,7 @@ public class ConfigurationPageTests extends EMCUITestBase {
         assertTestCase.assertTrue(detailsPage.verifyUser("Ferhat Demir"),"User is assigned to the role");
 
         //Login with Test User
-        Driver.closeDriver();
+        Driver.quit();
         Driver.getDriver().get(Environment.EMC_URL);
         BrowserUtils.waitForPageToLoad(10);
         LoginPageEMC loginPageEMC = new LoginPageEMC();
@@ -436,6 +436,7 @@ public class ConfigurationPageTests extends EMCUITestBase {
         BrowserUtils.wait(3);
         assertTestCase.assertTrue(accountDetailsPage.assignProductsButton.isEnabled(), "Products tab is verified for Admin Role");
         BrowserUtils.waitForClickablility(accountDetailsPage.currentProductsList.get(0), 5).click();
+        wait(accountDetailsPage.currentProductFeaturesList,250);
         assertTestCase.assertTrue(accountDetailsPage.currentProductFeaturesList.size()>0, "Products and Features List is verified for Admin Role");
         assertTestCase.assertTrue(accountDetailsPage.currentProductFeaturesDeleteButtons.size()>0, "Products and Features Delete Buttons List is verified for Admin Role");
         assertTestCase.assertTrue(accountDetailsPage.currentProductFeaturesDeleteButtons.get(0).isEnabled(), "Products and Features List Delete Buttons are enabled for Admin Role");
@@ -445,10 +446,12 @@ public class ConfigurationPageTests extends EMCUITestBase {
         BrowserUtils.wait(3);
         assertTestCase.assertTrue(accountDetailsPage.addUserButton.isEnabled(), "Users tab is verified for Admin Role");
         accountDetailsPage.clickOnAddUserButton();
-        assertTestCase.assertTrue(accountDetailsPage.createUser("Aaaa","Asdf",new Faker().internet().emailAddress(),false), "User creation is verified for Admin Role");
-        assertTestCase.assertTrue(accountDetailsPage.verifyUser("Aaaa Asdf"), "New user is verified for Admin Role");
-        assertTestCase.assertTrue(accountDetailsPage.deleteUser("Aaaa Asdf"), "User deletion is verified for Admin Role");
-        assertTestCase.assertFalse(accountDetailsPage.verifyUser("Aaaa Asdf"), "New user deletion is verified for Admin Role");
+        String fname = new Faker().name().firstName();
+        String lname = new Faker().name().lastName();
+        assertTestCase.assertTrue(accountDetailsPage.createUser(fname,lname,new Faker().internet().emailAddress(),false), "User creation is verified for Admin Role");
+        assertTestCase.assertTrue(accountDetailsPage.verifyUser(fname+" "+lname), "New user is verified for Admin Role");
+        assertTestCase.assertTrue(accountDetailsPage.deleteUser(fname+" "+lname), "User deletion is verified for Admin Role");
+        assertTestCase.assertFalse(accountDetailsPage.verifyUser(fname+" "+lname), "New user deletion is verified for Admin Role");
 
         //Go back to roles page and reset settings for the test users
         Driver.closeDriver();
@@ -522,7 +525,7 @@ public class ConfigurationPageTests extends EMCUITestBase {
     }
 
     @Test(groups = {EMC, UI,REGRESSION}, description = "UI | EMC | Roles | Verify User with View Role can view Accounts menu on EMC")
-    @Xray(test = {7336, 7434, 7552, 7599, 7389})
+    @Xray(test = {7434, 7336, 7338, 7552, 7599, 7389})
     public void verifyUserWithViewerRoleCanViewAccountsMenuTest() {
         navigateToConfigPage("permission roles");
         EMCRolesPage rolesPage = new EMCRolesPage();
@@ -604,6 +607,7 @@ public class ConfigurationPageTests extends EMCUITestBase {
         loginPageEMC.loginWithInternalUser();
         navigateToConfigPage("permission roles");
         BrowserUtils.wait( 5);
+
         rolesPage = new EMCRolesPage();
         assertTestCase.assertTrue(rolesPage.verifyRole("Viewer"), "TestRole are located in the page");
         rolesPage.selectRole("Viewer");

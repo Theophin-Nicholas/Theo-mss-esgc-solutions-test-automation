@@ -9,7 +9,6 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
 
 import static com.esgc.Utilities.Groups.*;
-import static com.esgc.Utilities.Groups.UI;
 
 
 public abstract class DataValidationTestBase extends TestBaseOnDemand {

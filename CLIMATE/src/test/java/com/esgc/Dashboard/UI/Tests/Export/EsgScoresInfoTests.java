@@ -18,7 +18,7 @@ public class EsgScoresInfoTests extends DataValidationTestBase {
     String portfolioId = "00000000-0000-0000-0000-000000000000";
     ExportUtils utils = new ExportUtils();
 
-    @Test(groups = {DASHBOARD, REGRESSION, UI})
+    @Test(groups = {DASHBOARD, REGRESSION, UI, ESG})
     @Xray(test = {9788, 9820, 11396})
     public void compareEsgScoresInfoFromExcelToDB() {
         DashboardPage dashboardPage = new DashboardPage();
@@ -50,7 +50,7 @@ public class EsgScoresInfoTests extends DataValidationTestBase {
         dashboardPage.deleteDownloadFolder();
     }
 
-    @Test(groups = {DASHBOARD, REGRESSION, UI})
+    @Test(groups = {DASHBOARD, REGRESSION, UI, ESG})
     @Xray(test = {11266, 11315, 11396})
     public void verifyScoreTypeOfEntitiesWhenEsgPredEntitlement_Bundle() {
         LoginPage login = new LoginPage();
@@ -89,7 +89,7 @@ public class EsgScoresInfoTests extends DataValidationTestBase {
         dashboardPage.deleteDownloadFolder();
     }
 
-    @Test(groups = {DASHBOARD, REGRESSION, UI})
+    @Test(groups = {DASHBOARD, REGRESSION, UI, ESG})
     @Xray(test = {11267, 11317})
     public void compareEsgScoresWhenNoEsgPredEntitlement_Bundle() {
         LoginPage login = new LoginPage();
@@ -127,7 +127,7 @@ public class EsgScoresInfoTests extends DataValidationTestBase {
         dashboardPage.deleteDownloadFolder();
     }
 
-    @Test(groups = {DASHBOARD, REGRESSION, UI})
+    @Test(groups = {DASHBOARD, REGRESSION, UI, ESG})
     @Xray(test = {11268})
     public void compareEsgScoresWhenNoEsgEntitlement_Bundle() {
         LoginPage login = new LoginPage();

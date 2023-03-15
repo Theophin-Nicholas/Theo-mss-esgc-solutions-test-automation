@@ -52,7 +52,7 @@ public class LeadersAndLaggards extends UITestBase {
     @Test(groups = {REGRESSION, UI, SMOKE},
             description = "Verify if More companies ranked in link present",
             dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
-    @Xray(test = {442, 543, 537, 1275, 2133, 2444, 2880, 3096, 3846, 1263, 1275, 6654, 8435 })
+    @Xray(test = {442, 543, 537, 1275, 2133, 2444, 2880, 3096, 3846, 1263, 1264, 1275, 6654, 8435 })
     public void verifyMoreRankedCompaniesLink(String page) {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         if ( page.equals("Temperature Alignment")) {
@@ -63,16 +63,12 @@ public class LeadersAndLaggards extends UITestBase {
 
         researchLinePage.selectSamplePortfolioFromPortfolioSelectionModal();
         test.info("Selected Sample Portfolio");
-
-        // researchLinePage.clickRegionsSectionAndAsOfDateDropdown();
         test.info("Selecting the As of Date value");
-
-        //researchLinePage.selectAnAsOfDateWhereUpdatesAreAvailable("April 2021");
-//        if (!page.equals("Carbon Footprint")) {
-//            Assert.assertTrue(researchLinePage.checkMoreCompaniesExistLink(page));
-//            Actions action = new Actions(Driver.getDriver());
-//            action.sendKeys(Keys.ESCAPE);
-//        }
+        researchLinePage.selectAnAsOfDateWhereUpdatesAreAvailable("April 2021");
+        if (!page.equals("Carbon Footprint")) {
+            Assert.assertTrue(researchLinePage.checkMoreCompaniesExistLink(page));
+            researchLinePage.clickHideButtonInDrillDownPanel();
+        }
         test.info("Verified that the More companies ranked in link is working as expected");
     }
 
@@ -87,11 +83,9 @@ public class LeadersAndLaggards extends UITestBase {
             throw new SkipException("Leaders & Laggards is not ready to test in " + page);
         }
         researchLinePage.navigateToResearchLine(page);
-        researchLinePage.clickFiltersDropdown();
+        researchLinePage.selectSamplePortfolioFromPortfolioSelectionModal();
         researchLinePage.selectOptionFromFiltersDropdown("as_of_date", "August 2021");
         BrowserUtils.wait(5);
-        // researchLinePage.clickAwayinBlankArea();
-
 
         assertTestCase.assertTrue(researchLinePage.VerifyIfScoreLogicIsCorrectForLeaders(page), "Entities were not ordered in correct order for Leaders");
         assertTestCase.assertTrue(researchLinePage.VerifyIfScoreLogicIsCorrectForLaggards(page), "Entities were not ordered in correct order for Laggards");

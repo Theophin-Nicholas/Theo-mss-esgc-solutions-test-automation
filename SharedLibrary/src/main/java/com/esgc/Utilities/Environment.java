@@ -11,7 +11,8 @@ public class Environment {
 
     public static final String INTERNAL_USER_USERNAME;
     public static final String INTERNAL_USER_PASSWORD;
-
+    public static final String VIEWER_USER_USERNAME;
+    public static final String VIEWER_USER_PASSWORD;
     //Database
     public static final String DB_HOST;
     public static final String DB_USERNAME;
@@ -68,6 +69,12 @@ public class Environment {
     public static final String USER_WITH_EXPORT_ENTITLEMENT_PASSWORD;
     public static final String QA_TEST_ACCOUNT_ID;
     public static final String QA_TEST_APPLICATION_ID;
+    public static final String ADMIN_ROLE_KEY;
+    public static final String VIEWER_ROLE_KEY;
+    public static final String FULFILLMENT_ROLE_KEY;
+
+
+
 
     public static final String PDF_EXPORT_BUNDLE_USERNAME;
     public static final String PDF_EXPORT_BUNDLE_PASSWORD;
@@ -109,6 +116,8 @@ public class Environment {
         EMC_URL = properties.getProperty("emc_url");
         INTERNAL_USER_USERNAME = properties.getProperty("internal_user_username");
         INTERNAL_USER_PASSWORD = properties.getProperty("internal_user_password");
+        VIEWER_USER_USERNAME = properties.getProperty("viewer_user_username");
+        VIEWER_USER_PASSWORD = properties.getProperty("viewer_user_password");
         DB_HOST = properties.getProperty("db_host");
         DB_USERNAME = properties.getProperty("db_username");
         DB_PASSWORD = properties.getProperty("db_password");
@@ -158,6 +167,9 @@ public class Environment {
         QA_TEST_ACCOUNT_ID = properties.getProperty("account_id");
         QA_TEST_APPLICATION_ID = properties.getProperty("application_id");
         MESG_APPLICATION_NAME = properties.getProperty("mesg_application_name");
+        VIEWER_ROLE_KEY = properties.getProperty("viewer_role_key");
+        ADMIN_ROLE_KEY = properties.getProperty("admin_role_key");
+        FULFILLMENT_ROLE_KEY = properties.getProperty("fulfillment_role_key");
         PDF_EXPORT_BUNDLE_USERNAME = properties.getProperty("PDFexport_bundle_username");
         PDF_EXPORT_BUNDLE_PASSWORD = properties.getProperty("PDFexport_bundle_password");
         PDF_EXPORT_ONLY_SOURCEDOCUMENTS_USERNAME = properties.getProperty("PDFexport_OnlySourceDocument_username");

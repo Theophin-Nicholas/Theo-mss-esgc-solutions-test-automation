@@ -2,12 +2,14 @@ package com.esgc.Utilities;
 
 import com.esgc.Base.API.APIModels.Portfolio;
 import com.esgc.Base.API.Controllers.APIController;
+import com.esgc.RegulatoryReporting.API.Controllers.RegulatoryReportingAPIController;
 import com.esgc.Utilities.API.Endpoints;
 import com.esgc.Utilities.EndPoints.CommonEndPoints;
 import io.restassured.response.Response;
 import org.hamcrest.Matchers;
 
 import java.io.File;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -229,5 +231,22 @@ public class APIUtilities {
                 .pathParam("portfolio_id", portfolioId)
                 .when()
                 .delete(Endpoints.PUT_PORTFOLIO_NAME_UPDATE).prettyPeek();
+    }
+
+
+    public synchronized static void deleteImportedPortfoliosAfterTest() {
+        APIController apiController = new APIController();
+        RegulatoryReportingAPIController apiController2 = new RegulatoryReportingAPIController();
+        List<String> portfolioNames = apiController2.getPortfolioNames();
+        Collections.shuffle(portfolioNames);
+
+        if (portfolioNames.size() > 10) {
+            for (int i = 0; i < portfolioNames.size() - 10; i++) {
+                if (portfolioNames.get(i).equals("Sample Portfolio")) continue;
+                System.out.println("Deleting the imported portfolio");
+                //Delete Portfolio
+                apiController.deletePortfolio(apiController2.getPortfolioId(portfolioNames.get(i)));
+            }
+        }
     }
 }

@@ -10,6 +10,7 @@ import com.esgc.PortfolioAnalysis.UI.Tests.ExcelComparison.EsgAssessment;
 import com.esgc.PortfolioAnalysis.UI.Tests.ExcelComparison.GreenShareAssessment;
 import com.esgc.TestBase.DataProviderClass;
 import com.esgc.Utilities.BrowserUtils;
+import com.esgc.Utilities.Environment;
 import com.esgc.Utilities.ExcelUtil;
 import com.esgc.Utilities.Xray;
 import org.apache.commons.io.FileUtils;
@@ -25,16 +26,16 @@ import static com.esgc.Utilities.Groups.*;
 
 
 public class ExportTests extends UITestBase {
-//TODO Needs attention. Tests are failing.
-    @Test(groups = {REGRESSION, SMOKE, EXPORT},
+    //TODO Needs attention. Tests are failing.
+    @Test(groups = {REGRESSION, SMOKE, EXPORT, UI},
             dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
-    @Xray(test = {2092, 2093, 2108, 2110, 2112, 2113, 2625, 3004, 3396, 3403, 3405, 3406, 4648, 5169, 3621, 8953, 9656, 9657, 9658, 9818, 9819, 10679 })
+    @Xray(test = {2092, 2093, 2108, 2110, 2112, 2113, 2625, 3004, 3396, 3403, 3405, 3406, 4648, 5169, 3621, 8953, 9656, 9657, 9658, 9818, 9819, 10679})
     public void verifyExportFunctionalityAndExcelFieldsWithUI(String researchLine) {
 
         ResearchLinePage researchLinePage = new ResearchLinePage();
         researchLinePage.navigateToResearchLine(researchLine);
         if (researchLine.equals("Physical Risk Hazards") || researchLine.equals("Temperature Alignment")
-            || researchLine.equals("Physical Risk Management")) {
+                || researchLine.equals("Physical Risk Management")) {
             throw new SkipException("Physical Risk Hazards - Export is not ready to test in " + researchLine);
         }
 
@@ -54,7 +55,7 @@ public class ExportTests extends UITestBase {
         BrowserUtils.wait(5);
         String sheetName = String.format("Summary %s", researchLine);
 
-        if(researchLine.equals("ESG Assessments")) {
+        if (researchLine.equals("ESG Assessments")) {
             sheetName = "Data - ESG";
             researchLine = "ESG Assessment";
             expectedTitle = "Entity Name";
@@ -89,7 +90,7 @@ public class ExportTests extends UITestBase {
             case "ESG Assessment":
                 System.out.println("ESG Assessment TESTING STARTED");
                 test.info("ESG Assessment TESTING STARTED");
-                new EsgAssessment().verifyEsgAssessment(researchLine, portfolio_id, "2022","05");
+                new EsgAssessment().verifyEsgAssessment(researchLine, portfolio_id, "2022", "05");
                 new EsgAssessment().verifyEsgAssessmentColumnsInExcel(exportedDocument);
                 break;
             default:
@@ -99,13 +100,14 @@ public class ExportTests extends UITestBase {
         }
     }
 
-    @Test(groups = {REGRESSION, EXPORT}, dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
+    @Test(groups = {REGRESSION, EXPORT, UI}, dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
     @Xray(test = {7254})
     public void verifyUserIsAbleToDownloadPDFTest(String researchLine) {
         System.out.println("PDF Download test for " + researchLine);
         ResearchLinePage researchLinePage = new ResearchLinePage();
 
-        if (researchLine.equals("ESG Assessments") || researchLine.equals("Physical Risk Hazards") || researchLine.equals("Temperature Alignment")) {
+        //TODO PDF is only for Carbon footprint in qa. Prod does not have it, follow up pdf related stories
+        if (!researchLine.equals("Carbon Footprint") || (!Environment.environment.equalsIgnoreCase("qa"))) {
             throw new SkipException("Physical Risk Hazards - Export is not ready to test in " + researchLine);
         }
 
@@ -142,19 +144,18 @@ public class ExportTests extends UITestBase {
         }
     }
 
-    @Test(groups = {REGRESSION, SMOKE, EXPORT},
+    @Test(groups = {REGRESSION, EXPORT, UI},
             dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
     @Xray(test = {2883, 2962})
-    public void verifyBenchMarkExportFunctionalityandExcelFieldsWithUI(String researchLine) {
+    public void verifyBenchMarkExportFunctionalityExcelFieldsWithUI(String researchLine) {
 
         ResearchLinePage researchLinePage = new ResearchLinePage();
 
+        researchLinePage.navigateToResearchLine(researchLine);
         if (researchLine.equals("ESG Assessments") || researchLine.equals("Physical Risk Hazards") || researchLine.equals("Temperature Alignment")
                 || researchLine.equals("Physical Risk Management")) {
             throw new SkipException("Export is not ready to test in " + researchLine);
         }
-
-        researchLinePage.navigateToResearchLine(researchLine);
         researchLinePage.selectSamplePortfolioFromPortfolioSelectionModal();
         researchLinePage.clickFiltersDropdown();
         researchLinePage.selectOptionFromFiltersDropdown("as_of_date", "May 2022");
@@ -226,7 +227,7 @@ public class ExportTests extends UITestBase {
                 }
             }
             dir.delete();
-        }else
+        } else
             System.out.println("There is no Directory to DELETE");
     }
 
@@ -253,13 +254,10 @@ public class ExportTests extends UITestBase {
     @Test(groups = {"regression", "export"}, dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
     @Xray(test = {2846})
     public void verifyCompaniesOrderInRegionsAndSectors(String researchLine) {
-
-        //TODO item for Brown Share, once https://esjira/browse/ESGCA-12562 is fixed we need to check Brown Share
-
         ResearchLinePage researchLinePage = new ResearchLinePage();
         researchLinePage.navigateToResearchLine(researchLine);
         if (researchLine.equals("Physical Risk Hazards") || researchLine.equals("Temperature Alignment")
-                || researchLine.equals("Physical Risk Management") || researchLine.equals("Brown Share Assessment")) {
+                || researchLine.equals("Physical Risk Management")) {
             throw new SkipException("Export is not ready to test in " + researchLine);
         }
         researchLinePage.selectSamplePortfolioFromPortfolioSelectionModal();

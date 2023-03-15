@@ -4,7 +4,6 @@ import com.esgc.Base.API.Controllers.APIController;
 import com.esgc.Dashboard.API.Controllers.DashboardAPIController;
 import com.esgc.Dashboard.DB.DBQueries.DashboardQueries;
 import com.esgc.Utilities.DataValidationUtilities;
-import com.esgc.Utilities.Database.DatabaseDriver;
 import com.esgc.Utilities.Database.EntityPageQueries;
 import com.esgc.Utilities.Database.PortfolioQueries;
 import com.esgc.Utilities.PortfolioUtilities;
@@ -25,7 +24,6 @@ public abstract class DataValidationTestBase extends TestBaseClimate {
     @BeforeClass(alwaysRun = true)
     public synchronized void setupTokenForPlatformDataValidation(){
         getAccessTokenDataValidation();
-        DatabaseDriver.createDBConnection();
     }
 
     @AfterMethod(alwaysRun = true)

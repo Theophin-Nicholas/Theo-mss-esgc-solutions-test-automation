@@ -1,0 +1,4 @@
+FirstNameLastNameEmail                      ApplicationRolesSendActivationEmail
+John     Foo     john.foo@foocorp.com              15121703no
+Lorem    Ipsum   lorem.ipsum@loremipsum.com        15121703no
+

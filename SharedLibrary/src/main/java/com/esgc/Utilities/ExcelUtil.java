@@ -1,6 +1,7 @@
 package com.esgc.Utilities;
 
 
+import com.esgc.TestBase.TestBase;
 import com.opencsv.CSVReader;
 import org.apache.poi.ss.usermodel.*;
 import org.testng.Assert;
@@ -199,7 +200,9 @@ public class ExcelUtil {
 
 
     public static boolean checkIf2CSVFilesAreSame(String csvFilePath1, String csvFilePath2) {
-
+        if (TestBase.isRemote){
+            RemoteUtils.downloadDocumentFromRemote();
+        }
         List<String[]> allLines1 = null;
         List<String[]> allLines2 = null;
         try (CSVReader reader1 = new CSVReader(new FileReader(csvFilePath1));
@@ -263,8 +266,7 @@ public class ExcelUtil {
 //                        return true;
 //                    }
 //                }
-
-                if(cell.toString().equals(data)){
+                if(new DataFormatter().formatCellValue(cell).equals(data)){
                     return true;
                 }
             }
@@ -357,6 +359,7 @@ public class ExcelUtil {
 
         return data;
     }
+
     public List<String> getNumericCells() {
         List<String> data = new ArrayList<>();
         for (Row row : workSheet) {
@@ -364,6 +367,17 @@ public class ExcelUtil {
                 if (cell.getCellType() == CellType.NUMERIC) {
                     data.add(cell.toString());
                 }
+            }
+        }
+        return data;
+    }
+
+    public List<String> getNumericCells(int colNum) {
+        List<String> data = new ArrayList<>();
+        for (Row row : workSheet) {
+            Cell cell = row.getCell(colNum);
+            if (cell != null && cell.getCellType() == CellType.NUMERIC) {
+                data.add(cell.toString());
             }
         }
         return data;

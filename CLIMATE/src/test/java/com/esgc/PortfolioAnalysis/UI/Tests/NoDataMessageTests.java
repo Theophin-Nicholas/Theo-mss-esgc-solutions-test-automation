@@ -14,6 +14,7 @@ import static com.esgc.Utilities.Groups.*;
 
 public class NoDataMessageTests extends UITestBase {
 
+    //TODO New approach needed: import no data portfolio before execution starts and delete it after execution is done
     @Test(priority = 1000, groups = {REGRESSION, UI,ROBOT_DEPENDENCY})
     @Xray(test = {7420, 7423, 7419})
     public void validateDataMessagesWhenPartialDataAvailable() {

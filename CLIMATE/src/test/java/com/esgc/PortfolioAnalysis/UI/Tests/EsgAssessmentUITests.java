@@ -125,7 +125,7 @@ public class EsgAssessmentUITests extends UITestBase {
 
     }
 
-    @Test(groups = {REGRESSION, UI, EXPORT})
+    @Test(groups = {REGRESSION, UI, ESG, EXPORT})
     @Xray(test = {9791})
     public void VerifyFileUploadSubsidiaryCompany() {
         DashboardPage dashboardPage = new DashboardPage();
@@ -145,7 +145,7 @@ public class EsgAssessmentUITests extends UITestBase {
         verifyEsgAssessmentExcelColumnsOrder_Dashboard();
     }
 
-    @Test(groups = {REGRESSION, UI, EXPORT})
+    @Test(groups = {REGRESSION, UI, ESG, EXPORT})
     @Xray(test = {11142})
     public void VerifyRLScoresFromExcelToEntityProfilePage() {
         DashboardPage dashboardPage = new DashboardPage();

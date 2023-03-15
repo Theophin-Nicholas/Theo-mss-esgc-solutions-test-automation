@@ -2,7 +2,6 @@ package com.esgc.API.Controllers;
 
 import com.esgc.API.APIModels.Portfolio;
 import com.esgc.API.OnDemandEndpoints;
-import com.esgc.Utilities.ConfigurationReader;
 import com.esgc.Utilities.Environment;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;

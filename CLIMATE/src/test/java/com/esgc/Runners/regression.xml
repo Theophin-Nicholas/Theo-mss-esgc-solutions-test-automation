@@ -15,7 +15,8 @@
         <groups>
             <run>
                 <include name="regression"/>
-                <exclude name="robot_dependency"></exclude>
+                <exclude name="robot_dependency"/>
+                <exclude name="esg"/>
             </run>
 
         </groups>

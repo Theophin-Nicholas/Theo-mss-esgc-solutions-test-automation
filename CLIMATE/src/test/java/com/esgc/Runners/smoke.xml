@@ -18,7 +18,7 @@
         </groups>
 
         <packages>
-            <package name="com.esgc.RegulatoryReporting.UI.Tests.*"/>
+            <package name="com.esgc.RegulatoryReporting.UI.Tests."/>
         </packages>
 
 

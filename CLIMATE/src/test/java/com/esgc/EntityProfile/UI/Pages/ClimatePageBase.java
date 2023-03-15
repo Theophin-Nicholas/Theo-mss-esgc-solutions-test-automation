@@ -1,8 +1,10 @@
 package com.esgc.EntityProfile.UI.Pages;
 
 import com.esgc.Pages.PageBase;
+import com.esgc.TestBase.TestBase;
 import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.Driver;
+import com.esgc.Utilities.RemoteUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
@@ -126,7 +128,7 @@ public abstract class ClimatePageBase extends PageBase {
         List<WebElement> list =
                 portfolioCards.stream().filter(e -> e.getText().substring(0, e.getText().length() - 11).equals(portfolioName))
                         .collect(Collectors.toList());
-        if(list.size() == 0) {
+        if (list.size() == 0) {
             System.out.println("Portfolio with name " + portfolioName + " is not found");
             clickAwayinBlankArea();
             return;
@@ -313,7 +315,7 @@ public abstract class ClimatePageBase extends PageBase {
                 break;
             case "benchmark":
                 element = benchmarkDropdown;
-                elementTitle = "No Benchmark";
+                elementTitle = "Select Benchmark";
                 break;
             default:
                 System.out.println("You provided wrong dropdown name for this method: selectOptionFromDropdown()");
@@ -327,13 +329,8 @@ public abstract class ClimatePageBase extends PageBase {
 
         //select provided option from picked dropdown
         try {
-            for (WebElement each : options) {
-                if (each.getText().equals(option)) {
-                    actions.moveToElement(each).pause(1000).click(each).sendKeys(Keys.ESCAPE).build().perform();
-
-                    break;
-                }
-            }
+            WebElement filterOptionToSelect = options.stream().filter(e -> e.getText().equals(option)).findFirst().get();
+            actions.moveToElement(filterOptionToSelect).pause(1000).click(filterOptionToSelect).pause(3000).build().perform();
         } catch (Exception e) {
             System.out.println("Could not click option under dropdown");
             e.printStackTrace();
@@ -413,11 +410,17 @@ public abstract class ClimatePageBase extends PageBase {
     }
 
     public boolean isTemplateDownloaded() {
-        File dir = new File(BrowserUtils.downloadPath());
-        File[] dir_contents = dir.listFiles();
 
-        return Arrays.asList(dir_contents).stream().filter(e -> e.getName().startsWith("ESG portfolio import")).findAny().isPresent();
-
+        String path = "";
+        boolean isRemote = TestBase.isRemote;
+        if (isRemote) {
+            String fileName = RemoteUtils.getDownloadedDocumentFileName();
+            return fileName.startsWith("ESG portfolio import");
+        } else {
+            File dir = new File(BrowserUtils.downloadPath());
+            File[] dir_contents = dir.listFiles();
+            return Arrays.asList(dir_contents).stream().filter(e -> e.getName().startsWith("ESG portfolio import")).findAny().isPresent();
+        }
     }
 
     public void openSelectionModalPopUp() {

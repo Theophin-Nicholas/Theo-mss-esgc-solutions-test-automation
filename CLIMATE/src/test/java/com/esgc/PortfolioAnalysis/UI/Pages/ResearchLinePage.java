@@ -16,6 +16,7 @@ import org.testng.Assert;
 
 import java.text.Collator;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
@@ -143,7 +144,7 @@ public class ResearchLinePage extends UploadPage {
     //=============== Updates
 
     @FindBy(xpath = "//*[text()='Updates']//..//table//th")
-    public List<WebElement> updatesTableColumns;
+    public List<WebElement> updatesTableHeaders;
 
     @FindBy(xpath = "//*[text()='Updates']//..//table/tbody/tr")
     public List<WebElement> updatesCompaniesList;
@@ -407,6 +408,18 @@ public class ResearchLinePage extends UploadPage {
     @FindBy(xpath = "//div[@id='BenchmarkScoreESG-test-id']//child::div[contains(text(),'Weighted')]")
     public List<WebElement> benchmarkPortfolioScoreWidget;
 
+    @FindBy(xpath = "//div[@id='BenchmarkScoreESG-test-id']")
+    public WebElement benchmarkPortfolioScore;
+
+    @FindBy(xpath = "//*[text()=' Benchmark ']/following-sibling::div//*[./*[text()='Coverage'] and ./*[text()='Companies']]")
+    public WebElement benchmarkPortfolioCoverage;
+
+    @FindBy(xpath = "//th[text()='% Benchmark']")
+    public List<WebElement> benchmarkColumnsRegionSectorTables;
+
+    @FindBy(xpath = "//td/div[2]")
+    public List<WebElement> benchmarkMarksOnRegionSectorTables;
+
     @FindBy(css = "g.highcharts-label > text")
     public List<WebElement> maptooltip;
 
@@ -651,16 +664,16 @@ public class ResearchLinePage extends UploadPage {
                 System.out.println("Actual Tooltip Text: " + tooltipText);
                 int numberOfCompanies = Integer.parseInt(tooltipText.substring(tooltipText.lastIndexOf(" ") + 1));
                 boolean categoryCheck = true;
-                if(scoreCategory.contains(",")){
+                if (scoreCategory.contains(",")) {
                     List<String> categories = Arrays.asList(scoreCategory.split(","));
-                    for(String category:categories){
-                        if(!tooltipText.contains(category)) {
-                            System.out.println(category+" is not available in tooltip text: "+tooltipText);
+                    for (String category : categories) {
+                        if (!tooltipText.contains(category)) {
+                            System.out.println(category + " is not available in tooltip text: " + tooltipText);
                             categoryCheck = false;
                             break;
                         }
                     }
-                }else{
+                } else {
                     categoryCheck = tooltipText.contains(scoreCategory);
                 }
                 boolean flag = actColor.equalsIgnoreCase(expColor) && categoryCheck && numberOfCompanies >= 0;
@@ -910,6 +923,15 @@ public class ResearchLinePage extends UploadPage {
         }
     }
 
+    public boolean checkIfWidgetsAreLoading() {
+        try {
+            return allLoadMasks.size() > 1;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     public boolean checkIfRegionMapLabelIsCorrect() {
         wait.until(ExpectedConditions.visibilityOf(mapLabel));
         BrowserUtils.scrollTo(mapLabel);
@@ -1139,7 +1161,7 @@ public class ResearchLinePage extends UploadPage {
         //li[contains(text(),'Data - Carbon Footprint')]
         String xpath = "";
         if (dataType.toLowerCase().equals("pdf"))
-            xpath = String.format("//li[contains(text(),'%s (%s)')]", researchLine, dataType);
+            xpath = String.format("//li[contains(text(),'PDF - %s (.%s)')]", researchLine, dataType);
         else {
             xpath = String.format("//li[contains(text(),'%s - %s')]", dataType, researchLine);
             if (researchLine.equals("ESG Assessments"))
@@ -1151,9 +1173,12 @@ public class ResearchLinePage extends UploadPage {
     }
 
     public void verifyExportOptions(String researchLine) {
-        String pdfOptionXpath = "//li[starts-with(@id,'ExportDropdown')][@data-value='pdf'][text()='" + researchLine + " (pdf)']";
+        //TODO PDF is not available for environments, follow up PDF stories
+        if (Environment.environment.equalsIgnoreCase("qa") || Environment.environment.equalsIgnoreCase("uat")) {
+            String pdfOptionXpath = "//li[starts-with(@id,'ExportDropdown')][@data-value='pdf'][text()='PDF - " + researchLine + " (.pdf)']";
+            wait.until(ExpectedConditions.numberOfElementsToBe(By.xpath(pdfOptionXpath), 1));
+        }
         String excelOptionXpath = "//li[starts-with(@id,'ExportDropdown')][@data-value='individual'][text()='Data - " + researchLine + " (.xlsx)']";
-        wait.until(ExpectedConditions.numberOfElementsToBe(By.xpath(pdfOptionXpath), 1));
         wait.until(ExpectedConditions.numberOfElementsToBe(By.xpath(excelOptionXpath), 1));
     }
 
@@ -1303,28 +1328,50 @@ public class ResearchLinePage extends UploadPage {
 
     public boolean verifyUpdatesSortingOrder(String page) {
         try {
-            List<WebElement> rows = Driver.getDriver().findElements(By.xpath("//td[@heap_id='updates']"));
+            List<WebElement> rows = updatesCompaniesList;
             if (rows.size() > 0) {
                 SimpleDateFormat sdformat = new SimpleDateFormat("yyyy-MM-dd");
                 for (int i = 1; i < rows.size() - 1; i++) {
-                    String updateDateXpath = "(//td[@heap_id='updates']/following-sibling::td[1]//span[@title])";
-                    if (page.equals("Brown Share Assessment"))
-                        updateDateXpath = "(//td[@heap_id='updates']/following-sibling::td[1])";
-                    Date updatedDate1 = sdformat.parse(Driver.getDriver().findElement(By.xpath(updateDateXpath + "[" + i + "]")).getText());
-                    Date updatedDate2 = sdformat.parse(Driver.getDriver().findElement(By.xpath(updateDateXpath + "[" + (i + 1) + "]")).getText());
-
-                    if (updatedDate1.compareTo(updatedDate2) < 0)
+                    System.out.println("##############################");
+                    String updateDateXpath = "(//td[@heap_id='updates']/following-sibling::td[1])";
+                    LocalDate updatedDate1 = LocalDate.parse(Driver.getDriver().findElement(By.xpath(updateDateXpath + "[" + i + "]")).getText());
+                    LocalDate updatedDate2 = LocalDate.parse(Driver.getDriver().findElement(By.xpath(updateDateXpath + "[" + (i + 1) + "]")).getText());
+                    System.out.println("updatedDate1 = " + updatedDate1);
+                    System.out.println("updatedDate2 = " + updatedDate2);
+                    if (updatedDate1.isBefore(updatedDate2)) {
                         return false;
-                    else if (updatedDate1.compareTo(updatedDate2) == 0) {
-                        float row1Inv = Float.parseFloat(Driver.getDriver().findElement(By.xpath("(//td[@heap_id='updates']/following-sibling::td[5])[" + i + "]")).getText().replace("%", ""));
-                        float row2Inv = Float.parseFloat(Driver.getDriver().findElement(By.xpath("(//td[@heap_id='updates']/following-sibling::td[5])[" + (i + 1) + "]")).getText().replace("%", ""));
-                        if (row1Inv < row2Inv)
-                            return false;
-                        else if (row1Inv == row2Inv) {
-                            String row1Company = Driver.getDriver().findElement(By.xpath("(//td[@heap_id='updates']//span[@title])[" + i + "]")).getText();
-                            String row2Company = Driver.getDriver().findElement(By.xpath("(//td[@heap_id='updates']//span[@title])[" + (i + 1) + "]")).getText();
-                            if (row1Company.compareTo(row2Company) > 0)
+                    } else if (updatedDate1.equals(updatedDate2)) {
+                        float row1Investment = Float.parseFloat(Driver.getDriver().findElement(By.xpath("(//td[@heap_id='updates']/following-sibling::td[5])[" + i + "]")).getText().replace("%", ""));
+                        float row2Investment = Float.parseFloat(Driver.getDriver().findElement(By.xpath("(//td[@heap_id='updates']/following-sibling::td[5])[" + (i + 1) + "]")).getText().replace("%", ""));
+                        System.out.println("row1Investment = " + row1Investment);
+                        System.out.println("row2Investment = " + row2Investment);
+                        String row1Company = Driver.getDriver().findElement(By.xpath("(//td[@heap_id='updates']//span[@title])[" + i + "]")).getText();
+                        String row2Company = Driver.getDriver().findElement(By.xpath("(//td[@heap_id='updates']//span[@title])[" + (i + 1) + "]")).getText();
+                        System.out.println("row1Company = " + row1Company);
+                        System.out.println("row2Company = " + row2Company);
+
+                        if (page.equals("Physical Risk Hazards")) {
+                            int row1Score = Integer.parseInt(Driver.getDriver().findElement(By.xpath("(//td[@heap_id='updates']/following-sibling::td[2])[" + i + "]")).getText());
+                            int row2Score = Integer.parseInt(Driver.getDriver().findElement(By.xpath("(//td[@heap_id='updates']/following-sibling::td[2])[" + (i + 1) + "]")).getText());
+                            System.out.println("row1Score = " + row1Score);
+                            System.out.println("row2Score = " + row2Score);
+                            if (row1Score < row2Score) {
                                 return false;
+                            } else if (row1Score == row2Score) {
+                                if (row1Investment < row2Investment)
+                                    return false;
+                                else if (row1Investment == row2Investment) {
+                                    if (row1Company.compareTo(row2Company) > 0)
+                                        return false;
+                                }
+                            }
+                        } else {
+                            if (row1Investment < row2Investment)
+                                return false;
+                            else if (row1Investment == row2Investment) {
+                                if (row1Company.compareTo(row2Company) > 0)
+                                    return false;
+                            }
                         }
                     }
                 }
@@ -1391,6 +1438,25 @@ public class ResearchLinePage extends UploadPage {
             return false;
         }
     }
+
+    public void verifyRegionComesFirstThenSectors() {
+        wait.until(ExpectedConditions.visibilityOf(RegionSectorsTables.get(0)));
+
+        BrowserUtils.scrollTo(RegionSectorsTables.get(0));
+
+        for (int i = 0; i < RegionSectorsTables.size() - 1; i++) {
+            String tableText1 = RegionSectorsTables.get(i).findElement(By.xpath(".//span[text()]")).getText();
+            System.out.println("tableText1 = " + tableText1);
+            String textToSort1 = tableText1.substring(0, tableText1.indexOf(" "));
+
+            String tableText2 = RegionSectorsTables.get(i + 1).findElement(By.xpath(".//span[text()]")).getText();
+            System.out.println("tableText2 = " + tableText2);
+            String textToSort2 = tableText2.substring(0, tableText2.indexOf(" "));
+
+            Assert.assertTrue(textToSort1.compareTo(textToSort2) >= 0, "Region cards should come before sector cards");
+        }
+    }
+
 
     public boolean checkIfDrillDownPanelIsDisplayed() {
         try {
@@ -1524,6 +1590,7 @@ public class ResearchLinePage extends UploadPage {
             System.out.println("Check if Drill Down Panel is closed by a click on out of Panel");
             for (int i = 0; i < regionSectorChartNames.size(); i++) {
                 WebElement regionSectorChart = regionSectorChartNames.get(i);
+                BrowserUtils.scrollTo(regionSectorChart);
                 wait.until(ExpectedConditions.elementToBeClickable(regionSectorChart)).click();
                 System.out.println("Clicked on " + regionSectorChart.getText() + " chart");
                 wait.until(ExpectedConditions.visibilityOf(drillDownPanel));
@@ -1566,9 +1633,9 @@ public class ResearchLinePage extends UploadPage {
     public boolean checkIfHideButtonIsDisplayedInDrillDownPanel() {
         try {
             System.out.println("Check if hide button Is Displayed");
-            wait.until(ExpectedConditions.visibilityOf(hideButton));
+            BrowserUtils.waitForVisibility(hideButton, 10);
             System.out.println("TEST PASSED");
-            return hideButton.isDisplayed();
+            return true;
         } catch (Exception e) {
             System.out.println("FAILED");
             e.printStackTrace();
@@ -1577,9 +1644,12 @@ public class ResearchLinePage extends UploadPage {
     }
 
     public void clickHideButtonInDrillDownPanel() {
-        wait.until(ExpectedConditions.visibilityOf(hideButton)).click();
-        clickAwayinBlankArea();
-        pressESCKey();
+        boolean isHideButtonVisible = checkIfHideButtonIsDisplayedInDrillDownPanel();
+        if (isHideButtonVisible) {
+            new Actions(Driver.getDriver()).moveToElement(hideButton).pause(1000).click().pause(1000).build().perform();
+            clickAwayinBlankArea();
+            pressESCKey();
+        }
     }
 
 
@@ -1594,12 +1664,13 @@ public class ResearchLinePage extends UploadPage {
             String headerDivId = "";
             List<String> dataRows = new ArrayList<String>();
             List<String> dataHeaders = new ArrayList<String>();
+            List<String> dataHeaders2 = new ArrayList<String>();
             String followingXpath = "div/div/div/span";
             String followingXpath1 = "";
 
             switch (page) {
                 case "Physical Risk Hazards":
-                    headerDivId = "Physical Risk Hazards";
+                    headerDivId = "//div[@id='Physical Risk Hazards']/div//parent::div/parent::header";
                     headerName = "Additional Physical Risk Hazards";
                     dataRows.add("Country of Sales");
                     dataRows.add("Weather Sensitivity");
@@ -1640,10 +1711,12 @@ public class ResearchLinePage extends UploadPage {
                     dataRows.add("Scope 1 (t CO2 eq)");
                     dataRows.add("Scope 2 (t CO2 eq)");
                     dataRows.add("Scope 3 (t CO2 eq)");
-                    dataHeaders.add("Total Scope 1 Emissions");
-                    dataHeaders.add("624,063,885 (t CO2 eq)");
-                    dataHeaders.add("Total Scope");
-                    dataHeaders.add("(t CO2 eq)");
+                    dataHeaders.add("Scope 1 (t CO2 eq)");
+                    dataHeaders.add("Scope 2 (t CO2 eq)");
+                    dataHeaders.add("Scope 3 (t CO2 eq)");
+                    dataHeaders2.add("Total Scope 1 Emissions");
+                    dataHeaders2.add("Total Scope 2 Emissions");
+                    dataHeaders2.add("Total Scope 3 Emissions");
                     followingXpath = "div/div/div/div/span";
                     followingXpath1 = "div/div[2]/span";
                     break;
@@ -1730,10 +1803,12 @@ public class ResearchLinePage extends UploadPage {
                 if (spanForDataRows.size() == dataRows.size()) {
                     for (int i = 0; i < dataRows.size(); i++) {
                         String[] spanData = spanForDataRows.get(i).getText().split("\n");
-                        if (i == 0 && !headerDivId.equals("Physical Risk Hazards")) {
+                        if (i == 0 && !headerDivId.contains("Physical Risk Hazards")) {
                             if (page.equals("Carbon Footprint")) {
-                                for (String headerValue : dataHeaders) {
-                                    if (spanForDataRows.get(i).getText().contains(headerValue)) {
+                                for (int j = 0; j < dataHeaders.size(); j++) {
+                                    String headerValue = dataHeaders.get(j);
+                                    String headerValue2 = dataHeaders2.get(j);
+                                    if (spanForDataRows.get(j).getText().startsWith(headerValue) && spanForDataRows.get(j).getText().contains(headerValue2)) {
                                         System.out.println("MATCHED " + headerValue);
                                         matched = true;
                                     } else {
@@ -1849,7 +1924,7 @@ public class ResearchLinePage extends UploadPage {
         }
     }
 
-    public List<String> getExpectedListOfPortfolioAnalysisResearchLines(List<EntitlementsBundles> bundles) {
+    public List<String> getExpectedListOfPortfolioAnalysisResearchLines(EntitlementsBundles... bundles) {
         List<String> expectedResearchLines = new ArrayList<>();
         for (EntitlementsBundles bundle : bundles) {
             switch (bundle) {
@@ -2281,7 +2356,6 @@ public class ResearchLinePage extends UploadPage {
 
     public List<WebElement> selectAnAsOfDateWhereUpdatesAreAvailable(String monthYear) {
         selectOptionFromFiltersDropdown("as_of_date", "April 2021");
-        closeFilterByKeyboard();
         /*try {
             for (int counter = 0; counter < 6; counter++) {
                 String month = asOfDateValues.get(counter).getText();
@@ -2301,7 +2375,8 @@ public class ResearchLinePage extends UploadPage {
         } catch (Exception e) {
             e.printStackTrace();
         }*/
-        return updatesTableColumns;
+        BrowserUtils.scrollTo(updatesTableHeaders.get(0));
+        return updatesTableHeaders;
     }
 
     //Leaders & Laggards if there are more than 10 rows, check hyperlink displayed or not
@@ -2371,12 +2446,13 @@ public class ResearchLinePage extends UploadPage {
     public boolean VerifyIfScoreLogicIsCorrectForLeaders(String page) {
         boolean LeadersScoreLogicStatus = false;
 
-        List<WebElement> LeadersTableScores = Driver.getDriver().findElements(By.xpath("//*[text()='Leaders by Score']//..//table//tbody//tr//td[4]"));
-        if (LeadersTableScores.size() > 0) {
-            for (int i = 0; i < LeadersTableScores.size() - 1; i++) {
-                if ((Integer.parseInt(LeadersTableScores.get(i).getText().replaceAll("[^a-zA-Z0-9]", "")) <= Integer.parseInt(LeadersTableScores.get(i + 1).getText().replaceAll("[^a-zA-Z0-9]", ""))) && (page.equals("Physical Risk Hazards") || page.equals("Operations Risk") || page.equals("Market Risk") || page.equals("Supply Chain Risk") || page.equals("Carbon Footprint") || page.equals("Brown Share Assessment"))) {
+        List<WebElement> leadersTableScores = Driver.getDriver().findElements(By.xpath("//*[text()='Leaders by Score']//..//table//tbody//tr//td[4]"));
+        BrowserUtils.scrollTo(leadersTableScores.get(0));
+        if (leadersTableScores.size() > 0) {
+            for (int i = 0; i < leadersTableScores.size() - 1; i++) {
+                if ((Integer.parseInt(leadersTableScores.get(i).getText().replaceAll("[^a-zA-Z0-9]", "")) <= Integer.parseInt(leadersTableScores.get(i + 1).getText().replaceAll("[^a-zA-Z0-9]", ""))) && (page.equals("Physical Risk Hazards") || page.equals("Operations Risk") || page.equals("Market Risk") || page.equals("Supply Chain Risk") || page.equals("Carbon Footprint") || page.equals("Brown Share Assessment"))) {
                     LeadersScoreLogicStatus = true;
-                } else if ((Integer.parseInt(LeadersTableScores.get(i).getText().replaceAll("[^a-zA-Z0-9]", "")) >= Integer.parseInt(LeadersTableScores.get(i + 1).getText().replaceAll("[^a-zA-Z0-9]", ""))) && (page.equals("Physical Risk Management") || page.equals("Energy Transition Management") || page.equals("TCFD Strategy") || page.equals("Green Share Assessment"))) {
+                } else if ((Integer.parseInt(leadersTableScores.get(i).getText().replaceAll("[^a-zA-Z0-9]", "")) >= Integer.parseInt(leadersTableScores.get(i + 1).getText().replaceAll("[^a-zA-Z0-9]", ""))) && (page.equals("Physical Risk Management") || page.equals("Energy Transition Management") || page.equals("TCFD Strategy") || page.equals("Green Share Assessment"))) {
                     LeadersScoreLogicStatus = true;
                 } else {
                     LeadersScoreLogicStatus = false;
@@ -2648,6 +2724,41 @@ public class ResearchLinePage extends UploadPage {
 
     }
 
+    public boolean isBenchmarkPortfolioScoreWidgetDisplayed() {
+        try {
+            BrowserUtils.waitForVisibility(benchmarkPortfolioScore);
+            return benchmarkPortfolioScore.isDisplayed();
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public boolean isBenchmarkPortfolioCoverageWidgetDisplayed() {
+        try {
+            BrowserUtils.waitForVisibility(benchmarkPortfolioCoverage);
+            return benchmarkPortfolioCoverage.isDisplayed();
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public boolean isBenchmarkColumnsAreDisplayedOnRegionAndSectorWidgets() {
+        try {
+            wait.until(ExpectedConditions.visibilityOfAllElements(benchmarkColumnsRegionSectorTables));
+            return benchmarkColumnsRegionSectorTables.size() > 0;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public boolean isBenchmarkMarksAreDisplayedOnRegionAndSectorWidgets() {
+        try {
+            wait.until(ExpectedConditions.visibilityOfAllElements(benchmarkMarksOnRegionSectorTables));
+            return benchmarkMarksOnRegionSectorTables.size() > 0;
+        } catch (Exception e) {
+            return false;
+        }
+    }
 
     public void validateCarbonFootPrint() {
 
@@ -2808,7 +2919,7 @@ public class ResearchLinePage extends UploadPage {
         Driver.getDriver().findElement(By.xpath("(" + tableXpath + "//tr/td/div)[1]")).click();
         BrowserUtils.wait(5);
         BrowserUtils.waitForVisibility(Driver.getDriver().findElement(By.xpath("//span[contains(text(),'" + entityName + "')]")), 30);
-        clickCloseIcon();
+        clickHideButtonInDrillDownPanel();
 
         return true;
     }
@@ -2858,8 +2969,7 @@ public class ResearchLinePage extends UploadPage {
                             return false;
                         checkDrawerBehavior = true;
                     }
-                    Driver.getDriver().findElement(By.xpath("(//a[text()='hide'])[2]")).click();
-                    BrowserUtils.wait(2);
+                    clickHideButtonInDrillDownPanel();
                 } else {
                     return false;
                 }
@@ -3369,7 +3479,7 @@ public class ResearchLinePage extends UploadPage {
     }
 
     public void validateEsgLeadersANDlaggersScorValuese() {
-        List<String> Categories = Arrays.asList(new String[]{"Advanced", "Robust", "Limited", "Weak"});
+        List<String> Categories = Arrays.asList("Advanced", "Robust", "Limited", "Weak");
         List<WebElement> e = LeadersAndLaggardsTable.findElements(By.xpath("//tbody/tr/td[4]"));
         for (int i = 0; i < e.size(); i++) {
             assertTestCase.assertTrue(Categories.contains(e.get(i).getText()), "Validate score categories");
@@ -3480,25 +3590,27 @@ public class ResearchLinePage extends UploadPage {
     }
 
     public void isUpdatesAndLeadersAndLaggardsHeaderDisplayUpdatedHeader(String page, CustomAssertion assertionTestCase) {
-        try {
-            clickFiltersDropdown();
-            selectRandomOptionFromFiltersDropdown("as_of_date");
-            closeFilterByKeyboard();
+        clickFiltersDropdown();
+        selectRandomOptionFromFiltersDropdown("as_of_date");
+        closeFilterByKeyboard();
 
-            String filters = getRegionsSectionAndAsOfDateDropdownSelectedValue();
-            String monthDate = filters.substring(filters.indexOf("at the end of") + 14);
-            String whatToValidate = "";
-            switch (page) {
-                case "Temperature Alignment":
-                    whatToValidate = "Impact";
-                    break;
-                default:
-                    whatToValidate = "Updates as of " + monthDate + ", Impact, and Current Leaders/Laggards";
-            }
-            assertionTestCase.assertEquals(updatesAndLeadersAndLaggardsHeader.getText(), whatToValidate, "Header message is not correct", 477, 592);
-        } catch (Exception e) {
-            e.printStackTrace();
+        String filters = getRegionsSectionAndAsOfDateDropdownSelectedValue();
+        String monthDate = filters.substring(filters.indexOf("at the end of") + 14);
+        String whatToValidate = "";
+        switch (page) {
+            case "Physical Risk Hazards":
+            case "Operations Risk":
+            case "Market Risk":
+            case "Supply Chain Risk":
+                whatToValidate = "Updates as of " + monthDate + ", Impact, and Current Leaders/Laggards";
+                break;
+            case "Temperature Alignment":
+                whatToValidate = "Impact";
+                break;
+            default:
+                whatToValidate = "Updates in " + monthDate + ", Impact, and Current Leaders/Laggards";
         }
+        assertionTestCase.assertTrue(whatToValidate.contains(updatesAndLeadersAndLaggardsHeader.getText()), "Header message validation", 477, 592);
     }
 
     //Portfolio Selection Side Panel

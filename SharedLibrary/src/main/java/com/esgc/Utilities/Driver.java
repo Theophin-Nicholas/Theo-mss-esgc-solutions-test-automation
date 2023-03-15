@@ -130,7 +130,7 @@ public class Driver {
 
                     prefs.put("download.default_directory", BrowserUtils.downloadPath()); //path to dir
                     chromeOptions.setExperimentalOption("prefs", prefs);
-
+                    chromeOptions.addArguments("--remote-allow-origins=*");
                     chromeOptions.addArguments("--start-maximized");
                     chromeOptions.addArguments("--disable-notifications");
                     chromeOptions.addArguments("--remote-allow-origins=*");
@@ -383,6 +383,12 @@ public class Driver {
             boolean b = driverPool.get() == null;
             driverPool.get().quit();
             //driverPool.remove();
+        }
+    }
+
+    public static void closeBrowserTab() {
+        if (driverPool.get() != null) {
+            driverPool.get().close();
         }
     }
 

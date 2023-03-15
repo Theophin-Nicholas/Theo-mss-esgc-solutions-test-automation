@@ -24,7 +24,7 @@ import static io.restassured.RestAssured.given;
 public class EntityClimateUnderlyingData extends EntityClimateProfileDataValidationTestBase {
 
     @Xray(test = {8005, 8006})
-    @Test(groups = {REGRESSION, UI, SMOKE, ENTITY_PROFILE})
+    @Test(groups = {REGRESSION, UI, ENTITY_PROFILE})
     public void verifyUnderlyingDataMetricsCorrectGreenShare() {
         String orbisId = "039634868";//"000411117";
         List<String> dbResults;
@@ -34,12 +34,12 @@ public class EntityClimateUnderlyingData extends EntityClimateProfileDataValidat
 
         dbResults = getCoverageForGreenShare(orbisId, "Green Share");
         System.out.println("dbResults = " + dbResults.size());
-        String firstValue = dbResults.get(0);
-        System.out.println("firstValue = " + firstValue);
-        double secondValue = Double.parseDouble(dbResults.get(1));
-        System.out.println("secondValue = " + secondValue);
-        String thirdValue = dbResults.get(2);
-        System.out.println("thirdValue = " + thirdValue);
+        String firstValue_ScoreFromSource = dbResults.get(0);
+        System.out.println("firstValue = " + firstValue_ScoreFromSource);
+        double secondValue_ScoreFromRange = Double.parseDouble(dbResults.get(1));
+        System.out.println("secondValue = " + secondValue_ScoreFromRange);
+        String thirdValue_ScoreScale = dbResults.get(2);
+        System.out.println("thirdValue = " + thirdValue_ScoreScale);
         String thirdValueAPI = greenShareList.get(0).getGreen_share_products().get(1).getInvestment_in_category_msg();
         System.out.println("thirdValueAPI = " + thirdValueAPI);
         /**
@@ -51,13 +51,13 @@ public class EntityClimateUnderlyingData extends EntityClimateProfileDataValidat
          *
          * If the all values less than zero or non than UI needs to populate NA
          */
-        if (firstValue.equalsIgnoreCase("-2.00")) {
-            assertTestCase.assertEquals(thirdValue, thirdValueAPI);
-        } else if (secondValue < 0) {
-            assertTestCase.assertEquals(thirdValue, thirdValueAPI);
-        } else if (firstValue.equalsIgnoreCase("-2.00") && secondValue < 0) {
-            assertTestCase.assertEquals(thirdValue, thirdValueAPI);
-        } else if (firstValue.equalsIgnoreCase("-2.00") && secondValue < 0 && thirdValue.equals("None")) {
+        if (firstValue_ScoreFromSource.equalsIgnoreCase("-2.00")) {
+            assertTestCase.assertEquals(thirdValue_ScoreScale, thirdValueAPI);
+        } else if (secondValue_ScoreFromRange < 0) {
+            assertTestCase.assertEquals(thirdValue_ScoreScale, thirdValueAPI);
+        } else if (firstValue_ScoreFromSource.equalsIgnoreCase("-2.00") && secondValue_ScoreFromRange < 0) {
+            assertTestCase.assertEquals(thirdValue_ScoreScale, thirdValueAPI);
+        } else if (firstValue_ScoreFromSource.equalsIgnoreCase("-2.00") && secondValue_ScoreFromRange < 0 && thirdValue_ScoreScale.equals("None")) {
             assertTestCase.assertTrue(thirdValueAPI.equals("NA"));
         }
     }

@@ -13,7 +13,6 @@ import org.jetbrains.annotations.NotNull;
 import org.openqa.selenium.JavascriptExecutor;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,6 +23,7 @@ public class PDFTestMethods extends PageBase {
 
     public void DownloadPDFPAndGetFileContent(@NotNull String entity) {
         EntityClimateProfilePage entityProfilePage = new EntityClimateProfilePage();
+        entityProfilePage.waitForDataLoadCompletion();
         String company = entity;
         String companyName = entityProfilePage.searchAndLoadClimateProfilePage(company);
         System.out.println("companyName = " + companyName);

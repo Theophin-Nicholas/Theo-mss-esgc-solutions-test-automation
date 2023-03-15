@@ -20,7 +20,7 @@ import static com.esgc.Utilities.Groups.*;
 public class SubsidiaryTests extends UITestBase {
 
 
-    @Test(groups = {REGRESSION, UI, SEARCH_ENTITY})
+    @Test(groups = {REGRESSION, UI, SEARCH_ENTITY, ESG})
     @Xray(test = {11042})
     public void VerifyFileUploadSubsidiaryCompany() {
         DashboardPage dashboardPage = new DashboardPage();
@@ -45,7 +45,7 @@ public class SubsidiaryTests extends UITestBase {
         assertTestCase.assertEquals(dbSubsidiaryCompanyInfo.size(), 1, "Verifying subsidiary company");
     }
 
-    @Test(groups = {REGRESSION, UI, SEARCH_ENTITY}, dataProviderClass = DataProviderClass.class, dataProvider = "SubsidiaryCompanies")
+    @Test(groups = {REGRESSION, UI, SEARCH_ENTITY, ESG}, dataProviderClass = DataProviderClass.class, dataProvider = "SubsidiaryCompanies")
     @Xray(test = {11051, 11052, 11053, 11054, 11237, 11524})
     public void verifySubsidiaryCompanyNameInDashboard(String subsidiaryCompanyName, String parentCompanyName) {
 
@@ -97,7 +97,7 @@ public class SubsidiaryTests extends UITestBase {
 
     }
 
-    @Test(groups = {REGRESSION, UI, SEARCH_ENTITY}, dataProviderClass = DataProviderClass.class, dataProvider = "InactiveSubsidiaryCompanyISIN")
+    @Test(groups = {REGRESSION, UI, SEARCH_ENTITY, ESG}, dataProviderClass = DataProviderClass.class, dataProvider = "InactiveSubsidiaryCompanyISIN")
     @Xray(test = {11058, 11242})
     public void VerifyFileUploadWithInactiveSubsidiaryCompany(String inactiveSubsidiaryCompany) {
         DashboardPage dashboardPage = new DashboardPage();
@@ -122,7 +122,7 @@ public class SubsidiaryTests extends UITestBase {
 
     }
 
-    @Test(groups = {REGRESSION, UI, SEARCH_ENTITY}, dataProviderClass = DataProviderClass.class, dataProvider = "InactiveSubsidiaryCompanies")
+    @Test(groups = {REGRESSION, UI, SEARCH_ENTITY, ESG}, dataProviderClass = DataProviderClass.class, dataProvider = "InactiveSubsidiaryCompanies")
     @Xray(test = {11059, 11242})
     public void searchWithInactiveSubsidiaryCompanyName(String subsidiaryCompanyName) {
 
@@ -138,7 +138,7 @@ public class SubsidiaryTests extends UITestBase {
 
     }
 
-    @Test(groups = {REGRESSION, UI}, dataProviderClass = DataProviderClass.class, dataProvider = "SubsidiaryCompanies")
+    @Test(groups = {REGRESSION, UI, ESG}, dataProviderClass = DataProviderClass.class, dataProvider = "SubsidiaryCompanies")
     @Xray(test = {11541})
     public void verifySubsidiaryCompanyInPortfolioManagement(String subsidiaryCompanyName, String parentCompanyName) {
         String portfolioName = "PortfolioWithSubsidiaryCompany1";
@@ -163,7 +163,7 @@ public class SubsidiaryTests extends UITestBase {
 
     }
 
-    @Test(groups = {REGRESSION, UI, SEARCH_ENTITY}, dataProviderClass = DataProviderClass.class, dataProvider = "SubsidiaryCompanies")
+    @Test(groups = {REGRESSION, UI, SEARCH_ENTITY, ESG}, dataProviderClass = DataProviderClass.class, dataProvider = "SubsidiaryCompanies")
     @Xray(test = {11529, 11237})
     public void verifySubsidiaryCompanyNameInPortfolioAnalysis(String subsidiaryCompanyName, String parentCompanyName) {
         ResearchLinePage researchLinePage = new ResearchLinePage();
@@ -202,7 +202,7 @@ public class SubsidiaryTests extends UITestBase {
 
     }
 
-    @Test(groups = {REGRESSION, UI, SEARCH_ENTITY}, dataProviderClass = DataProviderClass.class, dataProvider = "SubsidiaryCompanies")
+    @Test(groups = {REGRESSION, UI, SEARCH_ENTITY, ESG}, dataProviderClass = DataProviderClass.class, dataProvider = "SubsidiaryCompanies")
     @Xray(test = {11542, 11576})
     public void verifySubsidiaryLinkInEntityProfilePage(String subsidiaryCompanyName, String parentCompanyName) {
         DashboardPage dashboardPage = new DashboardPage();
@@ -227,7 +227,7 @@ public class SubsidiaryTests extends UITestBase {
         dashboardPage.pressESCKey();
     }
 
-    @Test(groups = {REGRESSION, UI, SEARCH_ENTITY}, dataProviderClass = DataProviderClass.class, dataProvider = "CompaniesWithNoSubsidiaryCompanies")
+    @Test(groups = {REGRESSION, UI, SEARCH_ENTITY, ESG}, dataProviderClass = DataProviderClass.class, dataProvider = "CompaniesWithNoSubsidiaryCompanies")
     @Xray(test = {11575})
     public void verifySubsidiaryLinkWhenNoSubsidiaryCompanies(String companyName) {
         DashboardPage dashboardPage = new DashboardPage();

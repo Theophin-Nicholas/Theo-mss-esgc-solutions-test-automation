@@ -24,57 +24,63 @@ public class BrowserUtils {
 
     /**
      * path to download folder - downloads all files here
+     *
      * @return path
      */
-    public static String downloadPath (){
-
+    public static String downloadPath() {
         String path = System.getProperty("user.dir") + File.separator + "src" +
                 File.separator + "test" + File.separator + "resources" + File.separator + "download";
 
         return path;
     }
+
     /**
      * path to upload folder - all upload files here
+     *
      * @return path
      */
-    public static String uploadPath (){
+    public static String uploadPath() {
 
         String path = System.getProperty("user.dir") + File.separator + "src" +
                 File.separator + "test" + File.separator + "resources" + File.separator + "upload";
 
         return path;
     }
+
     /**
      * path to downloaded template -ESGCA-317
+     *
      * @return path
      */
-    public static String templatePath (){
+    public static String templatePath() {
 
         String path = System.getProperty("user.dir") + File.separator + "src" +
                 File.separator + "test" + File.separator + "resources" + File.separator + "download"
                 + File.separator + ConfigurationReader.getProperty("downloadTemplateName");
-        System.out.println("Path "+path);
+        System.out.println("Path " + path);
         return path;
     }
 
     /**
      * path to expected portfolio template documents
+     *
      * @return path
      */
-    public static String expectedPortfolioTemplateDocumentPath (){
+    public static String expectedPortfolioTemplateDocumentPath() {
 
         String path = System.getProperty("user.dir") + File.separator + "src" +
                 File.separator + "test" + File.separator + "resources" + File.separator + "expected_portfolio_template"
                 + File.separator + "ESG portfolio import.csv";
-        System.out.println("Path "+path);
+        System.out.println("Path " + path);
         return path;
     }
 
     /**
      * path to export repository folder to get expected export documents
+     *
      * @return path
      */
-    public static String exportRepositoryPath (){
+    public static String exportRepositoryPath() {
 
         String path = System.getProperty("user.dir") + File.separator + "src" +
                 File.separator + "test" + File.separator + "resources" + File.separator + "export_document_repository";
@@ -84,13 +90,13 @@ public class BrowserUtils {
 
     /**
      * path to downloaded Export Data -ESGCA-2092
+     *
      * @return path
      */
-    public static String exportPath (String researchLine){
+    public static String exportPath(String researchLine) {
 
         File root = new File(downloadPath());
-        FilenameFilter beginsWithResearchLine = new FilenameFilter()
-        {
+        FilenameFilter beginsWithResearchLine = new FilenameFilter() {
             public boolean accept(File directory, String filename) {
                 return filename.startsWith(researchLine);
             }
@@ -98,18 +104,18 @@ public class BrowserUtils {
 
         File[] files = root.listFiles(beginsWithResearchLine);
 
-        return files[files.length-1].getAbsolutePath();
+        return files[files.length - 1].getAbsolutePath();
     }
 
     /**
      * path to expected export document
+     *
      * @return path
      */
-    public static String expectedExportDocumentPath (String researchLine){
+    public static String expectedExportDocumentPath(String researchLine) {
 
         File root = new File(exportRepositoryPath());
-        FilenameFilter beginsWithResearchLine = new FilenameFilter()
-        {
+        FilenameFilter beginsWithResearchLine = new FilenameFilter() {
             public boolean accept(File directory, String filename) {
                 return filename.startsWith(researchLine);
             }
@@ -117,7 +123,7 @@ public class BrowserUtils {
 
         File[] files = root.listFiles(beginsWithResearchLine);
 
-        return files[files.length-1].getAbsolutePath();
+        return files[files.length - 1].getAbsolutePath();
     }
 
 
@@ -141,7 +147,6 @@ public class BrowserUtils {
      * @param timeOutInSeconds
      */
     public static void waitForPageToLoad(long timeOutInSeconds) {
-        Driver Driver = new Driver();
         ExpectedCondition<Boolean> expectation = driver -> ((JavascriptExecutor) driver).executeScript("return document.readyState").equals("complete");
         try {
             WebDriverWait wait = new WebDriverWait(Driver.getDriver(), Duration.ofSeconds(timeOutInSeconds));
@@ -159,27 +164,28 @@ public class BrowserUtils {
      * @return
      */
     public static WebElement waitForVisibility(WebElement element, int timeToWaitInSec) {
-        Driver Driver = new Driver();
         WebDriverWait wait = new WebDriverWait(Driver.getDriver(), Duration.ofSeconds(timeToWaitInSec));
         return wait.until(ExpectedConditions.visibilityOf(element));
     }
 
+    public static WebElement waitForVisibility(WebElement element) {
+        WebDriverWait wait = new WebDriverWait(Driver.getDriver(), Duration.ofSeconds(10));
+        return wait.until(ExpectedConditions.visibilityOf(element));
+    }
+
     public static boolean waitForInvisibility(WebElement element, int timeToWaitInSec) {
-        Driver Driver = new Driver();
         WebDriverWait wait = new WebDriverWait(Driver.getDriver(), Duration.ofSeconds(timeToWaitInSec));
         return wait.until(ExpectedConditions.invisibilityOf(element));
     }
 
     public static boolean waitForInvisibility(List<WebElement> elements, int timeToWaitInSec) {
-        Driver Driver = new Driver();
         WebDriverWait wait = new WebDriverWait(Driver.getDriver(), Duration.ofSeconds(timeToWaitInSec));
         return wait.until(ExpectedConditions.invisibilityOfAllElements(elements));
     }
 
     public static boolean isElementVisible(WebElement element, int timeToWaitInSec) {
-        Driver Driver = new Driver();
         WebDriverWait wait = new WebDriverWait(Driver.getDriver(), Duration.ofSeconds(timeToWaitInSec));
-        try{
+        try {
             return wait.until(ExpectedConditions.visibilityOf(element)).isDisplayed();
         } catch (Exception e) {
             return false;
@@ -195,10 +201,15 @@ public class BrowserUtils {
      * @return
      */
     public static WebElement waitForClickablility(WebElement element, int timeout) {
-        Driver Driver = new Driver();
         WebDriverWait wait = new WebDriverWait(Driver.getDriver(), Duration.ofSeconds(timeout));
         return wait.until(ExpectedConditions.elementToBeClickable(element));
     }
+
+    public static WebElement waitForClickability(WebElement element) {
+        WebDriverWait wait = new WebDriverWait(Driver.getDriver(), Duration.ofSeconds(10));
+        return wait.until(ExpectedConditions.elementToBeClickable(element));
+    }
+
 
     /**
      * Tries to click on the element every second until it is clicked
@@ -229,7 +240,6 @@ public class BrowserUtils {
      * @param time
      */
     public static void waitForPresenceOfElement(By by, long time) {
-        Driver Driver = new Driver();
         new WebDriverWait(Driver.getDriver(), Duration.ofSeconds(time)).until(ExpectedConditions.presenceOfElementLocated(by));
     }
 
@@ -285,7 +295,7 @@ public class BrowserUtils {
      * @return list of strings
      */
     public static List<String> getElementsText(By locator) {
-        Driver Driver = new Driver();
+
         List<WebElement> elems = Driver.getDriver().findElements(locator);
         List<String> elemTexts = new ArrayList<>();
 
@@ -303,7 +313,6 @@ public class BrowserUtils {
      * @param element
      */
     public static void clickWithJS(WebElement element) {
-        Driver Driver = new Driver();
         ((JavascriptExecutor) Driver.getDriver()).executeScript("arguments[0].scrollIntoView(true);", element);
         ((JavascriptExecutor) Driver.getDriver()).executeScript("arguments[0].click();", element);
     }
@@ -316,7 +325,6 @@ public class BrowserUtils {
      * @param attempts
      */
     public static void clickWithWait(By by, int attempts) {
-        Driver Driver = new Driver();
         int counter = 0;
         //click on element as many as you specified in attempts parameter
         while (counter < attempts) {
@@ -343,7 +351,6 @@ public class BrowserUtils {
      * @param element
      */
     public static void doubleClick(WebElement element) {
-        Driver Driver = new Driver();
         new Actions(Driver.getDriver()).doubleClick(element).build().perform();
     }
 
@@ -354,22 +361,20 @@ public class BrowserUtils {
      * @param element
      */
     public static WebElement scrollTo(WebElement element) {
-        Driver Driver = new Driver();
         ((JavascriptExecutor) Driver.getDriver()).executeScript("arguments[0].scrollIntoView({block: \"center\"});", element);
         return element;
     }
 
     public static void scrollToByPixel() {
-        Driver Driver = new Driver();
         ((JavascriptExecutor) Driver.getDriver()).executeScript("window.scrollBy(0,5)");
     }
+
     /**
      * Moves the mouse to given element
      *
      * @param element on which to hover
      */
     public static void hover(WebElement element) {
-        Driver Driver = new Driver();
         Actions actions = new Actions(Driver.getDriver());
         actions.moveToElement(element).pause(2000).build().perform();
     }
@@ -399,7 +404,6 @@ public class BrowserUtils {
      * @param title of the window to switch
      */
     public static void switchWindow(String title) {
-        Driver Driver = new Driver();
         Set<String> windowHandles = Driver.getDriver().getWindowHandles();
         for (String window : windowHandles) {
             Driver.getDriver().switchTo().window(window);
@@ -416,7 +420,6 @@ public class BrowserUtils {
      * @throws AssertionError if the element matching the provided locator is not found or not displayed
      */
     public static void verifyElementDisplayed(By by) {
-        Driver Driver = new Driver();
         try {
             Assert.assertTrue(Driver.getDriver().findElement(by).isDisplayed(), "Element not visible: " + by);
         } catch (NoSuchElementException e) {
@@ -433,7 +436,6 @@ public class BrowserUtils {
      * @throws AssertionError the element matching the provided locator is displayed
      */
     public static void verifyElementNotDisplayed(By by) {
-        Driver Driver = new Driver();
         try {
             Assert.assertFalse(Driver.getDriver().findElement(by).isDisplayed(), "Element should not be visible: " + by);
         } catch (NoSuchElementException e) {
@@ -463,8 +465,7 @@ public class BrowserUtils {
      * @param name
      * take a name of a test and returns a path to screenshot takes
      */
-    public static String getScreenshot(String name)  {
-        Driver Driver = new Driver();
+    public static String getScreenshot(String name) {
         // name the screenshot with the current date time to avoid duplicate name
         String date = new SimpleDateFormat("yyyyMMddhhmmss").format(new Date());
         // TakesScreenshot ---> interface from selenium which takes screenshots
@@ -487,26 +488,21 @@ public class BrowserUtils {
         wait(seconds);
     }
 
-    public static void ActionKeyPress(Keys key){
-        Driver Driver = new Driver();
+    public static void ActionKeyPress(Keys key) {
         Actions act = new Actions(Driver.getDriver());
         act.sendKeys(key).build().perform();
     }
 
     public static String getCurrentWindowHandle() {
-
-        Driver Driver = new Driver();
         return Driver.getDriver().getWindowHandle();
     }
 
     public static Set<String> getWindowHandles() {
-        Driver Driver = new Driver();
         Set<String> handles = Driver.getDriver().getWindowHandles();
         return handles;
     }
 
     public static void switchWindowsTo(String tab) {
-        Driver Driver = new Driver();
         Driver.getDriver().switchTo().window(tab);
     }
 
@@ -518,14 +514,14 @@ public class BrowserUtils {
         for (int end = iterator.next();
              end != BreakIterator.DONE;
              start = end, end = iterator.next()) {
-            if(text.substring(start,end).replaceAll("\\W","").length()>0){
-                sentences.add(text.substring(start,end));
+            if (text.substring(start, end).replaceAll("\\W", "").length() > 0) {
+                sentences.add(text.substring(start, end));
             }
         }
         return sentences;
     }
-    
-    public static String DataSourcePath (){
+
+    public static String DataSourcePath() {
 
         String path = System.getProperty("user.dir") + File.separator + "src" +
                 File.separator + "test" + File.separator + "resources" + File.separator + "DataSource";
@@ -536,10 +532,10 @@ public class BrowserUtils {
     public static Object[][] appendedArrays(Object[][] array1, Object[][] array2) {
         Object[][] ret = new Object[array1.length + array2.length][];
         int i = 0;
-        for (;i<array1.length;i++) {
+        for (; i < array1.length; i++) {
             ret[i] = array1[i];
         }
-        for (int j = 0;j<array2.length;j++) {
+        for (int j = 0; j < array2.length; j++) {
             ret[i++] = array2[j];
         }
         return ret;
@@ -556,10 +552,10 @@ public class BrowserUtils {
         }
         return true;
     }
+
     public static <T, U> List<U>
     convertStringListToIntList(List<T> listOfString,
-                               Function<T, U> function)
-    {
+                               Function<T, U> function) {
         return Lists.transform(listOfString, function);
     }
 
@@ -572,5 +568,49 @@ public class BrowserUtils {
             }
         });
         return list;
+    }
+
+    public static void clearCache() {
+        Driver.getDriver().manage().deleteAllCookies();
+    }
+
+    public static List<WebElement> getElementAsList(WebElement element) {
+        List<WebElement> list = new ArrayList<>();
+        list.add(element);
+        return list;
+    }
+
+    public static void deleteFilesInDownloadsFolder() {
+        File dir = new File(BrowserUtils.downloadPath());
+        File[] dir_contents = dir.listFiles();
+        if (dir_contents == null) {
+            System.out.println("No files in the directory");
+            return;
+        }
+        for (File file : dir_contents) {
+            file.delete();
+        }
+        System.out.println("All files in the directory are deleted");
+    }
+
+    public static boolean verifyFileDownloaded(String fileName) {
+        String extension = fileName.substring(fileName.lastIndexOf("."));
+        System.out.println("extension = " + extension);
+        fileName = fileName.substring(0, fileName.lastIndexOf("."));
+        File dir = new File(BrowserUtils.downloadPath());
+        File[] dir_contents = dir.listFiles();
+        if (dir_contents == null) {
+            System.out.println("No files in the directory");
+            return false;
+        }
+        System.out.println("Files in the directory are: " + Arrays.toString(dir_contents));
+        String finalFileName = fileName;
+        System.out.println("finalFileName = " + finalFileName);
+        return Arrays.stream(dir_contents).anyMatch(e -> ((e.getName().startsWith(finalFileName) || e.getName().contains(finalFileName)) &&
+                e.getName().endsWith(extension)));
+    }
+
+    public static void refresh() {
+        Driver.getDriver().navigate().refresh();
     }
 }

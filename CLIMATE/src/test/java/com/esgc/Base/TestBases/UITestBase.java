@@ -11,6 +11,7 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.testng.ITestResult;
 import org.testng.annotations.*;
 
+import java.lang.reflect.Method;
 import java.time.Duration;
 
 import static com.esgc.Utilities.Groups.*;
@@ -32,24 +33,13 @@ public abstract class UITestBase extends TestBase {
         }
 
         Driver.getDriver().manage().window().maximize();
-        Driver.getDriver().manage().timeouts().implicitlyWait(Duration.ofSeconds(80));
+        Driver.getDriver().manage().timeouts().implicitlyWait(Duration.ofSeconds(30));
 
-//        LoginPage loginPage = new LoginPage();
-//
-//        boolean isPampaTest = this.getClass().getName().contains("Pampa");
-//        boolean isEntitlementsTest = this.getClass().getName().contains("Bundle") || this.getClass().getName().contains("Entitlements");
-//        if (loginPage.isUsernameBoxDisplayed() || !loginPage.checkIfUserLoggedInSuccessfully()) {
-//            if (!isPampaTest && !isEntitlementsTest) {
-//                loginPage.login();
-//            }
-//        }
 
         isUITest = true;
 
         DatabaseDriver.createDBConnection();
-//        String getAccessTokenScript = "return JSON.parse(localStorage.getItem('okta-token-storage')).accessToken.accessToken";
-//        String accessToken = ((JavascriptExecutor) Driver.getDriver()).executeScript(getAccessTokenScript).toString();
-//        System.setProperty("token", accessToken);
+
     }
 
     @BeforeMethod(onlyForGroups = {ENTITLEMENTS}, groups = {SMOKE, REGRESSION, ENTITLEMENTS}, alwaysRun = true)
@@ -69,20 +59,25 @@ public abstract class UITestBase extends TestBase {
         Driver.getDriver().manage().window().maximize();
         Driver.getDriver().manage().timeouts().implicitlyWait(Duration.ofSeconds(30));
         isUITest = true;
+
+        if(!Driver.getDriver().getCurrentUrl().endsWith("login")){
+            LoginPage loginPage = new LoginPage();
+            loginPage.clickOnLogout();
+        }
     }
 
     @BeforeMethod(alwaysRun = true)
-    public synchronized void loginForTestsIfUserLoggedOut() {
+    public synchronized void loginForTestsIfUserLoggedOut(Method method) {
         boolean isPampaTest = this.getClass().getName().contains("Pampa");
-        boolean isEntitlementsTest = this.getClass().getName().contains("Bundle") || this.getClass().getName().contains("Entitlements");
+        boolean isEntitlementsTest = this.getClass().getName().toLowerCase().contains("bundle") || this.getClass().getName().toLowerCase().contains("entitlements") || method.getName().toLowerCase().contains("entitlements");
         LoginPage loginPage = new LoginPage();
-        if (Driver.getDriver().getCurrentUrl().endsWith("login")) {
+        if (Driver.getDriver().getCurrentUrl().endsWith("login") || Driver.getDriver().getCurrentUrl().endsWith("signin")) {
             if (!isPampaTest && !isEntitlementsTest) {
                 loginPage.login();
             }
         }
     }
-
+/*
     @BeforeMethod(onlyForGroups = {API}, groups = {SMOKE, REGRESSION, ENTITLEMENTS}, alwaysRun = true)
     public synchronized void setupForAPITesting(@Optional String browser) {
         BrowserUtils.wait(10);
@@ -90,24 +85,26 @@ public abstract class UITestBase extends TestBase {
         String accessToken = ((JavascriptExecutor) Driver.getDriver()).executeScript(getAccessTokenScript).toString();
         System.setProperty("token", accessToken);
     }
+    */
 
     @AfterMethod(onlyForGroups = {UI}, groups = {SMOKE, REGRESSION, UI})
     public void refreshPageToContinueUITesting(ITestResult result) {
         getScreenshot(result);
-        //Driver.getDriver().navigate().refresh();
-       Driver.closeDriver();
-       // Driver.close();
+        Driver.getDriver().navigate().refresh();
     }
 
     @AfterMethod(onlyForGroups = {ENTITLEMENTS}, groups = {SMOKE, REGRESSION, ENTITLEMENTS})
     public synchronized void teardownBrowserAfterUITesting() {
-        Driver.closeDriver();
+        if (!Driver.getDriver().getCurrentUrl().endsWith("login") && !Driver.getDriver().getCurrentUrl().endsWith("signin")) {
+            LoginPage loginPage = new LoginPage();
+            loginPage.clickOnLogout();
+        }
     }
-/*
-   @AfterClass(alwaysRun = true)
-    public void closeDriverAfterAllTests() {
-      Driver.closeDriver();
-   }
-*/
+
+//    @BeforeClass(alwaysRun = true)
+//    public void deleteImportedPortfoliosAfterTest() {
+//        APIUtilities.deleteImportedPortfoliosAfterTest();
+//    }
+
 
 }

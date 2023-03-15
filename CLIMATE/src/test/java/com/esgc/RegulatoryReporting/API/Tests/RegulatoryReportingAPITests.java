@@ -1,6 +1,6 @@
 package com.esgc.RegulatoryReporting.API.Tests;
 
-import com.esgc.Base.TestBases.UITestBase;
+import com.esgc.Base.TestBases.APITestBase;
 import com.esgc.Base.UI.Pages.LoginPage;
 import com.esgc.Dashboard.API.Controllers.DashboardAPIController;
 import com.esgc.Dashboard.UI.Pages.DashboardPage;
@@ -8,21 +8,22 @@ import com.esgc.RegulatoryReporting.API.APIModels.PortfolioDetails;
 import com.esgc.RegulatoryReporting.API.Controllers.RegulatoryReportingAPIController;
 import com.esgc.RegulatoryReporting.UI.Pages.RegulatoryReportingPage;
 import com.esgc.Utilities.BrowserUtils;
-import com.esgc.Utilities.Driver;
+import com.esgc.Utilities.DateTimeUtilities;
 import com.esgc.Utilities.EntitlementsBundles;
 import com.esgc.Utilities.Xray;
-import io.restassured.path.json.JsonPath;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebElement;
+import io.restassured.http.ContentType;
+import io.restassured.response.Response;
 import org.testng.annotations.Test;
 
-import java.util.*;
-//import java.util.function.Function;
-//import com.google.common.collect.Lists;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static com.esgc.Utilities.Groups.*;
+import static org.hamcrest.Matchers.equalTo;
 
-public class RegulatoryReportingAPITests extends UITestBase {
+public class RegulatoryReportingAPITests extends APITestBase {
 
 
     @Test(groups = {REGRESSION, REGULATORY_REPORTING, API}, description = "Data Validation| MT | Regulatory Reporting | Validate Portfolio list and portfolio-details")
@@ -37,15 +38,11 @@ public class RegulatoryReportingAPITests extends UITestBase {
         List<String> expectedPortfoliosList = BrowserUtils.getElementsText(dashboardPage.portfolioNameList);
         dashboardPage.navigateToPageFromMenu("Regulatory Reporting");
         List<String> actualPortfoliosList = reportingPage.getPortfolioList();
-      assertTestCase.assertTrue(expectedPortfoliosList.containsAll(actualPortfoliosList), "Regulatory Reporting Page - Portfolio list is verified");
-
-        reportingPage.selectPortfolioOptionByIndex2(0);
-        reportingPage.selectPortfolioOptionByIndex(2);
         assertTestCase.assertTrue(expectedPortfoliosList.containsAll(actualPortfoliosList), "Regulatory Reporting Page - Portfolio list is verified");
 
         //Select a portfolio and validate the reporting for column is listed with year option dropdown.
         // The oldest available option should be 2019 and should not list any year before that
-        //reportingPage.selectPortfolioOptionByIndex(2);
+        reportingPage.selectPortfolioOptionByIndex(1);
         assertTestCase.assertTrue(reportingPage.reportingForListButtons.get(0).isEnabled(), "Reporting year dropdown is enabled");
         BrowserUtils.wait(2);
         reportingPage.reportingForList.get(0).click();
@@ -54,6 +51,7 @@ public class RegulatoryReportingAPITests extends UITestBase {
         assertTestCase.assertTrue(dropDownOptions.contains("2019"), "Reporting for option oldest year is 2019 is verified");
         assertTestCase.assertFalse(dropDownOptions.contains("2018"), "Reporting for option oldest year is 2019 is verified");
         reportingPage.reportingForDropdownOptionsList.get(0).click();
+        getExistingUsersAccessTokenFromUI();
         RegulatoryReportingAPIController apiController = new RegulatoryReportingAPIController();
         List<String> apiPortfoliosList = apiController.getPortfolioNames();
         //sort the list
@@ -67,8 +65,7 @@ public class RegulatoryReportingAPITests extends UITestBase {
         }
     }
 
-    //TODO should be in API package
-    @Test(groups = {"regression", "regulatoryReporting", "api"})
+    @Test(groups = {REGRESSION, REGULATORY_REPORTING, API})
     @Xray(test = {11681})
     public void verifyDownloadHistory() {
         RegulatoryReportingAPIController apiController = new RegulatoryReportingAPIController();
@@ -77,17 +74,13 @@ public class RegulatoryReportingAPITests extends UITestBase {
 
     }
 
-    @Test(groups = {"regression", "regulatoryReporting", "api"})
+    @Test(groups = {REGRESSION, REGULATORY_REPORTING, API, ENTITLEMENTS})
     @Xray(test = {11681})
     public void verifyDownloadHistoryWhenNoDownloadReports() {
         LoginPage login = new LoginPage();
-        login.clickOnLogout();
         login.entitlementsLogin(EntitlementsBundles.NO_PREVIOUSLY_DOWNLOADED_REGULATORY_REPORTS);
-        BrowserUtils.wait(10);
-
-        String getAccessTokenScript = "return JSON.parse(localStorage.getItem('okta-token-storage')).accessToken.accessToken";
-        String accessToken = ((JavascriptExecutor) Driver.getDriver()).executeScript(getAccessTokenScript).toString();
-        System.setProperty("token", accessToken);
+        BrowserUtils.wait(20);
+        getExistingUsersAccessTokenFromUI();
 
         RegulatoryReportingAPIController apiController = new RegulatoryReportingAPIController();
         List<String> apiReportsList1 = apiController.getDownloadHistory().jsonPath().getList("report_name");
@@ -102,14 +95,15 @@ public class RegulatoryReportingAPITests extends UITestBase {
         DashboardPage dashboardPage = new DashboardPage();
         dashboardPage.navigateToPageFromMenu("Regulatory Reporting");
         test.info("Navigated to Regulatory Reporting Page");
+        getExistingUsersAccessTokenFromUI();
         RegulatoryReportingAPIController apiController = new RegulatoryReportingAPIController();
         PortfolioDetails[] apiResponse = apiController.getPortfolioDetails().as(PortfolioDetails[].class);
         for (PortfolioDetails portfolio : apiResponse) {
             String portfolioName = portfolio.getPortfolio_name();
             int index = reportingPage.selectPortfolioOptionByName(portfolioName);
             List<Integer> UIYears = BrowserUtils.convertStringListToIntList(reportingPage.getReportingFor_YearList(portfolioName, index), Integer::parseInt);
-            if (BrowserUtils.convertStringListToIntList(portfolio.getReporting_years(), Integer::parseInt).stream().min(Integer::compare).get() < 2019) {
-                assertTestCase.assertTrue(UIYears.stream().min(Integer::compare).get() > 2018, "Validating that years are not showing less than 2019");
+            if (portfolio.getReporting_years().size() > 0 && BrowserUtils.convertStringListToIntList(portfolio.getReporting_years(), Integer::parseInt).stream().min(Integer::compare).get() < 2019) {
+                assertTestCase.assertTrue(UIYears.stream().min(Integer::compare).get() > 2018, "Validating that years are not showing less tyhan 2019");
             }
             reportingPage.deSelectPortfolioOptionByName(portfolioName);
         }
@@ -129,9 +123,11 @@ public class RegulatoryReportingAPITests extends UITestBase {
                 portfolioNumbers.put(portfolioName, 1);
             }
         }
-        portfolioNumbers.forEach((key, value) -> {if (value > 1) System.out.println(key+" = "+value);});
+        portfolioNumbers.forEach((key, value) -> {
+            if (value > 1) System.out.println(key + " = " + value);
+        });
         for (String portfolioName : portfolioNumbers.keySet()) {
-            for(int i = 1; i < portfolioNumbers.get(portfolioName); i++) {
+            for (int i = 1; i < portfolioNumbers.get(portfolioName); i++) {
                 apiController.deletePortfolio(apiController.getPortfolioId(portfolioName));
             }
         }
@@ -160,5 +156,133 @@ public class RegulatoryReportingAPITests extends UITestBase {
 
 
     }
+
+    @Test(groups = {REGRESSION, REGULATORY_REPORTING, API}, description = "Data Validation| MT | Regulatory Reporting | Verify API Response with Valid Parameters")
+    @Xray(test = {11408})
+    public void VerifyAPIsResponseWithValidParameters() {
+
+        RegulatoryReportingAPIController apiController = new RegulatoryReportingAPIController();
+
+        List<PortfolioDetails> portfolio = Arrays.asList(apiController.getPortfolioDetails().as(PortfolioDetails[].class));
+        String portfolioId = portfolio.stream().filter(i -> !(i.getPortfolio_name().contains("Sample"))).findFirst().get().getPortfolio_id();
+        Response response = apiController.getAysncGenerationAPIReposnse(portfolioId, DateTimeUtilities.getCurrentYear(), "Valid");
+        response.prettyPrint();
+        response.then().assertThat()
+                .statusCode(200)
+                .contentType(ContentType.JSON);
+        String reqID = response.jsonPath().getString("request_id");
+        System.out.println(reqID);
+
+        Response statusAPIResponse = apiController.getStatusAPIReposnse(reqID, "Valid");
+        statusAPIResponse.prettyPrint();
+        statusAPIResponse.then().assertThat()
+                .statusCode(200)
+                .contentType(ContentType.JSON);
+
+        //Wait until report is generated in db
+        for (int i = 0; i < 5; i++) {
+            BrowserUtils.wait(50);
+            statusAPIResponse = apiController.getStatusAPIReposnse(reqID, "Valid");
+            String status = statusAPIResponse.jsonPath().get("[0].request_status");
+            if(!status.equalsIgnoreCase("pending")) break;
+        }
+
+        Response DownloadAPIResponse = apiController.getDownload(reqID, "Valid");
+        DownloadAPIResponse.prettyPrint();
+        DownloadAPIResponse.then().assertThat()
+                .statusCode(200)
+                .contentType(ContentType.JSON);
+
+    }
+
+    @Test(groups = {REGRESSION, REGULATORY_REPORTING, API}, description = "Data Validation| MT | Regulatory Reporting | Verify API Response with InValid Parameters")
+    @Xray(test = {11411})
+    public void VerifyAPIsResponseWithInvalidParameters() {
+        RegulatoryReportingAPIController apiController = new RegulatoryReportingAPIController();
+        Response response = apiController.getAysncGenerationAPIReposnse("", DateTimeUtilities.getCurrentYear(), "Invalid");
+        response.prettyPrint();
+        response.then().assertThat()
+                .statusCode(400)
+                .contentType(ContentType.JSON)
+                .body("errorType", equalTo("ValueError"))
+                .body("errorMessage", equalTo("Request Invalid. "));
+
+        Response statusAPIResponse = apiController.getStatusAPIReposnse("", "Invalid");
+        statusAPIResponse.prettyPrint();
+        statusAPIResponse.then().assertThat()
+                .statusCode(400)
+                .contentType(ContentType.JSON)
+                .body("errorType", equalTo("ValueError"))
+                .body("errorMessage", equalTo("Request Invalid. "));
+
+        Response DownloadAPIResponse = apiController.getDownload("", "Invalid");
+        DownloadAPIResponse.prettyPrint();
+        DownloadAPIResponse.then().assertThat()
+                .statusCode(400)
+                .contentType(ContentType.JSON)
+                .body("errorType", equalTo("ValueError"))
+                .body("errorMessage", equalTo("Request Invalid. "));
+    }
+
+    @Test(groups = {REGRESSION, REGULATORY_REPORTING, API}, description = "Data Validation| MT | Regulatory Reporting | Verify API Response with InValid Token")
+    @Xray(test = {11412})
+    public void VerifyAPIsResponseWithinvalidToken() {
+        RegulatoryReportingAPIController apiController = new RegulatoryReportingAPIController();
+        apiController.setInvalid();
+        Response response = apiController.getAysncGenerationAPIReposnse("123456", DateTimeUtilities.getCurrentYear(), "Valid");
+        response.prettyPrint();
+        response.then().assertThat()
+                .statusCode(401)
+                .contentType(ContentType.JSON)
+                .body("message", equalTo("Forbidden"));
+
+        Response statusAPIResponse = apiController.getStatusAPIReposnse("11111", "Valid");
+        statusAPIResponse.prettyPrint();
+        statusAPIResponse.then().assertThat()
+                .statusCode(401)
+                .contentType(ContentType.JSON)
+                .body("message", equalTo("Forbidden"));
+
+        Response DownloadAPIResponse = apiController.getDownload("11111", "Valid");
+        DownloadAPIResponse.prettyPrint();
+        DownloadAPIResponse.then().assertThat()
+                .statusCode(401)
+                .contentType(ContentType.JSON)
+                .body("message", equalTo("Forbidden"));
+    }
+
+    //TODO : Need to check with dev team to revise Status code and error messange in this method
+    @Test(groups = {REGRESSION, REGULATORY_REPORTING, API}, description = "Data Validation| MT | Regulatory Reporting | Verify API Response in case of Different User's Portfolios and Request Ids")
+    @Xray(test = {11424})
+    public void VerifyAPIsResponseWithDifferentUserPortfolioAndRequestID() {
+
+        RegulatoryReportingAPIController apiController = new RegulatoryReportingAPIController();
+        String portfolioId = "0ba40cc2-4268-449d-91cc-98d1ae67a9e9";
+        Response response = apiController.getAysncGenerationAPIReposnse(portfolioId, DateTimeUtilities.getCurrentYear(), "Valid");
+        response.prettyPrint();
+        response.then().assertThat()
+                .statusCode(403)
+                .contentType(ContentType.JSON);
+        //.body("message", equalTo("Forbidden"));
+        String reqID = "r-7d901735-839a-449e-abb9-68ee7587c2a5";
+        System.out.println(reqID);
+
+        Response statusAPIResponse = apiController.getStatusAPIReposnse(reqID, "Valid");
+        statusAPIResponse.prettyPrint();
+        statusAPIResponse.then().assertThat()
+                .statusCode(401)
+                .contentType(ContentType.JSON);
+        //.body("message", equalTo("Forbidden"))
+
+        Response DownloadAPIResponse = apiController.getDownload(reqID, "Valid");
+        DownloadAPIResponse.prettyPrint();
+        DownloadAPIResponse.then().assertThat()
+                .statusCode(500)
+                .contentType(ContentType.JSON);
+        //.body("message", equalTo("Forbidden"));
+
+    }
+
+
 }
 

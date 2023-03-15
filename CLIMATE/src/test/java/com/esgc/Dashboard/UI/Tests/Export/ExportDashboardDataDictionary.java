@@ -117,7 +117,7 @@ public class ExportDashboardDataDictionary extends DashboardUITestBase {
         dashboardPage.deleteDownloadFolder();
     }
 
-    @Test(groups = {DASHBOARD, REGRESSION, UI})
+    @Test(groups = {DASHBOARD, REGRESSION, UI, ESG})
     @Xray(test = {9787, 9789})
     public void verifyESGInfoInExcelWhenNoESGEntitlement_Bundle() {
         LoginPage login = new LoginPage();

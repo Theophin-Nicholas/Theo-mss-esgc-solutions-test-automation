@@ -95,7 +95,7 @@ public class PhysicalRiskHazardsTests extends UITestBase {
         researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
         researchLinePage.selectResearchLineFromDropdown("Physical Risk Hazards");
 
-        BrowserUtils.wait(10);
+        researchLinePage.waitForDataLoadCompletion();
 
         assertTestCase.assertTrue(researchLinePage.verifyPhysicalRiskHazardsDrawers("Market Risk", "Country of Sales"), "Market Risk:Country of Sales - Verify drawers");
         assertTestCase.assertTrue(researchLinePage.verifyPhysicalRiskHazardsDrawers("Market Risk", "Weather Sensitivity"), "Market Risk:Weather Sensitivity - Verify drawers");

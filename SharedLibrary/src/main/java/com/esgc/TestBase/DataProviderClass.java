@@ -1,6 +1,5 @@
 package com.esgc.TestBase;
 
-import com.esgc.Utilities.ConfigurationReader;
 import com.esgc.Utilities.EntitlementsBundles;
 import com.esgc.Utilities.Environment;
 import org.testng.annotations.DataProvider;

@@ -11,7 +11,10 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.testng.annotations.Test;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.esgc.Utilities.Groups.*;
@@ -31,29 +34,21 @@ public class PerformanceChart extends DashboardUITestBase {
         test.info("Check if Performance Charts are Displayed");
 
         BrowserUtils.scrollTo(dashboardPage.performanceChart);
+        //TODO remove Overall ESG Score after March release
+        List<String> expectedColumnNames = Arrays.asList("Company", "% Investment", "Total Critical Controversies",
+                "Highest Risk Hazard", "Facilities Exposed to High Risk/Red Flag",
+                "Physical Risk Management", "Temperature Alignment",
+                "Carbon Footprint (tCO2eq)", "Green Share Assessment", "Brown Share Assessment");
 
-        List<String> expectedColumnNames = new ArrayList<>();
-
-        //TODO: ESG Assessment is not available in Prod as of Jan 2023
-        if (Environment.environment.equalsIgnoreCase("qa") || Environment.environment.equalsIgnoreCase("uat")) {
-            expectedColumnNames = Arrays.asList("Company", "% Investment", "Overall ESG Score", "Total Critical Controversies",
-                    "Highest Risk Hazard", "Facilities Exposed to High Risk/Red Flag",
-                    "Physical Risk Management", "Temperature Alignment",
-                    "Carbon Footprint (tCO2eq)", "Green Share Assessment", "Brown Share Assessment");
-        } else {
-            expectedColumnNames = Arrays.asList("Company", "% Investment", "Total Critical Controversies",
-                    "Highest Risk Hazard", "Facilities Exposed to High Risk/Red Flag",
-                    "Physical Risk Management", "Temperature Alignment",
-                    "Carbon Footprint (tCO2eq)", "Green Share Assessment", "Brown Share Assessment");
-        }
-
+        if (Environment.environment.equalsIgnoreCase("uat"))
+            expectedColumnNames.add(2, "Overall ESG Score");
 
         dashboardPage.clickAndSelectAPerformanceChart("Leaders");
 
         List<String> actualColumnNames = dashboardPage.getPerformanceChartColumnNames();
         int sizeOfTable = dashboardPage.getPerformanceChartRowCount();
-        double actualTotalInvestment = PortfolioUtilities.round(dashboardPage.calculateTotalInvestmentFromPerformanceChart(),1);
-        double expectedTotalInvestment = PortfolioUtilities.round(dashboardPage.getTotalInvestmentInPerformanceChart(),1);
+        double actualTotalInvestment = PortfolioUtilities.round(dashboardPage.calculateTotalInvestmentFromPerformanceChart(), 1);
+        double expectedTotalInvestment = PortfolioUtilities.round(dashboardPage.getTotalInvestmentInPerformanceChart(), 1);
         System.out.println("actualColumnNames = " + actualColumnNames);
         System.out.println("expectedColumnNames = " + expectedColumnNames);
         test.info("Switched to Leaders");
@@ -67,8 +62,8 @@ public class PerformanceChart extends DashboardUITestBase {
 
         actualColumnNames = dashboardPage.getPerformanceChartColumnNames();
         sizeOfTable = dashboardPage.getPerformanceChartRowCount();
-        actualTotalInvestment = PortfolioUtilities.round(dashboardPage.calculateTotalInvestmentFromPerformanceChart(),1);
-        expectedTotalInvestment = PortfolioUtilities.round(dashboardPage.getTotalInvestmentInPerformanceChart(),1);
+        actualTotalInvestment = PortfolioUtilities.round(dashboardPage.calculateTotalInvestmentFromPerformanceChart(), 1);
+        expectedTotalInvestment = PortfolioUtilities.round(dashboardPage.getTotalInvestmentInPerformanceChart(), 1);
 
         test.info("Switched to Laggards");
         assertTestCase.assertTrue(sizeOfTable <= 10, "max 10 companies are listed");
@@ -79,7 +74,7 @@ public class PerformanceChart extends DashboardUITestBase {
 
         actualColumnNames = dashboardPage.getPerformanceChartColumnNames();
         sizeOfTable = dashboardPage.getPerformanceChartRowCount();
-        actualTotalInvestment = PortfolioUtilities.round(dashboardPage.calculateTotalInvestmentFromPerformanceChart(),1);
+        actualTotalInvestment = PortfolioUtilities.round(dashboardPage.calculateTotalInvestmentFromPerformanceChart(), 1);
         expectedTotalInvestment = PortfolioUtilities.round(dashboardPage.getTotalInvestmentInPerformanceChart(), 1);
 
         test.info("Switched to Largest Holdings");
@@ -144,18 +139,23 @@ public class PerformanceChart extends DashboardUITestBase {
                 sortedCategories = sortedCategories.stream().map(e -> e.substring(0, e.indexOf("\n"))).collect(Collectors.toList());
             ;
 
-          if (header.equals("Brown Share Assessment"))
-              sortedCategories = sortedCategories.stream().map(s-> {
-                  switch (s){
-                      case "0-10%" : return "5%" ;
-                      case "10-20%" : return "15%";
-                      case "20-33%" : return "26.5%";
-                      case "33-50%" : return "41.5%";
-                      case ">=50%" : return "75%" ;
-                      default : return s;
-                  }
-              }).collect(Collectors.toList());
-
+            if (header.equals("Brown Share Assessment"))
+                sortedCategories = sortedCategories.stream().map(s -> {
+                    switch (s) {
+                        case "0-10%":
+                            return "5%";
+                        case "10-20%":
+                            return "15%";
+                        case "20-33%":
+                            return "26.5%";
+                        case "33-50%":
+                            return "41.5%";
+                        case ">=50%":
+                            return "75%";
+                        default:
+                            return s;
+                    }
+                }).collect(Collectors.toList());
 
 
             System.out.println("Leaders sortedCategories = " + sortedCategories);

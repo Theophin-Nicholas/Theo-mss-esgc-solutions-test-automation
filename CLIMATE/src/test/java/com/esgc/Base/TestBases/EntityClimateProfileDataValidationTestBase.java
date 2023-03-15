@@ -3,7 +3,6 @@ package com.esgc.Base.TestBases;
 import com.esgc.EntityProfile.API.Controllers.EntityProfileClimatePageAPIController;
 import com.esgc.EntityProfile.DB.DBQueries.EntityClimateProfilePageQueries;
 import com.esgc.Utilities.DataValidationUtilities;
-import com.esgc.Utilities.Database.DatabaseDriver;
 import com.esgc.Utilities.PortfolioUtilities;
 import org.testng.annotations.BeforeClass;
 
@@ -17,7 +16,6 @@ public abstract class EntityClimateProfileDataValidationTestBase extends TestBas
     @BeforeClass(alwaysRun = true)
     public void setupMethodForClimateProfileDataValidation(){
         getAccessTokenDataValidation();
-        DatabaseDriver.createDBConnection();
     }
 
 }

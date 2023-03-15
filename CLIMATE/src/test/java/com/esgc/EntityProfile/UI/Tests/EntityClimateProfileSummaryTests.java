@@ -749,10 +749,6 @@ public class EntityClimateProfileSummaryTests extends UITestBase {
             dataProviderClass = DataProviderClass.class, dataProvider = "orbisIDWithoutTempAlignment")
     @Xray(test = {7724, 7725, 7904, 10772})
     public void verifyNoDisplayMessageForNoData(String Entity) {
-        LoginPage loginPage = new LoginPage();
-        if(loginPage.loginButtons.size()>0) {
-            loginPage.login();
-        }
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio Analysis page");
         BrowserUtils.wait(2);
@@ -1027,7 +1023,7 @@ public class EntityClimateProfileSummaryTests extends UITestBase {
 
 
     @Test(groups = {REGRESSION, UI}, dataProviderClass = DataProviderClass.class, dataProvider = "Entity")
-    @Xray(test = {7089, 7091, 7092, 7093})
+    @Xray(test = {7089, 7091, 7092, 7093, 7095})
     public void verifyPhysicalRiskDropDownMenusTest(String Entity) {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio Analysis page");

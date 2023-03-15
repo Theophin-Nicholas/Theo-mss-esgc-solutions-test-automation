@@ -19,7 +19,7 @@ import java.util.List;
 import static com.esgc.Utilities.Groups.*;
 
 public class PortfolioMonitoringControversiesTests extends DataValidationTestBase {
-
+//TODO check queries
     @Test(groups = {REGRESSION, DATA_VALIDATION, DASHBOARD})
     @Xray(test = 4060)
     public void verifyControversiesOrder() throws ParseException {

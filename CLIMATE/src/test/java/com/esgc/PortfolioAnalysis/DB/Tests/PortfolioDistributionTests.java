@@ -22,8 +22,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static com.esgc.Utilities.Groups.DATA_VALIDATION;
-import static com.esgc.Utilities.Groups.REGRESSION;
+import static com.esgc.Utilities.Groups.*;
 
 public class PortfolioDistributionTests extends DataValidationTestBase {
 
@@ -146,7 +145,7 @@ public class PortfolioDistributionTests extends DataValidationTestBase {
 
     }
 
-    @Test(groups = {REGRESSION, DATA_VALIDATION})
+    @Test(groups = {REGRESSION, DATA_VALIDATION, ESG})
     @Xray(test = {8727})
     public void verifyESGDistribution() {
         String sector = "all";
@@ -249,10 +248,10 @@ public class PortfolioDistributionTests extends DataValidationTestBase {
                         {"all", "AMER", "Carbon Footprint", "04", "2021"},
                         {"all", "EMEA", "Carbon Footprint", "04", "2021"},
                         {"all", "all", "Carbon Footprint", "04", "2021"},*/
-                        {"all", "APAC", "Carbon Footprint", "12", "2020"},
-                        {"all", "AMER", "Carbon Footprint", "12", "2020"},
-                        {"all", "EMEA", "Carbon Footprint", "12", "2020"},
-                        {"all", "all", "Carbon Footprint", "12", "2020"},
+                        {"all", "APAC", "Carbon Footprint", "12", "2021"},
+                        {"all", "AMER", "Carbon Footprint", "12", "2021"},
+                        {"all", "EMEA", "Carbon Footprint", "12", "2021"},
+                        {"all", "all", "Carbon Footprint", "12", "2021"},
 //                        {"all", "APAC", "Energy Transition Management", "03", "2021"},
 //                        {"all", "AMER", "Energy Transition Management", "03", "2021"},
 //                        {"all", "EMEA", "Energy Transition Management", "03", "2021"},

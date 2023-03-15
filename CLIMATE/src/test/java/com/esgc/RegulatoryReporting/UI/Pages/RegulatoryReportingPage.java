@@ -2,7 +2,6 @@ package com.esgc.RegulatoryReporting.UI.Pages;
 
 import com.esgc.Base.UI.Pages.UploadPage;
 import com.esgc.RegulatoryReporting.API.Controllers.RegulatoryReportingAPIController;
-import com.esgc.Utilities.*;
 import com.esgc.RegulatoryReporting.DB.DBQueries.RegulatoryReportingQueries;
 import com.esgc.Utilities.*;
 import org.apache.commons.lang3.math.NumberUtils;
@@ -35,10 +34,11 @@ public class RegulatoryReportingPage extends UploadPage {
     @FindBy(xpath = "//div[.='Reporting']")
     public WebElement reportingSubtitle;
 
-    @FindBy(xpath = "//div[.='Reporting']/following-sibling::div//span[2]")
+    //TODO after march release, update them to 'Select Action'
+    @FindBy(xpath = "//div[.='Select Reporting']/..//span[2]")
     public List<WebElement> reportingNamesList;
 
-    @FindBy(xpath = "//div[.='Reporting']/following-sibling::div//input")
+    @FindBy(xpath = "//div[.='Select Reporting']/..//input")
     public List<WebElement> reportingRadioButtonList;
 
     @FindBy(xpath = "//div[.='Select Portfolios']/../div[2]/following-sibling::div/div[1]//span[2]")
@@ -47,6 +47,8 @@ public class RegulatoryReportingPage extends UploadPage {
     @FindBy(xpath = "//div[.='Select Portfolios']/../div[2]/following-sibling::div/div[1]//input")
     public List<WebElement> portfolioRadioButtonList;
 
+    @FindBy(xpath = "//div[.='Select Portfolios']/../div[2]/following-sibling::div/div[1]//input[not(@disabled)]")
+    public List<WebElement> activePortfolioRadioButtonList;
 
     @FindBy(xpath = "//div[.='Reporting for']/../following-sibling::div/div[2]/span")
     public List<WebElement> lastUploadedList;
@@ -125,11 +127,23 @@ public class RegulatoryReportingPage extends UploadPage {
     @FindBy(xpath = "//fieldset[@id='eu_taxonomy']")
     public WebElement EUTaxonomy;
 
-    @FindBy (xpath="//*[@id=\"sfdr\"]/label/span[2]/span")
-    public WebElement sfdrButton;
+    @FindBy(xpath = "//fieldset[@id='sfdr']")
+    public WebElement SFDRPAIs;
 
-    @FindBy(xpath = "//*[@id=\"interim\"]/label/span[2]/span")
-    public WebElement interimReportButton;
+    @FindBy(xpath = "//*[text()='Select Portfolios']/following-sibling::div[1]//*[text()]")
+    public List<WebElement> tableHeaders;
+
+    @FindBy(xpath = "//label[.//input[@disabled and @type='radio']]//span[2]")
+    public List<WebElement> deactivatedOptions;
+
+    public boolean isRegulatoryReportingOptionIsAvailableInSidePanel() {
+        try {
+            return BrowserUtils.waitForVisibility(regulatoryReporting, 10).isDisplayed();
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
     public List<WebElement> getEUTaxonomyInputBox(String portfolio) {
         return Driver.getDriver().findElements(By.xpath("//div[.='Select Portfolios']/..//span[contains(text(),'" + portfolio + "')]/../../../../../div[4]/div"));
     }
@@ -139,51 +153,77 @@ public class RegulatoryReportingPage extends UploadPage {
 
     // this methods returns is the create report button is enabled or not
     //
- public void clickOninterimReportButton(){
-     interimReportButton.click();
- }
-    public void clickOnSfdrButton(){
-         sfdrButton.click();
-    }
+
     public boolean isCreateReportsButtonEnabled(){
 
         return createReportsButton.isEnabled();
     }
 
-    public void clickOnCreateReportsButton(){
-        createReportsButton.click();
+    /*
+        public void clickOninterimReportButton(){
+            interimReportButton.click();
+        }
+        public void clickOnSfdrButton(){
+            sfdrButton.click();
+        }
+*/
+
+    public void clickOnEUTaxonomyOption() {
+        BrowserUtils.waitForClickability(EUTaxonomy).click();
     }
 
-    public void clickOnEUTaxonomy(){
+    public void clickOnSFDRPAIsOption() {
+        BrowserUtils.waitForClickability(SFDRPAIs).click();
+    }
+
+    public void navigateToReportingService(String reportingService) {
+        navigateToPageFromMenu("Regulatory Reporting");
+        if (reportingService.contains("SFDR")) {
+            clickOnEUTaxonomyOption();
+        }
+        if (reportingService.contains("EU")) {
+            clickOnSFDRPAIsOption();
+        }
+    }
+
+    public void clickOnEUTaxonomy() {
         EUTaxonomy.click();
     }
 
     //
-    public void isCreateReportsButtonClicked(){
+    public void isCreateReportsButtonClicked() {
 
         createReportsButton.click();
     }
 
+    public boolean isSFDROptionNotClickable() {
+        return deactivatedOptions.stream().anyMatch(e -> e.getText().equals("SFDR PAIs"));
+    }
+
+    public boolean isEUTaxonomyOptionNotClickable() {
+        return deactivatedOptions.stream().anyMatch(e -> e.getText().equals("EU Taxonomy"));
+    }
+
     //
-    public boolean isUploadAnotherPortfolioLinkDisplayed(){
+    public boolean isUploadAnotherPortfolioLinkDisplayed() {
 
         return uploadAnotherPortfolioLink.isDisplayed();
 
     }
 
     //
-    public boolean isImportPortfolioPopUpDisplayed(){
+    public boolean isImportPortfolioPopUpDisplayed() {
         return importPortfolioPopUp.isDisplayed();
     }
 
 
     // this method get the text value of the create report button webelement
-    public String getCreateReportsButtonText(){
+    public String getCreateReportsButtonText() {
         return createReportsButton.getText();
     }
 
     // this method returns the text value of use latest data option webelement
-    public String getUseLatestDataOptionText(){
+    public String getUseLatestDataOptionText() {
 
         return useLatestDataOption.getText();
 
@@ -191,33 +231,33 @@ public class RegulatoryReportingPage extends UploadPage {
 
     //gets the string value of previously downloaded error message webelement
 
-    public String getPreviouslyDownloadedErrorMessageText(){
+    public String getPreviouslyDownloadedErrorMessageText() {
         return previouslyDownloadedErrorMessage.getText();
     }
 
     //
-    public boolean isUseLatestDataOptionSubtitleDisplayed(){
+    public boolean isUseLatestDataOptionSubtitleDisplayed() {
         return useLatestDataOptionSubtitle.isDisplayed();
     }
 
     //
-    public String getUseLatestDataOptionSubtitleText(){
+    public String getUseLatestDataOptionSubtitleText() {
         return useLatestDataOptionSubtitle.getText();
     }
 
     // this method checks if reporting options webelement is displayed or not
-    public boolean isReportingOptionsTitleDisplayed(){
+    public boolean isReportingOptionsTitleDisplayed() {
         return reportingOptionsTitle.isDisplayed();
     }
 
     // this method returns the string value of the webelement reporting options title
-    public String getReportingOptionsTitleText(){
+    public String getReportingOptionsTitleText() {
 
         return reportingOptionsTitle.getText();
     }
 
     // this method helps get the webelement pageTitle text value
-    public String getPageTitleText(){
+    public String getPageTitleText() {
 
         return pageTitle.getText();
     }
@@ -225,8 +265,7 @@ public class RegulatoryReportingPage extends UploadPage {
     //reportingTitle
     // this method helps get the reporting title webelement text value
 
-    public String getReportingTitleText(){
-        BrowserUtils.wait(5);
+    public String getReportingTitleText() {
 
         return reportingTitle.getText();
     }
@@ -234,7 +273,7 @@ public class RegulatoryReportingPage extends UploadPage {
     // reportingSubtitle
     // this method is used to get the text value of reporting subtitle webelement
 
-    public String getReportingSubtitleText(){
+    public String getReportingSubtitleText() {
         return reportingSubtitle.getText();
     }
 
@@ -250,17 +289,16 @@ public class RegulatoryReportingPage extends UploadPage {
 
 
     //
-    public String getInterimReportsOptionText(){
+    public String getInterimReportsOptionText() {
         return interimReportsOption.getText();
     }
     // annualReportsOption
     // this method verifies if the annual reports option is displayed
 
-    public boolean isAnnualReportsOptionEnabled(){
+    public boolean isAnnualReportsOptionEnabled() {
         try {
-            return  annualReportsOption.isEnabled();
-        }
-        catch(Exception e){
+            return annualReportsOption.isEnabled();
+        } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
@@ -269,43 +307,43 @@ public class RegulatoryReportingPage extends UploadPage {
 
     // useLatestDataOption
     //  this method verifies if the use Latest data option is displayed
-    public boolean isUseLatestDataOptionDisplayed(){
-        try{
+    public boolean isUseLatestDataOptionDisplayed() {
+        try {
             return useLatestDataOption.isDisplayed();
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
     }
 
     //
-    public boolean isInterimOptionSubtitleDisplayed(){
+    public boolean isInterimOptionSubtitleDisplayed() {
         return interimOptionSubtitle.isDisplayed();
     }
 
     // method that returns the string value of interim option subtitle webelement
-    public String getInterimOptionSubtitleText(){
+    public String getInterimOptionSubtitleText() {
         return interimOptionSubtitle.getText();
     }
 
     //
 
-    public boolean isAnnualReportsOptionDisplayed(){
+    public boolean isAnnualReportsOptionDisplayed() {
         return annualReportsOption.isDisplayed();
     }
 
     //
-    public String getAnnualReportsOptionText(){
+    public String getAnnualReportsOptionText() {
         return annualReportsOption.getText();
     }
 
     // method checks if annual option susbtitle is displayed or not
-    public boolean isAnnualOptionSubtitleDisplayed(){
+    public boolean isAnnualOptionSubtitleDisplayed() {
         return annualOptionSubtitle.isDisplayed();
     }
 
     // methods returns the string value of the annual option subtitle webelement
-    public String getAnnualOptionSubtitleText(){
+    public String getAnnualOptionSubtitleText() {
         return annualOptionSubtitle.getText();
     }
 
@@ -398,7 +436,7 @@ public class RegulatoryReportingPage extends UploadPage {
 
     //select reporting option by name
     public void selectReportingOptionByName(String name) {
-
+        //todo: add more flexibility to the method
         reportingRadioButtonList.get(getReportingList().indexOf(name)).click();
     }
 
@@ -473,6 +511,18 @@ public class RegulatoryReportingPage extends UploadPage {
             portfolioRadioButtonList.get(index).click();
         }
     }
+
+    public void selectActivePortfolioOptionByIndex(int index) {
+        if (portfolioRadioButtonList.get(index - 1).isSelected()) {
+            System.out.println("Portfolio option is already selected");
+        } else if (numberOfSelectedPortfolioOptions() == 4) {
+            System.out.println("You can select up to 4 portfolios. De-select one of the portfolios first");
+        } else {
+            System.out.println("Selecting portfolio option by index: " + index);
+            activePortfolioRadioButtonList.get(index - 1).click();
+        }
+    }
+
 
     //select portfolio option by name
     public int selectPortfolioOptionByName(String name) {
@@ -575,6 +625,10 @@ public class RegulatoryReportingPage extends UploadPage {
         if (!isUseLatestDataSelected()) {
             useLatestDataOption.click();
         }
+    }
+
+    public void clickOnUseLatestData() {
+        useLatestDataOption.click();
     }
 
     //deselect interim reports
@@ -877,10 +931,10 @@ public class RegulatoryReportingPage extends UploadPage {
         return excelUtil;
     }
 
-    public boolean verifyReportsContentForData(List<String> selectedPortfolios, int sheetIndex, String data) {
+    public boolean verifyReportsContentForData(List<String> selectedPortfolios, String sheetName, String data) {
         String excelName = rrStatusPage_PortfoliosList.get(0).getText().replaceAll("ready", "").trim();
-        System.out.println("Verifying reports content for sheet " + sheetIndex);
-        ExcelUtil excelData = getExcelData(excelName, sheetIndex);
+        System.out.println("Verifying reports content for sheet " + sheetName);
+        ExcelUtil excelData = getExcelData(excelName, sheetName);
         if (!excelData.searchData(data)) {
             System.out.println("Data " + data + " is not found in the excel");
         }
@@ -1054,7 +1108,6 @@ public class RegulatoryReportingPage extends UploadPage {
             excelData.addAll(BrowserUtils.splitToSentences(data));
         }
 
-
 //        excelData.forEach(System.out::println);
         List<String> templateData = new ArrayList<>();
         for (int i = 0; i < template.rowCount(); i++) {
@@ -1064,6 +1117,8 @@ public class RegulatoryReportingPage extends UploadPage {
                 //templateData.addAll(BrowserUtils.splitToSentences(template.getCellData(i, j)));
             }
         }
+
+       // templateData.set(0, templateData.get(0).replace("© 2022 Moody’s", "© " + Year.now() + " Moody’s"));
        // templateData.set(0, templateData.get(0).replace("© 2022 Moody's", "© " + Year.now() + " Moody's"));
 //        System.out.println("\n===================================\n");
 //        templateData.forEach(System.out::println);
@@ -1074,7 +1129,6 @@ public class RegulatoryReportingPage extends UploadPage {
             }
             System.out.println(sentence);
         }
-
         return true;
     }
 
@@ -1089,7 +1143,7 @@ public class RegulatoryReportingPage extends UploadPage {
     }
 
     public void verifyPreviouslyDownloadedScreen() {
-        BrowserUtils.waitForVisibility(previouslyDownloadedStaticLabel, 15);
+        BrowserUtils.waitForVisibility(previouslyDownloadedStaticLabel, 30);
         String recordCellsXpath = "//div[text()='Reports created previously:']/following-sibling::div/div/div";
         String strDate = Driver.getDriver().findElement(By.xpath(recordCellsXpath + "[1]")).getText();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -1107,7 +1161,8 @@ public class RegulatoryReportingPage extends UploadPage {
         assertTestCase.assertTrue(NumberUtils.isParsable(portfoliosSerialNumber), "Verify portfolios information in the third column");
     }
 
-    public void verifyFileDownloadFromPreviouslyDownloadedScreen() {
+    public void
+    verifyFileDownloadFromPreviouslyDownloadedScreen() {
         BrowserUtils.waitForVisibility(previouslyDownloadedStaticLabel, 30);
         String expFileName = recordFileName.getText();
 
@@ -1300,16 +1355,36 @@ public class RegulatoryReportingPage extends UploadPage {
     public boolean verifyPortfolioLevelOutput(List<String> selectedPortfolios, String reportingYear, String reportFormat, String useLatestData) {
         for (String portfolioName : selectedPortfolios) {
             RegulatoryReportingAPIController apiController = new RegulatoryReportingAPIController();
+            System.out.println("portfolioName = " + portfolioName);
             String portfolioId = apiController.getPortfolioId(portfolioName);
             RegulatoryReportingQueries queries = new RegulatoryReportingQueries();
             //open Excel file
-            String excelName = rrStatusPage_PortfoliosList.get(0).getText().replaceAll("ready", "").trim();
-            ExcelUtil excelData = getExcelData(excelName, "Portfolio Level Output");
+            String excelName = "";
+            ExcelUtil excelData = null;
+            //if multiple portfolios are selected and
+            // if interim report selected, then multiple Excel files will be downloaded and sheet index will be always 1
+            // if annual report selected, then one Excel file will be downloaded and sheet index will be index of selected portfolios
+            if (rrStatusPage_PortfoliosList.size() > 1) {
+                excelName = rrStatusPage_PortfoliosList.get(selectedPortfolios.indexOf(portfolioName)).getText().replaceAll("ready", "").trim();
+            } else {
+                excelName = rrStatusPage_PortfoliosList.get(0).getText().replaceAll("ready", "").trim();
+            }
+            excelData = getExcelData(excelName, "Portfolio Level Output");
+            System.out.println("Sheet Name = " + excelData.getSheetName());
 
             List<Map<String, Object>> dbData = queries.getPortfolioLevelOutput(portfolioId, reportingYear, reportFormat, useLatestData);
             //get number cells from excel file
-            List<String> excelNumberCells = excelData.getNumericCells();
-            //System.out.println("excelNumberCells = " + excelNumberCells);
+            List<String> excelNumberCells = new ArrayList<>();
+            if (selectedPortfolios.size() > 1 && reportFormat.equals("Annual")) {
+                int columnNumber = selectedPortfolios.indexOf(portfolioName) * 2 + 5;
+                System.out.println("columnNumber = " + columnNumber);
+                excelNumberCells = excelData.getNumericCells(columnNumber);
+                excelNumberCells.addAll(excelData.getNumericCells(columnNumber + 1));
+            } else {
+                excelNumberCells = excelData.getNumericCells();
+            }
+            System.out.println("excelNumberCells = " + excelNumberCells);
+
             DecimalFormat decimalFormat = new DecimalFormat("##.####");
             //get number cells from db
             List<String> dbNumberCells = new ArrayList<>();
@@ -1324,6 +1399,7 @@ public class RegulatoryReportingPage extends UploadPage {
             System.out.println("dbNumberCells = " + dbNumberCells);
             //verify db number cells list contains all values of excelnumbercells list
             for (String cell : excelNumberCells) {
+                System.out.println("cell = " + cell);
                 if (!dbNumberCells.contains(cell)) {
                     if (!dbNumberCells.contains(cell.replaceAll("\\.0", ""))) {
                         System.out.println(cell + " is not in DB");
@@ -1549,7 +1625,7 @@ public class RegulatoryReportingPage extends UploadPage {
         return true;
     }
 
-    public boolean verifyScope3GHGEmissionsForPortfolioLevelOutput(List<String> selectedPortfolios, String year) {
+    public boolean verifyScope3GHGEmissionsForPortfolioLevelOutput(List<String> selectedPortfolios, String year, String reportingFormat) {
         for (String portfolioName : selectedPortfolios) {
             System.out.println("\nportfolioName = " + portfolioName);
             String portfolioId = apiController.getPortfolioId(portfolioName);
@@ -1600,19 +1676,27 @@ public class RegulatoryReportingPage extends UploadPage {
                 }
             }
             //Validate data for Scope 3 GHG emissions
-            List<Map<String, Object>> dbData = queries.getPortfolioLevelOutput(portfolioId, year.equalsIgnoreCase("latest")?"2020":year, "Annual", year.equalsIgnoreCase("latest")?"Yes":"No");
+            List<Map<String, Object>> dbData = queries.getPortfolioLevelOutput(portfolioId, year.equalsIgnoreCase("latest") ? "2020" : year, reportingFormat, year.equalsIgnoreCase("latest") ? "Yes" : "No");
             DecimalFormat decimalFormat = new DecimalFormat("##.####");
-            String scope3GHGEmissionsImpactScore = decimalFormat.format(dbData.stream().filter(row -> row.get("SFDR_SUBCATEGORY").toString().equals("Scope 3 GHG emissions")).findFirst().get().get("IMPACT"));
+            String scope3GHGEmissionsImpactScore = dbData.stream().filter(row -> row.get("SFDR_SUBCATEGORY").toString().equals("Scope 3 GHG emissions")).findFirst().get().get("IMPACT").toString();
+            System.out.println("scope3GHGEmissionsImpactScore = " + scope3GHGEmissionsImpactScore);
+            scope3GHGEmissionsImpactScore = decimalFormat.format(Double.parseDouble(scope3GHGEmissionsImpactScore));
             System.out.println("scope3GHGEmissionsImpactScore = " + scope3GHGEmissionsImpactScore);
             String scope3GHGEmissionsScopeOfDisclosure = decimalFormat.format(dbData.stream().filter(row -> row.get("SFDR_SUBCATEGORY").toString().equals("Scope 3 GHG emissions")).findFirst().get().get("SCOPE_OF_DISCLOSURE"));
             System.out.println("scope3GHGEmissionsScopeOfDisclosure = " + scope3GHGEmissionsScopeOfDisclosure);
-            if(!scope3GHGEmissionsImpactScore.contains(".")) scope3GHGEmissionsImpactScore += ".0";
-            if(!scope3GHGEmissionsScopeOfDisclosure.contains(".")) scope3GHGEmissionsScopeOfDisclosure += ".0";
-            if(!rowData.contains(scope3GHGEmissionsImpactScore) || !rowData.contains(scope3GHGEmissionsScopeOfDisclosure)){
+            if (!scope3GHGEmissionsImpactScore.contains(".")) scope3GHGEmissionsImpactScore += ".0";
+            if (!scope3GHGEmissionsScopeOfDisclosure.contains(".")) scope3GHGEmissionsScopeOfDisclosure += ".0";
+            if (!rowData.contains(scope3GHGEmissionsImpactScore) || !rowData.contains(scope3GHGEmissionsScopeOfDisclosure)) {
                 System.out.println("Impact score or Scope of disclosure is not found in the excel for Scope 3 GHG emissions");
                 return false;
             }
         }
         return true;
     }
+
+    public void clickOnCreateReportsButton() {
+        System.out.println("Clicking on Create Reports button");
+        BrowserUtils.waitForClickablility(createReportsButton, 5).click();
+    }
+
 }

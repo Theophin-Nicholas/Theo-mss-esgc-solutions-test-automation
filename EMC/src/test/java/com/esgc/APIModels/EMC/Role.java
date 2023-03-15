@@ -11,4 +11,5 @@ public class Role {
     private String modifiedAt;
     private String createdBy;
     private String modifiedBy;
+    private String id;
 }

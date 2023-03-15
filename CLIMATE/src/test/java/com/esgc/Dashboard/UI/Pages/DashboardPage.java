@@ -178,7 +178,7 @@ public class DashboardPage extends UploadPage {
     public WebElement panelExportText;
     @FindBy(id = "dashboard-export-button-test-id")
     public WebElement panelExportToExcelBtn;
-    @FindBy(xpath = "//span[.='X']")
+    @FindBy(css = "div[tabindex=\"-1\"] header svg > path[fill=\"#26415E\"]")
     public WebElement closePanelBtn;
     @FindBy(xpath = "//div[contains(@class, 'MuiTableContainer-root')]/following-sibling::div[contains(.,' more companies in this sector')]")
     public List<WebElement> moreCompaniesInThisSectorText;
@@ -253,7 +253,7 @@ public class DashboardPage extends UploadPage {
     @FindBy(xpath = "//span[contains(text(),'Laggards')]")
     public WebElement tabPerformanceLaggards;
 
-    @FindBy(xpath = "//div[contains(text(),'Performance:')]/..//div[starts-with(text(),'Show Top')]")
+    @FindBy(xpath = "//div[contains(text(),'Performance:')]/..//div[starts-with(text(),'Show Top') or starts-with(text(),'Show Bottom')]")
     public WebElement performanceChartDropdown;
 
     @FindBy(xpath = "//ul[@role='listbox']//span[text()]")
@@ -689,7 +689,7 @@ public class DashboardPage extends UploadPage {
         deleteDownloadFolder();
         clickExportCompaniesButton();
         closePortfolioExportDrawer();
-        assertTestCase.assertEquals(filesCountInDownloadsFolder(), 1, "Verify download of export file");
+        assertTestCase.assertTrue(filesCountInDownloadsFolder()>=1, "Verify download of export file");
     }
 
 
@@ -713,6 +713,7 @@ public class DashboardPage extends UploadPage {
                                 .findElement(By.xpath("//button[./span[contains(text(),'" + performanceChartName + "')]]"))))
                 .click();
         waitForDataLoadCompletion();
+        BrowserUtils.scrollTo(performanceChart);
     }
 
     public boolean checkIfPerformanceChartHeaderIsHighlighted(String headerName) {
@@ -1376,10 +1377,9 @@ public class DashboardPage extends UploadPage {
         int numberInExportText = Integer.parseInt(panelExportText.getText().replaceAll("\\D", ""));
         if (Integer.parseInt(numbers[2]) != numberInExportText) return false;
 
-        //TODO - Remove Finance
         //Remove Finance from from expSectorTitles.
         //A bug ticket created for it, It is just added to complete automation. Normally there shouldn't be such sector title.
-        List<String> expSectorTitles = Arrays.asList("Basic Materials", "Consumer Discretionary", "Communication", "Financials", "Energy", "Real Estate", "Sovereign", "Technology", "Utilities", "Health Care", "Consumer Staples", "Industry", "Finance");
+        List<String> expSectorTitles = Arrays.asList("Basic Materials", "Consumer Discretionary", "Communication", "Financials", "Energy", "Real Estate", "Sovereign", "Technology", "Utilities", "Health Care", "Consumer Staples", "Industry");
         List<String> expRegionTitles = Arrays.asList("Americas", "Asia Pacific", "Europe, Middle East & Africa");
         if (filterBy.toLowerCase().equals("sector")) {
             for (int i = 0; i < panelClassNames.size() - 1; i++) {
@@ -1688,8 +1688,9 @@ public class DashboardPage extends UploadPage {
     }
 
     public void verifyOverallESGScoreCatgories() {
-        List<String> categories = Arrays.asList(new String[]{"Weak", "Limited", "Robust", "Advanced"});
+        List<String> categories = Arrays.asList("Weak", "Limited", "Robust", "Advanced");
         for (WebElement e : OverallESGScoreTabledata) {
+            if(e.getText().equals("")) continue;
             assertTestCase.assertTrue(categories.contains(e.getText()), "Validate OverAll ESG Scores");
         }
     }

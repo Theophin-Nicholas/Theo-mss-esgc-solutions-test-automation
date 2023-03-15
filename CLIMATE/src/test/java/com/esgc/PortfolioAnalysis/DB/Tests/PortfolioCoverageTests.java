@@ -97,10 +97,11 @@ public class PortfolioCoverageTests extends DataValidationTestBase {
 
         return new Object[][]
                 {
-                        {"all", "AMER", "ESG", "09", "2022"},
-                        {"all", "EMEA", "ESG", "09", "2022"},
-                        {"all", "APAC", "ESG", "09", "2022"},
-                        {"all", "all", "ESG", "09", "2022"},
+                        //TODO ESG pages are not available as of Feb 2023
+//                        {"all", "AMER", "ESG", "09", "2022"},
+//                        {"all", "EMEA", "ESG", "09", "2022"},
+//                        {"all", "APAC", "ESG", "09", "2022"},
+//                        {"all", "all", "ESG", "09", "2022"},
 
                         {"all", "AMER", "Physical Risk Management", "12", "2020"},
                         {"all", "EMEA", "Physical Risk Management", "12", "2020"},
@@ -135,10 +136,10 @@ public class PortfolioCoverageTests extends DataValidationTestBase {
                         {"all", "AMER", "Carbon Footprint", "04", "2021"},
                         {"all", "EMEA", "Carbon Footprint", "04", "2021"},
                         {"all", "all", "Carbon Footprint", "04", "2021"},*/
-                        {"all", "APAC", "Carbon Footprint", "12", "2020"},
-                        {"all", "AMER", "Carbon Footprint", "12", "2020"},
-                        {"all", "EMEA", "Carbon Footprint", "12", "2020"},
-                        {"all", "all", "Carbon Footprint", "12", "2020"},
+                        {"all", "APAC", "Carbon Footprint", "12", "2021"},
+                        {"all", "AMER", "Carbon Footprint", "12", "2021"},
+                        {"all", "EMEA", "Carbon Footprint", "12", "2021"},
+                        {"all", "all", "Carbon Footprint", "12", "2021"},
 
                         {"all", "APAC", "Brown Share", "03", "2021"},
                         {"all", "AMER", "Brown Share", "03", "2021"},
