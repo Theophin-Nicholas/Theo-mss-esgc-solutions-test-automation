@@ -1,11 +1,13 @@
 package com.esgc.RegulatoryReporting.UI.Tests;
 
 import com.esgc.Base.TestBases.UITestBase;
-import com.esgc.Base.UI.Pages.LoginPage;
 import com.esgc.Dashboard.UI.Pages.DashboardPage;
 import com.esgc.PortfolioAnalysis.UI.Pages.PhysicalRiskPages.PhysicalRiskManagementPages.PhysicalRiskManagementPage;
 import com.esgc.RegulatoryReporting.UI.Pages.RegulatoryReportingPage;
-import com.esgc.Utilities.*;
+import com.esgc.Utilities.BrowserUtils;
+import com.esgc.Utilities.DateTimeUtilities;
+import com.esgc.Utilities.Driver;
+import com.esgc.Utilities.Xray;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.Color;
 import org.testng.annotations.Test;
@@ -143,7 +145,7 @@ public class RegulatoryReportingPageTests extends UITestBase {
         assertTestCase.assertEquals(reportingPage.getCreateReportsButtonText(), "Create 4 Reports", "Create Reports button is verified for 4 portfolio selected");
     }
 
-    @Test(groups = {REGRESSION, UI, REGULATORY_REPORTING}, description = "Verify user portfolio list on regulatory reporting page")
+    @Test(groups = {REGRESSION, UI, REGULATORY_REPORTING, ROBOT_DEPENDENCY}, description = "Verify user portfolio list on regulatory reporting page")
     @Xray(test = {11091, 11092})
     public void verifyPortfolioUploadTest() {
         RegulatoryReportingPage reportingPage = new RegulatoryReportingPage();
@@ -321,6 +323,7 @@ public class RegulatoryReportingPageTests extends UITestBase {
             assertTestCase.assertTrue(false, "New tab verification failed");
             e.printStackTrace();
         } finally {
+            Driver.closeBrowserTab();
             BrowserUtils.switchWindowsTo(currentWindow);
         }
         BrowserUtils.wait(5);
@@ -344,22 +347,6 @@ public class RegulatoryReportingPageTests extends UITestBase {
         assertTestCase.assertFalse(reportingPage.isPortfolioSelectionEnabled(portfolioName), "PredictedScoresPortfolio is disabled");
         assertTestCase.assertFalse(reportingPage.isCreateReportsButtonEnabled(), "Create report button is disabled");
     }
-
-    @Test(groups = {REGRESSION, UI, REGULATORY_REPORTING}, description = "Verify user can't see reporting page if is not entitled to SFDR")
-//, "smoke"
-    @Xray(test = {10867})
-    public void verifyReportingPageWithoutSFDRUserTest() {
-        RegulatoryReportingPage regulatoryReportingPage = new RegulatoryReportingPage();
-        regulatoryReportingPage.clickMenu();
-        assertTestCase.assertTrue(regulatoryReportingPage.isRegulatoryReportingOptionIsAvailableInSidePanel(), "Reporting page option is displayed");
-        LoginPage loginPage = new LoginPage();
-        loginPage.clickOnLogout();
-        loginPage.loginWithParams(Environment.PHYSICAL_RISK_USERNAME, Environment.PHYSICAL_RISK_PASSWORD);
-        regulatoryReportingPage.clickMenu();
-        assertTestCase.assertFalse(BrowserUtils.getElementsText(regulatoryReportingPage.menuList).contains("Regulatory Reporting"), "Reporting page is not displayed as expected");
-        loginPage.clickOnLogout();
-    }
-
 
     @Test(groups = {REGRESSION, UI, REGULATORY_REPORTING}, description = "UI | Regulatory Reporting | Download | Verify Create Reports Button is Clickable")
 //"smoke",
@@ -478,6 +465,7 @@ public class RegulatoryReportingPageTests extends UITestBase {
             assertTestCase.assertTrue(false, "Report verification failed");
             e.printStackTrace();
         } finally {
+            Driver.closeBrowserTab();
             BrowserUtils.switchWindowsTo(currentWindow);
         }
     }

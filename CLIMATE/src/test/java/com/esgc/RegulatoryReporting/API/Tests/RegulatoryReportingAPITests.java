@@ -1,6 +1,6 @@
 package com.esgc.RegulatoryReporting.API.Tests;
 
-import com.esgc.Base.TestBases.UITestBase;
+import com.esgc.Base.TestBases.APITestBase;
 import com.esgc.Base.UI.Pages.LoginPage;
 import com.esgc.Dashboard.UI.Pages.DashboardPage;
 import com.esgc.RegulatoryReporting.API.APIModels.PortfolioDetails;
@@ -22,7 +22,7 @@ import java.util.Map;
 import static com.esgc.Utilities.Groups.*;
 import static org.hamcrest.Matchers.equalTo;
 
-public class RegulatoryReportingAPITests extends UITestBase {
+public class RegulatoryReportingAPITests extends APITestBase {
 
 
     @Test(groups = {REGRESSION, REGULATORY_REPORTING, API}, description = "Data Validation| MT | Regulatory Reporting | Validate Portfolio list and portfolio-details")
@@ -64,7 +64,6 @@ public class RegulatoryReportingAPITests extends UITestBase {
         }
     }
 
-    //TODO should be in API package
     @Test(groups = {REGRESSION, REGULATORY_REPORTING, API})
     @Xray(test = {11681})
     public void verifyDownloadHistory() {
@@ -139,9 +138,9 @@ public class RegulatoryReportingAPITests extends UITestBase {
 
         RegulatoryReportingAPIController apiController = new RegulatoryReportingAPIController();
 
-       List<PortfolioDetails> portfolio = Arrays.asList(apiController.getPortfolioDetails().as(PortfolioDetails[].class));
-        String portfolioId =  portfolio.stream().filter(i -> !(i.getPortfolio_name().contains("Sample"))).findFirst().get().getPortfolio_id();
-        Response response = apiController.getAysncGenerationAPIReposnse(portfolioId, DateTimeUtilities.getCurrentYear(),"Valid");
+        List<PortfolioDetails> portfolio = Arrays.asList(apiController.getPortfolioDetails().as(PortfolioDetails[].class));
+        String portfolioId = portfolio.stream().filter(i -> !(i.getPortfolio_name().contains("Sample"))).findFirst().get().getPortfolio_id();
+        Response response = apiController.getAysncGenerationAPIReposnse(portfolioId, DateTimeUtilities.getCurrentYear(), "Valid");
         response.prettyPrint();
         response.then().assertThat()
                 .statusCode(200)
@@ -149,13 +148,21 @@ public class RegulatoryReportingAPITests extends UITestBase {
         String reqID = response.jsonPath().getString("request_id");
         System.out.println(reqID);
 
-        Response statusAPIResponse = apiController.getStatusAPIReposnse(reqID,"Valid");
+        Response statusAPIResponse = apiController.getStatusAPIReposnse(reqID, "Valid");
         statusAPIResponse.prettyPrint();
         statusAPIResponse.then().assertThat()
                 .statusCode(200)
                 .contentType(ContentType.JSON);
 
-        Response DownloadAPIResponse = apiController.getDownload(reqID,"Valid");
+        //Wait until report is generated in db
+        for (int i = 0; i < 5; i++) {
+            BrowserUtils.wait(50);
+            statusAPIResponse = apiController.getStatusAPIReposnse(reqID, "Valid");
+            String status = statusAPIResponse.jsonPath().get("[0].request_status");
+            if(!status.equalsIgnoreCase("pending")) break;
+        }
+
+        Response DownloadAPIResponse = apiController.getDownload(reqID, "Valid");
         DownloadAPIResponse.prettyPrint();
         DownloadAPIResponse.then().assertThat()
                 .statusCode(200)
@@ -167,7 +174,7 @@ public class RegulatoryReportingAPITests extends UITestBase {
     @Xray(test = {11411})
     public void VerifyAPIsResponseWithInvalidParameters() {
         RegulatoryReportingAPIController apiController = new RegulatoryReportingAPIController();
-        Response response = apiController.getAysncGenerationAPIReposnse("", DateTimeUtilities.getCurrentYear(),"Invalid");
+        Response response = apiController.getAysncGenerationAPIReposnse("", DateTimeUtilities.getCurrentYear(), "Invalid");
         response.prettyPrint();
         response.then().assertThat()
                 .statusCode(400)
@@ -175,7 +182,7 @@ public class RegulatoryReportingAPITests extends UITestBase {
                 .body("errorType", equalTo("ValueError"))
                 .body("errorMessage", equalTo("Request Invalid. "));
 
-        Response statusAPIResponse = apiController.getStatusAPIReposnse("","Invalid" );
+        Response statusAPIResponse = apiController.getStatusAPIReposnse("", "Invalid");
         statusAPIResponse.prettyPrint();
         statusAPIResponse.then().assertThat()
                 .statusCode(400)
@@ -183,7 +190,7 @@ public class RegulatoryReportingAPITests extends UITestBase {
                 .body("errorType", equalTo("ValueError"))
                 .body("errorMessage", equalTo("Request Invalid. "));
 
-        Response DownloadAPIResponse = apiController.getDownload("","Invalid");
+        Response DownloadAPIResponse = apiController.getDownload("", "Invalid");
         DownloadAPIResponse.prettyPrint();
         DownloadAPIResponse.then().assertThat()
                 .statusCode(400)
@@ -197,21 +204,21 @@ public class RegulatoryReportingAPITests extends UITestBase {
     public void VerifyAPIsResponseWithinvalidToken() {
         RegulatoryReportingAPIController apiController = new RegulatoryReportingAPIController();
         apiController.setInvalid();
-        Response response = apiController.getAysncGenerationAPIReposnse("123456", DateTimeUtilities.getCurrentYear(),"Valid");
+        Response response = apiController.getAysncGenerationAPIReposnse("123456", DateTimeUtilities.getCurrentYear(), "Valid");
         response.prettyPrint();
         response.then().assertThat()
                 .statusCode(401)
                 .contentType(ContentType.JSON)
                 .body("message", equalTo("Forbidden"));
 
-        Response statusAPIResponse = apiController.getStatusAPIReposnse("11111","Valid" );
+        Response statusAPIResponse = apiController.getStatusAPIReposnse("11111", "Valid");
         statusAPIResponse.prettyPrint();
         statusAPIResponse.then().assertThat()
                 .statusCode(401)
                 .contentType(ContentType.JSON)
                 .body("message", equalTo("Forbidden"));
 
-        Response DownloadAPIResponse = apiController.getDownload("11111","Valid");
+        Response DownloadAPIResponse = apiController.getDownload("11111", "Valid");
         DownloadAPIResponse.prettyPrint();
         DownloadAPIResponse.then().assertThat()
                 .statusCode(401)
@@ -225,29 +232,29 @@ public class RegulatoryReportingAPITests extends UITestBase {
     public void VerifyAPIsResponseWithDifferentUserPortfolioAndRequestID() {
 
         RegulatoryReportingAPIController apiController = new RegulatoryReportingAPIController();
-        String portfolioId =  "0ba40cc2-4268-449d-91cc-98d1ae67a9e9";
-        Response response = apiController.getAysncGenerationAPIReposnse(portfolioId, DateTimeUtilities.getCurrentYear(),"Valid");
+        String portfolioId = "0ba40cc2-4268-449d-91cc-98d1ae67a9e9";
+        Response response = apiController.getAysncGenerationAPIReposnse(portfolioId, DateTimeUtilities.getCurrentYear(), "Valid");
         response.prettyPrint();
         response.then().assertThat()
                 .statusCode(403)
                 .contentType(ContentType.JSON);
-                //.body("message", equalTo("Forbidden"));
+        //.body("message", equalTo("Forbidden"));
         String reqID = "r-7d901735-839a-449e-abb9-68ee7587c2a5";
         System.out.println(reqID);
 
-        Response statusAPIResponse = apiController.getStatusAPIReposnse(reqID,"Valid");
+        Response statusAPIResponse = apiController.getStatusAPIReposnse(reqID, "Valid");
         statusAPIResponse.prettyPrint();
         statusAPIResponse.then().assertThat()
                 .statusCode(401)
                 .contentType(ContentType.JSON);
-                //.body("message", equalTo("Forbidden"))
+        //.body("message", equalTo("Forbidden"))
 
-        Response DownloadAPIResponse = apiController.getDownload(reqID,"Valid");
+        Response DownloadAPIResponse = apiController.getDownload(reqID, "Valid");
         DownloadAPIResponse.prettyPrint();
         DownloadAPIResponse.then().assertThat()
                 .statusCode(500)
                 .contentType(ContentType.JSON);
-                //.body("message", equalTo("Forbidden"));
+        //.body("message", equalTo("Forbidden"));
 
     }
 

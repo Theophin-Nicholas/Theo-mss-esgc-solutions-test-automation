@@ -274,6 +274,9 @@ public class LoginPage extends ClimatePageBase {
 
 
     public void entitlementsLogin(EntitlementsBundles bundles) {
+        if(!Driver.getDriver().getCurrentUrl().endsWith("login")){
+            clickOnLogout();
+        }
         String username = "";
         String password = "";
         switch (bundles) {

@@ -112,7 +112,7 @@ public abstract class TestBase {
     }
 
     public void getScreenshot(ITestResult result) {
-        if (result.getStatus() == ITestResult.FAILURE) {
+        if (result.getStatus() == ITestResult.FAILURE || result.getThrowable() != null) {
             test.assignCategory(result.getInstanceName());
             test.log(Status.FAIL, "Classname: " + result.getTestClass());
             test.log(Status.FAIL, MarkupHelper.createLabel("FAILED test case name is: " + result.getName(), ExtentColor.RED));
