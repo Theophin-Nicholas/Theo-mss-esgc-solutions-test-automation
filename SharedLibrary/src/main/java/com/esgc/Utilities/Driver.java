@@ -130,7 +130,7 @@ public class Driver {
 
                     prefs.put("download.default_directory", BrowserUtils.downloadPath()); //path to dir
                     chromeOptions.setExperimentalOption("prefs", prefs);
-
+                    chromeOptions.addArguments("--remote-allow-origins=*");
                     chromeOptions.addArguments("--start-maximized");
                     chromeOptions.addArguments("--disable-notifications");
                     driverPool.set(new ChromeDriver(chromeOptions));

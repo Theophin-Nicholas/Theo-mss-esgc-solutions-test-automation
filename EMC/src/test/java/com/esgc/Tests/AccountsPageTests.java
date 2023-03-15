@@ -8,6 +8,7 @@ import com.github.javafaker.Faker;
 import io.restassured.response.Response;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.Color;
 import org.testng.annotations.Test;
 
@@ -364,8 +365,8 @@ public class AccountsPageTests extends EMCUITestBase {
 
     }
 
-    @Test(groups = {EMC, UI, REGRESSION})
-    @Xray(test = {5517})
+    @Test(groups = {EMC, UI, REGRESSION, SMOKE})
+    @Xray(test = {5517, 5756})
     public void verifySuspendUserTest() {
         navigateToAccountsPage("AutomationAccount", "users");
         EMCAccountDetailsPage detailsPage = new EMCAccountDetailsPage();
@@ -419,7 +420,7 @@ public class AccountsPageTests extends EMCUITestBase {
     }
 
     @Test(groups = {EMC, UI, SMOKE, REGRESSION})
-    @Xray(test = {5736, 6169, 6170})
+    @Xray(test = {5736, 6167, 6169, 6170})
     public void verifyActivateUserTest() {
         navigateToAccountsPage(accountName, "users");
         EMCAccountDetailsPage detailsPage = new EMCAccountDetailsPage();
@@ -1660,5 +1661,51 @@ public class AccountsPageTests extends EMCUITestBase {
         userPage.assignApplicationRoles(mesgAppName);
         assertTestCase.assertTrue(userPage.verifyApplicationRole(mesgAppName), "Application role is assigned");
         userPage.deleteUser();
+    }
+
+    @Test(groups = {EMC, UI, REGRESSION, SMOKE}, description = "EMC | UI | Text Alignments")
+    @Xray(test = {13863, 13864, 13865, 13893})
+    public void verifyTextAlignmentsTest() {
+        navigateToAccountsPage("", "");
+        for(WebElement header : accountsPage.tableHeaders){
+            assertTestCase.assertTrue(header.getCssValue("text-align").equals("left"), "Table headers are left aligned");
+        }
+
+        for(WebElement data: accountsPage.firstRow){
+            assertTestCase.assertTrue(data.getCssValue("text-align").equals("left"), "Data in the table is left aligned");
+        }
+
+        navigateToAccountsPage(accountName, "users");
+        EMCAccountDetailsPage detailsPage = new EMCAccountDetailsPage();
+        wait(detailsPage.userNamesList, 20);
+        for(WebElement header : detailsPage.tableHeaders){
+            assertTestCase.assertTrue(header.getCssValue("text-align").equals("left"), "Table headers are left aligned");
+        }
+
+        for(WebElement data: detailsPage.firstRow){
+            assertTestCase.assertTrue(data.getCssValue("text-align").equals("left"), "Data in the table is left aligned");
+        }
+
+        navigateToMenu("Users");
+        EMCUsersPage usersPage = new EMCUsersPage();
+        wait(usersPage.userNames, 20);
+        for(WebElement header : usersPage.tableHeaders){
+            assertTestCase.assertTrue(header.getCssValue("text-align").equals("left"), "Table headers are left aligned");
+        }
+
+        for(WebElement data: usersPage.firstRow){
+            assertTestCase.assertTrue(data.getCssValue("text-align").equals("left"), "Data in the table is left aligned");
+        }
+
+        navigateToMenu("Applications");
+        EMCApplicationsPage applicationsPage = new EMCApplicationsPage();
+        wait(applicationsPage.applications, 20);
+        for(WebElement header : applicationsPage.tableHeaders){
+            assertTestCase.assertTrue(header.getCssValue("text-align").equals("left"), "Table headers are left aligned");
+        }
+
+        for(WebElement data: applicationsPage.firstRow){
+            assertTestCase.assertTrue(data.getCssValue("text-align").equals("left"), "Data in the table is left aligned");
+        }
     }
 }

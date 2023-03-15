@@ -188,6 +188,12 @@ public class EMCAccountDetailsPage extends EMCBasePage {
     @FindBy (xpath = "//input[@type='text']")
     public WebElement searchInput;
 
+    @FindBy (xpath = "//th")
+    public List<WebElement> tableHeaders;
+
+    @FindBy (xpath = "//th")
+    public List<WebElement> firstRow;
+
     @FindBy (xpath = "//th/a")
     public List<WebElement> userNamesList;
 

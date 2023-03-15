@@ -294,7 +294,7 @@ public class ApplicationPageTests extends EMCUITestBase {
     }
 
     @Test(groups = {EMC, UI, REGRESSION})
-    @Xray(test = {2624, 7655, 12505})
+    @Xray(test = {2624, 7655, 12505, 12506})
     public void verifyUserSaveNewProductTest() {
         navigateToApplicationsPage(applicationName, "products");
         EMCApplicationDetailsPage detailsPage = new EMCApplicationDetailsPage();
@@ -314,9 +314,12 @@ public class ApplicationPageTests extends EMCUITestBase {
         detailsPage.productsCheckboxList.get(0).click();
         assertTestCase.assertTrue(detailsPage.deleteProductsButton.isDisplayed(), "Delete Product Button is displayed");
         BrowserUtils.waitForClickablility(detailsPage.deleteProductsButton, 10).click();
-        assertTestCase.assertTrue(detailsPage.deleteButton.isDisplayed(), "Confirm Delete Button is displayed");
-        assertTestCase.assertTrue(detailsPage.cancelButton.isDisplayed(), "Confirm Cancel Button is displayed");
-        BrowserUtils.waitForClickablility(detailsPage.deleteButton, 10).click();
+        wait(detailsPage.productDeletePopUpDeleteButton, 10);
+        assertTestCase.assertTrue(detailsPage.productDeletePopUpDeleteButton.isDisplayed(), "Confirm Delete Button is displayed");
+        assertTestCase.assertTrue(detailsPage.productDeletePopUpCancelButton.isDisplayed(), "Confirm Cancel Button is displayed");
+        BrowserUtils.waitAndClick(detailsPage.productDeletePopUpDeleteButton, 10);
+        BrowserUtils.waitForVisibility(detailsPage.notification, 10);
+        assertTestCase.assertTrue(detailsPage.notification.isDisplayed(), "Success Confirmation message is displayed on the Screen");
     }
 
     @Test(groups = {EMC, UI, REGRESSION, SMOKE, PROD})
@@ -688,5 +691,102 @@ public class ApplicationPageTests extends EMCUITestBase {
         assertTestCase.assertTrue(applicationsPage.verifyApplication(applicationName, false), "Applications are displayed");
         applicationsPage.searchApplication(applicationName.substring(0, 5).toUpperCase());
         assertTestCase.assertTrue(applicationsPage.verifyApplication(applicationName, false), "Applications are displayed");
+    }
+
+    @Test(groups = {EMC, UI, REGRESSION, SMOKE})
+    @Xray(test = {12736, 12738, 12792})
+    public void verifyAdminUserEditExternalApplicationTest() {
+        navigateToApplicationsPage(externalApplicationName, "details");
+        EMCApplicationDetailsPage detailsPage = new EMCApplicationDetailsPage();
+        detailsPage.verifyApplicationDetails("Admin");
+        BrowserUtils.waitForVisibility(detailsPage.editButton, 10);
+        assertTestCase.assertTrue(detailsPage.editButton.isDisplayed(), "Edit Button is displayed");
+        detailsPage.clickOnEditButton();
+        assertTestCase.assertTrue(detailsPage.saveButton.isDisplayed(), "Save button is displayed");
+        assertTestCase.assertTrue(detailsPage.cancelButton.isDisplayed(), "Cancel button is displayed");
+        String url = detailsPage.ApplicationURL.getAttribute("value");
+        System.out.println("url = " + url);
+        clear(detailsPage.ApplicationName);
+        detailsPage.ApplicationName.sendKeys("QATest_Edited");
+        clear(detailsPage.ApplicationURL);
+        detailsPage.ApplicationURL.sendKeys("https://esg.moodys.com");
+        assertTestCase.assertTrue(detailsPage.saveButton.isEnabled(), "Save Button is enabled");
+        BrowserUtils.waitForClickablility(detailsPage.saveButton, 10).click();
+        BrowserUtils.waitForVisibility(detailsPage.notification, 10);
+        assertTestCase.assertTrue(detailsPage.notification.isDisplayed(), "Application Updated Notification is displayed");
+        BrowserUtils.waitForInvisibility(detailsPage.notification, 10);
+        assertTestCase.assertTrue(detailsPage.ApplicationName.getAttribute("value").equals("QATest_Edited"), "Application Name is updated");
+        assertTestCase.assertTrue(detailsPage.ApplicationURL.getAttribute("value").equals("https://esg.moodys.com"), "Application URL is updated");
+
+        //Change account name and url back to original
+        detailsPage.clickOnEditButton();
+        clear(detailsPage.ApplicationName);
+        detailsPage.ApplicationName.sendKeys(externalApplicationName);
+        clear(detailsPage.ApplicationURL);
+        detailsPage.ApplicationURL.sendKeys(url);
+        BrowserUtils.waitForClickablility(detailsPage.saveButton, 10).click();
+        BrowserUtils.waitForVisibility(detailsPage.notification, 10);
+        assertTestCase.assertTrue(detailsPage.notification.isDisplayed(), "Application Updated Notification is displayed");
+
+        detailsPage.clickOnEditButton();
+        clear(detailsPage.ApplicationName);
+        detailsPage.ApplicationName.sendKeys("Cancel edit");
+        clear(detailsPage.ApplicationURL);
+        detailsPage.ApplicationURL.sendKeys("https://google.com");
+        BrowserUtils.waitForClickablility(detailsPage.cancelButton, 10).click();
+        assertTestCase.assertTrue(detailsPage.ApplicationName.getAttribute("value").equals(externalApplicationName), "Application Name is not updated");
+        assertTestCase.assertTrue(detailsPage.ApplicationURL.getAttribute("value").equals(url), "Application URL is not updated");
+    }
+
+    @Test(groups = {EMC, UI, REGRESSION}, description = "UI | EMC | API | Verify user with EMC permissions is able to see Role details in Applications Role Tab", priority = 10)
+    @Xray(test = {6538, 12501, 12739, 13122})
+    public void verifyApplicationRoleDetailsForDifferentPermissionLevel() {
+        loginAsAdmin();
+        navigateToApplicationsPage(externalApplicationName, "roles");
+        EMCApplicationDetailsPage detailsPage = new EMCApplicationDetailsPage();
+        detailsPage.verifyApplicationRolesTab("Admin");
+//        closeAndLoginWithAdmin();
+        loginAsViewer();
+        navigateToApplicationsPage(externalApplicationName, "roles");
+        detailsPage = new EMCApplicationDetailsPage();
+        detailsPage.verifyApplicationRolesTab("Viewer");
+        closeAndLoginWithAdmin();
+        loginAsFulfillment();
+        navigateToApplicationsPage(externalApplicationName, "roles");
+        detailsPage = new EMCApplicationDetailsPage();
+        detailsPage.verifyApplicationRolesTab("Fulfillment");
+        closeAndLoginWithAdmin();
+    }
+
+    private void loginAsFulfillment() {
+        //verify viewer role user's permissions
+        String email = Environment.VIEWER_USER_USERNAME;
+        String fulfillmentRoleKey = Environment.FULFILLMENT_ROLE_KEY;
+        EMCAPIController apiController = new EMCAPIController();
+        apiController.assignUserToRoleAndVerify(email, fulfillmentRoleKey);
+        System.out.println("Fulfillment role permissions reset is done");
+        //close the browser and login with viewer role user
+        Driver.quit();
+        Driver.getDriver().get(Environment.EMC_URL);
+        BrowserUtils.waitForPageToLoad(10);
+        LoginPageEMC loginPageEMC = new LoginPageEMC();
+        loginPageEMC.loginEMCWithParams(Environment.VIEWER_USER_USERNAME, Environment.VIEWER_USER_PASSWORD);
+    }
+
+    private void loginAsAdmin() {
+        //verify viewer role user's permissions
+        String email = Environment.VIEWER_USER_USERNAME;
+        System.out.println("email = " + email);
+        String adminRoleKey = Environment.ADMIN_ROLE_KEY;
+        System.out.println("adminRoleKey = " + adminRoleKey);
+        EMCAPIController apiController = new EMCAPIController();
+        apiController.assignUserToRoleAndVerify(email, adminRoleKey);
+        System.out.println("Admin role permissions reset is done");
+        //close the browser and login with viewer role user
+        Driver.quit();
+        Driver.getDriver().get(Environment.EMC_URL);
+        BrowserUtils.waitForPageToLoad(10);
+        LoginPageEMC loginPageEMC = new LoginPageEMC();
+        loginPageEMC.loginEMCWithParams(Environment.VIEWER_USER_USERNAME, Environment.VIEWER_USER_PASSWORD);
     }
 }

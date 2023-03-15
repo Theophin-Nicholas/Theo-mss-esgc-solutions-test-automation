@@ -19,6 +19,12 @@ public class EMCUsersPage extends EMCBasePage {
     @FindBy(xpath = "(//input)[1]")
     public WebElement searchInput;
 
+    @FindBy(xpath = "//thead//th")
+    public List<WebElement> tableHeaders;
+
+    @FindBy(xpath = "//tbody//tr[1]/*")
+    public List<WebElement> firstRow;
+
     @FindBy(xpath = "//tbody//th/a")
     public List<WebElement> names;
 
