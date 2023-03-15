@@ -213,15 +213,16 @@ public class EMCAPITests extends APITestBase {
 
     }
 
-    //@Test(groups = {EMC, API}, description = "API | EMC | Apps | CRUD Operations for Applications")
-    public void verifyCRUDOperationsForApplicationsTest() {
+    @Test(groups = {EMC, API, REGRESSION}, description = "API | EMC | Apps | CRUD Operations for External Applications")
+    @Xray(test = {12740})
+    public void verifyCRUDOperationsForExternalApplicationsTest() {
         //Get All Applications
         response = apiController.getEMCAllApplicationsResponse();
         //response.prettyPrint();
 
         //Create Application
-        String key = "qatestapp";
-        String name = "QA API Test App" + System.currentTimeMillis();
+        String key = "qatestapp"+faker.number().digits(4);
+        String name = "QA API Test App" + key.replaceAll("\\D","");
         String url = "https://www.google.com";
         String provider = "mss";
         String type = "ExternalApplication";//SinglePageApplication, ExternalApplication, WebApplication
@@ -276,9 +277,80 @@ public class EMCAPITests extends APITestBase {
         //Delete Application - Verify You CAN"T delete an application
         response = apiController.deleteEMCApplicationResponse(appId);
         response.prettyPrint();
-        assertTestCase.assertEquals(response.statusCode(), 403, "Status code 403 Forbidden is verified");
+        assertTestCase.assertEquals(response.statusCode(), 204, "Status code 204 No Content is verified");
         //assertTestCase.assertEquals(response.path("name"), "DeletedResponse", "Application delete response name is verified");
-        assertTestCase.assertEquals(response.path("message"), "Missing Authentication Token", "Application delete response message is verified");
+//        assertTestCase.assertEquals(response.path("message"), "Missing Authentication Token", "Application delete response message is verified");
+        List<Application> updatedApplications = apiController.getEMCAllApplicationsResponse().jsonPath().getList("", Application.class);
+        assertTestCase.assertFalse(updatedApplications.contains(application), "Application is not deleted successfully");
+    }
+
+    @Test(groups = {EMC, API, REGRESSION}, description = "API | EMC | Apps | CRUD Operations for Wev Applications")
+    @Xray(test = {13164})
+    public void verifyCRUDOperationsForWebApplicationsTest() {
+        //Get All Applications
+        response = apiController.getEMCAllApplicationsResponse();
+        //response.prettyPrint();
+
+        //Create Application
+        String key = "qatestapp"+faker.number().digits(4);
+        String name = "QA API Test App" + key.replaceAll("\\D","");
+        String url = "https://www.google.com";
+        String provider = "mss";
+        String type = "WebApplication";//SinglePageApplication, ExternalApplication, WebApplication
+        response = apiController.postEMCNewApplicationResponse(key, name, url, provider, type);
+        response.prettyPrint();
+        assertTestCase.assertEquals(response.statusCode(), 201, "Status code 201 Created is verified");
+        assertTestCase.assertEquals(response.path("name"), "CreatedResponse", "Application creation response name is verified");
+        assertTestCase.assertEquals(response.path("message"), "Application " + key + " created", "Application creation response message with key is verified");
+        List<Application> applications = apiController.getEMCAllApplicationsResponse().jsonPath().getList("", Application.class);
+        System.out.println("applications.size() = " + applications.size());
+
+        //Verify Application details
+        Application application = new Application();
+        for (Application app : applications) {
+            //System.out.println("app = " + app);
+            if (app.getId().equals(key)) {
+                application = app;
+                break;
+            }
+        }
+        System.out.println("application = " + application);
+        assertTestCase.assertEquals(application.getName(), name, "Application name is verified");
+        assertTestCase.assertEquals(application.getUrl(), url, "Application url is verified");
+        //assertTestCase.assertEquals(application.getProvider(), provider, "Application provider is verified");
+
+        //Get Details of Single Application
+        String appId = application.getId();
+        response = apiController.getEMCApplicationDetailsResponse(appId);
+        response.prettyPrint();
+        assertTestCase.assertEquals(response.statusCode(), 200, "Status code 200 OK is verified");
+        response.as(Application.class);
+
+        //Update Application
+        System.out.println("===================================");
+        System.out.println("Updating Application with id: " + appId);
+        application.setName("API Test App Updated");
+        application.setUrl("https://www.google.com.mx");
+        application.setProvider("mss");
+        response = apiController.putEMCApplicationResponse(appId, application);
+
+        response.prettyPrint();
+        assertTestCase.assertEquals(response.statusCode(), 204, "Status code 204 Updated is verified");
+        //assertTestCase.assertEquals(response.path("name"), "UpdatedResponse", "Application update response name is verified");
+        //assertTestCase.assertEquals(response.path("message"), "Application "+key+" updated", "Application update response message with key is verified");
+
+        //Verify Application details
+        Application updatedApplication = apiController.getEMCApplicationDetailsResponse(appId).as(Application.class);
+        assertTestCase.assertEquals(updatedApplication.getName(), "API Test App Updated", "Application name is verified");
+        assertTestCase.assertEquals(updatedApplication.getUrl(), "https://www.google.com.mx", "Application url is verified");
+        //assertTestCase.assertEquals(updatedApplication.getProvider(), "mss", "Application provider is verified");
+
+        //Delete Application - Verify You CAN"T delete an application
+        response = apiController.deleteEMCApplicationResponse(appId);
+        response.prettyPrint();
+        assertTestCase.assertEquals(response.statusCode(), 204, "Status code 204 No Content is verified");
+        //assertTestCase.assertEquals(response.path("name"), "DeletedResponse", "Application delete response name is verified");
+//        assertTestCase.assertEquals(response.path("message"), "Missing Authentication Token", "Application delete response message is verified");
         List<Application> updatedApplications = apiController.getEMCAllApplicationsResponse().jsonPath().getList("", Application.class);
         assertTestCase.assertFalse(updatedApplications.contains(application), "Application is not deleted successfully");
     }
@@ -735,5 +807,98 @@ public class EMCAPITests extends APITestBase {
         assertTestCase.assertFalse(apiController.verifyProductForAccount(accountId, productId), "Product is verified for account");
         apiController.putProductToAccount(accountId, applicationId, productId);
         assertTestCase.assertTrue(apiController.verifyProductForAccount(accountId, productId), "Product is verified for account");
+    }
+
+    @Test(groups = {EMC, API, REGRESSION, SMOKE}, description = "API | EMC | App Integration | Add App Integration Product to Account")
+    @Xray(test = {12058})
+    public void appIntegrationResponseTests() {
+        String Application_key = apiController.getApplicationKey(Environment.MESG_APPLICATION_NAME);
+        System.out.println("Application_key = " + Application_key);
+        response = apiController.getAppIntegrationResponse(Application_key);
+        response.prettyPrint();
+        List<String> purchasedAssessmentsList = response.jsonPath().getList("entitlements.info.assessmentsInfo.usedAssessments");
+        System.out.println("purchasedAssessmentsList = " + purchasedAssessmentsList);
+        List<String> usedAssessmentsList = response.jsonPath().getList("entitlements.info.assessmentsInfo.purchasedAssessments");
+        System.out.println("usedAssessmentsList = " + usedAssessmentsList);
+        assertTestCase.assertEquals(response.statusCode(), 200, "Status code 200 OK is verified");
+        assertTestCase.assertTrue(purchasedAssessmentsList.size() > 0, "Purchased assessments list is not empty");
+        assertTestCase.assertTrue(usedAssessmentsList.size() > 0, "Used assessments list is not empty");
+    }
+
+    @Test(groups = {EMC, API, REGRESSION}, description = "API | EMC | User Info | Verify User does not have Access to GET UserInfo without Access Token")
+    @Xray(test = {12062, 12063})
+    public void appIntegrationResponseWithoutAccessTokenTests() {
+        String Application_key = apiController.getApplicationKey(Environment.MESG_APPLICATION_NAME);
+        System.out.println("Application_key = " + Application_key);
+        apiController.setInvalid();
+        response = apiController.getAppIntegrationResponse(Application_key);
+        response.prettyPrint();
+        assertTestCase.assertEquals(response.statusCode(), 401, "Status code 401 Unauthorized is verified");
+        assertTestCase.assertEquals(response.path("message")+"", "Unauthorized", "Response message is verified");
+        String token = System.getProperty("token");
+        try{
+            System.setProperty("token", "InvalidToken");
+            response = apiController.getAppIntegrationResponse(Application_key);
+            response.prettyPrint();
+            assertTestCase.assertEquals(response.statusCode(), 401, "Status code 401 Unauthorized is verified");
+            assertTestCase.assertEquals(response.path("message")+"", "Unauthorized", "Response message is verified");
+        } catch (Exception e) {
+            System.out.println("Exception is thrown");
+        } finally {
+            System.setProperty("token", token);
+        }
+        response = apiController.getAppIntegrationResponse(Application_key);
+        response.prettyPrint();
+        assertTestCase.assertEquals(response.statusCode(), 200, "Status code 200 OK is verified");
+    }
+
+    @Test(groups = {EMC, API, REGRESSION, SMOKE}, description = "API | EMC | SME | Verify that PUT update the Used SME assessments on ESG On-Demand Assessments")
+    @Xray(test = {12245, 12247, 12248, 12249, 12250})
+    public void verifyPutUpdateUsedSMEAssessmentsTest() {
+        String accountId = Environment.QA_TEST_ACCOUNT_ID;
+        System.out.println("accountId = " + accountId);
+        response = apiController.getAccountInfo(accountId);
+        response.prettyPrint();
+        String accountKey = response.path("key");
+        System.out.println("accountKey = " + accountKey);
+
+        response = apiController.putAssessmentUsageInfo(accountKey, 1);
+        response.prettyPrint();
+        assertTestCase.assertEquals(response.statusCode(), 200, "Status code 200 OK is verified");
+        assertTestCase.assertEquals(response.path("info.usedAssessmentsDelta")+"", "1", "usedAssessmentsDelta is verified");
+        System.out.println("usedAssessmentsDelta with positive value verified");
+
+        response = apiController.putAssessmentUsageInfo(accountKey, -1);
+        response.prettyPrint();
+        assertTestCase.assertEquals(response.statusCode(), 200, "Status code 200 OK is verified");
+        assertTestCase.assertEquals(response.path("info.usedAssessmentsDelta")+"", "-1", "usedAssessmentsDelta is verified");
+        System.out.println("usedAssessmentsDelta with negative value verified");
+
+        //request more than available assessment count
+        int currentPurchasedAssessments = response.jsonPath().getInt("info.currentPurchasedAssessments")+1;
+        System.out.println("currentPurchasedAssessments = " + currentPurchasedAssessments);
+        response = apiController.putAssessmentUsageInfo(accountKey, currentPurchasedAssessments);
+        response.prettyPrint();
+        assertTestCase.assertEquals(response.statusCode(), 200, "Status code 200 OK is verified");
+        assertTestCase.assertEquals(response.path("name"), "InvalidUsedAssessmentsDelta", "InvalidUsedAssessmentsDelta is verified");
+        System.out.println("InvalidUsedAssessmentsDelta with more than available assessments verified");
+
+        //request less than used assessments
+
+        response = apiController.putAssessmentUsageInfo(accountKey, -currentPurchasedAssessments);
+        response.prettyPrint();
+        assertTestCase.assertEquals(response.statusCode(), 200, "Status code 200 OK is verified");
+        assertTestCase.assertEquals(response.path("name"), "InvalidUsedAssessmentsDelta", "InvalidUsedAssessmentsDelta is verified");
+
+        apiController.setInvalid();
+        response = apiController.putAssessmentUsageInfo(accountKey, 10);
+        response.prettyPrint();
+        assertTestCase.assertEquals(response.statusCode(), 403, "Status code 403 Forbidden is verified");
+        assertTestCase.assertEquals(response.path("message"), "Forbidden", "Response message is verified");
+
+        response = apiController.putAssessmentUsageInfo(accountKey, "InvalidValue");
+        response.prettyPrint();
+        assertTestCase.assertEquals(response.statusCode(), 403, "Status code 403 Forbidden is verified");
+        assertTestCase.assertEquals(response.path("message"), "Forbidden", "Response message is verified");
     }
 }

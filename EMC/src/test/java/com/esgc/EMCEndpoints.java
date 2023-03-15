@@ -24,6 +24,7 @@ public class EMCEndpoints {
     public static String DELETE_PRODUCTS_FROM_ACCOUNT = "api/accounts/{account-id}/products/{product-id}";
     public static String GET_USERS = "api/accounts/{account-id}/users";
     public static String GET_APPLICATIONS = "api/applications";
+    public static String ASSESSMENT_USAGE = "api/sme/accounts/{accountKey}/assessments_usage";
 
     //========Application Roles==========
     //to set Investor or Issuer role to a user
@@ -37,4 +38,7 @@ public class EMCEndpoints {
 
     //======== Products==========
     public static String GET_PRODUCTS = "api/products";
+
+    //======== App Integration==========
+    public static String GET_APP_INTEGRATION = "api/app_integration/userinfo?appKey={appkey}&roles=true&entitlements=true&account=true&profile=true";
 }
