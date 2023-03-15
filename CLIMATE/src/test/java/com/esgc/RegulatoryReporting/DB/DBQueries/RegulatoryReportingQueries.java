@@ -839,6 +839,12 @@ public class RegulatoryReportingQueries {
         }
         return data;
     }
+    public List<Map<String, Object>> getBVD9idForEachPortfolio(String portfolioId){
+        String query = "select PORTFOLIO_ID,SEC_ID ,SEC_ID_TYPE,BVD9_NUMBER from \"QA_MESGC\".\"DF_TARGET\".\"DF_PORTFOLIO\" where portfolio_id = '"+portfolioId;
+
+        return getQueryResultMap(query);
+    }
+
 
     public List<Map<String, Object>> getUserInputHistory(String portfolioId) {
         String query = "with p as (Select * from df_portfolio where portfolio_id ='"+portfolioId+"')\n" +

@@ -23,6 +23,19 @@ public class RegulatoryReportingAPIController extends APIController {
         return response;
     }
 
+
+        public Response getDashboardPortfolioDetails() {
+            Response response = null;
+            try {
+                response = configSpec()
+                        .when()
+                        .get(RegulatoryReportingEndPoints.GET_DASHBOARD_COVERAGE);
+            } catch (Exception e) {
+                System.out.println("Inside exception " + e.getMessage());
+            }
+            return response;
+        }
+
     public Response getDownloadHistory() {
         Response response = null;
         try {
@@ -147,5 +160,9 @@ public class RegulatoryReportingAPIController extends APIController {
         return response;
     }
 
-
+    public List<String> getPortfolioFields() {
+        Response response = getPortfolioDetails();
+        List<String> portfolioField = response.jsonPath().getList("benchmark");
+        return portfolioField;
+    }
 }
