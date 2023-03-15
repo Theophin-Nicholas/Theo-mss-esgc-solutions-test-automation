@@ -92,9 +92,9 @@ public class RegulatoryReportingPageTests extends RegReportingUITestBase {
         List<String> actualPortfoliosList = reportingPage.getPortfolioList();
 
         System.out.println("size of actual  portfolio list"+actualPortfoliosList.size());
-        List <String> actualEnabledPorfoliosList = reportingPage.selectEnabledPortfolioOption();
+       // List <String> actualEnabledPorfoliosList = reportingPage.selectEnabledPortfolioOption();
 
-        System.out.println("size of actual enabled portfolio list"+actualEnabledPorfoliosList.size());
+        //System.out.println("size of actual enabled portfolio list"+actualEnabledPorfoliosList.size());
         //List<String> actualPortfoliosList = BrowserUtils.getElementsText(dashboardPage.portfolioNameList);
         assertTestCase.assertTrue(actualPortfoliosList.size() > 4, "Regulatory Reporting Page - Portfolio list is verified");
         assertTestCase.assertTrue(expectedPortfoliosList.containsAll(actualPortfoliosList), "Regulatory Reporting Page - Portfolio list is verified");

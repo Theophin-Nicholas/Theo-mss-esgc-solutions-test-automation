@@ -57,7 +57,7 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
             System.out.println("Reports are downloaded");
             assertTestCase.assertTrue(reportingPage.unzipReports(), "Reports are extracted");
             System.out.println("Reports are extracted");
-            assertTestCase.assertTrue(reportingPage.verifyReportsContentForData(selectedPortfolios, "User Input History", "Exposure Amount in EUR"),
+            assertTestCase.assertTrue(reportingPage.verifyReportsContentForData(selectedPortfolios, 1 , "Exposure Amount in EUR"),
                     "Reports Dats is verified with snowflake");
         } catch (Exception e) {
             e.printStackTrace();

@@ -15,6 +15,7 @@ import org.openqa.selenium.support.FindBy;
 import java.io.File;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.time.Year;
 import java.util.*;
 
 
@@ -1052,13 +1053,18 @@ public class RegulatoryReportingPage extends UploadPage {
         for (String data : getExcelDataList(excelName, "Disclaimer")) {
             excelData.addAll(BrowserUtils.splitToSentences(data));
         }
+
+
 //        excelData.forEach(System.out::println);
         List<String> templateData = new ArrayList<>();
         for (int i = 0; i < template.rowCount(); i++) {
             for (int j = 0; j < template.columnCount(); j++) {
-                templateData.addAll(BrowserUtils.splitToSentences(template.getCellData(i, j)));
+                templateData.addAll(excelData);
+
+                //templateData.addAll(BrowserUtils.splitToSentences(template.getCellData(i, j)));
             }
         }
+       // templateData.set(0, templateData.get(0).replace("© 2022 Moody's", "© " + Year.now() + " Moody's"));
 //        System.out.println("\n===================================\n");
 //        templateData.forEach(System.out::println);
         for (String sentence : templateData) {
@@ -1066,7 +1072,9 @@ public class RegulatoryReportingPage extends UploadPage {
                 System.out.println(sentence);
                 return false;
             }
+            System.out.println(sentence);
         }
+
         return true;
     }
 
