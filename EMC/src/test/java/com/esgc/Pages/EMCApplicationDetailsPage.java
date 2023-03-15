@@ -136,6 +136,12 @@ public class EMCApplicationDetailsPage extends EMCBasePage{
     @FindBy (xpath = "//button[.='Cancel']")
     public WebElement cancelProductButton;
 
+    @FindBy (xpath = "//hr/..//button[.='Delete']")
+    public WebElement productDeletePopUpDeleteButton;
+
+    @FindBy (xpath = "//hr/..//button[.='Cancel']")
+    public WebElement productDeletePopUpCancelButton;
+
 //METHODS
     public List<String> getApplicationRolesNames() {
         return applicationRolesNames.stream().map(WebElement::getText).collect(java.util.stream.Collectors.toList());
@@ -311,5 +317,33 @@ public class EMCApplicationDetailsPage extends EMCBasePage{
         assertTestCase.assertTrue(roleDetailNameInput.isDisplayed(), "Role name input is displayed");
         assertTestCase.assertTrue(roleDetailKeyInput.isDisplayed(), "Role key input is displayed");
         return true;
+    }
+
+    public void verifyApplicationRolesTab(String userType) {
+        clickOnRolesTab();
+        wait(applicationRolesNames, 10000);
+        assertTestCase.assertTrue(pageTitle.isDisplayed(), "Page title is displayed");
+        assertTestCase.assertTrue(backToApplicationsButton.isDisplayed(), "Back to Applications button is displayed");
+        assertTestCase.assertTrue(applicationType.isDisplayed(), "Application type is displayed");
+        assertTestCase.assertTrue(providerType.isDisplayed(), "Provider type is displayed");
+        assertTestCase.assertTrue(applicationRolesNames.size()>0, "Application roles are displayed");
+        assertTestCase.assertTrue(applicationRolesKeys.size()>0, "Application roles keys are displayed");
+        if(userType.equals("Admin")) {
+            assertTestCase.assertTrue(addRoleButton.isDisplayed(), "Add role button is displayed");
+            assertTestCase.assertTrue(deleteButton.isDisplayed(), "Delete button is displayed");
+        } else {
+            try {
+                if(addRoleButton.isDisplayed()) {
+                    System.out.println("Add role button shouldn't be displayed");
+                    assertTestCase.assertTrue(false, "Add role button shouldn't be displayed");
+                }
+                if (deleteButton.isDisplayed()) {
+                    System.out.println("Delete button shouldn't be displayed");
+                    assertTestCase.assertTrue(false, "Delete button shouldn't be displayed");
+                }
+            } catch (Exception e) {
+                System.out.println("Delete button is not displayed as expected");
+            }
+        }
     }
 }

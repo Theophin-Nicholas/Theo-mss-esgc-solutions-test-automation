@@ -12,10 +12,16 @@ public class EMCApplicationsPage extends EMCBasePage{
     @FindBy(tagName = "h3")
     public WebElement pageTitle;
 
+    @FindBy (xpath = "//thead//th")
+    public List<WebElement> tableHeaders;
+
+    @FindBy (xpath = "//tbody/tr[1]/*")
+    public List<WebElement> firstRow;
+
     @FindBy (xpath = "//tbody//td[1]//input")
     public List<WebElement> checkBoxes;
 
-    @FindBy (xpath = "//tbody//td[1]/p")////tbody//th/a
+    @FindBy (xpath = "//tbody//th/a")////tbody//td[1]/p
     public List<WebElement> applications;
 
     @FindBy (xpath = "//tbody//td[2]")
