@@ -408,7 +408,7 @@ public class PerformanceChart extends DataValidationTestBase {
 
 
     }
-    @Test(groups = {"regression","smoke", "data_validation", "dashboard"})
+    @Test(groups = {REGRESSION,SMOKE, DATA_VALIDATION, DASHBOARD, ESG})
     @Xray(test = {8689,8695,8697})
     public void validateESGScoreCategory() {
         String portfolioId = "00000000-0000-0000-0000-000000000000";

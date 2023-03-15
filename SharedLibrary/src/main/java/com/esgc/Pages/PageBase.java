@@ -1406,15 +1406,15 @@ public abstract class PageBase {
                     .findFirst().get().getCssValue("background-color"));
 
             //Validate if Menu Item in URL is selected
-            Assert.assertTrue(menuList.stream().filter(p -> p.getText().equals(finalStringToCheck))
+            assertTestCase.assertTrue(menuList.stream().filter(p -> p.getText().equals(finalStringToCheck))
                     .findFirst().get().getCssValue("background-color").equalsIgnoreCase("rgba(215, 237, 250, 1)"), "Open page menu is not selected");
 
             //Click on cross button
-            Driver.getDriver().findElement(By.xpath("//li[text()=\"Moody's ESG360\"]/span//*[name()='svg']")).click();
+            Driver.getDriver().findElement(By.xpath("//li[text()]/span//*[name()='svg']")).click();
             // menuList.get(0).findElement(By.xpath("span")).click();
             //Validating that menu list is closed and background page is still on
             waitForDataLoadCompletion();
-            Assert.assertTrue(menuList.size() == 1 && Driver.getDriver().getCurrentUrl().equals(url), "Menu is still displayed and is not focused on main page");
+            assertTestCase.assertTrue(menuList.size() == 1 && Driver.getDriver().getCurrentUrl().equals(url), "Menu is still displayed and is not focused on main page");
 
         } catch (Exception e) {
             e.printStackTrace();
