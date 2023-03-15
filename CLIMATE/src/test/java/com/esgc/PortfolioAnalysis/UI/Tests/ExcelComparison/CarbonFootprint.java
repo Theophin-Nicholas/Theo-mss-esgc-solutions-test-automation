@@ -511,6 +511,14 @@ public class CarbonFootprint extends UITestBase {
             System.out.println("excelUpdateList.get(i) = " + excelUpdateList.get(i));
             System.out.println("myList.get(i) = " + myList.get(i));
             System.out.println("####################################");
+
+            //empty cells should be corrected since there are some format differences
+            for (int j = 0; j < myList.size(); j++) {
+                if (excelUpdateList.get(i).get(j).equals("-")) {
+                    assertTestCase.assertTrue(myList.get(i).get(j).equals("") || myList.get(i).get(j) == null);
+                    myList.get(i).set(j, "-");
+                }
+            }
             assertTestCase.assertEquals(excelUpdateList.get(i), myList.get(i));
         }
         assertTestCase.assertTrue(CollectionUtils.isEqualCollection(excelUpdateList, myList));

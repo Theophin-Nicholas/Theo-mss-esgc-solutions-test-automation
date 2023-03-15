@@ -34,7 +34,7 @@ public class HeatMapBrownShareTests extends DashboardUITestBase {
         BrowserUtils.wait(5);
         dashboardPage.selectOrDeselectHeatMapSection("Brown Share Assessment");
         BrowserUtils.wait(5);
-        dashboardPage.selectOrDeselectHeatMapSection("Overall ESG Score");
+        dashboardPage.selectOrDeselectHeatMapSection("Physical Risk: Operations Risk");
         BrowserUtils.wait(5);
 
         dashboardPage.verifyBrownShareCoverageInHeatMapDescription();

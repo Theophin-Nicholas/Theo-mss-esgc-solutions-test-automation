@@ -61,7 +61,7 @@ public class PortfolioSettings extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI, SMOKE, ROBOT_DEPENDENCY})
-    @Xray(test = {9627, 9628, 9629})
+    @Xray(test = {9077, 9627, 9628, 9629})
     public void
     validatePortfolioDeletionViaPortfolioSettings() {
         ResearchLinePage researchLinePage = new ResearchLinePage();

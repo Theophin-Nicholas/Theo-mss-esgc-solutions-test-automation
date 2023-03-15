@@ -1145,7 +1145,7 @@ public class BrownShareAssessment extends UITestBase {
                 //System.out.println("exportedDocument.getCellData(row++, column) = " + exportedDocument.getCellData(row, column));
                 company.setCompany_name(exportedDocument.getCellData(row, column));
                 company.setScore_category(exportedDocument.getCellData(row, column + 1));
-                company.setInvestment_pct(Double.parseDouble(exportedDocument.getCellData(row, column + 2).replaceAll("%", "")));
+                company.setInvestment_pct(Double.parseDouble(exportedDocument.getCellData(row, column + 3).replaceAll("%", "")));
                 row++;
                 companyList.add(company);
             }

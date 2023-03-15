@@ -18,7 +18,7 @@ import static com.esgc.Utilities.Groups.*;
 
 public class GlobalHeaderSidePanel extends UITestBase {
 
-    @Test(groups = {REGRESSION, UI})
+    @Test(groups = {REGRESSION, UI, SMOKE})
     @Xray(test = {1899, 5939, 8967})
     public void validateGlobalHeader() {
 

@@ -15,7 +15,7 @@ import static com.esgc.Utilities.Groups.*;
 
 public class ViewMethodologiesTests extends DashboardUITestBase {
 
-    @Test(groups = {DASHBOARD, REGRESSION, UI, SMOKE})
+    @Test(groups = {DASHBOARD, REGRESSION, UI, SMOKE, ESG})
     @Xray(test = {8325, 8328, 8334,9729})
     public void verifyViewMethodologies() {
         // ESGCA-8334: General UI Checks for Methodology Drawer
