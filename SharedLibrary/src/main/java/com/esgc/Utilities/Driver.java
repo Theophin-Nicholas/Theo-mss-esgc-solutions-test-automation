@@ -60,7 +60,7 @@ public class Driver {
     }
 
     //private constructor prevents creating new object.
-    private Driver() {
+    public Driver() {
 
     }
 
@@ -133,6 +133,7 @@ public class Driver {
 
                     chromeOptions.addArguments("--start-maximized");
                     chromeOptions.addArguments("--disable-notifications");
+                    chromeOptions.addArguments("--remote-allow-origins=*");
                     driverPool.set(new ChromeDriver(chromeOptions));
 
                     break;
@@ -287,6 +288,8 @@ public class Driver {
 
                     chromeOptions.addArguments("--start-maximized");
                     chromeOptions.addArguments("--disable-notifications");
+                    chromeOptions.addArguments("--remote-allow-origins=*");
+
                     //  chromeOptions.addArguments("--disable-dev-shm-usage");
 
                     driverPool.set(new ChromeDriver(chromeOptions));

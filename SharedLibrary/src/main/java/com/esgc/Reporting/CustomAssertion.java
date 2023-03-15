@@ -239,6 +239,7 @@ public class CustomAssertion extends SoftAssert {
      * take a name of a test and returns a path to screenshot takes
      */
     public static String getScreenshot(String name) throws IOException {
+        Driver myDriver = new Driver();
         try {
             // name the screenshot with the current date time to avoid duplicate name
             String date = new SimpleDateFormat("yyyyMMddhhmmss").format(new Date());
@@ -246,7 +247,7 @@ public class CustomAssertion extends SoftAssert {
 //        WebDriver driver = new RemoteWebDriver( ... );
 //        driver           = new Augmenter().augment( driver );
 //        ( (TakesScreenshot)driver ).getScreenshotAs( ... );
-            TakesScreenshot ts = (TakesScreenshot) Driver.getDriver();
+            TakesScreenshot ts = (TakesScreenshot) myDriver.getDriver();
             File source = ts.getScreenshotAs(OutputType.FILE);
             // full path to the screenshot location
             String target = System.getProperty("user.dir") + File.separator + "test-output"

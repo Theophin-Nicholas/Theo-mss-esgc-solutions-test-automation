@@ -46,6 +46,7 @@ public class RegulatoryReportingPage extends UploadPage {
     @FindBy(xpath = "//div[.='Select Portfolios']/../div[2]/following-sibling::div/div[1]//input")
     public List<WebElement> portfolioRadioButtonList;
 
+
     @FindBy(xpath = "//div[.='Reporting for']/../following-sibling::div/div[2]/span")
     public List<WebElement> lastUploadedList;
 
@@ -372,6 +373,11 @@ public class RegulatoryReportingPage extends UploadPage {
         return (int) reportingRadioButtonList.stream().filter(WebElement::isSelected).count();
     }
 
+    public int returnNumberOfEnabledReportingOptions(){
+        return (int) portfolioRadioButtonList.stream().filter(WebElement::isEnabled).count();
+    }
+
+
     //return seleted reporting option's name
     public String getSelectedReportingOption() {
         for (int i = 0; i < reportingRadioButtonList.size(); i++) {
@@ -391,22 +397,36 @@ public class RegulatoryReportingPage extends UploadPage {
 
     //select reporting option by name
     public void selectReportingOptionByName(String name) {
+
         reportingRadioButtonList.get(getReportingList().indexOf(name)).click();
     }
 
 
     // this method will be used to click on 1 checkbox that is displayed and enabled
-    public List<String> selectEnabledPortfolioOption(){
-        List<String> enabledCheckboxes = new ArrayList<String>();
+    public List<WebElement> selectEnabledPortfolioOption(){
+        List<WebElement> enabledCheckboxesElements = new ArrayList<WebElement>();
         for (int i=0; i<portfolioRadioButtonList.size(); i++) {
 
-            if (portfolioRadioButtonList.get(i).isDisplayed() && portfolioRadioButtonList.get(i).isEnabled()){
-                enabledCheckboxes.add(portfolioRadioButtonList.get(i).getText());
+            if (portfolioRadioButtonList.get(i).isEnabled()){
+                enabledCheckboxesElements.add(portfolioRadioButtonList.get(i));
                 break;
             }
         }
-        return enabledCheckboxes;
+        return enabledCheckboxesElements;
     }
+
+    public List<String> selectEnabledPortfolioOptionText(){
+        List<String> enabledCheckboxesText = new ArrayList<String>();
+        for (int i=0; i<portfolioRadioButtonList.size(); i++) {
+
+            if (portfolioRadioButtonList.get(i).isEnabled()){
+                enabledCheckboxesText.add(selectEnabledPortfolioOption().get(i).getText());
+                break;
+            }
+        }
+        return enabledCheckboxesText;
+    }
+
 
     public void clickOnFirstEnabledPortfolioOption(){
 
@@ -1051,12 +1071,9 @@ public class RegulatoryReportingPage extends UploadPage {
     }
 
     public boolean verifyPreviouslyDownloadedButton() {
-        try {
+
             return previouslyDownloadedButton.isDisplayed();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
+
     }
 
     public void clickPreviouslyDownloadedButton() {
@@ -1094,6 +1111,59 @@ public class RegulatoryReportingPage extends UploadPage {
         System.out.println(actualFileName + "-->" + expFileName);
         assertTestCase.assertTrue(actualFileName.equals(expFileName), "Verify file is downloaded from Previously Downloaded screen");
     }
+
+    public boolean verifyBVD9IDInCompanyLevelOutput(List<String> selectedPortfolios, String reportFormat, String reportYear) {
+        for (String portfolioName : selectedPortfolios) {
+            System.out.println("\nportfolioName = " + portfolioName);
+            String portfolioId = apiController.getPortfolioId(portfolioName);
+
+            //open Excel file
+            String excelName = "";
+            ExcelUtil excelData = null;
+            //if multiple portfolios are selected and
+            // if interim report selected, then multiple Excel files will be downloaded and sheet index will be always 1
+            // if annual report selected, then one Excel file will be downloaded and sheet index will be index of selected portfolios
+            if (rrStatusPage_PortfoliosList.size() > 1) {
+                excelName = rrStatusPage_PortfoliosList.get(selectedPortfolios.indexOf(portfolioName)).getText().replaceAll("ready", "").trim();
+                excelData = getExcelData(excelName, 1);
+            } else {
+                excelName = rrStatusPage_PortfoliosList.get(0).getText().replaceAll("ready", "").trim();
+                excelData = getExcelData(excelName, selectedPortfolios.indexOf(portfolioName) + 1);//we skip index 0 because it is for Portfolio Level Output
+            }
+            System.out.println("Sheet Name = " + excelData.getSheetName());
+            //get column names and verify it has BVD9 ID but nor Factset ID
+            List<String> columnNames = excelData.getColumnsNames();
+            System.out.println("columnNames = " + columnNames);
+            if (columnNames.contains("BVD9 ID")) {
+                System.out.println("BVD9 ID column is found in the excel");
+                //return false;
+            }
+            if (!columnNames.contains("Factset ID")) {
+                System.out.println("Factset ID column is not found in the excel");
+                //return false;
+            }
+            //Data Validation
+            RegulatoryReportingQueries queries = new RegulatoryReportingQueries();
+            List<Map<String, Object>> dbData = queries.getBVD9idForEachPortfolio(portfolioId);
+            System.out.println("dbData.get() = " + dbData.get(0));
+            for(Map<String, Object> dbRow: dbData){
+                String bvd9Id = dbRow.get("BVD9_NUMBER").toString();
+                String companyName = dbRow.get("COMPANY_NAME").toString();
+                List<String> excelRow = excelData.getRowData(companyName);
+                System.out.println("excelRow = " + excelRow);
+                if(!excelRow.contains(bvd9Id)){
+                    System.out.println("BVD9 ID is not found in the excel for company = " + companyName);
+                    return false;
+                }
+                if(!excelRow.contains(companyName)){
+                    System.out.println("Company name is not found in the excel for company = " + companyName);
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
 
     public boolean verifySFDRCompanyOutput(List<String> selectedPortfolios, String year) {
         for (String portfolioName : selectedPortfolios) {
@@ -1143,6 +1213,45 @@ public class RegulatoryReportingPage extends UploadPage {
     public boolean verifyUserInputHistory(List<String> selectedPortfolios) {
         for (String portfolioName : selectedPortfolios) {
             String portfolioId = apiController.getPortfolioId(portfolioName);
+            List<Map<String, Object>> dbData = queries.getBVD9idForEachPortfolio(portfolioId);
+
+            //open Excel file
+            String excelName = rrStatusPage_PortfoliosList.get(0).getText().replaceAll("ready", "").trim();
+            ExcelUtil excelData = getExcelData(excelName, "User Input History");
+            if (!excelData.searchData("Identifier")) return false;
+            if (!excelData.searchData("Company Name")) return false;
+            if (!excelData.searchData("Exposure Amount in EUR")) return false;
+            if (!excelData.searchData("Exposure Amount %")) return false;
+
+            for (int i = 0; i < dbData.size(); i++) {
+                //System.out.println("DBData = "+dbData.get(i).values());
+                String companyName = dbData.get(i).get("COMPANY_NAME").toString();
+                List<String> companyRow = excelData.getRowData(companyName);
+                for (String cell : companyRow) {
+
+                    //convert dbData to String
+                    if (!dbData.get(i).toString().contains(cell)) {
+                        if (cell.matches("\\d+\\.0")) {
+                            cell = cell.replaceAll("\\.0", "");
+                            if (dbData.get(i).toString().contains(cell)) {
+                                continue;
+                            }
+                            System.out.println("companyName = " + companyName);
+                            System.out.println("cell = " + cell);
+                            System.out.println(cell + " is not in DB");
+                            return false;
+                        }
+                    }
+                }
+            }
+
+        }
+        return true;
+    }
+
+    public boolean verifyUserInputHistory222(List<String> selectedPortfolios) {
+        for (String portfolioName : selectedPortfolios) {
+            String portfolioId = apiController.getPortfolioId(portfolioName);
             List<Map<String, Object>> dbData = queries.getUserInputHistory(portfolioId);
 
             //open Excel file
@@ -1178,6 +1287,7 @@ public class RegulatoryReportingPage extends UploadPage {
         }
         return true;
     }
+
 
     public boolean verifyPortfolioLevelOutput(List<String> selectedPortfolios, String reportingYear, String reportFormat, String useLatestData) {
         for (String portfolioName : selectedPortfolios) {

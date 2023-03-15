@@ -47,11 +47,11 @@ import java.util.stream.Collectors;
        - if an Element never changes in the DOM then we can cache it
 
  */
-public abstract class PageBase {
+public abstract class PageBase extends Driver{
 
 
     protected CustomAssertion assertTestCase = new CustomAssertion();
-
+Driver myDriver = new Driver();
 
     //Menu Tab on top left corner
     @FindBy(xpath = "//li[starts-with(text(),\"Moody's ESG360: \")]")
@@ -380,8 +380,8 @@ public abstract class PageBase {
     @FindBy(xpath = "//div[starts-with(@id,'mini')]")
     public List<WebElement> portfolioCards;
 
-    protected WebDriverWait wait = new WebDriverWait(Driver.getDriver(), Duration.ofSeconds(80));
-    protected Actions actions = new Actions(Driver.getDriver());
+    protected WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(80));
+    protected Actions actions = new Actions(myDriver.getDriver());
     private String finalStringToCheck;
 
     //====================================
@@ -393,7 +393,7 @@ public abstract class PageBase {
      */
     public PageBase() {
 
-        PageFactory.initElements(Driver.getDriver(), this);
+        PageFactory.initElements(myDriver.getDriver(), this);
 
     }
 
@@ -402,7 +402,7 @@ public abstract class PageBase {
      */
     public void switchToIframe() {
 
-        Driver.getDriver().switchTo().frame(iframe);
+        myDriver.getDriver().switchTo().frame(iframe);
     }
 
     /**
@@ -410,7 +410,7 @@ public abstract class PageBase {
      */
     public void exitFromIframe() {
 
-        Driver.getDriver().switchTo().defaultContent();
+        myDriver.getDriver().switchTo().defaultContent();
     }
     //=================Common Methods for Navigation Tabs on Top of the Page ============================================
 
@@ -518,16 +518,16 @@ public abstract class PageBase {
 
     public String getLastUpdatedDateContainsSearchKeyWord(String searchKeyword) {
         String lastUpdateXpath = "//span[@title='" + searchKeyword + "']/../following-sibling::div/span";
-        String lastUpdatedDate = Driver.getDriver().findElement(By.xpath(lastUpdateXpath)).getText();
+        String lastUpdatedDate = myDriver.getDriver().findElement(By.xpath(lastUpdateXpath)).getText();
         return lastUpdatedDate;
     }
 
     public boolean verifyMessage(String section, String message) {
         try {
-            //BrowserUtils.scrollTo(Driver.getDriver().findElement(By.xpath("//div/div/div[3]/main/div/div[1]/div[3]/div[2]/div[1]/div")));
+            //BrowserUtils.scrollTo(myDriver.getDriver().findElement(By.xpath("//div/div/div[3]/main/div/div[1]/div[3]/div[2]/div[1]/div")));
             String xpath = "//*[contains(text(),'" + section + "')]/../..//div[contains(text(),'" + message + "')]";
             System.out.println("xpath = " + xpath);
-            WebElement verifyMessage = Driver.getDriver().findElement(By.xpath(xpath));
+            WebElement verifyMessage = myDriver.getDriver().findElement(By.xpath(xpath));
             return verifyMessage.isDisplayed();
         } catch (Exception e) {
             e.printStackTrace();
@@ -538,7 +538,7 @@ public abstract class PageBase {
     public boolean verifyMessageTransitionRisk(String section, String message) {
         try {
             String xpath = "//*[contains(text(),'" + section + "')]/../../..//div[text()='" + message + "']";
-            return Driver.getDriver().findElement(By.xpath(xpath)).isDisplayed();
+            return myDriver.getDriver().findElement(By.xpath(xpath)).isDisplayed();
         } catch (Exception e) {
             e.printStackTrace();
             return false;
@@ -549,7 +549,7 @@ public abstract class PageBase {
         try {
             String xpath = "//*[text()='" + section + "']/../..//div[text()='" + message + "']";
             System.out.println("xpath = " + xpath);
-            return (Driver.getDriver().findElements(By.xpath(xpath)).size() == noOfOccurences);
+            return (myDriver.getDriver().findElements(By.xpath(xpath)).size() == noOfOccurences);
         } catch (Exception e) {
             e.printStackTrace();
             return false;
@@ -574,16 +574,16 @@ public abstract class PageBase {
 
     public void selectRegion(String region) {
         BrowserUtils.wait(1);
-        WebElement element = Driver.getDriver().findElement(By.xpath("//div[@heap_filter='region_" + region + "']"));
+        WebElement element = myDriver.getDriver().findElement(By.xpath("//div[@heap_filter='region_" + region + "']"));
         BrowserUtils.waitForClickablility(element, 20).click();
     }
 
     public void selectSector(String sector) {
-        Driver.getDriver().findElement(By.xpath("//div[@heap_filter='sector_" + sector + "']")).click();
+        myDriver.getDriver().findElement(By.xpath("//div[@heap_filter='sector_" + sector + "']")).click();
     }
 
     public void selectAsOfDate(String month) {
-        Driver.getDriver().findElement(By.xpath("//div[@heap_filter='month_" + month + "']")).click();
+        myDriver.getDriver().findElement(By.xpath("//div[@heap_filter='month_" + month + "']")).click();
     }
 
 
@@ -591,7 +591,7 @@ public abstract class PageBase {
      * Click method for Menu Tab on top left corner
      */
     public void clickMenu() {
-        //WebDriverWait wait = new WebDriverWait(Driver.getDriver(), Duration.ofSeconds(60));
+        //WebDriverWait wait = new WebDriverWait(myDriver.getDriver(), Duration.ofSeconds(60));
         //wait.until(ExpectedConditions.elementToBeClickable(menu));
         BrowserUtils.waitForClickablility(menu,120);
         BrowserUtils.clickWithJS(menu);
@@ -608,7 +608,7 @@ public abstract class PageBase {
     public boolean checkIfPageTitleIsDisplayed(String page) {
         try {
             System.out.println(page + " Sub Title Check");
-            WebElement subtitle = Driver.getDriver().findElement(By.xpath("//div[text()='" + page + "']"));
+            WebElement subtitle = myDriver.getDriver().findElement(By.xpath("//div[text()='" + page + "']"));
             return wait.until(ExpectedConditions.visibilityOf(subtitle)).isDisplayed();
         } catch (Exception e) {
             System.out.println("Failed");
@@ -627,7 +627,7 @@ public abstract class PageBase {
     public boolean checkIfResearchLineTitleIsDisplayed(String page) {
         try {
             System.out.println(page + " Sub Title Check");
-            WebElement subtitle = Driver.getDriver().findElement(By.xpath("//div[contains(@class,'MuiBox-root')]/div[text()='" + page + "']"));
+            WebElement subtitle = myDriver.getDriver().findElement(By.xpath("//div[contains(@class,'MuiBox-root')]/div[text()='" + page + "']"));
             String portfolioName = getSelectedPortfolioNameFromDropdown();
             return wait.until(ExpectedConditions.visibilityOf(subtitle)).getText().equals(portfolioName + "\n: " + page);
         } catch (Exception e) {
@@ -647,7 +647,7 @@ public abstract class PageBase {
         String result = "";
         try {
             System.out.println("Check if description is displayed");
-            WebElement descriptionOfPage = Driver.getDriver().findElement(By.xpath("//*[@id=\"summary_box\"]"));
+            WebElement descriptionOfPage = myDriver.getDriver().findElement(By.xpath("//*[@id=\"summary_box\"]"));
             result = wait.until(ExpectedConditions.visibilityOf(descriptionOfPage)).getText();
             System.out.println("TEST PASS");
             return result;
@@ -662,7 +662,7 @@ public abstract class PageBase {
      * Clicks the portfolio selection button on Page to select or upload a portfolio
      */
     public void clickPortfolioSelectionButton() {
-        BrowserUtils.waitForVisibility(portfolioSelectionButton,60);
+        BrowserUtils.waitForVisibility(portfolioSelectionButton,45);
         wait.until(ExpectedConditions.elementToBeClickable(portfolioSelectionButton)).click();
         BrowserUtils.waitFor(3);
     }
@@ -689,7 +689,7 @@ public abstract class PageBase {
             clickMenu();
             // Dynamic xpath - Helps us to pass page names "Dashboard", "Portfolio Analysis", "Regulatory Reporting"
             String pageXpath = "//li[text()='" + page + "']";
-            WebElement pageElement = Driver.getDriver().findElement(By.xpath(pageXpath));
+            WebElement pageElement = myDriver.getDriver().findElement(By.xpath(pageXpath));
             wait.until(ExpectedConditions.elementToBeClickable(pageElement)).click();
         }
     }
@@ -722,7 +722,7 @@ public abstract class PageBase {
             case "Market Risk":
             case "Brown Share Assessment":
             case "Supply Chain Risk":
-                WebElement pageElement = Driver.getDriver().findElement(By.partialLinkText("more companies updated as of"));
+                WebElement pageElement = myDriver.getDriver().findElement(By.partialLinkText("more companies updated as of"));
                 wait.until(ExpectedConditions.elementToBeClickable(pageElement)).click();
                 break;
 
@@ -731,7 +731,7 @@ public abstract class PageBase {
             case "Energy Transition Management":
             case "TCFD Strategy":
             case "Green Share Assessment":
-                WebElement hrefElement = Driver.getDriver().findElement(By.partialLinkText("more companies updated in"));
+                WebElement hrefElement = myDriver.getDriver().findElement(By.partialLinkText("more companies updated in"));
                 wait.until(ExpectedConditions.elementToBeClickable(hrefElement)).click();
                 break;
 
@@ -751,7 +751,7 @@ public abstract class PageBase {
         clickResearchLineDropdown();
         BrowserUtils.wait(2);
         String pageXpath = "//ul[@id='portfolioanalysis-reportnavigation-test-id']//span/span";
-        return Driver.getDriver().findElements(By.xpath(pageXpath))
+        return myDriver.getDriver().findElements(By.xpath(pageXpath))
                 .stream().map(WebElement::getText).collect(Collectors.toList());
     }
 
@@ -771,12 +771,12 @@ public abstract class PageBase {
                 clickResearchLineDropdown();
                 // Dynamic xpath - Helps us to pass page names "Carbon Footprint", "Green Share" etc
                 String pageXpath = "//ul[@id='portfolioanalysis-reportnavigation-test-id']//span[contains(text(),'" + page + "')]";
-                WebElement pageElement = Driver.getDriver().findElement(By.xpath(pageXpath));
+                WebElement pageElement = myDriver.getDriver().findElement(By.xpath(pageXpath));
                 wait.until(ExpectedConditions.elementToBeClickable(pageElement)).click();
             }
         } catch (Exception e) {
             System.out.println("Couldn't find " + page);
-            Actions a = new Actions(Driver.getDriver());
+            Actions a = new Actions(myDriver.getDriver());
             a.sendKeys(Keys.ESCAPE).build().perform();
         }
     }
@@ -787,7 +787,7 @@ public abstract class PageBase {
         clickResearchLineDropdown();
         // Dynamic xpath - Helps us to pass page names "Operations Risk", "Market Risk"
         String pageXpath = "//ul[@id='portfolioanalysis-reportnavigation-test-id']//span[text()]";
-        WebElement pageElement = Driver.getDriver().findElements(By.xpath(pageXpath)).get(index);
+        WebElement pageElement = myDriver.getDriver().findElements(By.xpath(pageXpath)).get(index);
         wait.until(ExpectedConditions.elementToBeClickable(pageElement)).click();
     }
 
@@ -978,23 +978,23 @@ public abstract class PageBase {
 
 
     public void clickAwayinBlankArea() {
-        Driver.getDriver().findElement(By.xpath("//body")).click();
+        myDriver.getDriver().findElement(By.xpath("//body")).click();
         BrowserUtils.wait(2);
     }
 
     public void closeFilterByKeyboard() {
-        new Actions(Driver.getDriver()).sendKeys(Keys.TAB).pause(2000).build().perform();
-        //Driver.getDriver().findElement(By.xpath("//ul")).sendKeys(Keys.TAB);
+        new Actions(myDriver.getDriver()).sendKeys(Keys.TAB).pause(2000).build().perform();
+        //myDriver.getDriver().findElement(By.xpath("//ul")).sendKeys(Keys.TAB);
         //BrowserUtils.wait(2);
     }
 
     public void pressESCKey() {
-        new Actions(Driver.getDriver()).sendKeys(Keys.ESCAPE).pause(2000).build().perform();
+        new Actions(myDriver.getDriver()).sendKeys(Keys.ESCAPE).pause(2000).build().perform();
     }
 
     public void clickCoordination(int x, int y) {
-        new Actions(Driver.getDriver()).moveByOffset(x, y).pause(2000).click().pause(2000).build().perform();
-//        JavascriptExecutor executor = (JavascriptExecutor) Driver.getDriver();
+        new Actions(myDriver.getDriver()).moveByOffset(x, y).pause(2000).click().pause(2000).build().perform();
+//        JavascriptExecutor executor = (JavascriptExecutor) myDriver.getDriver();
 //        executor.executeScript("document.elementFromPoint(" + x + "," + y + ").click();");
     }
 
@@ -1021,7 +1021,7 @@ public abstract class PageBase {
     }
 
     public void refreshCurrentWindow() {
-        Driver.getDriver().navigate().refresh();
+        myDriver.getDriver().navigate().refresh();
     }
 
 
@@ -1069,9 +1069,9 @@ public abstract class PageBase {
 
         try {
             SimpleDateFormat sdformat = new SimpleDateFormat("MMMM dd, yyyy");
-            int count = Driver.getDriver().findElements(By.xpath("//span[text()='Portfolio Monitoring']/../following-sibling::div//tr/td[1]/span")).size();
+            int count = myDriver.getDriver().findElements(By.xpath("//span[text()='Portfolio Monitoring']/../following-sibling::div//tr/td[1]/span")).size();
             for (int i = 1; i <= count; i++) {
-                String eventDate = Driver.getDriver().findElement(By.xpath("//span[text()='Portfolio Monitoring']/../following-sibling::div//tr[" + i + "]/td[1]/span")).getText();
+                String eventDate = myDriver.getDriver().findElement(By.xpath("//span[text()='Portfolio Monitoring']/../following-sibling::div//tr[" + i + "]/td[1]/span")).getText();
                 Date currentDate = new Date();
                 long diff = currentDate.getTime() - sdformat.parse(eventDate).getTime();
                 long diffDays = diff / (24 * 60 * 60 * 1000) % 30;
@@ -1091,9 +1091,9 @@ public abstract class PageBase {
         LocalDate now = LocalDate.now();
         LocalDate earlier = now.minusMonths(1);
         String lastMonth = earlier.getMonth().name();
-        int count = Driver.getDriver().findElements(By.xpath("//span[text()='Portfolio Monitoring']/../following-sibling::div//tr/td[1]/span")).size();
+        int count = myDriver.getDriver().findElements(By.xpath("//span[text()='Portfolio Monitoring']/../following-sibling::div//tr/td[1]/span")).size();
         for (int i = 1; i <= count; i++) {
-            String date = Driver.getDriver().findElement(By.xpath("//span[text()='Portfolio Monitoring']/../following-sibling::div//tr[" + i + "]/td[1]/span")).getText();
+            String date = myDriver.getDriver().findElement(By.xpath("//span[text()='Portfolio Monitoring']/../following-sibling::div//tr[" + i + "]/td[1]/span")).getText();
             System.out.println("Index: " + i + " Actual: " + date.toUpperCase() + " Expected to start with: " + lastMonth.toUpperCase());
             if (!date.toUpperCase().startsWith(lastMonth.toUpperCase()))
                 return false;
@@ -1102,14 +1102,14 @@ public abstract class PageBase {
     }
 
     public String[][] getControversies() {
-        int rows = Driver.getDriver().findElements(By.xpath("//span[text()='Portfolio Monitoring']/../following-sibling::div//tr")).size();
-        int cols = Driver.getDriver().findElements(By.xpath("//span[text()='Portfolio Monitoring']/../following-sibling::div//tr[1]/td")).size();
+        int rows = myDriver.getDriver().findElements(By.xpath("//span[text()='Portfolio Monitoring']/../following-sibling::div//tr")).size();
+        int cols = myDriver.getDriver().findElements(By.xpath("//span[text()='Portfolio Monitoring']/../following-sibling::div//tr[1]/td")).size();
         String controversies[][] = new String[rows][cols];
         String xpath = "";
         for (int i = 1; i <= rows; i++) {
             for (int j = 1; j <= cols; j++) {
                 xpath = "//span[text()='Portfolio Monitoring']/../following-sibling::div//tr[" + i + "]/td[" + j + "]";
-                controversies[i - 1][j - 1] = Driver.getDriver().findElement(By.xpath(xpath)).getText();
+                controversies[i - 1][j - 1] = myDriver.getDriver().findElement(By.xpath(xpath)).getText();
             }
         }
         return controversies;
@@ -1169,7 +1169,7 @@ public abstract class PageBase {
     }
 
     public boolean verifyRegionValuesAndSort(ArrayList<String> expRegionValues) {
-        List<WebElement> regions = Driver.getDriver().findElements(By.xpath("//div[@id='list-region']/div/div/span"));
+        List<WebElement> regions = myDriver.getDriver().findElements(By.xpath("//div[@id='list-region']/div/div/span"));
         ArrayList<String> regionValues = new ArrayList<>();
         for (WebElement region : regions) {
             regionValues.add(region.getText());
@@ -1178,17 +1178,17 @@ public abstract class PageBase {
     }
 
     public boolean verifyDefaultSelectedSectorValue(String expSector) {
-        String actualSelectedSector = Driver.getDriver().findElement(By.xpath("//div[@id='list-sector']/div[contains(@class,'Mui-selected')]/div/span")).getText();
+        String actualSelectedSector = myDriver.getDriver().findElement(By.xpath("//div[@id='list-sector']/div[contains(@class,'Mui-selected')]/div/span")).getText();
         return actualSelectedSector.equals(expSector);
     }
 
     public boolean verifyDefaultSelectedRegionValue(String expRegion) {
-        String actualSelectedRegion = Driver.getDriver().findElement(By.xpath("//div[@id='list-region']/div[contains(@class,'Mui-selected')]/div/span")).getText();
+        String actualSelectedRegion = myDriver.getDriver().findElement(By.xpath("//div[@id='list-region']/div[contains(@class,'Mui-selected')]/div/span")).getText();
         return actualSelectedRegion.equals(expRegion);
     }
 
     public boolean verifyDefaultSelectedAsOfDateValue() {
-        String actualSelectedAsOfDate = Driver.getDriver().findElement(By.xpath("//div[@id='list-asOfDate']/div[contains(@class,'Mui-selected')]/div/span")).getText();
+        String actualSelectedAsOfDate = myDriver.getDriver().findElement(By.xpath("//div[@id='list-asOfDate']/div[contains(@class,'Mui-selected')]/div/span")).getText();
         LocalDate now = LocalDate.now();
         LocalDate earlier = now.minusMonths(1);
         String month = earlier.getMonth().name();
@@ -1200,7 +1200,7 @@ public abstract class PageBase {
     public boolean verifyAsOfDatesSort() {
         LocalDate earlier = LocalDate.now();
         for (int i = 1; i <= 17; i++) {
-            String actDate = Driver.getDriver().findElement(By.xpath("(//div[@id='list-asOfDate']/div/div/span)[" + i + "]")).getText();
+            String actDate = myDriver.getDriver().findElement(By.xpath("(//div[@id='list-asOfDate']/div/div/span)[" + i + "]")).getText();
             earlier = earlier.minusMonths(1);
             String expDate = earlier.getMonth().name() + " " + earlier.getYear();
             if (!(actDate.equalsIgnoreCase(expDate)))
@@ -1210,7 +1210,7 @@ public abstract class PageBase {
     }
 
     public boolean verifySectorsSort() {
-        List<WebElement> sectors = Driver.getDriver().findElements(By.xpath("//div[@id='list-sector']/div"));
+        List<WebElement> sectors = myDriver.getDriver().findElements(By.xpath("//div[@id='list-sector']/div"));
         ArrayList<String> sectorValues = new ArrayList<>();
         for (WebElement sector : sectors) {
             sectorValues.add(sector.getText());
@@ -1255,51 +1255,51 @@ public abstract class PageBase {
     }
 
     public boolean verifyRegion(String region) {
-        return Driver.getDriver().findElement(By.xpath("//div[text()='" + region + "']")).isDisplayed();
+        return myDriver.getDriver().findElement(By.xpath("//div[text()='" + region + "']")).isDisplayed();
     }
 
     public boolean verifyViewByRegionTableColumns(String columnName) {
         String xpath = "//th/span[contains(text(),'" + columnName + "')]";
-        return Driver.getDriver().findElements(By.xpath(xpath)).size() == 3; //For 3 regions
+        return myDriver.getDriver().findElements(By.xpath(xpath)).size() == 3; //For 3 regions
     }
 
     public void verifyCompanyNameInCoveragePopup(String subsidiaryCompanyName) {
         String xpath = "//span[@heap_id='view-panel'][text()='" + subsidiaryCompanyName + "']";
-        assertTestCase.assertEquals(Driver.getDriver().findElements(By.xpath(xpath)).size(), 1);
+        assertTestCase.assertEquals(myDriver.getDriver().findElements(By.xpath(xpath)).size(), 1);
     }
 
     public void verifyCompanyIsNotClickableInCoveragePopup(String companyName) {
         String xpath = "//span[@heap_id='view-panel'][text()='" + companyName + "']";
-        WebElement element = Driver.getDriver().findElement(By.xpath(xpath));
+        WebElement element = myDriver.getDriver().findElement(By.xpath(xpath));
         assertTestCase.assertFalse(isElementClickable(element));
     }
 
     public void verifyCompanyIsClickableInCoveragePopup(String companyName) {
         String xpath = "//span[@heap_id='view-panel'][text()='" + companyName + "']";
-        WebElement element = Driver.getDriver().findElement(By.xpath(xpath));
+        WebElement element = myDriver.getDriver().findElement(By.xpath(xpath));
         assertTestCase.assertTrue(element.getCssValue("text-decoration").contains("underline"));
     }
 
     public void verifyCompanyNameInTables(String subsidiaryCompanyName) {
         String xpath = "//span[text()='" + subsidiaryCompanyName + "']";
-        assertTestCase.assertEquals(Driver.getDriver().findElements(By.xpath(xpath)).size(), 1);
+        assertTestCase.assertEquals(myDriver.getDriver().findElements(By.xpath(xpath)).size(), 1);
     }
 
     public void verifyCompanyIsNotClickable(String companyName) {
         String xpath = "//span[text()='" + companyName + "']";
-        WebElement element = Driver.getDriver().findElement(By.xpath(xpath));
+        WebElement element = myDriver.getDriver().findElement(By.xpath(xpath));
         assertTestCase.assertFalse(isElementClickable(element));
     }
 
     public void verifyCompanyIsClickable(String companyName) {
         String xpath = "//span[text()='" + companyName + "']";
-        WebElement element = Driver.getDriver().findElement(By.xpath(xpath));
+        WebElement element = myDriver.getDriver().findElement(By.xpath(xpath));
         assertTestCase.assertTrue(element.getCssValue("text-decoration").contains("underline"));
     }
 
     public void clickTheCompany(String companyName) {
         String xpath = "//span[text()='" + companyName + "']";
-        List<WebElement> elements = Driver.getDriver().findElements(By.xpath(xpath));
+        List<WebElement> elements = myDriver.getDriver().findElements(By.xpath(xpath));
         BrowserUtils.scrollTo(elements.get(elements.size() - 1));
         elements.get(elements.size() - 1).click();
     }
@@ -1338,7 +1338,7 @@ public abstract class PageBase {
         BrowserUtils.scrollTo(exportCompaniesButton);
         wait.until(ExpectedConditions.elementToBeClickable(exportCompaniesButton)).click();
         BrowserUtils.wait(3);
-    /*    Actions actions = new Actions(Driver.getDriver());
+    /*    Actions actions = new Actions(myDriver.getDriver());
         actions.moveToElement(exportPdf).pause(2000).click().pause(2000).build().perform();*/
         wait.until(ExpectedConditions.elementToBeClickable(exportPdf)).click();
         BrowserUtils.wait(30);
@@ -1366,7 +1366,7 @@ public abstract class PageBase {
             }
 
             //To get page URL
-            String url = Driver.getDriver().getCurrentUrl();
+            String url = myDriver.getDriver().getCurrentUrl();
 
             if (url.contains("dashboard")) {
                 Assert.assertEquals(menuList.get(0).getText(), "Moody's ESG360: Dashboard", "Global Header Title is not matched for Dashboard");
@@ -1385,11 +1385,11 @@ public abstract class PageBase {
                     .findFirst().get().getCssValue("background-color").equalsIgnoreCase("rgba(215, 237, 250, 1)"), "Open page menu is not selected");
 
             //Click on cross button
-            Driver.getDriver().findElement(By.xpath("//li[text()=\"Moody's ESG360\"]/span//*[name()='svg']")).click();
+            myDriver.getDriver().findElement(By.xpath("//li[text()=\"Moody's ESG360\"]/span//*[name()='svg']")).click();
             // menuList.get(0).findElement(By.xpath("span")).click();
             //Validating that menu list is closed and background page is still on
             waitForDataLoadCompletion();
-            Assert.assertTrue(menuList.size() == 1 && Driver.getDriver().getCurrentUrl().equals(url), "Menu is still displayed and is not focused on main page");
+            Assert.assertTrue(menuList.size() == 1 && myDriver.getDriver().getCurrentUrl().equals(url), "Menu is still displayed and is not focused on main page");
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -1575,7 +1575,7 @@ public abstract class PageBase {
     }
 
     public void clickSearchIcon() {
-        List<WebElement> svgElements = Driver.getDriver().findElements(By.xpath("//*[local-name()='svg']"));
+        List<WebElement> svgElements = myDriver.getDriver().findElements(By.xpath("//*[local-name()='svg']"));
         svgElements.get(1).click();
         wait.until(ExpectedConditions.visibilityOf(SearchInputBox));
 
@@ -1592,7 +1592,7 @@ public abstract class PageBase {
 
 
     public void clickCloseIcon() {
-        List<WebElement> closeIcon = Driver.getDriver().findElements(By.xpath("//div[@class='MuiToolbar-root MuiToolbar-regular']//*[local-name()='svg' and @class='MuiSvgIcon-root']"));
+        List<WebElement> closeIcon = myDriver.getDriver().findElements(By.xpath("//div[@class='MuiToolbar-root MuiToolbar-regular']//*[local-name()='svg' and @class='MuiSvgIcon-root']"));
         closeIcon.get(1).click();
     }
 
@@ -1627,8 +1627,8 @@ public abstract class PageBase {
         BrowserUtils.wait(3);
         String xpathSearchKeyWord = "//mark[.='" + searchKeyword + "']";
         try {
-            System.out.println(Driver.getDriver().findElement(By.xpath(xpathSearchKeyWord)).getText());
-            return BrowserUtils.isElementVisible(Driver.getDriver().findElement(By.xpath(xpathSearchKeyWord)), 3);
+            System.out.println(myDriver.getDriver().findElement(By.xpath(xpathSearchKeyWord)).getText());
+            return BrowserUtils.isElementVisible(myDriver.getDriver().findElement(By.xpath(xpathSearchKeyWord)), 3);
         } catch (Exception e) {
             e.printStackTrace();
             return false;
@@ -1636,8 +1636,8 @@ public abstract class PageBase {
     }
 
     public boolean checkIfSearchResultsContainsEllipses(String searchKeyword) {
-        WebElement element = Driver.getDriver().findElement(By.xpath("//div[@id='mini-0']/div"));
-        String resultKeyword = Driver.getDriver().findElement(By.xpath("//div[@id='mini-0']/div/span")).getText();
+        WebElement element = myDriver.getDriver().findElement(By.xpath("//div[@id='mini-0']/div"));
+        String resultKeyword = myDriver.getDriver().findElement(By.xpath("//div[@id='mini-0']/div/span")).getText();
         return searchKeyword.contains(resultKeyword) && element.getCssValue("text-overflow").equalsIgnoreCase("ellipsis");
     }
 
@@ -1647,7 +1647,7 @@ public abstract class PageBase {
         searchBarOfPortfolio.sendKeys(searchKeyword);
         BrowserUtils.wait(3);
         String xpathSearchKeyWord = "//mark[.='" + searchKeyword + "']";
-        List<WebElement> list = Driver.getDriver().findElements(By.xpath(xpathSearchKeyWord));
+        List<WebElement> list = myDriver.getDriver().findElements(By.xpath(xpathSearchKeyWord));
         for (int i = 0; i < list.size(); i++) {
             if (!list.get(i).getText().contains(searchKeyword)) {
                 return false;
@@ -1659,11 +1659,11 @@ public abstract class PageBase {
     public void checkSearchResultWithWildChars(String searchKeyword) {
         searchBarOfPortfolio.sendKeys(searchKeyword);
         BrowserUtils.wait(3);
-        BrowserUtils.isElementVisible(Driver.getDriver().findElement(By.xpath("//header[@id='prop-search']/following-sibling::*/DIV/div/div/div[1]")), 3);
-        int numberOfSearchResult = Driver.getDriver().findElements(By.xpath("//header[@id='prop-search']/following-sibling::*/DIV/div/div/div")).size();
+        BrowserUtils.isElementVisible(myDriver.getDriver().findElement(By.xpath("//header[@id='prop-search']/following-sibling::*/DIV/div/div/div[1]")), 3);
+        int numberOfSearchResult = myDriver.getDriver().findElements(By.xpath("//header[@id='prop-search']/following-sibling::*/DIV/div/div/div")).size();
         assertTestCase.assertEquals(numberOfSearchResult, 10);
         String xpathSearchKeyWord = "//mark[.='" + searchKeyword + "']";
-        List<WebElement> list = Driver.getDriver().findElements(By.xpath(xpathSearchKeyWord));
+        List<WebElement> list = myDriver.getDriver().findElements(By.xpath(xpathSearchKeyWord));
         searchKeyword = searchKeyword.replace("%", "").replace("*", "");
         for (int i = 0; i < list.size(); i++) {
             assertTestCase.assertTrue(list.get(i).getText().contains(searchKeyword));
@@ -1675,8 +1675,8 @@ public abstract class PageBase {
         searchBarOfPortfolio.sendKeys(searchKeyword);
         BrowserUtils.wait(3);
         try {
-            BrowserUtils.isElementVisible(Driver.getDriver().findElement(By.xpath("//header[@id='prop-search']/following-sibling::*/DIV/div/div/div[1]")), 3);
-            int numberOfSearchResult = Driver.getDriver().findElements(By.xpath("//header[@id='prop-search']/following-sibling::*/DIV/div/div/div")).size();
+            BrowserUtils.isElementVisible(myDriver.getDriver().findElement(By.xpath("//header[@id='prop-search']/following-sibling::*/DIV/div/div/div[1]")), 3);
+            int numberOfSearchResult = myDriver.getDriver().findElements(By.xpath("//header[@id='prop-search']/following-sibling::*/DIV/div/div/div")).size();
             System.out.println(numberOfSearchResult);
             return numberOfSearchResult == 10;
         } catch (Exception e) {
@@ -1691,8 +1691,8 @@ public abstract class PageBase {
         searchBarOfPortfolio.sendKeys(searchKeyword);
         BrowserUtils.wait(3);
         try {
-            BrowserUtils.isElementVisible(Driver.getDriver().findElement(By.xpath("(//div[.='No results found'])[3]")), 3);
-            String warningMessage = Driver.getDriver().findElement(By.xpath("(//div[.='No results found'])[3]")).getText();
+            BrowserUtils.isElementVisible(myDriver.getDriver().findElement(By.xpath("(//div[.='No results found'])[3]")), 3);
+            String warningMessage = myDriver.getDriver().findElement(By.xpath("(//div[.='No results found'])[3]")).getText();
             System.out.println(warningMessage);
             return warningMessage.equals("No results found");
         } catch (Exception e) {
@@ -1722,7 +1722,7 @@ public abstract class PageBase {
 
     public boolean isSearchBoxAppearonDashboardPage() {
         try {
-            List<WebElement> check = Driver.getDriver().findElements(By.xpath("//input[@id='platform-search-test-id']"));
+            List<WebElement> check = myDriver.getDriver().findElements(By.xpath("//input[@id='platform-search-test-id']"));
             return check.size() != 0;
         } catch (Exception e) {
             return false;
@@ -1731,30 +1731,30 @@ public abstract class PageBase {
 
     public boolean checkIfUserIsOnEntityPageBySearchedKeyword(String searchKeyword) {
         String dynamicXpath = "//li[contains(.,'" + searchKeyword + "')]";
-        BrowserUtils.isElementVisible(Driver.getDriver().findElement(By.xpath(dynamicXpath)), 3);
-        String text = Driver.getDriver().findElement(By.xpath(dynamicXpath)).getText();
+        BrowserUtils.isElementVisible(myDriver.getDriver().findElement(By.xpath(dynamicXpath)), 3);
+        String text = myDriver.getDriver().findElement(By.xpath(dynamicXpath)).getText();
         System.out.println(text);
         return text.contains(searchKeyword);
     }
 
     public void clickCloseXIcon() {
         BrowserUtils.wait(2);
-        Driver.getDriver().findElement(By.xpath("//(//*[@fill='#26415E'])[4]")).click();
+        myDriver.getDriver().findElement(By.xpath("//(//*[@fill='#26415E'])[4]")).click();
     }
 
     public void closePortfolioExportDrawer() {
-        Actions actionBuilder = new Actions(Driver.getDriver());
+        Actions actionBuilder = new Actions(myDriver.getDriver());
         actionBuilder.click(closeIconInCompanySummariesDrawer).build().perform();
     }
 
     public void clickCloseXIconWithJs() {
-        wait.until(ExpectedConditions.visibilityOf(Driver.getDriver().findElement(By.xpath("//(//*[@fill='#26415E'])[4]"))));
-        BrowserUtils.clickWithJS(Driver.getDriver().findElement(By.xpath("//(//*[@fill='#26415E'])[4]")));
+        wait.until(ExpectedConditions.visibilityOf(myDriver.getDriver().findElement(By.xpath("//(//*[@fill='#26415E'])[4]"))));
+        BrowserUtils.clickWithJS(myDriver.getDriver().findElement(By.xpath("//(//*[@fill='#26415E'])[4]")));
     }
 
     public boolean userIsOnHomePage() {
         String xpath = "(//div[@id='legend_box'])[1]";
-        return Driver.getDriver().findElement(By.xpath(xpath)).isDisplayed();
+        return myDriver.getDriver().findElement(By.xpath(xpath)).isDisplayed();
 
     }
 
@@ -1763,8 +1763,8 @@ public abstract class PageBase {
 
 //    public boolean checkIfUserIsOnRightPage(String entityName) {
 //        this.entityName = entityName;
-//        BrowserUtils.isElementVisible(Driver.getDriver().findElement(By.xpath("//div[.='" + entityName + "']")), 3);
-//        String text = Driver.getDriver().findElement(By.xpath("//div[.='" + entityName + "']")).getText();
+//        BrowserUtils.isElementVisible(myDriver.getDriver().findElement(By.xpath("//div[.='" + entityName + "']")), 3);
+//        String text = myDriver.getDriver().findElement(By.xpath("//div[.='" + entityName + "']")).getText();
 //        System.out.println(text);
 //        return text.contains(entityName);
 //    }
@@ -1792,7 +1792,7 @@ public abstract class PageBase {
     }
 
     public boolean verifyBackGroundColor() {
-        String color = Driver.getDriver().findElement(By.id("innerBox00")).getCssValue("background-color");
+        String color = myDriver.getDriver().findElement(By.id("innerBox00")).getCssValue("background-color");
         String backGroundOfUpdateDateColor = carbonFootprintUpdateDate.getCssValue("color");
         String headersColor = carbonFootprintTitle.getCssValue("color");
         System.out.println("headersColor" + headersColor);
@@ -1808,9 +1808,9 @@ public abstract class PageBase {
         BrowserUtils.wait(3);
         ////span[@title='Assa Abloy AB']
         String xpathSearchKeyWord = "//span[@title='" + nameOfEntity + "']";
-        System.out.println(Driver.getDriver().findElement(By.xpath(xpathSearchKeyWord)).getText());
-        BrowserUtils.isElementVisible(Driver.getDriver().findElement(By.xpath(xpathSearchKeyWord)), 3);
-        Driver.getDriver().findElement(By.xpath(xpathSearchKeyWord)).click();
+        System.out.println(myDriver.getDriver().findElement(By.xpath(xpathSearchKeyWord)).getText());
+        BrowserUtils.isElementVisible(myDriver.getDriver().findElement(By.xpath(xpathSearchKeyWord)), 3);
+        myDriver.getDriver().findElement(By.xpath(xpathSearchKeyWord)).click();
 
     }
 
@@ -1821,9 +1821,9 @@ public abstract class PageBase {
         BrowserUtils.wait(3);
         ////span[@title='Assa Abloy AB']
         String xpathSearchKeyWord = "//div[@id='mini-0']//span";
-        System.out.println(Driver.getDriver().findElement(By.xpath(xpathSearchKeyWord)).getText());
-        BrowserUtils.isElementVisible(Driver.getDriver().findElement(By.xpath(xpathSearchKeyWord)), 3);
-        Driver.getDriver().findElement(By.xpath(xpathSearchKeyWord)).click();
+        System.out.println(myDriver.getDriver().findElement(By.xpath(xpathSearchKeyWord)).getText());
+        BrowserUtils.isElementVisible(myDriver.getDriver().findElement(By.xpath(xpathSearchKeyWord)), 3);
+        myDriver.getDriver().findElement(By.xpath(xpathSearchKeyWord)).click();
 
     }
 
@@ -1851,7 +1851,7 @@ public abstract class PageBase {
     public boolean verifyPhysicalRiskHazardDescription(String riskType, String entitlement, String description) {
         try {
             String xpath = "//div[text()='" + riskType + "']//b[text()='" + entitlement + "']/parent::div";
-            WebElement element = Driver.getDriver().findElement(By.xpath(xpath));
+            WebElement element = myDriver.getDriver().findElement(By.xpath(xpath));
             BrowserUtils.scrollTo(element);
             return element.getText().contains(description);
         } catch (Exception e) {
@@ -1888,9 +1888,9 @@ public abstract class PageBase {
     }
 
     public boolean showTheExactNumberInsteadOfLessSign() {
-        List<WebElement> listOfAll = Driver.getDriver().findElements(By.xpath("//*[@id='table-id-1']//td"));
+        List<WebElement> listOfAll = myDriver.getDriver().findElements(By.xpath("//*[@id='table-id-1']//td"));
         // listOfBackgroundColoredCells shows the list of color background cells in table
-        List<WebElement> listOfBackgroundColoredCells = Driver.getDriver().findElements(By.xpath("//*[@id='table-id-1']/tbody/tr[*]/td[*]"));
+        List<WebElement> listOfBackgroundColoredCells = myDriver.getDriver().findElements(By.xpath("//*[@id='table-id-1']/tbody/tr[*]/td[*]"));
 
         for (int i = 0; i < listOfAll.size(); i++) {
             if ((("" + listOfAll.get(i)).contains("<")) && listOfBackgroundColoredCells.size() == 15) {
@@ -1909,7 +1909,7 @@ public abstract class PageBase {
     public boolean verifyCoverage() {
         String portfolio = getSelectedPortfolioNameFromDropdown();
         BrowserUtils.wait(5);
-        String coverage = Driver.getDriver().findElement(By.xpath("(//div[text()='" + portfolio + "']/following-sibling::div/span)[1]")).getText();
+        String coverage = myDriver.getDriver().findElement(By.xpath("(//div[text()='" + portfolio + "']/following-sibling::div/span)[1]")).getText();
         String[] coverageText = coverage.split("\n")[0].split(" ");
         return coverageText[0].equals("Coverage:")
                 && coverageText[1].equals("Across")
@@ -1924,13 +1924,13 @@ public abstract class PageBase {
     public boolean verifyClimateRisk() {
         wait.until(ExpectedConditions.elementToBeClickable(summaryClimateRisk)).click();
         BrowserUtils.wait(2);
-        return Driver.getDriver().findElement(By.xpath("//h2[text()='Climate Risk']")).isDisplayed();
+        return myDriver.getDriver().findElement(By.xpath("//h2[text()='Climate Risk']")).isDisplayed();
     }
 
     public boolean verifyPhysicalRiskClimateTile() {
         try {
 
-            String highestRiskHazardStatus = Driver.getDriver().findElement(By.xpath("//div[text()='Physical Risk']/..//div[text()='Highest Risk Hazard']/..//span[2]")).getText();
+            String highestRiskHazardStatus = myDriver.getDriver().findElement(By.xpath("//div[text()='Physical Risk']/..//div[text()='Highest Risk Hazard']/..//span[2]")).getText();
             System.out.println("highestRiskHazardStatus = " + highestRiskHazardStatus);
             ArrayList<String> highestRiskHazardStatusList = new ArrayList<String>();
             highestRiskHazardStatusList.add("Floods");
@@ -1940,7 +1940,7 @@ public abstract class PageBase {
             highestRiskHazardStatusList.add("Water Stress");
             highestRiskHazardStatusList.add("Wildfires");
 
-            String facilitiesExposedValue = Driver.getDriver().findElement(By.xpath("//div[text()='Physical Risk']/..//div[text()='Facilities Exposed to " + highestRiskHazardStatus + "']/..//span[1]")).getText();
+            String facilitiesExposedValue = myDriver.getDriver().findElement(By.xpath("//div[text()='Physical Risk']/..//div[text()='Facilities Exposed to " + highestRiskHazardStatus + "']/..//span[1]")).getText();
             System.out.println("facilitiesExposedValue = " + facilitiesExposedValue);
             System.out.println("facilitiesExposedValue = " + facilitiesExposedValue.substring(0, facilitiesExposedValue.indexOf('%') - 1).chars().allMatch(Character::isDigit));
             return highestRiskHazardStatusList.contains(highestRiskHazardStatus) &&
@@ -1954,7 +1954,7 @@ public abstract class PageBase {
 
     public boolean verifyTransitionRiskClimateTile() {
         try {
-            String temperatureAlignmentValue = Driver.getDriver().findElement(By.xpath("//div[text()='Transition Risk']/..//div[text()='Temperature Alignment']/..//span[1]")).getText();
+            String temperatureAlignmentValue = myDriver.getDriver().findElement(By.xpath("//div[text()='Transition Risk']/..//div[text()='Temperature Alignment']/..//span[1]")).getText();
 
             ArrayList<String> carbonFootprintScores = new ArrayList<String>();
             carbonFootprintScores.add("Moderate");
@@ -1962,7 +1962,7 @@ public abstract class PageBase {
             carbonFootprintScores.add("High");
             carbonFootprintScores.add("Intense");
 
-            String carbonFootprintScore = Driver.getDriver().findElement(By.xpath("//div[text()='Transition Risk']/..//div[text()='Carbon Footprint']/..//span[1]")).getText();
+            String carbonFootprintScore = myDriver.getDriver().findElement(By.xpath("//div[text()='Transition Risk']/..//div[text()='Carbon Footprint']/..//span[1]")).getText();
             return temperatureAlignmentValue.contains("°C")
                     && carbonFootprintScores.contains(carbonFootprintScore);
 
@@ -2099,7 +2099,7 @@ public abstract class PageBase {
 
     public void selectPortfolio(String portfolioName) {
         try {
-            WebElement portfolio = Driver.getDriver().findElement(By.xpath("//*[@title='" + portfolioName + "']"));
+            WebElement portfolio = myDriver.getDriver().findElement(By.xpath("//*[@title='" + portfolioName + "']"));
             BrowserUtils.scrollTo(portfolio);
             portfolio.click();
             System.out.println("Portfolio found : " + portfolioName);
@@ -2127,7 +2127,7 @@ public abstract class PageBase {
 
     public void selectPortfolioFromPortfolioSettings(String portfolioName) {
         try {
-            WebElement portfolio = Driver.getDriver().findElement(By.xpath("//span[@title='" + portfolioName + "']"));
+            WebElement portfolio = myDriver.getDriver().findElement(By.xpath("//span[@title='" + portfolioName + "']"));
             BrowserUtils.scrollTo(portfolio);
             portfolio.click();
             System.out.println("Portfolio found : " + portfolioName);
@@ -2167,7 +2167,7 @@ public abstract class PageBase {
 
     public WebElement getPortfolioDrawerHeader(String portfolioName) {
         BrowserUtils.wait(2);
-        return Driver.getDriver().findElement(By.xpath("//span[@title='" + portfolioName + "']"));
+        return myDriver.getDriver().findElement(By.xpath("//span[@title='" + portfolioName + "']"));
     }
 
     public void clickInSidePortfolioDrawer() {

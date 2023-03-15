@@ -40,7 +40,7 @@ public class DashboardPage extends UploadPage {
     @FindBy(xpath = "//*[@heap_menu='Dashboard']")
     public WebElement dashboardButton;
 
-    @FindBy(xpath = "//*[@heap_id='menu']")
+    @FindBy(xpath = "//*[@id='topbar-appbar-test-id']/div/li")
     public WebElement menuButton;
 
     @FindBy(xpath = "//*[@heap_id='portfolioSetting']")
@@ -415,6 +415,7 @@ public class DashboardPage extends UploadPage {
 
     public void clickOnDashboardButton() {
         dashboardButton.click();
+        //BrowserUtils.waitForVisibility(dashboardButton, 25).click();
     }
 
     public void clickOnLogoutButton() {
@@ -422,7 +423,8 @@ public class DashboardPage extends UploadPage {
     }
 
     public void clickOnMenuButton() {
-        menuButton.click();
+        BrowserUtils.waitForVisibility(menuButton, 25).click();
+        //BrowserUtils.waitForStaleElement(menuButton);
     }
 
     public void clickOnPortfolioSelectionUploadButton() {

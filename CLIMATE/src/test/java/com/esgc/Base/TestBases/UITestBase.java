@@ -103,11 +103,11 @@ public abstract class UITestBase extends TestBase {
     public synchronized void teardownBrowserAfterUITesting() {
         Driver.closeDriver();
     }
-
+/*
    @AfterClass(alwaysRun = true)
     public void closeDriverAfterAllTests() {
       Driver.closeDriver();
    }
-
+*/
 
 }

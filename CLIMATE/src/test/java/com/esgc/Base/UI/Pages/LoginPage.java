@@ -194,7 +194,8 @@ public class LoginPage extends ClimatePageBase {
      */
     public void login() {
         System.out.println("Login with default user");
-        wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.DATA_USERNAME, Keys.ENTER);
+        //wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.DATA_USERNAME, Keys.ENTER);
+        BrowserUtils.waitForVisibility(usernameBox, 10).sendKeys(Environment.DATA_USERNAME, Keys.ENTER);
         BrowserUtils.wait(5);
         boolean isUserOnNewLoginPage = Driver.getDriver().getCurrentUrl().contains("auth.moodys.com");
         if (isUserOnNewLoginPage) {
