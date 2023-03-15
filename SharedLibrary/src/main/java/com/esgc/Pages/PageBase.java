@@ -204,6 +204,9 @@ public abstract class PageBase {
     @FindBy(id = "button-holdings")
     public WebElement portfolioSelectionButton;
 
+    @FindBy(xpath = "//*[@heap_id='portfolioSetting']")
+    public WebElement portfolioSelectionUploadButton;
+
     @FindBy(id = "RegSector-test-id-1")
     public WebElement regionsDropdown;
 
@@ -437,6 +440,9 @@ public abstract class PageBase {
         regulatoryReporting.click();
     }
 
+    public void clickOnPortfolioSelectionUploadButton(){
+        portfolioSelectionUploadButton.click();
+    }
     /*
      * This method will verify if Regions Sections and As Of Date drop down
      */

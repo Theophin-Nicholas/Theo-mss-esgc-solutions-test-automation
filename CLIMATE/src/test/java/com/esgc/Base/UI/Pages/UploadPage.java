@@ -111,7 +111,8 @@ public class UploadPage extends ClimatePageBase {
     }
 
     public void clickUploadButton() {
-        wait.until(ExpectedConditions.elementToBeClickable(uploadButton));
+        //wait.until(ExpectedConditions.elementToBeClickable(uploadButton));
+        BrowserUtils.waitForClickablility(uploadButton, 30);
         uploadButton.click();
     }
 

@@ -1,17 +1,23 @@
 package com.esgc.RegulatoryReporting.UI.Tests;
 
 import com.esgc.Base.TestBases.UITestBase;
+import com.esgc.Base.UI.Pages.LoginPage;
 import com.esgc.Dashboard.UI.Pages.DashboardPage;
 import com.esgc.PortfolioAnalysis.UI.Pages.PhysicalRiskPages.PhysicalRiskManagementPages.PhysicalRiskManagementPage;
+import com.esgc.RegulatoryReporting.UI.Pages.RegReportingUITestBase;
 import com.esgc.RegulatoryReporting.UI.Pages.RegulatoryReportingPage;
 import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.DateTimeUtilities;
 import com.esgc.Utilities.Driver;
 import com.esgc.Utilities.Xray;
+import com.esgc.Utilities.*;
+import org.apache.commons.collections.bag.SynchronizedSortedBag;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.Color;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.Test;
 
+import java.time.Duration;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -25,7 +31,11 @@ public class RegulatoryReportingPageTests extends UITestBase {
     public void verifyReportingListTest() {
         RegulatoryReportingPage reportingPage = new RegulatoryReportingPage();
         DashboardPage dashboardPage = new DashboardPage();
-        dashboardPage.clickMenu();
+        BrowserUtils.wait(5);
+        //dashboardPage.refreshCurrentWindow();
+        dashboardPage.clickOnMenuButton();
+        //dashboardPage.clickOnRegulatoryReporting();
+        //dashboardPage.clickMenu();
         // Dynamic xpath - Helps us to pass page names "Dashboard", "Portfolio Analysis"
         assertTestCase.assertTrue(dashboardPage.isRegulatoryReportingDisplayed(),
                 "Verify that user can navigate to Regulatory Reporting page");
@@ -49,9 +59,10 @@ public class RegulatoryReportingPageTests extends UITestBase {
                 "SFDR PAIs is not selected");
         assertTestCase.assertTrue(reportingPage.isSelectedReportingOptionByName("EU Taxonomy"),
                 "EU Taxonomy is selected");
-        assertTestCase.assertTrue(reportingPage.isInterimReportsOptionDisplayed(),"Interim Reports option is displayed");
-        assertTestCase.assertTrue(reportingPage.isAnnualReportsOptionEnabled(),"Annual Reports option is enabled");
-        assertTestCase.assertTrue(reportingPage.isUseLatestDataOptionDisplayed(),"Use Latest Data option is displayed");
+        assertTestCase.assertTrue(reportingPage.isInterimReportsOptionDisplayed(), "Interim Reports option is displayed");
+        assertTestCase.assertTrue(reportingPage.isAnnualReportsOptionEnabled(), "Annual Reports option is enabled");
+        assertTestCase.assertTrue(reportingPage.isUseLatestDataOptionDisplayed(), "Use Latest Data option is displayed");
+        assertTestCase.assertAll();
     }
 
     @Test(groups = {REGRESSION, UI, REGULATORY_REPORTING}, description = "Verify user portfolio list on regulatory reporting page")
@@ -69,6 +80,12 @@ public class RegulatoryReportingPageTests extends UITestBase {
         test.info("Navigated to Regulatory Reporting Page");
         //get portfolios' list on regulatory reporting page
         List<String> actualPortfoliosList = reportingPage.getPortfolioList();
+
+        System.out.println("size of actual  portfolio list"+actualPortfoliosList.size());
+       // List <String> actualEnabledPorfoliosList = reportingPage.selectEnabledPortfolioOption();
+
+        //System.out.println("size of actual enabled portfolio list"+actualEnabledPorfoliosList.size());
+        //List<String> actualPortfoliosList = BrowserUtils.getElementsText(dashboardPage.portfolioNameList);
         assertTestCase.assertTrue(actualPortfoliosList.size() > 4, "Regulatory Reporting Page - Portfolio list is verified");
         assertTestCase.assertTrue(expectedPortfoliosList.containsAll(actualPortfoliosList), "Regulatory Reporting Page - Portfolio list is verified");
 
@@ -150,6 +167,11 @@ public class RegulatoryReportingPageTests extends UITestBase {
     public void verifyPortfolioUploadTest() {
         RegulatoryReportingPage reportingPage = new RegulatoryReportingPage();
         DashboardPage dashboardPage = new DashboardPage();
+        //BrowserUtils.wait(5);
+        //dashboardPage.clickOnRegulatoryReporting();
+        //dashboardPage.clickOnMenuButton();
+        //dashboardPage.clickOnRegulatoryReporting();
+
         dashboardPage.navigateToPageFromMenu("Regulatory Reporting");
         test.info("Navigated to Regulatory Reporting Page");
         //verify portfolio upload modal
@@ -302,7 +324,7 @@ public class RegulatoryReportingPageTests extends UITestBase {
         System.out.println("color = " + color);
         assertTestCase.assertEquals(color, "#1f8cff", "Create report button color is blue");
         Set<String> windows = BrowserUtils.getWindowHandles();
-        reportingPage.createReportsButton.click();
+        reportingPage.clickOnCreateReportsButton();
 
         //verify create reports button after clicking
         BrowserUtils.switchWindowsTo(currentWindow);
@@ -310,6 +332,7 @@ public class RegulatoryReportingPageTests extends UITestBase {
         color = Color.fromString(reportingPage.createReportsButton.getCssValue("background-color")).asHex();
         System.out.println("color = " + color);
         assertTestCase.assertEquals(color, "#046bd9", "Create report button color is blue");//#0971e0
+        assertTestCase.assertEquals(color, "#046bd9", "Create report button color is blue");
         try {
             //New tab should be opened and empty state message should be displayed as in the screenshot
             assertTestCase.assertTrue(reportingPage.verifyNewTabOpened(windows), "New tab is opened");
@@ -367,6 +390,26 @@ public class RegulatoryReportingPageTests extends UITestBase {
         reportingPage.selectAnnualReports();
         assertTestCase.assertFalse(reportingPage.isAnnualReportsSelected(), "Annual reports option is disabled as expected");
     }
+
+    /*
+    public void verifyAnnualReportingDisabledTest() {
+        DashboardPage dashboardPage = new DashboardPage();
+        dashboardPage.clickOnMenuButton();
+        dashboardPage.clickOnRegulatoryReporting();
+        //dashboardPage.navigateToPageFromMenu("Regulatory Reporting");
+        test.info("Navigated to Regulatory Reporting Page");
+        assertTestCase.assertTrue(reportingPage.isInterimReportsOptionDisplayed(), "Interim reports option is displayed");
+        assertTestCase.assertTrue(reportingPage.isAnnualReportsOptionDisplayed(), "Annual reports option is displayed");
+        assertTestCase.assertTrue(reportingPage.isUseLatestDataOptionDisplayed(), "Use latest data option is displayed");
+        reportingPage.selectAllPortfolioOptions();
+        List<String> selectedPortfolios = reportingPage.getSelectedPortfolioOptions();
+        reportingPage.selectReportingFor(selectedPortfolios.get(0), "2019");
+        reportingPage.selectReportingFor(selectedPortfolios.get(1), "2020");
+        reportingPage.selectReportingFor(selectedPortfolios.get(2), "2021");
+        reportingPage.selectAnnualReports();
+        assertTestCase.assertFalse(reportingPage.isAnnualReportsSelected(), "Annual reports option is disabled as expected");
+    }
+     */
 
     @Test(groups = {REGRESSION, UI, REGULATORY_REPORTING}, description = "UI | Regulatory Reporting | UI Checks for Reporting service Options")
     @Xray(test = {11066, 11067})
@@ -426,7 +469,7 @@ public class RegulatoryReportingPageTests extends UITestBase {
         if (!reportingPage.verifyPortfolio(portfolioName)) reportingPage.uploadPortfolio(portfolioName);
         String currentWindow = BrowserUtils.getCurrentWindowHandle();
         reportingPage.selectReportingOptionByName("EU Taxonomy");
-        assertTestCase.assertEquals(reportingPage.getSelectedReportingOption(), "EU Taxonomy", "EU Taxonomy is selected");
+        assertTestCase.assertEquals(reportingPage.getSelectedReportingOption(),"EU Taxonomy", "EU Taxonomy is selected");
         reportingPage.selectPortfolioOptionByName(portfolioName);
         List<String> selectedPortfolios = reportingPage.getSelectedPortfolioOptions();
         assertTestCase.assertTrue(selectedPortfolios.contains(portfolioName), "Portfolio is selected");
@@ -434,40 +477,83 @@ public class RegulatoryReportingPageTests extends UITestBase {
 
         //verify create reports button before clicking
         assertTestCase.assertTrue(reportingPage.isCreateReportsButtonEnabled(), "Create report button is enabled");
-        reportingPage.createReportsButton.click();
+        reportingPage.clickOnCreateReportsButton();
 
         //verify create reports button after clicking
         BrowserUtils.wait(1);
-        try {
-            //New tab should be opened and empty state message should be displayed as in the screenshot
-            assertTestCase.assertTrue(reportingPage.verifyNewTabOpened(tabs), "New tab is opened");
-            System.out.println("New tab is opened");
-            assertTestCase.assertTrue(reportingPage.verifyReportsReadyToDownload(selectedPortfolios), "Reports are ready to download");
-            System.out.println("Reports are ready to download");
-            reportingPage.deleteFilesInDownloadsFolder();
-            assertTestCase.assertTrue(reportingPage.verifyIfReportsDownloaded(), "Reports are downloaded");
-            System.out.println("Reports are downloaded");
-            assertTestCase.assertTrue(reportingPage.unzipReports(), "Reports are extracted");
-            System.out.println("Reports are extracted");
-            assertTestCase.assertTrue(reportingPage.verifyEUTaxonomySheets(), "EU Taxonomy sheets are verified");
-            System.out.println("EU Taxonomy sheets are verified");
-            assertTestCase.assertTrue(reportingPage.verifyGreenInvestmentRatioTemplate(), "Green Investment Ratio Template sheet is verified");
-            System.out.println("Green Investment Ratio Template sheet is verified");
-            assertTestCase.assertTrue(reportingPage.verifyUnderlyingDataOverview(), "Underlying Data Overview sheet is verified");
-            System.out.println("Underlying Data Overview sheet is verified");
-            assertTestCase.assertTrue(reportingPage.verifyUnderlyingDataActivities(), "Underlying Data Activities sheet is verified");
-            System.out.println("Underlying Data Activities sheet is verified");
-            assertTestCase.assertTrue(reportingPage.verifyDefinitions(), "Definitions sheet is verified");
-            System.out.println("Definitions sheet is verified");
-            assertTestCase.assertTrue(reportingPage.verifyDisclaimer(), "Definitions sheet is verified");
-            System.out.println("Definitions sheet is verified");
-        } catch (Exception e) {
-            assertTestCase.assertTrue(false, "Report verification failed");
-            e.printStackTrace();
-        } finally {
-            Driver.closeBrowserTab();
-            BrowserUtils.switchWindowsTo(currentWindow);
-        }
+        // try{
+        //New tab should be opened and empty state message should be displayed as in the screenshot
+        assertTestCase.assertTrue(reportingPage.verifyNewTabOpened(tabs), "New tab is opened");
+        System.out.println("New tab is opened");
+        assertTestCase.assertTrue(reportingPage.verifyReportsReadyToDownload(selectedPortfolios), "Reports are ready to download");
+        System.out.println("Reports are ready to download");
+        reportingPage.deleteFilesInDownloadsFolder();
+        assertTestCase.assertTrue(reportingPage.verifyIfReportsDownloaded(), "Reports are downloaded");
+        System.out.println("Reports are downloaded");
+        assertTestCase.assertTrue(reportingPage.unzipReports(), "Reports are extracted");
+        System.out.println("Reports are extracted");
+        assertTestCase.assertTrue(reportingPage.verifyEUTaxonomySheets(), "EU Taxonomy sheets are verified");
+        System.out.println("EU Taxonomy sheets are verified");
+        assertTestCase.assertTrue(reportingPage.verifyGreenInvestmentRatioTemplate(), "Green Investment Ratio Template sheet is verified");
+        System.out.println("Green Investment Ratio Template sheet is verified");
+        assertTestCase.assertTrue(reportingPage.verifyUnderlyingDataOverview(), "Underlying Data Overview sheet is verified");
+        System.out.println("Underlying Data Overview sheet is verified");
+        assertTestCase.assertTrue(reportingPage.verifyUnderlyingDataActivities(), "Underlying Data Activities sheet is verified");
+        System.out.println("Underlying Data Activities sheet is verified");
+        assertTestCase.assertTrue(reportingPage.verifyDefinitions(), "Definitions sheet is verified");
+        System.out.println("Definitions sheet is verified");
+        assertTestCase.assertTrue(reportingPage.verifyDisclaimer(), "Disclaimer sheet is verified");
+        System.out.println("Disclaimer sheet is verified");
+        //  } catch (Exception e) {
+        //      assertTestCase.assertTrue(false, "Report verification failed");
+        //      e.printStackTrace();
+        //  } finally {
+        //      BrowserUtils.switchWindowsTo(currentWindow);
+        //  }
+
     }
 
+    @Test(groups = {"regression", "ui", "regulatoryReporting"})
+    @Xray(test = {11654, 11657})
+    public void verifyPreviouslyDownloadedFeature() {
+        RegulatoryReportingPage reportingPage = new RegulatoryReportingPage();
+        DashboardPage dashboardPage = new DashboardPage();
+        dashboardPage.navigateToPageFromMenu("Regulatory Reporting");
+        test.info("Navigated to Regulatory Reporting Page");
+
+        assertTestCase.assertTrue(reportingPage.verifyPreviouslyDownloadedButton(), "Verify Previously Downloaded button");
+
+        reportingPage.clickPreviouslyDownloadedButton();
+        BrowserUtils.wait(5);
+        for (String windowHandle : Driver.getDriver().getWindowHandles()) {
+            Driver.getDriver().switchTo().window(windowHandle);
+        }
+
+        reportingPage.verifyPreviouslyDownloadedScreen();
+        reportingPage.verifyFileDownloadFromPreviouslyDownloadedScreen();
+    }
+
+    @Test(groups = {"regression", "ui", "regulatoryReporting"})
+    @Xray(test = {11712})
+    public void verifyNoFilesInPreviouslyDownloadedScreen() {
+        RegulatoryReportingPage reportingPage = new RegulatoryReportingPage();
+
+        LoginPage login = new LoginPage();
+        login.clickOnLogout();
+        login.entitlementsLogin(EntitlementsBundles.NO_PREVIOUSLY_DOWNLOADED_REGULATORY_REPORTS);
+        DashboardPage dashboardPage = new DashboardPage();
+        dashboardPage.navigateToPageFromMenu("Regulatory Reporting");
+        test.info("Navigated to Regulatory Reporting Page");
+
+        assertTestCase.assertTrue(reportingPage.verifyPreviouslyDownloadedButton(), "Verify Previously Downloaded button");
+
+        reportingPage.clickPreviouslyDownloadedButton();
+        BrowserUtils.wait(5);
+        for (String windowHandle : Driver.getDriver().getWindowHandles()) {
+            Driver.getDriver().switchTo().window(windowHandle);
+        }
+        BrowserUtils.waitForVisibility(reportingPage.previouslyDownloadedErrorMessage, 30);
+        assertTestCase.assertEquals(reportingPage.getPreviouslyDownloadedErrorMessageText(),"No previously downloaded reports to be displayed.", "Verify Error message in Previously Downloaded screen");
+
+    }
 }

@@ -69,7 +69,7 @@
             <artifactId>extentreports</artifactId>
         </dependency>
 
-        <!-- To work with excel files: -->
+        <!-- To work with Excel files: -->
         <dependency>
             <groupId>org.apache.poi</groupId>
             <artifactId>poi</artifactId>
