@@ -42,10 +42,11 @@ public class RegulatoryReportingEntitlementsTests extends UITestBase {
 //, "smoke"
     @Xray(test = {10867})
     public void verifyReportingPageWithoutSFDRUserTest() {
+        LoginPage loginPage = new LoginPage();
+        loginPage.login();
         RegulatoryReportingPage regulatoryReportingPage = new RegulatoryReportingPage();
         regulatoryReportingPage.clickMenu();
         assertTestCase.assertTrue(regulatoryReportingPage.isRegulatoryReportingOptionIsAvailableInSidePanel(), "Reporting page option is displayed");
-        LoginPage loginPage = new LoginPage();
         loginPage.clickOnLogout();
         loginPage.loginWithParams(Environment.PHYSICAL_RISK_USERNAME, Environment.PHYSICAL_RISK_PASSWORD);
         regulatoryReportingPage.clickMenu();
