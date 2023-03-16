@@ -103,6 +103,8 @@ public class LoginPage extends ClimatePageBase {
     @FindBy(xpath = "//a[text()='← Back to Sign-In Page']")
     public WebElement backToSignInButton;
 
+    @FindBy(xpath = "//*[@id='idp-discovery-submit']")
+    public WebElement nextButtonToEnterNoPreviousDownload;
     // ======================================== Help Page
 
     @FindBy(xpath = "//*[text()='Sign-In Help']")
@@ -201,6 +203,15 @@ public class LoginPage extends ClimatePageBase {
         if (!Environment.INTERNAL_USER_USERNAME.contains("moodys.com")) {
             wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.INTERNAL_USER_PASSWORD, Keys.ENTER);
         }
+    }
+
+    public void loginToVerifyNoPreviouslyDownloaded(){
+        wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.NO_PREVIOUSLY_DOWNLOADED_REGULATORY_REPORTS_USERNAME, Keys.ENTER);
+        wait.until(ExpectedConditions.elementToBeClickable(nextButtonToEnterNoPreviousDownload)).click();
+        //wait.until()nextButtonToEnterNoPreviousDownload.click();
+        //passwordBox.sendKeys(Environment.NO_PREVIOUSLY_DOWNLOADED_REGULATORY_REPORTS_PASSWORD);
+        wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.NO_PREVIOUSLY_DOWNLOADED_REGULATORY_REPORTS_PASSWORD, Keys.ENTER);
+
     }
 
     public void loginWithWrongUser() {

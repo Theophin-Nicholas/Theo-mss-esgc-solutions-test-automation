@@ -131,6 +131,7 @@ public abstract class TestBase {
     }
 
     public void getExistingUsersAccessTokenFromUI() {
+
         System.out.println("getting token");
         String getAccessTokenScript = "return JSON.parse(localStorage.getItem('okta-token-storage')).accessToken.accessToken";
         String accessToken = ((JavascriptExecutor) Driver.getDriver()).executeScript(getAccessTokenScript).toString();

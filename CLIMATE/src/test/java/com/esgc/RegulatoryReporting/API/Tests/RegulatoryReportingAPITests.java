@@ -2,6 +2,7 @@ package com.esgc.RegulatoryReporting.API.Tests;
 
 import com.esgc.Base.TestBases.APITestBase;
 import com.esgc.Base.UI.Pages.LoginPage;
+import com.esgc.Dashboard.API.Controllers.DashboardAPIController;
 import com.esgc.Dashboard.UI.Pages.DashboardPage;
 import com.esgc.RegulatoryReporting.API.APIModels.PortfolioDetails;
 import com.esgc.RegulatoryReporting.API.Controllers.RegulatoryReportingAPIController;
@@ -130,6 +131,30 @@ public class RegulatoryReportingAPITests extends APITestBase {
                 apiController.deletePortfolio(apiController.getPortfolioId(portfolioName));
             }
         }
+    }
+@Test
+    public void verifyBenchmarkFieldDashboard(){
+        RegulatoryReportingPage reportingPage = new RegulatoryReportingPage();
+        DashboardPage dashboardPage = new DashboardPage();
+    dashboardPage.navigateToPageFromMenu("Dashboard");
+
+    RegulatoryReportingAPIController apiController = new RegulatoryReportingAPIController();
+    List<String> portfolioFields = apiController.getPortfolioFields();
+
+    BrowserUtils.wait(10);
+
+    assertTestCase.assertFalse(portfolioFields.contains("benchmark"), "the benchmark field is not present");
+    for (String name : portfolioFields ){
+        System.out.println(name);
+    }
+
+    BrowserUtils.wait(10);
+
+    //JsonPath benchmarkTest = apiController.getDashboardPortfolioDetails().jsonPath();
+   // assertTestCase.assertEquals(benchmarkTest.getString("benchmark"), "benchmark", "benchmark field is present");
+
+
+
     }
 
     @Test(groups = {REGRESSION, REGULATORY_REPORTING, API}, description = "Data Validation| MT | Regulatory Reporting | Verify API Response with Valid Parameters")
