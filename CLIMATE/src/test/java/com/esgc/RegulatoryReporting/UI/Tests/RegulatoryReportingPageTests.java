@@ -216,7 +216,7 @@ public class RegulatoryReportingPageTests extends UITestBase {
 
         //delete portfolio
         portfolioAnalysisPage.deletePortfolio(newPortfolioName);
-        //note:LINES BELOW DISABLED BECAUSE OF there might be multiople portfolios with the same name
+        //note:LINES BELOW DISABLED BECAUSE OF there might be multiple portfolios with the same name
 //        assertTestCase.assertFalse(portfolioAnalysisPage.verifyPortfolio(newPortfolioName), "New Portfolio is deleted");
 //
 //        //verify portfolio on regulatory reporting page

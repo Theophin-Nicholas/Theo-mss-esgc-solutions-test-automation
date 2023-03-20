@@ -25,6 +25,8 @@ public class EsgMaterialityDataValidation extends DataValidationTestBase {
         EntityClimateProfilePage entityProfilePage = new EntityClimateProfilePage();
         String companyName = entityProfilePage.searchAndLoadClimateProfilePage(company);
         assertTestCase.assertTrue(entityProfilePage.validateGlobalCompanyNameHeader(companyName), companyName + " Header Verification");
+
+        // remove to be de-scoped furkan review ?
         assertTestCase.assertTrue(entityProfilePage.verifyOverallEsgScoreWidget(), "Verify overall ESG Score widget");
         assertTestCase.assertTrue(entityProfilePage.verifySectorComparisonChart(), "Verify Sector Comparison widget ");
 

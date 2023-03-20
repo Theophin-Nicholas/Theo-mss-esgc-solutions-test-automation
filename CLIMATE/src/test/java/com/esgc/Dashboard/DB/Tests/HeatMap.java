@@ -33,6 +33,7 @@ public class HeatMap extends DataValidationTestBase {
     @Xray(test = {4918, 4919, 4920, 4922, 4923, 4926, 5116, 7476, 7484, 7620, 7621, 9216, 11049  })
     public void verifyHeatMapWithMixedIdentifiers(@Optional String sector, @Optional String region, @Optional String researchLine1, @Optional String month, @Optional String year) {
         SoftAssert softAssert = new SoftAssert();
+        // to be de-scoped remove esg content. validate with furkan ???
         List<String> researchLines = Arrays.asList("ESG", "operationsrisk", "marketrisk", "supplychainrisk", "Physical Risk Management",
                 "Temperature Alignment", "Carbon Footprint", "Green Share", "Brown Share");
 
@@ -154,6 +155,7 @@ public class HeatMap extends DataValidationTestBase {
                 System.out.println("Max score:" + max);
                 double min2;
                 double max2;
+                // to be de-scoped remove esg content. validate with furkan ???
                 if (researchLine1.equals("ESG")) {
                     min2 = rangeAndCategory.getMin2();
                     max2 = rangeAndCategory.getMax2();
@@ -169,6 +171,7 @@ public class HeatMap extends DataValidationTestBase {
                 test.info("Expected Score Category:" + rangeAndCategory.getCategory());
                 test.info("Actual Score Category:" + categoryPercentage.getResearch_line_score_category());
                 List<ResearchLineIdentifier> companiesInCategory = null;
+                // to be de-scoped remove esg content. validate with furkan ???
                 if (researchLine1.equals("ESG")) {
                     companiesInCategory = portfolioToUpload.stream()
                             .filter(e -> e.getResearchLineIdForESGModel()!=null
@@ -260,6 +263,7 @@ public class HeatMap extends DataValidationTestBase {
                 System.out.println("Max score:" + max);
                 double min2;
                 double max2;
+                // to be de-scoped remove esg content. validate with furkan ???
                 if (researchLine2.equals("ESG")) {
                     min2 = rangeAndCategory.getMin2();
                     max2 = rangeAndCategory.getMax2();
@@ -275,6 +279,7 @@ public class HeatMap extends DataValidationTestBase {
                 test.info("Expected Score Category:" + rangeAndCategory.getCategory());
                 test.info("Actual Score Category:" + categoryPercentage.getResearch_line_score_category());
                 List<ResearchLineIdentifier> companiesInCategory = null;
+                // to be de-scoped remove esg content. validate with furkan ???
                 if (researchLine2.equals("ESG")) {
                     companiesInCategory = portfolioToUpload.stream()
                             .filter(e -> e.getResearchLineIdForESGModel()!=null
@@ -327,6 +332,7 @@ public class HeatMap extends DataValidationTestBase {
                 double min1 = rangeAndCategory1.getMin();
                 double max1 = rangeAndCategory1.getMax();
                 List<ResearchLineIdentifier> companiesInCategory1 = null;
+                // to be de-scoped remove esg content. validate with furkan ???
                 if (researchLine1.equals("ESG")) {
                     companiesInCategory1 = portfolioToUpload.stream()
                             .filter(e -> e.getResearchLineIdForESGModel()!=null
@@ -352,6 +358,7 @@ public class HeatMap extends DataValidationTestBase {
                     double min2 = rangeAndCategory2.getMin();
                     double max2 = rangeAndCategory2.getMax();
                     List<ResearchLineIdentifier> companiesInCategory2 = null;
+                    // to be de-scoped remove esg content. validate with furkan ???
                     if (researchLine2.equals("ESG")) {
                         companiesInCategory2 = portfolioForResearchLine2.stream()
                                 .filter(e -> e.getResearchLineIdForESGModel()!=null
@@ -453,6 +460,7 @@ public class HeatMap extends DataValidationTestBase {
         softAssert.assertAll();
     }
 
+    // to be de-scoped remove esg content. validate with furkan ???
     @DataProvider(name = "researchLines")
     public Object[][] provideFilterParameters() {
 

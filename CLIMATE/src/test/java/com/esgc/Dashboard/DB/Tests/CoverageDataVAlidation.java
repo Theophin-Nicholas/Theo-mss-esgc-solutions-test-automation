@@ -23,6 +23,9 @@ public class CoverageDataVAlidation extends DataValidationTestBase {
             8272, //ESG
             11049//Subs
     })
+
+    // to be de-scoped remove esg content. validate with furkan ???
+    // Coverage link text  should be Climate Coverage
     public void verifyCoverage() {
         Response portfoliosResponse = APIUtilities.getAvailablePortfoliosForUser();
         JsonPath jsonPathEvaluator = portfoliosResponse.jsonPath();

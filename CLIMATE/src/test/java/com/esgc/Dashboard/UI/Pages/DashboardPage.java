@@ -3,6 +3,7 @@ package com.esgc.Dashboard.UI.Pages;
 
 import com.esgc.Base.UI.Pages.UploadPage;
 import com.esgc.Dashboard.DB.DBQueries.DashboardQueries;
+import com.esgc.PortfolioAnalysis.UI.Pages.PhysicalRiskPages.PhysicalRiskManagementPages.PhysicalRiskManagementPage;
 import com.esgc.Utilities.*;
 import com.esgc.Utilities.Database.DatabaseDriver;
 import org.openqa.selenium.By;
@@ -408,6 +409,19 @@ public class DashboardPage extends UploadPage {
         }
     }
 
+    /*
+    public void verifyPortfolioOnPortfolioAnalysisPage(){
+
+    //verify portfolio on portfolio analysis page
+        dashboardPage.navigateToPageFromMenu("Portfolio Analysis");
+    PhysicalRiskManagementPage portfolioAnalysisPage = new PhysicalRiskManagementPage();
+        BrowserUtils.waitFor(10);
+        portfolioAnalysisPage.clickPortfolioSelectionButton();
+    actualPortfolioList = BrowserUtils.getElementsText(portfolioAnalysisPage.portfolioNameList);
+        assertTestCase.assertTrue(actualPortfolioList.contains(newPortfolioName), "New Portfolio is verified on portfolio analysis page");
+    }
+
+    */
     public void navigateToDashboardPage() {
 
         Driver.getDriver().navigate().to(Environment.URL);
@@ -525,6 +539,8 @@ public class DashboardPage extends UploadPage {
         }
     }
 
+    // to be de-scoped to be removed
+/*
     public boolean verifyAverageEsgScoreWidget() {
         try {
             BrowserUtils.waitForVisibility(averageEsgScoreLabel, 50);
@@ -533,7 +549,10 @@ public class DashboardPage extends UploadPage {
             return false;
         }
     }
+*/
 
+    // to be removed being de-scoped
+    /*
     public boolean verifyEsgScoreValue() {
         ArrayList<String> expectedValues = new ArrayList<>();
         expectedValues.add("Advanced");
@@ -545,7 +564,7 @@ public class DashboardPage extends UploadPage {
         System.out.println("ESG Score on UI: " + actualEsgScore);
         return expectedValues.contains(actualEsgScore);
     }
-
+*/
     public boolean verifyPhysicalRiskWidget() {
         try {
             WebElement highestRiskValue = Driver.getDriver().findElement(By.xpath("//div[@id='Highest_Risk_Hazard_id']//span[2]"));
@@ -564,11 +583,15 @@ public class DashboardPage extends UploadPage {
             return false;
         }
     }
+// to be de-scoped. remove . check with furkan
 
     public boolean verifyScoreQualityToggleIsOff() {
         String scoreQualityStyle = scoreQualityStatus.getAttribute("style");
         return scoreQualityStyle.equals("transform: translate(0px, 9px) scale(1.2);");
     }
+
+// to be de-scoped remove . check with furkan
+
 
     public boolean verifyScoreQualityToggleIsOn() {
         String scoreQualityStyle = scoreQualityStatus.getAttribute("style");
@@ -581,9 +604,13 @@ public class DashboardPage extends UploadPage {
         return performanceTableRecordsCount == recordsWithScoreQualityIcons;
     }
 
+    // to be-descoped -remove
+
     public boolean verifyScoreQualityIconWithEntitiesInCoveragePopup() {
         return scoreQualityIconsCoveragePopup.size() > 0;
     }
+
+    // to be-descoped - remove
 
     public void verifyScoreQualityLevelsInIconInCoveragePopup() {
         int companiesCount = rowsInCoveragePopup.size();
@@ -863,7 +890,7 @@ public class DashboardPage extends UploadPage {
     public List<String> getAvailableResearchLinesFromHeatMapResearchLineSelection() {
         return heatMapResearchLines.stream().map(WebElement::getText).collect(Collectors.toList());
     }
-
+// to be de-scoped remove overall ESG Score from the list
     public boolean verifyResearchLines() {
         List<String> availableResearchLines = getAvailableResearchLinesFromHeatMapResearchLineSelection();
         List<String> expResearchLines = Arrays.asList("Overall ESG Score", "Physical Risk: Operations Risk", "Physical Risk: Market Risk", "Physical Risk: Supply Chain Risk", "Physical Risk Management", "Temperature Alignment", "Carbon Footprint", "Green Share Assessment", "Brown Share Assessment");
@@ -958,6 +985,7 @@ public class DashboardPage extends UploadPage {
         return performanceChart.findElements(By.xpath("./..//tbody//td[" + index + "]"));
     }
 
+    // to be de-scoped remove ESg overall score from the cases . ?
     public int getPerformanceChartColumnIndexByHeader(String header) {
         int index = 0;
         switch (header) {
@@ -1581,6 +1609,8 @@ public class DashboardPage extends UploadPage {
         }
     }
 
+    // remove to be descoped
+/*
     public boolean verifyMethodologiesHeader() {
         try {
             assertTestCase.assertTrue(methodologyPopup_Header.getText().equals("ESG Assessment Framework"), "Validate header text as 'ESG Assessment Framework'");
@@ -1589,7 +1619,7 @@ public class DashboardPage extends UploadPage {
             return false;
         }
     }
-
+*/
     public List<String> getMethodologiesSections() {
         List<String> methodologySections = new ArrayList<>();
         for (WebElement element : methodologySectionNames) {
@@ -1598,8 +1628,11 @@ public class DashboardPage extends UploadPage {
         return methodologySections;
     }
 
+
     public boolean verifyMethodologiesLinks() {
 
+
+        // ESG content to be de-scoped. remove. check with furkan ????
 
         try {
             assertTestCase.assertTrue(methodologyPopup_Link_Methodology10.getText().equals("Read more about ESG Assessment Methodology 1.0"), "Validate link as 'Read more about ESG Assessment Methodology 1.0'");
@@ -1687,6 +1720,7 @@ public class DashboardPage extends UploadPage {
         BrowserUtils.scrollTo(heatMapCells.get(randomCell)).click();
     }
 
+    // to be de-scoped remove  check with furkan ?
     public void verifyOverallESGScoreCatgories() {
         List<String> categories = Arrays.asList("Weak", "Limited", "Robust", "Advanced");
         for (WebElement e : OverallESGScoreTabledata) {

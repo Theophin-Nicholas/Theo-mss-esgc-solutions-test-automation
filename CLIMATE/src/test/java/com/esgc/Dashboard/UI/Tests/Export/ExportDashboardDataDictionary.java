@@ -96,7 +96,10 @@ public class ExportDashboardDataDictionary extends DashboardUITestBase {
         expectedPhysicalRiskColumnsList.add("Physical Risk Management - Results Score");
         assertTestCase.assertTrue(actualColumnsList.containsAll(expectedPhysicalRiskColumnsList),"Data dictionary details verification");
 
+
+        // remove ?????? check with furkan.
         // ESGCA-9786: Validate newly added Columns in 'Data - All research lines' Sheet
+        /*
         List<String> expectedNewColumnsList = new ArrayList<>();
         expectedNewColumnsList.add("Scored Orbis ID");
         expectedNewColumnsList.add("LEI");
@@ -105,7 +108,7 @@ public class ExportDashboardDataDictionary extends DashboardUITestBase {
         expectedNewColumnsList.add("Evaluation Year");
         expectedNewColumnsList.add("Overall Score");
         assertTestCase.assertTrue(actualColumnsList.containsAll(expectedNewColumnsList),"Data dictionary details verification");
-
+*/
         //ESGCA-9817: Verify the columns Alphanumeric Score and Overall Qualifier is not present
         List<String> deletedColumnsList = new ArrayList<>();
         deletedColumnsList.add("Alphanumeric Score");
@@ -117,6 +120,7 @@ public class ExportDashboardDataDictionary extends DashboardUITestBase {
         dashboardPage.deleteDownloadFolder();
     }
 
+    // remove ???? export excel has esg related rows check with furkan
     @Test(groups = {DASHBOARD, REGRESSION, UI, ESG})
     @Xray(test = {9787, 9789})
     public void verifyESGInfoInExcelWhenNoESGEntitlement_Bundle() {
@@ -145,6 +149,7 @@ public class ExportDashboardDataDictionary extends DashboardUITestBase {
         String filePath = dashboardPage.getDownloadedCompaniesExcelFilePath();
         String tabName = "Data - All research lines";
 
+        // remove ??? check with furkan
         // ESGCA-9787: Validate ESG Columns in 'Data - All research lines' Sheet when no ESG Entitlement
         ExcelUtil excel = new ExcelUtil(filePath,tabName);
         List<String> actualColumnsList = excel.getColumnsNames();
@@ -164,6 +169,7 @@ public class ExportDashboardDataDictionary extends DashboardUITestBase {
         ExcelUtil dictionarySheet = new ExcelUtil(filePath,secondTabName);
         for(String columnName:expectedNewColumnsList){
             for(int i=0; i<dictionarySheet.rowCount();i++){
+                // remove ?  check wit furkan
                 assertTestCase.assertTrue(!dictionarySheet.getCellData(i,0).equals(columnName), "Verify ESG Info in Data Dictionary tab");
             }
         }

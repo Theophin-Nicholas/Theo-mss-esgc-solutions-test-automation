@@ -78,6 +78,9 @@ public class DashboardQueries {
         query = query.replaceAll("%m", String.valueOf(month));
         query = query.replaceAll("%ym", String.valueOf(year) + String.valueOf(month));
 
+
+        // to be de-scoped remove esg content. validate with furkan ???
+        // change Coverage to CLimate Coverage
         Map<String, String> result = new HashMap<>();
         for (Map<String, Object> rs : getQueryResultMap(query)) {
             result.put("Coverage", rs.get("covered_companies").toString());
@@ -87,6 +90,7 @@ public class DashboardQueries {
         return result;
     }
 
+    // to be de-scoped remove esg content. validate with furkan ???
     public List<Map<String, Object>> getEsgInfo(String portfolioId, String year, String month){
     /*    String query = "select df.company_name,eos.value from df_portfolio df\n" +
                 "join entity_coverage_tracking ect on ect.orbis_id=df.bvd9_number and coverage_status = 'Published' and publish = 'yes'\n" +

@@ -451,6 +451,7 @@ public class EntityClimateProfilePage extends ClimatePageBase {
     @FindBy(xpath = "//div[@id='cardInfo_box']/div[text()='ESG Score']/parent::div/div/div/div")
     public List<WebElement> esgScores;
 
+    // to be de-scoped remove esg content. validate with furkan ???
     @FindBy(xpath = "//div[.='Overall ESG Score']/../div/div/div/div[2]")
     public List<WebElement> esgScoreCategories;
 
@@ -2423,6 +2424,8 @@ public class EntityClimateProfilePage extends ClimatePageBase {
                 }
             }
         }
+
+        // to be de scoped . remove . review with furkan
         //Verify the data on the UI for Overall ESG score matches with the db
         String escScore = String.valueOf((int) Double.parseDouble(dbResult.get(0).get("SCORE").toString()));
         System.out.println("escScore = " + escScore);

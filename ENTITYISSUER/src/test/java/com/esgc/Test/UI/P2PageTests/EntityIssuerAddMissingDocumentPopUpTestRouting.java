@@ -311,6 +311,7 @@ public class EntityIssuerAddMissingDocumentPopUpTestRouting extends EntityPageTe
             if(Driver.getDriver().getCurrentUrl().contains("login"))
             LoginPageIssuer.loginWithParams(UserID, Password);
 
+            // ESG content to be de-scoped , remove. check with furkan ???
             entitypage.validateLinksOpenedInNewTab(entitypage.linkSeeMethodologyGuide, "Methodology%202.0%20ESG%20Assessment");
             entitypage.validateLinksOpenedInNewTab(entitypage.linkSeeSeeControversyMethodology, "Controversy%20Risk%20Assessment%20-%20Methodology");
             entitypage.validateLinksOpenedInNewTab(entitypage.linkSeeSubcategoryDefinitions, "ESG%20Assessment_Subcategory%20Definitions_FINAL");

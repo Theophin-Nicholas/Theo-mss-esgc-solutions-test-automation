@@ -62,6 +62,7 @@ public class HeatMapTemperatureAlignment extends DashboardUITestBase {
     public void VerifyTemperatureAlignmentRLPresentationAndInteraction () {
         DashboardPage dashboardPage = new DashboardPage();
         ArrayList<String> researchLines = new ArrayList<String>();
+        // to be de-scoped remove. validate with furkan ???
         researchLines.add("Overall ESG Score");
         researchLines.add("Physical Risk: Operations Risk");
         researchLines.add("Physical Risk: Market Risk");

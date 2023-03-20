@@ -71,6 +71,8 @@ public class OnDemandAssessmentPage extends PageBase {
     @FindBy(xpath = "//div[contains(text(),'ESC')]")
     public WebElement btnESC;
 
+
+    // de-scoped should remove. check with tarun and furkan. ???
     @FindBy(xpath = "//button[@id='score-qualty-btn']/span/div[contains(text(),'On-Demand')]")
     public WebElement dashboardPageMenuOption;
 
@@ -466,12 +468,16 @@ public class OnDemandAssessmentPage extends PageBase {
 
     public void validateDashboardPageButtonForOnDemand(){
         BrowserUtils.waitForVisibility(dashboardPageMenuOption,60);
+        // de-scoped should be removed. check with tarun and furkan ???
         assertTestCase.assertTrue(dashboardPageMenuOption.isDisplayed(), "Validate that Dasboard on demand button is visible");
+
+        // descoped should be removed. check with tarun and furkan.???
         assertTestCase.assertTrue(dashboardPageMenuOption.getText().matches("\\d+% On-Demand Assessment Eligible"), "Validate that Dasboard on demand button is visible");
     }
 
     public void validateDashboardPageButtonCoverage(String portfolioID){
         BrowserUtils.waitForVisibility(dashboardPageMenuOption,60);
+        // de-scoped should be removed. check with tarun and furkan ???
         assertTestCase.assertTrue(dashboardPageMenuOption.isDisplayed(), "Validate that Dasboard on demand button is visible");
         double uiValue = Double.valueOf(dashboardPageMenuOption.getText().substring(0,dashboardPageMenuOption.getText().indexOf("%")));
         OnDemandFilterAPIController apiController = new OnDemandFilterAPIController();

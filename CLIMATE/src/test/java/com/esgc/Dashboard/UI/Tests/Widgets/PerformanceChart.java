@@ -34,6 +34,7 @@ public class PerformanceChart extends DashboardUITestBase {
         test.info("Check if Performance Charts are Displayed");
 
         BrowserUtils.scrollTo(dashboardPage.performanceChart);
+        // to be de-scoped remove. validate with furkan ???
         //TODO remove Overall ESG Score after March release
         List<String> expectedColumnNames = Arrays.asList("Company", "% Investment", "Total Critical Controversies",
                 "Highest Risk Hazard", "Facilities Exposed to High Risk/Red Flag",
@@ -41,6 +42,7 @@ public class PerformanceChart extends DashboardUITestBase {
                 "Carbon Footprint (tCO2eq)", "Green Share Assessment", "Brown Share Assessment");
 
         if (Environment.environment.equalsIgnoreCase("uat"))
+            // to be de-scoped remove. validate with furkan ???
             expectedColumnNames.add(2, "Overall ESG Score");
 
         dashboardPage.clickAndSelectAPerformanceChart("Leaders");
@@ -93,6 +95,7 @@ public class PerformanceChart extends DashboardUITestBase {
         dashboardPage.selectRandomPortfolioFromPortfolioSelectionModal();
         test.info("Check Score categories in Performance Charts");
 
+        // to be de-scoped remove esg content . validate with furkan ???
         List<String> headersToClick =
                 Arrays.asList("Facilities Exposed to High Risk/Red Flag", "Overall ESG Score", "Physical Risk Management", "Temperature Alignment",
                         "Carbon Footprint (tCO2eq)", "Green Share Assessment", "Brown Share Assessment");
@@ -434,6 +437,7 @@ public class PerformanceChart extends DashboardUITestBase {
 
         test.info("Check Score categories in Performance Charts");
 
+        // to be de-scoped remove esg content. validate with furkan ???
         List<String> headersToClick =
                 Arrays.asList("Facilities Exposed to High Risk/Red Flag", "Overall ESG Score", "Physical Risk Management", "Temperature Alignment",
                         "Carbon Footprint (tCO2eq)", "Green Share Assessment", "Brown Share Assessment");

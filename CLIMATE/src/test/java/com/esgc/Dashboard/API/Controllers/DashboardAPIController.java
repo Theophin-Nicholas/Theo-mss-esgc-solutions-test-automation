@@ -56,7 +56,7 @@ public class DashboardAPIController extends APIController {
         return response;
     }
 
-
+    // to be de-scoped remove esg content. validate with furkan ???
     public synchronized Response getEsgCoverageScore(String portfolioId, String benchMark, String region, String sector, String year, String month) {
         Response response = null;
         try {

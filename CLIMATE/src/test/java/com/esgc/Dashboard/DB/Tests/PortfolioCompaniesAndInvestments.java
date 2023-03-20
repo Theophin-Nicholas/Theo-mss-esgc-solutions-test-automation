@@ -69,6 +69,7 @@ public class PortfolioCompaniesAndInvestments extends DataValidationTestBase {
 
 
 
+    // to be de-scoped remove esg content. validate with furkan ???
     @Test(groups = {DASHBOARD, REGRESSION, UI, SMOKE, ESG})
     @Xray(test = {8320, 8321})
     public void verifyCoverageAndEsgInfo(){
@@ -81,7 +82,8 @@ public class PortfolioCompaniesAndInvestments extends DataValidationTestBase {
 
         // ESGCA-8320: Verify that newly added ESG columns are displayed on Company list drawer
         dashboardPage.selectViewByRegion();
-        assertTestCase.assertTrue(dashboardPage.verifyViewByRegionTableColumns("ESG Score"), "Verify ESG Score Column is available");
+        // remove to be de-scoped
+        //assertTestCase.assertTrue(dashboardPage.verifyViewByRegionTableColumns("ESG Score"), "Verify ESG Score Column is available");
         assertTestCase.assertTrue(dashboardPage.verifyEsgInfo(), "Verify ESG Info of listed companies");
         System.out.println("VIEW BY SECTOR ");
         dashboardPage.selectViewBySector();

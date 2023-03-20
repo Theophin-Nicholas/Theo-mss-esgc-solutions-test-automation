@@ -82,6 +82,7 @@ public class EsgMaterialityMatrixTests extends EntityPageTestBase {
     }
 
 
+    // ESG content to be de-scoped , remove. check with furkan ???
     @Test(groups = {"esg_materiality", SMOKE, REGRESSION, UI}, dataProvider = "ESGMaterialitycredentials", dataProviderClass = IssuerDataProviderClass.class)
     @Xray(test = {9925})
     public void validateEsgMaterialityFooter(String... dataProvider) {
@@ -97,6 +98,7 @@ public class EsgMaterialityMatrixTests extends EntityPageTestBase {
             BrowserUtils.scrollTo(entityIssuerpage.esgMaterialityTab);
             entityIssuerpage.selectEsgMaterialityTab();
 
+            // ESG content to be de-scoped , remove. check with furkan ???
             List<String> methodologies = Arrays.asList(new String[]{"Double Materiality", "Business Materiality", "Stakeholder Materiality", "ESG", "Environmental", "Social", "Governance"});
             for (String e : methodologies) {
                 assertTestCase.assertTrue(entityIssuerpage.isProvidedFilterClickableInMaterialityMatrixFooter(e), "Verify " + e + "filter is clickable in Materiality Matrix Footer");

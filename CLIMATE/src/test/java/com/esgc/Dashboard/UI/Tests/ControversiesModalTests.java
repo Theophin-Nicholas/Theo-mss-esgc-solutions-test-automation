@@ -133,7 +133,7 @@ public class ControversiesModalTests extends DashboardUITestBase {
         assertTestCase.assertTrue(dashboardPage.compareArrays(allControversies, notCriticalControversies), "Verify all not critical controversies are in All controversies ");
 
     }
-
+// remove to be de-scoped
 //TODO Controversies ESG parts are not in scope yet, follow up https://esjira/browse/ESGCA-7696
 //Planned for Q2 2023
     @Test(enabled = false, groups = {"regression", "dashboard", "ui"})

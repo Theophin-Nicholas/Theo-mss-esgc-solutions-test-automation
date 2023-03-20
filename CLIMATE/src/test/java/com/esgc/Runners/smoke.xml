@@ -1,9 +1,8 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
-<suite name="ESGC Smoke Suite" verbose="2" >
-    <!--suite name="ESGC Smoke Suite" verbose="2" parallel="classes" thread-count="4">-->
+<!--<suite name="ESGC Smoke Suite" verbose="2" >-->
+    <suite name="ESGC Smoke Suite" verbose="2" parallel="classes" thread-count="8">
 <!--<suite name="ESGC Smoke Suite" verbose="2">-->
     <listeners>
-        <listener class-name="com.esgc.Utilities.XrayListener"/>
         <listener class-name="com.esgc.Reporting.Listeners"/>
     </listeners>
     <test name="ESGC Climate Smoke Test Results" >
@@ -18,7 +17,7 @@
         </groups>
 
         <packages>
-            <package name="com.esgc.RegulatoryReporting.UI.Tests."/>
+            <package name="com.esgc.*"/>
         </packages>
 
 

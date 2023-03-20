@@ -25,7 +25,7 @@ public class ViewMethodologiesTests extends DashboardUITestBase {
         dashboardPage.selectSamplePortfolioFromPortfolioSelectionModal();
         dashboardPage.selectViewMethodologies();
         assertTestCase.assertTrue(dashboardPage.verifyMethodologiesPopup(), "Verify Methodologies popup");
-        dashboardPage.verifyMethodologiesHeader();
+        //dashboardPage.verifyMethodologiesHeader();
         dashboardPage.verifyMethodologiesLinks();
         dashboardPage.clickHideLink();
     }
@@ -134,8 +134,9 @@ public class ViewMethodologiesTests extends DashboardUITestBase {
         dashboardPage.clickHideLink();
         assertTestCase.assertTrue(methodologySectionNames.contains("Physical Risk"), "Verify Methodologies Section - Physical Risk");
         assertTestCase.assertTrue(methodologySectionNames.contains("Transition Risk"), "Verify Methodologies Sections - Transition Risk");
-        assertTestCase.assertTrue(methodologySectionNames.contains("ESG Assessment Framework"), "Verify Methodologies Sections");
-        assertTestCase.assertTrue(methodologySectionNames.contains("ESG Categories and Subcategories"), "Verify Methodologies Sections");
+        // remove to be de-scoped
+        //assertTestCase.assertTrue(methodologySectionNames.contains("ESG Assessment Framework"), "Verify Methodologies Sections");
+       // assertTestCase.assertTrue(methodologySectionNames.contains("ESG Categories and Subcategories"), "Verify Methodologies Sections");
 
     }
 

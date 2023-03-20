@@ -31,8 +31,10 @@ public class EntityIssuerP3PageSummaryWidget extends EntityPageTestBase {
             LoginPageIssuer.loginWithParams(userId, password);
 
             entitypage.validateSummaryWidgetISVAvailable();
+            // ESG content to be de-scoped , remove. check with furkan ???
             //TODO : Need to update as per new header chnages
           //  assertTestCase.assertTrue(entitypage.verifyOverallEsgScoreWidget(), "Verify overall ESG Score widget");
+            // ESG content to be de-scoped , remove. check with furkan ???
             List<String> summarySections = Arrays.asList(new String[]{"ESG Score", "Environment", "Social", "Governance"});
             for (String ss : summarySections) entitypage.validateESGScoresAsNumericalValues(ss);
 

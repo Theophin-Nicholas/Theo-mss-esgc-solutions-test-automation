@@ -77,6 +77,7 @@ public class EntityReferenceAndMethodologiesTest extends UITestBase {
         assertTestCase.assertTrue(entityProfilePage.verifyPopup(), "Verify Reference & Methodologies popup");
         assertTestCase.assertTrue(entityProfilePage.verifyPopupTitle("Methodologies"), "Verify Popup Title");
         List<String> actualMethodologies = entityProfilePage.getMethodologiesLinks();
+        // ESG content to be de-scoped. remove. check with furkan ????
         List<String> expectedMethodologies = new ArrayList<>();
         expectedMethodologies.add("ESG Assessment Methodology 1.0");
         expectedMethodologies.add("Controversy Risk Assessment Methodology");

@@ -17,40 +17,52 @@ public class ScoreQualityTests extends UITestBase {
     @Xray(test = {11131,11133})
     public void verifyScoreQualityToggle() {
         DashboardPage dashboardPage = new DashboardPage();
-        assertTestCase.assertTrue(dashboardPage.scoreQualityButton.isDisplayed(),"Verify Score Quality Button in Dashboard Page");
-        assertTestCase.assertTrue(dashboardPage.verifyScoreQualityToggleIsOff(),"Verify Score Quality Button is off in Dashboard Page");
+        // remove to be de-scoped
+       // assertTestCase.assertTrue(dashboardPage.scoreQualityButton.isDisplayed(),"Verify Score Quality Button in Dashboard Page");
+       // assertTestCase.assertTrue(dashboardPage.verifyScoreQualityToggleIsOff(),"Verify Score Quality Button is off in Dashboard Page");
 
         dashboardPage.scoreQualityButton.click();
         BrowserUtils.wait(5);
-        assertTestCase.assertTrue(dashboardPage.verifyScoreQualityToggleIsOn(),"Verify Score Quality Button is on in Dashboard Page");
+        // remove to be de-scoped
+        //assertTestCase.assertTrue(dashboardPage.verifyScoreQualityToggleIsOn(),"Verify Score Quality Button is on in Dashboard Page");
 
         dashboardPage.scoreQualityButton.click();
         BrowserUtils.wait(5);
-        assertTestCase.assertTrue(dashboardPage.verifyScoreQualityToggleIsOff(),"Verify Score Quality Button is off in Dashboard Page");
+        // remove to be de-scoped
+      //  assertTestCase.assertTrue(dashboardPage.verifyScoreQualityToggleIsOff(),"Verify Score Quality Button is off in Dashboard Page");
 
         dashboardPage.navigateToPageFromMenu("Portfolio Analysis");
         dashboardPage.selectResearchLineFromDropdown("ESG Assessments");
-        assertTestCase.assertTrue(dashboardPage.scoreQualityButton.isDisplayed(),"Verify Score Quality Button in Dashboard Page");
+        // remove to be de-scoped
+      //  assertTestCase.assertTrue(dashboardPage.scoreQualityButton.isDisplayed(),"Verify Score Quality Button in Dashboard Page");
     }
 
+
+    // remove to be de-scoped
+    /*
     @Test(groups = {ESG, REGRESSION, UI})
     @Xray(test = {11136})
     public void verifyScoreQualityLevels() {
         DashboardPage dashboardPage = new DashboardPage();
-        assertTestCase.assertTrue(dashboardPage.scoreQualityButton.isDisplayed(),"Verify Score Quality Button in Dashboard Page");
-        dashboardPage.scoreQualityButton.click();
-        BrowserUtils.wait(5);
-        assertTestCase.assertTrue(dashboardPage.verifyScoreQualityToggleIsOn(),"Verify Score Quality Button is on in Dashboard Page");
+        // remove to be de-scoped
+       // assertTestCase.assertTrue(dashboardPage.scoreQualityButton.isDisplayed(),"Verify Score Quality Button in Dashboard Page");
+       // dashboardPage.scoreQualityButton.click();
+       // BrowserUtils.wait(5);
+       // assertTestCase.assertTrue(dashboardPage.verifyScoreQualityToggleIsOn(),"Verify Score Quality Button is on in Dashboard Page");
 
-        dashboardPage.clickCoverageLink();
-        assertTestCase.assertTrue(dashboardPage.verifyScoreQualityIconWithEntitiesInCoveragePopup(),"Verify Score Quality icon with Entity Names in Coverage popup in Dashboard Page");
-        dashboardPage.verifyScoreQualityLevelsInIconInCoveragePopup();
+       // dashboardPage.clickCoverageLink();
+       // assertTestCase.assertTrue(dashboardPage.verifyScoreQualityIconWithEntitiesInCoveragePopup(),"Verify Score Quality icon with Entity Names in Coverage popup in Dashboard Page");
+        //dashboardPage.verifyScoreQualityLevelsInIconInCoveragePopup();
     }
 
+     */
+
+    // to be de-scoped remove. validate with furkan ???
     @Test(groups = {ESG, REGRESSION, UI})
     @Xray(test = {11135})
     public void verifyScoreQualityIconWithEntities_Dashboard() {
         DashboardPage dashboardPage = new DashboardPage();
+        // remove to be de-scoped
 
         dashboardPage.scoreQualityButton.click();
         BrowserUtils.wait(5);
@@ -69,6 +81,7 @@ public class ScoreQualityTests extends UITestBase {
         assertTestCase.assertTrue(dashboardPage.verifyScoreQualityIconWithEntitiesUnderCompareResearchLines(),"Verify Score Quality icon with Entity Names in Performance Laggards table in Dashboard Page");
 
         dashboardPage.selectOrDeselectResearchLineUnderAnalysisSection("Physical Risk: Market Risk");
+        // to be de-scoped remove. validate with furkan ???
         dashboardPage.selectOrDeselectResearchLineUnderAnalysisSection("Overall ESG Score");
         dashboardPage.overallESGCell.click();
         assertTestCase.assertTrue(dashboardPage.verifyScoreQualityIconWithEntitiesUnderCompareResearchLines(),"Verify Score Quality icon with Entity Names in Performance Laggards table in Dashboard Page");
@@ -84,9 +97,10 @@ public class ScoreQualityTests extends UITestBase {
         dashboardPage.navigateToPageFromMenu("Portfolio Analysis");
         dashboardPage.selectResearchLineFromDropdown("ESG Assessments");
 
-        dashboardPage.scoreQualityButton.click();
-        BrowserUtils.wait(5);
-        assertTestCase.assertTrue(dashboardPage.verifyScoreQualityToggleIsOn(),"Verify Score Quality Button is on in Dashboard Page");
+        // remove to be de-scoped
+       // dashboardPage.scoreQualityButton.click();
+       // BrowserUtils.wait(5);
+      //  assertTestCase.assertTrue(dashboardPage.verifyScoreQualityToggleIsOn(),"Verify Score Quality Button is on in Dashboard Page");
 
         assertTestCase.assertTrue(researchLine.verifyScoreQualityIconWithEntitiesInLeadersAndLaggardsTables_PA(),"Verify Score Quality icon with Entity Names in Leaders and Laggards tables in Portfolio Analysis Page");
 
@@ -133,15 +147,16 @@ public class ScoreQualityTests extends UITestBase {
         DashboardPage dashboardPage = new DashboardPage();
         dashboardPage.selectPortfolioByNameFromPortfolioSelectionModal("PortfolioWithSubsidiaryCompany1");
 
-        assertTestCase.assertTrue(dashboardPage.scoreQualityButton.isDisplayed(),"Verify Score Quality Button in Dashboard Page");
-        dashboardPage.scoreQualityButton.click();
-        BrowserUtils.wait(5);
-        assertTestCase.assertTrue(dashboardPage.verifyScoreQualityToggleIsOn(),"Verify Score Quality Button is on in Dashboard Page");
+        // remove to be de-scoped
+       // assertTestCase.assertTrue(dashboardPage.scoreQualityButton.isDisplayed(),"Verify Score Quality Button in Dashboard Page");
+       // dashboardPage.scoreQualityButton.click();
+       // BrowserUtils.wait(5);
+       // assertTestCase.assertTrue(dashboardPage.verifyScoreQualityToggleIsOn(),"Verify Score Quality Button is on in Dashboard Page");
 
-        dashboardPage.clickCoverageLink();
-        assertTestCase.assertTrue(dashboardPage.verifyScoreQualityIconWithEntitiesInCoveragePopup(),"Verify Score Quality icon with Entity Names in Coverage popup in Dashboard Page");
-        dashboardPage.verifyScoreQualityLevelsInIconInCoveragePopup();
-        dashboardPage.pressESCKey();
+       // dashboardPage.clickCoverageLink();
+       // assertTestCase.assertTrue(dashboardPage.verifyScoreQualityIconWithEntitiesInCoveragePopup(),"Verify Score Quality icon with Entity Names in Coverage popup in Dashboard Page");
+       // dashboardPage.verifyScoreQualityLevelsInIconInCoveragePopup();
+       // dashboardPage.pressESCKey();
 
         //TODO ESGCA-12069 Step4:  Dashboard - Portfolio Monitoring - Verify Score Quality icons for the subsidiary companies
         //TODO ESGCA-12069 Step5:  Dashboard - Geographic Risk Section - Verify Score Quality icons for the subsidiary companies
@@ -167,9 +182,10 @@ public class ScoreQualityTests extends UITestBase {
         dashboardPage.navigateToPageFromMenu("Portfolio Analysis");
         dashboardPage.selectResearchLineFromDropdown("ESG Assessments");
 
-        dashboardPage.scoreQualityButton.click();
-        BrowserUtils.wait(5);
-        assertTestCase.assertTrue(dashboardPage.verifyScoreQualityToggleIsOn(),"Verify Score Quality Button is on in Dashboard Page");
+        // remove to be de-scoped
+       // dashboardPage.scoreQualityButton.click();
+      //  BrowserUtils.wait(5);
+       // assertTestCase.assertTrue(dashboardPage.verifyScoreQualityToggleIsOn(),"Verify Score Quality Button is on in Dashboard Page");
 
         assertTestCase.assertTrue(researchLine.verifyScoreQualityIconWithEntitiesInLeadersAndLaggardsTables_PA(),"Verify Score Quality icon with Entity Names in Leaders and Laggards tables in Portfolio Analysis Page");
 

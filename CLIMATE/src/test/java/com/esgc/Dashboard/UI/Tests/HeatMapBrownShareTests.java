@@ -93,8 +93,10 @@ public class HeatMapBrownShareTests extends DashboardUITestBase {
         BrowserUtils.wait(5);
         dashboardPage.selectOrDeselectHeatMapSection("Brown Share Assessment");
         BrowserUtils.wait(5);
+        // to be de-scoped remove. validate with furkan ???
         dashboardPage.selectOrDeselectHeatMapSection("Overall ESG Score");
         BrowserUtils.wait(5);
+        // to be de-scoped remove. validate with furkan ???
         dashboardPage.selectOrDeselectHeatMapSection("Overall ESG Score");
         BrowserUtils.wait(10);
 
@@ -150,8 +152,10 @@ public class HeatMapBrownShareTests extends DashboardUITestBase {
         BrowserUtils.wait(5);
         dashboardPage.selectOrDeselectHeatMapSection("Brown Share Assessment");
         BrowserUtils.wait(5);
+        // to be de-scoped remove. validate with furkan ???
         dashboardPage.selectOrDeselectHeatMapSection("Overall ESG Score");
         BrowserUtils.wait(5);
+        // to be de-scoped remove. validate with furkan ???
         dashboardPage.selectOrDeselectHeatMapSection("Overall ESG Score");
         BrowserUtils.wait(5);
 
