@@ -3,21 +3,14 @@ package com.esgc.Base.TestBases;
 import com.esgc.Base.UI.Pages.LoginPage;
 import com.esgc.TestBase.TestBase;
 import com.esgc.Utilities.BrowserUtils;
-import com.esgc.Utilities.Database.DatabaseDriver;
 import com.esgc.Utilities.Driver;
 import com.esgc.Utilities.Environment;
 import org.openqa.selenium.JavascriptExecutor;
-import org.testng.annotations.BeforeTest;
 
 import java.time.Duration;
 
 public class TestBaseClimate extends TestBase {
     String accessToken;
-
-    @BeforeTest(alwaysRun = true)
-    public void createDBConnectionForAllMethods(){
-        DatabaseDriver.createDBConnection();
-    }
 
     public synchronized void getNoExportBundleAccessTokenDataValidation() {
         System.out.println("getting token");
@@ -122,7 +115,7 @@ public class TestBaseClimate extends TestBase {
     public synchronized void refreshToken() {
         if (stopWatch.getTime() > 3600000) {
             LoginPage loginPage = new LoginPage();
-            if (loginPage.isSearchIconDisplayed()) {
+            if (!Driver.getDriver().getCurrentUrl().endsWith("login")) {
                 loginPage.clickOnLogout();
                 BrowserUtils.wait(5);
             }

@@ -12,7 +12,8 @@
         <groups>
             <run>
                 <include name="smoke"/>
-                <exclude name="robot_dependency"></exclude>
+                <exclude name="robot_dependency"/>
+                <exclude name="esg"/>
             </run>
         </groups>
 
@@ -34,8 +35,9 @@
             <!-- <class name="com.esgc.PortfolioAnalysis.UI.Tests.ResearchLineWidgets.UnderLyingDataMetrics"/>-->
             <class name="com.esgc.PortfolioAnalysis.UI.Tests.ResearchLineWidgets.CarbonFootprint_EmissionWidgetsTest"/>
             <class name="com.esgc.PortfolioAnalysis.UI.Tests.PhysicalRiskHazardsTests"/>
-<!--            <class name="com.esgc.EntityProfile.UI.Tests.EntityClimateProfile"/>-->
-<!--            <class name="com.esgc.EntityProfile.UI.Tests.EntityClimateProfileSummaryTests"/>-->
+            <class name="com.esgc.EntityProfile.UI.Tests.EntityClimateProfile"/>
+            <class name="com.esgc.EntityProfile.UI.Tests.EntityClimateProfileSummaryTests"/>
+            <class name="com.esgc.RegulatoryReporting.UI.Tests.RegulatoryReportingPageTests"/>
         </classes>
 
 

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import static com.esgc.Utilities.Database.DatabaseDriver.*;
+import static com.esgc.Utilities.Database.DatabaseDriver.getQueryResultMap;
 
 public class PredictedScoreQueries {
 

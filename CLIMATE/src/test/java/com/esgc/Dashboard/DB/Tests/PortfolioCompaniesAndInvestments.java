@@ -69,7 +69,7 @@ public class PortfolioCompaniesAndInvestments extends DataValidationTestBase {
 
 
 
-    @Test(groups = {DASHBOARD, REGRESSION, UI, SMOKE})
+    @Test(groups = {DASHBOARD, REGRESSION, UI, SMOKE, ESG})
     @Xray(test = {8320, 8321})
     public void verifyCoverageAndEsgInfo(){
         DashboardPage dashboardPage = new DashboardPage();

@@ -35,7 +35,7 @@ public class DatabaseDriver {
     }).get();
 
     public static void createDBConnection() {
-        if(connection == null) {
+        if (connection == null) {
             System.out.println("CONNECTING TO DEFAULT DATABASE...");
             Properties props = new Properties();
             props.put("db", DB_DATABASE);
@@ -160,7 +160,7 @@ public class DatabaseDriver {
         List<String> colNameValueList = new ArrayList<>();
         ;
         try {
-         //   rsmd = resultSet.getMetaData();
+            //   rsmd = resultSet.getMetaData();
             while (resultSet.next()) {
                 colNameValueList.add((String) resultSet.getObject("RELATED_DOMAIN"));
             }
@@ -315,5 +315,22 @@ public class DatabaseDriver {
         resultSet.last();
         int rowCount = resultSet.getRow();
         return rowCount;
+    }
+
+    public static void destroy() {
+        try {
+            if (resultSet != null) {
+                resultSet.close();
+            }
+            if (statement != null) {
+                statement.close();
+            }
+            if (connection != null) {
+                connection.close();
+            }
+        } catch (SQLException e) {
+            System.out.println("FAILED TO CLOSE DATABASE CONNECTION!");
+            e.printStackTrace();
+        }
     }
 }

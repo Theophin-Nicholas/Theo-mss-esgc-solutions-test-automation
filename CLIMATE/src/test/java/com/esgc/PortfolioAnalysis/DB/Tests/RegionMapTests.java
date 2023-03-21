@@ -23,7 +23,8 @@ import static com.esgc.Utilities.Groups.REGRESSION;
 
 public class RegionMapTests extends DataValidationTestBase {
 
-    @Test(groups = {REGRESSION, DATA_VALIDATION}, dataProvider = "researchLines", threadPoolSize = 10)
+    //TODO Region map is descoped for a while
+    @Test(enabled = false, groups = {REGRESSION, DATA_VALIDATION}, dataProvider = "researchLines", threadPoolSize = 10)
     @Xray(test = {4758, 4755, 4752, 4751, 4759, 4756, 4754, 4753})
     //Energy Transition 4757
     //TCFD 4758

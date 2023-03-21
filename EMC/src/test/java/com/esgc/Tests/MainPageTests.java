@@ -1,6 +1,5 @@
 package com.esgc.Tests;
 
-import com.esgc.APIModels.EMCAPIController;
 import com.esgc.Pages.EMCMainPage;
 import com.esgc.Pages.LoginPageEMC;
 import com.esgc.TestBases.EMCUITestBase;

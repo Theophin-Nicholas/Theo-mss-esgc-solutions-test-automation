@@ -134,7 +134,7 @@ public class EntityClimateProfile extends UITestBase {
                 "company name is displayed next to sector name");
 
     }
-
+//TODO needs to be handled
     @Xray(test = {8981, 8983})
     @Test(groups = {REGRESSION, UI, ENTITY_PROFILE},
             description = "Entity Climate Profile Page-Physical risk management",

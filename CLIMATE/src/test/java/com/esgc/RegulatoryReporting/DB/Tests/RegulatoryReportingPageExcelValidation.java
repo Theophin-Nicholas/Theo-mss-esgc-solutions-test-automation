@@ -1,28 +1,26 @@
 package com.esgc.RegulatoryReporting.DB.Tests;
 
 import com.esgc.Base.TestBases.UITestBase;
-import com.esgc.Dashboard.UI.Pages.*;
-import com.esgc.PortfolioAnalysis.UI.Pages.PhysicalRiskPages.PhysicalRiskManagementPages.PhysicalRiskManagementPage;
+import com.esgc.Dashboard.UI.Pages.DashboardPage;
 import com.esgc.RegulatoryReporting.API.Controllers.RegulatoryReportingAPIController;
 import com.esgc.RegulatoryReporting.UI.Pages.RegulatoryReportingPage;
 import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.DateTimeUtilities;
+import com.esgc.Utilities.Driver;
 import com.esgc.Utilities.Xray;
-import org.openqa.selenium.WebElement;
 import org.testng.annotations.Test;
 
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import static com.esgc.Utilities.Groups.*;
 
 public class RegulatoryReportingPageExcelValidation extends UITestBase {
 
-    RegulatoryReportingPage reportingPage = new RegulatoryReportingPage();
-    @Test(groups = {REGRESSION, DATA_VALIDATION, REGULATORY_REPORTING}, description = "Data Validation | Regulatory Reporting | Check the Data available on User Input History Tab of Annual Report")
+    @Test(groups = {REGRESSION, DATA_VALIDATION, REGULATORY_REPORTING, ROBOT_DEPENDENCY, UI}, description = "Data Validation | Regulatory Reporting | Check the Data available on User Input History Tab of Annual Report")
     @Xray(test = {11112})
     public void verifyDataAvailableForUserInputHistoryTabForAnnualReportTest() {
+        RegulatoryReportingPage reportingPage = new RegulatoryReportingPage();
         DashboardPage dashboardPage = new DashboardPage();
         dashboardPage.navigateToPageFromMenu("Regulatory Reporting");
         test.info("Navigated to Regulatory Reporting Page");
@@ -59,32 +57,31 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
             assertTestCase.assertTrue(reportingPage.unzipReports(), "Reports are extracted");
             System.out.println("Reports are extracted");
             assertTestCase.assertTrue(reportingPage.verifyReportsContentForData(selectedPortfolios, "User Input History", "Exposure Amount in EUR"),
-                    "Reports Dats is verified with snowflake");
+                    "Reports Data is verified with snowflake");
         } catch (Exception e) {
             e.printStackTrace();
             assertTestCase.assertTrue(false, "New tab verification failed");
         } finally {
+            Driver.closeBrowserTab();
             BrowserUtils.switchWindowsTo(currentWindow);
             System.out.println("=============================");
         }
-        /*reportingPage.navigateToPageFromMenu("Portfolio Analysis");*//*
-        PhysicalRiskManagementPage portfolioAnalysisPage = new PhysicalRiskManagementPage();
-        portfolioAnalysisPage.deletePortfolio(newPortfolioName);*/
         RegulatoryReportingAPIController apiController = new RegulatoryReportingAPIController();
         apiController.deletePortfolio(apiController.getPortfolioId(newPortfolioName));
     }
 
-    @Test(groups = {REGRESSION, DATA_VALIDATION, REGULATORY_REPORTING},
+    @Test(groups = {REGRESSION, DATA_VALIDATION, REGULATORY_REPORTING, UI},
             description = "Check the Data available on the Report with SF when Use latest data is selected (Company Level Output Tab)")
     @Xray(test = {11111, 11231})
     public void downloadAndVerifyExcelReportsTest() {
+        RegulatoryReportingPage reportingPage = new RegulatoryReportingPage();
         DashboardPage dashboardPage = new DashboardPage();
         dashboardPage.navigateToPageFromMenu("Regulatory Reporting");
         test.info("Navigated to Regulatory Reporting Page");
         reportingPage.selectReportingOptionByName("SFDR PAIs");
-        assertTestCase.assertTrue(reportingPage.interimReportsOption.isDisplayed(), "Interim reports option is displayed");
-        assertTestCase.assertTrue(reportingPage.useLatestDataOption.isDisplayed(), "Use latest data option is displayed");
-
+        assertTestCase.assertTrue(reportingPage.isInterimReportsOptionDisplayed(), "Interim reports option is displayed");
+        assertTestCase.assertTrue(reportingPage.isUseLatestDataOptionDisplayed(), "Use latest data option is displayed");
+        reportingPage.selectUseLatestData();
         String currentWindow = BrowserUtils.getCurrentWindowHandle();
         reportingPage.selectAllPortfolioOptions();
         reportingPage.selectInterimReports();
@@ -110,6 +107,7 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
             e.printStackTrace();
             assertTestCase.assertTrue(false, "New tab verification failed");
         } finally {
+            Driver.closeBrowserTab();
             BrowserUtils.switchWindowsTo(currentWindow);
             System.out.println("=============================");
         }
@@ -134,13 +132,15 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
             e.printStackTrace();
             assertTestCase.assertTrue(false, "New tab verification failed");
         } finally {
+            Driver.closeBrowserTab();
             BrowserUtils.switchWindowsTo(currentWindow);
         }
     }
 
-    @Test(groups = {REGRESSION, DATA_VALIDATION, REGULATORY_REPORTING}, description = "Data Validation | SFDR | Regulatory Reporting | Verify the portfolio coverage for the portfolio when SFDR reporting is selected")
+    @Test(groups = {REGRESSION, DATA_VALIDATION, REGULATORY_REPORTING, UI}, description = "Data Validation | SFDR | Regulatory Reporting | Verify the portfolio coverage for the portfolio when SFDR reporting is selected")
     @Xray(test = {11730})
     public void verifyPortfolioCoverageForSFDRReportingTest() {
+        RegulatoryReportingPage reportingPage = new RegulatoryReportingPage();
         DashboardPage dashboardPage = new DashboardPage();
         dashboardPage.navigateToPageFromMenu("Regulatory Reporting");
         test.info("Navigated to Regulatory Reporting Page");
@@ -182,15 +182,17 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
             e.printStackTrace();
             assertTestCase.assertTrue(false, "New tab verification failed");
         } finally {
+            Driver.closeBrowserTab();
             BrowserUtils.switchWindowsTo(currentWindow);
             System.out.println("=============================");
         }
     }
 
-    @Test(groups = {REGRESSION, DATA_VALIDATION, REGULATORY_REPORTING},
+    @Test(groups = {REGRESSION, DATA_VALIDATION, REGULATORY_REPORTING, UI},
             description = "Data Validation | EU Taxonomy | Regulatory Reporting | Verify the portfolio coverage for the portfolio when EU Taxonomy reporting is selected")
     @Xray(test = {11731})
     public void verifyPortfolioCoverageForEUTaxonomyReportingTest() {
+        RegulatoryReportingPage reportingPage = new RegulatoryReportingPage();
         DashboardPage dashboardPage = new DashboardPage();
         dashboardPage.navigateToPageFromMenu("Regulatory Reporting");
         test.info("Navigated to Regulatory Reporting Page");
@@ -233,15 +235,17 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
             e.printStackTrace();
             assertTestCase.assertTrue(false, "New tab verification failed");
         } finally {
+            Driver.closeBrowserTab();
             BrowserUtils.switchWindowsTo(currentWindow);
             System.out.println("=============================");
         }
     }
 
-    @Test(groups = {REGRESSION, DATA_VALIDATION, REGULATORY_REPORTING},
+    @Test(groups = {REGRESSION, DATA_VALIDATION, REGULATORY_REPORTING, UI},
             description = "Data Validation | Regulatory Reporting | Verify the data downloaded in the generated annual report excel is for the latest data available for the portfolios irrespective of reporting year when use latest data filter is selected")
     @Xray(test = {10855})
     public void verifyLatestDataAvailableForPortfoliosWithLatestDataTest() {
+        RegulatoryReportingPage reportingPage = new RegulatoryReportingPage();
         DashboardPage dashboardPage = new DashboardPage();
         dashboardPage.navigateToPageFromMenu("Regulatory Reporting");
         String year = "2021";
@@ -289,15 +293,17 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
             e.printStackTrace();
             assertTestCase.assertTrue(false, "New tab verification failed");
         } finally {
+            Driver.closeBrowserTab();
             BrowserUtils.switchWindowsTo(currentWindow);
             System.out.println("=============================");
         }
     }
 
-    @Test(groups = {REGRESSION, DATA_VALIDATION, REGULATORY_REPORTING},
+    @Test(groups = {REGRESSION, DATA_VALIDATION, REGULATORY_REPORTING, UI},
             description = "Data Validation | Regulatory Reporting | Verify the data downloaded in the generated annual report excel is for the latest data available for the portfolios irrespective of reporting year when use latest data filter is selected")
     @Xray(test = {10852,10853, 11200,11388})
     public void verifyAnnualReportWithoutLatestDataTest() {
+        RegulatoryReportingPage reportingPage = new RegulatoryReportingPage();
         DashboardPage dashboardPage = new DashboardPage();
         dashboardPage.navigateToPageFromMenu("Regulatory Reporting");
         String year = "2021";
@@ -346,16 +352,18 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
             e.printStackTrace();
             assertTestCase.assertTrue(false, "New tab verification failed");
         } finally {
+            Driver.closeBrowserTab();
             BrowserUtils.switchWindowsTo(currentWindow);
             System.out.println("=============================");
         }
     }
 
 
-    @Test(groups = {"regression", "DataValidation", "regulatoryReporting"},
+    @Test(groups = {REGRESSION, DATA_VALIDATION, REGULATORY_REPORTING, UI},
             description = "Data Validation | Regulatory Reporting | Verify the data downloaded in the generated Interim report excel when the portfolios has data for the selected year")
     @Xray(test = {11352, 11367,11200,11388})
     public void verifyInterimReportForSelectedYearTest() {
+        RegulatoryReportingPage reportingPage = new RegulatoryReportingPage();
         DashboardPage dashboardPage = new DashboardPage();
         dashboardPage.navigateToPageFromMenu("Regulatory Reporting");
         String year = "2020";
@@ -400,15 +408,17 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
             e.printStackTrace();
             assertTestCase.assertTrue(false, "New tab verification failed");
         } finally {
+            Driver.closeBrowserTab();
             BrowserUtils.switchWindowsTo(currentWindow);
             System.out.println("=============================");
         }
     }
 
-    @Test(groups = {"regression", "DataValidation", "regulatoryReporting"},
+    @Test(groups = {REGRESSION, DATA_VALIDATION, REGULATORY_REPORTING, UI},
             description = "Data Validation | Regulatory Reporting | Verify the data downloaded in the generated Interim report excel when the portfolios has data for the selected year")
     @Xray(test = {11368, 11717})
     public void verifyInterimReportForLatestDataTest() {
+        RegulatoryReportingPage reportingPage = new RegulatoryReportingPage();
         DashboardPage dashboardPage = new DashboardPage();
         dashboardPage.navigateToPageFromMenu("Regulatory Reporting");
         String year = "2021";
@@ -453,15 +463,17 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
             e.printStackTrace();
             assertTestCase.assertTrue(false, "New tab verification failed");
         } finally {
+            Driver.closeBrowserTab();
             BrowserUtils.switchWindowsTo(currentWindow);
             System.out.println("=============================");
         }
     }
 
-    @Test(groups = {"regression", "DataValidation", "regulatoryReporting"},
+    @Test(groups = {REGRESSION, DATA_VALIDATION, REGULATORY_REPORTING, UI},
             description = "Data Validation | UI | Regulatory Reporting | Verify data available in Company level Output across different reports")
     @Xray(test = {11716})
     public void verifyCompanyLevelOutputTest() {
+        RegulatoryReportingPage reportingPage = new RegulatoryReportingPage();
         DashboardPage dashboardPage = new DashboardPage();
         dashboardPage.navigateToPageFromMenu("Regulatory Reporting");
         test.info("Navigated to Regulatory Reporting Page");
@@ -498,6 +510,7 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
             e.printStackTrace();
             assertTestCase.assertTrue(false, "New tab verification failed");
         } finally {
+            Driver.closeBrowserTab();
             BrowserUtils.switchWindowsTo(currentWindow);
             System.out.println("=============================");
         }
@@ -521,15 +534,17 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
             e.printStackTrace();
             assertTestCase.assertTrue(false, "New tab verification failed");
         } finally {
+            Driver.closeBrowserTab();
             BrowserUtils.switchWindowsTo(currentWindow);
             System.out.println("=============================");
         }
     }
 
-    @Test(groups = {"regression", "DataValidation", "regulatoryReporting"},
+    @Test(groups = {REGRESSION, DATA_VALIDATION, REGULATORY_REPORTING, UI},
             description = "Data Validation | UI | Regulatory Reporting | SFDR | Company Level Outputs | Verify Scope 3 GHG Emissions Column is Reflected to report")
     @Xray(test = {12892, 12893, 12895,11276})
     public void verifyScope3GHGEmissionsColumnTest() {
+        RegulatoryReportingPage reportingPage = new RegulatoryReportingPage();
         DashboardPage dashboardPage = new DashboardPage();
         dashboardPage.navigateToPageFromMenu("Regulatory Reporting");
         test.info("Navigated to Regulatory Reporting Page");
@@ -570,6 +585,7 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
             e.printStackTrace();
             assertTestCase.assertTrue(false, "New tab verification failed");
         } finally {
+            Driver.closeBrowserTab();
             BrowserUtils.switchWindowsTo(currentWindow);
             System.out.println("=============================");
         }
@@ -605,15 +621,17 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
             e.printStackTrace();
             assertTestCase.assertTrue(false, "New tab verification failed");
         } finally {
+            Driver.closeBrowserTab();
             BrowserUtils.switchWindowsTo(currentWindow);
             System.out.println("=============================");
         }
     }
 
-    @Test(groups = {"regression", "DataValidation", "regulatoryReporting"},
+    @Test(groups = {REGRESSION, DATA_VALIDATION, REGULATORY_REPORTING, UI},
             description = "Data Validation | SFDR - Regulatory reporting | Verify the BVD9 ID for the entities is displayed correctly in the Portfolio Level Output Sheet of generated Interim report without Use latest data filter")
     @Xray(test = {13566})
     public void verifyBVD9IDForInterimPortfolioLevelOutputWithoutLatestDataTest() {
+        RegulatoryReportingPage reportingPage = new RegulatoryReportingPage();
         DashboardPage dashboardPage = new DashboardPage();
         dashboardPage.navigateToPageFromMenu("Regulatory Reporting");
         test.info("Navigated to Regulatory Reporting Page");
@@ -647,6 +665,7 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
             e.printStackTrace();
             assertTestCase.assertTrue(false, "New tab verification failed");
         } finally {
+            Driver.closeBrowserTab();
             BrowserUtils.switchWindowsTo(currentWindow);
             System.out.println("=============================");
         }

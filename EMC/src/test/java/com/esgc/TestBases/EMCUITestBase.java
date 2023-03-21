@@ -1,8 +1,6 @@
 package com.esgc.TestBases;
 
 import com.esgc.APIModels.EMCAPIController;
-import com.esgc.Pages.EMCAccountDetailsPage;
-import com.esgc.Pages.EMCAccountsPage;
 import com.esgc.Pages.EMCMainPage;
 import com.esgc.Pages.LoginPageEMC;
 import com.esgc.TestBase.TestBase;

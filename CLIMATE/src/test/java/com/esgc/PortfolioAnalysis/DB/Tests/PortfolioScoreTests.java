@@ -13,6 +13,7 @@ import com.esgc.Utilities.PortfolioUtilities;
 import com.esgc.Utilities.Xray;
 import io.restassured.response.Response;
 import org.hamcrest.Matchers;
+import org.testng.SkipException;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Test;
@@ -22,8 +23,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.esgc.Utilities.Groups.DATA_VALIDATION;
-import static com.esgc.Utilities.Groups.REGRESSION;
+import static com.esgc.Utilities.Groups.*;
 
 public class PortfolioScoreTests extends DataValidationTestBase {
 
@@ -43,7 +43,9 @@ public class PortfolioScoreTests extends DataValidationTestBase {
             @Optional String researchLine,
             @Optional String month, @Optional String year) {
 
-
+        //TODO ESG will not be checked
+        if(researchLine.contains("ESG"))
+            throw new SkipException("ESG is in scope");
         List<ResearchLineIdentifier> portfolioToUpload = dataValidationUtilities.getPortfolioToUpload(researchLine, month, year);
 
         String fileName = String.format("Portfolio Score %s - %s - %s - %s - %s", researchLine, dataValidationUtilities.sectorFilter, dataValidationUtilities.regionFilter, month, year);
@@ -166,12 +168,12 @@ public class PortfolioScoreTests extends DataValidationTestBase {
                 .as(PortfolioPhysicalHazard[].class));
         PortfolioQueries portfolioQueries = new PortfolioQueries();
         PhysicalScore score = portfolioQueries.getPhysicalHazardScore("'" + portfolioId + "'", year + "||" + month);
-        assertTestCase.assertTrue(score.getHighest_risk_hazard().equals(apiResponse.get(0).getHighest_risk_hazard()));
-        assertTestCase.assertTrue(score.getFacilities_exposed().equals(apiResponse.get(0).getFacilities_exposed()));
-        assertTestCase.assertTrue(score.getHrh_risk_category().equals(apiResponse.get(0).getHrh_risk_category()));
+        assertTestCase.assertEquals(score.getHighest_risk_hazard(),apiResponse.get(0).getHighest_risk_hazard());
+        assertTestCase.assertEquals(score.getFacilities_exposed(),apiResponse.get(0).getFacilities_exposed());
+        assertTestCase.assertEquals(score.getHrh_risk_category(),apiResponse.get(0).getHrh_risk_category());
     }
 
-    @Test(groups = {REGRESSION, DATA_VALIDATION})
+    @Test(groups = {REGRESSION, DATA_VALIDATION, ESG})
     @Xray(test = {8178})
     public void verifyESGAssessmentPortfolioScore(
             //@Optional String sector, @Optional String region,
@@ -245,7 +247,7 @@ public class PortfolioScoreTests extends DataValidationTestBase {
 
                         {"Carbon Footprint", "03", "2021"},
                         {"Carbon Footprint", "02", "2021"},
-                        {"Carbon Footprint", "12", "2020"},
+                        {"Carbon Footprint", "12", "2021"},
                         {"Carbon Footprint", "04", "2021"},
 
                         {"Brown Share", "03", "2021"},

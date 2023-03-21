@@ -9,6 +9,7 @@ import com.aventstack.extentreports.reporter.ExtentSparkReporter;
 import com.esgc.APIModels.TestCase;
 import com.esgc.Reporting.CustomAssertion;
 import com.esgc.Utilities.*;
+import com.esgc.Utilities.Database.DatabaseDriver;
 import org.apache.commons.lang3.time.StopWatch;
 import org.openqa.selenium.JavascriptExecutor;
 import org.testng.ITestResult;
@@ -36,10 +37,19 @@ public abstract class TestBase {
     public static boolean isBrowserOpen = false;
     public static StopWatch stopWatch = new StopWatch();
     public static String reportPath = System.getProperty("user.dir") + File.separator + "test-output";
+    public static boolean isRemote = false;
 
     @BeforeTest(alwaysRun = true)
     @Parameters("reportName")
     public void setupTestBeforeExecution(@Optional String reportName) {
+        DatabaseDriver.createDBConnection();
+        //Check if execution is in remote environment or local?
+        if (System.getProperty("browser") != null) {
+            isRemote = System.getProperty("browser").contains("remote");
+        } else {
+            isRemote = ConfigurationReader.getProperty("browser").contains("remote");
+        }
+
         System.out.println("Report name: " + reportName);
         reportName = reportName == null ? "report.html" : reportName + ".html";
 
@@ -82,12 +92,14 @@ public abstract class TestBase {
 
     @AfterTest(alwaysRun = true)
     public void tearDownAndGenerateReport() {
+        DatabaseDriver.destroy();
         report.flush();
     }
 
     @AfterSuite(alwaysRun = true)
     @Parameters("reportName")
     public void uploadResultsToJira(@Optional String reportName) {
+        Driver.closeDriver();
         System.out.println("#########################################3");
         System.out.println("Test Cases:");
         testCasesList.forEach(System.out::println);
@@ -100,7 +112,7 @@ public abstract class TestBase {
     }
 
     public void getScreenshot(ITestResult result) {
-        if (result.getStatus() == ITestResult.FAILURE) {
+        if (result.getStatus() == ITestResult.FAILURE || result.getThrowable() != null) {
             test.assignCategory(result.getInstanceName());
             test.log(Status.FAIL, "Classname: " + result.getTestClass());
             test.log(Status.FAIL, MarkupHelper.createLabel("FAILED test case name is: " + result.getName(), ExtentColor.RED));
@@ -119,6 +131,7 @@ public abstract class TestBase {
     }
 
     public void getExistingUsersAccessTokenFromUI() {
+
         System.out.println("getting token");
         String getAccessTokenScript = "return JSON.parse(localStorage.getItem('okta-token-storage')).accessToken.accessToken";
         String accessToken = ((JavascriptExecutor) Driver.getDriver()).executeScript(getAccessTokenScript).toString();

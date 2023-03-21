@@ -239,6 +239,7 @@ public class CustomAssertion extends SoftAssert {
      * take a name of a test and returns a path to screenshot takes
      */
     public static String getScreenshot(String name) throws IOException {
+        Driver Driver = new Driver();
         try {
             // name the screenshot with the current date time to avoid duplicate name
             String date = new SimpleDateFormat("yyyyMMddhhmmss").format(new Date());

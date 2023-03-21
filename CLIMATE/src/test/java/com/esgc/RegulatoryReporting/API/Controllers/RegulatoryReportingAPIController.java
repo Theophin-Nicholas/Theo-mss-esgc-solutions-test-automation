@@ -2,13 +2,10 @@ package com.esgc.RegulatoryReporting.API.Controllers;
 
 import com.esgc.Base.API.Controllers.APIController;
 import com.esgc.RegulatoryReporting.API.RegulatoryReportingEndPoints;
-import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.DateTimeUtilities;
 import io.restassured.response.Response;
 
 import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 
@@ -25,6 +22,19 @@ public class RegulatoryReportingAPIController extends APIController {
         }
         return response;
     }
+
+
+        public Response getDashboardPortfolioDetails() {
+            Response response = null;
+            try {
+                response = configSpec()
+                        .when()
+                        .get(RegulatoryReportingEndPoints.GET_DASHBOARD_COVERAGE);
+            } catch (Exception e) {
+                System.out.println("Inside exception " + e.getMessage());
+            }
+            return response;
+        }
 
     public Response getDownloadHistory() {
         Response response = null;
@@ -150,5 +160,9 @@ public class RegulatoryReportingAPIController extends APIController {
         return response;
     }
 
-
+    public List<String> getPortfolioFields() {
+        Response response = getPortfolioDetails();
+        List<String> portfolioField = response.jsonPath().getList("benchmark");
+        return portfolioField;
+    }
 }

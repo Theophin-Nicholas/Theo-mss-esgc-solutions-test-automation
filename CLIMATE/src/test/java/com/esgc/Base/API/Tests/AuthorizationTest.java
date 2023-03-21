@@ -33,12 +33,13 @@ public class AuthorizationTest extends APITestBase {
             apiController.getPortfolioRegionMapResponse(portfolio_id, researchLine, apiFilterPayload).then().assertThat().statusCode(200);
             apiController.getPortfolioSectorSummaryResponse(portfolio_id, researchLine, apiFilterPayload).then().assertThat().statusCode(200);
             apiController.getPortfolioSectorDetailsResponse(portfolio_id, researchLine, apiFilterPayload).then().assertThat().statusCode(200);
-            if (!researchLine.equals("physicalriskmgmt"))
+            if (researchLine.equals("marketrisk") || researchLine.equals("supplychainrisk"))
+                apiController.getPhysicalRiskUnderlyingDataMetricsResponse(portfolio_id, researchLine, apiFilterPayload).then().assertThat().statusCode(200);
+            else if (!researchLine.equals("physicalriskmgmt") && !researchLine.equals("operationsrisk"))
                 apiController.getPortfolioUnderlyingDataMetricsResponse(portfolio_id, researchLine, apiFilterPayload).prettyPeek().then().assertThat().statusCode(200);
             if (researchLine.equals("carbonfootprint"))
                 apiController.getPortfolioEmissionsResponse(portfolio_id, researchLine, apiFilterPayload).prettyPeek().then().assertThat().statusCode(200);
-            if (researchLine.equals("marketrisk") || researchLine.equals("supplychainrisk"))
-                apiController.getPhysicalRiskUnderlyingDataMetricsResponse(portfolio_id, researchLine, apiFilterPayload).then().assertThat().statusCode(200);
+            if (!researchLine.equals("marketrisk") && !researchLine.equals("supplychainrisk"))
             apiController.getImpactDistributionResponse(portfolio_id, researchLine, apiImpactFilterPayload).then().assertThat().statusCode(200);
             apiController.getHistoryTablesResponse(portfolio_id, researchLine, apiFilterPayload).then().assertThat().statusCode(200);
         }

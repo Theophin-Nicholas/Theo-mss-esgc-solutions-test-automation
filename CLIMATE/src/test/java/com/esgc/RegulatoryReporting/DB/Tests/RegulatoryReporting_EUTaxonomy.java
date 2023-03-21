@@ -1,27 +1,24 @@
 package com.esgc.RegulatoryReporting.DB.Tests;
 
 import com.esgc.Base.TestBases.UITestBase;
-import com.esgc.Dashboard.UI.Pages.*;
+import com.esgc.Dashboard.UI.Pages.DashboardPage;
 import com.esgc.PortfolioAnalysis.UI.Pages.PhysicalRiskPages.PhysicalRiskManagementPages.PhysicalRiskManagementPage;
 import com.esgc.RegulatoryReporting.API.Controllers.RegulatoryReportingAPIController;
 import com.esgc.RegulatoryReporting.UI.Pages.RegulatoryReportingPage;
 import com.esgc.Utilities.BrowserUtils;
+import com.esgc.Utilities.Driver;
 import com.esgc.Utilities.Xray;
 import org.openqa.selenium.Keys;
 import org.testng.annotations.Test;
-
-import java.util.List;
-import java.util.Set;
 
 import static com.esgc.Utilities.Groups.*;
 
 public class RegulatoryReporting_EUTaxonomy extends UITestBase {
 
-
-    RegulatoryReportingPage reportingPage = new RegulatoryReportingPage();
-    @Test(groups = {REGRESSION, DATA_VALIDATION, REGULATORY_REPORTING}, description = "Data Validation | EU Taxonomy Regulatory Reporting")
+    @Test(groups = {REGRESSION, DATA_VALIDATION, REGULATORY_REPORTING, UI, ROBOT_DEPENDENCY}, description = "Data Validation | EU Taxonomy Regulatory Reporting")
     @Xray(test = {11993, 11994, 11995})
     public void verifyEUTaxonomyReport() {
+        RegulatoryReportingPage reportingPage = new RegulatoryReportingPage();
         PhysicalRiskManagementPage portfolioAnalysisPage = new PhysicalRiskManagementPage();
         DashboardPage dashboardPage = new DashboardPage();
         dashboardPage.navigateToPageFromMenu("Regulatory Reporting");
@@ -42,7 +39,7 @@ public class RegulatoryReporting_EUTaxonomy extends UITestBase {
 
         RegulatoryReportingAPIController apiController = new RegulatoryReportingAPIController();
         String portfolioId = apiController.getPortfolioId(portfolioName);
-        reportingPage.clickOnEUTaxonomy();
+        reportingPage.clickOnEUTaxonomyOption();
         reportingPage.selectPortfolioOptionByName(portfolioName);
         reportingPage.enterEUTaxonomyValues(portfolioName, "100", "1000");
         //verify create reports button before clicking
@@ -73,6 +70,7 @@ public class RegulatoryReporting_EUTaxonomy extends UITestBase {
             e.printStackTrace();
             assertTestCase.assertTrue(false, "New tab verification failed");
         } finally {
+            Driver.closeBrowserTab();
             BrowserUtils.switchWindowsTo(currentWindow);
             System.out.println("=============================");
         }

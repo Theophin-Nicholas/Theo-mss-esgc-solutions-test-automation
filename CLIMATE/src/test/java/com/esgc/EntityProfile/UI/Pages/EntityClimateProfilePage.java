@@ -435,7 +435,7 @@ public class EntityClimateProfilePage extends ClimatePageBase {
     @FindBy(xpath = "//div[normalize-space()='PHYSICAL RISK MANAGEMENT']")
     public WebElement header_PhysicalRiskManagement;
 
-    @FindBy(xpath = "//div[normalize-space()='PHYSICAL RISK MANAGEMENT']")
+    @FindBy(xpath = "//div[contains(text(),'Physical Risk Management') and .//*[starts-with(text(),'Anticipation,')]]")
     public WebElement PhysicalRiskManagementTable;
     //ESG Monitoring Section
 
@@ -514,7 +514,7 @@ public class EntityClimateProfilePage extends ClimatePageBase {
     @FindBy(xpath = "//div[normalize-space()='Filter by most impacted categories of ESG:']//following-sibling::div")
     public List<WebElement> subCategoryList;
 
-    @FindBy(xpath = "//tr[@heap_id='event']")
+    @FindBy(xpath = "//tr[@heap_id='event' and @notclickable='false']")
     public List<WebElement> controversiesTableRow;
 
     @FindBy(xpath = "//div[@id='methodologies_modal']//div[@role='dialog']/div[2]/div/div/div/span")
@@ -546,7 +546,8 @@ public class EntityClimateProfilePage extends ClimatePageBase {
     private Pattern pattern = Pattern.compile("-?\\d+(\\.\\d+)?");
 
     public String searchAndLoadClimateProfilePage(String companyToSearch) {
-        searchIcon.click();
+        waitForDataLoadCompletion();
+        clickSearchIcon();
         searchInputBox.sendKeys(companyToSearch);
         String companyName = wait.until(ExpectedConditions.visibilityOf(firstElementOfSearch)).getText().split("\n")[0];
         firstElementOfSearch.click();
@@ -555,7 +556,7 @@ public class EntityClimateProfilePage extends ClimatePageBase {
 
     public boolean validateGlobalCompanyNameHeader(String companyName) {
         try{
-            return Driver.getDriver().findElement(By.xpath("//li//span[text()='"+companyName+"']")).isDisplayed();
+            return wait.until(ExpectedConditions.visibilityOf(Driver.getDriver().findElement(By.xpath("//li//span[text()='"+companyName+"']")))).isDisplayed();
         }catch(Exception e){
             return false;
         }
@@ -1095,13 +1096,12 @@ public class EntityClimateProfilePage extends ClimatePageBase {
     }
 
     public void validateTemperatureAlignmentUpdatedOn() {
-        if (temperatureAlignmentDetailDivs.get(2).isDisplayed()) {
-            Assert.assertTrue(temperatureAlignmentDetailDivs.get(2).getText().contains("The company reports a target"));
-            Assert.assertEquals(Color.fromString(temperatureAlignmentDetailDivs.get(2).getCssValue("color")).asHex(), "#263238");
-            Assert.assertEquals(temperatureAlignmentDetailDivs.get(2).getCssValue("font-size"), "12px");
-            Assert.assertEquals(temperatureAlignmentDetailDivs.get(2).getCssValue("font-family"),
-                    ("WhitneyNarrMedium, Roboto, Arial, sans-serif"));
-
+        if (temperatureAlignmentDetailDivs.get(3).isDisplayed()) {
+            Assert.assertTrue(temperatureAlignmentDetailDivs.get(3).getText().contains("Updated on"));
+            Assert.assertEquals(Color.fromString(temperatureAlignmentDetailDivs.get(3).getCssValue("color")).asHex(), "#999999");
+            Assert.assertEquals(temperatureAlignmentDetailDivs.get(3).getCssValue("font-size"), "10px");
+            Assert.assertEquals(temperatureAlignmentDetailDivs.get(3).getCssValue("font-family"),
+                    ("WhitneyNarrSemiBold, Roboto, Arial, sans-serif"));
         }
     }
 
@@ -2675,6 +2675,7 @@ public class EntityClimateProfilePage extends ClimatePageBase {
         String dbDate = getFormattedDate(entityClimateProfilepagequeries.getUpdatedDateforPhysicalRiskManagement(orbisID), "MMMM d, yyyy");
         if (!dbDate.equals("")) {
             BrowserUtils.scrollTo(physicalRiskManagementWidgetDescription);
+            //TODO check here
             validateUpdatedOndate(physicalRiskManagementWidgetDescription.getText().split("\n")[1], dbDate);
             navigateToPhysicalRisk();
             BrowserUtils.scrollTo(PhysicalRisk_PhysicalRiskManagement_UpdatedDate_Span);

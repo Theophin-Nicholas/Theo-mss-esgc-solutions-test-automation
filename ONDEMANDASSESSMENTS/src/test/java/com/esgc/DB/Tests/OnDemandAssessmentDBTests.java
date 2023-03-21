@@ -4,10 +4,8 @@ import com.esgc.API.Controllers.OnDemandFilterAPIController;
 import com.esgc.DB.DBQueries.OnDemandAssessmentQueries;
 import com.esgc.DB.TestBases.DataValidationTestBase;
 import com.esgc.UI.Pages.OnDemandAssessmentPage;
-import com.esgc.TestBase.DataProviderClass;
 import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.Xray;
-
 import org.testng.annotations.Test;
 
 import java.util.ArrayList;
@@ -15,7 +13,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.esgc.Utilities.Groups.*;
+import static com.esgc.Utilities.Groups.DATA_VALIDATION;
+import static com.esgc.Utilities.Groups.REGRESSION;
 
 public class OnDemandAssessmentDBTests extends DataValidationTestBase {
 

@@ -1,18 +1,15 @@
 package com.esgc.Pages;
 
-import com.esgc.Utilities.*;
-import com.opencsv.CSVReader;
+import com.esgc.Utilities.BrowserUtils;
+import com.esgc.Utilities.CSVUtil;
+import com.esgc.Utilities.DateTimeUtilities;
+import com.esgc.Utilities.UnzipUtil;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 import static com.esgc.Utilities.BrowserUtils.scrollTo;

@@ -44,7 +44,7 @@ public abstract class DashboardUITestBase extends TestBase {
 
         isPampaTest = method.getName().contains("Pampa");
         isEntitlementsTest = method.getName().contains("Bundle");
-        userOnLoginPage = Driver.getDriver().getCurrentUrl().endsWith("login");
+        userOnLoginPage = Driver.getDriver().getCurrentUrl().endsWith("login") || Driver.getDriver().getCurrentUrl().endsWith("signin");
 
         //For entitlements tests, automation should be logged out from default user
         //If it is not an entitlements test, keep user logged in
@@ -69,12 +69,13 @@ public abstract class DashboardUITestBase extends TestBase {
         getScreenshot(iTestResult);
         if (isPampaTest || isEntitlementsTest) {
             LoginPage loginPage = new LoginPage();
-            try {
-                loginPage.clickOnLogout();
-            } catch (Exception ignored) {
-
+            if(!Driver.getDriver().getCurrentUrl().endsWith("login")) {
+                try {
+                    loginPage.clickOnLogout();
+                } catch (Exception ignored) {
+                    Driver.closeDriver();
+                }
             }
-
         }
     }
 
