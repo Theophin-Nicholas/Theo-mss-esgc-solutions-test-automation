@@ -133,6 +133,7 @@ public class ControversiesModalTests extends DashboardUITestBase {
         assertTestCase.assertTrue(dashboardPage.compareArrays(allControversies, notCriticalControversies), "Verify all not critical controversies are in All controversies ");
 
     }
+    /*
 // remove to be de-scoped
 //TODO Controversies ESG parts are not in scope yet, follow up https://esjira/browse/ESGCA-7696
 //Planned for Q2 2023
@@ -159,5 +160,5 @@ public class ControversiesModalTests extends DashboardUITestBase {
             assertTestCase.assertEquals(box.getCssValue("background-color"),"rgba(179, 23, 23, 0.18)", "Verify label is having score inside parenthesis");
         }
 
-    }
+    }*/
 }

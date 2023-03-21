@@ -263,6 +263,7 @@ public class DashboardHeatMapEntityListTests extends UITestBase {
             //controller.getResearchLineRangesAndScoreCategories()
             System.out.println("researchLine = " + researchLine);
             switch (researchLine) {
+                /*
                 // remove to be de-scoped  review with furkan ?
                 case "Overall ESG Score":
                     assertTestCase.assertEquals(dashboardPage.heatMapYAxisIndicators.get(0).getText(), "Weak", "Overall ESG Score Category Verified");
@@ -271,6 +272,8 @@ public class DashboardHeatMapEntityListTests extends UITestBase {
                     assertTestCase.assertEquals(dashboardPage.heatMapYAxisIndicators.get(3).getText(), "Advanced", "Overall ESG Score Category Verified");
                     assertTestCase.assertEquals(dashboardPage.overallESGDescription.getText(), Descriptions.OVERALL_ESG_SCORE_HEATMAP);
                     break;
+
+                 */
                 case "Physical Risk: Operations Risk":
                 case "Physical Risk: Market Risk":
                 case "Physical Risk: Supply Chain Risk":
@@ -688,7 +691,7 @@ public class DashboardHeatMapEntityListTests extends UITestBase {
         }
     }
     // remove to be de-scoped review with furkan ?
-
+/*
     @Test(groups = {DASHBOARD, UI, REGRESSION, ESG})
     @Xray(test = {9214})
     public void verifyOnlyOverallEsgScoreInHeatMap() {
@@ -718,9 +721,11 @@ public class DashboardHeatMapEntityListTests extends UITestBase {
         }
 // to be de-scoped remove. validate with furkan ???
         // Verify esg score X-Axis categories
-        assertTestCase.assertFalse(dashboardPage.heatmapXAxisIsAvailable(), "As only Overall ESG Score is in selected, others should not be available.");
+      //  assertTestCase.assertFalse(dashboardPage.heatmapXAxisIsAvailable(), "As only Overall ESG Score is in selected, others should not be available.");
 
     }
+
+ */
 
     @Test(groups = {DASHBOARD, UI, REGRESSION})
     @Xray(test = {11222})

@@ -465,16 +465,16 @@ public class OnDemandAssessmentPage extends PageBase {
         BrowserUtils.waitForVisibility(confirmRequestPopupBtnCancel,10).click();
         assertTestCase.assertTrue(BrowserUtils.waitForVisibility(btnConfirmRequest,30).isDisplayed(),"Validate it is back on Confirm euest page");
     }
-
+/*
     public void validateDashboardPageButtonForOnDemand(){
         BrowserUtils.waitForVisibility(dashboardPageMenuOption,60);
         // de-scoped should be removed. check with tarun and furkan ???
-        assertTestCase.assertTrue(dashboardPageMenuOption.isDisplayed(), "Validate that Dasboard on demand button is visible");
+       // assertTestCase.assertTrue(dashboardPageMenuOption.isDisplayed(), "Validate that Dasboard on demand button is visible");
 
         // descoped should be removed. check with tarun and furkan.???
-        assertTestCase.assertTrue(dashboardPageMenuOption.getText().matches("\\d+% On-Demand Assessment Eligible"), "Validate that Dasboard on demand button is visible");
-    }
-
+      //  assertTestCase.assertTrue(dashboardPageMenuOption.getText().matches("\\d+% On-Demand Assessment Eligible"), "Validate that Dasboard on demand button is visible");
+    }*/
+/*
     public void validateDashboardPageButtonCoverage(String portfolioID){
         BrowserUtils.waitForVisibility(dashboardPageMenuOption,60);
         // de-scoped should be removed. check with tarun and furkan ???
@@ -485,6 +485,8 @@ public class OnDemandAssessmentPage extends PageBase {
        assertTestCase.assertEquals(uiValue,apiValue,"Validating Coverage %");
 
     }
+
+ */
 
     public void validateErrormessage(){
         assertTestCase.assertTrue(BrowserUtils.waitForVisibility(SomeThingWentWrongErrorMessage,20).isDisplayed(), "Validating if error message has displayed");

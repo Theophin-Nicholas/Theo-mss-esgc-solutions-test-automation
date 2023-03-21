@@ -1610,7 +1610,7 @@ public class DashboardPage extends UploadPage {
     }
 
     // remove to be descoped
-/*
+
     public boolean verifyMethodologiesHeader() {
         try {
             assertTestCase.assertTrue(methodologyPopup_Header.getText().equals("ESG Assessment Framework"), "Validate header text as 'ESG Assessment Framework'");
@@ -1619,7 +1619,7 @@ public class DashboardPage extends UploadPage {
             return false;
         }
     }
-*/
+
     public List<String> getMethodologiesSections() {
         List<String> methodologySections = new ArrayList<>();
         for (WebElement element : methodologySectionNames) {
@@ -1628,6 +1628,8 @@ public class DashboardPage extends UploadPage {
         return methodologySections;
     }
 
+
+        // ESG content to be de-scoped. remove. check with furkan ????
 
     public boolean verifyMethodologiesLinks() {
 

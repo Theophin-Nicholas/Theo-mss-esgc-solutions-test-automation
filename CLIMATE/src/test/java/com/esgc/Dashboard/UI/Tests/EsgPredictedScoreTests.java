@@ -16,10 +16,10 @@ import static com.esgc.Utilities.Groups.*;
 
 public class EsgPredictedScoreTests extends UITestBase {
 //TODO check ESG Assessment Page, it is descoped as of now
-    @Test(enabled = false, groups = {ESG, REGRESSION, UI})
-    @Xray(test = {11131,11133})
-    public void verifyScoreQualityToggle() {
-        DashboardPage dashboardPage = new DashboardPage();
+  //  @Test(enabled = false, groups = {ESG, REGRESSION, UI})
+  //  @Xray(test = {11131,11133})
+  //  public void verifyScoreQualityToggle() {
+       // DashboardPage dashboardPage = new DashboardPage();
         // remove to be de-scoped
         //assertTestCase.assertTrue(dashboardPage.scoreQualityButton.isDisplayed(),"Verify Score Quality Button in Dashboard Page");
         //assertTestCase.assertTrue(dashboardPage.verifyScoreQualityToggleIsOff(),"Verify Score Quality Button is off in Dashboard Page");
@@ -32,11 +32,11 @@ public class EsgPredictedScoreTests extends UITestBase {
         //BrowserUtils.wait(5);
        // assertTestCase.assertTrue(dashboardPage.verifyScoreQualityToggleIsOff(),"Verify Score Quality Button is off in Dashboard Page");
 
-        dashboardPage.navigateToPageFromMenu("Portfolio Analysis");
-        dashboardPage.selectResearchLineFromDropdown("ESG Assessments");
+       // dashboardPage.navigateToPageFromMenu("Portfolio Analysis");
+      //  dashboardPage.selectResearchLineFromDropdown("ESG Assessments");
        // assertTestCase.assertTrue(dashboardPage.scoreQualityButton.isDisplayed(),"Verify Score Quality Button in Dashboard Page");
 
-    }
+ //   }
     // remove to be de-scoped
 
     /*
@@ -60,10 +60,10 @@ public class EsgPredictedScoreTests extends UITestBase {
     public void verifyScoreQualityIconWithEntities_Dashboard() {
         DashboardPage dashboardPage = new DashboardPage();
 
-        // remove to be de-scoped
-      //  dashboardPage.scoreQualityButton.click();
-      //  BrowserUtils.wait(5);
-       // assertTestCase.assertTrue(dashboardPage.verifyScoreQualityToggleIsOn(),"Verify Score Quality Button is on in Dashboard Page");
+       //  remove to be de-scoped
+       dashboardPage.scoreQualityButton.click();
+       BrowserUtils.wait(5);
+        assertTestCase.assertTrue(dashboardPage.verifyScoreQualityToggleIsOn(),"Verify Score Quality Button is on in Dashboard Page");
 
         assertTestCase.assertTrue(dashboardPage.verifyScoreQualityIconWithEntitiesInPerformanceTable(),"Verify Score Quality icon with Entity Names in Performance Larger Holdings table in Dashboard Page");
 

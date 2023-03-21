@@ -68,13 +68,13 @@ public class PortfolioCompaniesAndInvestments extends DataValidationTestBase {
     }
 
 
-
+/*
     // to be de-scoped remove esg content. validate with furkan ???
     @Test(groups = {DASHBOARD, REGRESSION, UI, SMOKE, ESG})
     @Xray(test = {8320, 8321})
     public void verifyCoverageAndEsgInfo(){
         DashboardPage dashboardPage = new DashboardPage();
-        //dashboardPage.selectPortfolioByNameFromPortfolioSelectionModal("TestEsgScores");
+        dashboardPage.selectPortfolioByNameFromPortfolioSelectionModal("TestEsgScores");
 
         // ESGCA-8321: Verify Summary Companies Panel Hyperlink is Changed
         dashboardPage.clickViewCompaniesAndInvestments();
@@ -83,13 +83,13 @@ public class PortfolioCompaniesAndInvestments extends DataValidationTestBase {
         // ESGCA-8320: Verify that newly added ESG columns are displayed on Company list drawer
         dashboardPage.selectViewByRegion();
         // remove to be de-scoped
-        //assertTestCase.assertTrue(dashboardPage.verifyViewByRegionTableColumns("ESG Score"), "Verify ESG Score Column is available");
-        assertTestCase.assertTrue(dashboardPage.verifyEsgInfo(), "Verify ESG Info of listed companies");
-        System.out.println("VIEW BY SECTOR ");
-        dashboardPage.selectViewBySector();
-        //assertTestCase.assertTrue(dashboardPage.verifyViewByRegionTableColumns("ESG Score"), "Verify ESG Score Column is available");
+      //  assertTestCase.assertTrue(dashboardPage.verifyViewByRegionTableColumns("ESG Score"), "Verify ESG Score Column is available");
+      //  assertTestCase.assertTrue(dashboardPage.verifyEsgInfo(), "Verify ESG Info of listed companies");
+     //   System.out.println("VIEW BY SECTOR ");
+      //  dashboardPage.selectViewBySector();
+      //  assertTestCase.assertTrue(dashboardPage.verifyViewByRegionTableColumns("ESG Score"), "Verify ESG Score Column is available");
         assertTestCase.assertTrue(dashboardPage.verifyEsgInfo(), "Verify ESG Info of listed companies");//TODO randomly failed
         dashboardPage.closePortfolioExportDrawer();
-    }
+    }*/
 
 }

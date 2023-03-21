@@ -13,29 +13,29 @@ import static com.esgc.Utilities.Groups.*;
 
 public class ScoreQualityTests extends UITestBase {
 
-    @Test(groups = {ESG, REGRESSION, UI})
-    @Xray(test = {11131,11133})
-    public void verifyScoreQualityToggle() {
-        DashboardPage dashboardPage = new DashboardPage();
+  //  @Test(groups = {ESG, REGRESSION, UI})
+  //  @Xray(test = {11131,11133})
+  //  public void verifyScoreQualityToggle() {
+      //  DashboardPage dashboardPage = new DashboardPage();
         // remove to be de-scoped
        // assertTestCase.assertTrue(dashboardPage.scoreQualityButton.isDisplayed(),"Verify Score Quality Button in Dashboard Page");
        // assertTestCase.assertTrue(dashboardPage.verifyScoreQualityToggleIsOff(),"Verify Score Quality Button is off in Dashboard Page");
 
-        dashboardPage.scoreQualityButton.click();
-        BrowserUtils.wait(5);
+      //  dashboardPage.scoreQualityButton.click();
+      //  BrowserUtils.wait(5);
         // remove to be de-scoped
         //assertTestCase.assertTrue(dashboardPage.verifyScoreQualityToggleIsOn(),"Verify Score Quality Button is on in Dashboard Page");
 
-        dashboardPage.scoreQualityButton.click();
-        BrowserUtils.wait(5);
+      //  dashboardPage.scoreQualityButton.click();
+      //  BrowserUtils.wait(5);
         // remove to be de-scoped
       //  assertTestCase.assertTrue(dashboardPage.verifyScoreQualityToggleIsOff(),"Verify Score Quality Button is off in Dashboard Page");
 
-        dashboardPage.navigateToPageFromMenu("Portfolio Analysis");
-        dashboardPage.selectResearchLineFromDropdown("ESG Assessments");
+     //   dashboardPage.navigateToPageFromMenu("Portfolio Analysis");
+     //   dashboardPage.selectResearchLineFromDropdown("ESG Assessments");
         // remove to be de-scoped
       //  assertTestCase.assertTrue(dashboardPage.scoreQualityButton.isDisplayed(),"Verify Score Quality Button in Dashboard Page");
-    }
+  //  }
 
 
     // remove to be de-scoped
@@ -56,7 +56,7 @@ public class ScoreQualityTests extends UITestBase {
     }
 
      */
-
+/*
     // to be de-scoped remove. validate with furkan ???
     @Test(groups = {ESG, REGRESSION, UI})
     @Xray(test = {11135})
@@ -64,38 +64,38 @@ public class ScoreQualityTests extends UITestBase {
         DashboardPage dashboardPage = new DashboardPage();
         // remove to be de-scoped
 
-        dashboardPage.scoreQualityButton.click();
-        BrowserUtils.wait(5);
-        assertTestCase.assertTrue(dashboardPage.verifyScoreQualityToggleIsOn(),"Verify Score Quality Button is on in Dashboard Page");
+      // dashboardPage.scoreQualityButton.click();
+      // BrowserUtils.wait(5);
+      //  assertTestCase.assertTrue(dashboardPage.verifyScoreQualityToggleIsOn(),"Verify Score Quality Button is on in Dashboard Page");
 
-        assertTestCase.assertTrue(dashboardPage.verifyScoreQualityIconWithEntitiesInPerformanceTable(),"Verify Score Quality icon with Entity Names in Performance Larger Holdings table in Dashboard Page");
+     //   assertTestCase.assertTrue(dashboardPage.verifyScoreQualityIconWithEntitiesInPerformanceTable(),"Verify Score Quality icon with Entity Names in Performance Larger Holdings table in Dashboard Page");
 
-        dashboardPage.tabPerformanceLeaders.click();
-        assertTestCase.assertTrue(dashboardPage.verifyScoreQualityIconWithEntitiesInPerformanceTable(),"Verify Score Quality icon with Entity Names in Performance Leaders table in Dashboard Page");
+     //   dashboardPage.tabPerformanceLeaders.click();
+      //  assertTestCase.assertTrue(dashboardPage.verifyScoreQualityIconWithEntitiesInPerformanceTable(),"Verify Score Quality icon with Entity Names in Performance Leaders table in Dashboard Page");
 
-        dashboardPage.tabPerformanceLaggards.click();
-        assertTestCase.assertTrue(dashboardPage.verifyScoreQualityIconWithEntitiesInPerformanceTable(),"Verify Score Quality icon with Entity Names in Performance Laggards table in Dashboard Page");
+      //  dashboardPage.tabPerformanceLaggards.click();
+       // assertTestCase.assertTrue(dashboardPage.verifyScoreQualityIconWithEntitiesInPerformanceTable(),"Verify Score Quality icon with Entity Names in Performance Laggards table in Dashboard Page");
 
-        BrowserUtils.scrollTo(dashboardPage.overallESGCell);
-        dashboardPage.overallESGCell.click();
-        assertTestCase.assertTrue(dashboardPage.verifyScoreQualityIconWithEntitiesUnderCompareResearchLines(),"Verify Score Quality icon with Entity Names in Performance Laggards table in Dashboard Page");
+       // BrowserUtils.scrollTo(dashboardPage.overallESGCell);
+      //  dashboardPage.overallESGCell.click();
+      //  assertTestCase.assertTrue(dashboardPage.verifyScoreQualityIconWithEntitiesUnderCompareResearchLines(),"Verify Score Quality icon with Entity Names in Performance Laggards table in Dashboard Page");
 
-        dashboardPage.selectOrDeselectResearchLineUnderAnalysisSection("Physical Risk: Market Risk");
+     //   dashboardPage.selectOrDeselectResearchLineUnderAnalysisSection("Physical Risk: Market Risk");
         // to be de-scoped remove. validate with furkan ???
-        dashboardPage.selectOrDeselectResearchLineUnderAnalysisSection("Overall ESG Score");
+     //   dashboardPage.selectOrDeselectResearchLineUnderAnalysisSection("Overall ESG Score");
         dashboardPage.overallESGCell.click();
         assertTestCase.assertTrue(dashboardPage.verifyScoreQualityIconWithEntitiesUnderCompareResearchLines(),"Verify Score Quality icon with Entity Names in Performance Laggards table in Dashboard Page");
 
-    }
-
+    }*/
+/*
     @Test(groups = {ESG, REGRESSION, UI})
     @Xray(test = {11163, 11175})
     public void verifyScoreQualityIconWithEntities_PortfolioAnalysis() {
-        DashboardPage dashboardPage = new DashboardPage();
-        ResearchLinePage researchLine =new ResearchLinePage();
+      //  DashboardPage dashboardPage = new DashboardPage();
+      //  ResearchLinePage researchLine =new ResearchLinePage();
 
-        dashboardPage.navigateToPageFromMenu("Portfolio Analysis");
-        dashboardPage.selectResearchLineFromDropdown("ESG Assessments");
+      //  dashboardPage.navigateToPageFromMenu("Portfolio Analysis");
+      //  dashboardPage.selectResearchLineFromDropdown("ESG Assessments");
 
         // remove to be de-scoped
        // dashboardPage.scoreQualityButton.click();
@@ -122,7 +122,7 @@ public class ScoreQualityTests extends UITestBase {
         assertTestCase.assertTrue(researchLine.verifyScoreQualityIconWithEntitiesInCoveragePopup_PA(),"Verify Score Quality icon with Entity Names in Coverage popup in Portfolio Analysis Page");
         researchLine.hideButton.click();
     }
-
+*/
     @Test(groups = {ESG, REGRESSION, UI})
     @Xray(test = {11216})
     public void verifyScoreQualityToggleWithoutEsgEntitlement() {
@@ -140,7 +140,7 @@ public class ScoreQualityTests extends UITestBase {
         assertTestCase.assertTrue(!researchLine.verifyScoreQualityIconWithEntitiesInLeadersAndLaggardsTables_PA(),"Verify Score Quality icon with Entity Names in Leaders and Laggards tables in Portfolio Analysis Page");
 
     }
-
+/*
     @Test(groups = {ESG, REGRESSION, UI})
     @Xray(test = {12069})
     public void verifyScoreQualityIconWithSubsidiaryCompanies_Dashboard() {
@@ -170,8 +170,8 @@ public class ScoreQualityTests extends UITestBase {
         dashboardPage.tabPerformanceLaggards.click();
         assertTestCase.assertTrue(dashboardPage.verifyScoreQualityIconWithEntitiesInPerformanceTable(),"Verify Score Quality icon with Entity Names in Performance Laggards table in Dashboard Page");
 
-    }
-
+    }*/
+/*
     @Test(groups = {ESG, REGRESSION, UI})
     @Xray(test = {12071})
     public void verifyScoreQualityIconWithSubsidiaryCompanies_PortfolioAnalysis() {
@@ -194,4 +194,5 @@ public class ScoreQualityTests extends UITestBase {
         assertTestCase.assertTrue(researchLine.verifyScoreQualityIconWithEntitiesInCoveragePopup_PA(),"Verify Score Quality icon with Entity Names in Coverage popup in Portfolio Analysis Page");
         researchLine.hideButton.click();
     }
+    */
 }

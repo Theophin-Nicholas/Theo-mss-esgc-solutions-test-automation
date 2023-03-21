@@ -13,12 +13,13 @@ import static com.esgc.Utilities.Groups.*;
 
 public class EsgMaterialityDataValidation extends DataValidationTestBase {
 
+    /*
     @Test(groups = {ENTITY_PROFILE, REGRESSION, UI})
     @Xray(test = {9367, 9368, 9375, 8451, 8428, 8869,12419,12448})
     public void validateEsgMaterialityMatrix() {
 
-       /* String company = "Sculptor Capital Management, Inc.";
-        String orbisID = "035352536";*/
+        String company = "Sculptor Capital Management, Inc.";
+        String orbisID = "035352536";
         String company = "Apple, Inc.";
         String orbisID = "000411117";
         test.info("Searching and Selecting the company");
@@ -27,13 +28,13 @@ public class EsgMaterialityDataValidation extends DataValidationTestBase {
         assertTestCase.assertTrue(entityProfilePage.validateGlobalCompanyNameHeader(companyName), companyName + " Header Verification");
 
         // remove to be de-scoped furkan review ?
-        assertTestCase.assertTrue(entityProfilePage.verifyOverallEsgScoreWidget(), "Verify overall ESG Score widget");
-        assertTestCase.assertTrue(entityProfilePage.verifySectorComparisonChart(), "Verify Sector Comparison widget ");
+     //   assertTestCase.assertTrue(entityProfilePage.verifyOverallEsgScoreWidget(), "Verify overall ESG Score widget");
+      //  assertTestCase.assertTrue(entityProfilePage.verifySectorComparisonChart(), "Verify Sector Comparison widget ");
 
-        entityProfilePage.selectEsgMaterialityTab();
-        List<Map<String, Object>> dbEsgMaterialityCategories = EntityPageQueries.getEsgMaterialityCategories(orbisID);
-        List<String> uiEsgMaterialityCategories = entityProfilePage.readEsgMaterialityCategories();
-        //assertTestCase.assertEquals(dbEsgMaterialityCategories.size(), uiEsgMaterialityCategories.size(), "Verification number of categories");
+    //    entityProfilePage.selectEsgMaterialityTab();
+     //   List<Map<String, Object>> dbEsgMaterialityCategories = EntityPageQueries.getEsgMaterialityCategories(orbisID);
+     //   List<String> uiEsgMaterialityCategories = entityProfilePage.readEsgMaterialityCategories();
+     //   //assertTestCase.assertEquals(dbEsgMaterialityCategories.size(), uiEsgMaterialityCategories.size(), "Verification number of categories");
         for (int i = 1; i < dbEsgMaterialityCategories.size(); i++) {
             System.out.println("Category Record - " + i + ": " + dbEsgMaterialityCategories.get(i).get("criteria_name"));
             System.out.println("uiEsgMaterialityCategories = " + uiEsgMaterialityCategories);
@@ -43,5 +44,5 @@ public class EsgMaterialityDataValidation extends DataValidationTestBase {
              // assertTestCase.assertTrue(entityProfilePage.verifyCategoryControversies(dbEsgMaterialityCategories.get(i), dbEsgMaterialityControversies), "Verify Controversies of Category");
         }
         entityProfilePage.clickCloseIcon();
-    }
+    }*/
 }
