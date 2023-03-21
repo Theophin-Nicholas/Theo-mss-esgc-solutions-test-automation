@@ -805,7 +805,7 @@ public class EMCAPITests extends APITestBase {
             apiController.deleteProductFromAccount(accountId, productId);
         }
         assertTestCase.assertFalse(apiController.verifyProductForAccount(accountId, productId), "Product is verified for account");
-        apiController.putProductToAccount(accountId, applicationId, productId);
+        apiController.putProductToAccount(accountId, applicationId, productId, 100);
         assertTestCase.assertTrue(apiController.verifyProductForAccount(accountId, productId), "Product is verified for account");
     }
 

@@ -792,7 +792,7 @@ public class ApplicationPageTests extends EMCUITestBase {
     }
 
     @Test(groups = {EMC, UI, REGRESSION}, description = "UI | EMC | API | Application Delete Tests")
-    @Xray(test = {13925, 13928, 13924})
+    @Xray(test = {13925, 13928, 13934})
     public void verifyApplicationDeleteTests() {
         navigateToApplicationsPage("", "roles");
         wait(applicationsPage.applications, 10);

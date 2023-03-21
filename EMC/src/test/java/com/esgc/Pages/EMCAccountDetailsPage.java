@@ -146,7 +146,7 @@ public class EMCAccountDetailsPage extends EMCBasePage {
     @FindBy (xpath = "//div[@aria-expanded='true']//following-sibling::div//li//p/../span")
     public List<WebElement> currentProductFeaturesList;
 
-    @FindBy (xpath = "//div[.='Products']/following-sibling::div//ul//button")
+    @FindBy (xpath = "//div[@aria-expanded='true']/following-sibling::div//button")
     public List<WebElement> currentProductFeaturesDeleteButtons;
 
     @FindBy (xpath = "//input[@name='PurchasedAssessments']")
@@ -278,12 +278,22 @@ public class EMCAccountDetailsPage extends EMCBasePage {
             lastNameInput.sendKeys(lastName);
             //emailInput.sendKeys(userName);
             userNameInput.sendKeys(userName, Keys.TAB);
-            if(!sendActivationEmail) sendActivationEmailCheckbox.click();
-            if(MAUser) BrowserUtils.waitForClickablility(maCheckbox, 5).click();
-            else {
-                BrowserUtils.waitForClickablility(mssCheckbox, 5).click();
-                assertTestCase.assertTrue(sendActivationEmailCheckbox.isDisplayed(), "Send Activation Email checkbox is displayed");
+
+            if(MAUser) {
+                System.out.println("Selecting MA checkbox");
+                BrowserUtils.waitForClickablility(maCheckbox, 5).click();
             }
+            else {
+                System.out.println("Selecting MSS checkbox");
+                if(!mssCheckbox.isSelected()) BrowserUtils.doubleClick(mssCheckbox);
+                //BrowserUtils.wait(300);
+               //assertTestCase.assertTrue(sendActivationEmailCheckbox.isDisplayed(), "Send Activation Email checkbox is displayed");
+                if(!sendActivationEmail) {
+                    System.out.println("Unchecking send activation email checkbox");
+                    BrowserUtils.waitAndClick(sendActivationEmailCheckbox, 5);
+                }
+            }
+            System.out.println("Saving user");
             BrowserUtils.waitForClickablility(saveButton, 5).click();
             System.out.println("save button clicked");
             BrowserUtils.waitForClickablility(backToUsersButton, 5).click();

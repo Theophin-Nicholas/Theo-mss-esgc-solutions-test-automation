@@ -154,28 +154,28 @@ public class LoginPageEMC extends PageBase {
     public void loginWithInternalUser() {
         Driver.getDriver().manage().window().maximize();
         System.out.println("Login with internal user");
-        BrowserUtils.clearCache();
+//        BrowserUtils.clearCache();
         wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.INTERNAL_USER_USERNAME, Keys.ENTER);
         //check if next button is displayed
-        try{
-            BrowserUtils.wait(5);
-            BrowserUtils.waitAndClick(nextButton, 3);
-        }catch (Exception e){
-            System.out.println("No need to click next button");
-        }
+//        try{
+//            BrowserUtils.wait(5);
+//            BrowserUtils.waitAndClick(nextButton, 3);
+//        }catch (Exception e){
+//            System.out.println("No need to click next button");
+//        }
 
         //check if username is displayed and cleared
-        try{
+        try {
             BrowserUtils.wait(5);
             BrowserUtils.clearCache();
-            if(PTusernameBox.getAttribute("value").isEmpty())
+            if (PTusernameBox.getAttribute("value").isEmpty())
                 PTusernameBox.sendKeys(Environment.INTERNAL_USER_USERNAME);
         } catch (Exception e) {
             System.out.println("No need to enter username");
         }
 
         //check if password is displayed
-        try{
+        try {
             //wait.until(ExpectedConditions.visibilityOf(
             passwordBox.sendKeys(Environment.INTERNAL_USER_PASSWORD, Keys.ENTER);
         } catch (Exception e) {
@@ -183,7 +183,6 @@ public class LoginPageEMC extends PageBase {
         }
         BrowserUtils.waitForPageToLoad(30);
     }
-
     public void loginEMCInternal() {
         System.out.println("Log in to Prod with Authorized User");
         Driver.getDriver().manage().window().maximize();

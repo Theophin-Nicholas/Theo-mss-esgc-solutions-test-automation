@@ -601,6 +601,27 @@ public class EMCAPIController extends APITestBase {
         if (!verifyApplication(accountId, applicationId))
             putApplicationToAccount(accountId, applicationId);
         Response response = null;
+
+        try {
+            response = configSpec()
+                    .when()
+                    .pathParam("account-id", accountId)
+                    .pathParam("application-id", applicationId)
+                    .pathParam("product-id", productId)
+                    .put(EMCEndpoints.PUT_PRODUCT_TO_ACCOUNT);
+
+        } catch (Exception e) {
+            System.out.println("Inside exception " + e.getMessage());
+        }
+        System.out.println("Put Product To Account Status Code = " + response.statusCode());
+        response.prettyPrint();
+        return response;
+    }
+
+    public Response putProductToAccount(String accountId, String applicationId, String productId, int purchasedAssessments) {
+        if (!verifyApplication(accountId, applicationId))
+            putApplicationToAccount(accountId, applicationId);
+        Response response = null;
         String body = "";
         ProductSection[] productSection = getSectionsOfProduct(productId).as(ProductSection[].class);
         if (productSection[0].getName().equals("AssessmentsInfo")) {
@@ -608,7 +629,7 @@ public class EMCAPIController extends APITestBase {
             body = "{\n" +
                     "  \"info\": {\n" +
                     "    \"AssessmentsInfo\": {\n" +
-                    "      \"PurchasedAssessments\": 100,\n" +
+                    "      \"PurchasedAssessments\": "+purchasedAssessments+",\n" +
                     "      \"UsedAssessments\": 0\n" +
                     "    }\n" +
                     "  }\n" +
@@ -631,7 +652,6 @@ public class EMCAPIController extends APITestBase {
         response.prettyPrint();
         return response;
     }
-
     public Response getSectionsOfProduct(String productId) {
         Response response = null;
         System.out.println("EMC API URL: " + Environment.EMC_URL + EMCEndpoints.GET_PRODUCT_SECTIONS);
@@ -831,6 +851,7 @@ public class EMCAPIController extends APITestBase {
                 return role.getId();
         }
         System.out.println("Role with name " + roleName + " not found");
+        System.out.println("roles = " + roles);
         return null;
     }
 
