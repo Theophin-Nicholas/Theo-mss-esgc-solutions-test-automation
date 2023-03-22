@@ -26,34 +26,7 @@ import static com.esgc.Utilities.Groups.*;
 
 public class EsgAssessmentTests extends UITestBase {
 
-    @Test(enabled = false,groups = {REGRESSION, UI, SMOKE, ESG},
-            description = "Verify ESG Weighted Average Score Data Validation")
-    @Xray(test = {8176}) //TODO de-scoped , enable after scoped
-    public void verifyESGWeightedAverageScoreDataValidationTest() {
-        ResearchLinePage researchLinePage = new ResearchLinePage();
 
-        researchLinePage.navigateToResearchLine("ESG Assessments");
-        test.info("Navigated to ESG Assessments Page");
-
-        assertTestCase.assertTrue(researchLinePage.validateIfEsgCardInfoIsDisplayed(), "Verify ESG Card Info with coverage details");
-
-        //ESG Score Widget should be displayed
-        assertTestCase.assertTrue(researchLinePage.esgCardInfoBox.isDisplayed(), "Verify ESG Score Widget is displayed");
-        //ESG score scale category should be displayed: Weak, Limited, Robust, Advanced
-        List<String> availableESGScoresScaleCategories = new ArrayList<>(Arrays.asList("Weak", "Limited", "Robust", "Advanced"));
-        System.out.println("UI Data = " + researchLinePage.esgCardInfoBoxScore.getText());
-//        assertTestCase.assertTrue(availableESGScoresScaleCategories.contains(researchLinePage.esgCardInfoBoxScore.getText()), "Verify ESG Score Scale Category is displayed");
-
-        //The color of the Category should be:
-        //Weak	#DD581D
-        //Limited	#E8951C
-        //Robust	#EAC550
-        //Advanced	#DBE5A3
-        String expectedColor = researchLinePage.getColorByScoreCategory("ESG",researchLinePage.esgCardInfoBoxScore.getText());
-        String actualColor = Color.fromString(researchLinePage.esgCardInfoBoxScore.getCssValue("background-color")).asHex().toUpperCase();
-        System.out.println("actualColor = " + actualColor);
-        assertTestCase.assertEquals(actualColor, expectedColor, "Verify ESG Score Scale Category Color");
-    }
 
     @Test(groups = {REGRESSION, UI, ESG},
             description = "Verify displayed data for ESG is matching with SF data")
@@ -194,14 +167,6 @@ public class EsgAssessmentTests extends UITestBase {
         }
     }
 
-    @Test(enabled = false,groups = {REGRESSION, UI, SMOKE, ESG})
-    @Xray(test = {8704}) //TODO de-scoped , enable after scoped
-    public void verifyESGGradeDistributionIsDisplayed() {
-        ResearchLinePage researchLinePage = new ResearchLinePage();
-        researchLinePage.navigateToResearchLine("ESG Assessments");
-        test.info("Navigated to ESG Assessments Page");
-        researchLinePage.validateEsgGradeDistribution();
-    }
 
     @Test(enabled = false,groups = {REGRESSION, UI, SMOKE, ESG})
     @Xray(test = {9133})

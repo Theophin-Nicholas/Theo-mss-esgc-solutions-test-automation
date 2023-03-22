@@ -81,18 +81,6 @@ public class ResearchLinesDescriptionsTest extends UITestBase {
 
     }
 
-    @Test(enabled = false, groups = {REGRESSION, UI, SMOKE, ESG},
-            description = "Verify  ESG Summary Section") //TODO De-scoped as of now.
-    @Xray(test = {8283, 8285})
-    public void verifyESGAssessmentBoxAndDescription() {
-        ResearchLinePage researchLinePage = new ResearchLinePage();
 
-        researchLinePage.navigateToResearchLine("ESG Assessments");
-        test.info("Navigated to ESG Assessments Page");
-
-        assertTestCase.assertTrue(researchLinePage.ValidateifEsgPortfolioBoxIsDisplayed(), "Portfolio Box is displayed");
-        assertTestCase.assertTrue(researchLinePage.ValidateifEsgsummaryBoxIsDisplayed(), "ESG summary Box is displayed");
-        researchLinePage.ValidateSummaryBoxText();
-    }
 
 }

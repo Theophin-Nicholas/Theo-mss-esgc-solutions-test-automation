@@ -33,8 +33,7 @@ public class HeatMap extends DataValidationTestBase {
     @Xray(test = {4918, 4919, 4920, 4922, 4923, 4926, 5116, 7476, 7484, 7620, 7621, 9216, 11049  })
     public void verifyHeatMapWithMixedIdentifiers(@Optional String sector, @Optional String region, @Optional String researchLine1, @Optional String month, @Optional String year) {
         SoftAssert softAssert = new SoftAssert();
-        // to be de-scoped remove esg content. validate with furkan ???
-        List<String> researchLines = Arrays.asList("ESG", "operationsrisk", "marketrisk", "supplychainrisk", "Physical Risk Management",
+        List<String> researchLines = Arrays.asList("operationsrisk", "marketrisk", "supplychainrisk", "Physical Risk Management",
                 "Temperature Alignment", "Carbon Footprint", "Green Share", "Brown Share");
 
         DashboardAPIController dashboardAPIController = new DashboardAPIController();
@@ -156,20 +155,7 @@ public class HeatMap extends DataValidationTestBase {
                 double min2;
                 double max2;
                 // to be de-scoped remove esg content. validate with furkan ???
-                if (researchLine1.equals("ESG")) {
-                    min2 = rangeAndCategory.getMin2();
-                    max2 = rangeAndCategory.getMax2();
-                    System.out.println("Min2 score:" + min2);
-                    System.out.println("Max2 score:" + max2);
-                }
-                System.out.println("Score Category:" + rangeAndCategory.getCategory());
-                System.out.println("Score Category Actual:" + categoryPercentage.getResearch_line_score_category());
 
-                test.info("Score Range");
-                test.info("Min score:" + min);
-                test.info("Max score:" + max);
-                test.info("Expected Score Category:" + rangeAndCategory.getCategory());
-                test.info("Actual Score Category:" + categoryPercentage.getResearch_line_score_category());
                 List<ResearchLineIdentifier> companiesInCategory = null;
                 // to be de-scoped remove esg content. validate with furkan ???
                 if (researchLine1.equals("ESG")) {
@@ -460,18 +446,11 @@ public class HeatMap extends DataValidationTestBase {
         softAssert.assertAll();
     }
 
-    // to be de-scoped remove esg content. validate with furkan ???
     @DataProvider(name = "researchLines")
     public Object[][] provideFilterParameters() {
 
         return new Object[][]
                 {
-
-                        {"all", "all", "ESG", "03", "2022"},
-                        {"all", "APAC", "ESG", "03", "2022"},
-                        {"all", "EMEA", "ESG", "03", "2022"},
-                        {"all", "AMER", "ESG", "03", "2022"},
-                        {"all", "all", "ESG", "12", "2021"},
 
                         {"all", "all", "Temperature Alignment", "03", "2022"},
                         {"all", "APAC", "Temperature Alignment", "03", "2022"},

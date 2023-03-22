@@ -133,32 +133,5 @@ public class ControversiesModalTests extends DashboardUITestBase {
         assertTestCase.assertTrue(dashboardPage.compareArrays(allControversies, notCriticalControversies), "Verify all not critical controversies are in All controversies ");
 
     }
-    /*
-// remove to be de-scoped
-//TODO Controversies ESG parts are not in scope yet, follow up https://esjira/browse/ESGCA-7696
-//Planned for Q2 2023
-    @Test(enabled = false, groups = {"regression", "dashboard", "ui"})
-    @Xray(test = 8306)
-    public void controversiesInEsg() {
-        DashboardPage dashboardPage = new DashboardPage();
-        dashboardPage.selectSamplePortfolioFromPortfolioSelectionModal();
 
-        BrowserUtils.waitForVisibility(dashboardPage.criticalControversiesInEsg, 30);
-        assertTestCase.assertEquals(dashboardPage.criticalControversiesInEsg.getText(), "Critical Controversies in ESG", "Verify Critical Controversies in ESG label in Portfolio Monitoring table");
-
-        assertTestCase.assertTrue(dashboardPage.esgScoreBoxesLabels.get(0).getText().contains("E"), "Verify first box label is 'E'");
-        assertTestCase.assertTrue(dashboardPage.esgScoreBoxesLabels.get(1).getText().contains("S"), "Verify first box label is 'S'");
-        assertTestCase.assertTrue(dashboardPage.esgScoreBoxesLabels.get(2).getText().contains("G"), "Verify first box label is 'G'");
-
-        for(WebElement label: dashboardPage.esgScoreBoxesLabels){
-            String labelText = label.getText();
-            String score = labelText.substring(labelText.indexOf('(')+1,labelText.indexOf(')'));
-            assertTestCase.assertTrue(NumberUtils.isParsable(score), "Verify label is having score inside parenthesis");
-        }
-
-        for(WebElement box:dashboardPage.esgScoreBoxes){
-            assertTestCase.assertEquals(box.getCssValue("background-color"),"rgba(179, 23, 23, 0.18)", "Verify label is having score inside parenthesis");
-        }
-
-    }*/
 }

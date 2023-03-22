@@ -300,31 +300,6 @@ public class EntityIssuerAddMissingDocumentPopUpTestRouting extends EntityPageTe
         }
     }
 
-    @Xray(test = {8087, 8088, 10250})
-    @Test(groups = {REGRESSION, UI, SMOKE, ISSUER},
-            dataProvider = "loginP2", dataProviderClass = IssuerDataProviderClass.class,
-            description = "Verify Methodology Links")
-    public void verifyMethodologyLinks(String UserID, String Password) {
-        EntityIssuerPage entitypage = new EntityIssuerPage();
-        try {
-            LoginPageIssuer LoginPageIssuer = new LoginPageIssuer();
-            if(Driver.getDriver().getCurrentUrl().contains("login"))
-            LoginPageIssuer.loginWithParams(UserID, Password);
-
-            // ESG content to be de-scoped , remove. check with furkan ???
-            entitypage.validateLinksOpenedInNewTab(entitypage.linkSeeMethodologyGuide, "Methodology%202.0%20ESG%20Assessment");
-            entitypage.validateLinksOpenedInNewTab(entitypage.linkSeeSeeControversyMethodology, "Controversy%20Risk%20Assessment%20-%20Methodology");
-            entitypage.validateLinksOpenedInNewTab(entitypage.linkSeeSubcategoryDefinitions, "ESG%20Assessment_Subcategory%20Definitions_FINAL");
-            entitypage.validateLinksOpenedInNewTab(entitypage.linkSeeSeeESGMetricDefinitions, "ESGAssessmentMetrics_DefinitionsHandbook");
-            entitypage.validateLinksOpenedInNewTab(entitypage.linkSeeFAQ, "FAQ_Moodys%20ESG%20Assessment");
-            BrowserUtils.wait(2);
-           // entitypage.logout.click();
-        } catch (Exception e) {
-            e.printStackTrace();
-            entitypage.logout.click();
-        }
-    }
-
     @Xray(test = {11714})
     @Test(groups = {REGRESSION, UI, SMOKE, ISSUER},
             dataProvider = "loginP2", dataProviderClass = IssuerDataProviderClass.class,

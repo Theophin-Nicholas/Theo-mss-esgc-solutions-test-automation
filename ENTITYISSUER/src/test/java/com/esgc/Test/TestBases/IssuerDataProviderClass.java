@@ -73,16 +73,7 @@ public class IssuerDataProviderClass {
                 {"058618674"}
         };
     }
-    @DataProvider(name = "ESGMaterialitycredentials")
-    public Object[][] ESGMaterialityCredentials() {
 
-        List<String> requiredCols= Arrays.asList(new String[]{"UserName","Password","coverage_status","Page"});
-        Map<String,String> params = new HashMap<>();
-       // params.put("Page","P2");
-        params.put("Entitlement","ESGMaterialitycredentials");
-        return getData (params,requiredCols);
-
-    }
     //Method for below dataprovider is not in use
     @DataProvider(name = "CompaniesWithMESGScore")
     public Object[][] CompaniesWithMESGScore() {

@@ -118,17 +118,6 @@ public class LeadersAndLaggards extends UITestBase {
         }
         test.info("Verified that the More companies ranked in link is working as expected");
     }
-    //TODO De-Scoped as of now
-    @Test(enabled = false,groups = {REGRESSION, UI, SMOKE})
-    @Xray(test = {9871})
-    public void VerifyESGLeadersAndLaggersTable() {
-        ResearchLinePage researchLinePage = new ResearchLinePage();
-        researchLinePage.navigateToResearchLine("ESG Assessments");
-        researchLinePage.selectSamplePortfolioFromPortfolioSelectionModal();
-        test.info("Selected Sample Portfolio");
-        BrowserUtils.scrollTo(researchLinePage.LeadersAndLaggardsTable);
-        researchLinePage.validateEsgLeadersANDlaggersScorValuese();
-        researchLinePage.validateEsgLeadersANDlaggersModelvalues();
-    }
+
 
 }

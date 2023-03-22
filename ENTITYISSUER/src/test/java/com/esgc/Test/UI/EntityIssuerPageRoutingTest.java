@@ -32,7 +32,6 @@ public class EntityIssuerPageRoutingTest extends EntityPageTestBase {
         if (expectedPage.equals("P2")){
             BrowserUtils.wait(5);
             System.out.println("P2 Banner "+entitypage.banner.get(0).getText());
-            // ESG de-scoped. remove ???? check with furkan
            softAssert.assertTrue(wait.until(ExpectedConditions.visibilityOf(entitypage.banner.get(0))).getText().contains("Welcome to Moody’s ESG360: the portal connecting you to the Moody’s ESG Assessment process."));
         }
         else{

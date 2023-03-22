@@ -79,11 +79,9 @@ public class DashboardQueries {
         query = query.replaceAll("%ym", String.valueOf(year) + String.valueOf(month));
 
 
-        // to be de-scoped remove esg content. validate with furkan ???
-        // change Coverage to CLimate Coverage
         Map<String, String> result = new HashMap<>();
         for (Map<String, Object> rs : getQueryResultMap(query)) {
-            result.put("Coverage", rs.get("covered_companies").toString());
+            result.put("Climate Coverage", rs.get("covered_companies").toString());
             result.put("TotalCompanies", rs.get("Total_Companies").toString());
             result.put("CoveragePercent", rs.get("investment").toString());
         }

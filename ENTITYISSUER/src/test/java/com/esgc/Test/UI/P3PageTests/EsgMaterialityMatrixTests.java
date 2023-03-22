@@ -22,7 +22,7 @@ import static com.esgc.Utilities.Groups.*;
 public class EsgMaterialityMatrixTests extends EntityPageTestBase {
 
 
-    @Test(groups = {"entity_Issuer_profile", SMOKE, REGRESSION, UI}, dataProvider = "ESGMaterialitycredentials", dataProviderClass = IssuerDataProviderClass.class)
+    @Test(groups = {"entity_Issuer_profile", SMOKE, REGRESSION, UI}, dataProviderClass = IssuerDataProviderClass.class)
     @Xray(test = {9884, 9921})
     public void validateESGMaterialityMatrixHeader(String... dataProvider) {
         EntityIssuerPage entityIssuerPage = new EntityIssuerPage();
@@ -46,7 +46,7 @@ public class EsgMaterialityMatrixTests extends EntityPageTestBase {
 
     }
 
-    @Test(groups = {ENTITY_PROFILE, SMOKE, REGRESSION, UI}, dataProvider = "ESGMaterialitycredentials", dataProviderClass = IssuerDataProviderClass.class)
+    @Test(groups = {ENTITY_PROFILE, SMOKE, REGRESSION, UI}, dataProviderClass = IssuerDataProviderClass.class)
     @Xray(test = {9924})
     public void validateEsgMaterialityMatrixColumns(String... dataProvider) {
         EntityIssuerPage entityIssuerpage = new EntityIssuerPage();
@@ -82,8 +82,7 @@ public class EsgMaterialityMatrixTests extends EntityPageTestBase {
     }
 
 
-    // ESG content to be de-scoped , remove. check with furkan ???
-    @Test(groups = {"esg_materiality", SMOKE, REGRESSION, UI}, dataProvider = "ESGMaterialitycredentials", dataProviderClass = IssuerDataProviderClass.class)
+    @Test(groups = {"esg_materiality", SMOKE, REGRESSION, UI},  dataProviderClass = IssuerDataProviderClass.class)
     @Xray(test = {9925})
     public void validateEsgMaterialityFooter(String... dataProvider) {
         EntityIssuerPage entityIssuerpage = new EntityIssuerPage();
@@ -98,11 +97,10 @@ public class EsgMaterialityMatrixTests extends EntityPageTestBase {
             BrowserUtils.scrollTo(entityIssuerpage.esgMaterialityTab);
             entityIssuerpage.selectEsgMaterialityTab();
 
-            // ESG content to be de-scoped , remove. check with furkan ???
-            List<String> methodologies = Arrays.asList(new String[]{"Double Materiality", "Business Materiality", "Stakeholder Materiality", "ESG", "Environmental", "Social", "Governance"});
+            List<String> methodologies = Arrays.asList(new String[]{"Double Materiality", "Business Materiality", "Stakeholder Materiality", "Environmental", "Social", "Governance"});
             for (String e : methodologies) {
                 assertTestCase.assertTrue(entityIssuerpage.isProvidedFilterClickableInMaterialityMatrixFooter(e), "Verify " + e + "filter is clickable in Materiality Matrix Footer");
-                if (e.equals("Double Materiality") || e.equals("ESG")) {
+                if (e.equals("Double Materiality")) {
                     assertTestCase.assertTrue(entityIssuerpage.isProvidedFilterSelectedByDefaultInMaterialityMatrixFooter(e), "Verify" + e + "filter is selected as default in Materiality Matrix Footer");
                 } else {
                     assertTestCase.assertTrue(!entityIssuerpage.isProvidedFilterSelectedByDefaultInMaterialityMatrixFooter(e), "Verify" + e + "filter is not selected in Materiality Matrix Footer");
@@ -130,7 +128,7 @@ public class EsgMaterialityMatrixTests extends EntityPageTestBase {
 
     }
 
-    @Test(groups = {"esg_materiality", REGRESSION, UI,"Test"}, dataProvider = "ESGMaterialitycredentials", dataProviderClass = IssuerDataProviderClass.class)
+    @Test(groups = {"esg_materiality", REGRESSION, UI,"Test"}, dataProviderClass = IssuerDataProviderClass.class)
 
     @Xray(test = {9926})
     public void validateEsgMaterialitySubCategoryModel(String... dataProvider) {

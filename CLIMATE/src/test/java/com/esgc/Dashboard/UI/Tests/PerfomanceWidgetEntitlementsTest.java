@@ -12,7 +12,6 @@ import java.util.List;
 
 public class PerfomanceWidgetEntitlementsTest extends DashboardUITestBase {
 
-    // to be de-scoped remove. validate with furkan ???
     @Test(groups = {"regression", "ui", "smoke","entitlements"})
     @Xray(test = {8691})
     public void validateEsgScoreEntitlementNotVailableBundle(){
@@ -27,7 +26,6 @@ public class PerfomanceWidgetEntitlementsTest extends DashboardUITestBase {
 
         for (String performanceChartType : performanceChartTypes) {
             dashboardPage.clickAndSelectAPerformanceChart(performanceChartType);
-            // to be de-scoped remove. validate with furkan ???
             assertTestCase.assertTrue(!dashboardPage.isOverAllESGColumAvailable(), "Verify Overall ESG Score coloumn is not avaialble in performance widget");
         }
     }

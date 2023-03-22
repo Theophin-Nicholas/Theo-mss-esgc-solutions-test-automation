@@ -886,7 +886,6 @@ public class EntityIssuerPage extends PageBase {
 
 
     public void validateIssuerPageBanner() {
-        // ESG content to be de-scoped , remove. check with furkan ???
         assertTestCase.assertTrue(banner.get(0).getText().equals("Welcome to Moody’s ESG360: the portal connecting you to the Moody’s ESG Assessment process."), "Verify the Welcome Text in Banner");
         //Validating if Add missing button is next to ContactUS
         int ContactusYLocation = issuerContactUsButton.getLocation().y;
@@ -910,30 +909,6 @@ public class EntityIssuerPage extends PageBase {
         assertTestCase.assertTrue(liItemsinBanner.get(2).getText().equals("• View your company's scorecard"), "Validated Bullet points in Banner");
     }
 
-    // ESG content to be de-scoped , remove. check with furkan ???
-    public void validateScoringMethodologyStaticText() {
-        assertTestCase.assertTrue(ScoringMethodology.getText().equals("Scoring Methodology"), "Validate Grade and Score header");
-        // ESG content to be de-scoped , remove. check with furkan ???
-        assertTestCase.assertEquals(ScoringMethodologyText.getText(), "The scoring outputs of an ESG Assessment comprise two types of scores: \n" +
-                "\n" +
-                " 1. An Overall ESG Score from 0-100 based on the maturity of the entity’s approach against common global standards and industry practices. \n" +
-                "\n" +
-                " 2. Our assessment of an entity's managerial system to address defined responsibilities across different subcategories expressed, highest to lowest, as four levels: Advanced, Robust, Limited and Weak.");
-
-    }
-
-    // ESG content to be de-scoped , remove. check with furkan ???
-    public void validateESGSubcategoriesavailability() {
-        BrowserUtils.scrollTo(mainDiv_ESGSubCategory);
-        assertTestCase.assertTrue(mainDiv_ESGSubCategory.isDisplayed(), "Valiadte if ESGsubcategories scetion is available");
-    }
-
-    // ESG content to be de-scoped , remove. check with furkan ???
-    public void validateSummaryWidgetISVAvailable() {
-        assertTestCase.assertTrue(ESGScore.isDisplayed(), "Validate if ESG score widget is displayed");
-
-
-    }
 
     public void validateESGSubcategorieToggleButtons() {
 
@@ -1026,15 +1001,6 @@ public class EntityIssuerPage extends PageBase {
             assertTestCase.assertTrue(scoreRanges.get(i).getText().equals(expectedList.get(i)), "Validate if Score ranges are as expected");
         }
 
-    }
-
-    // ESG content to be de-scoped , remove. check with furkan ???
-    public void validateEsgScoredateFormat() {
-        // String esgScoreDate = EsgScoreRange.findElement(By.xpath("../following-sibling::div")).getText();
-        assertTestCase.assertTrue(EsgScoreRange.getText().startsWith("Updated on"));
-        assertTestCase.assertTrue((isValidFormat("MMMM dd, yyyy", EsgScoreRange.getText().split("on ")[1].toString())), "Validate date format");
-        assertTestCase.assertTrue(Color.fromString(EsgScoreRange.getCssValue("color")).asHex().equals("#ffffff"), "Validate Date text color");
-        assertTestCase.assertTrue(Color.fromString(EsgScoreRange.findElement(By.xpath("..")).getCssValue("background-color")).asHex().equals("#26415e"), "Validate Date text background color");
     }
 
     public void validateHeaderAvailability() {
@@ -1219,22 +1185,6 @@ public class EntityIssuerPage extends PageBase {
         }
     }
 
-    // ESG content to be de-scoped , remove. check with furkan ???
-    public void validateESGScoresAsNumericalValues(String score) {
-        if (score.equals("ESG Score")) {
-            String esgScoreValue = ESGScore.findElement(By.xpath("../following-sibling::div")).getText();
-            assertTestCase.assertTrue(Integer.valueOf(esgScoreValue.split("/")[0]) > 0, "Validate that ESG Score is greater than 0");
-            assertTestCase.assertTrue(Integer.valueOf(esgScoreValue.split("/")[1]) == 100, "Validate that ESG Score widget has 100");
-
-        } else {
-
-            String esgScoreValue = Driver.getDriver().findElement(By.xpath("(//div[@class='MuiGrid-root MuiGrid-item'])[2]//div[text()='" + score + "']/following-sibling::div")).getText();
-            assertTestCase.assertTrue(Integer.valueOf(esgScoreValue.split("/")[0]) > 0, "Validate that ESG Score is greater than 0");
-            assertTestCase.assertTrue(Integer.valueOf(esgScoreValue.split("/")[1]) == 100, "Validate that ESG Score widget has 100");
-        }
-
-
-    }
 
     public void ValidateOverallDisclosureRatioIsVailableAndValueisNumeric() {
 

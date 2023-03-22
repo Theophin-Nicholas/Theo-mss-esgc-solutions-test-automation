@@ -38,7 +38,6 @@ public abstract class APITestBase extends TestBaseClimate {
     public Object[][] availableResearchLinesForAPITests() {
 
         return new Object[][]{
-              /*  {"ESG Assessments"},*/ //TODO de-scoped
                 {"operationsrisk"},
                 {"marketrisk"},
                 {"supplychainrisk"},
