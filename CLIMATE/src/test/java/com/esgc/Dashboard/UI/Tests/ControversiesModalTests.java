@@ -5,6 +5,7 @@ import com.esgc.Base.UI.Pages.LoginPage;
 import com.esgc.Dashboard.UI.Pages.DashboardPage;
 import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.EntitlementsBundles;
+import com.esgc.Utilities.Environment;
 import com.esgc.Utilities.Xray;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.openqa.selenium.WebElement;
@@ -55,7 +56,7 @@ public class ControversiesModalTests extends DashboardUITestBase {
     public void verifyControversiesAreVisible_Bundle() {
 
         LoginPage login = new LoginPage();
-        login.entitlementsLogin(EntitlementsBundles.USER_WITH_CONTROVERSIES_ENTITLEMENT);
+        login.login();
 
         DashboardPage dashboardPage = new DashboardPage();
         BrowserUtils.wait(10);
@@ -79,7 +80,11 @@ public class ControversiesModalTests extends DashboardUITestBase {
     public void verifyControversiesAreNotVisible_Bundle() {
 
         LoginPage login = new LoginPage();
-        login.entitlementsLogin(EntitlementsBundles.USER_WITH_OUT_CONTROVERSIES_ENTITLEMENT);
+        if (Environment.environment.equalsIgnoreCase("prod")) {
+            login.entitlementsLogin(EntitlementsBundles.PHYSICAL_RISK);
+        } else {
+            login.entitlementsLogin(EntitlementsBundles.USER_WITH_OUT_CONTROVERSIES_ENTITLEMENT);
+        }
 
         DashboardPage dashboardPage = new DashboardPage();
         BrowserUtils.wait(10);

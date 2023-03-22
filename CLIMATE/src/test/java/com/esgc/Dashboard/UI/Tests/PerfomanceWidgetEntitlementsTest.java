@@ -10,6 +10,8 @@ import org.testng.annotations.Test;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.esgc.Utilities.Groups.*;
+
 public class PerfomanceWidgetEntitlementsTest extends DashboardUITestBase {
 
     @Test(groups = {"regression", "ui", "smoke","entitlements"})
@@ -30,14 +32,14 @@ public class PerfomanceWidgetEntitlementsTest extends DashboardUITestBase {
         }
     }
 
-    @Test(groups = {"regression", "ui","smoke", "entitlements"})
+    @Test(groups = {REGRESSION, UI, SMOKE, ENTITLEMENTS})
     @Xray(test = {8692})
     public void validateTotalControversiesNotAvailableBundle(){
         DashboardPage dashboardPage = new DashboardPage();
         LoginPage login = new LoginPage();
 
         test.info("Login with user is not having ESG Entitlement");
-        login.entitlementsLogin(EntitlementsBundles.USER_WITH_OUT_CONTROVERSIES_ENTITLEMENT);
+        login.entitlementsLogin(EntitlementsBundles.PHYSICAL_RISK_TRANSITION_RISK);
 
         test.info("ESG Score widget in Dashboard Page");
         List<String> performanceChartTypes = Arrays.asList("Leaders", "Laggards", "Largest Holding");
