@@ -1724,7 +1724,7 @@ public class AccountsPageTests extends EMCUITestBase {
     }
 
     @Test(groups = {EMC, UI, REGRESSION}, description = "EMC | UI | Delete Assigned Application Test")
-    @Xray(test = {13935, 13936, 13938})
+    @Xray(test = {6542, 13935, 13936, 13938})
     public void verifyDeleteAssignedApplicationsTest() {
         EMCAPIController apiController = new EMCAPIController();
         //create new application
