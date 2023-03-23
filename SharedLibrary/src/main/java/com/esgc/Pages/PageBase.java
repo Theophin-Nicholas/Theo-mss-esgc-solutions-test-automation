@@ -721,6 +721,19 @@ public abstract class PageBase {
         }
     }
 
+    public void navigateToPageFromMenu(String page,String navigateTo) {
+        String URL = Driver.getDriver().getCurrentUrl();
+        String pageName = URL.substring(URL.lastIndexOf("/")+1,URL.length());;
+
+        if (!pageName.endsWith(page)) {
+            clickMenu();
+            // Dynamic xpath - Helps us to pass page names "Dashboard", "Portfolio Analysis", "Regulatory Reporting"
+            String pageXpath = "//li[text()='" + navigateTo + "']";
+            WebElement pageElement = Driver.getDriver().findElement(By.xpath(pageXpath));
+            wait.until(ExpectedConditions.elementToBeClickable(pageElement)).click();
+        }
+    }
+
     /**
      * Method for navigation through research lines in the Portfolio Analysis page
      * e.g. Carbon Footprint, Operations Risk, Market Risk...

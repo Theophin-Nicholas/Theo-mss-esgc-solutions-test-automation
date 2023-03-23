@@ -5,12 +5,9 @@ import com.esgc.Dashboard.UI.Pages.DashboardPage;
 import com.esgc.PortfolioAnalysis.UI.Pages.ResearchLinePage;
 import com.esgc.PortfolioManagement.DB.DBQueries.PredictedScoreQueries;
 import com.esgc.PortfolioManagement.UI.Pages.PortfolioManagementPage;
-import com.esgc.RegulatoryReporting.API.Controllers.RegulatoryReportingAPIController;
+//import com.esgc.RegulatoryReporting.API.Controllers.RegulatoryReportingAPIController;
 import com.esgc.Reporting.CustomAssertion;
-import com.esgc.Utilities.BrowserUtils;
-import com.esgc.Utilities.PortfolioFilePaths;
-import com.esgc.Utilities.RobotRunner;
-import com.esgc.Utilities.Xray;
+import com.esgc.Utilities.*;
 import org.testng.annotations.Test;
 
 import java.util.ArrayList;
@@ -46,8 +43,10 @@ public class PredictedScoreTests extends UITestBase {
         assertTestCase.assertTrue(researchLinePage.verifyEntitiesWithPredictedScoresInYellow_PA(pmPage.portfolioTableRows),"Verify Entities with Predicted Scores are displaying in Yellow color in Portfolio table");
         assertTestCase.assertTrue(researchLinePage.verifyEntitiesWithPredictedScoresAreNotClickable_PA(pmPage.portfolioTableRows),"Verify Entities with Predicted Scores are not clickable in Portfolio table");
 
-        RegulatoryReportingAPIController apiController = new RegulatoryReportingAPIController();
-        String portfolioId = apiController.getPortfolioId(portfolioName);
+       /* RegulatoryReportingAPIController apiController = new RegulatoryReportingAPIController();
+        String portfolioId = apiController.getPortfolioId(portfolioName);*/
+
+        String portfolioId = APIUtilities.getPortfolioId(portfolioName);
         PredictedScoreQueries queries = new PredictedScoreQueries();
         ArrayList<String> dbPredictedScoredCompanies = queries.getPredictedScoredCompanies(portfolioId);
         ArrayList<String> uiPredictedScoredCompanies = pmPage.getPredictedScoredCompanies();
