@@ -909,6 +909,10 @@ public class EntityIssuerPage extends PageBase {
         assertTestCase.assertTrue(liItemsinBanner.get(2).getText().equals("• View your company's scorecard"), "Validated Bullet points in Banner");
     }
 
+    public void validateESGSubcategoriesavailability() {
+        BrowserUtils.scrollTo(mainDiv_ESGSubCategory);
+        assertTestCase.assertTrue(mainDiv_ESGSubCategory.isDisplayed(), "Valiadte if ESGsubcategories scetion is available");
+    }
     public void validateScoringMethodologyStaticText() {
         assertTestCase.assertTrue(ScoringMethodology.getText().equals("Scoring Methodology"), "Validate Grade and Score header");
         assertTestCase.assertEquals(ScoringMethodologyText.getText(), "The scoring outputs of an ESG Assessment comprise two types of scores: \n" +
