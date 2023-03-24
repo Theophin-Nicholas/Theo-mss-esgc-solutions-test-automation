@@ -462,6 +462,12 @@ public class OnDemandAssessmentPage extends CommonPage {
         }*/
     }
 
+    public void validateDashboardPageButtonForOnDemand(){
+        BrowserUtils.waitForVisibility(dashboardPageMenuOption,60);
+        assertTestCase.assertTrue(dashboardPageMenuOption.isDisplayed(), "Validate that Dasboard on demand button is visible");
+        assertTestCase.assertTrue(dashboardPageMenuOption.getText().matches("\\d+% On-Demand Assessment Eligible"), "Validate that Dasboard on demand button is visible");
+    }
+
     public void validateOnDemandPageHeader() {
         assertTestCase.assertEquals(BrowserUtils.waitForVisibility(menuOptionPageHeader, 90).getText(), "Moody's ESG360: Request On-Demand Assessment", "Moody's ESG360: Request On-Demand Assessment page verified");
     }
@@ -477,6 +483,15 @@ public class OnDemandAssessmentPage extends CommonPage {
         assertTestCase.assertTrue(BrowserUtils.waitForVisibility(btnConfirmRequest,30).isDisplayed(),"Validate it is back on Confirm euest page");
     }
 
+    public void validateDashboardPageButtonCoverage(String portfolioID){
+        BrowserUtils.waitForVisibility(dashboardPageMenuOption,60);
+        assertTestCase.assertTrue(dashboardPageMenuOption.isDisplayed(), "Validate that Dasboard on demand button is visible");
+        double uiValue = Double.valueOf(dashboardPageMenuOption.getText().substring(0,dashboardPageMenuOption.getText().indexOf("%")));
+        OnDemandFilterAPIController apiController = new OnDemandFilterAPIController();
+        double apiValue =  apiController.getDashboardCoverage(portfolioID).jsonPath().getDouble("perc_avail_for_assessment")*100;
+        assertTestCase.assertEquals(uiValue,apiValue,"Validating Coverage %");
+
+    }
 
     public void validateErrormessage(){
         assertTestCase.assertTrue(BrowserUtils.waitForVisibility(SomeThingWentWrongErrorMessage,20).isDisplayed(), "Validating if error message has displayed");
