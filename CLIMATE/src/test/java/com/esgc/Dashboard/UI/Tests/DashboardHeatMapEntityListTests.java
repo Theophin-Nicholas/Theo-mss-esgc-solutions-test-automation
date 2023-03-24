@@ -563,6 +563,60 @@ public class DashboardHeatMapEntityListTests extends UITestBase {
     }
 
 
+    @Test(groups = {DASHBOARD, UI, REGRESSION})
+    @Xray(test = {9201, 9202, 11218})
+    public void verifyOverallEsgScoreHeatMap() {
+
+        DashboardPage dashboardPage = new DashboardPage();
+        BrowserUtils.waitForVisibility(dashboardPage.verifyPortfolioName, 20);
+
+        if (!dashboardPage.verifyPortfolioName.getText().equalsIgnoreCase("Sample Portfolio"))
+            dashboardPage.selectPortfolioByNameFromPortfolioSelectionModal("Sample Portfolio");
+
+        BrowserUtils.wait(5);
+        BrowserUtils.scrollTo(dashboardPage.heatMapResearchLines.get(0));
+
+        //Verify Heat Map Title
+        assertTestCase.assertTrue(dashboardPage.verifyHeatMapTitle("Analyze Companies by Range"),
+                "Verified the widget doesn't show anything before a cell is selected.");
+
+        //Verify the entity list - Entity list should be displaying no records
+        assertTestCase.assertFalse(dashboardPage.isHeatMapEntityListDrawerDisplayed(),
+                "Verified the widget doesn't show anything before a cell is selected.");
+
+        //verify esg score research line is the first one in row
+        assertTestCase.assertEquals(dashboardPage.heatMapResearchLines.get(0).getText(),"Overall ESG Score",
+                "Verified ESG Score research line is first in row");
+
+        //verify esg score research line selected by default
+        assertTestCase.assertTrue(dashboardPage.verifySelectedResearchLineForHeatMap("Overall ESG Score"),
+                "Verified ESG Score research line is selected by default");
+
+        //Verify esg score categories when it is on Y-Axis in Heat Map
+        ArrayList<String> categories = new ArrayList<String>();
+        categories.add("Weak");
+        categories.add("Limited");
+        categories.add("Robust");
+        categories.add("Advanced");
+        for(int i=0; i<categories.size();i++){
+            assertTestCase.assertEquals(dashboardPage.heatMapYAxisIndicators.get(i).getText(), categories.get(i), "Y-Axis Categories verification");
+        }
+
+        //Verify esg score categories when it is on X-Axis in Heat Map
+        dashboardPage.selectResearchLineForHeatMap("Physical Risk: Supply Chain Risk");
+        assertTestCase.assertFalse(dashboardPage.verifySelectedResearchLineForHeatMap("Overall ESG Score"),
+                "Verified ESG Score research line is selected by default");
+        BrowserUtils.wait(5);
+        dashboardPage.selectResearchLineForHeatMap("Overall ESG Score");
+        assertTestCase.assertTrue(dashboardPage.verifySelectedResearchLineForHeatMap("Overall ESG Score"),
+                "Verified ESG Score research line is selected");
+
+        //Verify esg score X-Axis categories
+        BrowserUtils.wait(5);
+        for(int i=0; i<categories.size();i++){
+            assertTestCase.assertEquals(dashboardPage.heatMapXAxisIndicators.get(i).getText(), categories.get(categories.size()-i-1), "X-Axis Categories verification");
+        }
+    }
 
 
 
