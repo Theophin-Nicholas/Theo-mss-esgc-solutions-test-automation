@@ -5,4 +5,5 @@ public class CommonEndPoints {
     public static String POST_FILTER_OPTIONS_IN_PORTFOLIO = "api/portfolio/{portfolio_id}/filter";
     public static String SEARCH = "api/os/search";
     public static String GET_ENTITLEMENT_HANDLER = "api/entitlement-handler";
+    public static String GET_PORTFOLIO_DETAILS = "/api/report/portfolio-details";
 }
