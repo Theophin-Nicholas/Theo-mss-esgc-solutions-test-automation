@@ -37,44 +37,6 @@ public class DashboardAPIController extends APIController {
         return response;
     }
 
-    public synchronized Response getControversies(String portfolioId, String region, String sector, String year, String month) {
-        Response response = null;
-        try {
-            response = configSpec()
-                    .pathParam("portfolio_id", portfolioId).log().all()
-                    .pathParam("research_line", "controversies")
-                    .body("{\"region\":\"" + region + "\",\"sector\":\"" + sector + "\",\"month\":\"" + month + "\",\"year\":\"" + year + "\"}")
-                    .when()
-                    .post(DashboardEndPoints.POST_CONTROVERSIES);
-
-            System.out.println(response.prettyPrint());
-
-        } catch (Exception e) {
-            System.out.println("Inside exception " + e.getMessage());
-        }
-
-        return response;
-    }
-
-    // to be de-scoped remove esg content. validate with furkan ???
-    public synchronized Response getEsgCoverageScore(String portfolioId, String benchMark, String region, String sector, String year, String month) {
-        Response response = null;
-        try {
-            response = configSpec()
-                    .pathParam("portfolio_id", portfolioId).log().all()
-                    .body("{\"region\":\"" + region + "\",\"sector\":\"" + sector + "\",\"month\":\"" + month + "\",\"year\":\"" + year + "\",\"benchmark\":\"" + benchMark + "\"}")
-                    .when()
-                    .post(DashboardEndPoints.POST_ESG_SCORES);
-
-            System.out.println(response.prettyPrint());
-
-        } catch (Exception e) {
-            System.out.println("Inside exception " + e.getMessage());
-        }
-
-        return response;
-    }
-
     public synchronized Response getExportSourceDocuments(String entityId) {
         Response response = null;
         try {

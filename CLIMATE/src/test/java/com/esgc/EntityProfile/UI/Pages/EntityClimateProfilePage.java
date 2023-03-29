@@ -451,9 +451,7 @@ public class EntityClimateProfilePage extends ClimatePageBase {
     @FindBy(xpath = "//div[@id='cardInfo_box']/div[text()='ESG Score']/parent::div/div/div/div")
     public List<WebElement> esgScores;
 
-    // to be de-scoped remove esg content. validate with furkan ???
-    @FindBy(xpath = "//div[.='Overall ESG Score']/../div/div/div/div[2]")
-    public List<WebElement> esgScoreCategories;
+
 
     //Ignore first element
     @FindBy(xpath = "//div[ @id='portfolio_box' ]/div/div/div/div")
@@ -2345,20 +2343,6 @@ public class EntityClimateProfilePage extends ClimatePageBase {
             }
         }
         return true;//End of code
-    }
-
-    public boolean verifyESGScoreValue() {
-        for (WebElement score : esgScores) {
-          //  System.out.println("score " + score.getText().split("\n")[1]);
-            if (score.getText().split("/")[1].equals("100")) {
-                System.out.println("ESG score is verified = " + score.getText());
-                String color = Color.fromString(score.getCssValue("color")).asHex();
-                System.out.println("color = " + color);
-                if (!color.equals("#ffffff")) return false;
-                return score.isDisplayed();
-            }
-        }
-        return false;
     }
 
     public void verifyESGScoreHeaders() {

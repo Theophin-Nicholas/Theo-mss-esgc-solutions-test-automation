@@ -637,7 +637,6 @@ public class EntityClimateProfileSummaryTests extends UITestBase {
         profilePage.navigateToPhysicalRisk();
         //BrowserUtils.wait(5);
         assertTestCase.assertTrue(profilePage.esgTitle.isDisplayed(), "ESG Score title is displayed");
-        assertTestCase.assertTrue(profilePage.verifyESGScoreValue(), "ESG Score is verified");
         profilePage.verifyESGScoreHeaders();
     }
 

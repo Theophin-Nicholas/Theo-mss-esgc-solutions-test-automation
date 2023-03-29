@@ -67,6 +67,17 @@ public class PortfolioCompaniesAndInvestments extends DataValidationTestBase {
 
     }
 
+    @Test(groups = {DASHBOARD, REGRESSION, UI, SMOKE})
+    @Xray(test = {8320, 8321})
+    public void verifyCoverageAndEsgInfo(){
+        DashboardPage dashboardPage = new DashboardPage();
+        //dashboardPage.selectPortfolioByNameFromPortfolioSelectionModal("TestEsgScores");
 
+        // ESGCA-8321: Verify Summary Companies Panel Hyperlink is Changed
+        dashboardPage.clickViewCompaniesAndInvestments();
+        assertTestCase.assertTrue(dashboardPage.isExportButtonEnabled(), "Verify Export button is available");
+
+        dashboardPage.closePortfolioExportDrawer();
+    }
 
 }

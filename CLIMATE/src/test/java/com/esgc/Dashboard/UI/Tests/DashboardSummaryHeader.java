@@ -45,19 +45,6 @@ public class DashboardSummaryHeader extends DashboardUITestBase {
     }
 
     @Test(groups = {DASHBOARD, REGRESSION, UI, SMOKE})
-    @Xray(test = {6082, 4324, 7391})
-    public void verifyStickyHeader() {
-        DashboardPage dashboardPage = new DashboardPage();
-
-        test.info("Navigate to Dashboard Page");
-        dashboardPage.navigateToPageFromMenu("Dashboard");
-
-        test.info("Verify sticky header information");
-        BrowserUtils.wait(5);
-        assertTestCase.assertTrue(dashboardPage.verifyStickyHeaderInfo(), "Verify Sticky Header Info");
-    }
-
-    @Test(groups = {DASHBOARD, REGRESSION, UI, SMOKE})
     @Xray(test = {4260, 5074, 5076, 7892})
     public void validateClimateTiles() {
         DashboardPage dashboardPage = new DashboardPage();
