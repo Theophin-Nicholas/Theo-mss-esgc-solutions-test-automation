@@ -27,7 +27,7 @@ public class AccountsPageTests extends EMCUITestBase {
 
     String accountName = "INTERNAL QATest - PROD123";
     String applicationName = "TestQA";
-    String activeUserName = "Ferhat Test";
+    String activeUserName = "Active User";
 
     String fname = "Test";
     String lname = "user";
@@ -348,9 +348,7 @@ public class AccountsPageTests extends EMCUITestBase {
         navigateToAccountsPage("", "users");
         wait(accountsPage.accountNames, 10);
         accountsPage.verifyAccountsPage();
-        List<String> accountNames = accountsPage.getAccountNames();
-        //convert to lower case and sort alphabetically
-        accountNames.sort(String::compareToIgnoreCase);
+        List<String> accountNames = BrowserUtils.specialSort(accountsPage.getAccountNames());
         assertTestCase.assertEquals(accountNames, accountsPage.getAccountNames(), "Accounts are sorted alphabetically");
     }
 
@@ -455,7 +453,7 @@ public class AccountsPageTests extends EMCUITestBase {
     }
 
     @Test(groups = {EMC, UI, SMOKE, REGRESSION, PROD})
-    @Xray(test = {5736, 5746, 5764, 5765, 6185})
+    @Xray(test = {5746, 5764, 5765, 6185})
     public void resetPasswordButtonTest() {
         navigateToAccountsPage(accountName, "users");
         EMCAccountDetailsPage detailsPage = new EMCAccountDetailsPage();
@@ -481,7 +479,7 @@ public class AccountsPageTests extends EMCUITestBase {
     }
 
     @Test(groups = {EMC, UI, REGRESSION})
-    @Xray(test = {6794, 6792, 6795, 6797})
+    @Xray(test = {6792, 6794, 6795, 6797})
     public void deleteMultipleUsersTest() {
         navigateToAccountsPage(accountName, "users");
         EMCAccountDetailsPage detailsPage = new EMCAccountDetailsPage();
@@ -1565,9 +1563,24 @@ public class AccountsPageTests extends EMCUITestBase {
         detailsPage.clickOnMenuOption("Bulk import");
         EMCUserImportPage importPage = new EMCUserImportPage();
         importPage.verifyImportPage();
-        assertTestCase.assertTrue(importPage.downloadAndVerifyTemplate(), "Import Users modal is displayed");
-        assertTestCase.assertTrue(importPage.verifyTemplateContent(), "Import Users modal is displayed");
-        assertTestCase.assertTrue(importPage.uploadTemplateAndVerifyUsers(), "Import Users modal is displayed");
+        assertTestCase.assertTrue(importPage.downloadAndVerifyTemplate(), "Template downloaded and verified");
+        assertTestCase.assertTrue(importPage.verifyTemplateContent(), "Template content is verified");
+        assertTestCase.assertTrue(importPage.uploadTemplateAndVerifyUsers(), "Template uploaded and users are verified");
+        navigateToAccountsPage(accountName, "users");
+        detailsPage = new EMCAccountDetailsPage();
+        wait(detailsPage.userNamesList, 10);
+        System.out.println("userNamesList.size() = " + detailsPage.userNamesList.size());
+        for (int i = 0; i < 10; i++) {
+            if(detailsPage.verifyUser("QA Test User1") && detailsPage.verifyUser("QA Test User2")){
+                break;
+            }
+            BrowserUtils.wait(1);
+            BrowserUtils.refresh();
+            detailsPage.clickOnUsersTab();
+        }
+        assertTestCase.assertTrue(detailsPage.verifyUser("QA Test User1"),"QA Test User1 is imported");
+        assertTestCase.assertTrue(detailsPage.verifyUser("QA Test User2"),"QA Test User2 is imported");
+
         navigateToMenu("Users");
         EMCUsersPage usersPage = new EMCUsersPage();
         wait(usersPage.userNames, 20);
@@ -1650,6 +1663,7 @@ public class AccountsPageTests extends EMCUITestBase {
         navigateToAccountsPage(accountName, "applications");
         EMCAccountDetailsPage detailsPage = new EMCAccountDetailsPage();
         String mesgAppName = Environment.MESG_APPLICATION_NAME;
+        System.out.println("mesgAppName = " + mesgAppName);
         if (!detailsPage.verifyApplication(mesgAppName))
             detailsPage.assignApplication(mesgAppName);
         detailsPage.clickOnUsersTab();
@@ -1707,5 +1721,63 @@ public class AccountsPageTests extends EMCUITestBase {
         for(WebElement data: applicationsPage.firstRow){
             assertTestCase.assertTrue(data.getCssValue("text-align").equals("left"), "Data in the table is left aligned");
         }
+    }
+
+    @Test(groups = {EMC, UI, REGRESSION}, description = "EMC | UI | Delete Assigned Application Test")
+    @Xray(test = {6542, 13935, 13936, 13938})
+    public void verifyDeleteAssignedApplicationsTest() {
+        EMCAPIController apiController = new EMCAPIController();
+        //create new application
+        String applicationId = apiController.getApplicationId("QA Delete 3");
+        if(applicationId != null) apiController.deleteEMCApplicationResponse(applicationId);
+        apiController.createApplicationAndVerify("qadelete3", "QA Delete 3", "https://www.qadelete3.com","mss", "ExternalApplication");
+        //create new product for the application
+        applicationId = apiController.getApplicationId("QA Delete 3");
+        System.out.println("applicationId = " + applicationId);
+        apiController.createProductForApplicationResponse(applicationId,"QA Delete 3 Product", "qadelete3product").prettyPrint();
+        apiController.verifyProductForApplication(applicationId, "QA Delete 3 Product");
+        apiController.createRoleForApplicationResponse(applicationId, "QA Delete 3 Role", "qadelete3role").prettyPrint();
+        apiController.verifyRoleForApplication(applicationId, "QA Delete 3 Role");
+        //assign application to account
+        String accountId = Environment.QA_TEST_ACCOUNT_ID;
+        apiController.assignApplicationToAccountResponse(accountId, applicationId);
+        //verify application assigned to account
+        apiController.verifyApplication(accountId, applicationId);
+        //assign product to account
+        String productId = apiController.getProductId(applicationId, "QA Delete 3 Product");
+        System.out.println("productId = " + productId);
+        apiController.putProductToAccount(accountId, applicationId, productId);
+        //verify product assigned to account
+        apiController.verifyProductForAccount(accountId, productId);
+        //assign application role to active user
+        String userId = apiController.getUserId(accountId, activeUserName);
+        System.out.println("userId = " + userId);
+        String applicationRoleId = apiController.getRoleId(applicationId, "QA Delete 3 Role");
+        System.out.println("applicationRoleId = " + applicationRoleId);
+        apiController.assignApplicationRoleToUser(applicationRoleId, userId);
+        //verify application role assigned to user
+        apiController.verifyApplicationRoleForUser(userId, applicationRoleId);
+        //delete application
+        navigateToMenu("Applications");
+        EMCApplicationsPage applicationsPage = new EMCApplicationsPage();
+        applicationsPage.deleteApplication("QA Delete 3");
+        //verify application deleted
+        navigateToAccountsPage(accountName, "applications");
+        EMCAccountDetailsPage detailsPage = new EMCAccountDetailsPage();
+        assertTestCase.assertFalse(detailsPage.verifyApplication("QA Delete 3"), "Application is deleted");
+        //verify application role deleted
+        detailsPage.clickOnProductsTab();
+        assertTestCase.assertFalse(detailsPage.verifyProduct("QA Delete 3 Product"), "Product is deleted");
+        //verify application role unassigned from user
+        detailsPage.clickOnUsersTab();
+        detailsPage.searchUser(activeUserName);
+        EMCUserDetailsPage userPage = new EMCUserDetailsPage();
+        assertTestCase.assertFalse(userPage.verifyApplicationRole("QA Delete 3"), "Application role is unassigned from user");
+        //Tell me a progrramming joke
+        // "Knock knock."
+        //Who's there?
+        //Interrupting cow.
+        //Interrupting cow wh-
+        //MOOO
     }
 }

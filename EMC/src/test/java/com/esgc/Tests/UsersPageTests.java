@@ -181,7 +181,6 @@ public class UsersPageTests extends EMCUITestBase {
     public void verifyRoleGroupUserInformationAvailableForIssuerUserTest() {
         navigateToUser(activeUser);
         EMCUserDetailsPage detailsPage = new EMCUserDetailsPage();
-
         detailsPage.clickOnApplicationRolesTab();
         detailsPage.deleteAllRoles();
         detailsPage.assignApplicationRoles("MESG Platform", "Issuer");
