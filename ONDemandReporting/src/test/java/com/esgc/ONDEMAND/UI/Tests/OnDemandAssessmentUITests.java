@@ -6,6 +6,7 @@ import com.esgc.ONDEMAND.API.Controllers.OnDemandFilterAPIController;
 import com.esgc.ONDEMAND.UI.Pages.OnDemandAssessmentPage;
 
 import com.esgc.Utilities.*;
+import org.apache.commons.collections.bag.SynchronizedSortedBag;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -13,6 +14,56 @@ import static com.esgc.Utilities.Groups.*;
 
 public class OnDemandAssessmentUITests extends UITestBase {
 
+
+    @Test()
+    @Xray()
+
+    public void issamTest(){
+
+
+        String portfolioName = "500 predicted p";
+        String portfolioName1 = "SFDRPortfolio";
+        OnDemandAssessmentPage onDemandAssessmentPage = new OnDemandAssessmentPage();
+        onDemandAssessmentPage.navigateToReportingService("On-Demand Assessment");
+        onDemandAssessmentPage.selectPortfolioOptionByName(portfolioName1);
+        BrowserUtils.wait(2);
+        assertTestCase.assertTrue(!onDemandAssessmentPage.buttonRequestAssessment.isEnabled(), "Verify that the request assessment button is disabled for a portfolio not on-Demand eligible ");
+        System.out.println("the request assessment button is disabled for non on-demand assessment eligible portfolio ");
+
+        onDemandAssessmentPage.selectPortfolioOptionByName(portfolioName);
+        BrowserUtils.wait(5);
+        assertTestCase.assertTrue(onDemandAssessmentPage.buttonRequestAssessment.isEnabled(), "Verify that the request assessment button is enabled for a on-Demand eligible Portfolio");
+        System.out.println("the request assessment button is enabled for On-Demand assessment eligible portfolio");
+        //assertTestCase.assertTrue(onDemandAssessmentPage.isViewDetailButtonEnabled(portfolioName), "verify view detail button is enabled");
+        System.out.println("the view detail button is displayed and enabled ");
+        onDemandAssessmentPage.clickOnViewDetailButton(portfolioName);
+
+
+
+
+     /*
+        onDemandAssessmentPage.clickOnMenuButton();
+        onDemandAssessmentPage.clickOnLogOutButton();
+        LoginPage login = new LoginPage();
+        login.loginWithParams("onemodyt+001@gmail.com", "Moodys123");
+        System.out.println("logged In to check portfolio with 0% coverage");
+        onDemandAssessmentPage.getListOfPortfolios();
+        int index = onDemandAssessmentPage.checkPortfolioWithZeroCoverage();
+        System.out.println("index for portfolio with 0 coverage is : " + index);
+        String portfolio =onDemandAssessmentPage.getPortfolioNameByIndex(index);
+        System.out.println("the name of portfolio with 0 coverage is" + portfolio);
+
+        BrowserUtils.wait(20);
+*/
+
+
+
+
+      //  onDemandAssessmentPage.clickonOnRequestAssessmentButton();
+       // onDemandAssessmentPage.clickReviewAndSendRequestButton();
+
+
+    }
     @Test(groups = {REGRESSION,UI,COMMON })
     @Xray(test = {11985,12001,12002,12011,12054,12092,12822,12824})
     public void validateOnDemandAssessmentRequest() {
@@ -222,6 +273,19 @@ public class OnDemandAssessmentUITests extends UITestBase {
         apiController.deletePortfolio(PortfolioId);
 
     }
+
+    @Test(groups = {REGRESSION,UI , SMOKE})
+    @Xray(test = {})
+public void testOnDemandDetailPanel(){
+
+    String portfolioName = "500 predicted p";
+    OnDemandAssessmentPage onDemandAssessmentPage = new OnDemandAssessmentPage();
+    onDemandAssessmentPage.navigateToReportingService("On-Demand Assessment");
+    onDemandAssessmentPage.selectPortfolioOptionByName(portfolioName);
+    BrowserUtils.wait(5);
+    onDemandAssessmentPage.clickonOnRequestAssessmentButton();
+    onDemandAssessmentPage.clickReviewAndSendRequestButton();
+}
 
 
 

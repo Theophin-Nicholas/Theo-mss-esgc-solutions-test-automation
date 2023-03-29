@@ -82,7 +82,7 @@ public class OnDemandAssessmentPage extends CommonPage {
     public WebElement dashboardPageMenuOption;
 
     @FindBy(xpath = "//div[contains(@id,'card-test-id')]")
-    public List<WebElement> fiterOptionDivs;
+    public List<WebElement> filterOptionDivs;
 
     @FindBy(xpath = "//div[contains(@id,'card-test-id-0')]//span[@role='slider']")
     public List<WebElement> predictedScoresliders;
@@ -145,8 +145,80 @@ public class OnDemandAssessmentPage extends CommonPage {
     @FindBy(xpath = "//button[@id='button-report-test-id-1']")
     public WebElement buttonRequestAssessment ;
 
+@FindBy(xpath = "//*[@id=\"topbar-appbar-test-id\"]/div/li")
+public WebElement menuButton;
+    @FindBy(xpath = "//div[contains(text(), 'View Detail')]")
+    public List<WebElement> viewDetailButton;
+
+    @FindBy(xpath = "//li[contains(text(), 'Log Out')]")
+    public WebElement logOutButton;
+
+    //*[@id="div-mainlayout"]/div/div[2]/main/div/div/div[2]/div[2]/div[4]/div[3]/span
+
+    //*[@id="div-mainlayout"]/div/div[2]/main/div/div/div[2]/div[2]/div[6]/div[3]/span
+
+    @FindBy(xpath = "//*[@id='div-mainlayout']/div/div[2]/main/div/div/div[2]/div[2]/div")
+    public List<WebElement> coverageList;
+
     public String landingPage = "";
 
+    public int checkPortfolioWithZeroCoverage(){
+        int index =0;
+        for (index = 0 ; index < coverageList.size(); index++){
+              if(  coverageList.get(index).getText().equals("0.00%")) {
+                  return index;
+              }
+        }
+        return index;
+    }
+    public void getListOfPortfolios(){
+        for (WebElement portfolio : portfolioNameList){
+            System.out.println(portfolio.getText());
+        }
+    }
+
+    public String getPortfolioNameByIndex(int index){
+        String portfolioName="";
+        portfolioName = portfolioNameList.get(index).getText();
+        return portfolioName;
+    }
+    public void clickOnViewDetailButton(String portfolioName){
+        if(IsPortfolioTableLoaded()) {
+            int index = getPortfolioList().indexOf(portfolioName.trim());
+            viewDetailButton.get(index).click();
+        } else{
+            System.out.println("please select a portfolio first!!!");
+        }
+    }
+    public void clickOnMenuButton(){
+        menuButton.click();
+    }
+    public void clickOnLogOutButton(){
+        BrowserUtils.waitForVisibility(logOutButton).click();
+    }
+
+    public List<String> getCoverageValuesList() {
+        return BrowserUtils.getElementsText(coverageList);
+    }
+    /*
+    public int getCoverageZeroIndex(){
+        int index=0 ;
+        for (WebElement coverage  : coverageList){
+            if(coverage.get(index).getText().equals("0.00%")){
+                return index;
+            }
+        }
+        return index;
+    }
+*/
+    public boolean isViewDetailButtonEnabled(String portfolioName){
+        if(IsPortfolioTableLoaded()){
+            int index = getPortfolioList().indexOf(portfolioName.trim());
+            System.out.println("index of : "+ portfolioName + " is : "+viewDetailButton.get(index));
+            viewDetailButton.get(index).isEnabled();
+        }
+            return false;
+    }
     public void goToSendRequestPage(String portfolioName) {
         if (landingPage.equals("")) getLandingPage(portfolioName);
         if (landingPage.equals("batchProcessingPage")) {
