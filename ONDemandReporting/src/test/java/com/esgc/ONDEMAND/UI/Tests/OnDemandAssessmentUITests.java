@@ -5,6 +5,7 @@ import com.esgc.Common.UI.TestBases.UITestBase;
 import com.esgc.ONDEMAND.API.Controllers.OnDemandFilterAPIController;
 import com.esgc.ONDEMAND.UI.Pages.OnDemandAssessmentPage;
 
+import com.esgc.ONDEMAND.UI.Pages.viewDetailPage;
 import com.esgc.Utilities.*;
 import org.apache.commons.collections.bag.SynchronizedSortedBag;
 import org.testng.Assert;
@@ -37,7 +38,12 @@ public class OnDemandAssessmentUITests extends UITestBase {
         //assertTestCase.assertTrue(onDemandAssessmentPage.isViewDetailButtonEnabled(portfolioName), "verify view detail button is enabled");
         System.out.println("the view detail button is displayed and enabled ");
         onDemandAssessmentPage.clickOnViewDetailButton(portfolioName);
-
+        BrowserUtils.wait(15);
+        viewDetailPage detail = new viewDetailPage();
+        detail.verifyHeaderDetailsInViewDetailPage(detail);
+        detail.verifyViewDetailPageFooter(detail, portfolioName );
+        detail.verifyViewDetailTables(detail);
+        detail.verifyClickingOnEscButtonFromViewDetailPage(detail);
 
 
 
