@@ -18,9 +18,9 @@
         </groups>
 
         <packages>
-            <package name="com.esgc.Tests.UI.RegulatoryReporting"/>
-            <package name="com.esgc.Tests.API.RegulatoryReporting"/>
-            <package name="com.esgc.Tests.DataValidation.RegulatoryReportingPage"/>
+            <package name="com.esgc.RegulatoryReporting.*"/>
+           <!-- <package name="com.esgc.Tests.API.RegulatoryReporting"/>
+            <package name="com.esgc.Tests.DataValidation.RegulatoryReportingPage"/>-->
         </packages>
 
 

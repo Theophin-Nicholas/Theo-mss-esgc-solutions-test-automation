@@ -22,6 +22,7 @@ public class EntityHeader {
     private String  overall_disclosure_score ;
     private String region;
     private int research_line_id;
+    private String score_quality;
     private String sector_l1;
     private String sector_l2;
     private List<EntityHeaderSubsidiaryDetails> subsidiaries;

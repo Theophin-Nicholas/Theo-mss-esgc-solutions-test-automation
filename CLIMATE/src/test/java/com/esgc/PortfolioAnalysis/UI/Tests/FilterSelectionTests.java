@@ -32,7 +32,7 @@ public class FilterSelectionTests extends UITestBase {
 
         test.info("Select a Portfolio from the list.");
         researchLinePage.selectRandomPortfolioFromPortfolioSelectionModal();
-
+        researchLinePage.waitForDataLoadCompletion();
         String portfolioNameBeforeRefresh = researchLinePage.getSelectedPortfolioNameFromDropdown();
 
         researchLinePage.clickFiltersDropdown();

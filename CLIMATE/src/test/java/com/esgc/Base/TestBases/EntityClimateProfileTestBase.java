@@ -2,7 +2,6 @@ package com.esgc.Base.TestBases;
 
 import com.esgc.Utilities.Driver;
 import org.testng.annotations.AfterClass;
-import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 
 
@@ -10,14 +9,9 @@ public abstract class EntityClimateProfileTestBase extends TestBaseClimate {
 
 
 
-    @BeforeClass(alwaysRun = true)
-    public void setupToGetTokenForClimateProfile() {
-        getAccessTokenDataValidation();
-    }
-
     @AfterClass(alwaysRun = true)
     public void tearDownAfterClimateProfileTests() {
-        Driver.closeDriver();
+        Driver.getDriver().navigate().refresh();
     }
 
 

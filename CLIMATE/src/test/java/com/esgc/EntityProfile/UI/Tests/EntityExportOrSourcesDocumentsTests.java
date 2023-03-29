@@ -61,7 +61,7 @@ public class EntityExportOrSourcesDocumentsTests extends UITestBase {
         assertTestCase.assertTrue(!entityProfilePage.verifyPopup(), "Verify Export Sources Documents popup is closed");
     }
 
-    @Test(groups = {ENTITY_PROFILE, REGRESSION, UI})
+    @Test(groups = {ENTITY_PROFILE, REGRESSION, UI, ESG})
     @Xray(test = {9381, 10175})
     public void validateExportSourceDocumentsPopupWithNoDocsMessage(){
 
@@ -128,6 +128,7 @@ public class EntityExportOrSourcesDocumentsTests extends UITestBase {
 
         String company = "Rogers Corp.";
         EntityClimateProfilePage entityProfilePage = new EntityClimateProfilePage();
+        entityProfilePage.waitForDataLoadCompletion();
         String companyName = entityProfilePage.searchAndLoadClimateProfilePage(company);
         assertTestCase.assertTrue(entityProfilePage.validateGlobalCompanyNameHeader(companyName),companyName+" Header Verification");
         System.out.println("companyName = " + companyName);
@@ -227,6 +228,7 @@ public class EntityExportOrSourcesDocumentsTests extends UITestBase {
             assertTestCase.assertTrue(content.contains("MARKET RISK"));
             assertTestCase.assertTrue(content.contains("SUPPLY CHAIN RISK"));
             assertTestCase.assertTrue(!content.contains("Transition Risk "));
+            assertTestCase.assertTrue(!content.contains("Five-year history of ESG score")); //12479
         } else if (entitlement.equals("Transition Risk")) {
             assertTestCase.assertTrue(content.contains("Transition Risk"));
             assertTestCase.assertTrue(content.contains("Temperature Alignment"));
@@ -259,10 +261,16 @@ public class EntityExportOrSourcesDocumentsTests extends UITestBase {
             assertTestCase.assertTrue(content.contains("Key Drivers")); //12271
             assertTestCase.assertTrue(content.contains("Very high and high materiality criteria that score advanced or weak")); //12271
             assertTestCase.assertTrue(content.contains("STRENGTHS WEAKNESSES")); //12271
-            assertTestCase.assertTrue(content.contains("more criteria receive a")); //12272
-
-        } else if (entitlement.equals("Controversy entitlement")) {
+            assertTestCase.assertTrue(content.contains("more criteria receive a")); //12272,12277,12283
             assertTestCase.assertTrue(content.contains("Controversies as of ")); //12438
+            entityProfilePage.verifyStrengthsAndWeakness(content); //12273,12276
+            assertTestCase.assertTrue(content.contains("Five-year history of ESG score")); //12478
+        } else if (entitlement.equals("EsgWithMethodology1Entity")) {
+            assertTestCase.assertTrue(!content.contains("Key Drivers")); //12274
+            assertTestCase.assertTrue(!content.contains("Very high and high materiality criteria that score advanced or weak")); //12274
+            assertTestCase.assertTrue(!content.contains("STRENGTHS WEAKNESSES")); //12274
+        }else if (entitlement.equals("Controversy entitlement")) {
+            assertTestCase.assertTrue(content.contains("Controversies as of ")); //12439
             assertTestCase.assertTrue(content.contains("CRITICAL AND HIGH SEVERITY CONTROVERSIES SEVERITY"));
         } else if (entitlement.equals("No Controversy")) {
             assertTestCase.assertTrue(!content.contains("Controversies as of "));
@@ -271,5 +279,7 @@ public class EntityExportOrSourcesDocumentsTests extends UITestBase {
         loginPage.clickOnLogout();
 
     }
+
+
 
 }

@@ -480,6 +480,8 @@ public class CarbonFootprint extends UITestBase {
 
         //Verify the headers UI vs Excel
         List<String> updatesUIHeaders = researchLinePage.carbonFootprintHeaders.stream().map(WebElement::getText).collect(Collectors.toList());
+        updatesUIHeaders.set(2, updatesUIHeaders.get(2) + " Category");
+        updatesUIHeaders.set(4, updatesUIHeaders.get(4) + " Category");
         List<String> excelHeaders = new ArrayList<>();
         for (int i = updatesHeadersRow, j = 0; j < 9; j++) {
             excelHeaders.add(exportedDocument.getCellData(i, j));
@@ -487,8 +489,7 @@ public class CarbonFootprint extends UITestBase {
         //Asserting the headers
         System.out.println("Excel Headers " + excelHeaders);
         System.out.println("UI Headers " + updatesUIHeaders);
-        //TODO There is header difference between UI and excel Previous Score Category vs Previous Score and Score Category vs Score
-       //--assertTestCase.assertTrue(CollectionUtils.isEqualCollection(updatesUIHeaders, excelHeaders), "Headers are Matching");
+        assertTestCase.assertTrue(CollectionUtils.isEqualCollection(updatesUIHeaders, excelHeaders), "Headers are Matching");
 
         int updatesListStartsFrom = updatesHeadersRow + 1;
         List<List<Object>> excelUpdateList = new ArrayList<>();
@@ -504,6 +505,21 @@ public class CarbonFootprint extends UITestBase {
                     exportedDocument.getCellData(z, 7), //Country
                     exportedDocument.getCellData(z, 8)  //Region
             ));
+        }
+        for (int i = 0; i < myList.size(); i++) {
+            System.out.println("####################################");
+            System.out.println("excelUpdateList.get(i) = " + excelUpdateList.get(i));
+            System.out.println("myList.get(i) = " + myList.get(i));
+            System.out.println("####################################");
+
+            //empty cells should be corrected since there are some format differences
+            for (int j = 0; j < myList.size(); j++) {
+                if (excelUpdateList.get(i).get(j).equals("-")) {
+                    assertTestCase.assertTrue(myList.get(i).get(j).equals("") || myList.get(i).get(j) == null);
+                    myList.get(i).set(j, "-");
+                }
+            }
+            assertTestCase.assertEquals(excelUpdateList.get(i), myList.get(i));
         }
         assertTestCase.assertTrue(CollectionUtils.isEqualCollection(excelUpdateList, myList));
         System.out.println("Assertion Successful");
@@ -924,33 +940,33 @@ public class CarbonFootprint extends UITestBase {
         Cell carbonFootPrintScopeCell = exportedDocument.searchCellData("Carbon Footprint Scope");
         int i = carbonFootPrintScopeCell.getRowIndex();
         assertTestCase.assertEquals(researchLinePage.carbonFootprintScopeHeader.getText(), exportedDocument.getCellData(i, 0),
-                "Verify Carbon Footprint Scope Header");
+                "Verify Carbon Footprint Scope Header", 532);
 
-        assertTestCase.assertEquals(researchLinePage.carbonFootprintScopeHeaders.get(0).getText(), exportedDocument.getCellData(i+1, 0),
+        assertTestCase.assertEquals(researchLinePage.carbonFootprintScopeHeaders.get(0).getText(), exportedDocument.getCellData(i + 1, 0),
                 "Verify Scope1 title in UI vs Excel");
-        assertTestCase.assertEquals(researchLinePage.carbonFootprintScopeHeaders.get(1).getText(), exportedDocument.getCellData(i+1, 1),
+        assertTestCase.assertEquals(researchLinePage.carbonFootprintScopeHeaders.get(1).getText(), exportedDocument.getCellData(i + 1, 1),
                 "Verify Total Scope 1 Emissions in UI vs Excel");
-        assertTestCase.assertTrue(researchLinePage.carbonFootprintScopeDetails.get(0).getText().contains(exportedDocument.getCellData(i+2, 0)),
+        assertTestCase.assertTrue(researchLinePage.carbonFootprintScopeDetails.get(0).getText().contains(exportedDocument.getCellData(i + 2, 0)),
                 "Verify Scope 1 Description in UI vs Excel");
-        assertTestCase.assertTrue(researchLinePage.carbonFootprintScopeDetails.get(1).getText().contains(exportedDocument.getCellData(i+2, 1)),
+        assertTestCase.assertTrue(researchLinePage.carbonFootprintScopeDetails.get(1).getText().contains(exportedDocument.getCellData(i + 2, 1)),
                 "Verify Total Scope 1 Value in UI vs Excel");
 
-        assertTestCase.assertEquals(researchLinePage.carbonFootprintScopeHeaders.get(2).getText(), exportedDocument.getCellData(i+3, 0),
+        assertTestCase.assertEquals(researchLinePage.carbonFootprintScopeHeaders.get(2).getText(), exportedDocument.getCellData(i + 3, 0),
                 "Verify Scope2 title in UI vs Excel");
-        assertTestCase.assertEquals(researchLinePage.carbonFootprintScopeHeaders.get(3).getText(), exportedDocument.getCellData(i+3, 1),
+        assertTestCase.assertEquals(researchLinePage.carbonFootprintScopeHeaders.get(3).getText(), exportedDocument.getCellData(i + 3, 1),
                 "Verify Total Scope 2 Emissions in UI vs Excel");
-        assertTestCase.assertTrue(researchLinePage.carbonFootprintScopeDetails.get(2).getText().contains(exportedDocument.getCellData(i+4, 0)),
+        assertTestCase.assertTrue(researchLinePage.carbonFootprintScopeDetails.get(2).getText().contains(exportedDocument.getCellData(i + 4, 0)),
                 "Verify Scope 2 Description in UI vs Excel");
-        assertTestCase.assertTrue(researchLinePage.carbonFootprintScopeDetails.get(3).getText().contains(exportedDocument.getCellData(i+4, 1)),
+        assertTestCase.assertTrue(researchLinePage.carbonFootprintScopeDetails.get(3).getText().contains(exportedDocument.getCellData(i + 4, 1)),
                 "Verify Total Scope 2 Value in UI vs Excel");
 
-        assertTestCase.assertEquals(researchLinePage.carbonFootprintScopeHeaders.get(4).getText(), exportedDocument.getCellData(i+5, 0),
+        assertTestCase.assertEquals(researchLinePage.carbonFootprintScopeHeaders.get(4).getText(), exportedDocument.getCellData(i + 5, 0),
                 "Verify Scope3 title in UI vs Excel");
-        assertTestCase.assertEquals(researchLinePage.carbonFootprintScopeHeaders.get(5).getText(), exportedDocument.getCellData(i+5, 1),
+        assertTestCase.assertEquals(researchLinePage.carbonFootprintScopeHeaders.get(5).getText(), exportedDocument.getCellData(i + 5, 1),
                 "Verify Total Scope 3 Emissions in UI vs Excel");
-        assertTestCase.assertTrue(researchLinePage.carbonFootprintScopeDetails.get(4).getText().contains(exportedDocument.getCellData(i+6, 0)),
+        assertTestCase.assertTrue(researchLinePage.carbonFootprintScopeDetails.get(4).getText().contains(exportedDocument.getCellData(i + 6, 0)),
                 "Verify Scope 3 Description in UI vs Excel");
-        assertTestCase.assertTrue(researchLinePage.carbonFootprintScopeDetails.get(5).getText().contains(exportedDocument.getCellData(i+6, 1)),
+        assertTestCase.assertTrue(researchLinePage.carbonFootprintScopeDetails.get(5).getText().contains(exportedDocument.getCellData(i + 6, 1)),
                 "Verify Total Scope 3 Value in UI vs Excel");
 
 

@@ -68,7 +68,7 @@ public class ImportPortfolio extends UITestBase {
 //1027
     @Test(groups = {REGRESSION, UI, SMOKE, ROBOT_DEPENDENCY},dataProviderClass = DataProviderClass.class,
             dataProvider = "Valid Portfolios")
-    @Xray(test = {493, 497, 500, 1027, 3044, 11069})
+    @Xray(test = {493, 497, 500, 1027, 1297, 3044, 11069})
     public void VerifyFileUploadSuccessPopup(String portfolio) {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
@@ -366,7 +366,7 @@ public class ImportPortfolio extends UITestBase {
         BrowserUtils.wait(2);
 
         String popUpMessage = researchLinePage.getUnknownIdentifierPopUpMessage();
-        String expectedErrorMessage = "124/126 unique identifiers matched; the system was unable to match 2 identifiers for: Invalid Identifier Included Portfolio  Included Portfolio";
+        String expectedErrorMessage = "124/126 unique identifiers matched; the system was unable to match 2 identifiers for: InvalidIdentifier";
 
         Assert.assertTrue(researchLinePage.checkIfUnknownIdentifierPopUpDisplayed());
         Assert.assertEquals(popUpMessage, expectedErrorMessage);

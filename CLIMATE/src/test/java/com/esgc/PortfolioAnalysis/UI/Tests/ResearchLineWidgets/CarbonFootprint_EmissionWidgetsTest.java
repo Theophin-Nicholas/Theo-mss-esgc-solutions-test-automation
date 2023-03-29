@@ -17,7 +17,7 @@ public class CarbonFootprint_EmissionWidgetsTest extends UITestBase {
 
     @Test(groups = {REGRESSION, SMOKE, UI},
             description = "ESGCA-3011 - Verify Emissions Section is Displayed in Carbon Footprint")
-    @Xray(test = {3011, 3079})
+    @Xray(test = {607, 608, 3011, 3079})
     public void verifyEmissionsWidgetsAreDisplayedOnCarbonFootPrintPage() {
 
         ResearchLinePage researchLinePage = new ResearchLinePage();
@@ -36,7 +36,7 @@ public class CarbonFootprint_EmissionWidgetsTest extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI})
-    @Xray(test = {5506, 5507})
+    @Xray(test = {3216, 5506, 5507})
     public void verifyCarbonFootprintPageLabels_tCO2eq() {
 
         ResearchLinePage researchLinePage = new ResearchLinePage();

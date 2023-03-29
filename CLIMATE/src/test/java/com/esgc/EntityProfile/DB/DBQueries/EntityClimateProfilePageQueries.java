@@ -256,11 +256,12 @@ public class EntityClimateProfilePageQueries {
                     "and AS_OF_DATE = ( select MAX(AS_OF_DATE) from brown_share where bvd9_number = "+orbisId+" )";
             result = getQueryResultListUDBrownShare(query);
         } else if (researchLine.equalsIgnoreCase("Green Share")) {
-            query = "select \n" +
+            query = "select top 1 \n" +
                     "GS_BUILDING_MATERIALS_WOOD_ESTIMATE_OF_INCORPORATION_SOURCE SOURCE,\n" +
                     "GS_BUILDING_MATERIALS_WOOD_ESTIMATE_OF_INCORPORATION MAIN,\n" +
                     "GS_BUILDING_MATERIALS_WOOD_SCALE_OF_INCORPORATION SCALE\n" +
-                    "from GREEN_SHARE As C where bvd9_number =039634868 and C.Year ='2022' and C.Month ='08'";
+                    "from GREEN_SHARE As C where bvd9_number = " + orbisId +
+                    "  order by C.Year desc, C.Month desc";
             result = getQueryResultListUDGreenShare(query);
         }
         System.out.println("result = " + result);
@@ -330,8 +331,8 @@ public class EntityClimateProfilePageQueries {
     public static String getUpdatedDateforPhysicalRiskManagement(String orbisId) {
 
         String query = "select TO_VARCHAR(PRODUCED_DATE) as PRODUCED_DATE  from PHYSICAL_RISK_MANAGEMENT where bvd9_number in\n" +
-                "(Select BVD9_ID from \"QA_MESGC\".\"DF_TARGET\".\"VW_ENTITY_DATA\" where bvd_ID in\n" +
-                "(select bvd_id_number from \"QA_MESGC\".\"DF_TARGET\".\"ESG_ENTITY_MASTER\" where orbis_id='" + orbisId + "') )\n" +
+                "(Select BVD9_ID from VW_ENTITY_DATA where bvd_ID in\n" +
+                "(select bvd_id_number from ESG_ENTITY_MASTER where orbis_id='" + orbisId + "') )\n" +
                 " order by produced_date desc limit  1";
         try {
             return getQueryResultMap(query).get(0).get("PRODUCED_DATE").toString();
@@ -343,8 +344,8 @@ public class EntityClimateProfilePageQueries {
 
 
     public static String getUpdatedDateforPhysicalClimateHazard(String orbisId) {
-        String query = " Select * from ENTITY_SCORE where entity_id_bvd9 in (Select BVD9_ID from \"QA_MESGC\".\"DF_TARGET\".\"VW_ENTITY_DATA\" where bvd_ID in\n" +
-                "(select bvd_id_number from \"QA_MESGC\".\"DF_TARGET\".\"ESG_ENTITY_MASTER\" where orbis_id='" + orbisId + "') )\n" +
+        String query = " Select * from ENTITY_SCORE where entity_id_bvd9 in (Select BVD9_ID from VW_ENTITY_DATA where bvd_ID in\n" +
+                "(select bvd_id_number from ESG_ENTITY_MASTER where orbis_id='" + orbisId + "') )\n" +
                 " order by Release_date desc limit 1;";
         try {
             return getQueryResultMap(query).get(0).get("RELEASE_DATE").toString();

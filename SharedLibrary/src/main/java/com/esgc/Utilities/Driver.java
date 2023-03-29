@@ -60,7 +60,7 @@ public class Driver {
     }
 
     //private constructor prevents creating new object.
-    private Driver() {
+    public Driver() {
 
     }
 
@@ -130,9 +130,10 @@ public class Driver {
 
                     prefs.put("download.default_directory", BrowserUtils.downloadPath()); //path to dir
                     chromeOptions.setExperimentalOption("prefs", prefs);
-
+                    chromeOptions.addArguments("--remote-allow-origins=*");
                     chromeOptions.addArguments("--start-maximized");
                     chromeOptions.addArguments("--disable-notifications");
+                    chromeOptions.addArguments("--remote-allow-origins=*");
                     driverPool.set(new ChromeDriver(chromeOptions));
 
                     break;
@@ -284,9 +285,11 @@ public class Driver {
 
                     prefs.put("download.default_directory", BrowserUtils.downloadPath()); //path to dir
                     chromeOptions.setExperimentalOption("prefs", prefs);
-
+                    chromeOptions.addArguments("--remote-allow-origins=*");
                     chromeOptions.addArguments("--start-maximized");
                     chromeOptions.addArguments("--disable-notifications");
+                    chromeOptions.addArguments("--remote-allow-origins=*");
+
                     //  chromeOptions.addArguments("--disable-dev-shm-usage");
 
                     driverPool.set(new ChromeDriver(chromeOptions));
@@ -380,6 +383,19 @@ public class Driver {
             boolean b = driverPool.get() == null;
             driverPool.get().quit();
             //driverPool.remove();
+        }
+    }
+
+    public static void closeBrowserTab() {
+        if (driverPool.get() != null) {
+            driverPool.get().close();
+        }
+    }
+
+    public static void quit() {
+        if (driverPool.get() != null) {
+            driverPool.get().quit();
+            driverPool.remove();
         }
     }
 }

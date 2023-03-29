@@ -9,17 +9,44 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EMCApplicationsPage extends EMCBasePage{
-    @FindBy(tagName = "h4")
+    @FindBy(tagName = "h3")
     public WebElement pageTitle;
 
-    @FindBy (xpath = "//tbody//td[1]//a")
+    @FindBy (xpath = "//thead//th")
+    public List<WebElement> tableHeaders;
+
+    @FindBy (xpath = "//tbody/tr[1]/*")
+    public List<WebElement> firstRow;
+
+    @FindBy (xpath = "//tbody//td[1]//input")
+    public List<WebElement> checkBoxes;
+
+    @FindBy (xpath = "//tbody//th/a")////tbody//td[1]/p
     public List<WebElement> applications;
 
     @FindBy (xpath = "//tbody//td[2]")
     public List<WebElement> applicationLinks;
 
+    @FindBy (xpath = "//tbody//td[3]")
+    public List<WebElement> providerList;
+
+    @FindBy (xpath = "//tbody//td[4]")
+    public List<WebElement> typeList;
+
+    @FindBy (xpath = "//tbody//td[5]")
+    public List<WebElement> createdInfoList;
+
+    @FindBy (xpath = "//tbody//td[6]")
+    public List<WebElement> createdByList;
+
+    @FindBy (xpath = "//tbody//td[7]")
+    public List<WebElement> modifiedList;
+
     @FindBy (xpath = "//button[.='Create application']")
     public WebElement createApplicationButton;
+
+    @FindBy (xpath = "//button[.='Create application']")
+    public List<WebElement> createApplicationButtonList;
 
     @FindBy (tagName = "input")
     public WebElement searchInput;
@@ -54,16 +81,16 @@ public class EMCApplicationsPage extends EMCBasePage{
     }
 
     public void selectApplication(String applicationName ) {
-        clearSearchInput();
-        searchInput.sendKeys(applicationName);
+        searchApplication(applicationName);
         for (WebElement element : applications) {
             if (element.getText().equals(applicationName)) {
                 System.out.println("Application found: " + applicationName);
                 System.out.println("Application name: " + element.getText());
                 element.click();
-                break;
+                return;
             }
         }
+        System.out.println("Application not found: " + applicationName);
     }
     public void clearSearchInput() {
         while (!searchInput.getAttribute("value").isEmpty()) {
@@ -94,7 +121,7 @@ public class EMCApplicationsPage extends EMCBasePage{
             searchInput.sendKeys(Keys.BACK_SPACE);
         }
         searchInput.sendKeys(applicationName);
-        searchButton.click();
+        BrowserUtils.wait(1);
         return applications;
     }
 
@@ -111,27 +138,18 @@ public class EMCApplicationsPage extends EMCBasePage{
         return false;
     }
 
-    public void createApplication(String applicationName) {
-        createApplicationButton.click();
-        applicationKeyInput.sendKeys(applicationName.toLowerCase());
-        applicationNameInput.sendKeys(applicationName);
-        applicationUrlInput.sendKeys("https://" + applicationName + ".com");
-        BrowserUtils.waitForClickablility(saveButton,10).click();
-    }
-    public void createApplication(String applicationName,String applicationLink) {
-        createApplicationButton.click();
-        applicationKeyInput.sendKeys(applicationName.toLowerCase());
-        applicationNameInput.sendKeys(applicationName);
-        applicationUrlInput.sendKeys(applicationLink);
-        BrowserUtils.waitForClickablility(saveButton,10).click();
-    }
-    public void search(String applicationName) {
-        System.out.println("searchInput.isDisplayed() = " + searchInput.isDisplayed());
-        searchInput.clear();
-        searchInput.sendKeys(applicationName);
-        searchButton.click();
-        System.out.println("Searching for account: " + applicationName);
-        System.out.println(applications.size() + " accounts found");
+    public boolean verifyApplication(String applicationName, boolean isSearch) {
+        if (isSearch) {
+            searchApplication(applicationName);
+        }
+        for (WebElement element : applications) {
+            if (element.getText().equals(applicationName)) {
+                System.out.println("Application found: " + applicationName);
+                System.out.println("Application name: " + element.getText());
+                return true;
+            }
+        }
+        return false;
     }
 
     public void clickOnFirstApplication() {
@@ -142,6 +160,39 @@ public class EMCApplicationsPage extends EMCBasePage{
     public void clickOnCreateApplicationButton() {
         BrowserUtils.waitForClickablility(createApplicationButton, 5).click();
         System.out.println("Clicked on create application button");
+    }
+
+    public void createApplication(String applicationName, String applicationKey, String applicationUrl, String appType) {
+        clickOnCreateApplicationButton();
+        EMCApplicationCreatePage createPage = new EMCApplicationCreatePage();
+        switch (appType.toLowerCase()){
+            case "single-page":
+                BrowserUtils.doubleClick(createPage.singlePageApplicationRadioButton);
+                assertTestCase.assertTrue(createPage.singlePageApplicationRadioButton.isSelected(), "Single Page Application Radio Button is selected");
+                break;
+            case "external":
+                BrowserUtils.doubleClick(createPage.externalApplicationRadioButton);
+                assertTestCase.assertTrue(createPage.externalApplicationRadioButton.isSelected(), "External Application Radio Button is selected");
+                break;
+            case "web":
+                BrowserUtils.doubleClick(createPage.webApplicationRadioButton);
+                assertTestCase.assertTrue(createPage.webApplicationRadioButton.isSelected(), "Web Application Radio Button is selected");
+                break;
+        }
+
+        assertTestCase.assertTrue(createPage.nextButton.isEnabled(), "Next Button is enabled");
+        BrowserUtils.waitForClickablility(createPage.nextButton, 10).click();
+        createPage.applicationNameInput.sendKeys(applicationName);
+        createPage.applicationKeyInput.sendKeys(applicationKey);
+        createPage.applicationUrlInput.sendKeys(applicationUrl+Keys.TAB);
+        assertTestCase.assertTrue(createPage.saveButton.isEnabled(), "Save Button is enabled");
+        BrowserUtils.waitForClickablility(createPage.saveButton, 10).click();
+        wait(notification, 10);
+    }
+
+    public void clickOnCancelButton() {
+        BrowserUtils.waitForClickablility(cancelButton, 5).click();
+        System.out.println("Clicked on cancel button");
     }
 }
 

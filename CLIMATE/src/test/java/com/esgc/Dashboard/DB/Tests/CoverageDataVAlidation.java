@@ -19,7 +19,7 @@ import static com.esgc.Utilities.Groups.*;
 public class CoverageDataVAlidation extends DataValidationTestBase {
 
     @Test(groups = {REGRESSION, DATA_VALIDATION, DASHBOARD})
-    @Xray(test = {3643, 3645,
+    @Xray(test = {3643, 3645, 3646, 3647,
             8272, //ESG
             11049//Subs
     })

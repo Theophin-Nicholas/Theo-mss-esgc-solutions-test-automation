@@ -45,6 +45,7 @@ public class APIController {
             return given().accept(ContentType.JSON)
                     .baseUri(Environment.URL)
                     .relaxedHTTPSValidation()
+                    //.header("Authorization", "Bearer 12345678")
                     .header("Accept", "application/json")
                     .header("Content-Type", "application/json")
                     .log().ifValidationFails();

@@ -5,6 +5,7 @@ import com.esgc.Base.UI.Pages.LoginPage;
 import com.esgc.Dashboard.UI.Pages.DashboardPage;
 import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.EntitlementsBundles;
+import com.esgc.Utilities.Environment;
 import com.esgc.Utilities.Xray;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.openqa.selenium.WebElement;
@@ -15,7 +16,7 @@ import static com.esgc.Utilities.Groups.*;
 public class ControversiesModalTests extends DashboardUITestBase {
 
     @Test(groups = {REGRESSION, DASHBOARD, UI})
-    @Xray(test = {3170, 3171, 3932, 3953, 4020, 4025, 4033, 4036, 4059, 7381})
+    @Xray(test = {3170, 3171, 3932, 3953, 4020, 4025, 4033, 4036, 4059, 7381, 8042})
     public void controversiesModalUIAutomationTest() {
         DashboardPage dashboardPage = new DashboardPage();
         dashboardPage.selectSamplePortfolioFromPortfolioSelectionModal();
@@ -55,7 +56,7 @@ public class ControversiesModalTests extends DashboardUITestBase {
     public void verifyControversiesAreVisible_Bundle() {
 
         LoginPage login = new LoginPage();
-        login.entitlementsLogin(EntitlementsBundles.USER_WITH_CONTROVERSIES_ENTITLEMENT);
+        login.login();
 
         DashboardPage dashboardPage = new DashboardPage();
         BrowserUtils.wait(10);
@@ -79,7 +80,11 @@ public class ControversiesModalTests extends DashboardUITestBase {
     public void verifyControversiesAreNotVisible_Bundle() {
 
         LoginPage login = new LoginPage();
-        login.entitlementsLogin(EntitlementsBundles.USER_WITH_OUT_CONTROVERSIES_ENTITLEMENT);
+        if (Environment.environment.equalsIgnoreCase("prod")) {
+            login.entitlementsLogin(EntitlementsBundles.PHYSICAL_RISK);
+        } else {
+            login.entitlementsLogin(EntitlementsBundles.USER_WITH_OUT_CONTROVERSIES_ENTITLEMENT);
+        }
 
         DashboardPage dashboardPage = new DashboardPage();
         BrowserUtils.wait(10);
@@ -98,7 +103,7 @@ public class ControversiesModalTests extends DashboardUITestBase {
     }
 
     @Test(groups = {REGRESSION, DASHBOARD, UI})
-    @Xray(test = {3191, 3935, 7764, 7765, 7766, 7769, 7770})
+    @Xray(test = {3191, 3953, 7764, 7765, 7766, 7769, 7770})
     public void verifyCriticalAndNonCriticalControversies() {
         DashboardPage dashboardPage = new DashboardPage();
         dashboardPage.selectSamplePortfolioFromPortfolioSelectionModal();
@@ -134,7 +139,7 @@ public class ControversiesModalTests extends DashboardUITestBase {
 
     }
 
-//TODO Controversies ESG parts are not in scope yet, follow up https://esjira/browse/ESGCA-7696
+    //TODO Controversies ESG parts are not in scope yet, follow up https://esjira/browse/ESGCA-7696
 //Planned for Q2 2023
     @Test(enabled = false, groups = {"regression", "dashboard", "ui"})
     @Xray(test = 8306)
@@ -149,14 +154,14 @@ public class ControversiesModalTests extends DashboardUITestBase {
         assertTestCase.assertTrue(dashboardPage.esgScoreBoxesLabels.get(1).getText().contains("S"), "Verify first box label is 'S'");
         assertTestCase.assertTrue(dashboardPage.esgScoreBoxesLabels.get(2).getText().contains("G"), "Verify first box label is 'G'");
 
-        for(WebElement label: dashboardPage.esgScoreBoxesLabels){
+        for (WebElement label : dashboardPage.esgScoreBoxesLabels) {
             String labelText = label.getText();
-            String score = labelText.substring(labelText.indexOf('(')+1,labelText.indexOf(')'));
+            String score = labelText.substring(labelText.indexOf('(') + 1, labelText.indexOf(')'));
             assertTestCase.assertTrue(NumberUtils.isParsable(score), "Verify label is having score inside parenthesis");
         }
 
-        for(WebElement box:dashboardPage.esgScoreBoxes){
-            assertTestCase.assertEquals(box.getCssValue("background-color"),"rgba(179, 23, 23, 0.18)", "Verify label is having score inside parenthesis");
+        for (WebElement box : dashboardPage.esgScoreBoxes) {
+            assertTestCase.assertEquals(box.getCssValue("background-color"), "rgba(179, 23, 23, 0.18)", "Verify label is having score inside parenthesis");
         }
 
     }

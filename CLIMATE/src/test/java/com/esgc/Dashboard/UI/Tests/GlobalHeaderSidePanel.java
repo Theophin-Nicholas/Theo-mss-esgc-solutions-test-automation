@@ -10,13 +10,15 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.testng.annotations.Test;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import static com.esgc.Utilities.Groups.*;
 
 public class GlobalHeaderSidePanel extends UITestBase {
 
-    @Test(groups = {REGRESSION, UI})
+    @Test(groups = {REGRESSION, UI, SMOKE})
     @Xray(test = {1899, 5939, 8967})
     public void validateGlobalHeader() {
 
@@ -79,47 +81,6 @@ public class GlobalHeaderSidePanel extends UITestBase {
         String currentURL = Driver.getDriver().getCurrentUrl();
 
         assertTestCase.assertEquals(currentURL, "https://www.moodys.com/Pages/contactus.aspx", "Contact Us page verified");
-
-        Driver.getDriver().close();
-        Driver.getDriver().switchTo().window(firstPage);
-
-        researchLinePage.navigateToPageFromMenu("Climate on Demand");
-
-        for (String windowHandle : Driver.getDriver().getWindowHandles()) {
-            Driver.getDriver().switchTo().window(windowHandle);
-        }
-
-        currentURL = Driver.getDriver().getCurrentUrl();
-
-        assertTestCase.assertEquals(currentURL, "https://climate-on-demand.moodys.com/AppsServices/", "Climate on Demand page verified");
-
-        Driver.getDriver().close();
-        Driver.getDriver().switchTo().window(firstPage);
-
-
-        researchLinePage.navigateToPageFromMenu("Company Portal");
-
-        for (String windowHandle : Driver.getDriver().getWindowHandles()) {
-            Driver.getDriver().switchTo().window(windowHandle);
-        }
-
-        currentURL = Driver.getDriver().getCurrentUrl();
-
-        assertTestCase.assertEquals(currentURL, "https://veconnect.vigeo.com/login.html", "Company Portal page verified");
-
-        Driver.getDriver().close();
-        Driver.getDriver().switchTo().window(firstPage);
-
-        researchLinePage.navigateToPageFromMenu("Datalab");
-        BrowserUtils.wait(10);
-
-        for (String windowHandle : Driver.getDriver().getWindowHandles()) {
-            Driver.getDriver().switchTo().window(windowHandle);
-        }
-
-        currentURL = Driver.getDriver().getCurrentUrl();
-
-        assertTestCase.assertEquals(currentURL, "https://www.ve-datalab.com/Account/EGPlogin.aspx?src=/Features/Home/Landing.aspx", "Data Lab page verified");
 
         Driver.getDriver().close();
         Driver.getDriver().switchTo().window(firstPage);

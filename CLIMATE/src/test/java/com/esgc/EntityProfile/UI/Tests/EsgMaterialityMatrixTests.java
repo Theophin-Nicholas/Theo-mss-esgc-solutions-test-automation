@@ -83,7 +83,7 @@ public class EsgMaterialityMatrixTests extends UITestBase {
         entityProfilePage.clickCloseIcon();
     }
 
-    @Test(groups = {ENTITY_PROFILE, REGRESSION, UI, SMOKE})
+    @Test(groups = {ENTITY_PROFILE, REGRESSION, UI, SMOKE, ESG})
     @Xray(test = {8442})
     public void validateNoneForTheSector() {
 
@@ -127,7 +127,7 @@ public class EsgMaterialityMatrixTests extends UITestBase {
         entityProfilePage.clickCloseIcon();
     }
 
-    @Test(groups = {ENTITY_PROFILE, REGRESSION, UI, SMOKE})
+    @Test(groups = {ENTITY_PROFILE, REGRESSION, UI, SMOKE, ESG})
     @Xray(test = {8868})
     public void validateEsgMaterialityPopup() {
 

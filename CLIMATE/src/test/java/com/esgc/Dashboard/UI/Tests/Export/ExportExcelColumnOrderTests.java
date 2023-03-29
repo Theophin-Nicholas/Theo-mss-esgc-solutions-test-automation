@@ -31,7 +31,7 @@ public class ExportExcelColumnOrderTests extends APITestBase {
         response.then().assertThat().statusCode(200);
 
         JsonPath jsonPathEvaluator = response.jsonPath();
-        List<String> entitlements = jsonPathEvaluator.getList("applications[0].entitlements.name");
+        List<String> entitlements = jsonPathEvaluator.getList("entitlements.name");
         System.out.println(entitlements);
 
         verifyColumnsOrderWithEntitlements(excelColumns, entitlements);
