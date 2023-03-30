@@ -70,6 +70,14 @@ public class EMCApplicationsPage extends EMCBasePage{
     @FindBy (xpath = "//button[.='Cancel']")
     public WebElement cancelButton;
 
+    @FindBy (xpath = "//main//hr/..//button")
+    public WebElement deleteButton;
+
+    @FindBy (xpath = "//div[@role='dialog']//button[.='Delete']")
+    public WebElement deletePopupDeleteButton;
+
+    @FindBy (xpath = "//div[@role='dialog']//button[.='Cancel']")
+    public WebElement deletePopupCancelButton;
 
 
     public List<String> getApplicationNames() {
@@ -80,7 +88,7 @@ public class EMCApplicationsPage extends EMCBasePage{
         return names;
     }
 
-    public void selectApplication(String applicationName ) {
+    public void goToApplication(String applicationName) {
         searchApplication(applicationName);
         for (WebElement element : applications) {
             if (element.getText().equals(applicationName)) {
@@ -107,7 +115,7 @@ public class EMCApplicationsPage extends EMCBasePage{
             counter++;
         }
     }
-    public void selectApplication(int applicationIndex) {
+    public void goToApplication(int applicationIndex) {
         BrowserUtils.waitForClickablility(applications.get(applicationIndex), 5);
         applications.get(applicationIndex).click();
     }
@@ -193,6 +201,29 @@ public class EMCApplicationsPage extends EMCBasePage{
     public void clickOnCancelButton() {
         BrowserUtils.waitForClickablility(cancelButton, 5).click();
         System.out.println("Clicked on cancel button");
+    }
+
+    public void clickOnDeleteButton() {
+        System.out.println("Clicking on delete button");
+        BrowserUtils.scrollTo(deleteButton).click();
+        BrowserUtils.waitForVisibility(deletePopupDeleteButton, 5);
+    }
+
+    public void deleteApplication(String applicationName) {
+        selectApplication(applicationName);
+        clickOnDeleteButton();
+        BrowserUtils.waitForClickablility(deletePopupDeleteButton, 5).click();
+        wait(notification, 10);
+    }
+
+    private void selectApplication(String applicationName) {
+        searchApplication(applicationName);
+        for (WebElement element : applications) {
+            if (element.getText().equals(applicationName)) {
+                checkBoxes.get(applications.indexOf(element)).click();
+                return;
+            }
+        }
     }
 }
 

@@ -14,7 +14,7 @@
         <module>EMC</module>
         <module>CLIMATE</module>
         <module>SharedLibrary</module>
-        <module>ONDEMANDASSESSMENTS</module>
+        <module>ONDemandReporting</module>
         
     </modules>
 

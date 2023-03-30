@@ -765,7 +765,7 @@ public class EMCAPITests extends APITestBase {
     }
 
     @Test(groups = {"EMC", "api", "regression"}, description = "API | EMC | Applications | Products | CRUD Operations for Products")
-    @Xray(test = {6538})
+    @Xray(test = {6508})
     public void verifyCRUDOperationsForApplicationsProductsTest() {
         String applicationId = apiController.getApplicationId("TestQA");
         System.out.println("appId = " + applicationId);
@@ -805,7 +805,7 @@ public class EMCAPITests extends APITestBase {
             apiController.deleteProductFromAccount(accountId, productId);
         }
         assertTestCase.assertFalse(apiController.verifyProductForAccount(accountId, productId), "Product is verified for account");
-        apiController.putProductToAccount(accountId, applicationId, productId);
+        apiController.putProductToAccount(accountId, applicationId, productId, 100);
         assertTestCase.assertTrue(apiController.verifyProductForAccount(accountId, productId), "Product is verified for account");
     }
 

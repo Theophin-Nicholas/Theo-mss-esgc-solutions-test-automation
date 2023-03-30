@@ -1,5 +1,5 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
-<suite name="EMC Regression Suite" verbose="10" parallel="classes" thread-count="5">
+<suite name="EMC Regression Suite" verbose="10" parallel="classes" thread-count="8">
 <!--    <suite name="EMC Regression Suite" verbose="10">-->
     <listeners>
         <listener class-name="com.esgc.Utilities.XrayListener"/>
