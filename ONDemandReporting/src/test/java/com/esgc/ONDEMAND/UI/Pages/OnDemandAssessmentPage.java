@@ -8,7 +8,6 @@ import com.esgc.Utilities.Driver;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.remote.Browser;
 import org.openqa.selenium.support.FindBy;
 
 import java.util.ArrayList;
@@ -22,8 +21,8 @@ public class OnDemandAssessmentPage extends CommonPage {
     @FindBy(xpath = "//div[@data-test='sentinelStart']/following-sibling::div//div[contains(@class,'MuiToolbar-root')]/div[text()]")
     public WebElement menuOptionPageHeader;
 
-    @FindBy(xpath = "//li[@heap_menu='On-Demand Assessment Request']")
-    public WebElement onDemandAssessmentRequest;
+    @FindBy(xpath = "//li[@heap_menu='On-Demand Reporting']")
+    public WebElement onDemandReportingMenu;
 
     @FindBy(xpath = "//div[@data-testid='remove-entity']")
     public List<WebElement> removeButtons;
@@ -142,6 +141,8 @@ public class OnDemandAssessmentPage extends CommonPage {
 
     @FindBy(xpath = "//button[@id='button-report-test-id-1']")
     public WebElement buttonRequestAssessment ;
+
+
 
     public String landingPage = "";
 
@@ -329,7 +330,7 @@ public class OnDemandAssessmentPage extends CommonPage {
 
     public boolean isOnDemandAssessmentRequestAvailableInMenu() {
         try {
-            return onDemandAssessmentRequest.isDisplayed();
+            return onDemandReportingMenu.isDisplayed();
         } catch (Exception e) {
             return false;
         }
@@ -443,10 +444,10 @@ public class OnDemandAssessmentPage extends CommonPage {
     }
 
     public boolean validateIfOndemandmenuOptionIsEnabled() {
-        while (onDemandAssessmentRequest.getAttribute("aria-disabled").equals("true")) {
+        while (onDemandReportingMenu.getAttribute("aria-disabled").equals("true")) {
             BrowserUtils.wait(1);
         }
-        if (onDemandAssessmentRequest.getAttribute("aria-disabled").equals("false")) return true;
+        if (onDemandReportingMenu.getAttribute("aria-disabled").equals("false")) return true;
         else return false;
 
     }
@@ -456,7 +457,7 @@ public class OnDemandAssessmentPage extends CommonPage {
         BrowserUtils.waitForClickablility(buttonRequestAssessment,60).click();
 
        /* if (validateIfOndemandmenuOptionIsEnabled()) {
-            onDemandAssessmentRequest.click();
+            onDemandReportingMenu.click();
         }*/
     }
 
@@ -494,5 +495,16 @@ public class OnDemandAssessmentPage extends CommonPage {
     public void validateErrormessage(){
         assertTestCase.assertTrue(BrowserUtils.waitForVisibility(SomeThingWentWrongErrorMessage,20).isDisplayed(), "Validating if error message has displayed");
     }
+
+    /*public void uploadPortfolioLink(String fileName){
+        BrowserUtils.waitForVisibility(uploadPortfolioLink,60).click();
+        clickBrowseFile();
+        BrowserUtils.wait(2);
+
+        String inputFile = fileName;
+        RobotRunner.selectFileToUpload(inputFile);
+
+        BrowserUtils.wait(4);
+    }*/
 
 }

@@ -308,6 +308,14 @@ public class LoginPage extends PageBase {
                 wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.NO_PREVIOUSLY_DOWNLOADED_REGULATORY_REPORTS_USERNAME, Keys.ENTER);
                 wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.NO_PREVIOUSLY_DOWNLOADED_REGULATORY_REPORTS_PASSWORD);
                 break;
+            case USER_WITH_PREDICTEDSCORE_AND_CLIMATE:
+                wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.USER_WITH_PREDICTEDSCORE_AND_CLIMATE_USERNAME, Keys.ENTER);
+                wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.USER_WITH_PREDICTEDSCORE_AND_CLIMATE_PASSWORD);
+                break;
+            case USER_WITH_ONDEMAND_ENTITLEMENT:
+                wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.USER_WITH_ONDEMAND_ENTITLEMENT_USERNAME, Keys.ENTER);
+                wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.USER_WITH_ONDEMAND_ENTITLEMENT_PASSWORD);
+                break;
             default:
                 Assert.fail("Bundle not found!");
         }

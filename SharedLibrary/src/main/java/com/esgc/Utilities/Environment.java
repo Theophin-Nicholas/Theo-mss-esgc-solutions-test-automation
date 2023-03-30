@@ -72,9 +72,11 @@ public class Environment {
     public static final String ADMIN_ROLE_KEY;
     public static final String VIEWER_ROLE_KEY;
     public static final String FULFILLMENT_ROLE_KEY;
+    public static final String USER_WITH_PREDICTEDSCORE_AND_CLIMATE_USERNAME ;
+    public static final String USER_WITH_PREDICTEDSCORE_AND_CLIMATE_PASSWORD ;
 
-
-
+    public static final String USER_WITH_ONDEMAND_ENTITLEMENT_USERNAME ;
+    public static final String USER_WITH_ONDEMAND_ENTITLEMENT_PASSWORD ;
 
     public static final String PDF_EXPORT_BUNDLE_USERNAME;
     public static final String PDF_EXPORT_BUNDLE_PASSWORD;
@@ -178,7 +180,11 @@ public class Environment {
         PDF_EXPORT_ONLY_PDF_PASSWORD = properties.getProperty("PDFexport_OnlyPDF_password");
         NO_PREVIOUSLY_DOWNLOADED_REGULATORY_REPORTS_USERNAME = properties.getProperty("NoPreviouslyDownloadedRegulatoryReports_username");
         NO_PREVIOUSLY_DOWNLOADED_REGULATORY_REPORTS_PASSWORD = properties.getProperty("NoPreviouslyDownloadedRegulatoryReports_password");
+        USER_WITH_PREDICTEDSCORE_AND_CLIMATE_USERNAME  = properties.getProperty("UserOnlyWithPredictedAndClimateEntitlement_username");
+        USER_WITH_PREDICTEDSCORE_AND_CLIMATE_PASSWORD = properties.getProperty("UserOnlyWithPredictedAndClimateEntitlement_password");
 
+        USER_WITH_ONDEMAND_ENTITLEMENT_USERNAME  = properties.getProperty("UserWithOnDemandEntitlement_username");
+        USER_WITH_ONDEMAND_ENTITLEMENT_PASSWORD = properties.getProperty("UserWithOnDemandEntitlement_password");
 
     }
 }

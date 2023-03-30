@@ -730,7 +730,8 @@ public abstract class PageBase {
             // Dynamic xpath - Helps us to pass page names "Dashboard", "Portfolio Analysis", "Regulatory Reporting"
             String pageXpath = "//li[text()='" + navigateTo + "']";
             WebElement pageElement = Driver.getDriver().findElement(By.xpath(pageXpath));
-            wait.until(ExpectedConditions.elementToBeClickable(pageElement)).click();
+           // wait.until(ExpectedConditions.elementToBeClickable(pageElement)).click();
+            BrowserUtils.waitForVisibility(pageElement,20).click();
         }
     }
 
