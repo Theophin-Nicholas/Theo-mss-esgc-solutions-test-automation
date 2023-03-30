@@ -1,5 +1,6 @@
 package com.esgc.Pages;
 
+import com.esgc.Reporting.CustomAssertion;
 import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.Driver;
 import org.openqa.selenium.By;
@@ -11,21 +12,26 @@ import org.openqa.selenium.support.PageFactory;
 import java.util.List;
 
 public abstract class EMCBasePage {
+    public CustomAssertion assertTestCase = new CustomAssertion();
 
     @FindBy(id = "notistack-snackbar")
     public WebElement notification;
+
     public EMCBasePage() {
-        PageFactory.initElements(Driver.getDriver(),this);
+        PageFactory.initElements(Driver.getDriver(), this);
     }
+
     public void clickAwayInBlankArea() {
-        Driver.getDriver().findElement(By.xpath("(//body//div//button)[2]")).click();
+        Driver.getDriver().findElement(By.xpath("//body")).click();
         BrowserUtils.wait(2);
     }
+
     public void clear(WebElement element) {
         while (!element.getAttribute("value").isEmpty()) {
             element.sendKeys(Keys.BACK_SPACE);
         }
     }
+
     public void wait(WebElement element, int seconds) {
         for (int i = 0; i < seconds; i++) {
             try {
@@ -38,6 +44,21 @@ public abstract class EMCBasePage {
         }
         System.out.println("Element is not displayed after " + seconds + " seconds");
     }
+
+    public void waitForInvisibility(WebElement element, int seconds) {
+        wait(element, seconds);
+        for (int i = 0; i < seconds; i++) {
+            try {
+                if (element.isDisplayed()) {
+                    BrowserUtils.wait(1);
+                }
+            } catch (Exception e) {
+                return;
+            }
+        }
+        System.out.println("Element is still displayed after " + seconds + " seconds");
+    }
+
     public void wait(List<WebElement> elements, int seconds) {
         for (int i = 0; i < seconds; i++) {
             try {

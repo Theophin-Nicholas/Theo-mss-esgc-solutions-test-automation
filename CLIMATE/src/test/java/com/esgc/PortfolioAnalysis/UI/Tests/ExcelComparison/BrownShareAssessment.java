@@ -294,6 +294,8 @@ public class BrownShareAssessment extends UITestBase {
 
         //Verify the headers UI vs Excel
         List<String> updatesUIHeaders = researchLinePage.brownAndGreenShareHeaders.stream().map(WebElement::getText).collect(Collectors.toList());
+        updatesUIHeaders.set(2,updatesUIHeaders.get(2) + " Category");
+        updatesUIHeaders.set(4,updatesUIHeaders.get(4) + " Category");
         List<String> excelHeaders = new ArrayList<>();
         for (int i = updatesHeadersRow, j = 0; j < 9; j++) {
             excelHeaders.add(exportedDocument.getCellData(i, j));
@@ -1143,7 +1145,7 @@ public class BrownShareAssessment extends UITestBase {
                 //System.out.println("exportedDocument.getCellData(row++, column) = " + exportedDocument.getCellData(row, column));
                 company.setCompany_name(exportedDocument.getCellData(row, column));
                 company.setScore_category(exportedDocument.getCellData(row, column + 1));
-                company.setInvestment_pct(Double.parseDouble(exportedDocument.getCellData(row, column + 2).replaceAll("%", "")));
+                company.setInvestment_pct(Double.parseDouble(exportedDocument.getCellData(row, column + 3).replaceAll("%", "")));
                 row++;
                 companyList.add(company);
             }
@@ -1481,9 +1483,9 @@ public class BrownShareAssessment extends UITestBase {
         }
         //Portfolio Distribution
         List<String> benchmarkPrtfolioDistributionCategoryColumnNames = Arrays.asList(researchLinePage.portfolioDistributionAllTableHeaders.get(0).getText().split(" "));
-        String benchmarkPortfolioDistributionCategoryNameUI = benchmarkPrtfolioDistributionCategoryColumnNames.get(0) + " " + benchmarkPrtfolioDistributionCategoryColumnNames.get(1);
-        String benchmarkPortfolioDistributionCategoryInvestmentNameUI = "% " + benchmarkPrtfolioDistributionCategoryColumnNames.get(3);
-        String benchmarkPortfolioDistributionCategoryCompanyNameUI = benchmarkPrtfolioDistributionCategoryColumnNames.get(4);
+        String benchmarkPortfolioDistributionCategoryNameUI = benchmarkPrtfolioDistributionCategoryColumnNames.get(0);
+        String benchmarkPortfolioDistributionCategoryInvestmentNameUI = benchmarkPrtfolioDistributionCategoryColumnNames.get(1) + " " + benchmarkPrtfolioDistributionCategoryColumnNames.get(2);
+        String benchmarkPortfolioDistributionCategoryCompanyNameUI = benchmarkPrtfolioDistributionCategoryColumnNames.get(3);
 
         String benchmarkPortfolioDistributionCategoryUI1 = benchmarkPortfolioDistributionList.get(0).get(0);
         String benchmarkPortfolioDistributionCategory1InvestmentUI = benchmarkPortfolioDistributionList.get(0).get(1);

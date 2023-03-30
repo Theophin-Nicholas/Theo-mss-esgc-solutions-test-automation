@@ -45,7 +45,7 @@ public class PortfolioScore extends UITestBase {
         Assert.assertTrue(researchLinePage.checkIfResearchLineTitleIsDisplayed(page));
         test.pass("User is on " + page + " Page");
 
-       // Assert.assertTrue(researchLinePage.checkIfPortfolioLoadMaskIsDisplayed(title));
+        // Assert.assertTrue(researchLinePage.checkIfPortfolioLoadMaskIsDisplayed(title));
         Assert.assertTrue(researchLinePage.checkIfWidgetTitleIsDisplayed(title));
         Assert.assertTrue(researchLinePage.checkIfPortfolioTableIsDisplayed(title));
 
@@ -150,9 +150,9 @@ public class PortfolioScore extends UITestBase {
     without updating the portfolio filter there should be no api call to load data
  */
 
+    @Xray(test = {640, 728})
     @Test(groups = {REGRESSION, UI},
             description = "Verify Portfolio Score is not changed when User navigates another page and come back to Physical Management Page without any changes")
-
     public void verifyPortfolioScoreNotUpdated() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         String title = "Score";
@@ -160,6 +160,7 @@ public class PortfolioScore extends UITestBase {
         test.info("Navigated to Portfolio Analysis Page");
         researchLinePage.navigateToResearchLine("Carbon Footprint");
         assertTestCase.assertTrue(researchLinePage.checkIfPortfolioLoadMaskIsDisplayed(title), "Widget is loading");
+        assertTestCase.assertTrue(researchLinePage.checkIfWidgetsAreLoading(), "Widgets should be loaded", 731);
 
         assertTestCase.assertTrue(researchLinePage.checkIfResearchLineTitleIsDisplayed("Carbon Footprint"), "Page Subtitle Verification");
         test.pass("User is on Carbon Footprint Page");

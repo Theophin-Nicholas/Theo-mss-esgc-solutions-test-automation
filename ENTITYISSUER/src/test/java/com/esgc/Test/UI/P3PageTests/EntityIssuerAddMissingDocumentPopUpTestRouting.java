@@ -15,7 +15,7 @@ import static com.esgc.Utilities.Groups.*;
 public class EntityIssuerAddMissingDocumentPopUpTestRouting extends EntityPageTestBase {
 
 
-    @Xray(test = {7350, 8795, 9821})
+    @Xray(test = {7350, 8795, 9821,10809})
     @Test(groups = {REGRESSION, UI, SMOKE, ISSUER},
             dataProvider = "loginP3", dataProviderClass = IssuerDataProviderClass.class,
             description = "Verify Add missing document functionlity")

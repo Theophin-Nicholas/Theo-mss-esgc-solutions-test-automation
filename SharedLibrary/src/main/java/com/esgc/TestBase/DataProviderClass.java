@@ -1,6 +1,5 @@
 package com.esgc.TestBase;
 
-import com.esgc.Utilities.ConfigurationReader;
 import com.esgc.Utilities.EntitlementsBundles;
 import com.esgc.Utilities.Environment;
 import org.testng.annotations.DataProvider;
@@ -229,6 +228,9 @@ public class DataProviderClass {
                 {"esg-test6@outlook.com", "Helloworld26", "Transition Risk", "Rogers Corp."},//
                 {"esg-test1+export@outlook.com", "Moodys123", "Physical Risk and Transition Risk", "Apple, Inc."},//
                 {"esg-test33@outlook.com", "Helloworld21", "ESG", "Apple, Inc."},//
+
+                {"esg-test33@outlook.com", "Helloworld21", "EsgWithMethodology1Entity", "Rogers Corp."},//
+
                 {"esg-test1+controversyandexport@outlook.com", "Helloworld21", "Controversy entitlement", "Rogers Corp."},
                 {"esg-test1+no-controversy@outlook.com", "Moodys123","No Controversy", "Rogers Corp."}
         };

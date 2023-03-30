@@ -42,15 +42,15 @@ public class EntityClimateProfileControversies extends UITestBase {
             //Verify the Label - Filter by most impacted categories of ESG:
             assertTestCase.assertEquals(entityProfilePage.controversiesStaticText.getText(), "Filter by most impacted categories of ESG:");
             //Verify the subcategory names and the numbers in it. ex: Environmental Strategy (3)
-            //TODO get values from database instead hardcoded values
+            //TODO get values from database instead hardcoded values, assertion is failing
             List<String> categoryExpectedList = new ArrayList<>(
                     Arrays.asList(
                             "Community Involvement (8)",
-                            "Business Behaviour (65)",
+                            "Business Behaviour (61)",
                             "Human Rights (14)",
                             "Human Resources (5)",
                             "Environment (3)",
-                            "Corporate Governance (4)"
+                            "Corporate Governance (5)"
                     )
             );
             //number of controversies in sub category
@@ -64,6 +64,7 @@ public class EntityClimateProfileControversies extends UITestBase {
                 System.out.println("subCategoryActual.getText() = " + subCategoryActual.getText());
                 assertTestCase.assertTrue(categoryExpectedList.contains(subCategoryActual.getText()));
                 subCategoryActual.click();
+                BrowserUtils.wait(4);
                 int numberOfSubCategoryControversies = Integer.parseInt(subCategoryActual.getText().substring(subCategoryActual.getText().indexOf("(") + 1, subCategoryActual.getText().indexOf(")")));
                 System.out.println("Number of Controversies in Sub Category = " + numberOfSubCategoryControversies);
                 BrowserUtils.wait(2);

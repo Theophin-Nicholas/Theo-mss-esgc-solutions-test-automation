@@ -26,7 +26,7 @@ public class EntityHyperlinksTests extends UITestBase {
         String actPanelTitle = dashboardPage.summaryCompaniesPanelTitle.getText();
         assertTestCase.assertEquals(actPanelTitle, expPanelTitle,
                 "Panel title is verified as Companies in <portfolio name>");
-        dashboardPage.closePanelBtn.click();
+        dashboardPage.closePortfolioExportDrawer();
         BrowserUtils.wait(10);
 
         assertTestCase.assertTrue(dashboardPage.verifyDashboardHyperlinks("Portfolio Monitoring", 3),
@@ -65,6 +65,7 @@ public class EntityHyperlinksTests extends UITestBase {
 //                    "Geographic Risk Distribution - " + risk + ": Verify Entity Hyperlink");
 //        }
 
+        //TODO webelement is failing
         assertTestCase.assertTrue(dashboardPage.verifyHeatMapHyperlink(),
                 "Heatmap: Verify Entity Hyperlink");
 
@@ -90,7 +91,7 @@ public class EntityHyperlinksTests extends UITestBase {
 
         assertTestCase.assertTrue(dashboardPage.verifyPortfolioAnalysisHyperlinks("Negative impact based on investment and score", 1),
                 "Portfolio Analysis - Verify Negative impact based on investment and score Hyperlink");
-
+        //TODO webelement is failing
         assertTestCase.assertTrue(dashboardPage.verifyPortfolioAnalysisHyperlinks("Leaders by Score", 2),
                 "Portfolio Analysis - Verify Leaders by Score Hyperlink");
 

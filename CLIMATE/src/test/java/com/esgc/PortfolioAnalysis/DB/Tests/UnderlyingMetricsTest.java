@@ -91,6 +91,10 @@ public class UnderlyingMetricsTest extends DataValidationTestBase {
 
         List<RangeAndScoreCategory> rangeAndCategoryList = controller.getResearchLineRangesAndScoreCategories(researchLine);
 
+        if(researchLine.equalsIgnoreCase("Brown Share")){
+            rangeAndCategoryList = controller.getResearchLineRangesAndScoreCategories("Brown Share Ranges");
+        }
+
         switch (researchLine) {
             case "TCFD":
                 dataMetricsList3 = Arrays.asList(response.as(UnderlyingDataMetricsTCFD[].class));

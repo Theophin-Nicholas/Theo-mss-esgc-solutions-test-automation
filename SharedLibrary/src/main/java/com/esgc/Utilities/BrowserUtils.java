@@ -11,9 +11,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 
-import java.io.File;
-import java.io.FilenameFilter;
-import java.io.IOException;
+import java.io.*;
 import java.text.BreakIterator;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
@@ -22,83 +20,83 @@ import java.util.*;
 public class BrowserUtils {
 
 
-
     /**
      * path to download folder - downloads all files here
+     *
      * @return path
      */
     public static String downloadPath (){
-//        String path = "";
-//        boolean isRemote = false;
-//        try{
-//           isRemote = System.getProperty("browser").contains("remote");
-//        } catch (Exception e){
-//
-//        }
-//        if(isRemote){
-//            try{
-//                System.out.println("System.getProperty(\"os.name\") = " + System.getProperty("os.name"));
-//                String command = "cmd /c echo %cd%";
-//                Process process = Runtime.getRuntime().exec(command);
-//                BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-//                String currentPath = reader.readLine();
-//                System.out.println("Current working directory on remote node: " + currentPath);
-//                path = currentPath + File.separator + "download";
-//            }catch (IOException e) {
-//                System.out.println("FILE ERRORRR!!!!");
-//                e.printStackTrace();
-//            }
-//
-//        }else{
-        String path = System.getProperty("user.dir") + File.separator + "src" +
+
+        String path = "";
+        boolean isRemote = System.getProperty("browser").contains("remote");
+        if(isRemote){
+            try{
+                String command = "pwd";
+                Process process = Runtime.getRuntime().exec(command);
+                BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+                String currentPath = reader.readLine();
+                System.out.println("Current working directory on remote node: " + currentPath);
+                path = currentPath + File.separator + "download";
+            }catch (IOException e) {
+                System.out.println("FILE ERRORRR!!!!");
+                e.printStackTrace();
+            }
+
+        }else{
+            path = System.getProperty("user.dir") + File.separator + "src" +
                     File.separator + "test" + File.separator + "resources" + File.separator + "download";
+        }
 
-        System.out.println("Source Path = " + path);
         return path;
-
     }
+
     /**
      * path to upload folder - all upload files here
+     *
      * @return path
      */
-    public static String uploadPath (){
+    public static String uploadPath() {
 
         String path = System.getProperty("user.dir") + File.separator + "src" +
                 File.separator + "test" + File.separator + "resources" + File.separator + "upload";
 
         return path;
     }
+
     /**
      * path to downloaded template -ESGCA-317
+     *
      * @return path
      */
-    public static String templatePath (){
+    public static String templatePath() {
 
         String path = System.getProperty("user.dir") + File.separator + "src" +
                 File.separator + "test" + File.separator + "resources" + File.separator + "download"
                 + File.separator + ConfigurationReader.getProperty("downloadTemplateName");
-        System.out.println("Path "+path);
+        System.out.println("Path " + path);
         return path;
     }
 
     /**
      * path to expected portfolio template documents
+     *
      * @return path
      */
-    public static String expectedPortfolioTemplateDocumentPath (){
+    public static String expectedPortfolioTemplateDocumentPath() {
 
         String path = System.getProperty("user.dir") + File.separator + "src" +
                 File.separator + "test" + File.separator + "resources" + File.separator + "expected_portfolio_template"
                 + File.separator + "ESG portfolio import.csv";
-        System.out.println("Path "+path);
+        System.out.println("Path " + path);
         return path;
     }
 
     /**
      * path to export repository folder to get expected export documents
+     *
      * @return path
      */
-    public static String exportRepositoryPath (){
+    public static String exportRepositoryPath() {
 
         String path = System.getProperty("user.dir") + File.separator + "src" +
                 File.separator + "test" + File.separator + "resources" + File.separator + "export_document_repository";
@@ -108,13 +106,13 @@ public class BrowserUtils {
 
     /**
      * path to downloaded Export Data -ESGCA-2092
+     *
      * @return path
      */
-    public static String exportPath (String researchLine){
+    public static String exportPath(String researchLine) {
 
         File root = new File(downloadPath());
-        FilenameFilter beginsWithResearchLine = new FilenameFilter()
-        {
+        FilenameFilter beginsWithResearchLine = new FilenameFilter() {
             public boolean accept(File directory, String filename) {
                 return filename.startsWith(researchLine);
             }
@@ -122,18 +120,18 @@ public class BrowserUtils {
 
         File[] files = root.listFiles(beginsWithResearchLine);
 
-        return files[files.length-1].getAbsolutePath();
+        return files[files.length - 1].getAbsolutePath();
     }
 
     /**
      * path to expected export document
+     *
      * @return path
      */
-    public static String expectedExportDocumentPath (String researchLine){
+    public static String expectedExportDocumentPath(String researchLine) {
 
         File root = new File(exportRepositoryPath());
-        FilenameFilter beginsWithResearchLine = new FilenameFilter()
-        {
+        FilenameFilter beginsWithResearchLine = new FilenameFilter() {
             public boolean accept(File directory, String filename) {
                 return filename.startsWith(researchLine);
             }
@@ -141,7 +139,7 @@ public class BrowserUtils {
 
         File[] files = root.listFiles(beginsWithResearchLine);
 
-        return files[files.length-1].getAbsolutePath();
+        return files[files.length - 1].getAbsolutePath();
     }
 
 
@@ -186,6 +184,11 @@ public class BrowserUtils {
         return wait.until(ExpectedConditions.visibilityOf(element));
     }
 
+    public static WebElement waitForVisibility(WebElement element) {
+        WebDriverWait wait = new WebDriverWait(Driver.getDriver(), Duration.ofSeconds(10));
+        return wait.until(ExpectedConditions.visibilityOf(element));
+    }
+
     public static boolean waitForInvisibility(WebElement element, int timeToWaitInSec) {
         WebDriverWait wait = new WebDriverWait(Driver.getDriver(), Duration.ofSeconds(timeToWaitInSec));
         return wait.until(ExpectedConditions.invisibilityOf(element));
@@ -198,7 +201,7 @@ public class BrowserUtils {
 
     public static boolean isElementVisible(WebElement element, int timeToWaitInSec) {
         WebDriverWait wait = new WebDriverWait(Driver.getDriver(), Duration.ofSeconds(timeToWaitInSec));
-        try{
+        try {
             return wait.until(ExpectedConditions.visibilityOf(element)).isDisplayed();
         } catch (Exception e) {
             return false;
@@ -217,6 +220,12 @@ public class BrowserUtils {
         WebDriverWait wait = new WebDriverWait(Driver.getDriver(), Duration.ofSeconds(timeout));
         return wait.until(ExpectedConditions.elementToBeClickable(element));
     }
+
+    public static WebElement waitForClickability(WebElement element) {
+        WebDriverWait wait = new WebDriverWait(Driver.getDriver(), Duration.ofSeconds(10));
+        return wait.until(ExpectedConditions.elementToBeClickable(element));
+    }
+
 
     /**
      * Tries to click on the element every second until it is clicked
@@ -375,6 +384,7 @@ public class BrowserUtils {
     public static void scrollToByPixel() {
         ((JavascriptExecutor) Driver.getDriver()).executeScript("window.scrollBy(0,5)");
     }
+
     /**
      * Moves the mouse to given element
      *
@@ -471,7 +481,7 @@ public class BrowserUtils {
      * @param name
      * take a name of a test and returns a path to screenshot takes
      */
-    public static String getScreenshot(String name)  {
+    public static String getScreenshot(String name) {
         // name the screenshot with the current date time to avoid duplicate name
         String date = new SimpleDateFormat("yyyyMMddhhmmss").format(new Date());
         // TakesScreenshot ---> interface from selenium which takes screenshots
@@ -494,7 +504,7 @@ public class BrowserUtils {
         wait(seconds);
     }
 
-    public static void ActionKeyPress(Keys key){
+    public static void ActionKeyPress(Keys key) {
         Actions act = new Actions(Driver.getDriver());
         act.sendKeys(key).build().perform();
     }
@@ -520,14 +530,14 @@ public class BrowserUtils {
         for (int end = iterator.next();
              end != BreakIterator.DONE;
              start = end, end = iterator.next()) {
-            if(text.substring(start,end).replaceAll("\\W","").length()>0){
-                sentences.add(text.substring(start,end));
+            if (text.substring(start, end).replaceAll("\\W", "").length() > 0) {
+                sentences.add(text.substring(start, end));
             }
         }
         return sentences;
     }
 
-    public static String DataSourcePath (){
+    public static String DataSourcePath() {
 
         String path = System.getProperty("user.dir") + File.separator + "src" +
                 File.separator + "test" + File.separator + "resources" + File.separator + "DataSource";
@@ -538,10 +548,10 @@ public class BrowserUtils {
     public static Object[][] appendedArrays(Object[][] array1, Object[][] array2) {
         Object[][] ret = new Object[array1.length + array2.length][];
         int i = 0;
-        for (;i<array1.length;i++) {
+        for (; i < array1.length; i++) {
             ret[i] = array1[i];
         }
-        for (int j = 0;j<array2.length;j++) {
+        for (int j = 0; j < array2.length; j++) {
             ret[i++] = array2[j];
         }
         return ret;
@@ -558,10 +568,10 @@ public class BrowserUtils {
         }
         return true;
     }
+
     public static <T, U> List<U>
     convertStringListToIntList(List<T> listOfString,
-                               Function<T, U> function)
-    {
+                               Function<T, U> function) {
         return Lists.transform(listOfString, function);
     }
 
@@ -574,5 +584,49 @@ public class BrowserUtils {
             }
         });
         return list;
+    }
+
+    public static void clearCache() {
+        Driver.getDriver().manage().deleteAllCookies();
+    }
+
+    public static List<WebElement> getElementAsList(WebElement element) {
+        List<WebElement> list = new ArrayList<>();
+        list.add(element);
+        return list;
+    }
+
+    public static void deleteFilesInDownloadsFolder() {
+        File dir = new File(BrowserUtils.downloadPath());
+        File[] dir_contents = dir.listFiles();
+        if (dir_contents == null) {
+            System.out.println("No files in the directory");
+            return;
+        }
+        for (File file : dir_contents) {
+            file.delete();
+        }
+        System.out.println("All files in the directory are deleted");
+    }
+
+    public static boolean verifyFileDownloaded(String fileName) {
+        String extension = fileName.substring(fileName.lastIndexOf("."));
+        System.out.println("extension = " + extension);
+        fileName = fileName.substring(0, fileName.lastIndexOf("."));
+        File dir = new File(BrowserUtils.downloadPath());
+        File[] dir_contents = dir.listFiles();
+        if (dir_contents == null) {
+            System.out.println("No files in the directory");
+            return false;
+        }
+        System.out.println("Files in the directory are: " + Arrays.toString(dir_contents));
+        String finalFileName = fileName;
+        System.out.println("finalFileName = " + finalFileName);
+        return Arrays.stream(dir_contents).anyMatch(e -> ((e.getName().startsWith(finalFileName) || e.getName().contains(finalFileName)) &&
+                e.getName().endsWith(extension)));
+    }
+
+    public static void refresh() {
+        Driver.getDriver().navigate().refresh();
     }
 }

@@ -2,11 +2,17 @@ package com.esgc.Utilities;
 
 import com.esgc.Base.API.APIModels.Portfolio;
 import com.esgc.Base.API.Controllers.APIController;
+import com.esgc.RegulatoryReporting.API.Controllers.RegulatoryReportingAPIController;
+import com.esgc.Utilities.API.Endpoints;
 import com.esgc.Utilities.EndPoints.CommonEndPoints;
 import io.restassured.response.Response;
 import org.hamcrest.Matchers;
 
 import java.io.File;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.is;
@@ -139,5 +145,108 @@ public class APIUtilities {
         System.out.println(portfolioName + " Successfully Imported for User:" + user_id);
 
         return response;
+    }
+
+    public static Response getUserPortfolioDetails() {
+        Response response = null;
+        APIController apiController = new APIController();
+        try {
+            response = apiController.configSpec()
+                    .when()
+                    .get(Endpoints.GET_PORTFOLIOS_FOR_USER);
+        } catch (Exception e) {
+            System.out.println("Inside exception " + e.getMessage());
+        }
+        //response.prettyPrint();
+        return response;
+    }
+
+    public Response getPortfolioDetails(String portfolioId) {
+        Response response = null;
+        APIController apiController = new APIController();
+        try {
+            response = apiController.configSpec()
+                    .pathParam("portfolio_id", portfolioId)
+                    .when().get(Endpoints.POST_PORTFOLIO_SETTINGS);
+        } catch (Exception e) {
+            System.out.println("Inside exception " + e.getMessage());
+        }
+        return response;
+    }
+
+    public static List<String> getPortfolioNames() {
+        return getUserPortfolioDetails().jsonPath().getList("portfolios.portfolio_name");
+    }
+
+    public static List<String> getPortfolioIds() {
+        return getUserPortfolioDetails().jsonPath().getList("portfolios.portfolio_id");
+    }
+
+    public void deleteDuplicatePortfolios() {
+        List<String> portfolioNames = getPortfolioNames();
+        //sort the list
+        portfolioNames.sort(String::compareToIgnoreCase);
+        Map<String, Integer> portfolioNumbers = new HashMap<>();
+        for (String portfolioName : portfolioNames) {
+            if (portfolioNumbers.containsKey(portfolioName)) {
+                portfolioNumbers.put(portfolioName, portfolioNumbers.get(portfolioName) + 1);
+            } else {
+                portfolioNumbers.put(portfolioName, 1);
+            }
+        }
+        portfolioNumbers.forEach((key, value) -> {if (value > 1) System.out.println(key+" = "+value);});
+        for (String portfolioName : portfolioNumbers.keySet()) {
+            for(int i = 1; i < portfolioNumbers.get(portfolioName); i++) {
+                deletePortfolio(getPortfolioId(portfolioName));
+            }
+        }
+    }
+
+    public static String getPortfolioId(String portfolioName) {
+        List<String> portfolioNames = getPortfolioNames();
+        System.out.println("portfolioNames.size() = " + portfolioNames.size());
+        List<String> portfolioIds = getPortfolioIds();
+        System.out.println("portfolioIds.size() = " + portfolioIds.size());
+        for (int i = 0; i < portfolioNames.size(); i++) {
+            if(portfolioNames.get(i).equals(portfolioName)) {
+                System.out.println("Returning portfolio id: " + portfolioIds.get(i));
+                return portfolioIds.get(i);
+            }
+        }
+        System.out.println("No portfolios found with matching name. Searching portfolios starts with.");
+        for (int i = 0; i < portfolioNames.size(); i++) {
+            if(portfolioNames.get(i).startsWith(portfolioName)) {
+                System.out.println("Returning portfolio id: " + portfolioIds.get(i));
+                return portfolioIds.get(i);
+            }
+        }
+        System.out.println("Portfolio name not found");
+        return "";
+    }
+
+    public synchronized Response deletePortfolio(String portfolioId) {
+        APIController apiController = new APIController();
+        return apiController.configSpec()
+                .header("Content-Type", "application/json, text/plain, */*")
+                .pathParam("portfolio_id", portfolioId)
+                .when()
+                .delete(Endpoints.PUT_PORTFOLIO_NAME_UPDATE).prettyPeek();
+    }
+
+
+    public synchronized static void deleteImportedPortfoliosAfterTest() {
+        APIController apiController = new APIController();
+        RegulatoryReportingAPIController apiController2 = new RegulatoryReportingAPIController();
+        List<String> portfolioNames = apiController2.getPortfolioNames();
+        Collections.shuffle(portfolioNames);
+
+        if (portfolioNames.size() > 10) {
+            for (int i = 0; i < portfolioNames.size() - 10; i++) {
+                if (portfolioNames.get(i).equals("Sample Portfolio")) continue;
+                System.out.println("Deleting the imported portfolio");
+                //Delete Portfolio
+                apiController.deletePortfolio(apiController2.getPortfolioId(portfolioNames.get(i)));
+            }
+        }
     }
 }

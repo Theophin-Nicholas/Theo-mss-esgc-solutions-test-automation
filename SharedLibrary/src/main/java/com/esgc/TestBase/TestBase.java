@@ -9,6 +9,7 @@ import com.aventstack.extentreports.reporter.ExtentSparkReporter;
 import com.esgc.APIModels.TestCase;
 import com.esgc.Reporting.CustomAssertion;
 import com.esgc.Utilities.*;
+import com.esgc.Utilities.Database.DatabaseDriver;
 import org.apache.commons.lang3.time.StopWatch;
 import org.openqa.selenium.JavascriptExecutor;
 import org.testng.ITestResult;
@@ -41,6 +42,7 @@ public abstract class TestBase {
     @BeforeTest(alwaysRun = true)
     @Parameters("reportName")
     public void setupTestBeforeExecution(@Optional String reportName) {
+        DatabaseDriver.createDBConnection();
         //Check if execution is in remote environment or local?
         if (System.getProperty("browser") != null) {
             isRemote = System.getProperty("browser").contains("remote");
@@ -90,6 +92,7 @@ public abstract class TestBase {
 
     @AfterTest(alwaysRun = true)
     public void tearDownAndGenerateReport() {
+        DatabaseDriver.destroy();
         report.flush();
     }
 
@@ -109,7 +112,7 @@ public abstract class TestBase {
     }
 
     public void getScreenshot(ITestResult result) {
-        if (result.getStatus() == ITestResult.FAILURE) {
+        if (result.getStatus() == ITestResult.FAILURE || result.getThrowable() != null) {
             test.assignCategory(result.getInstanceName());
             test.log(Status.FAIL, "Classname: " + result.getTestClass());
             test.log(Status.FAIL, MarkupHelper.createLabel("FAILED test case name is: " + result.getName(), ExtentColor.RED));
@@ -128,6 +131,7 @@ public abstract class TestBase {
     }
 
     public void getExistingUsersAccessTokenFromUI() {
+
         System.out.println("getting token");
         String getAccessTokenScript = "return JSON.parse(localStorage.getItem('okta-token-storage')).accessToken.accessToken";
         String accessToken = ((JavascriptExecutor) Driver.getDriver()).executeScript(getAccessTokenScript).toString();

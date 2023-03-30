@@ -73,7 +73,7 @@ public class ImportPortfolio extends DashboardUITestBase {
 
         dashboardPage.waitForDataLoadCompletion();
         BrowserUtils.wait(20);
-        assertTestCase.assertFalse(dashboardPage.checkifSuccessPopUpIsDisplyed(), "Success pop up disappeared", 337);
+        assertTestCase.assertFalse(dashboardPage.checkifSuccessPopUpDisappearedAfterACertainTime(), "Success pop up disappeared", 337);
 
         assertTestCase.assertEquals(dashboardPage.getSelectedPortfolioNameFromDropdown(), expectedPortfolioName, "Portfolio name verification", 1298);
         assertTestCase.assertEquals(dashboardPage.getPortfolioNameInSummaryHeaders(), expectedPortfolioName, "Portfolio name in subtitle");
@@ -323,7 +323,7 @@ public class ImportPortfolio extends DashboardUITestBase {
         BrowserUtils.wait(2);
 
         String popUpMessage = dashboardPage.getUnknownIdentifierPopUpMessage();
-        String expectedErrorMessage = "124/126 unique identifiers matched; the system was unable to match 2 identifiers for: Invalid Identifier Included Portfolio";
+        String expectedErrorMessage = "124/126 unique identifiers matched; the system was unable to match 2 identifiers for: InvalidIdentifier";
 
         Assert.assertTrue(dashboardPage.checkIfUnknownIdentifierPopUpDisplayed());
         Assert.assertEquals(popUpMessage, expectedErrorMessage);
