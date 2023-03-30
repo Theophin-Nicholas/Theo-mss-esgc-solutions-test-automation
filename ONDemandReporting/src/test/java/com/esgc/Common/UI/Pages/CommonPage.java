@@ -14,7 +14,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CommonPage extends PageBase {
+public class CommonPage extends UploadPortfolio {
 
     //=============== Summary Header
     @FindBy(xpath = "//div[@heap_id='portfolio-selection']//div[1]/span")
@@ -69,42 +69,7 @@ public class CommonPage extends PageBase {
     public WebElement uploadAnotherPortfolioLink;
 
     //-----
-    public void clickBrowseFile() {
-        wait.until(ExpectedConditions.elementToBeClickable(browseFileButton));
-        browseFileButton.click();
 
-    }
-
-    //To Upload the portfolio
-    public void clickUploadButton() {
-        //wait.until(ExpectedConditions.elementToBeClickable(uploadButton));
-        BrowserUtils.waitForClickablility(uploadButton, 30);
-        uploadButton.click();
-    }
-
-    //Success method after portfolio uploaded successfully
-    public boolean checkifSuccessPopUpIsDisplyed() {
-        try {
-            BrowserUtils.waitForVisibility(successMessagePopUP, 15);
-            return successMessagePopUP.isDisplayed();
-        } catch (Exception e) {
-            return false;
-        }
-    }
-
-    // Close portfolio upload popup model
-    public void closePopUp() {
-        try {
-            wait.until(ExpectedConditions.elementToBeClickable(closeAlert));
-            actions.click(closeAlert).pause(3000).build().perform();
-            BrowserUtils.wait(2);
-            System.out.println("Pop up closed");
-        } catch (Exception e) {
-            System.out.println("###POP UP Failed###");
-            System.out.println("Failed");
-            e.printStackTrace();
-        }
-    }
 
     // To Delete any portfolio
     public void deletePortfolio(String portfolioName) {
@@ -141,13 +106,10 @@ public class CommonPage extends PageBase {
         }
     }
 
-    //Close Portfolio Model under portfolio selection upload popup
-    public void closeUploadModal() {
-        closeUploadModalButton.click();
-    }
 
 //This method is to select the reporting option on reporting landing page
     public void navigateToReportingService(String reportingService) {
+        BrowserUtils.wait(3);
         navigateToPageFromMenu("reportingservice","On-Demand Reporting");
         if (reportingService.contains("SFDR")) {
             clickOnEUTaxonomyOption();
@@ -165,7 +127,9 @@ public class CommonPage extends PageBase {
     }
 
     public void clickOnDemandOption() {
-        BrowserUtils.waitForClickability(OnDemandAssessment).click();
+        BrowserUtils.wait(5);
+        BrowserUtils.waitForVisibility(OnDemandAssessment,20);
+        BrowserUtils.clickWithJS(OnDemandAssessment);
     }
     public void clickOnEUTaxonomyOption() {
         BrowserUtils.waitForClickability(EUTaxonomy).click();

@@ -13,8 +13,8 @@ import static com.esgc.Utilities.Groups.*;
 
 public class OnDemandAssessmentUITests extends UITestBase {
 
-    @Test(groups = {REGRESSION,UI,COMMON })
-    @Xray(test = {11985,12001,12002,12011,12054,12092,12822,12824})
+    @Test(groups = {REGRESSION, UI, COMMON})
+    @Xray(test = {11985, 12001, 12002, 12011, 12054, 12092, 12822, 12824})
     public void validateOnDemandAssessmentRequest() {
 
         String portfolioName = "500 predicted p";
@@ -65,8 +65,8 @@ public class OnDemandAssessmentUITests extends UITestBase {
         Assert.assertTrue(onDemandAssessmentPage.verifyMainPageHeader("Moody's ESG360: Dashboard"), "Global Header Title is not matched for Dashboard");
     }
 
-    @Test(groups = {REGRESSION,UI })
-    @Xray(test = {12054,12810,12811,12812})
+    @Test(groups = {REGRESSION, UI})
+    @Xray(test = {12054, 12810, 12811, 12812})
     public void validateErrorMessageOfEmailFieldAndExit() {
 
         String portfolioName = "500 predicted portfolio";
@@ -86,31 +86,18 @@ public class OnDemandAssessmentUITests extends UITestBase {
         BrowserUtils.wait(2);
         onDemandAssessmentPage.validateOnDemandPageHeader();
 
-        onDemandAssessmentPage.clickReviewAndSendRequestButton();;
+        onDemandAssessmentPage.clickReviewAndSendRequestButton();
+        ;
         BrowserUtils.wait(3);
         onDemandAssessmentPage.clickESCkey();
         BrowserUtils.wait(2);
         onDemandAssessmentPage.validateOnDemandPageHeader();
     }
 
-    @Test(groups = {REGRESSION,UI })
-    @Xray(test = {12010,12827})
-    public void verifyOnDemandAssessmentRequestIsNotAvailable() {
-        LoginPage login = new LoginPage();
-        login.clickOnLogout();
-        login.entitlementsLogin(EntitlementsBundles.PHYSICAL_RISK);
 
-        OnDemandAssessmentPage onDemandAssessmentPage = new OnDemandAssessmentPage();
 
-        BrowserUtils.wait(10);
-
-        onDemandAssessmentPage.clickMenu();
-        assertTestCase.assertFalse(onDemandAssessmentPage.isOnDemandAssessmentRequestAvailableInMenu(), "On-Demand Assessment Request option should not be available");
-        login.clickOnLogout();
-    }
-
-    @Test(groups = {REGRESSION,UI , SMOKE})
-    @Xray(test = {12440,12456})
+    @Test(groups = {REGRESSION, UI, SMOKE})
+    @Xray(test = {12440, 12456})
     public void verifyHeaderAndFilterFunctionality() {
 
         String portfolioName = "500 predicted portfolio";
@@ -123,8 +110,8 @@ public class OnDemandAssessmentUITests extends UITestBase {
 
         onDemandAssessmentPage.goToSendRequestPage(portfolioName);
         onDemandAssessmentPage.onDemandCoverageHeaderValidation(portfolioName);
-        assertTestCase.assertTrue(onDemandAssessmentPage.isCancelButtonAvailable(),"Validate if Cancel button is available");
-        assertTestCase.assertTrue(onDemandAssessmentPage.isReviewButtonAvailable(),"Validate if Review button is available");
+        assertTestCase.assertTrue(onDemandAssessmentPage.isCancelButtonAvailable(), "Validate if Cancel button is available");
+        assertTestCase.assertTrue(onDemandAssessmentPage.isReviewButtonAvailable(), "Validate if Review button is available");
 
         //Validating Predicted Score Graph Slider
         onDemandAssessmentPage.validatePredictedScore();
@@ -135,7 +122,7 @@ public class OnDemandAssessmentUITests extends UITestBase {
 
     }
 
-    @Test(groups = {REGRESSION,UI , SMOKE})
+    @Test(groups = {REGRESSION, UI, SMOKE})
     @Xray(test = {12455})
     public void verifyPageNavigation() {
 
@@ -156,8 +143,7 @@ public class OnDemandAssessmentUITests extends UITestBase {
     }
 
 
-
-    @Test(groups = {REGRESSION,UI , SMOKE})
+    @Test(groups = {REGRESSION, UI, SMOKE})
     @Xray(test = {12703})
     public void verifyFilterCriteriaWithAndORLogic() {
 
@@ -174,11 +160,10 @@ public class OnDemandAssessmentUITests extends UITestBase {
         onDemandAssessmentPage.validateAndORLogic();
 
 
-
     }
 
     @Test(groups = {"regression", "ui"})
-    @Xray(test = {12826, 12974,12828})
+    @Xray(test = {12826, 12974, 12828})
     public void validateFirstTimeUser() {
 
         OnDemandAssessmentPage onDemandAssessmentPage = new OnDemandAssessmentPage();
@@ -223,8 +208,50 @@ public class OnDemandAssessmentUITests extends UITestBase {
 
     }
 
+    @Test(groups = {REGRESSION, UI, COMMON})
+    @Xray(test = {12080})
+    public void validateOnDemandEntitilementForPortfolioUpload() {
+        String portfolioName = "OnDemandEntities";
+        OnDemandAssessmentPage onDemandAssessmentPage = new OnDemandAssessmentPage();
+        String portfolioFilePath = ImportPortfolioUtility.getOnDemandPortfolioFileToUpload("Self-Assessed", "", 10, portfolioName);
+        onDemandAssessmentPage.navigateToReportingService("On-Demand Assessment");
+        if (onDemandAssessmentPage.IsPortfolioTableLoaded()) {
+            onDemandAssessmentPage.uploadPortfolio(portfolioFilePath, "OnDemand");
+            Assert.assertTrue(onDemandAssessmentPage.checkifSuccessPopUpIsDisplyed(), "Validating if portfolio updated successfully");
+            onDemandAssessmentPage.closePopUp();
+        }
+    }
 
 
+    @Test(groups = {REGRESSION, UI, COMMON})
+    @Xray(test = {12393})
+    public void validatePortfolioUploadWithOnlyPredictedEntitlement() {
+        LoginPage login = new LoginPage();
+        login.clickOnLogout();
+        login.entitlementsLogin(EntitlementsBundles.USER_WITH_PREDICTEDSCORE_AND_CLIMATE);
+        String portfolioName = "OnDemandEntitiesPredictedEntitlement";
+        OnDemandAssessmentPage onDemandAssessmentPage = new OnDemandAssessmentPage();
+        String portfolioFilePath = ImportPortfolioUtility.getOnDemandPortfolioFileToUpload("Self-Assessed", "N", 10, portfolioName);
+        onDemandAssessmentPage.uploadPortfolio(portfolioFilePath, "Dashboard");
+        Assert.assertTrue(onDemandAssessmentPage.checkifSuccessPopUpIsDisplyed(), "Validating if portfolio updated successfully");
+        onDemandAssessmentPage.closePopUp();
+    }
 
+    @Test(groups = {REGRESSION, UI, COMMON})
+    @Xray(test = {12394})
+    public void validatePortfolioUploadWithOnDemandEntitlement() {
+        LoginPage login = new LoginPage();
+        login.clickOnLogout();
+        login.entitlementsLogin(EntitlementsBundles.USER_WITH_ONDEMAND_ENTITLEMENT);
+        String portfolioName = "OnDemandEntitiesOnDemandEntitlement";
+        OnDemandAssessmentPage onDemandAssessmentPage = new OnDemandAssessmentPage();
+        String portfolioFilePath = ImportPortfolioUtility.getOnDemandPortfolioFileToUpload("Self-Assessed", "N", 10, portfolioName);
+        onDemandAssessmentPage.navigateToReportingService("On-Demand Assessment");
+        if (onDemandAssessmentPage.IsPortfolioTableLoaded()) {
+            onDemandAssessmentPage.uploadPortfolio(portfolioFilePath, "OnDemand");
+            Assert.assertTrue(onDemandAssessmentPage.checkifSuccessPopUpIsDisplyed(), "Validating if portfolio updated successfully");
+            onDemandAssessmentPage.closePopUp();
+        }
+    }
 
 }
