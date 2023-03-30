@@ -677,7 +677,8 @@ public class EMCAccountDetailsPage extends EMCBasePage {
         BrowserUtils.waitAndClick(cancelButton,10);
     }
 
-    public boolean verifyAccountDetails() {
+
+   public boolean verifyAccountDetails() {
         wait(accountKeyInput, 10);
         assertTestCase.assertTrue(pageTitle.isDisplayed(), "Accounts Page - Details Tab is title displayed");
         assertTestCase.assertTrue(detailsTab.isDisplayed(), "Accounts Page - Details Tab is displayed");
@@ -843,4 +844,5 @@ public class EMCAccountDetailsPage extends EMCBasePage {
         int index = userNamesList.indexOf(userElement);
         return userEmailsList.get(index).getText();
     }
+
 }

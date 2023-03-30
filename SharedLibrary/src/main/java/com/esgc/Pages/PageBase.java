@@ -1395,7 +1395,7 @@ public abstract class PageBase {
             //Validate if Menu is available
             Assert.assertTrue(menu.isDisplayed(), "Menu Item is not displayed");
             clickMenu();
-            List<String> menuItemsArray = Arrays.asList("Navigate To", "Dashboard", "Portfolio Analysis",
+            List<String> menuItemsArray = Arrays.asList("Navigate To", "Dashboard", "Portfolio Analysis", "On-Demand Assessment Request",
                     "Portfolio Selection/Upload", "Regulatory Reporting",
                     "Contact Us", "Terms & Conditions", "Log Out");
             //TODO on demand is only in QA as of Feb 2023

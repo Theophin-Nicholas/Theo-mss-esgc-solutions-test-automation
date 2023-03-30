@@ -1391,16 +1391,20 @@ public class AccountsPageTests extends EMCUITestBase {
             Driver.getDriver().switchTo().window(currentTab);
             BrowserUtils.wait(2);
         }
+
         if (link == null) return false;
         return link.endsWith("issuerworkspace") || link.endsWith("dashboard");
+
     }
 
     @Test(groups = {EMC, UI, REGRESSION}, description = "UI | EMC | Roles | Verify User with Admin Role is able to Edit and Save Account Details")
     @Xray(test = {7322, 7323})
     public void editAccountTest() {
+
         navigateToAccountsPage("Test Account", "details");
         EMCAccountDetailsPage detailsPage = new EMCAccountDetailsPage();
         detailsPage.verifyDetailsPage("Admin");
+
         detailsPage.clickOnEditButton();
         assertTestCase.assertTrue(detailsPage.cancelButton.isEnabled(), "Accounts Page - Users Details - Cancel button is enabled for editing");
         assertTestCase.assertTrue(detailsPage.saveButton.isEnabled(), "Accounts Page - Users Details - Save button is enabled for editing");
@@ -1415,6 +1419,7 @@ public class AccountsPageTests extends EMCUITestBase {
         assertTestCase.assertEquals(detailsPage.accountNameInput.getAttribute("value"), "Test Account Edited", "Accounts Page - Users Details - Account Name is edited");
         detailsPage.clickOnEditButton();
         clear(detailsPage.accountNameInput);
+
         detailsPage.accountNameInput.sendKeys("Test Account");
         detailsPage.clickOnSaveButton();
         BrowserUtils.waitForVisibility(detailsPage.notification, 15);
@@ -1721,6 +1726,7 @@ public class AccountsPageTests extends EMCUITestBase {
         for(WebElement data: applicationsPage.firstRow){
             assertTestCase.assertTrue(data.getCssValue("text-align").equals("left"), "Data in the table is left aligned");
         }
+
     }
 
     @Test(groups = {EMC, UI, REGRESSION}, description = "EMC | UI | Delete Assigned Application Test")
