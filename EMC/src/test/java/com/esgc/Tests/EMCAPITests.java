@@ -8,10 +8,9 @@ import com.esgc.Utilities.Xray;
 import com.github.javafaker.Faker;
 import io.restassured.response.Response;
 import org.testng.annotations.Test;
-
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
-
 import static com.esgc.Utilities.Groups.*;
 
 public class EMCAPITests extends APITestBase {
@@ -699,6 +698,7 @@ public class EMCAPITests extends APITestBase {
         response = apiController.getEMCAllAdminUsersPermissionsResponse();
         response.prettyPrint();
         System.out.println("response = " + response.statusCode());
+
         assertTestCase.assertEquals(response.statusCode(), 200, "Status code 200 OK is verified");
         List<String> roleNames = response.jsonPath().getList("");
         List<String> expectedAdminRoleNames = Arrays.asList("activate-account-user", "admin-assign-role-permissions", "admin-assign-role-users",
@@ -721,6 +721,7 @@ public class EMCAPITests extends APITestBase {
         assertTestCase.assertTrue(roleNames.containsAll(expectedAdminRoleNames), "Admin Role names are verified");
         assertTestCase.assertTrue(roleNames.containsAll(expectedViewerRoleNames), "Viewer Role names are verified");
     }
+
 
     @Test(groups = {"EMC", "api"})
     //@Xray(test = {7399, 7400})
