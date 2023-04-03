@@ -8,7 +8,6 @@ import com.esgc.Dashboard.API.APIModels.APIHeatMapPayload;
 import com.esgc.Dashboard.API.APIModels.APIHeatMapSinglePayload;
 import com.esgc.Dashboard.API.APIModels.APIPerformanceChartPayload;
 import com.esgc.Dashboard.API.DashboardEndPoints;
-import com.esgc.EntityProfile.API.EntityProfilePageEndpoints;
 import com.esgc.PortfolioAnalysis.API.PortfolioAnalysisEndpoints;
 import io.restassured.RestAssured;
 import io.restassured.parsing.Parser;
@@ -37,13 +36,15 @@ public class DashboardAPIController extends APIController {
         return response;
     }
 
-    public synchronized Response getExportSourceDocuments(String entityId) {
+    public synchronized Response getControversies(String portfolioId, String region, String sector, String year, String month) {
         Response response = null;
         try {
             response = configSpec()
-                    .pathParam("entity_id", entityId).log().all()
+                    .pathParam("portfolio_id", portfolioId).log().all()
+                    .pathParam("research_line", "controversies")
+                    .body("{\"region\":\"" + region + "\",\"sector\":\"" + sector + "\",\"month\":\"" + month + "\",\"year\":\"" + year + "\"}")
                     .when()
-                    .post(EntityProfilePageEndpoints.POST_EXPORT_SOURCE_DOCUMENTS);
+                    .post(DashboardEndPoints.POST_CONTROVERSIES);
 
             System.out.println(response.prettyPrint());
 

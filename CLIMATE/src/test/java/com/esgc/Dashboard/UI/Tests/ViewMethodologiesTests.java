@@ -64,12 +64,9 @@ public class ViewMethodologiesTests extends DashboardUITestBase {
 
     }
 
-    @Test(groups = {DASHBOARD, REGRESSION, UI, ESG})
+    @Test(groups = {DASHBOARD, REGRESSION, UI})
     @Xray(test = {8304})
-    public void verifyViewMethodologiesEsg_Bundle() {
-        LoginPage login = new LoginPage();
-        login.entitlementsLogin(EntitlementsBundles.USER_WITH_ESG_ENTITLEMENT);
-
+    public void verifyEsgMethodologiesAreRemoved() {
         DashboardPage dashboardPage = new DashboardPage();
         dashboardPage.navigateToPageFromMenu("Dashboard");
         BrowserUtils.wait(4);
@@ -78,8 +75,8 @@ public class ViewMethodologiesTests extends DashboardUITestBase {
 
         List<String> methodologySectionNames = dashboardPage.getMethodologiesSections();
         dashboardPage.clickHideLink();
-        assertTestCase.assertTrue(methodologySectionNames.contains("ESG Assessment Framework"), "Verify Methodologies Sections");
-        assertTestCase.assertTrue(methodologySectionNames.contains("ESG Categories and Subcategories"), "Verify Methodologies Sections");
+        assertTestCase.assertFalse(methodologySectionNames.contains("ESG Assessment Framework"), "Verify Methodologies Sections");
+        assertTestCase.assertFalse(methodologySectionNames.contains("ESG Categories and Subcategories"), "Verify Methodologies Sections");
 
     }
 
