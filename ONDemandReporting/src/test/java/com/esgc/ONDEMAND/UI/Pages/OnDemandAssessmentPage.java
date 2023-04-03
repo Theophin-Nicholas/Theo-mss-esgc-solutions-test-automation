@@ -142,6 +142,15 @@ public class OnDemandAssessmentPage extends CommonPage {
     @FindBy(xpath = "//button[@id='button-report-test-id-1']")
     public WebElement buttonRequestAssessment ;
 
+    @FindBy(xpath="//button[@id='button-prev-status-test-id-1']")
+    public WebElement buttonViewAssessmentStatus ;
+
+    @FindBy(xpath="//button[@id='button-prev-methodologies-test-id-1']")
+    public WebElement buttonMethodologies ;
+
+    @FindBy(xpath="//div[contains(@class,'MuiGrid-root MuiGrid-item MuiGrid-grid')][3]//div/div/div/div/div/div[1]")
+    public WebElement AssessmentsRemaining ;
+
 
 
     public String landingPage = "";
@@ -496,15 +505,32 @@ public class OnDemandAssessmentPage extends CommonPage {
         assertTestCase.assertTrue(BrowserUtils.waitForVisibility(SomeThingWentWrongErrorMessage,20).isDisplayed(), "Validating if error message has displayed");
     }
 
-    /*public void uploadPortfolioLink(String fileName){
-        BrowserUtils.waitForVisibility(uploadPortfolioLink,60).click();
-        clickBrowseFile();
-        BrowserUtils.wait(2);
+   public boolean validateNoPortfolio(){
+        try {
+            return BrowserUtils.waitForVisibility(noPortfolioAvailable, 10).isDisplayed();
+        }catch(Exception e){
+            return false;
+        }
+   }
 
-        String inputFile = fileName;
-        RobotRunner.selectFileToUpload(inputFile);
+    public boolean validateOnDemandReportingLandingPage(){
+        return BrowserUtils.waitForVisibility(OnDemandMenuItem,10).getText().equals("On-Demand Reporting");
+    }
 
-        BrowserUtils.wait(4);
-    }*/
+    public boolean isReequestAssessmentButtonDisabled(){
+        return buttonRequestAssessment.getAttribute("class").contains("disabled");
+    }
+
+    public boolean isViewAssessmentRequestButtonDisabled(){
+        return buttonViewAssessmentStatus.getAttribute("class").contains("disabled");
+    }
+    public boolean isbuttonMethodologiesEnabled(){
+        return buttonMethodologies.getAttribute("class").contains("disabled");
+    }
+
+    public boolean isAssessmentsRemainingOptionAvailable(){
+        return AssessmentsRemaining.getText().contains("Assessments remaining");
+    }
+
 
 }

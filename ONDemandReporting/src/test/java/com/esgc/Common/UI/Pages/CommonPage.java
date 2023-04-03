@@ -1,7 +1,6 @@
 package com.esgc.Common.UI.Pages;
 
 
-import com.esgc.Pages.PageBase;
 import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.ConfigurationReader;
 import com.esgc.Utilities.Driver;
@@ -9,9 +8,9 @@ import com.esgc.Utilities.RobotRunner;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class CommonPage extends UploadPortfolio {
@@ -48,19 +47,29 @@ public class CommonPage extends UploadPortfolio {
     @FindBy(xpath = "//header//li")
     public WebElement pageTitle;
 
+    @FindBy(xpath = "//div[.='Select Action']")
+    public WebElement divSelectAction ;
 
-    //TODO after march release, update them to 'Select Action'
-    @FindBy(xpath = "//div[.='Select Portfolio']/..//span[2]")
+    @FindBy(xpath = "//div[.='Select Action']/following-sibling::div[1]")
+    public WebElement divService ;
+
+    @FindBy(xpath = "//div[.='Select Action']/..//span[2]")
     public List<WebElement> reportingNamesList;
 
-    @FindBy(xpath = "//div[.='Select Portfolio']/..//input")
+    @FindBy(xpath = "//div[.='Select Action']/..//input")
     public List<WebElement> reportingRadioButtonList;
 
     @FindBy(xpath = "//div[.='Select Portfolio']/../div[2]/following-sibling::div/div[1]//span[2]")
-    public List<WebElement> rrPage_portfolioNamesList;
+    public List<WebElement> portfolioNamesList;
 
-    @FindBy (xpath = "//div[text()='Select Portfolio']")
+    @FindBy (xpath = "//div[contains(text(),'Select Portfolio')]")
     public WebElement divSelectPortfolio ;
+
+    @FindBy (xpath = "//div[text()='Select Portfolio']/following-sibling::div/div/p[text()='No portfolio available.']")
+    public WebElement noPortfolioAvailable ;
+
+    @FindBy (xpath = "//li[@heap_menu='On-Demand Reporting']")
+    public WebElement OnDemandMenuItem ;
 
     @FindBy(xpath = "//div[.='Select Portfolio']/../div[2]/following-sibling::div/div[1]//input")
     public List<WebElement> portfolioRadioButtonList;
@@ -145,7 +154,7 @@ public class CommonPage extends UploadPortfolio {
     }
 
     public List<String> getPortfolioList() {
-        return BrowserUtils.getElementsText(rrPage_portfolioNamesList);
+        return BrowserUtils.getElementsText(portfolioNamesList);
     }
 
 
@@ -166,6 +175,10 @@ public class CommonPage extends UploadPortfolio {
         reportingRadioButtonList.get(getReportingList().indexOf(name)).click();
     }
 
+    public void ValidateReportingOptions(List<String> reportingOptions) {
+        BrowserUtils.waitForVisibility(reportingNamesList.get(0),10);
+        assertTestCase.assertTrue(getReportingList().containsAll(reportingOptions),"Validate if all three reporting options are available");
+    }
 
     // this method will be used to click on 1 checkbox that is displayed and enabled
     public List<WebElement> selectEnabledPortfolioOption(){
@@ -216,7 +229,7 @@ public class CommonPage extends UploadPortfolio {
         List<String> selectedPortfolioOptions = new ArrayList<>();
         for (int i = 0; i < portfolioRadioButtonList.size(); i++) {
             if (portfolioRadioButtonList.get(i).isSelected()) {
-                selectedPortfolioOptions.add(rrPage_portfolioNamesList.get(i).getText());
+                selectedPortfolioOptions.add(portfolioNamesList.get(i).getText());
             }
         }
         //System.out.println("selectedPortfolioOptions = " + selectedPortfolioOptions);
@@ -277,5 +290,22 @@ public class CommonPage extends UploadPortfolio {
     public boolean isPortfolioSelectionEnabled(String portfolioName) {
         return portfolioRadioButtonList.get(getPortfolioList().indexOf(portfolioName)).isEnabled();
     }
+    public boolean isSelectActionHeadingAvailable(){
+        return divSelectAction.isDisplayed() && divSelectAction.getText().equals("Select Action") ;
+    }
+
+    public boolean isServiceSubHeadingAvailable(){
+        return divService.isDisplayed() && divService.getText().equals("Service") ;
+    }
+
+    public boolean isPortfolioAvailableInList(String portfolioName){
+        return getPortfolioList().contains(portfolioName);
+    }
+
+    public int getAvailablePortfolioCountt(){
+        return portfolioRadioButtonList.size();
+    }
+
+
 
 }

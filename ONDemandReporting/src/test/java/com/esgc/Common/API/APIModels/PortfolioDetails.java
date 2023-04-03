@@ -18,5 +18,6 @@ public class PortfolioDetails {
     private double taxonomy_coverage;
     private Object non_sovereign_derivatives;
     private Object cash_and_liquidities;
+    private String update_date;
 
 }
