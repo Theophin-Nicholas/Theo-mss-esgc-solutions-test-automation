@@ -3,7 +3,6 @@ package com.esgc.Dashboard.UI.Pages;
 
 import com.esgc.Base.UI.Pages.UploadPage;
 import com.esgc.Dashboard.DB.DBQueries.DashboardQueries;
-import com.esgc.PortfolioAnalysis.UI.Pages.PhysicalRiskPages.PhysicalRiskManagementPages.PhysicalRiskManagementPage;
 import com.esgc.Utilities.*;
 import com.esgc.Utilities.Database.DatabaseDriver;
 import org.openqa.selenium.By;
@@ -31,12 +30,6 @@ public class DashboardPage extends UploadPage {
 
     @FindBy(xpath = "//header[.//*[starts-with(text(),'View')]]")
     public WebElement stickyHeader;
-
-    @FindBy(xpath = "//div[text()='ESG score']")
-    public WebElement averageEsgScoreLabel;
-
-    @FindBy(xpath = "//div[text()='ESG score']/following-sibling::div/div")
-    public WebElement esgScoreValue;
 
     @FindBy(xpath = "//*[@heap_menu='Dashboard']")
     public WebElement dashboardButton;
@@ -236,9 +229,6 @@ public class DashboardPage extends UploadPage {
     @FindBy(xpath = "//table/thead//th[text()='Overall ESG Score']")
     public WebElement OverallESGScoreColoumn;
 
-    @FindBy(xpath = "//table[./thead//th[text()='Overall ESG Score']]/tbody/tr/td[3]")
-    public List<WebElement> OverallESGScoreTabledata;
-
     @FindBy(xpath = "//table/thead//th[text()='Total Critical Controversies']")
     public WebElement TotalCriticalControversiesColoumn;
 
@@ -317,9 +307,6 @@ public class DashboardPage extends UploadPage {
     @FindBy(xpath = "(//div[@id='div-mainlayout']//table)[3]//tbody//td")
     public List<WebElement> heatMapCells;
 
-    @FindBy(xpath = "//td//div[@heap_id='heatmap']/span[2]")
-    public List<WebElement> heatMapEsgScoreCells;
-
     @FindBy(xpath = "(//table[.//thead//div[text()]])[1]//*[@heap_id='heatmap']//span")
     public List<WebElement> heatMapYAxisIndicators;
 
@@ -364,12 +351,6 @@ public class DashboardPage extends UploadPage {
 
     @FindBy(xpath = " //button[@id='button-holdings']/span/div")
     public WebElement verifyPortfolioName;
-
-    @FindBy(xpath = "(//div[@heap_heatmap_id='gridcell']/span[2])[2]")
-    public WebElement overallESGCell;
-
-    @FindBy(xpath = "//p[contains(text(),'ESG performance. They measure the degree to which ')]")
-    public WebElement overallESGDescription;
 
     @FindBy(xpath = "//p[contains(text(),'We score companies for Operations Risk by aggregat')]")
     public WebElement operationRiskDescription;

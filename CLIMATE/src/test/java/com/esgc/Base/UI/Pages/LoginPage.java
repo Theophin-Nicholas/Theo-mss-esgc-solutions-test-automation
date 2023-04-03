@@ -142,7 +142,7 @@ public class LoginPage extends ClimatePageBase {
     @FindBy(xpath = "//body")
     public WebElement body;
 
-    @FindBy(xpath = "//li[text()=\"Moody's ESG360: Dashboard\"]")
+    @FindBy(xpath = "//li[text()=\"Climate Dashboard\"]")
     public WebElement MESGCLeftMenuHeader;
 
     @FindBy(xpath = "//a[text()='Terms of Use']")
