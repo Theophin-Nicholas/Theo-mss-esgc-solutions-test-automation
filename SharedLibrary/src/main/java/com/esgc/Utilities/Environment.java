@@ -78,6 +78,16 @@ public class Environment {
     public static final String USER_WITH_ONDEMAND_ENTITLEMENT_USERNAME ;
     public static final String USER_WITH_ONDEMAND_ENTITLEMENT_PASSWORD ;
 
+    public static final String FIRSTTIME_USER_WITH_ONDEMAND_ENTITLEMENT_USERNAME ;
+    public static final String FIRSTTIME_USER_WITH_ONDEMAND_ENTITLEMENT_PASSWORD ;
+
+    public static final String EUTAXONOMY_SFDR_ESG_ESGPREDICTOR_ONDEMAND_EXPORT_USERNAME ;
+    public static final String EUTAXONOMY_SFDR_ESG_ESGPREDICTOR_ONDEMAND_EXPORT_PASSWORD ;
+
+
+    public static final String EUTAXONOMY_SFDR_USERNAME ;
+    public static final String EUTAXONOMY_SFDR_PASSWORD ;
+
     public static final String PDF_EXPORT_BUNDLE_USERNAME;
     public static final String PDF_EXPORT_BUNDLE_PASSWORD;
     public static final String PDF_EXPORT_ONLY_SOURCEDOCUMENTS_USERNAME;
@@ -88,6 +98,7 @@ public class Environment {
     public static final String PDF_EXPORT_ONLY_PDF_PASSWORD;
     public static final String MESG_APPLICATION_NAME;
     public static  String environment ;
+
 
 
     static String getPropertiesPath() {
@@ -186,5 +197,13 @@ public class Environment {
         USER_WITH_ONDEMAND_ENTITLEMENT_USERNAME  = properties.getProperty("UserWithOnDemandEntitlement_username");
         USER_WITH_ONDEMAND_ENTITLEMENT_PASSWORD = properties.getProperty("UserWithOnDemandEntitlement_password");
 
+        FIRSTTIME_USER_WITH_ONDEMAND_ENTITLEMENT_USERNAME = properties.getProperty("FirstTimeUserWithOnDemandEntitlement_username");
+        FIRSTTIME_USER_WITH_ONDEMAND_ENTITLEMENT_PASSWORD = properties.getProperty("FirstTimeUserWithOnDemandEntitlement_password");
+
+        EUTAXONOMY_SFDR_ESG_ESGPREDICTOR_ONDEMAND_EXPORT_USERNAME = properties.getProperty("EUTaxonomy_SFDR_ESG_ESGPREDICTOR_ONDEMAND_EXPORT_username");
+        EUTAXONOMY_SFDR_ESG_ESGPREDICTOR_ONDEMAND_EXPORT_PASSWORD =  properties.getProperty("EUTaxonomy_SFDR_ESG_ESGPREDICTOR_ONDEMAND_EXPORT_password");
+
+        EUTAXONOMY_SFDR_USERNAME= properties.getProperty("EUTaxonomy_SFDR_username");
+        EUTAXONOMY_SFDR_PASSWORD = properties.getProperty("EUTaxonomy_SFDR_password");
     }
 }

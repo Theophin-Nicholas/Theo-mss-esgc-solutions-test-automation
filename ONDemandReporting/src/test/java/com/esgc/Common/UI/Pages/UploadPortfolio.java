@@ -12,9 +12,6 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -207,14 +204,14 @@ public class UploadPortfolio extends PageBase {
      *
      * @return name of uploaded portfolio
      */
-    public String uploadPortfolio(String filePath, String Page) {
+    public String uploadPortfolio(String filePath, String fromPage) {
         try {
-            if (Page.equals("Dashboard")) {
+            if (fromPage.equals("Dashboard")) {
                 clickPortfolioSelectionButton();
                 wait.until(ExpectedConditions.elementToBeClickable(uploadPortfolioButton));
                 BrowserUtils.clickWithJS(uploadPortfolioButton);
                 BrowserUtils.waitForVisibility(uploadButton, 2);
-            } else if (Page.equals("OnDemand")) {
+            } else if (fromPage.equals("OnDemand")) {
                 wait.until(ExpectedConditions.elementToBeClickable(uploadPortfolioLinkOnDemandPage));
                 BrowserUtils.clickWithJS(uploadPortfolioLinkOnDemandPage);
             }
@@ -230,6 +227,10 @@ public class UploadPortfolio extends PageBase {
             e.printStackTrace();
         }
         return "Portfolio Upload updated_good";
+    }
+
+    public boolean validateIfUploadPortfolioButtonIsAvailable(){
+        return BrowserUtils.waitForVisibility(uploadPortfolioLinkOnDemandPage,10).isDisplayed();
     }
 
     /**

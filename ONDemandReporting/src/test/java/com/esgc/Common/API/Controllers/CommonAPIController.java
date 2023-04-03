@@ -65,6 +65,17 @@ public class CommonAPIController {
                 .when()
                 .delete(CommonEndPoints.DELETE_PORTFOLIO).prettyPeek();
     }
+    public void deletePortfolioByName(String portfolioName) {
+        try {
+            List<String> portfolioIDs = getPortfolioIds(portfolioName);
+            for (String id : portfolioIDs){
+                deletePortfolio(id);
+            }
+        }catch(Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 
     public  void deletePortfolioIfExists(String inputFile){
         try {
@@ -98,11 +109,11 @@ public class CommonAPIController {
     public List<String> getPortfolioIds(String portfolioName) {
         Response response = getPortfolioDetails();
         response.prettyPrint();
-        List<Portfolio> portfolios= Arrays.asList(response.as(Portfolio[].class)).stream().
-                filter(i -> i.getPortfolio_name().equals(portfolioName)).collect(Collectors.toList());
+        List<Portfolio> portfolios= Arrays.asList(response.as(Portfolio.class)).stream().
+                filter(i -> i.getPortfolios().get(0).getPortfolio_name().equals(portfolioName)).collect(Collectors.toList());
         List<String> portfolioIds = new ArrayList<>();
         for(Portfolio portfolio : portfolios){
-            portfolioIds.add(portfolio.getPortfolio_id());
+            portfolioIds.add(portfolio.getPortfolios().get(0).getPortfolio_id());
         }
 
         return portfolioIds;
@@ -128,6 +139,7 @@ public class CommonAPIController {
         try {
             response = configSpec()
                     .when()
+                    .log().all()
                     .get(CommonEndPoints.GET_PORTFOLIO_DETAILS);
         } catch (Exception e) {
             System.out.println("Inside exception " + e.getMessage());
