@@ -255,7 +255,7 @@ public class ConfigurationPageTests extends EMCUITestBase {
         assertTestCase.assertTrue(rolesPage.verifyRole(roleName),"New role is creation is verified");
     }
 
-    @Test(groups = {EMC, UI,REGRESSION})
+    @Test(groups = {EMC, UI,REGRESSION, PROD, SMOKE})
     @Xray(test = {6670})
     public void verifyAdminUserCreateRoleCancelButtonTest() {
         navigateToConfigPage("permission roles");

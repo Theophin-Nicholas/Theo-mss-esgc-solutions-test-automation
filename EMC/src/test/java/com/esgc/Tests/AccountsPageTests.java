@@ -219,7 +219,7 @@ public class AccountsPageTests extends EMCUITestBase {
         detailsPage.cancelButton.click();
     }
 
-    @Test(groups = {EMC, UI, REGRESSION})
+    @Test(groups = {EMC, UI, REGRESSION, PROD, SMOKE})
     @Xray(test = {4806, 6737, 7294, 7296, 7300, 8342})
     public void createNewUserTest() {
         navigateToAccountsPage(accountName, "users");
@@ -327,7 +327,7 @@ public class AccountsPageTests extends EMCUITestBase {
         assertTestCase.assertTrue(currentInfo.get("modifiedBy").split(" ").length >= 5, "Modified by info is displayed");
     }
 
-    @Test(groups = {EMC, UI, SMOKE, REGRESSION})
+    @Test(groups = {EMC, UI, SMOKE, REGRESSION, PROD})
     @Xray(test = {5044, 4809})
     public void verifyAllUsersSortedByNameTest() {
         navigateToAccountsPage(accountName, "users");
@@ -340,7 +340,7 @@ public class AccountsPageTests extends EMCUITestBase {
         assertTestCase.assertTrue(detailsPage.isSortedByName(), "Users Table is displayed");
     }
 
-    @Test(groups = {EMC, UI, REGRESSION, SMOKE})
+    @Test(groups = {EMC, UI, REGRESSION, SMOKE, PROD})
     @Xray(test = {2351, 5043})
     public void verifyAllAccountsSortedByNameTest() {
         navigateToAccountsPage("", "users");
@@ -574,7 +574,7 @@ public class AccountsPageTests extends EMCUITestBase {
         //todo: Search for the user on OKTA - User is present in Okta but not on EMC
     }
 
-    @Test(groups = {EMC, UI, SMOKE})
+    @Test(groups = {EMC, UI, SMOKE, REGRESSION, PROD})
     @Xray(test = {5179, 3994, 7390, 7394, 7396})
     public void verifyUserAssignApplicationRolesTest() {
         navigateToAccountsPage(accountName, "applications");
@@ -1119,7 +1119,7 @@ public class AccountsPageTests extends EMCUITestBase {
 
     }
 
-    @Test(groups = {EMC, UI, REGRESSION}, description = "UI | EMC | Accounts | Verify the ability to search for an account")
+    @Test(groups = {EMC, UI, REGRESSION, PROD}, description = "UI | EMC | Accounts | Verify the ability to search for an account")
     @Xray(test = {4514})
     public void verifySearchForAccountTest() {
         EMCMainPage homePage = new EMCMainPage();
@@ -1281,7 +1281,7 @@ public class AccountsPageTests extends EMCUITestBase {
 
     }
 
-    @Test(groups = {EMC, UI, REGRESSION}, description = "UI | EMC | Roles | Verify User with Admin Role can view Accounts list and Create Account button available")
+    @Test(groups = {EMC, UI, REGRESSION, PROD}, description = "UI | EMC | Roles | Verify User with Admin Role can view Accounts list and Create Account button available")
     @Xray(test = {7315})
     public void verifyUserWithAdminRoleViewAccountsTest() {
         navigateToAccountsPage("", "details");
@@ -1469,7 +1469,7 @@ public class AccountsPageTests extends EMCUITestBase {
         assertTestCase.assertFalse(detailsPage.verifyUser(newFirstName + " " + newLastName), "User is deleted successfully");
     }
 
-    @Test(groups = {EMC, UI, REGRESSION}, description = "UI | EMC | Accounts | Verify once Account creation is canceled, is redirected to Account List page")
+    @Test(groups = {EMC, UI, REGRESSION, SMOKE, PROD}, description = "UI | EMC | Accounts | Verify once Account creation is canceled, is redirected to Account List page")
     @Xray(test = {12713})
     public void verifyAccountCreationCancelTest() {
         EMCMainPage homePage = new EMCMainPage();
@@ -1599,7 +1599,7 @@ public class AccountsPageTests extends EMCUITestBase {
         assertTestCase.assertTrue(importPage.uploadTemplateAndVerifyTemplateWithWrongData(), "Import Users modal is displayed");
     }
 
-    @Test(groups = {EMC, UI, REGRESSION},
+    @Test(groups = {EMC, UI, REGRESSION, SMOKE, PROD},
             description = "UI | EMC | ImportUsers | Verify Mass Import User is only available on User tab inside the Account")
     @Xray(test = {13304})
     public void verifyMassImportUserOnlyAvailableOnUsersTabTest() {
@@ -1619,7 +1619,7 @@ public class AccountsPageTests extends EMCUITestBase {
         assertTestCase.assertFalse(usersPage.isOptionsAvailable("Bulk import"), "Bulk import option is not available");
     }
 
-    @Test(groups = {EMC, UI, REGRESSION, SMOKE},
+    @Test(groups = {EMC, UI, REGRESSION, SMOKE, PROD},
             description = "UI | EMC | Users | Verify the Users page search box behavior")
     @Xray(test = {5494})
     public void verifyUsersPageSearchBoxBehaviorTest() {
