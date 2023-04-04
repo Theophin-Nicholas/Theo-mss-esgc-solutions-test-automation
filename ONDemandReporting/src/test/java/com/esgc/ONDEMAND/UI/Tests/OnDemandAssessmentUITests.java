@@ -81,7 +81,7 @@ public class OnDemandAssessmentUITests extends UITestBase {
         OnDemandAssessmentPage onDemandAssessmentPage = new OnDemandAssessmentPage();
         //onDemandAssessmentPage.selectPortfolioByNameFromPortfolioSelectionModal(portfolioName);
         onDemandAssessmentPage.navigateToPageFromMenu("reportingservice","On-Demand Reporting");
-        BrowserUtils.waitForVisibility(onDemandAssessmentPage.rrPage_portfolioNamesList, 15);
+        BrowserUtils.waitForVisibility(onDemandAssessmentPage.portfolioNamesList, 15);
         assertTestCase.assertTrue(onDemandAssessmentPage.verifyPortfolio(portfolioName), "Portfolio is not available");
         onDemandAssessmentPage.selectPortfolio(portfolioName);
         onDemandAssessmentPage.clickonOnRequestAssessmentButton();
@@ -246,14 +246,14 @@ public class OnDemandAssessmentUITests extends UITestBase {
         OnDemandAssessmentPage onDemandAssessmentPage = new OnDemandAssessmentPage();
         //onDemandAssessmentPage.selectPortfolioByNameFromPortfolioSelectionModal(portfolioName);
         onDemandAssessmentPage.navigateToPageFromMenu("reportingservice","On-Demand Reporting");
-        BrowserUtils.waitForVisibility(onDemandAssessmentPage.rrPage_portfolioNamesList, 15);
+        BrowserUtils.waitForVisibility(onDemandAssessmentPage.portfolioNamesList, 15);
 
         onDemandAssessmentPage.verifyMethodologies();
 
         if(!onDemandAssessmentPage.verifyPortfolio(portfolioName)) {
             onDemandAssessmentPage.uploadPortfolio(portfolioName.replaceAll(" ", ""));
         }
-        BrowserUtils.waitForVisibility(onDemandAssessmentPage.rrPage_portfolioNamesList, 15);
+        BrowserUtils.waitForVisibility(onDemandAssessmentPage.portfolioNamesList, 15);
         assertTestCase.assertTrue(onDemandAssessmentPage.verifyPortfolio(portfolioName), "Portfolio is not available");
         onDemandAssessmentPage.selectPortfolio(portfolioName);
         onDemandAssessmentPage.clickonOnRequestAssessmentButton();
@@ -361,13 +361,13 @@ public class OnDemandAssessmentUITests extends UITestBase {
         OnDemandAssessmentPage ODAPage = new OnDemandAssessmentPage();
         //onDemandAssessmentPage.selectPortfolioByNameFromPortfolioSelectionModal(portfolioName);
         ODAPage.navigateToPageFromMenu("reportingservice","On-Demand Reporting");
-        BrowserUtils.waitForVisibility(ODAPage.rrPage_portfolioNamesList, 15);
+        BrowserUtils.waitForVisibility(ODAPage.portfolioNamesList, 15);
 
         String portfolioName = "500 predicted portfolio";
         if(!ODAPage.verifyPortfolio(portfolioName)) {
             ODAPage.uploadPortfolio(portfolioName.replaceAll(" ", ""));
         }
-        BrowserUtils.waitForVisibility(ODAPage.rrPage_portfolioNamesList, 15);
+        BrowserUtils.waitForVisibility(ODAPage.portfolioNamesList, 15);
         assertTestCase.assertTrue(ODAPage.verifyPortfolio(portfolioName), "Portfolio is not available");
         ODAPage.selectPortfolio(portfolioName);
         ODAPage.clickonOnRequestAssessmentButton();

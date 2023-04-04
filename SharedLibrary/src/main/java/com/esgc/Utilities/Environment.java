@@ -96,8 +96,6 @@ public class Environment {
     public static final String NO_PREVIOUSLY_DOWNLOADED_REGULATORY_REPORTS_PASSWORD;
     public static final String PDF_EXPORT_ONLY_PDF_USERNAME;
     public static final String PDF_EXPORT_ONLY_PDF_PASSWORD;
-    public static final String USER_WITH_ONDEMAND_ENTITLEMENT_USERNAME;
-    public static final String USER_WITH_ONDEMAND_ENTITLEMENT_PASSWORD;
     public static final String USER_WITH_SCORE_PREDICTOR_ENTITLEMENT_USERNAME;
     public static final String USER_WITH_SCORE_PREDICTOR_ENTITLEMENT_PASSWORD;
     public static final String USER_WITH_CORPORATES_ESG_DATA_AND_SCORES_ENTITLEMENT_USERNAME;
