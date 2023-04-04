@@ -4,13 +4,19 @@ package com.esgc.ONDEMAND.UI.Pages;
 import com.esgc.Common.UI.Pages.CommonPage;
 import com.esgc.ONDEMAND.API.Controllers.OnDemandFilterAPIController;
 import com.esgc.Utilities.BrowserUtils;
+import com.esgc.Utilities.ConfigurationReader;
 import com.esgc.Utilities.Driver;
+import com.esgc.Utilities.RobotRunner;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.Browser;
 import org.openqa.selenium.support.FindBy;
 
+import java.awt.*;
+import java.awt.datatransfer.StringSelection;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -145,22 +151,136 @@ public class OnDemandAssessmentPage extends CommonPage {
     @FindBy(xpath = "//button[@id='button-report-test-id-1']")
     public WebElement buttonRequestAssessment ;
 
+
 @FindBy(xpath = "//*[@id=\"topbar-appbar-test-id\"]/div/li")
 public WebElement menuButton;
-    @FindBy(xpath = "//div[contains(text(), 'View Detail')]")
+    @FindBy(xpath = "//div[text()='View Detail']")
     public List<WebElement> viewDetailButton;
 
     @FindBy(xpath = "//li[contains(text(), 'Log Out')]")
     public WebElement logOutButton;
 
-    //*[@id="div-mainlayout"]/div/div[2]/main/div/div/div[2]/div[2]/div[4]/div[3]/span
-
-    //*[@id="div-mainlayout"]/div/div[2]/main/div/div/div[2]/div[2]/div[6]/div[3]/span
+    @FindBy(xpath= "//div[text()= 'remaining']")
+    public WebElement assessmentRemainingHeader;
 
     @FindBy(xpath = "//*[@id='div-mainlayout']/div/div[2]/main/div/div/div[2]/div[2]/div")
     public List<WebElement> coverageList;
 
+    @FindBy(xpath= ("//button[contains(@title, 'Download')]"))
+    public List<WebElement> downloadButtonList;
+
+    @FindBy(xpath="//li[text()='Portfolio Selection/Upload']")
+    public WebElement portfolioSelectionUpload;
+
+    @FindBy(xpath="//a[text()='Upload New']")
+    public WebElement uploadNewLink;
+
+    @FindBy(xpath="//*[@id=\"upload-button-browsefile-test-id\"]")
+    public WebElement browseFileButton;
+
+    public void clickOnPortfolioSelectionUpload(){
+        BrowserUtils.waitForVisibility(portfolioSelectionUpload, 5);
+        portfolioSelectionUpload.click();
+    }
+
+    public void clickOnUploadNewLink(){
+        uploadNewLink.click();
+    }
+
+    public boolean isRequestAssessmentButtonEnabled(){
+        BrowserUtils.wait(4);
+       return buttonRequestAssessment.isEnabled();
+    }
+    public void uploadNewPortfolio(String portfolioName){
+        try {
+            BrowserUtils.wait(5);
+            clickOnMenuButton();
+            BrowserUtils.wait(3);
+            clickOnPortfolioSelectionUpload();
+            BrowserUtils.wait(5);
+            clickOnUploadNewLink();
+            browseFileButton.click();
+            BrowserUtils.wait(2);
+           // String inputFile = System.getProperty("user.dir") + ConfigurationReader.getProperty(portfolioName);
+           // RobotRunner.selectFileToUpload(inputFile);
+
+
+            StringSelection ss = new StringSelection("C:\\Users\\elouadgi\\Downloads\\"+portfolioName);
+            Toolkit.getDefaultToolkit().getSystemClipboard().setContents(ss, null);
+            //imitate mouse events like ENTER, CTRL+C, CTRL+V
+            Robot robot = new Robot();
+            robot.delay(250);
+            robot.keyPress(KeyEvent.VK_ENTER);
+            robot.keyRelease(KeyEvent.VK_ENTER);
+            robot.keyPress(KeyEvent.VK_CONTROL);
+            robot.keyPress(KeyEvent.VK_V);
+            robot.keyRelease(KeyEvent.VK_V);
+            robot.keyRelease(KeyEvent.VK_CONTROL);
+            robot.keyPress(KeyEvent.VK_ENTER);
+            robot.delay(90);
+            robot.keyRelease(KeyEvent.VK_ENTER);
+            BrowserUtils.wait(4);
+            clickUploadButton();
+            while (!checkifSuccessPopUpIsDisplyed()) {
+                BrowserUtils.wait(1);
+            }
+            closePopUp();
+            pressESCKey();
+
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+
+    }
+
+
+    // Select portfolio under portfolio selection upload model
+    public void selectPortfolioFromPortfolioSelectionModel(String portfolioName) {
+        System.out.println("Selecting portfolio: " + portfolioName);
+        try {
+            if (!menu.isDisplayed()) {
+                BrowserUtils.wait(5);
+                clickOnMenuButton();
+                BrowserUtils.wait(3);
+                clickOnPortfolioSelectionUpload();
+                BrowserUtils.wait(5);
+            }
+
+            //div[@id='portfolio-drawer-test-id']//span[@title='PortfolioWithZeroCoverageEntities']
+            String xpathExpression = "\"//div[@id='portfolio-drawer-test-id']//span[@title='"+portfolioName+"']\"";
+            WebElement targetPortfolio = Driver.getDriver().findElement(By.xpath(xpathExpression));
+            System.out.println("Portfolio Located");
+            BrowserUtils.scrollTo(targetPortfolio);
+            BrowserUtils.waitForClickablility(targetPortfolio, 10).click();
+            System.out.println("Portfolio selected");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    // method used to Delete any portfolio
+    public void deletePortfolio(String portfolioName) {
+        System.out.println("Deleting portfolio: " + portfolioName);
+        selectPortfolioFromPortfolioSelectionModel(portfolioName);
+        try {
+            BrowserUtils.waitForClickablility(deleteButton, 15).click();
+            BrowserUtils.waitForVisibility(confirmPortfolioDeletePopupHeader, 10);
+            confirmPortfolioDeleteYesButton.click(); //clicking the Yes button and deleting the portfolio
+            BrowserUtils.wait(6);
+            pressESCKey();
+            System.out.println("Portfolio deleted");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public String landingPage = "";
+
+    public boolean isDownloadButtonEnabled(){
+       return downloadButtonList.get(0).isEnabled();
+    }
+    public String getAssessmentRemainingHeaderText(){
+        return assessmentRemainingHeader.getText();
+    }
 
     public int checkPortfolioWithZeroCoverage(){
         int index =0;
@@ -191,6 +311,7 @@ public WebElement menuButton;
         }
     }
     public void clickOnMenuButton(){
+        BrowserUtils.waitForClickablility(menuButton, 5);
         menuButton.click();
     }
     public void clickOnLogOutButton(){
@@ -211,6 +332,32 @@ public WebElement menuButton;
         return index;
     }
 */
+
+    public void checkViewDetailButtonDisabled (){
+        System.out.println("Checking if view detail button is disabled..... ");
+        /*for(int i =0 ; i < viewDetailButton.size(); i++){
+            if(viewDetailButton.get(i).isEnabled()){
+                System.out.println("the view Detail Button is Enabled"+ viewDetailButton.get(i));
+            } else {
+                System.out.println("the View Detail Button is Disabled"+viewDetailButton.get(i));
+            }
+        }*/
+        for(int i=0; i < viewDetailButton.size(); i++){
+            if(viewDetailButton.get(i).getAttribute("disabled").equals("")){
+                System.out.println("the view detail button is disabled for "+ viewDetailButton.get(i).getText());
+            } else {
+                System.out.println("the view detail button is enabled");
+            }
+        }
+
+    }
+
+    public void isViewDetailButtonDisabled(){
+       // JavascriptExecutor jse = (JavascriptExecutor) Driver.getDriver();
+       // System.out.println("is the View Detail Button disabled " + jse.executeScript("return arguments[0].disabled", viewDetailButton.get(0)));
+
+        viewDetailButton.get(0).getAttribute("disabled");
+    }
     public boolean isViewDetailButtonEnabled(String portfolioName){
         if(IsPortfolioTableLoaded()){
             int index = getPortfolioList().indexOf(portfolioName.trim());
@@ -534,6 +681,11 @@ public WebElement menuButton;
         }*/
     }
 
+    public void verifyZeroAssessmentRemainingForOnDemand(){
+        BrowserUtils.wait(5);
+        assertTestCase.assertTrue(assessmentRemainingHeader.isDisplayed(), "Verification that 0 Assessment Remaining is displayed");
+        assertTestCase.assertEquals(assessmentRemainingHeader.getText(), "0 Assessment remaining", "Verification 0 Assessment Remaining text is done");
+    }
     public void validateDashboardPageButtonForOnDemand(){
         BrowserUtils.waitForVisibility(dashboardPageMenuOption,60);
         assertTestCase.assertTrue(dashboardPageMenuOption.isDisplayed(), "Validate that Dasboard on demand button is visible");
@@ -567,6 +719,20 @@ public WebElement menuButton;
 
     public void validateErrormessage(){
         assertTestCase.assertTrue(BrowserUtils.waitForVisibility(SomeThingWentWrongErrorMessage,20).isDisplayed(), "Validating if error message has displayed");
+    }
+
+    public void validateViewDetailButtonAndDownloadButtonDisabledForZeroCoveragePortfolios(String portfolioName){
+        clickOnViewDetailButton(portfolioName);
+        System.out.println("Validating that View Detail button is disabled");
+        String disabledProperty = viewDetailButton.get(0).getDomProperty("disabled");
+        boolean isEnabled = viewDetailButton.get(0).isEnabled();
+        System.out.println(" attribute of view detail button :    : "+viewDetailButton.get(0).getDomAttribute("disabled"));
+        System.out.println(disabledProperty);
+        System.out.println(isEnabled);
+
+        System.out.println("validation that view Detail button is disable is done");
+        //assertTestCase.assertEquals(false, viewDetailButton.get(0).isEnabled(), "Validating that View Detail button is disabled");
+        assertTestCase.assertFalse(isDownloadButtonEnabled(), "Verification that the download button is disabled");
     }
 
 }
