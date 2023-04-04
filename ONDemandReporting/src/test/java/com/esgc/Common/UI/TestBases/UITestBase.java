@@ -69,8 +69,9 @@ public abstract class UITestBase extends TestBase implements ITestListener {
             if (!isEntitlementsTest) {
                 loginPage.login();
                 BrowserUtils.wait(20);
+                setAccessTokenFromUI();
             }
-            setAccessTokenFromUI();
+
         }
 
     }
@@ -88,10 +89,12 @@ public abstract class UITestBase extends TestBase implements ITestListener {
         Driver.getDriver().navigate().refresh();
     }
 
-  /*  @AfterMethod(onlyForGroups = {ENTITLEMENTS}, groups = {SMOKE, REGRESSION, ENTITLEMENTS})
+   @AfterMethod(onlyForGroups = {ENTITLEMENTS}, groups = {SMOKE, REGRESSION, UI, ENTITLEMENTS})
     public synchronized void teardownBrowserAfterUITesting() {
-        Driver.closeDriver();
-    }*/
+        //Driver.closeDriver();
+       LoginPage login = new LoginPage();
+       if (!Driver.getDriver().getCurrentUrl().endsWith("login")) login.clickOnLogout();
+    }
 
    /* @BeforeMethod(onlyForGroups = {COMMON} )
     public void commonStarttup() {

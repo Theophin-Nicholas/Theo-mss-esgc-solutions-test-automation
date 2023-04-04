@@ -730,7 +730,8 @@ public abstract class PageBase {
             // Dynamic xpath - Helps us to pass page names "Dashboard", "Portfolio Analysis", "Regulatory Reporting"
             String pageXpath = "//li[text()='" + navigateTo + "']";
             WebElement pageElement = Driver.getDriver().findElement(By.xpath(pageXpath));
-            wait.until(ExpectedConditions.elementToBeClickable(pageElement)).click();
+           // wait.until(ExpectedConditions.elementToBeClickable(pageElement)).click();
+            BrowserUtils.waitForVisibility(pageElement,20).click();
         }
     }
 
@@ -1395,7 +1396,7 @@ public abstract class PageBase {
             //Validate if Menu is available
             Assert.assertTrue(menu.isDisplayed(), "Menu Item is not displayed");
             clickMenu();
-            List<String> menuItemsArray = Arrays.asList("Navigate To", "Dashboard", "Portfolio Analysis",
+            List<String> menuItemsArray = Arrays.asList("Navigate To", "Dashboard", "Portfolio Analysis", "On-Demand Assessment Request",
                     "Portfolio Selection/Upload", "Regulatory Reporting",
                     "Contact Us", "Terms & Conditions", "Log Out");
             //TODO on demand is only in QA as of Feb 2023

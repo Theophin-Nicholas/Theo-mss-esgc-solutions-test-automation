@@ -72,9 +72,21 @@ public class Environment {
     public static final String ADMIN_ROLE_KEY;
     public static final String VIEWER_ROLE_KEY;
     public static final String FULFILLMENT_ROLE_KEY;
+    public static final String USER_WITH_PREDICTEDSCORE_AND_CLIMATE_USERNAME ;
+    public static final String USER_WITH_PREDICTEDSCORE_AND_CLIMATE_PASSWORD ;
+
+    public static final String USER_WITH_ONDEMAND_ENTITLEMENT_USERNAME ;
+    public static final String USER_WITH_ONDEMAND_ENTITLEMENT_PASSWORD ;
+
+    public static final String FIRSTTIME_USER_WITH_ONDEMAND_ENTITLEMENT_USERNAME ;
+    public static final String FIRSTTIME_USER_WITH_ONDEMAND_ENTITLEMENT_PASSWORD ;
+
+    public static final String EUTAXONOMY_SFDR_ESG_ESGPREDICTOR_ONDEMAND_EXPORT_USERNAME ;
+    public static final String EUTAXONOMY_SFDR_ESG_ESGPREDICTOR_ONDEMAND_EXPORT_PASSWORD ;
 
 
-
+    public static final String EUTAXONOMY_SFDR_USERNAME ;
+    public static final String EUTAXONOMY_SFDR_PASSWORD ;
 
     public static final String PDF_EXPORT_BUNDLE_USERNAME;
     public static final String PDF_EXPORT_BUNDLE_PASSWORD;
@@ -102,7 +114,6 @@ public class Environment {
                 File.separator + "test" + File.separator + "resources" +
                 File.separator + "environments" + File.separator + "%s.properties";
     }
-
 
     static {
         Properties properties = null;
@@ -196,5 +207,16 @@ public class Environment {
         USER_WITH_CORPORATES_ESG_DATA_AND_SCORES_ENTITLEMENT_PASSWORD = properties.getProperty("corporates_esg_data_and_scores_password");
         ODA_ESG_PREDICTOR_DATA_ENTITLEMENT_USERNAME = properties.getProperty("oda_esg_predictor_data_username");
         ODA_ESG_PREDICTOR_DATA_ENTITLEMENT_PASSWORD = properties.getProperty("oda_esg_predictor_data_password");
+        USER_WITH_PREDICTEDSCORE_AND_CLIMATE_USERNAME  = properties.getProperty("UserOnlyWithPredictedAndClimateEntitlement_username");
+        USER_WITH_PREDICTEDSCORE_AND_CLIMATE_PASSWORD = properties.getProperty("UserOnlyWithPredictedAndClimateEntitlement_password");
+
+        FIRSTTIME_USER_WITH_ONDEMAND_ENTITLEMENT_USERNAME = properties.getProperty("FirstTimeUserWithOnDemandEntitlement_username");
+        FIRSTTIME_USER_WITH_ONDEMAND_ENTITLEMENT_PASSWORD = properties.getProperty("FirstTimeUserWithOnDemandEntitlement_password");
+
+        EUTAXONOMY_SFDR_ESG_ESGPREDICTOR_ONDEMAND_EXPORT_USERNAME = properties.getProperty("EUTaxonomy_SFDR_ESG_ESGPREDICTOR_ONDEMAND_EXPORT_username");
+        EUTAXONOMY_SFDR_ESG_ESGPREDICTOR_ONDEMAND_EXPORT_PASSWORD =  properties.getProperty("EUTaxonomy_SFDR_ESG_ESGPREDICTOR_ONDEMAND_EXPORT_password");
+
+        EUTAXONOMY_SFDR_USERNAME= properties.getProperty("EUTaxonomy_SFDR_username");
+        EUTAXONOMY_SFDR_PASSWORD = properties.getProperty("EUTaxonomy_SFDR_password");
     }
 }

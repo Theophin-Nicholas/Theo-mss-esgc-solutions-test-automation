@@ -21,8 +21,8 @@ public class OnDemandAssessmentPage extends CommonPage {
     @FindBy(xpath = "//div[@data-test='sentinelStart']/following-sibling::div//div[contains(@class,'MuiToolbar-root')]/div[text()]")
     public WebElement menuOptionPageHeader;
 
-    @FindBy(xpath = "//li[@heap_menu='On-Demand Assessment Request']")
-    public WebElement onDemandAssessmentRequest;
+    @FindBy(xpath = "//li[@heap_menu='On-Demand Reporting']")
+    public WebElement onDemandReportingMenu;
 
     @FindBy(xpath = "//div[@data-testid='remove-entity']")
     public List<WebElement> removeButtons;
@@ -146,6 +146,15 @@ public class OnDemandAssessmentPage extends CommonPage {
     @FindBy(xpath = "//button[@id='button-report-test-id-1']")
     public WebElement buttonRequestAssessment;
 
+    @FindBy(xpath="//button[@id='button-prev-status-test-id-1']")
+    public WebElement buttonViewAssessmentStatus ;
+
+    @FindBy(xpath="//button[@id='button-prev-methodologies-test-id-1']")
+    public WebElement buttonMethodologies ;
+
+    @FindBy(xpath="//div[contains(@class,'MuiGrid-root MuiGrid-item MuiGrid-grid')][3]//div/div/div/div/div/div[1]")
+    public WebElement AssessmentsRemaining ;
+
     @FindBy(xpath = "//div[@data-testid='input-email']//input")
     public List<WebElement> emailInputs;
 
@@ -174,7 +183,6 @@ public class OnDemandAssessmentPage extends CommonPage {
 
 
     public String landingPage = "";
-
 
     public void goToSendRequestPage(String portfolioName) {
         if (landingPage.equals("")) getLandingPage(portfolioName);
@@ -367,7 +375,7 @@ public class OnDemandAssessmentPage extends CommonPage {
 
     public boolean isOnDemandAssessmentRequestAvailableInMenu() {
         try {
-            return onDemandAssessmentRequest.isDisplayed();
+            return onDemandReportingMenu.isDisplayed();
         } catch (Exception e) {
             return false;
         }
@@ -481,10 +489,10 @@ public class OnDemandAssessmentPage extends CommonPage {
     }
 
     public boolean validateIfOndemandmenuOptionIsEnabled() {
-        while (onDemandAssessmentRequest.getAttribute("aria-disabled").equals("true")) {
+        while (onDemandReportingMenu.getAttribute("aria-disabled").equals("true")) {
             BrowserUtils.wait(1);
         }
-        if (onDemandAssessmentRequest.getAttribute("aria-disabled").equals("false")) return true;
+        if (onDemandReportingMenu.getAttribute("aria-disabled").equals("false")) return true;
         else return false;
 
     }
@@ -494,7 +502,7 @@ public class OnDemandAssessmentPage extends CommonPage {
         BrowserUtils.waitForClickablility(buttonRequestAssessment, 60).click();
 
        /* if (validateIfOndemandmenuOptionIsEnabled()) {
-            onDemandAssessmentRequest.click();
+            onDemandReportingMenu.click();
         }*/
     }
 
@@ -656,4 +664,32 @@ public class OnDemandAssessmentPage extends CommonPage {
         BrowserUtils.waitForVisibility(remainingAssessmentLimit, 30);
         return Integer.parseInt(remainingAssessmentLimit.getText().replaceAll("\\D",""));
     }
+   public boolean validateNoPortfolio(){
+        try {
+            return BrowserUtils.waitForVisibility(noPortfolioAvailable, 10).isDisplayed();
+        }catch(Exception e){
+            return false;
+        }
+   }
+
+    public boolean validateOnDemandReportingLandingPage(){
+        return BrowserUtils.waitForVisibility(OnDemandMenuItem,10).getText().equals("On-Demand Reporting");
+    }
+
+    public boolean isReequestAssessmentButtonDisabled(){
+        return buttonRequestAssessment.getAttribute("class").contains("disabled");
+    }
+
+    public boolean isViewAssessmentRequestButtonDisabled(){
+        return buttonViewAssessmentStatus.getAttribute("class").contains("disabled");
+    }
+    public boolean isbuttonMethodologiesEnabled(){
+        return buttonMethodologies.getAttribute("class").contains("disabled");
+    }
+
+    public boolean isAssessmentsRemainingOptionAvailable(){
+        return AssessmentsRemaining.getText().contains("Assessments remaining");
+    }
+
+
 }

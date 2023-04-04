@@ -35,7 +35,7 @@ public class ApplicationPageTests extends EMCUITestBase {
             assertTestCase.assertTrue(applicationsPage.verifyApplication(applicationName), "Application is displayed");
 
             //On Account Details view, select USERS tab
-            applicationsPage.selectApplication(applicationName);
+            applicationsPage.goToApplication(applicationName);
             //BrowserUtils.wait(10);
             EMCApplicationDetailsPage detailsPage = new EMCApplicationDetailsPage();
             switch (tabName.toLowerCase()) {
@@ -66,7 +66,7 @@ public class ApplicationPageTests extends EMCUITestBase {
         String expApplicationName = emcApplicationsPage.getApplicationNames().get(0);
         String expApplicationURL = emcApplicationsPage.applicationLinks.get(0).getText();
         //Click on Application Name
-        emcApplicationsPage.selectApplication(expApplicationName);
+        emcApplicationsPage.goToApplication(expApplicationName);
 
         EMCApplicationDetailsPage emcApplicationDetailsPage = new EMCApplicationDetailsPage();
         //New screen should be opened having three sections when user click into a specific application
@@ -282,7 +282,7 @@ public class ApplicationPageTests extends EMCUITestBase {
         wait(applicationsPage.notification, 10);
         assertTestCase.assertTrue(applicationsPage.notification.isDisplayed(), "Application Created Notification is displayed");
         assertTestCase.assertTrue(applicationsPage.verifyApplication(applicationName), "Application is displayed in the list");
-        applicationsPage.selectApplication(applicationName);
+        applicationsPage.goToApplication(applicationName);
         EMCApplicationDetailsPage detailsPage = new EMCApplicationDetailsPage();
         detailsPage.clickOnProductsTab();
         assertTestCase.assertTrue(detailsPage.addProductButton.isDisplayed(), "Add Product Button is displayed");
@@ -623,7 +623,7 @@ public class ApplicationPageTests extends EMCUITestBase {
             }
             assertTestCase.fail("Viewer role user is able to create an application");
         }
-        applicationsPage.selectApplication(testWebAppName);
+        applicationsPage.goToApplication(testWebAppName);
         EMCApplicationDetailsPage detailsPage = new EMCApplicationDetailsPage();
         detailsPage.verifyApplicationDetails("Viewer");
         closeAndLoginWithAdmin();
@@ -789,5 +789,45 @@ public class ApplicationPageTests extends EMCUITestBase {
         BrowserUtils.waitForPageToLoad(10);
         LoginPageEMC loginPageEMC = new LoginPageEMC();
         loginPageEMC.loginEMCWithParams(Environment.VIEWER_USER_USERNAME, Environment.VIEWER_USER_PASSWORD);
+    }
+
+    @Test(groups = {EMC, UI, REGRESSION}, description = "UI | EMC | API | Application Delete Tests")
+    @Xray(test = {13925, 13928, 13934})
+    public void verifyApplicationDeleteTests() {
+        navigateToApplicationsPage("", "roles");
+        wait(applicationsPage.applications, 10);
+        EMCAPIController apiController = new EMCAPIController();
+        if(apiController.verifyApplication(apiController.getApplicationId("QA Delete 1"))){
+            apiController.deleteEMCApplicationResponse(apiController.getApplicationId("QA Delete 1"));
+        }
+        if(apiController.verifyApplication(apiController.getApplicationId("QA Delete 2"))){
+            apiController.deleteEMCApplicationResponse(apiController.getApplicationId("QA Delete 2"));
+        }
+        BrowserUtils.wait(5);
+        applicationsPage.createApplication("QA Delete 1", "qadelete"+faker.number().digits(5), "https://google.com", "external");
+        applicationsPage.createApplication("QA Delete 2", "qadelete"+faker.number().digits(5), "https://google.com", "external");
+        BrowserUtils.wait(3);
+        assertTestCase.assertTrue(applicationsPage.verifyApplication("QA Delete 1"), "Application is created");
+        assertTestCase.assertTrue(applicationsPage.verifyApplication("QA Delete 2"), "Application is created");
+        applicationsPage.searchApplication("QA Delete");
+        applicationsPage.checkBoxes.get(0).click();
+        assertTestCase.assertTrue(applicationsPage.deleteButton.isEnabled(), "Delete button is enabled");
+        assertTestCase.assertTrue(applicationsPage.deleteButton.isDisplayed(), "Delete button is displayed");
+        applicationsPage.checkBoxes.get(1).click();
+        assertTestCase.assertTrue(applicationsPage.deleteButton.isEnabled(), "Delete button is enabled");
+        assertTestCase.assertTrue(applicationsPage.deleteButton.isDisplayed(), "Delete button is displayed");
+        applicationsPage.clickOnDeleteButton();
+        assertTestCase.assertTrue(applicationsPage.deletePopupDeleteButton.isDisplayed(), "Delete confirmation - Delete button is displayed");
+        assertTestCase.assertTrue(applicationsPage.deletePopupCancelButton.isDisplayed(), "Delete confirmation - Cancel button is displayed");
+        BrowserUtils.waitForClickablility(applicationsPage.deletePopupCancelButton, 10).click();
+        assertTestCase.assertTrue(applicationsPage.verifyApplication("QA Delete 1", false), "Application is not deleted");
+        assertTestCase.assertTrue(applicationsPage.verifyApplication("QA Delete 2", false), "Application is not deleted");
+        BrowserUtils.wait(3);
+        applicationsPage.clickOnDeleteButton();
+        BrowserUtils.waitForClickablility(applicationsPage.deletePopupDeleteButton, 10).click();
+        BrowserUtils.waitForVisibility(applicationsPage.notification, 10);
+        assertTestCase.assertTrue(applicationsPage.notification.isDisplayed(), "Application Deleted Notification is displayed");
+        assertTestCase.assertFalse(applicationsPage.verifyApplication("QA Delete 1", false), "Application is deleted");
+        assertTestCase.assertFalse(applicationsPage.verifyApplication("QA Delete 2", false), "Application is deleted");
     }
 }

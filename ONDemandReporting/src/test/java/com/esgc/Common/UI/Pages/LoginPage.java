@@ -327,6 +327,29 @@ public class LoginPage extends PageBase {
                 wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.ODA_ESG_PREDICTOR_DATA_ENTITLEMENT_PASSWORD);
                 break;
             default:
+            case USER_WITH_PREDICTEDSCORE_AND_CLIMATE:
+                wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.USER_WITH_PREDICTEDSCORE_AND_CLIMATE_USERNAME, Keys.ENTER);
+                wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.USER_WITH_PREDICTEDSCORE_AND_CLIMATE_PASSWORD);
+                break;
+            case USER_WITH_ONDEMAND_ENTITLEMENT:
+                wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.USER_WITH_ONDEMAND_ENTITLEMENT_USERNAME, Keys.ENTER);
+                wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.USER_WITH_ONDEMAND_ENTITLEMENT_PASSWORD);
+                break;
+            case USER_WITH_ONLYONDEMAND_ENTITLEMENT_FIRSTTIMEUSER:
+                wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.FIRSTTIME_USER_WITH_ONDEMAND_ENTITLEMENT_USERNAME, Keys.ENTER);
+                wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.FIRSTTIME_USER_WITH_ONDEMAND_ENTITLEMENT_PASSWORD);
+                break;
+
+            case USER_WITH_EUTAXONOMY_SFDR_ESG_ESGPREDICTOR_ONDEMAND_EXPORT:
+                wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.EUTAXONOMY_SFDR_ESG_ESGPREDICTOR_ONDEMAND_EXPORT_USERNAME, Keys.ENTER);
+                wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.EUTAXONOMY_SFDR_ESG_ESGPREDICTOR_ONDEMAND_EXPORT_PASSWORD);
+                break;
+            case USER_WITH_EUTAXONOMY_SFDR_ENTITLEMENT:
+                wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.EUTAXONOMY_SFDR_USERNAME, Keys.ENTER);
+                wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.EUTAXONOMY_SFDR_PASSWORD);
+                break;
+
+                default:
                 Assert.fail("Bundle not found!");
         }
      /*   if (!termsAndConditionsCheckBox.isSelected())

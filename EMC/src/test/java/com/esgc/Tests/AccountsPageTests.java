@@ -1390,16 +1390,20 @@ public class AccountsPageTests extends EMCUITestBase {
             Driver.getDriver().switchTo().window(currentTab);
             BrowserUtils.wait(2);
         }
+
         if (link == null) return false;
         return link.endsWith("issuerworkspace") || link.endsWith("dashboard");
+
     }
 
     @Test(groups = {EMC, UI, REGRESSION}, description = "UI | EMC | Roles | Verify User with Admin Role is able to Edit and Save Account Details")
     @Xray(test = {7322, 7323})
     public void editAccountTest() {
+
         navigateToAccountsPage("Test Account", "details");
         EMCAccountDetailsPage detailsPage = new EMCAccountDetailsPage();
         detailsPage.verifyDetailsPage("Admin");
+
         detailsPage.clickOnEditButton();
         assertTestCase.assertTrue(detailsPage.cancelButton.isEnabled(), "Accounts Page - Users Details - Cancel button is enabled for editing");
         assertTestCase.assertTrue(detailsPage.saveButton.isEnabled(), "Accounts Page - Users Details - Save button is enabled for editing");
@@ -1414,6 +1418,7 @@ public class AccountsPageTests extends EMCUITestBase {
         assertTestCase.assertEquals(detailsPage.accountNameInput.getAttribute("value"), "Test Account Edited", "Accounts Page - Users Details - Account Name is edited");
         detailsPage.clickOnEditButton();
         clear(detailsPage.accountNameInput);
+
         detailsPage.accountNameInput.sendKeys("Test Account");
         detailsPage.clickOnSaveButton();
         BrowserUtils.waitForVisibility(detailsPage.notification, 15);
@@ -1543,7 +1548,6 @@ public class AccountsPageTests extends EMCUITestBase {
         assertTestCase.assertTrue(detailsPage.verifyProduct(mesgApp, product), "ESG On-Demand Assessment product is assigned");
         //User is able to verify "SME Assessment Limit" is not present/enable
         detailsPage.selectApplication(mesgApp);
-        detailsPage.esgOnDemandAssessmentEditButton.click();
         assertTestCase.assertTrue(detailsPage.smePurchasedAssessmentInput.isDisplayed(), "SME Purchased Assessments Limit is present");
         assertTestCase.assertTrue(detailsPage.smeUsedAssessmentInput.isDisplayed(), "SME Used Assessments Limit is present");
     }
@@ -1648,6 +1652,7 @@ public class AccountsPageTests extends EMCUITestBase {
         navigateToAccountsPage(accountName, "applications");
         EMCAccountDetailsPage detailsPage = new EMCAccountDetailsPage();
         String mesgAppName = Environment.MESG_APPLICATION_NAME;
+        System.out.println("mesgAppName = " + mesgAppName);
         if (!detailsPage.verifyApplication(mesgAppName))
             detailsPage.assignApplication(mesgAppName);
         detailsPage.clickOnUsersTab();
@@ -1705,5 +1710,64 @@ public class AccountsPageTests extends EMCUITestBase {
         for(WebElement data: applicationsPage.firstRow){
             assertTestCase.assertTrue(data.getCssValue("text-align").equals("left"), "Data in the table is left aligned");
         }
+
+    }
+
+    @Test(groups = {EMC, UI, REGRESSION}, description = "EMC | UI | Delete Assigned Application Test")
+    @Xray(test = {6542, 13935, 13936, 13938})
+    public void verifyDeleteAssignedApplicationsTest() {
+        EMCAPIController apiController = new EMCAPIController();
+        //create new application
+        String applicationId = apiController.getApplicationId("QA Delete 3");
+        if(applicationId != null) apiController.deleteEMCApplicationResponse(applicationId);
+        apiController.createApplicationAndVerify("qadelete3", "QA Delete 3", "https://www.qadelete3.com","mss", "ExternalApplication");
+        //create new product for the application
+        applicationId = apiController.getApplicationId("QA Delete 3");
+        System.out.println("applicationId = " + applicationId);
+        apiController.createProductForApplicationResponse(applicationId,"QA Delete 3 Product", "qadelete3product").prettyPrint();
+        apiController.verifyProductForApplication(applicationId, "QA Delete 3 Product");
+        apiController.createRoleForApplicationResponse(applicationId, "QA Delete 3 Role", "qadelete3role").prettyPrint();
+        apiController.verifyRoleForApplication(applicationId, "QA Delete 3 Role");
+        //assign application to account
+        String accountId = Environment.QA_TEST_ACCOUNT_ID;
+        apiController.assignApplicationToAccountResponse(accountId, applicationId);
+        //verify application assigned to account
+        apiController.verifyApplication(accountId, applicationId);
+        //assign product to account
+        String productId = apiController.getProductId(applicationId, "QA Delete 3 Product");
+        System.out.println("productId = " + productId);
+        apiController.putProductToAccount(accountId, applicationId, productId);
+        //verify product assigned to account
+        apiController.verifyProductForAccount(accountId, productId);
+        //assign application role to active user
+        String userId = apiController.getUserId(accountId, activeUserName);
+        System.out.println("userId = " + userId);
+        String applicationRoleId = apiController.getRoleId(applicationId, "QA Delete 3 Role");
+        System.out.println("applicationRoleId = " + applicationRoleId);
+        apiController.assignApplicationRoleToUser(applicationRoleId, userId);
+        //verify application role assigned to user
+        apiController.verifyApplicationRoleForUser(userId, applicationRoleId);
+        //delete application
+        navigateToMenu("Applications");
+        EMCApplicationsPage applicationsPage = new EMCApplicationsPage();
+        applicationsPage.deleteApplication("QA Delete 3");
+        //verify application deleted
+        navigateToAccountsPage(accountName, "applications");
+        EMCAccountDetailsPage detailsPage = new EMCAccountDetailsPage();
+        assertTestCase.assertFalse(detailsPage.verifyApplication("QA Delete 3"), "Application is deleted");
+        //verify application role deleted
+        detailsPage.clickOnProductsTab();
+        assertTestCase.assertFalse(detailsPage.verifyProduct("QA Delete 3 Product"), "Product is deleted");
+        //verify application role unassigned from user
+        detailsPage.clickOnUsersTab();
+        detailsPage.searchUser(activeUserName);
+        EMCUserDetailsPage userPage = new EMCUserDetailsPage();
+        assertTestCase.assertFalse(userPage.verifyApplicationRole("QA Delete 3"), "Application role is unassigned from user");
+        //Tell me a progrramming joke
+        // "Knock knock."
+        //Who's there?
+        //Interrupting cow.
+        //Interrupting cow wh-
+        //MOOO
     }
 }

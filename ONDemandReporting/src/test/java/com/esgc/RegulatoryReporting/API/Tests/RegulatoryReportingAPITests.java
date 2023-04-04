@@ -1,6 +1,7 @@
 package com.esgc.RegulatoryReporting.API.Tests ;
 
 
+import com.esgc.Common.API.APIModels.Portfolio;
 import com.esgc.Common.API.APIModels.PortfolioDetails;
 import com.esgc.Common.API.TestBase.CommonTestBase;
 import com.esgc.Common.UI.Pages.LoginPage;
@@ -96,12 +97,12 @@ public class RegulatoryReportingAPITests extends CommonTestBase {
         test.info("Navigated to Regulatory Reporting Page");
         getExistingUsersAccessTokenFromUI();
         RegulatoryReportingAPIController apiController = new RegulatoryReportingAPIController();
-        PortfolioDetails[] apiResponse = apiController.getPortfolioDetails().as(PortfolioDetails[].class);
-        for (PortfolioDetails portfolio : apiResponse) {
-            String portfolioName = portfolio.getPortfolio_name();
+        Portfolio[] apiResponse = apiController.getPortfolioDetails().as(Portfolio[].class);
+        for (Portfolio portfolio : apiResponse) {
+            String portfolioName = portfolio.getPortfolios().get(0).getPortfolio_name();
             int index = reportingPage.selectPortfolioOptionByName(portfolioName);
             List<Integer> UIYears = BrowserUtils.convertStringListToIntList(reportingPage.getReportingFor_YearList(portfolioName, index), Integer::parseInt);
-            if (portfolio.getReporting_years().size() > 0 && BrowserUtils.convertStringListToIntList(portfolio.getReporting_years(), Integer::parseInt).stream().min(Integer::compare).get() < 2019) {
+            if (portfolio.getPortfolios().get(0).getReporting_years().size() > 0 && BrowserUtils.convertStringListToIntList(portfolio.getPortfolios().get(0).getReporting_years(), Integer::parseInt).stream().min(Integer::compare).get() < 2019) {
                 assertTestCase.assertTrue(UIYears.stream().min(Integer::compare).get() > 2018, "Validating that years are not showing less tyhan 2019");
             }
             reportingPage.deSelectPortfolioOptionByName(portfolioName);

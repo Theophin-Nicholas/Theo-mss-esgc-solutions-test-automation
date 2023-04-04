@@ -86,4 +86,18 @@ public class OnDemandAssessmentQueries {
         return companiesWithPredictedScores/companiesWithEsg*100+"%";
     }
 
+    public List<String> getOnDemandOrbisIDsForPortfolioCreation(String ScoreQuality, String DataAlliance, int dataCount) {
+        String query = "" ;
+        query = "select * from df_target.entity_score_type est where " ;
+        if (DataAlliance!=""){
+            query = query + "DATA_ALLIANCE= '" + DataAlliance+ "' And ";
+        }
+        query = query + "SCORE_QUALITY= '" + ScoreQuality+ "' and Entity_Status = 'Active' and IS_Current = 'Y' limit " + dataCount;
+        List<String> dataList =  new ArrayList<>();
+        for (Map<String, Object> result : DatabaseDriver.getQueryResultMap(query)){
+            dataList.add(result.get("ORBIS_ID").toString());
+        }
+        return dataList ;
+    }
+
 }

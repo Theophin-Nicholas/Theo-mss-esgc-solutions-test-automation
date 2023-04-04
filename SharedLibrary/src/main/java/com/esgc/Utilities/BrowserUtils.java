@@ -11,9 +11,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 
-import java.io.File;
-import java.io.FilenameFilter;
-import java.io.IOException;
+import java.io.*;
 import java.text.BreakIterator;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
@@ -27,11 +25,11 @@ public class BrowserUtils {
      *
      * @return path
      */
-    public static String downloadPath() {
-        String path = System.getProperty("user.dir") + File.separator + "src" +
-                File.separator + "test" + File.separator + "resources" + File.separator + "download";
+    public static String downloadPath (){
 
-        return path;
+        return System.getProperty("user.dir") + File.separator + "src" +
+                    File.separator + "test" + File.separator + "resources" + File.separator + "download";
+
     }
 
     /**

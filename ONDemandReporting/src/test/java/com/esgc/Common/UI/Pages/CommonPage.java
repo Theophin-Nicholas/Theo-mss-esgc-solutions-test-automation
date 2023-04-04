@@ -1,7 +1,6 @@
 package com.esgc.Common.UI.Pages;
 
 
-import com.esgc.Pages.PageBase;
 import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.ConfigurationReader;
 import com.esgc.Utilities.Driver;
@@ -9,13 +8,13 @@ import com.esgc.Utilities.RobotRunner;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
-public class CommonPage extends PageBase {
+public class CommonPage extends UploadPortfolio {
 
     //=============== Summary Header
     @FindBy(xpath = "//div[@heap_id='portfolio-selection']//div[1]/span")
@@ -49,19 +48,29 @@ public class CommonPage extends PageBase {
     @FindBy(xpath = "//header//li")
     public WebElement pageTitle;
 
+    @FindBy(xpath = "//div[.='Select Action']")
+    public WebElement divSelectAction ;
 
-    //TODO after march release, update them to 'Select Action'
-    @FindBy(xpath = "//div[.='Select Portfolio']/..//span[2]")
+    @FindBy(xpath = "//div[.='Select Action']/following-sibling::div[1]")
+    public WebElement divService ;
+
+    @FindBy(xpath = "//div[.='Select Action']/..//span[2]")
     public List<WebElement> reportingNamesList;
 
-    @FindBy(xpath = "//div[.='Select Portfolio']/..//input")
+    @FindBy(xpath = "//div[.='Select Action']/..//input")
     public List<WebElement> reportingRadioButtonList;
 
     @FindBy(xpath = "//div[.='Select Portfolio']/../div[2]/following-sibling::div/div[1]//span[2]")
-    public List<WebElement> rrPage_portfolioNamesList;
+    public List<WebElement> portfolioNamesList;
 
-    @FindBy (xpath = "//div[text()='Select Portfolio']")
+    @FindBy (xpath = "//div[contains(text(),'Select Portfolio')]")
     public WebElement divSelectPortfolio ;
+
+    @FindBy (xpath = "//div[text()='Select Portfolio']/following-sibling::div/div/p[text()='No portfolio available.']")
+    public WebElement noPortfolioAvailable ;
+
+    @FindBy (xpath = "//li[@heap_menu='On-Demand Reporting']")
+    public WebElement OnDemandMenuItem ;
 
     @FindBy(xpath = "//div[.='Select Portfolio']/../div[2]/following-sibling::div/div[1]//input")
     public List<WebElement> portfolioRadioButtonList;
@@ -70,42 +79,7 @@ public class CommonPage extends PageBase {
     public WebElement uploadAnotherPortfolioLink;
 
     //-----
-    public void clickBrowseFile() {
-        wait.until(ExpectedConditions.elementToBeClickable(browseFileButton));
-        browseFileButton.click();
 
-    }
-
-    //To Upload the portfolio
-    public void clickUploadButton() {
-        //wait.until(ExpectedConditions.elementToBeClickable(uploadButton));
-        BrowserUtils.waitForClickablility(uploadButton, 30);
-        uploadButton.click();
-    }
-
-    //Success method after portfolio uploaded successfully
-    public boolean checkifSuccessPopUpIsDisplyed() {
-        try {
-            BrowserUtils.waitForVisibility(successMessagePopUP, 15);
-            return successMessagePopUP.isDisplayed();
-        } catch (Exception e) {
-            return false;
-        }
-    }
-
-    // Close portfolio upload popup model
-    public void closePopUp() {
-        try {
-            wait.until(ExpectedConditions.elementToBeClickable(closeAlert));
-            actions.click(closeAlert).pause(3000).build().perform();
-            BrowserUtils.wait(2);
-            System.out.println("Pop up closed");
-        } catch (Exception e) {
-            System.out.println("###POP UP Failed###");
-            System.out.println("Failed");
-            e.printStackTrace();
-        }
-    }
 
     // To Delete any portfolio
     public void deletePortfolio(String portfolioName) {
@@ -142,13 +116,10 @@ public class CommonPage extends PageBase {
         }
     }
 
-    //Close Portfolio Model under portfolio selection upload popup
-    public void closeUploadModal() {
-        closeUploadModalButton.click();
-    }
 
 //This method is to select the reporting option on reporting landing page
     public void navigateToReportingService(String reportingService) {
+        BrowserUtils.wait(3);
         navigateToPageFromMenu("reportingservice","On-Demand Reporting");
         if (reportingService.contains("SFDR")) {
             clickOnEUTaxonomyOption();
@@ -166,7 +137,9 @@ public class CommonPage extends PageBase {
     }
 
     public void clickOnDemandOption() {
-        BrowserUtils.waitForClickability(OnDemandAssessment).click();
+        BrowserUtils.wait(5);
+        BrowserUtils.waitForVisibility(OnDemandAssessment,20);
+        BrowserUtils.clickWithJS(OnDemandAssessment);
     }
     public void clickOnEUTaxonomyOption() {
         BrowserUtils.waitForClickability(EUTaxonomy).click();
@@ -182,7 +155,7 @@ public class CommonPage extends PageBase {
     }
 
     public List<String> getPortfolioList() {
-        return BrowserUtils.getElementsText(rrPage_portfolioNamesList);
+        return BrowserUtils.getElementsText(portfolioNamesList);
     }
 
 
@@ -203,6 +176,10 @@ public class CommonPage extends PageBase {
         reportingRadioButtonList.get(getReportingList().indexOf(name)).click();
     }
 
+    public void ValidateReportingOptions(List<String> reportingOptions) {
+        BrowserUtils.waitForVisibility(reportingNamesList.get(0),10);
+        assertTestCase.assertTrue(getReportingList().containsAll(reportingOptions),"Validate if all three reporting options are available");
+    }
 
     // this method will be used to click on 1 checkbox that is displayed and enabled
     public List<WebElement> selectEnabledPortfolioOption(){
@@ -253,7 +230,7 @@ public class CommonPage extends PageBase {
         List<String> selectedPortfolioOptions = new ArrayList<>();
         for (int i = 0; i < portfolioRadioButtonList.size(); i++) {
             if (portfolioRadioButtonList.get(i).isSelected()) {
-                selectedPortfolioOptions.add(rrPage_portfolioNamesList.get(i).getText());
+                selectedPortfolioOptions.add(portfolioNamesList.get(i).getText());
             }
         }
         //System.out.println("selectedPortfolioOptions = " + selectedPortfolioOptions);
@@ -316,6 +293,23 @@ public class CommonPage extends PageBase {
     public boolean isPortfolioSelectionEnabled(String portfolioName) {
         return portfolioRadioButtonList.get(getPortfolioList().indexOf(portfolioName)).isEnabled();
     }
+    public boolean isSelectActionHeadingAvailable(){
+        return divSelectAction.isDisplayed() && divSelectAction.getText().equals("Select Action") ;
+    }
+
+    public boolean isServiceSubHeadingAvailable(){
+        return divService.isDisplayed() && divService.getText().equals("Service") ;
+    }
+
+    public boolean isPortfolioAvailableInList(String portfolioName){
+        return getPortfolioList().contains(portfolioName);
+    }
+
+    public int getAvailablePortfolioCountt(){
+        return portfolioRadioButtonList.size();
+    }
+
+
 
     public void deleteFilesInDownloadsFolder() {
         File dir = new File(BrowserUtils.downloadPath());
