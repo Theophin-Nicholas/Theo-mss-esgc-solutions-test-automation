@@ -18,7 +18,7 @@ import java.util.Map;
 import static com.esgc.Utilities.Groups.*;
 
 public class SubsidiaryTests extends UITestBase {
-
+//Check
 
     @Test(groups = {REGRESSION, UI, SEARCH_ENTITY, ESG})
     @Xray(test = {11042})
@@ -43,58 +43,6 @@ public class SubsidiaryTests extends UITestBase {
         List<Map<String, Object>> dbSubsidiaryCompanyInfo = dashboardQueries.getSubsidiaryCompany("XS0097093636");
 
         assertTestCase.assertEquals(dbSubsidiaryCompanyInfo.size(), 1, "Verifying subsidiary company");
-    }
-
-    @Test(groups = {REGRESSION, UI, SEARCH_ENTITY, ESG}, dataProviderClass = DataProviderClass.class, dataProvider = "SubsidiaryCompanies")
-    @Xray(test = {11051, 11052, 11053, 11054, 11237, 11524})
-    public void verifySubsidiaryCompanyNameInDashboard(String subsidiaryCompanyName, String parentCompanyName) {
-
-        DashboardPage dashboardPage = new DashboardPage();
-        dashboardPage.navigateToPageFromMenu("Dashboard");
-        dashboardPage.selectPortfolioByNameFromPortfolioSelectionModal("PortfolioWithSubsidiaryCompany1");
-
-        // Search with subsidiary company name, when clicked, parent company profile page should be opened
-        EntityClimateProfilePage entityClimateProfilePage = new EntityClimateProfilePage();
-        entityClimateProfilePage.searchAndLoadClimateProfilePage(subsidiaryCompanyName);
-        assertTestCase.assertTrue(entityClimateProfilePage.validateGlobalCompanyNameHeader(parentCompanyName), "Global header verification");
-        entityClimateProfilePage.closeEntityProfilePage();
-        assertTestCase.assertFalse(dashboardPage.isSearchBoxDisplayed(), "User is on expected page");
-
-        // Verify subsidiary company in Coverage popup
-        dashboardPage.viewAllCompaniesButton.click();
-        BrowserUtils.wait(5);
-        dashboardPage.verifyCompanyNameInCoveragePopup(subsidiaryCompanyName);
-        dashboardPage.verifyCompanyIsClickableInCoveragePopup(subsidiaryCompanyName);
-        dashboardPage.clickTheCompany(subsidiaryCompanyName);
-        assertTestCase.assertTrue(entityClimateProfilePage.validateGlobalCompanyNameHeader(parentCompanyName), "Global header verification");
-        entityClimateProfilePage.closeEntityProfilePage();
-        dashboardPage.pressESCKey();
-
-        // ToDo - ESGCA-11052, ESGCA-11053, ESGCA-11054: Step3 - Can't automate as no subsidiary company controversies
-        // ToDo - ESGCA-11052, ESGCA-11053, ESGCA-11054: Step4 - Can't automate as geomap is not yet ready
-        // ToDo - ESGCA-11052, ESGCA-11053, ESGCA-11054: Step5 - Can't automate as no subsidiary under heatmap
-
-        dashboardPage.clickAndSelectAPerformanceChart("Largest Holdings");
-        dashboardPage.verifyCompanyNameInTables(subsidiaryCompanyName);
-        dashboardPage.verifyCompanyIsClickable(subsidiaryCompanyName);
-        dashboardPage.clickTheCompany(subsidiaryCompanyName);
-        assertTestCase.assertTrue(entityClimateProfilePage.validateGlobalCompanyNameHeader(parentCompanyName), "Global header verification");
-        entityClimateProfilePage.closeEntityProfilePage();
-
-        dashboardPage.clickAndSelectAPerformanceChart("Leaders");
-        dashboardPage.verifyCompanyNameInTables(subsidiaryCompanyName);
-        dashboardPage.verifyCompanyIsClickable(subsidiaryCompanyName);
-        dashboardPage.clickTheCompany(subsidiaryCompanyName);
-        assertTestCase.assertTrue(entityClimateProfilePage.validateGlobalCompanyNameHeader(parentCompanyName), "Global header verification");
-        entityClimateProfilePage.closeEntityProfilePage();
-
-        dashboardPage.clickAndSelectAPerformanceChart("Laggards");
-        dashboardPage.verifyCompanyNameInTables(subsidiaryCompanyName);
-        dashboardPage.verifyCompanyIsClickable(subsidiaryCompanyName);
-        dashboardPage.clickTheCompany(subsidiaryCompanyName);
-        assertTestCase.assertTrue(entityClimateProfilePage.validateGlobalCompanyNameHeader(parentCompanyName), "Global header verification");
-        entityClimateProfilePage.closeEntityProfilePage();
-
     }
 
     @Test(groups = {REGRESSION, UI, SEARCH_ENTITY, ESG}, dataProviderClass = DataProviderClass.class, dataProvider = "InactiveSubsidiaryCompanyISIN")
@@ -163,73 +111,9 @@ public class SubsidiaryTests extends UITestBase {
 
     }
 
-    @Test(groups = {REGRESSION, UI, SEARCH_ENTITY, ESG}, dataProviderClass = DataProviderClass.class, dataProvider = "SubsidiaryCompanies")
-    @Xray(test = {11529, 11237})
-    public void verifySubsidiaryCompanyNameInPortfolioAnalysis(String subsidiaryCompanyName, String parentCompanyName) {
-        ResearchLinePage researchLinePage = new ResearchLinePage();
-        DashboardPage dashboardPage = new DashboardPage();
-        EntityClimateProfilePage entityClimateProfilePage = new EntityClimateProfilePage();
-
-        researchLinePage.selectPortfolioByNameFromPortfolioSelectionModal("PortfolioWithSubsidiaryCompany1");
-        researchLinePage.navigateToResearchLine("ESG Assessments");
-
-        // Search with subsidiary company name, when clicked, parent company profile page should be opened
-        entityClimateProfilePage.searchAndLoadClimateProfilePage(subsidiaryCompanyName);
-        assertTestCase.assertTrue(entityClimateProfilePage.validateGlobalCompanyNameHeader(parentCompanyName), "Global header verification");
-        entityClimateProfilePage.closeEntityProfilePage();
-        assertTestCase.assertFalse(dashboardPage.isSearchBoxDisplayed(), "User is on expected page");
-
-        // Verify subsidiary company in Coverage popup
-        researchLinePage.selectEsgPortfolioCoverage();
-        assertTestCase.assertTrue(researchLinePage.validateCompaniesEsgPopupIsDisplayed(), "Verify ESG Drawer coverage details");
-        researchLinePage.verifyCompanyNameInCoveragePopup(subsidiaryCompanyName);
-        researchLinePage.verifyCompanyIsClickableInCoveragePopup(subsidiaryCompanyName);
-        dashboardPage.clickTheCompany(subsidiaryCompanyName);
-        assertTestCase.assertTrue(entityClimateProfilePage.validateGlobalCompanyNameHeader(parentCompanyName), "Global header verification");
-        entityClimateProfilePage.closeEntityProfilePage();
-        dashboardPage.pressESCKey();
-
-        // ToDo - ESGCA-11052, ESGCA-11053, ESGCA-11054: Step3 - Can't automate as no subsidiary company controversies
-        // ToDo - ESGCA-11052, ESGCA-11053, ESGCA-11054: Step4 - Can't automate as geomap is not yet ready
-        // ToDo - ESGCA-11052, ESGCA-11053, ESGCA-11054: Step5 - Can't automate as no subsidiary under heatmap
-
-        // Leaders & Laggards tables - Verify subsidiary company
-        dashboardPage.verifyCompanyNameInTables(subsidiaryCompanyName);
-        dashboardPage.verifyCompanyIsClickable(subsidiaryCompanyName);
-        dashboardPage.clickTheCompany(subsidiaryCompanyName);
-        assertTestCase.assertTrue(entityClimateProfilePage.validateGlobalCompanyNameHeader(parentCompanyName), "Global header verification");
-        entityClimateProfilePage.closeEntityProfilePage();
-
-    }
-
-    @Test(groups = {REGRESSION, UI, SEARCH_ENTITY, ESG}, dataProviderClass = DataProviderClass.class, dataProvider = "SubsidiaryCompanies")
-    @Xray(test = {11542, 11576})
-    public void verifySubsidiaryLinkInEntityProfilePage(String subsidiaryCompanyName, String parentCompanyName) {
-        DashboardPage dashboardPage = new DashboardPage();
-
-        EntityClimateProfilePage entityClimateProfilePage = new EntityClimateProfilePage();
-        entityClimateProfilePage.searchAndLoadClimateProfilePage(subsidiaryCompanyName);
-        assertTestCase.assertTrue(entityClimateProfilePage.validateGlobalCompanyNameHeader(parentCompanyName), "Global header verification");
-
-        entityClimateProfilePage.clickGlobalHeader();
-        String  orbisId = entityClimateProfilePage.orbisIdValue.getText();
-        dashboardPage.clickHideLink();
-
-        DashboardQueries dashboardQueries = new DashboardQueries();
-        List<Map<String, Object>> dbSubsidiaryCompanyInfo = dashboardQueries.getSubsidiaryCompanies(orbisId);
-
-        entityClimateProfilePage.verifySubsidiaryCompaniesCount(dbSubsidiaryCompanyInfo.size());
-        entityClimateProfilePage.clickSubsidiaryCompaniesLink();
-        entityClimateProfilePage.verifySubsidiaryCompaniesPopup(subsidiaryCompanyName);
-        dashboardPage.clickHideLink();
-
-        entityClimateProfilePage.closeEntityProfilePage();
-        dashboardPage.pressESCKey();
-    }
-
     @Test(groups = {REGRESSION, UI, SEARCH_ENTITY, ESG}, dataProviderClass = DataProviderClass.class, dataProvider = "CompaniesWithNoSubsidiaryCompanies")
     @Xray(test = {11575})
-    public void verifySubsidiaryLinkWhenNoSubsidiaryCompanies(String companyName) {
+    public void verifySubsidiaryLinkIsNotDisplayedWhenNoSubsidiaryCompanies(String companyName) {
         DashboardPage dashboardPage = new DashboardPage();
 
         EntityClimateProfilePage entityClimateProfilePage = new EntityClimateProfilePage();

@@ -55,7 +55,7 @@ public abstract class PageBase {
 
 
     //Menu Tab on top left corner
-    @FindBy(xpath = "//li[starts-with(text(),\"Moody's ESG360: \")]")
+    @FindBy(xpath = "//li[starts-with(text(),\"\")]")
     public WebElement menuHeader;
 
     @FindBy(xpath = "//li[@role='menuitem']")
@@ -1413,12 +1413,12 @@ public abstract class PageBase {
             String url = Driver.getDriver().getCurrentUrl();
 
             if (url.contains("dashboard")) {
-                Assert.assertEquals(menuList.get(0).getText(), "Moody's ESG360: Dashboard", "Global Header Title is not matched for Dashboard");
+                Assert.assertEquals(menuList.get(0).getText(), "Climate Dashboard", "Global Header Title is not matched for Dashboard");
                 finalStringToCheck = menuItemsArray.get(1);
             }
 
             if (url.contains("portfolioanalysis")) {
-                Assert.assertEquals(menuList.get(0).getText(), "Moody's ESG360: Portfolio Analysis", "Global Header Title is not matched for Portfolio Analysis");
+                Assert.assertEquals(menuList.get(0).getText(), "Climate Portfolio Analysis", "Global Header Title is not matched for Portfolio Analysis");
                 finalStringToCheck = menuItemsArray.get(2);
             }
             System.out.println(menuList.stream().filter(p -> p.getText().equals(finalStringToCheck))

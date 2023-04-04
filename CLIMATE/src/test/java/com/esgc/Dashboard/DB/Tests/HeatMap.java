@@ -30,7 +30,7 @@ import static com.esgc.Utilities.Groups.*;
 public class HeatMap extends DataValidationTestBase {
 
     @Test(groups = {REGRESSION, DATA_VALIDATION, DASHBOARD}, dataProvider = "researchLines")
-    @Xray(test = {4918, 4919, 4920, 4922, 4923, 4926, 5116, 7476, 7484, 7620, 7621, 9216, 11049  })
+    @Xray(test = {4918, 4919, 4920, 4922, 4923, 4926, 5116, 7476, 7484, 7620, 7621})
     public void verifyHeatMapWithMixedIdentifiers(@Optional String sector, @Optional String region, @Optional String researchLine1, @Optional String month, @Optional String year) {
         SoftAssert softAssert = new SoftAssert();
         List<String> researchLines = Arrays.asList("operationsrisk", "marketrisk", "supplychainrisk", "Physical Risk Management",
@@ -156,8 +156,8 @@ public class HeatMap extends DataValidationTestBase {
                 double max2;
 
                 List<ResearchLineIdentifier> companiesInCategory = null;
-                    companiesInCategory = portfolioToUpload.stream()
-                            .filter(e -> e.getSCORE() >= min && e.getSCORE() <= max).collect(Collectors.toList());
+                companiesInCategory = portfolioToUpload.stream()
+                        .filter(e -> e.getSCORE() >= min && e.getSCORE() <= max).collect(Collectors.toList());
                 System.out.println(companiesInCategory);
                 Double investmentPct = 0d;
 
@@ -243,8 +243,8 @@ public class HeatMap extends DataValidationTestBase {
                 test.info("Actual Score Category:" + categoryPercentage.getResearch_line_score_category());
                 List<ResearchLineIdentifier> companiesInCategory = null;
 
-                    companiesInCategory = portfolioForResearchLine2.stream()
-                            .filter(e -> e.getSCORE() >= min && e.getSCORE() <= max).collect(Collectors.toList());
+                companiesInCategory = portfolioForResearchLine2.stream()
+                        .filter(e -> e.getSCORE() >= min && e.getSCORE() <= max).collect(Collectors.toList());
 
                 System.out.println(companiesInCategory);
 
@@ -275,10 +275,8 @@ public class HeatMap extends DataValidationTestBase {
 
                 double min1 = rangeAndCategory1.getMin();
                 double max1 = rangeAndCategory1.getMax();
-                List<ResearchLineIdentifier> companiesInCategory1 = null;
-                // to be de-scoped remove esg content. validate with furkan ???
-                    companiesInCategory1 = portfolioToUpload.stream()
-                            .filter(e -> e.getSCORE() >= min1 && e.getSCORE() <= max1).collect(Collectors.toList());
+                List<ResearchLineIdentifier> companiesInCategory1 = portfolioToUpload.stream()
+                        .filter(e -> e.getSCORE() >= min1 && e.getSCORE() <= max1).collect(Collectors.toList());
                 System.out.println(companiesInCategory1);
 
                 Double totalInvestmentPercentageInColumn = 0d;
@@ -289,8 +287,8 @@ public class HeatMap extends DataValidationTestBase {
                     double max2 = rangeAndCategory2.getMax();
                     List<ResearchLineIdentifier> companiesInCategory2 = null;
 
-                        companiesInCategory2 = portfolioForResearchLine2.stream()
-                                .filter(e -> e.getSCORE() >= min2 && e.getSCORE() <= max2).collect(Collectors.toList());
+                    companiesInCategory2 = portfolioForResearchLine2.stream()
+                            .filter(e -> e.getSCORE() >= min2 && e.getSCORE() <= max2).collect(Collectors.toList());
 
                     System.out.println(companiesInCategory2);
 
