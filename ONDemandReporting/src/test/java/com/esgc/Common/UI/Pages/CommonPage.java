@@ -11,6 +11,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -303,6 +304,8 @@ public class CommonPage extends PageBase {
     }
 
     public boolean verifyPortfolio(String portfolioName) {
+        System.out.println("Verifying portfolio: " + portfolioName);
+        //System.out.println(getPortfolioList());
         return getPortfolioList().contains(portfolioName);
     }
 
@@ -312,6 +315,19 @@ public class CommonPage extends PageBase {
 
     public boolean isPortfolioSelectionEnabled(String portfolioName) {
         return portfolioRadioButtonList.get(getPortfolioList().indexOf(portfolioName)).isEnabled();
+    }
+
+    public void deleteFilesInDownloadsFolder() {
+        File dir = new File(BrowserUtils.downloadPath());
+        File[] dir_contents = dir.listFiles();
+        if (dir_contents == null) {
+            System.out.println("No files in the directory");
+            return;
+        }
+        for (File file : dir_contents) {
+            file.delete();
+        }
+        System.out.println("All files in the directory are deleted");
     }
 
 }

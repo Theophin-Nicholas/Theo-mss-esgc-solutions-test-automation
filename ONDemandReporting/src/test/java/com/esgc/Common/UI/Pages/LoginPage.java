@@ -179,10 +179,12 @@ public class LoginPage extends PageBase {
         wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys("Wrong_User_Name", Keys.ENTER);
         wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.INTERNAL_USER_PASSWORD, Keys.ENTER);
     }
+
     public void loginWithWrongPass() {
         wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.INTERNAL_USER_USERNAME, Keys.ENTER);
         wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys("Wrong_Pass_Word", Keys.ENTER);
     }
+
     /*
      *Method for login - version #2
      * Login as a default user
@@ -197,7 +199,7 @@ public class LoginPage extends PageBase {
             clickOnNextButton();
         }
         wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.DATA_PASSWORD);
-        
+
 //        wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.UI_USERNAME, Keys.ENTER);
 //        wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.UI_PASSWORD);
        /* if (!termsAndConditionsCheckBox.isSelected())
@@ -226,8 +228,8 @@ public class LoginPage extends PageBase {
     public void dataValidationLogin() {
         wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.DATA_USERNAME, Keys.ENTER);
         wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.DATA_PASSWORD);
-       // if (!termsAndConditionsCheckBox.isSelected()) //TODO This is removed
-         //   wait.until(ExpectedConditions.visibilityOf(termsAndConditionsLabel)).click();
+        // if (!termsAndConditionsCheckBox.isSelected()) //TODO This is removed
+        //   wait.until(ExpectedConditions.visibilityOf(termsAndConditionsLabel)).click();
         wait.until(ExpectedConditions.visibilityOf(loginButton)).click();
     }
 
@@ -308,6 +310,22 @@ public class LoginPage extends PageBase {
                 wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.NO_PREVIOUSLY_DOWNLOADED_REGULATORY_REPORTS_USERNAME, Keys.ENTER);
                 wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.NO_PREVIOUSLY_DOWNLOADED_REGULATORY_REPORTS_PASSWORD);
                 break;
+            case USER_WITH_ON_DEMAND_ENTITLEMENT:
+                wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.USER_WITH_ONDEMAND_ENTITLEMENT_USERNAME, Keys.ENTER);
+                wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.USER_WITH_ONDEMAND_ENTITLEMENT_PASSWORD);
+                break;
+            case USER_WITH_SCORE_PREDICTOR_ENTITLEMENT:
+                wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.USER_WITH_SCORE_PREDICTOR_ENTITLEMENT_USERNAME, Keys.ENTER);
+                wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.USER_WITH_SCORE_PREDICTOR_ENTITLEMENT_PASSWORD);
+                break;
+            case USER_WITH_CORPORATES_ESG_DATA_AND_SCORES_ENTITLEMENT:
+                wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.USER_WITH_CORPORATES_ESG_DATA_AND_SCORES_ENTITLEMENT_USERNAME, Keys.ENTER);
+                wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.USER_WITH_CORPORATES_ESG_DATA_AND_SCORES_ENTITLEMENT_PASSWORD);
+                break;
+                case ODA_ESG_PREDICTOR_DATA_ENTITLEMENT:
+                wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.ODA_ESG_PREDICTOR_DATA_ENTITLEMENT_USERNAME, Keys.ENTER);
+                wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.ODA_ESG_PREDICTOR_DATA_ENTITLEMENT_PASSWORD);
+                break;
             default:
                 Assert.fail("Bundle not found!");
         }
@@ -317,18 +335,15 @@ public class LoginPage extends PageBase {
     }
 
 
-
-
-
     public void clickOnLogout() {
         BrowserUtils.wait(10);
         wait.until(ExpectedConditions.visibilityOf(menu));
         BrowserUtils.clickWithJS(menu);
 
-        BrowserUtils.clickWithJS(BrowserUtils.waitForVisibility(logout,10));
+        BrowserUtils.clickWithJS(BrowserUtils.waitForVisibility(logout, 10));
     }
 
-    public void checkTermsAndConditions(){
+    public void checkTermsAndConditions() {
         wait.until(ExpectedConditions.visibilityOf(termsAndConditionsLabel)).click();
     }
 }

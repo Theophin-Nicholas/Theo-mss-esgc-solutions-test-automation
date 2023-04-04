@@ -168,6 +168,17 @@ public class BrowserUtils {
         return wait.until(ExpectedConditions.visibilityOf(element));
     }
 
+    public static void waitForVisibility(List<WebElement> element, int timeToWaitInSec) {
+        int count = 0;
+        while(element.size() == 0){
+            count++;
+            wait(1);
+            if(count == timeToWaitInSec){
+                break;
+            }
+        }
+    }
+
     public static WebElement waitForVisibility(WebElement element) {
         WebDriverWait wait = new WebDriverWait(Driver.getDriver(), Duration.ofSeconds(10));
         return wait.until(ExpectedConditions.visibilityOf(element));
@@ -612,5 +623,15 @@ public class BrowserUtils {
 
     public static void refresh() {
         Driver.getDriver().navigate().refresh();
+    }
+
+    public static void switchToWindow(Set<String> currentWindowHandles) {
+        for(String window : getWindowHandles()) {
+            if(!currentWindowHandles.contains(window)) {
+                switchWindowsTo(window);
+                return;
+            }
+        }
+        System.out.println("No new window found");
     }
 }

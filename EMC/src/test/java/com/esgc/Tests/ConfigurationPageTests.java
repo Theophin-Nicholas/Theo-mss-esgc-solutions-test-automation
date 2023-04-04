@@ -162,7 +162,7 @@ public class ConfigurationPageTests extends EMCUITestBase {
         rolesPage.selectRole(roleName);
         EMCRoleDetailsPage detailsPage = new EMCRoleDetailsPage();
         assertTestCase.assertEquals(detailsPage.pageTitle.getText(),roleName, roleName+" page loaded");
-        BrowserUtils.waitForClickablility(detailsPage.usersTab, 5).click();
+        detailsPage.clickOnUsersTab();
         assertTestCase.assertTrue(detailsPage.roleMembersTag.isDisplayed(),"Users Tab - Role members tag is displayed");
 
         if(detailsPage.verifyRoleMember(userName)) {
@@ -176,6 +176,9 @@ public class ConfigurationPageTests extends EMCUITestBase {
 
         detailsPage.removeMemberFromRole(userName);
         assertTestCase.assertTrue(detailsPage.notification.isDisplayed(), "Users removed message is displayed");
+        detailsPage.clickOnDetailsTab();
+        BrowserUtils.wait(2);
+        detailsPage.clickOnUsersTab();
         assertTestCase.assertFalse(detailsPage.verifyRoleMember(userName), "Member is removed from role");
     }
 

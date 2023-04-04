@@ -679,19 +679,6 @@ public class RegulatoryReportingPage extends CommonPage {
         return true;
     }
 
-    public void deleteFilesInDownloadsFolder() {
-        File dir = new File(BrowserUtils.downloadPath());
-        File[] dir_contents = dir.listFiles();
-        if (dir_contents == null) {
-            System.out.println("No files in the directory");
-            return;
-        }
-        for (File file : dir_contents) {
-            file.delete();
-        }
-        System.out.println("All files in the directory are deleted");
-    }
-
     public ExcelUtil getExcelData(String excelName, int sheetIndex) {
         File dir = new File(BrowserUtils.downloadPath());
         File[] dir_contents = dir.listFiles();

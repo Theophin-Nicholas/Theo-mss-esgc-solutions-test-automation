@@ -183,4 +183,15 @@ public class CommonAPIController {
     }
 
 
+    public Response getEntitlementHandlerResponse() {
+        Response response = null;
+        try {
+            response = configSpec()
+                    .when()
+                    .get(CommonEndPoints.GET_ENTITLEMENT_HANDLER);
+        } catch (Exception e) {
+            System.out.println("Inside exception " + e.getMessage());
+        }
+        return response;
+    }
 }

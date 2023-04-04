@@ -84,6 +84,15 @@ public class Environment {
     public static final String NO_PREVIOUSLY_DOWNLOADED_REGULATORY_REPORTS_PASSWORD;
     public static final String PDF_EXPORT_ONLY_PDF_USERNAME;
     public static final String PDF_EXPORT_ONLY_PDF_PASSWORD;
+    public static final String USER_WITH_ONDEMAND_ENTITLEMENT_USERNAME;
+    public static final String USER_WITH_ONDEMAND_ENTITLEMENT_PASSWORD;
+    public static final String USER_WITH_SCORE_PREDICTOR_ENTITLEMENT_USERNAME;
+    public static final String USER_WITH_SCORE_PREDICTOR_ENTITLEMENT_PASSWORD;
+    public static final String USER_WITH_CORPORATES_ESG_DATA_AND_SCORES_ENTITLEMENT_USERNAME;
+    public static final String USER_WITH_CORPORATES_ESG_DATA_AND_SCORES_ENTITLEMENT_PASSWORD;
+    public static final String ODA_ESG_PREDICTOR_DATA_ENTITLEMENT_USERNAME;
+    public static final String ODA_ESG_PREDICTOR_DATA_ENTITLEMENT_PASSWORD;
+
     public static final String MESG_APPLICATION_NAME;
     public static  String environment ;
 
@@ -93,6 +102,7 @@ public class Environment {
                 File.separator + "test" + File.separator + "resources" +
                 File.separator + "environments" + File.separator + "%s.properties";
     }
+
 
     static {
         Properties properties = null;
@@ -178,7 +188,13 @@ public class Environment {
         PDF_EXPORT_ONLY_PDF_PASSWORD = properties.getProperty("PDFexport_OnlyPDF_password");
         NO_PREVIOUSLY_DOWNLOADED_REGULATORY_REPORTS_USERNAME = properties.getProperty("NoPreviouslyDownloadedRegulatoryReports_username");
         NO_PREVIOUSLY_DOWNLOADED_REGULATORY_REPORTS_PASSWORD = properties.getProperty("NoPreviouslyDownloadedRegulatoryReports_password");
-
-
+        USER_WITH_ONDEMAND_ENTITLEMENT_USERNAME = properties.getProperty("OnDemand_bundle_username");
+        USER_WITH_ONDEMAND_ENTITLEMENT_PASSWORD = properties.getProperty("OnDemand_bundle_password");
+        USER_WITH_SCORE_PREDICTOR_ENTITLEMENT_USERNAME = properties.getProperty("score_predictor_username");
+        USER_WITH_SCORE_PREDICTOR_ENTITLEMENT_PASSWORD = properties.getProperty("score_predictor_password");
+        USER_WITH_CORPORATES_ESG_DATA_AND_SCORES_ENTITLEMENT_USERNAME = properties.getProperty("corporates_esg_data_and_scores_username");
+        USER_WITH_CORPORATES_ESG_DATA_AND_SCORES_ENTITLEMENT_PASSWORD = properties.getProperty("corporates_esg_data_and_scores_password");
+        ODA_ESG_PREDICTOR_DATA_ENTITLEMENT_USERNAME = properties.getProperty("oda_esg_predictor_data_username");
+        ODA_ESG_PREDICTOR_DATA_ENTITLEMENT_PASSWORD = properties.getProperty("oda_esg_predictor_data_password");
     }
 }

@@ -21,7 +21,7 @@ public class EMCApplicationsPage extends EMCBasePage{
     @FindBy (xpath = "//tbody//td[1]//input")
     public List<WebElement> checkBoxes;
 
-    @FindBy (xpath = "//tbody//th/a")////tbody//td[1]/p
+    @FindBy (xpath = "//tbody//th/a")
     public List<WebElement> applications;
 
     @FindBy (xpath = "//tbody//td[2]")
