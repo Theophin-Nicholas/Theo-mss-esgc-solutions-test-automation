@@ -266,12 +266,12 @@ public class OnDemandAssessmentUITests extends UITestBase {
 
         onDemandAssessmentPage.RemoveRequests(2);
         assertTestCase.assertTrue(onDemandAssessmentPage.getNumberOfEmailInputs()==2, "Number of email inputs is verified");
-        String email = faker.internet().emailAddress();
+        String email = "qatest_"+faker.number().digits(4)+"@moodystest.com";
         onDemandAssessmentPage.enterEmail(email,0);
         onDemandAssessmentPage.enterEmail(email,1);
         onDemandAssessmentPage.verifyDuplicateEmailNotification();
         assertTestCase.assertFalse(onDemandAssessmentPage.btnConfirmRequest.isEnabled(), "Confirm request button is disabled");
-        onDemandAssessmentPage.enterEmail(faker.internet().emailAddress(),1);
+        onDemandAssessmentPage.enterEmail("qatest"+faker.number().digits(4)+"@moodystest.com",1);
         assertTestCase.assertTrue(onDemandAssessmentPage.btnConfirmRequest.isEnabled(), "Confirm request button is enabled");
         onDemandAssessmentPage.clickConfirmRequest();
         onDemandAssessmentPage.verifyConfirmRequestPopup("Cancel");
@@ -383,7 +383,7 @@ public class OnDemandAssessmentUITests extends UITestBase {
         ODAPage.RemoveRequests(remainingAssessmentLimit+1);
 
         for (int i = 0; i < remainingAssessmentLimit+1; i++) {
-            String email = faker.internet().emailAddress();
+            String email = "qatest"+faker.number().digits(4)+"@moodystest.com";
             ODAPage.enterEmail(email,i);
         }
         assertTestCase.assertFalse(ODAPage.btnConfirmRequest.isEnabled(), "Confirm request button is disabled");

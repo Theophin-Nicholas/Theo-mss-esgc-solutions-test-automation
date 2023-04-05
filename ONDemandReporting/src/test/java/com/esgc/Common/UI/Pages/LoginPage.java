@@ -326,7 +326,6 @@ public class LoginPage extends PageBase {
                 wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.ODA_ESG_PREDICTOR_DATA_ENTITLEMENT_USERNAME, Keys.ENTER);
                 wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.ODA_ESG_PREDICTOR_DATA_ENTITLEMENT_PASSWORD);
                 break;
-            default:
             case USER_WITH_PREDICTEDSCORE_AND_CLIMATE:
                 wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.USER_WITH_PREDICTEDSCORE_AND_CLIMATE_USERNAME, Keys.ENTER);
                 wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.USER_WITH_PREDICTEDSCORE_AND_CLIMATE_PASSWORD);
