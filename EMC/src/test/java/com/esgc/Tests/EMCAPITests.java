@@ -21,7 +21,7 @@ public class EMCAPITests extends APITestBase {
     String  accountId = Environment.QA_TEST_ACCOUNT_ID;
     String applicationId = Environment.QA_TEST_APPLICATION_ID;
 
-    @Test(groups = {EMC, API, REGRESSION, SMOKE, PROD})
+    @Test(groups = {EMC, API, REGRESSION, SMOKE})
     @Xray(test = {6870})
     public void verifyAdminUserCanGETListOfAllUsersWithAdminRoleTest() {
         response = apiController.getEMCAllAdminUsersResponse();
