@@ -1,21 +1,22 @@
 package com.esgc.ONDEMAND.DB.Tests;
 
+import com.esgc.Common.API.Controllers.CommonAPIController;
 import com.esgc.ONDEMAND.API.Controllers.OnDemandFilterAPIController;
+import com.esgc.ONDEMAND.DB.DBModels.OnDemandPortfolioTable;
 import com.esgc.ONDEMAND.DB.DBQueries.OnDemandAssessmentQueries;
 import com.esgc.Common.DB.TestBases.DataValidationTestBase;
 
 import com.esgc.ONDEMAND.UI.Pages.OnDemandAssessmentPage;
-import com.esgc.Utilities.BrowserUtils;
-import com.esgc.Utilities.Xray;
+import com.esgc.Utilities.*;
 import org.testng.annotations.Test;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.text.ParseException;
+import java.util.*;
+import java.util.stream.Collectors;
 
-import static com.esgc.Utilities.Groups.DATA_VALIDATION;
-import static com.esgc.Utilities.Groups.REGRESSION;
+import static com.esgc.Utilities.Groups.*;
+import static com.esgc.Utilities.Groups.COMMON;
+import static org.codehaus.groovy.runtime.DefaultGroovyMethods.collect;
 
 public class OnDemandAssessmentDBTests extends DataValidationTestBase {
 
@@ -110,4 +111,84 @@ public class OnDemandAssessmentDBTests extends DataValidationTestBase {
         }
 
     }
+
+    @Test(groups = {REGRESSION, UI, COMMON})
+    @Xray(test = {13989})
+    public void OnDemandAssessmentPortfolioTableDataValidations() throws ParseException {
+        String portfolioName = "OnDemandEntities";
+        OnDemandAssessmentPage onDemandAssessmentPage = new OnDemandAssessmentPage();
+        onDemandAssessmentPage.navigateToReportingService("On-Demand Assessment");
+        onDemandAssessmentPage.waitForPortfolioTableToLoad();
+        if (onDemandAssessmentPage.getPortfolioList().stream().filter(i-> i.equals(portfolioName)).count()>0){
+            CommonAPIController.deletePortfolioThroughAPI(portfolioName);
+            Driver.getDriver().navigate().refresh();
+        }
+        onDemandAssessmentPage.waitForPortfolioTableToLoad();
+        String portfolioFilePath = ImportPortfolioUtility.getOnDemandPortfolioFileToUpload(Arrays.asList(new String[]{"Self-Assessed","Predicted","Analytical"}),"" ,10, portfolioName,false);
+        onDemandAssessmentPage.uploadPortfolio(portfolioFilePath, "OnDemand");
+        onDemandAssessmentPage.closePopUp();
+        onDemandAssessmentPage.waitForPortfolioTableToLoad();
+        String portfolioID = CommonAPIController.getPortfolioIds(portfolioName).get(0);
+        OnDemandAssessmentQueries onDemandQueries = new OnDemandAssessmentQueries();
+        List<OnDemandPortfolioTable> dbData = onDemandQueries.getDataForPortfolioTable(portfolioID,"'Self-Assessed','Predicted','Analytical'");
+        int sumOfCoveredEntities =  dbData.stream().filter(i -> !(i.getSCORE_QUALITY().equals("NA"))).mapToInt(OnDemandPortfolioTable::getVALUE).sum();
+        int sumOfPredictedEntities =  dbData.stream().filter(i -> (i.getSCORE_QUALITY().equals("Predicted"))).mapToInt(OnDemandPortfolioTable::getVALUE).sum();
+        Map<String,String> UIValues = onDemandAssessmentPage.getPortfolioCoverageAndOnDemadEligibilityValues(portfolioName);
+        assertTestCase.assertTrue(UIValues.get("Coverage").equals(String.format("%.2f",(float) sumOfCoveredEntities/dbData.get(0).getTOTAL_VALUE()*100)+"%"),"Validating Coverage Value");
+        assertTestCase.assertTrue(UIValues.get("Coverage").equals(String.format("%.2f",(float) sumOfPredictedEntities/dbData.get(0).getTOTAL_VALUE()*100)+"%"),"Validating On Demand Eligibility Value");
+        //assertTestCase.assertTrue(UIValues.get("ONDemandEligibility").equals(CommonUtility.round((float) sumOfPredictedEntities/dbData.get(0).getTOTAL_VALUE()*100,2)+"%"),"");
+    }
+
+    @Test(groups = {REGRESSION, UI, COMMON})
+    @Xray(test = {13991})
+    public void OnDemandAssessmentPortfolioTableDataValidationsWithUnmatchedEntities() throws ParseException {
+        String portfolioName = "OnDemandEntities";
+        OnDemandAssessmentPage onDemandAssessmentPage = new OnDemandAssessmentPage();
+        onDemandAssessmentPage.navigateToReportingService("On-Demand Assessment");
+        onDemandAssessmentPage.waitForPortfolioTableToLoad();
+        if (onDemandAssessmentPage.getPortfolioList().stream().filter(i-> i.equals(portfolioName)).count()>0){
+            CommonAPIController.deletePortfolioThroughAPI(portfolioName);
+            Driver.getDriver().navigate().refresh();
+        }
+        onDemandAssessmentPage.waitForPortfolioTableToLoad();
+        String portfolioFilePath = ImportPortfolioUtility.getOnDemandPortfolioFileToUpload(Arrays.asList(new String[]{"Self-Assessed","Predicted","Analytical"}),"" ,10, portfolioName,true);
+        onDemandAssessmentPage.uploadPortfolio(portfolioFilePath, "OnDemand");
+        onDemandAssessmentPage.closePopUp();
+        onDemandAssessmentPage.waitForPortfolioTableToLoad();
+        String portfolioID = CommonAPIController.getPortfolioIds(portfolioName).get(0);
+        OnDemandAssessmentQueries onDemandQueries = new OnDemandAssessmentQueries();
+        List<OnDemandPortfolioTable> dbData = onDemandQueries.getDataForPortfolioTable(portfolioID,"'Self-Assessed','Predicted','Analytical'");
+        int sumOfCoveredEntities =  dbData.stream().filter(i -> !(i.getSCORE_QUALITY().equals("NA"))).mapToInt(OnDemandPortfolioTable::getVALUE).sum();
+        int sumOfPredictedEntities =  dbData.stream().filter(i -> (i.getSCORE_QUALITY().equals("Predicted"))).mapToInt(OnDemandPortfolioTable::getVALUE).sum();
+        Map<String,String> UIValues = onDemandAssessmentPage.getPortfolioCoverageAndOnDemadEligibilityValues(portfolioName);
+        assertTestCase.assertTrue(UIValues.get("Coverage").equals(CommonUtility.round((float) sumOfCoveredEntities/dbData.get(0).getTOTAL_VALUE()*100,2)+"%"),"Validating Coverage Value");
+        assertTestCase.assertTrue(UIValues.get("ONDemandEligibility").equals(CommonUtility.round((float) sumOfPredictedEntities/dbData.get(0).getTOTAL_VALUE()*100,2)+"%"),"Validating On Demand Eligibility Value");
+    }
+
+    @Test(groups = {REGRESSION, UI, COMMON})
+    @Xray(test = {13988})
+    public void OnDemandAssessmentPortfolioTableDataValidationsWithOnyPredictedAndAnalyticalEntities() throws ParseException {
+        String portfolioName = "OnDemandEntities";
+        OnDemandAssessmentPage onDemandAssessmentPage = new OnDemandAssessmentPage();
+        onDemandAssessmentPage.navigateToReportingService("On-Demand Assessment");
+        onDemandAssessmentPage.waitForPortfolioTableToLoad();
+        if (onDemandAssessmentPage.getPortfolioList().stream().filter(i-> i.equals(portfolioName)).count()>0){
+            CommonAPIController.deletePortfolioThroughAPI(portfolioName);
+            Driver.getDriver().navigate().refresh();
+        }
+        onDemandAssessmentPage.waitForPortfolioTableToLoad();
+        String portfolioFilePath = ImportPortfolioUtility.getOnDemandPortfolioFileToUpload(Arrays.asList(new String[]{"Predicted","Analytical"}),"" ,10, portfolioName,false);
+        onDemandAssessmentPage.uploadPortfolio(portfolioFilePath, "OnDemand");
+        onDemandAssessmentPage.closePopUp();
+        onDemandAssessmentPage.waitForPortfolioTableToLoad();
+        String portfolioID = CommonAPIController.getPortfolioIds(portfolioName).get(0);
+        OnDemandAssessmentQueries onDemandQueries = new OnDemandAssessmentQueries();
+        List<OnDemandPortfolioTable> dbData = onDemandQueries.getDataForPortfolioTable(portfolioID,"'Self-Assessed','Predicted','Analytical'");
+        int sumOfCoveredEntities =  dbData.stream().filter(i -> !(i.getSCORE_QUALITY().equals("NA"))).mapToInt(OnDemandPortfolioTable::getVALUE).sum();
+        int sumOfPredictedEntities =  dbData.stream().filter(i -> (i.getSCORE_QUALITY().equals("Predicted"))).mapToInt(OnDemandPortfolioTable::getVALUE).sum();
+        Map<String,String> UIValues = onDemandAssessmentPage.getPortfolioCoverageAndOnDemadEligibilityValues(portfolioName);
+        assertTestCase.assertTrue(UIValues.get("Coverage").equals(CommonUtility.round((float) sumOfCoveredEntities/dbData.get(0).getTOTAL_VALUE()*100,2)+"%"),"Validating Coverage Value");
+        assertTestCase.assertTrue(UIValues.get("ONDemandEligibility").equals(CommonUtility.round((float) sumOfPredictedEntities/dbData.get(0).getTOTAL_VALUE()*100,2)+"%"),"Validating On Demand Eligibility Value");
+    }
+
 }

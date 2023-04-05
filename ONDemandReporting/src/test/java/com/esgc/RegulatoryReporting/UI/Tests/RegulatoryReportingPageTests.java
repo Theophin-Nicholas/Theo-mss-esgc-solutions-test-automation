@@ -33,7 +33,7 @@ public class RegulatoryReportingPageTests extends UITestBase {
         assertTestCase.assertTrue(reportingPage.isRegulatoryReportingDisplayed(),
                 "Verify that user can navigate to Regulatory Reporting page");
         reportingPage.clickOnRegulatoryReporting();
-        //reportingPage.navigateToPageFromMenu("On-Demand Reporting");
+        //reportingPage.navigateToPageFromMenu("ESG Reporting Portal");
         TestBase.test.info("Navigated to Regulatory Reporting Page");
         assertTestCase.assertTrue(reportingPage.isPageTitleDisplayed(),
                 "Regulatory Reporting page title is verified");
@@ -69,7 +69,7 @@ public class RegulatoryReportingPageTests extends UITestBase {
         reportingPage.clickPortfolioSelectionButton();
         List<String> expectedPortfoliosList = BrowserUtils.getElementsText(reportingPage.portfolioNameList);
         assertTestCase.assertTrue(expectedPortfoliosList.size() > 0, "Dashboard Page - Portfolio list is verified");
-        reportingPage.navigateToPageFromMenu("On-Demand Reporting");
+        reportingPage.navigateToPageFromMenu("ESG Reporting Portal");
         TestBase.test.info("Navigated to Regulatory Reporting Page");
         //get portfolios' list on regulatory reporting page
         List<String> actualPortfoliosList = reportingPage.getPortfolioList();
@@ -165,7 +165,7 @@ public class RegulatoryReportingPageTests extends UITestBase {
         //reportingPage.clickOnMenuButton();
         //reportingPage.clickOnRegulatoryReporting();
 
-        reportingPage.navigateToPageFromMenu("On-Demand Reporting");
+        reportingPage.navigateToPageFromMenu("ESG Reporting Portal");
         TestBase.test.info("Navigated to Regulatory Reporting Page");
         //verify portfolio upload modal
         assertTestCase.assertTrue(reportingPage.isUploadAnotherPortfolioLinkDisplayed(), "Portfolio Upload button is displayed");
@@ -213,7 +213,7 @@ public class RegulatoryReportingPageTests extends UITestBase {
 //        assertTestCase.assertFalse(portfolioAnalysisPage.verifyPortfolio(newPortfolioName), "New Portfolio is deleted");
 //
 //        //verify portfolio on regulatory reporting page
-//        reportingPage.navigateToPageFromMenu("On-Demand Reporting");
+//        reportingPage.navigateToPageFromMenu("ESG Reporting Portal");
 //        assertTestCase.assertFalse(regulatoryReportingPage.getPortfolioList().contains(newPortfolioName),"New Portfolio is deleted from the list");
     }
 
@@ -228,7 +228,7 @@ public class RegulatoryReportingPageTests extends UITestBase {
         reportingPage.clickPortfolioSelectionButton();
         List<String> expectedPortfoliosList = BrowserUtils.getElementsText(reportingPage.portfolioNameList);
         assertTestCase.assertTrue(expectedPortfoliosList.size() > 0, "Dashboard Page - Portfolio list is verified");
-        reportingPage.navigateToPageFromMenu("On-Demand Reporting");
+        reportingPage.navigateToPageFromMenu("ESG Reporting Portal");
         TestBase.test.info("Navigated to Regulatory Reporting Page");
         //get portfolios' list on regulatory reporting page
         List<String> actualPortfoliosList = reportingPage.getPortfolioList();
@@ -302,7 +302,7 @@ public class RegulatoryReportingPageTests extends UITestBase {
     public void verifyCreateReportsButtonWorksTest() {
         RegulatoryReportingPage reportingPage = new RegulatoryReportingPage();
         
-        reportingPage.navigateToPageFromMenu("On-Demand Reporting");
+        reportingPage.navigateToPageFromMenu("ESG Reporting Portal");
         TestBase.test.info("Navigated to Regulatory Reporting Page");
 
         String currentWindow = BrowserUtils.getCurrentWindowHandle();
@@ -352,7 +352,7 @@ public class RegulatoryReportingPageTests extends UITestBase {
     public void verifyPredictedScorePortfolioTest() {
         RegulatoryReportingPage reportingPage = new RegulatoryReportingPage();
         
-        reportingPage.navigateToPageFromMenu("On-Demand Reporting");
+        reportingPage.navigateToPageFromMenu("ESG Reporting Portal");
         TestBase.test.info("Navigated to Regulatory Reporting Page");
         reportingPage.deselectAllPortfolioOptions();
         String portfolioName = "PredictedScoresPortfolio";
@@ -370,7 +370,7 @@ public class RegulatoryReportingPageTests extends UITestBase {
     public void verifyAnnualReportingDisabledTest() {
         RegulatoryReportingPage reportingPage = new RegulatoryReportingPage();
         
-        reportingPage.navigateToPageFromMenu("On-Demand Reporting");
+        reportingPage.navigateToPageFromMenu("ESG Reporting Portal");
         TestBase.test.info("Navigated to Regulatory Reporting Page");
         assertTestCase.assertTrue(reportingPage.isInterimReportsOptionDisplayed(), "Interim reports option is displayed");
         assertTestCase.assertTrue(reportingPage.isAnnualReportsOptionDisplayed(), "Annual reports option is displayed");
@@ -389,7 +389,7 @@ public class RegulatoryReportingPageTests extends UITestBase {
         
         reportingPage.clickOnMenuButton();
         reportingPage.clickOnRegulatoryReporting();
-        //reportingPage.navigateToPageFromMenu("On-Demand Reporting");
+        //reportingPage.navigateToPageFromMenu("ESG Reporting Portal");
         test.info("Navigated to Regulatory Reporting Page");
         assertTestCase.assertTrue(reportingPage.isInterimReportsOptionDisplayed(), "Interim reports option is displayed");
         assertTestCase.assertTrue(reportingPage.isAnnualReportsOptionDisplayed(), "Annual reports option is displayed");
@@ -409,7 +409,7 @@ public class RegulatoryReportingPageTests extends UITestBase {
     public void verifyReportingServiceOptionsTest() {
         RegulatoryReportingPage reportingPage = new RegulatoryReportingPage();
         
-        reportingPage.navigateToPageFromMenu("On-Demand Reporting");
+        reportingPage.navigateToPageFromMenu("ESG Reporting Portal");
         TestBase.test.info("Navigated to Regulatory Reporting Page");
         //verify Title
         assertTestCase.assertTrue(reportingPage.isReportingOptionsTitleDisplayed(), "Reporting options title is displayed");
@@ -456,7 +456,7 @@ public class RegulatoryReportingPageTests extends UITestBase {
     public void verifyEUTaxonomyReportSheetsTest() {
         RegulatoryReportingPage reportingPage = new RegulatoryReportingPage();
         
-        reportingPage.navigateToPageFromMenu("On-Demand Reporting");
+        reportingPage.navigateToPageFromMenu("ESG Reporting Portal");
         TestBase.test.info("Navigated to Regulatory Reporting Page");
         String portfolioName = "SFDRPortfolio";
         if (!reportingPage.verifyPortfolio(portfolioName)) reportingPage.uploadPortfolio(portfolioName);
@@ -511,7 +511,7 @@ public class RegulatoryReportingPageTests extends UITestBase {
     public void verifyPreviouslyDownloadedFeature() {
         RegulatoryReportingPage reportingPage = new RegulatoryReportingPage();
         
-        reportingPage.navigateToPageFromMenu("On-Demand Reporting");
+        reportingPage.navigateToPageFromMenu("ESG Reporting Portal");
         TestBase.test.info("Navigated to Regulatory Reporting Page");
 
         assertTestCase.assertTrue(reportingPage.verifyPreviouslyDownloadedButton(), "Verify Previously Downloaded button");
@@ -535,7 +535,7 @@ public class RegulatoryReportingPageTests extends UITestBase {
         login.clickOnLogout();
         login.entitlementsLogin(EntitlementsBundles.NO_PREVIOUSLY_DOWNLOADED_REGULATORY_REPORTS);
         
-        reportingPage.navigateToPageFromMenu("On-Demand Reporting");
+        reportingPage.navigateToPageFromMenu("ESG Reporting Portal");
         TestBase.test.info("Navigated to Regulatory Reporting Page");
 
         assertTestCase.assertTrue(reportingPage.verifyPreviouslyDownloadedButton(), "Verify Previously Downloaded button");

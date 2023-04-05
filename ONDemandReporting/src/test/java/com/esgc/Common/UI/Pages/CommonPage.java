@@ -1,14 +1,20 @@
 package com.esgc.Common.UI.Pages;
 
 
+import com.esgc.Common.UI.TestBases.UITestBase;
+import com.esgc.ONDEMAND.API.Controllers.OnDemandFilterAPIController;
 import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.ConfigurationReader;
 import com.esgc.Utilities.Driver;
 import com.esgc.Utilities.RobotRunner;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.Color;
+import org.openqa.selenium.support.Colors;
 import org.openqa.selenium.support.FindBy;
+import org.testng.annotations.BeforeClass;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -48,10 +54,10 @@ public class CommonPage extends UploadPortfolio {
     public WebElement pageTitle;
 
     @FindBy(xpath = "//div[.='Select Action']")
-    public WebElement divSelectAction ;
+    public WebElement divSelectAction;
 
     @FindBy(xpath = "//div[.='Select Action']/following-sibling::div[1]")
-    public WebElement divService ;
+    public WebElement divService;
 
     @FindBy(xpath = "//div[.='Select Action']/..//span[2]")
     public List<WebElement> reportingNamesList;
@@ -59,23 +65,31 @@ public class CommonPage extends UploadPortfolio {
     @FindBy(xpath = "//div[.='Select Action']/..//input")
     public List<WebElement> reportingRadioButtonList;
 
-    @FindBy(xpath = "//div[.='Select Portfolio']/../div[2]/following-sibling::div/div[1]//span[2]")
+    @FindBy(xpath = "//div[contains(text(),'Select Portfolio')]/../div[2]/following-sibling::div/div[1]//span[2]")
     public List<WebElement> portfolioNamesList;
 
-    @FindBy (xpath = "//div[contains(text(),'Select Portfolio')]")
-    public WebElement divSelectPortfolio ;
+    @FindBy(xpath = "//div[contains(text(),'Select Portfolio')]")
+    public WebElement divSelectPortfolio;
 
-    @FindBy (xpath = "//div[text()='Select Portfolio']/following-sibling::div/div/p[text()='No portfolio available.']")
-    public WebElement noPortfolioAvailable ;
+    @FindBy(xpath = "//div[contains(text(),'Select Portfolio')]/following-sibling::div/div/p[text()='No portfolio available.']")
+    public WebElement noPortfolioAvailable;
 
-    @FindBy (xpath = "//li[@heap_menu='On-Demand Reporting']")
-    public WebElement OnDemandMenuItem ;
+    @FindBy(xpath = "//li[@heap_menu='ESG Reporting Portal']")
+    public WebElement OnDemandMenuItem;
 
-    @FindBy(xpath = "//div[.='Select Portfolio']/../div[2]/following-sibling::div/div[1]//input")
+    @FindBy(xpath = "//div[contains(text(),'Select Portfolio')]/../div[2]/following-sibling::div/div[1]//input")
     public List<WebElement> portfolioRadioButtonList;
 
     @FindBy(id = "link-upload")
     public WebElement uploadAnotherPortfolioLink;
+
+    @FindBy(xpath = "//div[contains(text(),'Select Portfolio')]/../div[2]/div")
+    public List<WebElement> PortfolioTableHeaders;
+
+    @FindBy(xpath = "//div[contains(text(),'Select Portfolio')]/../div[2]/following-sibling::div//button[2]")
+    public List<WebElement> ExportButton;
+
+
 
     //-----
 
@@ -116,10 +130,10 @@ public class CommonPage extends UploadPortfolio {
     }
 
 
-//This method is to select the reporting option on reporting landing page
+    //This method is to select the reporting option on reporting landing page
     public void navigateToReportingService(String reportingService) {
-        BrowserUtils.wait(3);
-        navigateToPageFromMenu("reportingservice","On-Demand Reporting");
+       // BrowserUtils.wait(3);
+        navigateToPageFromMenu("reportingservice", "ESG Reporting Portal");
         if (reportingService.contains("SFDR")) {
             clickOnEUTaxonomyOption();
         }
@@ -137,9 +151,10 @@ public class CommonPage extends UploadPortfolio {
 
     public void clickOnDemandOption() {
         BrowserUtils.wait(5);
-        BrowserUtils.waitForVisibility(OnDemandAssessment,20);
+        BrowserUtils.waitForVisibility(OnDemandAssessment, 20);
         BrowserUtils.clickWithJS(OnDemandAssessment);
     }
+
     public void clickOnEUTaxonomyOption() {
         BrowserUtils.waitForClickability(EUTaxonomy).click();
     }
@@ -156,7 +171,6 @@ public class CommonPage extends UploadPortfolio {
     public List<String> getPortfolioList() {
         return BrowserUtils.getElementsText(portfolioNamesList);
     }
-
 
 
     public String getSelectedReportingOption() {
@@ -176,16 +190,16 @@ public class CommonPage extends UploadPortfolio {
     }
 
     public void ValidateReportingOptions(List<String> reportingOptions) {
-        BrowserUtils.waitForVisibility(reportingNamesList.get(0),10);
-        assertTestCase.assertTrue(getReportingList().containsAll(reportingOptions),"Validate if all three reporting options are available");
+        BrowserUtils.waitForVisibility(reportingNamesList.get(0), 10);
+        assertTestCase.assertTrue(getReportingList().containsAll(reportingOptions), "Validate if all three reporting options are available");
     }
 
     // this method will be used to click on 1 checkbox that is displayed and enabled
-    public List<WebElement> selectEnabledPortfolioOption(){
+    public List<WebElement> selectEnabledPortfolioOption() {
         List<WebElement> enabledCheckboxesElements = new ArrayList<WebElement>();
-        for (int i=0; i<portfolioRadioButtonList.size(); i++) {
+        for (int i = 0; i < portfolioRadioButtonList.size(); i++) {
 
-            if (portfolioRadioButtonList.get(i).isEnabled()){
+            if (portfolioRadioButtonList.get(i).isEnabled()) {
                 enabledCheckboxesElements.add(portfolioRadioButtonList.get(i));
                 break;
             }
@@ -193,11 +207,11 @@ public class CommonPage extends UploadPortfolio {
         return enabledCheckboxesElements;
     }
 
-    public List<String> selectEnabledPortfolioOptionText(){
+    public List<String> selectEnabledPortfolioOptionText() {
         List<String> enabledCheckboxesText = new ArrayList<String>();
-        for (int i=0; i<portfolioRadioButtonList.size(); i++) {
+        for (int i = 0; i < portfolioRadioButtonList.size(); i++) {
 
-            if (portfolioRadioButtonList.get(i).isEnabled()){
+            if (portfolioRadioButtonList.get(i).isEnabled()) {
                 enabledCheckboxesText.add(selectEnabledPortfolioOption().get(i).getText());
                 break;
             }
@@ -211,14 +225,19 @@ public class CommonPage extends UploadPortfolio {
             System.out.println("Index = " + index);
             portfolioRadioButtonList.get(index).click();
             return index;
-        }else{
+        } else {
             return 0;
         }
     }
 
-    public boolean IsPortfolioTableLoaded(){
-       // BrowserUtils.waitFor(10);
-        return BrowserUtils.waitForVisibility(divSelectPortfolio,60).isDisplayed();
+    public boolean IsPortfolioTableLoaded() {
+        return (BrowserUtils.waitForVisibility(divSelectPortfolio, 80).isDisplayed() && getAvailablePortfolioCountt()>0) ;
+    }
+
+    public void waitForPortfolioTableToLoad() {
+       if (IsPortfolioTableLoaded()){
+           System.out.println("Portfolio Table Successfully loaded ");
+       }
     }
 
     public int deSelectPortfolioOptionByName(String name) {
@@ -235,11 +254,12 @@ public class CommonPage extends UploadPortfolio {
         //System.out.println("selectedPortfolioOptions = " + selectedPortfolioOptions);
         return selectedPortfolioOptions;
     }
+
     //select all portfolio options
     public void selectAllPortfolioOptions() {
         //select all buttons if not selected
         int count = 0;
-        while (getSelectedPortfolioOptions().size() < 4) {
+        while (getSelectedPortfolioOptions().size() < 4 ) {
             portfolioRadioButtonList.get(count).click();
             count++;
         }
@@ -290,22 +310,49 @@ public class CommonPage extends UploadPortfolio {
     public boolean isPortfolioSelectionEnabled(String portfolioName) {
         return portfolioRadioButtonList.get(getPortfolioList().indexOf(portfolioName)).isEnabled();
     }
-    public boolean isSelectActionHeadingAvailable(){
-        return divSelectAction.isDisplayed() && divSelectAction.getText().equals("Select Action") ;
+
+    public boolean isSelectActionHeadingAvailable() {
+        return divSelectAction.isDisplayed() && divSelectAction.getText().equals("Select Action");
     }
 
-    public boolean isServiceSubHeadingAvailable(){
-        return divService.isDisplayed() && divService.getText().equals("Service") ;
+    public boolean isServiceSubHeadingAvailable() {
+        return divService.isDisplayed() && divService.getText().equals("Service");
     }
 
-    public boolean isPortfolioAvailableInList(String portfolioName){
+    public boolean isPortfolioAvailableInList(String portfolioName) {
         return getPortfolioList().contains(portfolioName);
     }
 
-    public int getAvailablePortfolioCountt(){
+    public int getAvailablePortfolioCountt() {
         return portfolioRadioButtonList.size();
     }
 
+    public List<String> getPortfolioTableHeadersList() {
+        BrowserUtils.waitForVisibility(PortfolioTableHeaders.get(0), 10);
+        List<String> headerList = new ArrayList<>();
+        for (WebElement e : PortfolioTableHeaders) {
+            if (!e.getText().equals(""))
+                headerList.add(e.getText());
+        }
+        return headerList;
+    }
+
+    public void validatePortfolioTableHeaders() {
+        List<String> expectedHeaders = Arrays.asList(new String[]{"Portfolio", "Last Uploaded", "Coverage", "On-Demand Assessment Eligible"});
+        assertTestCase.assertTrue(expectedHeaders.containsAll(getPortfolioTableHeadersList()), "Validating Portfolio Table Headers");
+
+    }
+
+    public void validatePortfolioTableHeadersDesignProperties() {
+        BrowserUtils.waitForVisibility(PortfolioTableHeaders.get(0), 10);
+        for (WebElement e : PortfolioTableHeaders) {
+            if (!e.getText().equals("")) {
+                assertTestCase.assertTrue(Color.fromString(e.getCssValue("color")).asHex().equals("#999999"));
+                assertTestCase.assertTrue(e.getCssValue("font-size").equals("10px"));
+            }
+
+        }
+    }
 
 
 }

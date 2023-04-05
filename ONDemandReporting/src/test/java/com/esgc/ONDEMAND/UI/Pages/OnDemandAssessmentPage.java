@@ -4,16 +4,15 @@ package com.esgc.ONDEMAND.UI.Pages;
 import com.esgc.Common.UI.Pages.CommonPage;
 import com.esgc.ONDEMAND.API.Controllers.OnDemandFilterAPIController;
 import com.esgc.Utilities.BrowserUtils;
+import com.esgc.Utilities.DateTimeUtilities;
 import com.esgc.Utilities.Driver;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Scanner;
+import java.text.ParseException;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class OnDemandAssessmentPage extends CommonPage {
@@ -21,7 +20,7 @@ public class OnDemandAssessmentPage extends CommonPage {
     @FindBy(xpath = "//div[@data-test='sentinelStart']/following-sibling::div//div[contains(@class,'MuiToolbar-root')]/div[text()]")
     public WebElement menuOptionPageHeader;
 
-    @FindBy(xpath = "//li[@heap_menu='On-Demand Reporting']")
+    @FindBy(xpath = "//li[@heap_menu='ESG Reporting Portal']")
     public WebElement onDemandReportingMenu;
 
     @FindBy(xpath = "//div[@data-testid='remove-entity']")
@@ -151,7 +150,14 @@ public class OnDemandAssessmentPage extends CommonPage {
     @FindBy(xpath="//div[contains(@class,'MuiGrid-root MuiGrid-item MuiGrid-grid')][3]//div/div/div/div/div/div[1]")
     public WebElement AssessmentsRemaining ;
 
+    @FindBy(xpath = "//div[contains(text(),'Select Portfolio')]/../div[2]/following-sibling::div/div[3]")
+    public List<WebElement> portfolioCoverage;
 
+    @FindBy(xpath = "//div[contains(text(),'Select Portfolio')]/../div[2]/following-sibling::div/div[4]")
+    public List<WebElement> OnDemandEligibility;
+
+    @FindBy(xpath = "//div[contains(text(),'Select Portfolio')]/../div[2]/following-sibling::div/div[2]")
+    public List<WebElement> LastUpdateColumn;
 
     public String landingPage = "";
 
@@ -514,7 +520,7 @@ public class OnDemandAssessmentPage extends CommonPage {
    }
 
     public boolean validateOnDemandReportingLandingPage(){
-        return BrowserUtils.waitForVisibility(OnDemandMenuItem,10).getText().equals("On-Demand Reporting");
+        return BrowserUtils.waitForVisibility(OnDemandMenuItem,10).getText().equals("ESG Reporting Portal");
     }
 
     public boolean isReequestAssessmentButtonDisabled(){
@@ -530,6 +536,45 @@ public class OnDemandAssessmentPage extends CommonPage {
 
     public boolean isAssessmentsRemainingOptionAvailable(){
         return AssessmentsRemaining.getText().contains("Assessments remaining");
+    }
+
+    public boolean isExportbuttonDisabled(){
+        return ExportButton.get(0).getAttribute("class").contains("disabled");
+    }
+
+    public void trySelectingMultiplePortfolios() {
+       for(int i = 0 ; i< getPortfolioList().size() ; i++ ) {
+            portfolioRadioButtonList.get(i).click();
+        }
+    }
+    public void SelectPortfolioWithZeroOnDemandAssessmentEligibility() {
+        for(int i = 0 ; i< getPortfolioList().size() ; i++ ) {
+            if(OnDemandEligibility.get(i).getText().equals("0.00%")) {
+                portfolioRadioButtonList.get(i).click();
+                break;
+            }
+        }
+    }
+
+    public void ValidateSortingOnLastUpdateColumn() throws ParseException {
+        for(int i = 1 ; i< getPortfolioList().size() ; i++ ) {
+            Date previousRowDate = DateTimeUtilities.convertStringToDate(LastUpdateColumn.get(i-1).getText(),"MMMM dd, yyyy");
+            Date currentRowDate = DateTimeUtilities.convertStringToDate(LastUpdateColumn.get(i).getText(),"MMMM dd, yyyy");
+            assertTestCase.assertTrue(previousRowDate.compareTo(currentRowDate) >= 0,"Validating sorting order of Last Updated column in portfolio table, Dates should be in Descending order");
+        }
+    }
+
+    public Map<String,String> getPortfolioCoverageAndOnDemadEligibilityValues(String PortfolioName){
+        Map<String,String> returnValue = new HashMap<>();
+         for(int i = 0 ; i< getPortfolioList().size() ; i++ ) {
+            if (getPortfolioList().get(i).equals(PortfolioName)){
+                returnValue.put("Coverage",portfolioCoverage.get(i).getText());
+                returnValue.put("ONDemandEligibility",OnDemandEligibility.get(i).getText());
+             break;
+            }
+
+        }
+        return returnValue ;
     }
 
 

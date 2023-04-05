@@ -17,7 +17,7 @@ import java.time.Duration;
 import static com.esgc.Utilities.Groups.*;
 
 public abstract class UITestBase extends TestBase implements ITestListener {
-    String accessToken;
+    public static String  accessToken;
     public String portfolioName ;
 
     @BeforeClass(alwaysRun = true)
@@ -77,7 +77,7 @@ public abstract class UITestBase extends TestBase implements ITestListener {
     }
 
 
-    public synchronized void setAccessTokenFromUI() {
+    public static synchronized void setAccessTokenFromUI() {
         String getAccessTokenScript = "return JSON.parse(localStorage.getItem('okta-token-storage')).accessToken.accessToken";
         accessToken = ((JavascriptExecutor) Driver.getDriver()).executeScript(getAccessTokenScript).toString();
         System.setProperty("token", accessToken);

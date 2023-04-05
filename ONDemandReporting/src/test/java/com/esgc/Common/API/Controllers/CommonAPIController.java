@@ -2,7 +2,10 @@ package com.esgc.Common.API.Controllers;
 
 
 import com.esgc.Common.API.APIModels.Portfolio;
+import com.esgc.Common.API.APIModels.PortfolioDetails;
 import com.esgc.Common.API.EndPoints.CommonEndPoints;
+import com.esgc.Common.UI.TestBases.UITestBase;
+import com.esgc.ONDEMAND.API.Controllers.OnDemandFilterAPIController;
 import com.esgc.Utilities.Driver;
 import com.esgc.Utilities.Environment;
 import io.restassured.http.ContentType;
@@ -58,14 +61,14 @@ public class CommonAPIController {
         this.isInvalidTest = false;
     }
 
-    public synchronized Response deletePortfolio(String portfolioId) {
+    public static synchronized Response deletePortfolio(String portfolioId) {
         return configSpec()
                 .header("Content-Type", "application/json, text/plain, */*")
                 .pathParam("portfolio_id", portfolioId)
                 .when()
                 .delete(CommonEndPoints.DELETE_PORTFOLIO).prettyPeek();
     }
-    public void deletePortfolioByName(String portfolioName) {
+    public static void deletePortfolioByName(String portfolioName) {
         try {
             List<String> portfolioIDs = getPortfolioIds(portfolioName);
             for (String id : portfolioIDs){
@@ -106,14 +109,15 @@ public class CommonAPIController {
                 File.separator+"upload"+File.separator+fileName;
     }
 
-    public List<String> getPortfolioIds(String portfolioName) {
+    public static List<String> getPortfolioIds(String portfolioName) {
         Response response = getPortfolioDetails();
         response.prettyPrint();
-        List<Portfolio> portfolios= Arrays.asList(response.as(Portfolio.class)).stream().
-                filter(i -> i.getPortfolios().get(0).getPortfolio_name().equals(portfolioName)).collect(Collectors.toList());
+        List<PortfolioDetails> portfolios = new ArrayList<>();
         List<String> portfolioIds = new ArrayList<>();
-        for(Portfolio portfolio : portfolios){
-            portfolioIds.add(portfolio.getPortfolios().get(0).getPortfolio_id());
+        for (PortfolioDetails i : Arrays.asList(response.as(Portfolio.class)).get(0).getPortfolios()) {
+            if (i.getPortfolio_name().equals(portfolioName)) {
+                portfolioIds.add(i.getPortfolio_id());
+            }
         }
 
         return portfolioIds;
@@ -194,5 +198,8 @@ public class CommonAPIController {
         return response;
     }
 
+    public  static void deletePortfolioThroughAPI(String portfolioName){
+        deletePortfolioByName(portfolioName);
+    }
 
 }
