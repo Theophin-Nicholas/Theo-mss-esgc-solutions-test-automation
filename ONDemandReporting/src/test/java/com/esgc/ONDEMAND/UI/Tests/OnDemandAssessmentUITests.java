@@ -21,7 +21,7 @@ import java.util.List;
 import static com.esgc.Utilities.Groups.*;
 
 public class OnDemandAssessmentUITests extends UITestBase {
-
+Faker faker = new Faker();
     @Test(groups = {REGRESSION, UI, COMMON})
     @Xray(test = {11985, 12001, 12002, 12011, 12054, 12092, 12822, 12824})
     public void validateOnDemandAssessmentRequest() {
