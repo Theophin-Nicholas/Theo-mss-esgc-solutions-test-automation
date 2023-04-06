@@ -132,16 +132,17 @@ public class LoginPageEMC extends PageBase {
         wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(userName, Keys.ENTER);
         try{
             BrowserUtils.wait(5);
-            BrowserUtils.waitAndClick(nextButton, 3);
+            if(nextButton.isDisplayed()){
+                System.out.println("Next button is displayed");
+                BrowserUtils.waitForClickablility(nextButton, 3).click();
+            }
         }catch (Exception e){
             System.out.println("No need to click next button");
         }
         wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(password);
-
         wait.until(ExpectedConditions.visibilityOf(loginButton)).click();
         System.out.println("Login with params");
         Driver.getDriver().manage().window().maximize();
-
     }
 
     /**
