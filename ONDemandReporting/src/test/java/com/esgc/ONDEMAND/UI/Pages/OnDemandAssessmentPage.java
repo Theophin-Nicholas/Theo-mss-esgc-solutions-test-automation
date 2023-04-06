@@ -6,12 +6,15 @@ import com.esgc.ONDEMAND.API.Controllers.OnDemandFilterAPIController;
 import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.DateTimeUtilities;
 import com.esgc.Utilities.Driver;
+import com.esgc.Utilities.UnzipUtil;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 import java.text.ParseException;
+import java.util.*;
+import java.io.File;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -58,6 +61,9 @@ public class OnDemandAssessmentPage extends CommonPage {
 
     @FindBy(xpath = "//div[contains(text(),'assessment eligible')]")
     public WebElement lblAssessmentEligible;
+
+    @FindBy(xpath = "//div/b")
+    public WebElement remainingAssessmentLimit;
 
     @FindBy(xpath = "(//div[contains(text(),'Predicted ESG Score')]/../../../..//div[text()])[2]")
     public WebElement lblHighestInvestment;
@@ -120,7 +126,8 @@ public class OnDemandAssessmentPage extends CommonPage {
     @FindBy(xpath = "(//span[@class='MuiSwitch-track'])[2]/../span[1]")
     public WebElement toggleButton;
 
-    @FindBy(xpath = "//*[contains(text(),'Please confirm email addresses. The listed contacts will receive an email prompting them to complete an ESG assessment questionnaire.')]")
+    @FindBy(xpath = "//div/*[local-name()='svg' and @fill='#1F8CFF']/..")
+//"//*[contains(text(),'Please confirm email addresses. The listed contacts will receive an email prompting them to complete an ESG assessment questionnaire.')]")
     public WebElement emailAlertMessage;
 
     @FindBy(xpath="//div[text()='Confirm Request']")
@@ -152,6 +159,31 @@ public class OnDemandAssessmentPage extends CommonPage {
 
     @FindBy(xpath = "//div[contains(text(),'Select Portfolio')]/../div[2]/following-sibling::div/div[3]")
     public List<WebElement> portfolioCoverage;
+    @FindBy(xpath = "//div[@data-testid='input-email']//input")
+    public List<WebElement> emailInputs;
+
+    @FindBy(xpath = "//span[.='Duplicate email']")
+    public List<WebElement> duplicateEmailNotification;
+
+    @FindBy(xpath = "//button[.='Methodologies']")
+    public WebElement btnMethodologies;
+
+    @FindBy(xpath = "//h2")
+    public WebElement methodologiesPopupTitle;
+
+    @FindBy(xpath = "//h2[.=' Methodology Documents ']")
+    public WebElement methodologiesPopupListHeader;
+
+    @FindBy(xpath = "//h2/..//li/a")
+    public List<WebElement> methodologiesPopupList;
+
+    @FindBy(xpath = "//button[.='Download All .ZIP']")
+    public WebElement methodologiesPopupDownloadAllButton;
+
+    @FindBy(xpath = "//h2/button")
+    public WebElement methodologiesPopupCloseButton;
+
+
 
     @FindBy(xpath = "//div[contains(text(),'Select Portfolio')]/../div[2]/following-sibling::div/div[4]")
     public List<WebElement> OnDemandEligibility;
@@ -219,6 +251,13 @@ public class OnDemandAssessmentPage extends CommonPage {
     public void KeepOnlyOneRequest() {
         selectFilter("No Request Sent");
         while (removeButtons.size() > 1) {
+            removeButtons.get(0).click();
+        }
+    }
+
+    public void RemoveRequests(int remainingRequests) {
+        selectFilter("No Request Sent");
+        while (removeButtons.size() > remainingRequests) {
             removeButtons.get(0).click();
         }
     }
@@ -511,6 +550,128 @@ public class OnDemandAssessmentPage extends CommonPage {
         assertTestCase.assertTrue(BrowserUtils.waitForVisibility(SomeThingWentWrongErrorMessage,20).isDisplayed(), "Validating if error message has displayed");
     }
 
+    public int getNumberOfEmailInputs() {
+        return emailInputs.size();
+    }
+
+    //index starts from 0
+    public void enterEmail(String email, int index) {
+        if (index > getNumberOfEmailInputs()) {
+            System.out.println("Index is greater than number of email inputs");
+            return;
+        }
+        while(emailInputs.get(index).getAttribute("value").length() > 0)
+            emailInputs.get(index).sendKeys(Keys.BACK_SPACE);
+        emailInputs.get(index).sendKeys(email, Keys.TAB);
+    }
+
+    public void verifyDuplicateEmailNotification() {
+        assertTestCase.assertTrue(duplicateEmailNotification.size() > 0, "Duplicate email notification is displayed");
+    }
+
+    public void clickConfirmRequest() {
+        System.out.println("Clicking on Confirm Request button");
+        BrowserUtils.waitForClickablility(btnConfirmRequest, 60).click();
+    }
+
+    public void verifyConfirmRequestPopup(String prompt) {
+        BrowserUtils.waitForVisibility(confirmRequestPopupHeader, 10);
+        assertTestCase.assertTrue(confirmRequestPopupHeader.isDisplayed(), "Validate Confirm Request header");
+        assertTestCase.assertTrue(confirmRequestPopupSubHeader.isDisplayed(), "Validate Sub Header Count and Text");
+        assertTestCase.assertTrue(confirmRequestPopupBtnCancel.isDisplayed(), "Validate Cancel button is available in popup");
+        assertTestCase.assertTrue(confirmRequestPopupBtnProceed.isDisplayed(), "Validate proceed button is available in popup");
+        if(prompt.toLowerCase().equals("proceed")) {
+            BrowserUtils.waitForClickablility(confirmRequestPopupBtnProceed, 60).click();
+        }
+        else{
+            BrowserUtils.waitForClickablility(confirmRequestPopupBtnCancel, 60).click();
+        }
+    }
+
+    public void verifyMethodologies() {
+        String currentWindow = BrowserUtils.getCurrentWindowHandle();
+        assertTestCase.assertTrue(btnMethodologies.isDisplayed(), "Methodologies button is displayed");
+        BrowserUtils.waitForClickablility(btnMethodologies, 60).click();
+        assertTestCase.assertTrue(methodologiesPopupTitle.isDisplayed(), "Methodologies popup is displayed");
+        assertTestCase.assertTrue(methodologiesPopupListHeader.isDisplayed(), "Methodologies popup list header is displayed");
+        assertTestCase.assertTrue(methodologiesPopupList.size()>0, "Methodologies popup list is displayed");
+        assertTestCase.assertTrue(methodologiesPopupCloseButton.isDisplayed(), "Methodologies popup close button is displayed");
+        assertTestCase.assertTrue(methodologiesPopupDownloadAllButton.isEnabled(), "Methodologies popup download all button is enabled");
+
+        List<String> expectedMethodologiesList = Arrays.asList("Analyst", "Self Assessed", "Predicted");
+        assertTestCase.assertTrue(BrowserUtils.getElementsText(methodologiesPopupList).containsAll(expectedMethodologiesList),
+                "Methodologies popup list contains all expected methodologies");
+
+        for(WebElement document : methodologiesPopupList) {
+            Set<String> currentWindowHandles = Driver.getDriver().getWindowHandles();
+            String documentName = document.getText();
+            document.click();
+            BrowserUtils.wait(3);
+            BrowserUtils.switchToWindow(currentWindowHandles);
+            switch (documentName) {
+                case "Analyst":
+                    assertTestCase.assertTrue(Driver.getDriver().getCurrentUrl().endsWith("Methodology_1.0_ESG_Assessment.pdf"), "Analyst methodology is opened");
+                    break;
+                case "Self Assessed":
+                    assertTestCase.assertTrue(Driver.getDriver().getCurrentUrl().endsWith("Methodology_2.0_ESG_Assessment_20220517.pdf"), "Self Assessed methodology is opened");
+                    break;
+                case "Predicted":
+                    assertTestCase.assertTrue(Driver.getDriver().getCurrentUrl().endsWith("Methodology_2.0_ESG_Assessment.pdf"), "Predicted methodology is opened");
+                    break;
+            }
+            BrowserUtils.switchWindowsTo(currentWindow);
+        }
+
+        //Download and verify Zip file
+        deleteFilesInDownloadsFolder();
+        methodologiesPopupDownloadAllButton.click();
+        assertTestCase.assertTrue(verifyIfDocumentsDownloaded(), "Methodologies zip file is downloaded");
+        assertTestCase.assertTrue(unzipFile(), "Documents in ZIP File extracted and verified");
+        BrowserUtils.waitForClickablility(methodologiesPopupCloseButton, 60).click();
+    }
+
+    public boolean verifyIfDocumentsDownloaded() {
+        BrowserUtils.wait(10);
+        File dir = new File(BrowserUtils.downloadPath());
+        File[] dir_contents = dir.listFiles();
+        if (dir_contents == null) {
+            System.out.println("No files in the directory");
+            return false;
+        }
+        return Arrays.stream(dir_contents).anyMatch(e -> ((e.getName().startsWith("methodologies")) && (e.getName().endsWith(".zip"))));
+    }
+
+    public boolean unzipFile() {
+        File dir = new File(BrowserUtils.downloadPath());
+        File[] dir_contents = dir.listFiles();
+        assert dir_contents != null;
+        String zipFilePath = Arrays.stream(dir_contents).filter(e -> ((e.getName().startsWith("methodologies")) && (e.getName().endsWith(".zip")))).findFirst().get().getAbsolutePath();
+        System.out.println("zipFilePath = " + zipFilePath);
+        String destDirectory = BrowserUtils.downloadPath();//+"/methodologies";
+        System.out.println("destDirectory = " + destDirectory);
+        UnzipUtil unZipper = new UnzipUtil();
+        try {
+            unZipper.unzip(zipFilePath, destDirectory);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        System.out.println("Unzipping is done");
+        List<String> expectedDocumentList = Arrays.asList("Methodology_1.0_ESG_Assessment.pdf", "Methodology_2.0_ESG_Assessment.pdf", "Methodology_2.0_ESG_Assessment 20220517.pdf");
+        for (String file : expectedDocumentList) {
+            File document = new File(destDirectory+File.separator+file);
+            if (!document.exists()) {
+                System.out.println("File " + file + " is not found");
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public int getRemainingAssessmentLimit() {
+        //remainingAssessmentLimit.getText(); will give you "996 assessment requests" etc
+        BrowserUtils.waitForVisibility(remainingAssessmentLimit, 30);
+        return Integer.parseInt(remainingAssessmentLimit.getText().replaceAll("\\D",""));
+    }
    public boolean validateNoPortfolio(){
         try {
             return BrowserUtils.waitForVisibility(noPortfolioAvailable, 10).isDisplayed();

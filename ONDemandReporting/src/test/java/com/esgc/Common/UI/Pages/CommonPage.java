@@ -14,6 +14,7 @@ import org.openqa.selenium.support.Colors;
 import org.openqa.selenium.support.FindBy;
 import org.testng.annotations.BeforeClass;
 
+import java.io.File;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -300,6 +301,8 @@ public class CommonPage extends UploadPortfolio {
     }
 
     public boolean verifyPortfolio(String portfolioName) {
+        System.out.println("Verifying portfolio: " + portfolioName);
+        //System.out.println(getPortfolioList());
         return getPortfolioList().contains(portfolioName);
     }
 
@@ -354,5 +357,18 @@ public class CommonPage extends UploadPortfolio {
         }
     }
 
+
+    public void deleteFilesInDownloadsFolder() {
+        File dir = new File(BrowserUtils.downloadPath());
+        File[] dir_contents = dir.listFiles();
+        if (dir_contents == null) {
+            System.out.println("No files in the directory");
+            return;
+        }
+        for (File file : dir_contents) {
+            file.delete();
+        }
+        System.out.println("All files in the directory are deleted");
+    }
 
 }

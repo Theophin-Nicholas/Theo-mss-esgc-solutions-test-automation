@@ -7,6 +7,7 @@ import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.Database.DatabaseDriver;
 import com.esgc.Utilities.Driver;
 import com.esgc.Utilities.Environment;
+import com.github.javafaker.Faker;
 import org.openqa.selenium.JavascriptExecutor;
 import org.testng.ITestListener;
 import org.testng.ITestResult;
@@ -19,7 +20,6 @@ import static com.esgc.Utilities.Groups.*;
 public abstract class UITestBase extends TestBase implements ITestListener {
     public static String  accessToken;
     public String portfolioName ;
-
     @BeforeClass(alwaysRun = true)
     @Parameters("browser")
     public synchronized void setupUIForTests(@Optional String browser) {
