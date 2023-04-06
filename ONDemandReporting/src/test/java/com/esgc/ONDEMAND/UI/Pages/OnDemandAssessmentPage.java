@@ -12,6 +12,8 @@ import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
+import java.text.ParseException;
+import java.util.*;
 import java.io.File;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -21,7 +23,7 @@ public class OnDemandAssessmentPage extends CommonPage {
     @FindBy(xpath = "//div[@data-test='sentinelStart']/following-sibling::div//div[contains(@class,'MuiToolbar-root')]/div[text()]")
     public WebElement menuOptionPageHeader;
 
-    @FindBy(xpath = "//li[@heap_menu='On-Demand Reporting']")
+    @FindBy(xpath = "//li[@heap_menu='ESG Reporting Portal']")
     public WebElement onDemandReportingMenu;
 
     @FindBy(xpath = "//div[@data-testid='remove-entity']")
@@ -128,14 +130,14 @@ public class OnDemandAssessmentPage extends CommonPage {
 //"//*[contains(text(),'Please confirm email addresses. The listed contacts will receive an email prompting them to complete an ESG assessment questionnaire.')]")
     public WebElement emailAlertMessage;
 
-    @FindBy(xpath = "//div[text()='Confirm Request']")
-    public WebElement confirmRequestPopupHeader;
+    @FindBy(xpath="//div[text()='Confirm Request']")
+    public WebElement confirmRequestPopupHeader ;
 
-    @FindBy(xpath = "//div[text()='Confirm Request']//following-sibling::div")
-    public WebElement confirmRequestPopupSubHeader;
+    @FindBy(xpath="//div[text()='Confirm Request']//following-sibling::div")
+    public WebElement confirmRequestPopupSubHeader ;
 
-    @FindBy(xpath = "//button[@id='ondemand-assessment-cancel']")
-    public WebElement confirmRequestPopupBtnCancel;
+    @FindBy(xpath="//button[@id='ondemand-assessment-cancel']")
+    public WebElement confirmRequestPopupBtnCancel ;
 
     @FindBy(xpath = "//button[@id='ondemand-assessment-confirmation']")
     public WebElement confirmRequestPopupBtnProceed;
@@ -144,7 +146,7 @@ public class OnDemandAssessmentPage extends CommonPage {
     public WebElement SomeThingWentWrongErrorMessage;
 
     @FindBy(xpath = "//button[@id='button-report-test-id-1']")
-    public WebElement buttonRequestAssessment;
+    public WebElement buttonRequestAssessment ;
 
     @FindBy(xpath="//button[@id='button-prev-status-test-id-1']")
     public WebElement buttonViewAssessmentStatus ;
@@ -155,6 +157,8 @@ public class OnDemandAssessmentPage extends CommonPage {
     @FindBy(xpath="//div[contains(@class,'MuiGrid-root MuiGrid-item MuiGrid-grid')][3]//div/div/div/div/div/div[1]")
     public WebElement AssessmentsRemaining ;
 
+    @FindBy(xpath = "//div[contains(text(),'Select Portfolio')]/../div[2]/following-sibling::div/div[3]")
+    public List<WebElement> portfolioCoverage;
     @FindBy(xpath = "//div[@data-testid='input-email']//input")
     public List<WebElement> emailInputs;
 
@@ -181,6 +185,11 @@ public class OnDemandAssessmentPage extends CommonPage {
 
 
 
+    @FindBy(xpath = "//div[contains(text(),'Select Portfolio')]/../div[2]/following-sibling::div/div[4]")
+    public List<WebElement> OnDemandEligibility;
+
+    @FindBy(xpath = "//div[contains(text(),'Select Portfolio')]/../div[2]/following-sibling::div/div[2]")
+    public List<WebElement> LastUpdateColumn;
 
     public String landingPage = "";
 
@@ -228,8 +237,8 @@ public class OnDemandAssessmentPage extends CommonPage {
 
     public void selectFilter(String filterOption) {
         // BrowserUtils.waitForVisibility(drdShowFilter,30).click();
-        // drdShowOptions.get(0).click();
-        BrowserUtils.waitForVisibility(FilterDropDown, 30).click();
+       // drdShowOptions.get(0).click();
+        BrowserUtils.waitForVisibility(FilterDropDown,30).click();
         for (WebElement option : drdShowOptions) {
             if (option.getText().equals(filterOption)) {
                 option.click();
@@ -392,7 +401,7 @@ public class OnDemandAssessmentPage extends CommonPage {
     }
 
     public boolean isReviewButtonAvailable() {
-        return BrowserUtils.waitForVisibility(btnReviewRequest, 60).isDisplayed();
+        return BrowserUtils.waitForVisibility(btnReviewRequest,60).isDisplayed();
     }
 
     public void clickOnESCButton() {
@@ -499,7 +508,7 @@ public class OnDemandAssessmentPage extends CommonPage {
 
     public void clickonOnRequestAssessmentButton() {
         BrowserUtils.scrollTo(buttonRequestAssessment);
-        BrowserUtils.waitForClickablility(buttonRequestAssessment, 60).click();
+        BrowserUtils.waitForClickablility(buttonRequestAssessment,60).click();
 
        /* if (validateIfOndemandmenuOptionIsEnabled()) {
             onDemandReportingMenu.click();
@@ -511,35 +520,34 @@ public class OnDemandAssessmentPage extends CommonPage {
     }
 
     public void validateProceedOnConfirmRequestPopup(String countOfCompanies) {
-        assertTestCase.assertTrue(BrowserUtils.waitForVisibility(confirmRequestPopupHeader, 10).getText().equals("Confirm Request"), "Validate Confirm Request header");
-        assertTestCase.assertTrue(BrowserUtils.waitForVisibility(confirmRequestPopupSubHeader, 10).getText().equals("Assessment request will be sent to " + countOfCompanies + " company. You will receive confirmation when all requests have been sent."), "Validate Sub Header Count and Text");
-        assertTestCase.assertTrue(confirmRequestPopupBtnCancel.isDisplayed(), "Validate Cancel button is available in popup");
-        assertTestCase.assertTrue(confirmRequestPopupBtnProceed.isDisplayed(), "Validate proceed button is available in popup");
+        assertTestCase.assertTrue(BrowserUtils.waitForVisibility(confirmRequestPopupHeader,10).getText().equals("Confirm Request"),"Validate Confirm Request header");
+        assertTestCase.assertTrue(BrowserUtils.waitForVisibility(confirmRequestPopupSubHeader,10).getText().equals("Assessment request will be sent to " + countOfCompanies + " company. You will receive confirmation when all requests have been sent."),"Validate Sub Header Count and Text");
+        assertTestCase.assertTrue(confirmRequestPopupBtnCancel.isDisplayed(),"Validate Cancel button is available in popup");
+        assertTestCase.assertTrue(confirmRequestPopupBtnProceed.isDisplayed(),"Validate proceed button is available in popup");
+    }
+    public void clickCancelButtonAndValidateRequestPage(){
+        BrowserUtils.waitForVisibility(confirmRequestPopupBtnCancel,10).click();
+        assertTestCase.assertTrue(BrowserUtils.waitForVisibility(btnConfirmRequest,30).isDisplayed(),"Validate it is back on Confirm euest page");
     }
 
-    public void clickCancelButtonAndValidateRequestPage() {
-        BrowserUtils.waitForVisibility(confirmRequestPopupBtnCancel, 10).click();
-        assertTestCase.assertTrue(BrowserUtils.waitForVisibility(btnConfirmRequest, 30).isDisplayed(), "Validate it is back on Confirm euest page");
-    }
-
-    public void validateDashboardPageButtonForOnDemand() {
-        BrowserUtils.waitForVisibility(dashboardPageMenuOption, 60);
+    public void validateDashboardPageButtonForOnDemand(){
+        BrowserUtils.waitForVisibility(dashboardPageMenuOption,60);
         assertTestCase.assertTrue(dashboardPageMenuOption.isDisplayed(), "Validate that Dasboard on demand button is visible");
         assertTestCase.assertTrue(dashboardPageMenuOption.getText().matches("\\d+% On-Demand Assessment Eligible"), "Validate that Dasboard on demand button is visible");
     }
 
-    public void validateDashboardPageButtonCoverage(String portfolioID) {
-        BrowserUtils.waitForVisibility(dashboardPageMenuOption, 60);
+    public void validateDashboardPageButtonCoverage(String portfolioID){
+        BrowserUtils.waitForVisibility(dashboardPageMenuOption,60);
         assertTestCase.assertTrue(dashboardPageMenuOption.isDisplayed(), "Validate that Dasboard on demand button is visible");
-        double uiValue = Double.valueOf(dashboardPageMenuOption.getText().substring(0, dashboardPageMenuOption.getText().indexOf("%")));
+        double uiValue = Double.valueOf(dashboardPageMenuOption.getText().substring(0,dashboardPageMenuOption.getText().indexOf("%")));
         OnDemandFilterAPIController apiController = new OnDemandFilterAPIController();
-        double apiValue = apiController.getDashboardCoverage(portfolioID).jsonPath().getDouble("perc_avail_for_assessment") * 100;
-        assertTestCase.assertEquals(uiValue, apiValue, "Validating Coverage %");
+       double apiValue =  apiController.getDashboardCoverage(portfolioID).jsonPath().getDouble("perc_avail_for_assessment")*100;
+       assertTestCase.assertEquals(uiValue,apiValue,"Validating Coverage %");
 
     }
 
-    public void validateErrormessage() {
-        assertTestCase.assertTrue(BrowserUtils.waitForVisibility(SomeThingWentWrongErrorMessage, 20).isDisplayed(), "Validating if error message has displayed");
+    public void validateErrormessage(){
+        assertTestCase.assertTrue(BrowserUtils.waitForVisibility(SomeThingWentWrongErrorMessage,20).isDisplayed(), "Validating if error message has displayed");
     }
 
     public int getNumberOfEmailInputs() {
@@ -673,7 +681,7 @@ public class OnDemandAssessmentPage extends CommonPage {
    }
 
     public boolean validateOnDemandReportingLandingPage(){
-        return BrowserUtils.waitForVisibility(OnDemandMenuItem,10).getText().equals("On-Demand Reporting");
+        return BrowserUtils.waitForVisibility(OnDemandMenuItem,10).getText().equals("ESG Reporting Portal");
     }
 
     public boolean isReequestAssessmentButtonDisabled(){
@@ -689,6 +697,45 @@ public class OnDemandAssessmentPage extends CommonPage {
 
     public boolean isAssessmentsRemainingOptionAvailable(){
         return AssessmentsRemaining.getText().contains("Assessments remaining");
+    }
+
+    public boolean isExportbuttonDisabled(){
+        return ExportButton.get(0).getAttribute("class").contains("disabled");
+    }
+
+    public void trySelectingMultiplePortfolios() {
+       for(int i = 0 ; i< getPortfolioList().size() ; i++ ) {
+            portfolioRadioButtonList.get(i).click();
+        }
+    }
+    public void SelectPortfolioWithZeroOnDemandAssessmentEligibility() {
+        for(int i = 0 ; i< getPortfolioList().size() ; i++ ) {
+            if(OnDemandEligibility.get(i).getText().equals("0.00%")) {
+                portfolioRadioButtonList.get(i).click();
+                break;
+            }
+        }
+    }
+
+    public void ValidateSortingOnLastUpdateColumn() throws ParseException {
+        for(int i = 1 ; i< getPortfolioList().size() ; i++ ) {
+            Date previousRowDate = DateTimeUtilities.convertStringToDate(LastUpdateColumn.get(i-1).getText(),"MMMM dd, yyyy");
+            Date currentRowDate = DateTimeUtilities.convertStringToDate(LastUpdateColumn.get(i).getText(),"MMMM dd, yyyy");
+            assertTestCase.assertTrue(previousRowDate.compareTo(currentRowDate) >= 0,"Validating sorting order of Last Updated column in portfolio table, Dates should be in Descending order");
+        }
+    }
+
+    public Map<String,String> getPortfolioCoverageAndOnDemadEligibilityValues(String PortfolioName){
+        Map<String,String> returnValue = new HashMap<>();
+         for(int i = 0 ; i< getPortfolioList().size() ; i++ ) {
+            if (getPortfolioList().get(i).equals(PortfolioName)){
+                returnValue.put("Coverage",portfolioCoverage.get(i).getText());
+                returnValue.put("ONDemandEligibility",OnDemandEligibility.get(i).getText());
+             break;
+            }
+
+        }
+        return returnValue ;
     }
 
 

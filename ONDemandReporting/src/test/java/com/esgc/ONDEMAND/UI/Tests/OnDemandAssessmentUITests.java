@@ -13,13 +13,14 @@ import io.restassured.response.Response;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
+import java.text.ParseException;
+
 import java.util.Arrays;
 import java.util.List;
 
 import static com.esgc.Utilities.Groups.*;
 
 public class OnDemandAssessmentUITests extends UITestBase {
-    Faker faker = new Faker();
 
     @Test(groups = {REGRESSION, UI, COMMON})
     @Xray(test = {11985, 12001, 12002, 12011, 12054, 12092, 12822, 12824})
@@ -397,5 +398,18 @@ public class OnDemandAssessmentUITests extends UITestBase {
         assertTestCase.assertTrue(ODAPage.btnConfirmRequest.isEnabled(), "Confirm request button is enabled");
         ODAPage.clickConfirmRequest();
         ODAPage.verifyConfirmRequestPopup("Cancel");
+    }
+
+    @Test(groups = {REGRESSION, UI, COMMON})
+    @Xray(test = {13987, 14002})
+    public void OnDemandAssessmentPortfolioTableValidations() throws ParseException {
+        OnDemandAssessmentPage onDemandAssessmentPage = new OnDemandAssessmentPage();
+        onDemandAssessmentPage.navigateToReportingService("On-Demand Assessment");
+        onDemandAssessmentPage.waitForPortfolioTableToLoad();
+        // ESGCA - 13987 Verify that for a portfolio having 0% On Demand Assessment eligible coverage , request assessment button is disabled
+        onDemandAssessmentPage.SelectPortfolioWithZeroOnDemandAssessmentEligibility();
+        assertTestCase.assertTrue(onDemandAssessmentPage.isViewAssessmentRequestButtonDisabled(), "Validating that View Assessment Request button is disabled");
+        // ESGCA - 14002 - Verify the sorting of the Portfolios in the portfolio table
+        onDemandAssessmentPage.ValidateSortingOnLastUpdateColumn();
     }
 }

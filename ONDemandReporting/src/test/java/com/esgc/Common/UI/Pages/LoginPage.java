@@ -199,11 +199,6 @@ public class LoginPage extends PageBase {
             clickOnNextButton();
         }
         wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.DATA_PASSWORD);
-
-//        wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.UI_USERNAME, Keys.ENTER);
-//        wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.UI_PASSWORD);
-       /* if (!termsAndConditionsCheckBox.isSelected())
-            wait.until(ExpectedConditions.visibilityOf(termsAndConditionsLabel)).click();*/
         wait.until(ExpectedConditions.visibilityOf(loginButton)).click();
     }
 
@@ -348,12 +343,17 @@ public class LoginPage extends PageBase {
                 wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.EUTAXONOMY_SFDR_PASSWORD);
                 break;
 
+            case ONDEMAND_USER_WITHOUT_EXPORT_ENTITLEMENT:
+                wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.ONDEMAND_USER_WITHOUT_EXPORT_ENTITLEMENT_USERNAME, Keys.ENTER);
+                wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.ONDEMAND_USER_WITHOUT_EXPORT_ENTITLEMENT_PASSWORD);
+                break;
                 default:
                 Assert.fail("Bundle not found!");
         }
      /*   if (!termsAndConditionsCheckBox.isSelected())
             wait.until(ExpectedConditions.visibilityOf(termsAndConditionsLabel)).click();*/
         wait.until(ExpectedConditions.visibilityOf(loginButton)).click();
+
     }
 
 
@@ -362,10 +362,10 @@ public class LoginPage extends PageBase {
         wait.until(ExpectedConditions.visibilityOf(menu));
         BrowserUtils.clickWithJS(menu);
 
-        BrowserUtils.clickWithJS(BrowserUtils.waitForVisibility(logout, 10));
+        BrowserUtils.clickWithJS(BrowserUtils.waitForVisibility(logout,10));
     }
 
-    public void checkTermsAndConditions() {
+    public void checkTermsAndConditions(){
         wait.until(ExpectedConditions.visibilityOf(termsAndConditionsLabel)).click();
     }
 }
