@@ -4,7 +4,6 @@ import com.esgc.ONDEMAND.DB.DBModels.OnDemandPortfolioTable;
 import com.esgc.Utilities.Database.DatabaseDriver;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -131,72 +130,6 @@ public class OnDemandAssessmentQueries {
             dataList.add(list);
         }
         return dataList ;
-    }
-
-
-    public List<Map<String,Object>> getEntitiesWithScoreType(String portfolioId){
-
-
-        String query = "SELECT  dp.portfolio_id\n" +
-                "                            ,nvl(dp.bvd9_number,dp.sec_id) as \"bvd9_number\"\n" +
-                "                            ,dp.company_name\n" +
-                "                            ,dp.region\n" +
-                "                            ,dp.sector\n" +
-                "                            ,est.score_quality\n" +
-                "                            ,max(est.entity_status) entity_status\n" +
-                "                            , SUM(dp.value) value\n" +
-                "                            , COUNT(*) OVER(PARTITION BY dp.portfolio_id) total_companies\n" +
-                "                            , SUM(SUM(dp.value)) OVER(PARTITION BY dp.portfolio_id) AS total_value\n" +
-                "                    FROM df_target.df_portfolio dp left join df_target.entity_score_type est\n" +
-                "                                                on est.orbis_id = dp.bvd9_number\n" +
-                "                                                and est.is_current = 'Y'\n" +
-                "                                                and est.entity_status = 'Active'\n" +
-                "                                                and est.score_quality in ('Analytical', 'Subsidiary', 'Predicted', 'Self-Assessed')\n" +
-                "                    where portfolio_id = '"+portfolioId+"'\n" +
-                "                    GROUP BY dp.portfolio_id, \"bvd9_number\", dp.region,dp.company_name, dp.sector ,est.SCORE_QUALITY ";
-
-
-
-        return DatabaseDriver.getQueryResultMap(query);
-    }
-    public List<Object> getEntitiesNameList(String portfolioId){
-
-        List<Object> rowList = new ArrayList<>();
-
-        String query = "SELECT  dp.portfolio_id\n" +
-                "                            ,nvl(dp.bvd9_number,dp.sec_id) as \"bvd9_number\"\n" +
-                "                            ,dp.company_name\n" +
-                "                            ,dp.region\n" +
-                "                            ,dp.sector\n" +
-                "                            ,est.score_quality\n" +
-                "                            ,max(est.entity_status) entity_status\n" +
-                "                            , SUM(dp.value) value\n" +
-                "                            , COUNT(*) OVER(PARTITION BY dp.portfolio_id) total_companies\n" +
-                "                            , SUM(SUM(dp.value)) OVER(PARTITION BY dp.portfolio_id) AS total_value\n" +
-                "                    FROM df_target.df_portfolio dp left join df_target.entity_score_type est\n" +
-                "                                                on est.orbis_id = dp.bvd9_number\n" +
-                "                                                and est.is_current = 'Y'\n" +
-                "                                                and est.entity_status = 'Active'\n" +
-                "                                                and est.score_quality in ('Analytical', 'Subsidiary', 'Predicted', 'Self-Assessed')\n" +
-                "                    where portfolio_id = '"+portfolioId+"'\n" +
-                "                    GROUP BY dp.portfolio_id, \"bvd9_number\", dp.region,dp.company_name, dp.sector ,est.SCORE_QUALITY ";
-
-
-        return     DatabaseDriver.getColumnData(query, "COMPANY_NAME");
-    }
-
-    public List<String> getEntitieNamesFromResultSet(String portfolioId){
-        List<Map<String, Object>> resultSet = getEntitiesWithScoreType(portfolioId);
-
-
-
-        List<String> entityNames = new LinkedList<>();
-
-        for(int i=0; i<entityNames.size(); i++){
-            entityNames.add(resultSet.get(i).get("COMPANY_NAME").toString());
-        }
-
-        return entityNames;
     }
 
 }
