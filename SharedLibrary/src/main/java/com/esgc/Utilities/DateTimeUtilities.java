@@ -62,6 +62,10 @@ public class DateTimeUtilities {
         return formatter.format(date1);
 
     }
+    public static Date convertStringToDate(String date, String currentDateformat) throws ParseException {
+        SimpleDateFormat formatter = new SimpleDateFormat(currentDateformat);
+        return formatter.parse(date);
+    }
     public static String getFormattedDate(String date, String inputFormat, String outputFormat) {
         Date date1 = null;
         try {

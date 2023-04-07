@@ -8,10 +8,9 @@ import com.esgc.Utilities.Xray;
 import com.github.javafaker.Faker;
 import io.restassured.response.Response;
 import org.testng.annotations.Test;
-
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
-
 import static com.esgc.Utilities.Groups.*;
 
 public class EMCAPITests extends APITestBase {
@@ -19,10 +18,10 @@ public class EMCAPITests extends APITestBase {
     protected EMCAPIController apiController = new EMCAPIController();
     Response response;
     Faker faker = new Faker();
-    String accountId = Environment.QA_TEST_ACCOUNT_ID;
+    String  accountId = Environment.QA_TEST_ACCOUNT_ID;
     String applicationId = Environment.QA_TEST_APPLICATION_ID;
 
-    @Test(groups = {EMC, API, REGRESSION})
+    @Test(groups = {EMC, API, REGRESSION, SMOKE})
     @Xray(test = {6870})
     public void verifyAdminUserCanGETListOfAllUsersWithAdminRoleTest() {
         response = apiController.getEMCAllAdminUsersResponse();
@@ -45,7 +44,7 @@ public class EMCAPITests extends APITestBase {
         assertTestCase.assertTrue(response.as(Role[].class).length > 0, "Role details are verified");
     }
 
-    @Test(groups = {EMC, API, REGRESSION})
+    @Test(groups = {EMC, API, REGRESSION, SMOKE})
     @Xray(test = {6871, 6872, 4979})
     public void verifyAdminUserCRUDOperationsOnUserTest() {
 
@@ -439,7 +438,6 @@ public class EMCAPITests extends APITestBase {
         assertTestCase.assertEquals(response.path("name"), "DuplicateException", "Application creation failed response name is verified");
         assertTestCase.assertEquals(response.path("message"), "An application with Key "+applicationKey+" already exists.", "Application creation failed response message is verified");
 
-        //todo: verify this part later
         //Create Web Application with duplicate key
         type = "WebApplication";//SinglePageApplication, ExternalApplication, WebApplication
         response = apiController.postEMCNewApplicationResponse(applicationKey, applicationName, applicationUrl, provider, type);
@@ -556,7 +554,7 @@ public class EMCAPITests extends APITestBase {
         assertTestCase.assertEquals(response.statusCode(), 401, "Status code 401 Unauthorized is verified");
     }
 
-    @Test(groups = {EMC, API, REGRESSION},
+    @Test(groups = {EMC, API, REGRESSION, SMOKE, PROD},
             description = "API | EMC | Accounts Applications | Verify that User is Able to Add a New Relation between Account and Applications")
     @Xray(test = {4046})
     public void verifyAssignApplicationToAccountTest() {
@@ -661,7 +659,7 @@ public class EMCAPITests extends APITestBase {
         assertTestCase.assertEquals(names, response.jsonPath().getList("products.name"), "Products are sorted by name");
     }
 
-    @Test(groups = {EMC, API, REGRESSION},
+    @Test(groups = {EMC, API, REGRESSION, SMOKE, PROD},
             description = "API | EMC | Product | Verify User does not have Access to GET Products without Access Token")
     @Xray(test = {3606})
     public void verifyUserCantAccessGETProductsWithoutAccessTokenTest() {
@@ -672,7 +670,7 @@ public class EMCAPITests extends APITestBase {
         assertTestCase.assertEquals(response.path("message"), "Unauthorized", "Response message is verified");
     }
 
-    @Test(groups = {EMC, API, REGRESSION},
+    @Test(groups = {EMC, API, REGRESSION, SMOKE, PROD},
             description = "API | EMC | Product | Verify User does not have Access to GET Products with Invalid Access Token")
     @Xray(test = {3607})
     public void verifyUserCantAccessGETProductsWithInvalidAccessToken() {
@@ -693,12 +691,13 @@ public class EMCAPITests extends APITestBase {
         }
     }
 
-    @Test(groups = {EMC, UI, REGRESSION})
+    @Test(groups = {EMC, UI, REGRESSION, SMOKE})
     @Xray(test = {7399, 7400})
     public void verifyAdminUserCanGETListOfAllAdminUserPermissionsTest() {
         response = apiController.getEMCAllAdminUsersPermissionsResponse();
         response.prettyPrint();
         System.out.println("response = " + response.statusCode());
+
         assertTestCase.assertEquals(response.statusCode(), 200, "Status code 200 OK is verified");
         List<String> roleNames = response.jsonPath().getList("");
         List<String> expectedAdminRoleNames = Arrays.asList("activate-account-user", "admin-assign-role-permissions", "admin-assign-role-users",
@@ -721,6 +720,7 @@ public class EMCAPITests extends APITestBase {
         assertTestCase.assertTrue(roleNames.containsAll(expectedAdminRoleNames), "Admin Role names are verified");
         assertTestCase.assertTrue(roleNames.containsAll(expectedViewerRoleNames), "Viewer Role names are verified");
     }
+
 
     @Test(groups = {"EMC", "api"})
     //@Xray(test = {7399, 7400})

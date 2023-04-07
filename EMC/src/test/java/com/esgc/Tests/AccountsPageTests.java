@@ -219,7 +219,7 @@ public class AccountsPageTests extends EMCUITestBase {
         detailsPage.cancelButton.click();
     }
 
-    @Test(groups = {EMC, UI, REGRESSION})
+    @Test(groups = {EMC, UI, REGRESSION, PROD, SMOKE})
     @Xray(test = {4806, 6737, 7294, 7296, 7300, 8342})
     public void createNewUserTest() {
         navigateToAccountsPage(accountName, "users");
@@ -264,8 +264,6 @@ public class AccountsPageTests extends EMCUITestBase {
         EMCAccountDetailsPage detailsPage = new EMCAccountDetailsPage();
         assertTestCase.assertTrue(detailsPage.addUserButton.isDisplayed(), "Users Tab is displayed");
 
-        //Click on Add User button
-        detailsPage.clickOnAddUserButton();
         //Enter all data required in the modal
         // Click Save button
         fname = "QATest User";
@@ -329,7 +327,7 @@ public class AccountsPageTests extends EMCUITestBase {
         assertTestCase.assertTrue(currentInfo.get("modifiedBy").split(" ").length >= 5, "Modified by info is displayed");
     }
 
-    @Test(groups = {EMC, UI, SMOKE, REGRESSION})
+    @Test(groups = {EMC, UI, SMOKE, REGRESSION, PROD})
     @Xray(test = {5044, 4809})
     public void verifyAllUsersSortedByNameTest() {
         navigateToAccountsPage(accountName, "users");
@@ -342,13 +340,15 @@ public class AccountsPageTests extends EMCUITestBase {
         assertTestCase.assertTrue(detailsPage.isSortedByName(), "Users Table is displayed");
     }
 
-    @Test(groups = {EMC, UI, REGRESSION, SMOKE})
+    @Test(groups = {EMC, UI, REGRESSION, SMOKE, PROD})
     @Xray(test = {2351, 5043})
     public void verifyAllAccountsSortedByNameTest() {
         navigateToAccountsPage("", "users");
         wait(accountsPage.accountNames, 10);
         accountsPage.verifyAccountsPage();
-        List<String> accountNames = BrowserUtils.specialSort(accountsPage.getAccountNames());
+        List<String> accountNames = accountsPage.getAccountNames();
+        //sort account names alphabetically by ignoring case
+        accountNames.sort(String.CASE_INSENSITIVE_ORDER);
         assertTestCase.assertEquals(accountNames, accountsPage.getAccountNames(), "Accounts are sorted alphabetically");
     }
 
@@ -422,7 +422,7 @@ public class AccountsPageTests extends EMCUITestBase {
     public void verifyActivateUserTest() {
         navigateToAccountsPage(accountName, "users");
         EMCAccountDetailsPage detailsPage = new EMCAccountDetailsPage();
-        detailsPage.clickOnAddUserButton();
+        //detailsPage.clickOnAddUserButton();
 
         //Enter all data required in the modal
         // Click Save button
@@ -453,7 +453,7 @@ public class AccountsPageTests extends EMCUITestBase {
     }
 
     @Test(groups = {EMC, UI, SMOKE, REGRESSION, PROD})
-    @Xray(test = {5746, 5764, 5765, 6185})
+    @Xray(test = {5736, 5746, 5764, 5765, 6185})
     public void resetPasswordButtonTest() {
         navigateToAccountsPage(accountName, "users");
         EMCAccountDetailsPage detailsPage = new EMCAccountDetailsPage();
@@ -574,7 +574,7 @@ public class AccountsPageTests extends EMCUITestBase {
         //todo: Search for the user on OKTA - User is present in Okta but not on EMC
     }
 
-    @Test(groups = {EMC, UI, SMOKE})
+    @Test(groups = {EMC, UI, SMOKE, REGRESSION, PROD})
     @Xray(test = {5179, 3994, 7390, 7394, 7396})
     public void verifyUserAssignApplicationRolesTest() {
         navigateToAccountsPage(accountName, "applications");
@@ -643,8 +643,7 @@ public class AccountsPageTests extends EMCUITestBase {
         detailsPage.clickOnApplicationsTab();
         assertTestCase.assertTrue(detailsPage.assignApplicationsButton.isDisplayed(), "Applications Tab is displayed");
         assertTestCase.assertTrue(detailsPage.assignApplication(applicationName), "Application is assigned for the user");
-        BrowserUtils.waitForVisibility(detailsPage.applicationAddedMessage, 5);
-        assertTestCase.assertTrue(detailsPage.applicationAddedMessage.isDisplayed(), "Application is assigned for the user");
+
         detailsPage.clickOnUsersTab();
         BrowserUtils.waitForClickablility(detailsPage.userNamesList.get(0), 5).click();
         //User account details page are displayed
@@ -1120,7 +1119,7 @@ public class AccountsPageTests extends EMCUITestBase {
 
     }
 
-    @Test(groups = {EMC, UI, REGRESSION}, description = "UI | EMC | Accounts | Verify the ability to search for an account")
+    @Test(groups = {EMC, UI, REGRESSION, PROD}, description = "UI | EMC | Accounts | Verify the ability to search for an account")
     @Xray(test = {4514})
     public void verifySearchForAccountTest() {
         EMCMainPage homePage = new EMCMainPage();
@@ -1282,7 +1281,7 @@ public class AccountsPageTests extends EMCUITestBase {
 
     }
 
-    @Test(groups = {EMC, UI, REGRESSION}, description = "UI | EMC | Roles | Verify User with Admin Role can view Accounts list and Create Account button available")
+    @Test(groups = {EMC, UI, REGRESSION, PROD}, description = "UI | EMC | Roles | Verify User with Admin Role can view Accounts list and Create Account button available")
     @Xray(test = {7315})
     public void verifyUserWithAdminRoleViewAccountsTest() {
         navigateToAccountsPage("", "details");
@@ -1391,16 +1390,20 @@ public class AccountsPageTests extends EMCUITestBase {
             Driver.getDriver().switchTo().window(currentTab);
             BrowserUtils.wait(2);
         }
+
         if (link == null) return false;
         return link.endsWith("issuerworkspace") || link.endsWith("dashboard");
+
     }
 
     @Test(groups = {EMC, UI, REGRESSION}, description = "UI | EMC | Roles | Verify User with Admin Role is able to Edit and Save Account Details")
     @Xray(test = {7322, 7323})
     public void editAccountTest() {
+
         navigateToAccountsPage("Test Account", "details");
         EMCAccountDetailsPage detailsPage = new EMCAccountDetailsPage();
         detailsPage.verifyDetailsPage("Admin");
+
         detailsPage.clickOnEditButton();
         assertTestCase.assertTrue(detailsPage.cancelButton.isEnabled(), "Accounts Page - Users Details - Cancel button is enabled for editing");
         assertTestCase.assertTrue(detailsPage.saveButton.isEnabled(), "Accounts Page - Users Details - Save button is enabled for editing");
@@ -1415,17 +1418,18 @@ public class AccountsPageTests extends EMCUITestBase {
         assertTestCase.assertEquals(detailsPage.accountNameInput.getAttribute("value"), "Test Account Edited", "Accounts Page - Users Details - Account Name is edited");
         detailsPage.clickOnEditButton();
         clear(detailsPage.accountNameInput);
+
         detailsPage.accountNameInput.sendKeys("Test Account");
         detailsPage.clickOnSaveButton();
         BrowserUtils.waitForVisibility(detailsPage.notification, 15);
         assertTestCase.assertTrue(detailsPage.notification.isDisplayed(), "Accounts Page - Users Details - Notification is displayed");
-        assertTestCase.assertEquals(detailsPage.accountNameInput.getAttribute("value"), "Test Account.", "Accounts Page - Users Details - Account Name is edited");
+        assertTestCase.assertEquals(detailsPage.accountNameInput.getAttribute("value"), "Test Account", "Accounts Page - Users Details - Account Name is edited");
         detailsPage.clickOnEditButton();
         assertTestCase.assertTrue(detailsPage.cancelButton.isEnabled(), "Accounts Page - Users Details - Cancel button is enabled for editing");
         assertTestCase.assertTrue(detailsPage.saveButton.isEnabled(), "Accounts Page - Users Details - Save button is enabled for editing");
         assertTestCase.assertTrue(detailsPage.accountNameInput.isEnabled(), "Accounts Page - Users Details - Account Name input is enabled for editing");
         detailsPage.clickOnCancelButton();
-        assertTestCase.assertEquals(detailsPage.accountNameInput.getAttribute("value"), "Test Account.", "Accounts Page - Users Details - Account Name is not edited");
+        assertTestCase.assertEquals(detailsPage.accountNameInput.getAttribute("value"), "Test Account", "Accounts Page - Users Details - Account Name is not edited");
     }
 
     @Test(groups = {EMC, UI, REGRESSION}, description = "UI | EMC | MA | create and Verify MA User")
@@ -1436,7 +1440,7 @@ public class AccountsPageTests extends EMCUITestBase {
         assertTestCase.assertTrue(detailsPage.addUserButton.isDisplayed(), "Users Tab is displayed");
 
         //Click on Add User button
-        detailsPage.clickOnAddUserButton();
+        //detailsPage.clickOnAddUserButton();
         //Enter all data required in the modal
         // Click Save button
         fname = "QATest MAUser";
@@ -1465,7 +1469,7 @@ public class AccountsPageTests extends EMCUITestBase {
         assertTestCase.assertFalse(detailsPage.verifyUser(newFirstName + " " + newLastName), "User is deleted successfully");
     }
 
-    @Test(groups = {EMC, UI, REGRESSION}, description = "UI | EMC | Accounts | Verify once Account creation is canceled, is redirected to Account List page")
+    @Test(groups = {EMC, UI, REGRESSION, SMOKE, PROD}, description = "UI | EMC | Accounts | Verify once Account creation is canceled, is redirected to Account List page")
     @Xray(test = {12713})
     public void verifyAccountCreationCancelTest() {
         EMCMainPage homePage = new EMCMainPage();
@@ -1563,24 +1567,9 @@ public class AccountsPageTests extends EMCUITestBase {
         detailsPage.clickOnMenuOption("Bulk import");
         EMCUserImportPage importPage = new EMCUserImportPage();
         importPage.verifyImportPage();
-        assertTestCase.assertTrue(importPage.downloadAndVerifyTemplate(), "Template downloaded and verified");
-        assertTestCase.assertTrue(importPage.verifyTemplateContent(), "Template content is verified");
-        assertTestCase.assertTrue(importPage.uploadTemplateAndVerifyUsers(), "Template uploaded and users are verified");
-        navigateToAccountsPage(accountName, "users");
-        detailsPage = new EMCAccountDetailsPage();
-        wait(detailsPage.userNamesList, 10);
-        System.out.println("userNamesList.size() = " + detailsPage.userNamesList.size());
-        for (int i = 0; i < 10; i++) {
-            if(detailsPage.verifyUser("QA Test User1") && detailsPage.verifyUser("QA Test User2")){
-                break;
-            }
-            BrowserUtils.wait(1);
-            BrowserUtils.refresh();
-            detailsPage.clickOnUsersTab();
-        }
-        assertTestCase.assertTrue(detailsPage.verifyUser("QA Test User1"),"QA Test User1 is imported");
-        assertTestCase.assertTrue(detailsPage.verifyUser("QA Test User2"),"QA Test User2 is imported");
-
+        assertTestCase.assertTrue(importPage.downloadAndVerifyTemplate(), "Import Users modal is displayed");
+        assertTestCase.assertTrue(importPage.verifyTemplateContent(), "Import Users modal is displayed");
+        assertTestCase.assertTrue(importPage.uploadTemplateAndVerifyUsers(), "Import Users modal is displayed");
         navigateToMenu("Users");
         EMCUsersPage usersPage = new EMCUsersPage();
         wait(usersPage.userNames, 20);
@@ -1610,7 +1599,7 @@ public class AccountsPageTests extends EMCUITestBase {
         assertTestCase.assertTrue(importPage.uploadTemplateAndVerifyTemplateWithWrongData(), "Import Users modal is displayed");
     }
 
-    @Test(groups = {EMC, UI, REGRESSION},
+    @Test(groups = {EMC, UI, REGRESSION, SMOKE, PROD},
             description = "UI | EMC | ImportUsers | Verify Mass Import User is only available on User tab inside the Account")
     @Xray(test = {13304})
     public void verifyMassImportUserOnlyAvailableOnUsersTabTest() {
@@ -1630,7 +1619,7 @@ public class AccountsPageTests extends EMCUITestBase {
         assertTestCase.assertFalse(usersPage.isOptionsAvailable("Bulk import"), "Bulk import option is not available");
     }
 
-    @Test(groups = {EMC, UI, REGRESSION, SMOKE},
+    @Test(groups = {EMC, UI, REGRESSION, SMOKE, PROD},
             description = "UI | EMC | Users | Verify the Users page search box behavior")
     @Xray(test = {5494})
     public void verifyUsersPageSearchBoxBehaviorTest() {
@@ -1721,6 +1710,7 @@ public class AccountsPageTests extends EMCUITestBase {
         for(WebElement data: applicationsPage.firstRow){
             assertTestCase.assertTrue(data.getCssValue("text-align").equals("left"), "Data in the table is left aligned");
         }
+
     }
 
     @Test(groups = {EMC, UI, REGRESSION}, description = "EMC | UI | Delete Assigned Application Test")

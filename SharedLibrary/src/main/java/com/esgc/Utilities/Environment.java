@@ -72,9 +72,23 @@ public class Environment {
     public static final String ADMIN_ROLE_KEY;
     public static final String VIEWER_ROLE_KEY;
     public static final String FULFILLMENT_ROLE_KEY;
+    public static final String USER_WITH_PREDICTEDSCORE_AND_CLIMATE_USERNAME ;
+    public static final String USER_WITH_PREDICTEDSCORE_AND_CLIMATE_PASSWORD ;
 
+    public static final String USER_WITH_ONDEMAND_ENTITLEMENT_USERNAME ;
+    public static final String USER_WITH_ONDEMAND_ENTITLEMENT_PASSWORD ;
 
+    public static final String FIRSTTIME_USER_WITH_ONDEMAND_ENTITLEMENT_USERNAME ;
+    public static final String FIRSTTIME_USER_WITH_ONDEMAND_ENTITLEMENT_PASSWORD ;
 
+    public static final String EUTAXONOMY_SFDR_ESG_ESGPREDICTOR_ONDEMAND_EXPORT_USERNAME ;
+    public static final String EUTAXONOMY_SFDR_ESG_ESGPREDICTOR_ONDEMAND_EXPORT_PASSWORD ;
+
+    public static final String ONDEMAND_USER_WITHOUT_EXPORT_ENTITLEMENT_USERNAME ;
+    public static final String ONDEMAND_USER_WITHOUT_EXPORT_ENTITLEMENT_PASSWORD ;
+
+    public static final String EUTAXONOMY_SFDR_USERNAME ;
+    public static final String EUTAXONOMY_SFDR_PASSWORD ;
 
     public static final String PDF_EXPORT_BUNDLE_USERNAME;
     public static final String PDF_EXPORT_BUNDLE_PASSWORD;
@@ -84,6 +98,13 @@ public class Environment {
     public static final String NO_PREVIOUSLY_DOWNLOADED_REGULATORY_REPORTS_PASSWORD;
     public static final String PDF_EXPORT_ONLY_PDF_USERNAME;
     public static final String PDF_EXPORT_ONLY_PDF_PASSWORD;
+    public static final String USER_WITH_SCORE_PREDICTOR_ENTITLEMENT_USERNAME;
+    public static final String USER_WITH_SCORE_PREDICTOR_ENTITLEMENT_PASSWORD;
+    public static final String USER_WITH_CORPORATES_ESG_DATA_AND_SCORES_ENTITLEMENT_USERNAME;
+    public static final String USER_WITH_CORPORATES_ESG_DATA_AND_SCORES_ENTITLEMENT_PASSWORD;
+    public static final String ODA_ESG_PREDICTOR_DATA_ENTITLEMENT_USERNAME;
+    public static final String ODA_ESG_PREDICTOR_DATA_ENTITLEMENT_PASSWORD;
+
     public static final String MESG_APPLICATION_NAME;
     public static  String environment ;
 
@@ -178,7 +199,27 @@ public class Environment {
         PDF_EXPORT_ONLY_PDF_PASSWORD = properties.getProperty("PDFexport_OnlyPDF_password");
         NO_PREVIOUSLY_DOWNLOADED_REGULATORY_REPORTS_USERNAME = properties.getProperty("NoPreviouslyDownloadedRegulatoryReports_username");
         NO_PREVIOUSLY_DOWNLOADED_REGULATORY_REPORTS_PASSWORD = properties.getProperty("NoPreviouslyDownloadedRegulatoryReports_password");
+        USER_WITH_ONDEMAND_ENTITLEMENT_USERNAME = properties.getProperty("OnDemand_bundle_username");
+        USER_WITH_ONDEMAND_ENTITLEMENT_PASSWORD = properties.getProperty("OnDemand_bundle_password");
+        USER_WITH_SCORE_PREDICTOR_ENTITLEMENT_USERNAME = properties.getProperty("score_predictor_username");
+        USER_WITH_SCORE_PREDICTOR_ENTITLEMENT_PASSWORD = properties.getProperty("score_predictor_password");
+        USER_WITH_CORPORATES_ESG_DATA_AND_SCORES_ENTITLEMENT_USERNAME = properties.getProperty("corporates_esg_data_and_scores_username");
+        USER_WITH_CORPORATES_ESG_DATA_AND_SCORES_ENTITLEMENT_PASSWORD = properties.getProperty("corporates_esg_data_and_scores_password");
+        ODA_ESG_PREDICTOR_DATA_ENTITLEMENT_USERNAME = properties.getProperty("oda_esg_predictor_data_username");
+        ODA_ESG_PREDICTOR_DATA_ENTITLEMENT_PASSWORD = properties.getProperty("oda_esg_predictor_data_password");
+        USER_WITH_PREDICTEDSCORE_AND_CLIMATE_USERNAME  = properties.getProperty("UserOnlyWithPredictedAndClimateEntitlement_username");
+        USER_WITH_PREDICTEDSCORE_AND_CLIMATE_PASSWORD = properties.getProperty("UserOnlyWithPredictedAndClimateEntitlement_password");
 
+        FIRSTTIME_USER_WITH_ONDEMAND_ENTITLEMENT_USERNAME = properties.getProperty("FirstTimeUserWithOnDemandEntitlement_username");
+        FIRSTTIME_USER_WITH_ONDEMAND_ENTITLEMENT_PASSWORD = properties.getProperty("FirstTimeUserWithOnDemandEntitlement_password");
 
+        EUTAXONOMY_SFDR_ESG_ESGPREDICTOR_ONDEMAND_EXPORT_USERNAME = properties.getProperty("EUTaxonomy_SFDR_ESG_ESGPREDICTOR_ONDEMAND_EXPORT_username");
+        EUTAXONOMY_SFDR_ESG_ESGPREDICTOR_ONDEMAND_EXPORT_PASSWORD =  properties.getProperty("EUTaxonomy_SFDR_ESG_ESGPREDICTOR_ONDEMAND_EXPORT_password");
+
+        EUTAXONOMY_SFDR_USERNAME= properties.getProperty("EUTaxonomy_SFDR_username");
+        EUTAXONOMY_SFDR_PASSWORD = properties.getProperty("EUTaxonomy_SFDR_password");
+
+        ONDEMAND_USER_WITHOUT_EXPORT_ENTITLEMENT_USERNAME = properties.getProperty("ONDEMAND_USER_Without_Export_Entitlement_username");
+        ONDEMAND_USER_WITHOUT_EXPORT_ENTITLEMENT_PASSWORD = properties.getProperty("ONDEMAND_USER_Without_Export_Entitlement_password");
     }
 }

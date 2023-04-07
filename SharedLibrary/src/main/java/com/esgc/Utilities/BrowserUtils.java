@@ -11,9 +11,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 
-import java.io.File;
-import java.io.FilenameFilter;
-import java.io.IOException;
+import java.io.*;
 import java.text.BreakIterator;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
@@ -27,11 +25,11 @@ public class BrowserUtils {
      *
      * @return path
      */
-    public static String downloadPath() {
-        String path = System.getProperty("user.dir") + File.separator + "src" +
-                File.separator + "test" + File.separator + "resources" + File.separator + "download";
+    public static String downloadPath (){
 
-        return path;
+        return System.getProperty("user.dir") + File.separator + "src" +
+                    File.separator + "test" + File.separator + "resources" + File.separator + "download";
+
     }
 
     /**
@@ -166,6 +164,17 @@ public class BrowserUtils {
     public static WebElement waitForVisibility(WebElement element, int timeToWaitInSec) {
         WebDriverWait wait = new WebDriverWait(Driver.getDriver(), Duration.ofSeconds(timeToWaitInSec));
         return wait.until(ExpectedConditions.visibilityOf(element));
+    }
+
+    public static void waitForVisibility(List<WebElement> element, int timeToWaitInSec) {
+        int count = 0;
+        while(element.size() == 0){
+            count++;
+            wait(1);
+            if(count == timeToWaitInSec){
+                break;
+            }
+        }
     }
 
     public static WebElement waitForVisibility(WebElement element) {
@@ -612,5 +621,15 @@ public class BrowserUtils {
 
     public static void refresh() {
         Driver.getDriver().navigate().refresh();
+    }
+
+    public static void switchToWindow(Set<String> currentWindowHandles) {
+        for(String window : getWindowHandles()) {
+            if(!currentWindowHandles.contains(window)) {
+                switchWindowsTo(window);
+                return;
+            }
+        }
+        System.out.println("No new window found");
     }
 }

@@ -22,7 +22,7 @@ public class EUTaxonomyTests extends UITestBase {
     @Xray(test = {11532})
     public void verifyEUTaxonomyPageTest() {
         EUTaxonomyPage euTaxonomyPage = new EUTaxonomyPage();
-        euTaxonomyPage.navigateToPageFromMenu("On-Demand Reporting");
+        euTaxonomyPage.navigateToPageFromMenu("ESG Reporting Portal");
         TestBase.test.info("Navigated to Regulatory Reporting Page");
 
         assertTestCase.assertTrue(euTaxonomyPage.isEUTaxonomyOptionIsAvailable(),
@@ -50,7 +50,7 @@ public class EUTaxonomyTests extends UITestBase {
     @Xray(test = {11548})
     public void verifyValuesAreRemainingForEUTaxonomy() {
         EUTaxonomyPage euTaxonomyPage = new EUTaxonomyPage();
-        euTaxonomyPage.navigateToPageFromMenu("On-Demand Reporting");
+        euTaxonomyPage.navigateToPageFromMenu("ESG Reporting Portal");
         TestBase.test.info("Navigated to Regulatory Reporting Page");
 
         euTaxonomyPage.clickOnEUTaxonomyOption();
@@ -87,7 +87,7 @@ public class EUTaxonomyTests extends UITestBase {
         BrowserUtils.switchWindow(currentWindow);
 
         euTaxonomyPage.navigateToPageFromMenu("Dashboard");
-        euTaxonomyPage.navigateToPageFromMenu("On-Demand Reporting");
+        euTaxonomyPage.navigateToPageFromMenu("ESG Reporting Portal");
         TestBase.test.info("User goes back to EU taxonomy");
 
         euTaxonomyPage.clickOnEUTaxonomyOption();

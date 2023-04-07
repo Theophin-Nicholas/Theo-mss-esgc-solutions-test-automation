@@ -7,6 +7,7 @@ import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.Database.DatabaseDriver;
 import com.esgc.Utilities.Driver;
 import com.esgc.Utilities.Environment;
+import com.github.javafaker.Faker;
 import org.openqa.selenium.JavascriptExecutor;
 import org.testng.ITestListener;
 import org.testng.ITestResult;
@@ -17,9 +18,8 @@ import java.time.Duration;
 import static com.esgc.Utilities.Groups.*;
 
 public abstract class UITestBase extends TestBase implements ITestListener {
-    String accessToken;
+    public static String  accessToken;
     public String portfolioName ;
-
     @BeforeClass(alwaysRun = true)
     @Parameters("browser")
     public synchronized void setupUIForTests(@Optional String browser) {
@@ -69,14 +69,15 @@ public abstract class UITestBase extends TestBase implements ITestListener {
             if (!isEntitlementsTest) {
                 loginPage.login();
                 BrowserUtils.wait(20);
+                setAccessTokenFromUI();
             }
-            setAccessTokenFromUI();
+
         }
 
     }
 
 
-    public synchronized void setAccessTokenFromUI() {
+    public static synchronized void setAccessTokenFromUI() {
         String getAccessTokenScript = "return JSON.parse(localStorage.getItem('okta-token-storage')).accessToken.accessToken";
         accessToken = ((JavascriptExecutor) Driver.getDriver()).executeScript(getAccessTokenScript).toString();
         System.setProperty("token", accessToken);
@@ -88,10 +89,12 @@ public abstract class UITestBase extends TestBase implements ITestListener {
         Driver.getDriver().navigate().refresh();
     }
 
-  /*  @AfterMethod(onlyForGroups = {ENTITLEMENTS}, groups = {SMOKE, REGRESSION, ENTITLEMENTS})
+   @AfterMethod(onlyForGroups = {ENTITLEMENTS}, groups = {SMOKE, REGRESSION, UI, ENTITLEMENTS})
     public synchronized void teardownBrowserAfterUITesting() {
-        Driver.closeDriver();
-    }*/
+        //Driver.closeDriver();
+       LoginPage login = new LoginPage();
+       if (!Driver.getDriver().getCurrentUrl().endsWith("login")) login.clickOnLogout();
+    }
 
    /* @BeforeMethod(onlyForGroups = {COMMON} )
     public void commonStarttup() {

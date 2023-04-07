@@ -96,7 +96,7 @@ public class ApplicationPageTests extends EMCUITestBase {
         emcApplicationDetailsPage.backToApplicationsButton.click();
     }
 
-    @Test(groups = {EMC, UI, REGRESSION})//no smoke
+    @Test(groups = {EMC, UI, REGRESSION, SMOKE})
     @Xray(test = {2346, 2322, 2323})
     public void verifyUserEnterApplicationNameTest() {
         navigateToApplicationsPage(testApplicationName, "details");
@@ -165,7 +165,7 @@ public class ApplicationPageTests extends EMCUITestBase {
 
     }
 
-    @Test(groups = {EMC, UI, REGRESSION})
+    @Test(groups = {EMC, UI, REGRESSION, SMOKE, PROD})
     @Xray(test = {2312})
     public void verifyEMCApplicationsSortedAlphabeticallyByNameTest() {
         navigateToApplicationsPage("", "roles");
@@ -294,7 +294,7 @@ public class ApplicationPageTests extends EMCUITestBase {
         assertTestCase.assertTrue(detailsPage.noProductMessages.size()>0, "No Products messages are displayed");
     }
 
-    @Test(groups = {EMC, UI, REGRESSION})
+    @Test(groups = {EMC, UI, REGRESSION, SMOKE, PROD})
     @Xray(test = {2624, 7655, 12505, 12506})
     public void verifyUserSaveNewProductTest() {
         navigateToApplicationsPage(applicationName, "products");
@@ -432,7 +432,7 @@ public class ApplicationPageTests extends EMCUITestBase {
         assertTestCase.assertTrue(detailsPage.ApplicationURL.getAttribute("value").equals(url), "Application URL is not updated");
     }
 
-    @Test(groups = {EMC, UI, REGRESSION})
+    @Test(groups = {EMC, UI, REGRESSION, SMOKE, PROD})
     @Xray(test = {2152})
     public void verifyAllApplicationsVisibleInListViewOnApplicationPanelTest() {
         navigateToApplicationsPage("", "details");
@@ -479,7 +479,7 @@ public class ApplicationPageTests extends EMCUITestBase {
         detailsPage.clickOnCancelButton();
     }
 
-    @Test(groups = {EMC, UI, REGRESSION}, description = "UI | EMC | Products | Validate User can View the Product Details View Sorting")
+    @Test(groups = {EMC, UI, REGRESSION, SMOKE, PROD}, description = "UI | EMC | Products | Validate User can View the Product Details View Sorting")
     @Xray(test = {3538})
     public void verifyUserViewProductDetailsSortedTest() {
         navigateToApplicationsPage(applicationName, "products");
@@ -541,7 +541,7 @@ public class ApplicationPageTests extends EMCUITestBase {
         BrowserUtils.wait(5);
     }
 
-    @Test(groups = {EMC, UI, REGRESSION, SMOKE},
+    @Test(groups = {EMC, UI, REGRESSION, SMOKE, PROD},
             description = "UI | EMC | API | Application | Verify user can not Create a new External Application if required fields are missing")
     @Xray(test = {12721})
     public void verifyUserCantCreateAApplicationWithoutRequiredFields() {
@@ -639,7 +639,7 @@ public class ApplicationPageTests extends EMCUITestBase {
         navigateToApplicationsPage("", "details");
     }
 
-    @Test(groups = {EMC, UI, REGRESSION}, description = "UI | EMC | The ability to view all accounts | Verify that User is able to Click Account tab on Accounts Screen s")
+    @Test(groups = {EMC, UI, REGRESSION, SMOKE, PROD}, description = "UI | EMC | The ability to view all accounts | Verify that User is able to Click Account tab on Accounts Screen s")
     @Xray(test = {2353, 2313, 2311})
     public void verifyUserClickAccountMenuOnApplicationsPageTest() {
         navigateToApplicationsPage("", "details");
@@ -651,7 +651,7 @@ public class ApplicationPageTests extends EMCUITestBase {
         assertTestCase.assertTrue(accountsPage.accountNames.size() > 0, "Accounts are displayed");
     }
 
-    @Test(groups = {EMC, UI, REGRESSION, PROD}, description = "UI | EMC | Verify Applications Page")
+    @Test(groups = {EMC, UI, REGRESSION, SMOKE, PROD}, description = "UI | EMC | Verify Applications Page")
     @Xray(test = {2314})
     public void verifyApplicationsPageTest() {
         navigateToApplicationsPage("", "details");

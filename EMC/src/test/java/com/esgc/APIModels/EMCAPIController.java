@@ -123,7 +123,6 @@ public class EMCAPIController extends APITestBase {
         System.out.println("Status Code = " + response.statusCode());
         return response;
     }
-
     public Response getEMCAllAdminUsersPermissionsResponse() {
         Response response = null;
         System.out.println("EMC API URL: " + Environment.EMC_URL + Endpoints.EMC_ADMIN_USERS_PERMISSIONS);

@@ -179,10 +179,12 @@ public class LoginPage extends PageBase {
         wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys("Wrong_User_Name", Keys.ENTER);
         wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.INTERNAL_USER_PASSWORD, Keys.ENTER);
     }
+
     public void loginWithWrongPass() {
         wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.INTERNAL_USER_USERNAME, Keys.ENTER);
         wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys("Wrong_Pass_Word", Keys.ENTER);
     }
+
     /*
      *Method for login - version #2
      * Login as a default user
@@ -197,11 +199,6 @@ public class LoginPage extends PageBase {
             clickOnNextButton();
         }
         wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.DATA_PASSWORD);
-        
-//        wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.UI_USERNAME, Keys.ENTER);
-//        wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.UI_PASSWORD);
-       /* if (!termsAndConditionsCheckBox.isSelected())
-            wait.until(ExpectedConditions.visibilityOf(termsAndConditionsLabel)).click();*/
         wait.until(ExpectedConditions.visibilityOf(loginButton)).click();
     }
 
@@ -226,8 +223,8 @@ public class LoginPage extends PageBase {
     public void dataValidationLogin() {
         wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.DATA_USERNAME, Keys.ENTER);
         wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.DATA_PASSWORD);
-       // if (!termsAndConditionsCheckBox.isSelected()) //TODO This is removed
-         //   wait.until(ExpectedConditions.visibilityOf(termsAndConditionsLabel)).click();
+        // if (!termsAndConditionsCheckBox.isSelected()) //TODO This is removed
+        //   wait.until(ExpectedConditions.visibilityOf(termsAndConditionsLabel)).click();
         wait.until(ExpectedConditions.visibilityOf(loginButton)).click();
     }
 
@@ -308,16 +305,56 @@ public class LoginPage extends PageBase {
                 wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.NO_PREVIOUSLY_DOWNLOADED_REGULATORY_REPORTS_USERNAME, Keys.ENTER);
                 wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.NO_PREVIOUSLY_DOWNLOADED_REGULATORY_REPORTS_PASSWORD);
                 break;
-            default:
+            case USER_WITH_ON_DEMAND_ENTITLEMENT:
+                wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.USER_WITH_ONDEMAND_ENTITLEMENT_USERNAME, Keys.ENTER);
+                wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.USER_WITH_ONDEMAND_ENTITLEMENT_PASSWORD);
+                break;
+            case USER_WITH_SCORE_PREDICTOR_ENTITLEMENT:
+                wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.USER_WITH_SCORE_PREDICTOR_ENTITLEMENT_USERNAME, Keys.ENTER);
+                wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.USER_WITH_SCORE_PREDICTOR_ENTITLEMENT_PASSWORD);
+                break;
+            case USER_WITH_CORPORATES_ESG_DATA_AND_SCORES_ENTITLEMENT:
+                wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.USER_WITH_CORPORATES_ESG_DATA_AND_SCORES_ENTITLEMENT_USERNAME, Keys.ENTER);
+                wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.USER_WITH_CORPORATES_ESG_DATA_AND_SCORES_ENTITLEMENT_PASSWORD);
+                break;
+                case ODA_ESG_PREDICTOR_DATA_ENTITLEMENT:
+                wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.ODA_ESG_PREDICTOR_DATA_ENTITLEMENT_USERNAME, Keys.ENTER);
+                wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.ODA_ESG_PREDICTOR_DATA_ENTITLEMENT_PASSWORD);
+                break;
+            case USER_WITH_PREDICTEDSCORE_AND_CLIMATE:
+                wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.USER_WITH_PREDICTEDSCORE_AND_CLIMATE_USERNAME, Keys.ENTER);
+                wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.USER_WITH_PREDICTEDSCORE_AND_CLIMATE_PASSWORD);
+                break;
+            case USER_WITH_ONDEMAND_ENTITLEMENT:
+                wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.USER_WITH_ONDEMAND_ENTITLEMENT_USERNAME, Keys.ENTER);
+                wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.USER_WITH_ONDEMAND_ENTITLEMENT_PASSWORD);
+                break;
+            case USER_WITH_ONLYONDEMAND_ENTITLEMENT_FIRSTTIMEUSER:
+                wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.FIRSTTIME_USER_WITH_ONDEMAND_ENTITLEMENT_USERNAME, Keys.ENTER);
+                wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.FIRSTTIME_USER_WITH_ONDEMAND_ENTITLEMENT_PASSWORD);
+                break;
+
+            case USER_WITH_EUTAXONOMY_SFDR_ESG_ESGPREDICTOR_ONDEMAND_EXPORT:
+                wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.EUTAXONOMY_SFDR_ESG_ESGPREDICTOR_ONDEMAND_EXPORT_USERNAME, Keys.ENTER);
+                wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.EUTAXONOMY_SFDR_ESG_ESGPREDICTOR_ONDEMAND_EXPORT_PASSWORD);
+                break;
+            case USER_WITH_EUTAXONOMY_SFDR_ENTITLEMENT:
+                wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.EUTAXONOMY_SFDR_USERNAME, Keys.ENTER);
+                wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.EUTAXONOMY_SFDR_PASSWORD);
+                break;
+
+            case ONDEMAND_USER_WITHOUT_EXPORT_ENTITLEMENT:
+                wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.ONDEMAND_USER_WITHOUT_EXPORT_ENTITLEMENT_USERNAME, Keys.ENTER);
+                wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.ONDEMAND_USER_WITHOUT_EXPORT_ENTITLEMENT_PASSWORD);
+                break;
+                default:
                 Assert.fail("Bundle not found!");
         }
      /*   if (!termsAndConditionsCheckBox.isSelected())
             wait.until(ExpectedConditions.visibilityOf(termsAndConditionsLabel)).click();*/
         wait.until(ExpectedConditions.visibilityOf(loginButton)).click();
+
     }
-
-
-
 
 
     public void clickOnLogout() {

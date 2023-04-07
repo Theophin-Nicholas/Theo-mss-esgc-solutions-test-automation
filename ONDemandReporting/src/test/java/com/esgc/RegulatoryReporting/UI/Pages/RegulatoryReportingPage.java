@@ -599,9 +599,9 @@ public class RegulatoryReportingPage extends CommonPage {
     public void selectReportingFor(String portfolioName, String reportingYear) {
         if (isUseLatestDataSelected()) deselectUseLatestData();
         //go through portfolios list
-        for (int i = 0; i < rrPage_portfolioNamesList.size(); i++) {
+        for (int i = 0; i < portfolioNamesList.size(); i++) {
             //find the portfolio
-            if (rrPage_portfolioNamesList.get(i).getText().equals(portfolioName)) {
+            if (portfolioNamesList.get(i).getText().equals(portfolioName)) {
                 //verify if portfolio is selected
                 if (!isPortfolioSelected(portfolioName)) {
                     System.out.println("Selecting portfolio " + portfolioName);
@@ -619,9 +619,9 @@ public class RegulatoryReportingPage extends CommonPage {
 
         if (isUseLatestDataSelected()) deselectUseLatestData();
         reportingForList.get(index).click();
-       /* for (int i = 0; i < rrPage_portfolioNamesList.size(); i++) {
+       /* for (int i = 0; i < portfolioNamesList.size(); i++) {
 
-            if (rrPage_portfolioNamesList.get(i).getText().equals(portfolioName)) {
+            if (portfolioNamesList.get(i).getText().equals(portfolioName)) {
 
                 if (!isPortfolioSelected(portfolioName)) {
                     System.out.println("Selecting portfolio " + portfolioName);
@@ -677,19 +677,6 @@ public class RegulatoryReportingPage extends CommonPage {
             }
         }
         return true;
-    }
-
-    public void deleteFilesInDownloadsFolder() {
-        File dir = new File(BrowserUtils.downloadPath());
-        File[] dir_contents = dir.listFiles();
-        if (dir_contents == null) {
-            System.out.println("No files in the directory");
-            return;
-        }
-        for (File file : dir_contents) {
-            file.delete();
-        }
-        System.out.println("All files in the directory are deleted");
     }
 
     public ExcelUtil getExcelData(String excelName, int sheetIndex) {
@@ -802,12 +789,12 @@ public class RegulatoryReportingPage extends CommonPage {
     }
 
     private String getCoveragePercentage(String portfolioName) {
-        System.out.println("Number of Portfolios = " + rrPage_portfolioNamesList.size());
-        for (WebElement portfolio : rrPage_portfolioNamesList) {
+        System.out.println("Number of Portfolios = " + portfolioNamesList.size());
+        for (WebElement portfolio : portfolioNamesList) {
             if (portfolio.getText().contains(portfolioName)) {
                 System.out.println("Portfolio found");
-                System.out.println("Index of portfolio = " + rrPage_portfolioNamesList.indexOf(portfolio));
-                return coverageList.get(rrPage_portfolioNamesList.indexOf(portfolio)).getText();
+                System.out.println("Index of portfolio = " + portfolioNamesList.indexOf(portfolio));
+                return coverageList.get(portfolioNamesList.indexOf(portfolio)).getText();
             }
         }
         System.out.println("Portfolio not found");
