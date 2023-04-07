@@ -56,7 +56,20 @@ public class OnDemandFilterAPIController extends CommonAPIController {
         return landingPage ;
     }
 
+    public Response getOnDemandInfo() {
+        Response response = null;
+        try {
+            response = configSpec()
+                    .log().all()
+                    .when()
+                    .get(OnDemandEndpoints.GET_ON_DEMAND_INFO).prettyPeek();
 
+        } catch (Exception e) {
+            System.out.println("Inside exception " + e.getMessage());
+        }
+        System.out.println(response != null ? response.prettyPrint() : null);
+        return response;
+    }
 
 
 
