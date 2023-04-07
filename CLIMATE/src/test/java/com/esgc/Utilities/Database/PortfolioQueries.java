@@ -743,22 +743,7 @@ public class PortfolioQueries {
         return score;
     }
 
-    public List<List<Object>> getEsgInfoFromDB() {
-        String queryForLatestMonthAndYear = "select * from ESG_OVERALL_SCORES order by year desc, month desc limit 1;";
-        Map<String, Object> monthAndYear = getQueryResultMap(queryForLatestMonthAndYear).get(0);
 
-        String query1 = "select sum(value) from df_portfolio where portfolio_id='00000000-0000-0000-0000-000000000000'";
-        String total = getQueryResultList(query1).get(0).get(0).toString();
-
-        String query2 = "select df.COMPANY_NAME,round((df.value/" + total + ")*100,2) as investment,eos.value, ect.METHODOLOGY_VERSION from df_portfolio df\n" +
-                " join entity_coverage_tracking ect on ect.orbis_id=df.bvd9_number and coverage_status = 'Published' and publish = 'yes'\n" +
-                " join ESG_OVERALL_SCORES eos on ect.orbis_id=eos.orbis_id and data_type = 'overall_alphanumeric_score' and sub_category = 'ESG'\n" +
-                " where portfolio_id='00000000-0000-0000-0000-000000000000'\n" +
-                " and eos.year || eos.month <= '" + monthAndYear.get("YEAR_MONTH").toString() + "'\n" +
-                " qualify row_number() OVER (PARTITION BY eos.orbis_id ORDER BY eos.year DESC, eos.month DESC, eos.scored_date DESC) =1";
-
-        return getQueryResultList(query2);
-    }
 
     public int getEsgScoreOfPortfolio() {
         String query1 = "select sum(value) from df_portfolio where portfolio_id='00000000-0000-0000-0000-000000000000'";

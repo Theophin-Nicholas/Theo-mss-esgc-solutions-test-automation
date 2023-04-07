@@ -162,20 +162,7 @@ public class PortfolioAnalysisEntitlementsTests extends UITestBase {
     }
 
 
-    @Test(enabled = false, groups = {REGRESSION, UI, SMOKE, ENTITLEMENTS, ESG}, description = "Verify research line navigation")
-    @Xray(test = {8214, 8215})
-    public void verifyESGAssessmentRL() {//TODO De-scopped
-        LoginPage loginPage = new LoginPage();
-        loginPage.loginWithParams("esg-test1+no-controversy@outlook.com", "Moodys123");
-        ResearchLinePage researchLinePage = new ResearchLinePage();
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
-        BrowserUtils.wait(5);
 
-        List<String> actualResearchLines = researchLinePage.getAvailableResearchLines();
-        assertTestCase.assertEquals(actualResearchLines.size(), 7, "Existing Research Lines Validation ");
-        assertTestCase.assertEquals(actualResearchLines.get(6), "ESG Assessments", "ESG Assessments Research Line is available");
-        researchLinePage.validateExportButtonIsNotAvailable();
-    }
 
     @Xray(test = {8219})
     @Test(groups = {REGRESSION, UI, SMOKE, ESG, ENTITLEMENTS},

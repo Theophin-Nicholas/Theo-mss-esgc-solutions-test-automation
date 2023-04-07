@@ -28,7 +28,7 @@ import static com.esgc.Utilities.Groups.*;
 public class PerformanceChart extends DataValidationTestBase {
 
     @Test(groups = {REGRESSION, DATA_VALIDATION, DASHBOARD}, dataProvider = "researchLines")
-    @Xray(test = {4988, 7989, 6416, 6415, 11049})
+    @Xray(test = {4988, 7989, 6416, 6415})
     public void verifyPerformanceChartWithMixedIdentifiers(
             @Optional String sector, @Optional String region,
             @Optional String researchLine, @Optional String month, @Optional String year) {
@@ -407,43 +407,6 @@ public class PerformanceChart extends DataValidationTestBase {
                 };
 
 
-    }
-    @Test(groups = {REGRESSION,SMOKE, DATA_VALIDATION, DASHBOARD, ESG})
-    @Xray(test = {8689,8695,8697})
-    public void validateESGScoreCategory() {
-        String portfolioId = "00000000-0000-0000-0000-000000000000";
-        APIFilterPayload apiFilterPayload = new APIFilterPayload();
-        apiFilterPayload.setSector("all");
-        apiFilterPayload.setRegion("all");
-        apiFilterPayload.setBenchmark("");
-        apiFilterPayload.setYear("2022");
-        apiFilterPayload.setMonth("11");
-        List<String> performanceChartTypes = Arrays.asList("leaders", "laggards", "largest_holdings");
-
-        for (String performanceChartType : performanceChartTypes) {
-            System.out.println("Performance Chart:" + performanceChartType);
-            //Get all regions
-            List<PerformanceChartCompany> companyList = new ArrayList<>();
-            companyList = Arrays.asList(
-                    dashboardAPIController.getPerformanceChartList(portfolioId, "esgasmt", apiFilterPayload, performanceChartType, "10")
-                            .as(PerformanceChartCompany[].class));
-            System.out.println(companyList);
-
-            List<DashboardPerformanceChart> dbResult = DashboardQueries.getPerfomanceChartESGSCORE(performanceChartType);
-
-            System.out.println(dbResult);
-
-            for (int i = 0; i < companyList.size(); i++) {
-                Assert.assertEquals(companyList.get(i).getCOMPANY_NAME(), dbResult.get(i).getCOMPANY_NAME(), "Validate Comapny Names");
-                Assert.assertEquals(companyList.get(i).getSCORE_CATEGORY_ESG_ASSESSMENT(), dbResult.get(i).getESGCATEGORIES(), "Validate Score Category");
-                if (dbResult.get(i).getControCounts() > -1) {
-                    Assert.assertEquals(companyList.get(i).getCURR_CRITICAL_CONTROVERSIES(), String.valueOf(dbResult.get(i).getControCounts()), "Validating Critical Cntroversey Count");
-                } else {
-                    Assert.assertEquals(companyList.get(i).getCURR_CRITICAL_CONTROVERSIES(), null, "Validating if Controversey value is blank");
-                }
-
-            }
-        }
     }
         @Test(groups = {"regression", "data_validation", "dashboard"})
         @Xray(test = {12267})

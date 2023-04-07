@@ -78,62 +78,14 @@ public class DashboardQueries {
         query = query.replaceAll("%m", String.valueOf(month));
         query = query.replaceAll("%ym", String.valueOf(year) + String.valueOf(month));
 
+
         Map<String, String> result = new HashMap<>();
         for (Map<String, Object> rs : getQueryResultMap(query)) {
-            result.put("Coverage", rs.get("covered_companies").toString());
+            result.put("Climate Coverage", rs.get("covered_companies").toString());
             result.put("TotalCompanies", rs.get("Total_Companies").toString());
             result.put("CoveragePercent", rs.get("investment").toString());
         }
         return result;
-    }
-
-    public List<Map<String, Object>> getEsgInfo(String portfolioId, String year, String month){
-    /*    String query = "select df.company_name,eos.value from df_portfolio df\n" +
-                "join entity_coverage_tracking ect on ect.orbis_id=df.bvd9_number and coverage_status = 'Published' and publish = 'yes'\n" +
-                "join ESG_OVERALL_SCORES eos on ect.orbis_id=eos.orbis_id and data_type = 'overall_alphanumeric_score' and sub_category = 'ESG'\n" +
-                "where portfolio_id='"+portfolioId+"'\n" +
-                "and eos.year || eos.month <= '"+year+""+month+"'\n" +
-                "qualify row_number() OVER (PARTITION BY eos.orbis_id ORDER BY eos.year DESC, eos.month DESC, eos.scored_date DESC) =1";
-        */
-        String query=" with p as (\n" +
-                "     select * from df_portfolio df where portfolio_id='"+portfolioId+"'\n" +
-                " ),\n" +
-                "  esg as (\n" +
-                "    select  \n" +
-                "    CASE \n" +
-                "    WHEN eos.RESEARCH_LINE_ID in('1008','9999' )\n" +
-                "       THEN  CASE \n" +
-                "            WHEN eos.value>= 60 and eos.value<=100 THEN 4\n" +
-                "            WHEN eos.value>= 50 and eos.value<=59 THEN 3\n" +
-                "            WHEN eos.value>= 30 and eos.value<=49 THEN 2\n" +
-                "            WHEN eos.value>= 0 and eos.value<=29 THEN 1\n" +
-                "         END\n" +
-                "     WHEN eos.RESEARCH_LINE_ID = '1015' \n" +
-                "        THEN CASE \n" +
-                "            WHEN eos.value>= 65 and eos.value<=100 THEN 4\n" +
-                "            WHEN eos.value>= 45 and eos.value<65 THEN 3\n" +
-                "            WHEN eos.value>= 25 and eos.value<45 THEN 2\n" +
-                "            WHEN eos.value>= 0 and eos.value<25 THEN 1\n" +
-                "         END\n" +
-                "    END AS SCALE,\n" +
-                "    CASE \n" +
-                "    \n" +
-                "            WHEN scale=1 THEN 'Weak'\n" +
-                "            WHEN scale=2 THEN 'Limited'\n" +
-                "            WHEN scale=3 THEN 'Robust'\n" +
-                "            WHEN scale=4 THEN 'Advanced'\n" +
-                "         END AS VALUE_ESG,\n" +
-                "    eos.* from entity_coverage_tracking ect  \n" +
-                "join ESG_OVERALL_SCORES eos on ect.orbis_id=eos.orbis_id and data_type = 'esg_pillar_score'  and sub_category = 'ESG' and eos.year || eos.month <= '"+year+""+month+"' \n" +
-                "    and coverage_status = 'Published' and publish = 'yes' \n" +
-                " qualify row_number() OVER (PARTITION BY eos.orbis_id ORDER BY eos.year DESC, eos.month DESC, eos.scored_date DESC) =1\n" +
-                "    )\n" +
-                "     select * from p\n" +
-                "     join esg on p.bvd9_number=esg.orbis_id";
-        System.out.println("query = " + query);
-        List<Map<String, Object>> esgInfo = getQueryResultMap(query);
-        System.out.println("esgInfo = " + esgInfo);
-        return esgInfo;
     }
 
     public String getLatestMonthAndYearWithData(String portfolioId){
@@ -204,12 +156,6 @@ public class DashboardQueries {
         String query = "select bvd9_number, max(ISIN) from DF_DERIVED.ISIN_SORTED d\n" +
                 "join esg_entity_master e on d.bvd9_number=e.orbis_id where MANAGED_TYPE='Subsidiary' and entity_status='Active' and ISIN = '"+subsidiaryCompanyIsin+"'\n" +
                 "group by 1;";
-        List<Map<String, Object>> result = getQueryResultMap(query);
-        return result;
-    }
-
-    public List<Map<String, Object>> getSubsidiaryCompanies(String orbisId) {
-        String query = "select * from esg_entity_master where entity_status='Active' and orbis_id='"+orbisId+"';";
         List<Map<String, Object>> result = getQueryResultMap(query);
         return result;
     }
@@ -411,16 +357,6 @@ public class DashboardQueries {
         return getQueryResultMap(query);
     }
 
-    public List<Map<String, Object>> getEsgScoresInfo(String portfolioId) {
-        String queryForLatestMonthAndYear = "select * from VW_DASHBOARD_CLIMATE_ENTITY_DATA_EXPORT order by year desc, month desc limit 1;";
-        Map<String, Object> monthAndYear = getQueryResultMap(queryForLatestMonthAndYear).get(0);
-        String query = "SELECT * FROM VW_DASHBOARD_CLIMATE_ENTITY_DATA_EXPORT\n" +
-                "WHERE PORTFOLIO_ID = '" + portfolioId + "'\n" +
-                "and YEAR = '" + monthAndYear.get("YEAR").toString() + "' AND MONTH = '" + monthAndYear.get("MONTH").toString() + "'";
-        System.out.println("query = " + query);
-        return getQueryResultMap(query);
-    }
-
     public List<Map<String, Object>> getEsgAssessmentInfo(String portfolioId, String year, String month) {
         String query = "select * from DF_TARGET.VW_EXPORT_ESG_ASSESSMENTS where \"portfolio_id\" = '"+portfolioId+"' and \"Year\" = '"+year+"' and \"Month\" = '"+month+"'";
         System.out.println("query = " + query);
@@ -450,88 +386,6 @@ public class DashboardQueries {
         return getQueryResultMap(query);
     }
 
-
-    public static List<DashboardPerformanceChart> getPerfomanceChartESGSCORE(String performanceChartTypes) {
-        String Query =
-                " with p as (SELECT bvd9_number, COMPANY_NAME\n" +
-                        ",region, sector, SUM(value) as invvalue, COUNT(*) OVER() total_companies, SUM(SUM(value)) OVER() AS total_value\n" +
-                        "FROM df_target.df_portfolio WHERE 1=1 AND portfolio_id = '00000000-0000-0000-0000-000000000000'  GROUP BY bvd9_number, COMPANY_NAME, region, sector)\n" +
-                        ",contro as (\n" +
-                        "SELECT DISTINCT orbis_id, nvl(sum(case when cd.severity = 'Critical' AND cd.controversy_steps = 'last' then 1 else 0 end), 0) counts FROM CONTROVERSY_DETAILS cd \n" +
-                        " WHERE\n" +
-                        " cd.CONTROVERSY_STATUS='Active'\n" +
-                        " and to_varchar(extract(year from cd.controversy_events)) = 2022\n" +
-                        " and to_varchar(extract(month from cd.controversy_events)) =  to_varchar(11)\n" +
-                        " AND cd.CONTROVERSY_STEPS='last'\n" +
-                        " group by 1\n" +
-                        " ),\n" +
-                        " esg as (\n" +
-                        " select  eos.* from entity_coverage_tracking ect\n" +
-                        " join ESG_OVERALL_SCORES eos on ect.orbis_id=eos.orbis_id and data_type = 'esg_pillar_score'  and sub_category = 'ESG' and eos.year || eos.month <= '202211' //and eos.RESEARCH_LINE_ID=1015\n" +
-                        " where  coverage_status = 'Published' and publish = 'yes' --and  value <> null\n" +
-                        " qualify row_number() OVER (PARTITION BY eos.orbis_id ORDER BY eos.year DESC, eos.month DESC, eos.scored_date DESC) =1\n" +
-                        " )\n" +
-                        " select  top 10 p.bvd9_number,COMPANY_NAME, Round((p.invvalue/p.total_value)*100,2) as invtPer,value as score,contro.counts,\n" +
-                        " case\n" +
-                        " when esg.RESEARCH_LINE_ID=1008 then\n" +
-                        " case\n" +
-                        " when (esg.value < 30) then 1\n" +
-                        " when (esg.value < 50) then 2\n" +
-                        " when (esg.value < 60) then 3\n" +
-                        " when (esg.value >= 60) then 4\n" +
-                        " end\n" +
-                        " when esg.RESEARCH_LINE_ID=1015 then\n" +
-                        " case\n" +
-                        " when (esg.value < 25) then 1\n" +
-                        " when (esg.value < 45 ) then 2\n" +
-                        " when (esg.value < 65 ) then 3\n" +
-                        " when (esg.value >= 65) then 4\n" +
-                        " end\n" +
-                        " end as scale,\n" +
-                        " case\n" +
-                        " when scale = 4 then 'Advanced'\n" +
-                        " when scale = 3 then 'Robust'\n" +
-                        " when scale = 2 then 'Limited'\n" +
-                        " when scale = 1 then 'Weak'\n" +
-                        " end as esgCategories\n" +
-                        " from p\n" +
-                        " join esg on p.bvd9_number=esg.orbis_id\n" +
-                        " left join contro on p.bvd9_number=contro.orbis_id" ;
-
-        String OrderClause = "";
-        switch (performanceChartTypes){
-            case "largest_holdings":
-                OrderClause = " order by p.invvalue desc, p.COMPANY_NAME";
-                break ;
-            case "leaders":
-                OrderClause = " order by scale desc nulls last, score desc nulls last, INVTPER desc, counts asc nulls first,  p.COMPANY_NAME asc nulls last";
-                break ;
-            case "laggards":
-                OrderClause = " order by scale asc nulls last, score asc nulls last, INVTPER asc, counts desc nulls last,  p.COMPANY_NAME asc nulls last";
-                break ;
-        }
-
-        Query = Query + OrderClause ;
-
-        List<DashboardPerformanceChart> performanceChartESGScore = new ArrayList<>();
-        for (Map<String, Object> each : getQueryResultMap(Query)) {
-            DashboardPerformanceChart model = new DashboardPerformanceChart();
-            model.setBVD9_NUMBER(each.get("BVD9_NUMBER").toString());
-            model.setCOMPANY_NAME(each.get("COMPANY_NAME").toString());
-            model.setInvestmentPercentage(Double.valueOf(each.get("INVTPER").toString()));
-            model.setSCORE(Integer.valueOf(each.get("SCORE").toString()));
-            if(each.get("COUNTS") != null)
-                model.setControCounts(Integer.valueOf(each.get("COUNTS").toString()));
-            else
-                model.setControCounts(-1);
-            model.setScale(Integer.valueOf(each.get("SCALE").toString()));
-            model.setESGCATEGORIES(each.get("ESGCATEGORIES").toString());
-            performanceChartESGScore.add(model);
-        }
-        return performanceChartESGScore;
-
-
-    }
 
     public static List<DashboardPerformanceChart> getBrownShareResultd(String portfolioID, String year, String month) {
         String Query = "select Portfolio_id,df.bvd9_number,BS_FOSF_INDUSTRY_REVENUES_ACCURATE_SOURCE,BS_FOSF_INDUSTRY_REVENUES_ACCURATE, SCORE_RANGE\n" +

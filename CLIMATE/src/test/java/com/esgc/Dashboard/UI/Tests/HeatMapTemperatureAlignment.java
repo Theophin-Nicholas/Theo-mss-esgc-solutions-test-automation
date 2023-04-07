@@ -62,7 +62,7 @@ public class HeatMapTemperatureAlignment extends DashboardUITestBase {
     public void VerifyTemperatureAlignmentRLPresentationAndInteraction () {
         DashboardPage dashboardPage = new DashboardPage();
         ArrayList<String> researchLines = new ArrayList<String>();
-        researchLines.add("Overall ESG Score");
+
         researchLines.add("Physical Risk: Operations Risk");
         researchLines.add("Physical Risk: Market Risk");
         researchLines.add("Physical Risk: Supply Chain Risk");

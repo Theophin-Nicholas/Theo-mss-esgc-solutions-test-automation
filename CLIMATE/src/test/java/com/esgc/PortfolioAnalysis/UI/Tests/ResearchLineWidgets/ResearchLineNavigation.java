@@ -24,7 +24,7 @@ public class ResearchLineNavigation extends UITestBase {
         assertTestCase.assertEquals(actualResearchLines.size(), 6, "Existing Research Lines Validation ");//TODO MAKE IT 7 AFTER ESG ASSESSMENTS
         assertTestCase.assertEquals(actualResearchLines.get(0), "Physical Risk Hazards", "Default Research Line Validation");
         List<String> expectedResearchLines = Arrays.asList("Physical Risk Hazards", "Physical Risk Management",
-                "Temperature Alignment", "Carbon Footprint", "Green Share Assessment", "Brown Share Assessment"/*,"ESG Assessments"*/);//TODO DE-SCOPPED
+                "Temperature Alignment", "Carbon Footprint", "Green Share Assessment", "Brown Share Assessment");
         assertTestCase.assertEquals(actualResearchLines, expectedResearchLines, "Research Line dropdown list verification");
 
     }

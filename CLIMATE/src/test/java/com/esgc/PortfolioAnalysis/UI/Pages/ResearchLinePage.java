@@ -3046,11 +3046,6 @@ public class ResearchLinePage extends UploadPage {
         return scoreQualityIconsInCoveragePopup.size() > 0;
     }
 
-    public boolean verifyScoreQualityIconWithEntitiesInLeadersAndLaggardsTables_PA() {
-        int recordsCountInTable = recordsInLeadersAndLaggardsTable.size();
-        int scoreQualityIconsCountInTable = scoreQualityIconsInLeadersAndLaggardsTable.size();
-        return scoreQualityIconsCountInTable == recordsCountInTable;
-    }
 
     public boolean verifyScoreQualityIconWithEntitiesInLeadersPopup_PA() {
         return scoreQualityIconsInLeadersPopup.size() > 0;
