@@ -36,7 +36,7 @@ public class RegulatoryReportingAPITests extends CommonTestBase {
         test.info("Navigated to Dashboard Page");
         reportingPage.clickPortfolioSelectionButton();
         List<String> expectedPortfoliosList = BrowserUtils.getElementsText(reportingPage.portfolioNameList);
-        reportingPage.navigateToPageFromMenu("On-Demand Reporting");
+        reportingPage.navigateToPageFromMenu("ESG Reporting Portal");
         List<String> actualPortfoliosList = reportingPage.getPortfolioList();
         assertTestCase.assertTrue(expectedPortfoliosList.containsAll(actualPortfoliosList), "Regulatory Reporting Page - Portfolio list is verified");
 
@@ -93,7 +93,7 @@ public class RegulatoryReportingAPITests extends CommonTestBase {
     public void ValidatePortfolioListAndPortfolioDetails() {
         RegulatoryReportingPage reportingPage = new RegulatoryReportingPage();
         
-        reportingPage.navigateToPageFromMenu("On-Demand Reporting");
+        reportingPage.navigateToPageFromMenu("ESG Reporting Portal");
         test.info("Navigated to Regulatory Reporting Page");
         getExistingUsersAccessTokenFromUI();
         RegulatoryReportingAPIController apiController = new RegulatoryReportingAPIController();

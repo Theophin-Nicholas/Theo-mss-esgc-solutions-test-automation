@@ -24,7 +24,7 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
     public void verifyDataAvailableForUserInputHistoryTabForAnnualReportTest() {
         RegulatoryReportingPage reportingPage = new RegulatoryReportingPage();
         
-        reportingPage.navigateToPageFromMenu("On-Demand Reporting");
+        reportingPage.navigateToPageFromMenu("ESG Reporting Portal");
         TestBase.test.info("Navigated to Regulatory Reporting Page");
         //verify portfolio upload modal
         assertTestCase.assertTrue(reportingPage.uploadAnotherPortfolioLink.isDisplayed(), "Portfolio Upload button is displayed");
@@ -78,7 +78,7 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
     public void downloadAndVerifyExcelReportsTest() {
         RegulatoryReportingPage reportingPage = new RegulatoryReportingPage();
         
-        reportingPage.navigateToPageFromMenu("On-Demand Reporting");
+        reportingPage.navigateToPageFromMenu("ESG Reporting Portal");
         TestBase.test.info("Navigated to Regulatory Reporting Page");
         reportingPage.selectReportingOptionByName("SFDR PAIs");
         assertTestCase.assertTrue(reportingPage.isInterimReportsOptionDisplayed(), "Interim reports option is displayed");
@@ -144,7 +144,7 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
     public void verifyPortfolioCoverageForSFDRReportingTest() {
         RegulatoryReportingPage reportingPage = new RegulatoryReportingPage();
         
-        reportingPage.navigateToPageFromMenu("On-Demand Reporting");
+        reportingPage.navigateToPageFromMenu("ESG Reporting Portal");
         TestBase.test.info("Navigated to Regulatory Reporting Page");
         //verify portfolio upload modal
         assertTestCase.assertTrue(reportingPage.uploadAnotherPortfolioLink.isDisplayed(), "Portfolio Upload button is displayed");
@@ -196,7 +196,7 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
     public void verifyPortfolioCoverageForEUTaxonomyReportingTest() {
         RegulatoryReportingPage reportingPage = new RegulatoryReportingPage();
         
-        reportingPage.navigateToPageFromMenu("On-Demand Reporting");
+        reportingPage.navigateToPageFromMenu("ESG Reporting Portal");
         TestBase.test.info("Navigated to Regulatory Reporting Page");
         //verify portfolio upload modal
         assertTestCase.assertTrue(reportingPage.uploadAnotherPortfolioLink.isDisplayed(), "Portfolio Upload button is displayed");
@@ -249,7 +249,7 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
     public void verifyLatestDataAvailableForPortfoliosWithLatestDataTest() {
         RegulatoryReportingPage reportingPage = new RegulatoryReportingPage();
         
-        reportingPage.navigateToPageFromMenu("On-Demand Reporting");
+        reportingPage.navigateToPageFromMenu("ESG Reporting Portal");
         String year = "2021";
         TestBase.test.info("Navigated to Regulatory Reporting Page");
         //verify portfolio upload modal
@@ -307,7 +307,7 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
     public void verifyAnnualReportWithoutLatestDataTest() {
         RegulatoryReportingPage reportingPage = new RegulatoryReportingPage();
         
-        reportingPage.navigateToPageFromMenu("On-Demand Reporting");
+        reportingPage.navigateToPageFromMenu("ESG Reporting Portal");
         String year = "2021";
         TestBase.test.info("Navigated to Regulatory Reporting Page");
         //verify portfolio upload modal
@@ -367,7 +367,7 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
     public void verifyInterimReportForSelectedYearTest() {
         RegulatoryReportingPage reportingPage = new RegulatoryReportingPage();
         
-        reportingPage.navigateToPageFromMenu("On-Demand Reporting");
+        reportingPage.navigateToPageFromMenu("ESG Reporting Portal");
         String year = "2020";
         TestBase.test.info("Navigated to Regulatory Reporting Page");
         //verify portfolio upload modal
@@ -422,7 +422,7 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
     public void verifyInterimReportForLatestDataTest() {
         RegulatoryReportingPage reportingPage = new RegulatoryReportingPage();
         
-        reportingPage.navigateToPageFromMenu("On-Demand Reporting");
+        reportingPage.navigateToPageFromMenu("ESG Reporting Portal");
         String year = "2021";
         TestBase.test.info("Navigated to Regulatory Reporting Page");
         //verify portfolio upload modal
@@ -477,7 +477,7 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
     public void verifyCompanyLevelOutputTest() {
         RegulatoryReportingPage reportingPage = new RegulatoryReportingPage();
         
-        reportingPage.navigateToPageFromMenu("On-Demand Reporting");
+        reportingPage.navigateToPageFromMenu("ESG Reporting Portal");
         TestBase.test.info("Navigated to Regulatory Reporting Page");
         //verify portfolio upload modal
         assertTestCase.assertTrue(reportingPage.uploadAnotherPortfolioLink.isDisplayed(), "Portfolio Upload button is displayed");
@@ -548,7 +548,7 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
     public void verifyScope3GHGEmissionsColumnTest() {
         RegulatoryReportingPage reportingPage = new RegulatoryReportingPage();
         
-        reportingPage.navigateToPageFromMenu("On-Demand Reporting");
+        reportingPage.navigateToPageFromMenu("ESG Reporting Portal");
         TestBase.test.info("Navigated to Regulatory Reporting Page");
         //verify portfolio upload modal
         assertTestCase.assertTrue(reportingPage.uploadAnotherPortfolioLink.isDisplayed(), "Portfolio Upload button is displayed");
@@ -635,7 +635,7 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
     public void verifyBVD9IDForInterimPortfolioLevelOutputWithoutLatestDataTest() {
         RegulatoryReportingPage reportingPage = new RegulatoryReportingPage();
         
-        reportingPage.navigateToPageFromMenu("On-Demand Reporting");
+        reportingPage.navigateToPageFromMenu("ESG Reporting Portal");
         TestBase.test.info("Navigated to Regulatory Reporting Page");
         //verify portfolio upload modal
         assertTestCase.assertTrue(reportingPage.uploadAnotherPortfolioLink.isDisplayed(), "Portfolio Upload button is displayed");

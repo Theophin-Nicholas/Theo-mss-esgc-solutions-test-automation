@@ -12,11 +12,23 @@ import static com.esgc.Utilities.CommonUtility.*;
 
 public class ImportPortfolioUtility {
 
-    public static String getOnDemandPortfolioFileToUpload(String ScoreQuality, String dataAllliance, int dataCount, String portfolioName) {
+    public static String getOnDemandPortfolioFileToUpload(List<String> ScoreQuality, String dataAllliance, int dataCount, String portfolioName, boolean addNull) {
         OnDemandAssessmentQueries portfolioToUpload = new OnDemandAssessmentQueries();
 
-        List<String> orbisIds = portfolioToUpload.getOnDemandOrbisIDsForPortfolioCreation(ScoreQuality,dataAllliance,dataCount);
+     List<String> orbisIds = new ArrayList<>();
+     for (String e : ScoreQuality) {
+         List<String> temp = portfolioToUpload.getOnDemandOrbisIDsForPortfolioCreation(e, dataAllliance, dataCount);
+         for(String t : temp ){
+             orbisIds.add(t);
+         }
+     }
+     if (addNull){
+         for(int i = 0 ; i<2 ; i++){
+             int randomOrbisID = (int)Math.floor(Math.random() * (999 - 111 + 1) + 111);
+             orbisIds.add(String.valueOf(randomOrbisID));
+         }
 
+     }
         String portfolioUploadRepository = CommonUtility.portfolioRepositoryPath();
 
         File directory = new File(portfolioUploadRepository);

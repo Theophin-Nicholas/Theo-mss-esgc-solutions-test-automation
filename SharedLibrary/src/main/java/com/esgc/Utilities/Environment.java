@@ -84,6 +84,8 @@ public class Environment {
     public static final String EUTAXONOMY_SFDR_ESG_ESGPREDICTOR_ONDEMAND_EXPORT_USERNAME ;
     public static final String EUTAXONOMY_SFDR_ESG_ESGPREDICTOR_ONDEMAND_EXPORT_PASSWORD ;
 
+    public static final String ONDEMAND_USER_WITHOUT_EXPORT_ENTITLEMENT_USERNAME ;
+    public static final String ONDEMAND_USER_WITHOUT_EXPORT_ENTITLEMENT_PASSWORD ;
 
     public static final String EUTAXONOMY_SFDR_USERNAME ;
     public static final String EUTAXONOMY_SFDR_PASSWORD ;
@@ -218,5 +220,8 @@ public class Environment {
 
         EUTAXONOMY_SFDR_USERNAME= properties.getProperty("EUTaxonomy_SFDR_username");
         EUTAXONOMY_SFDR_PASSWORD = properties.getProperty("EUTaxonomy_SFDR_password");
+
+        ONDEMAND_USER_WITHOUT_EXPORT_ENTITLEMENT_USERNAME = properties.getProperty("ONDEMAND_USER_Without_Export_Entitlement_username");
+        ONDEMAND_USER_WITHOUT_EXPORT_ENTITLEMENT_PASSWORD = properties.getProperty("ONDEMAND_USER_Without_Export_Entitlement_password");
     }
 }
