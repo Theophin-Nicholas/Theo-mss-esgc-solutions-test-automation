@@ -435,6 +435,7 @@ public class EntityIssuerPage extends PageBase {
 
     }
 
+    // ESG content to be de-scoped , remove. check with furkan ???
     public boolean verifyMidTexts() {
         String[] expectedTexts = {"Community Bank System, Inc. is assessed as part of the Banks industry.", "Our Banks industry framework is composed of categories and sub-categories listed below. " +
                 "Each sub-category has been assigned a weight from 0-3 depending on their level of materiality. " +
@@ -493,6 +494,7 @@ public class EntityIssuerPage extends PageBase {
 
         return Arrays.equals(expectedSubHeaders, actualSubHeaders);
     }
+// ESG content to be de-scoped , remove. check with furkan ???
 
     public boolean verifyMidTopHeaderDetails() {
         String expectedPartOfHeader = "Proposed ESG Score Methodology";
@@ -549,6 +551,7 @@ public class EntityIssuerPage extends PageBase {
     }
 
     public boolean verifyTopBodyOfText() {
+        // ESG content to be de-scoped , remove. check with furkan ???
 
         String bannerHeader = "Welcome to Moody’s ESG360: the portal connecting you to the Moody’s ESG Assessment process.";
         String bannerText = "We will be conducting an ESG Assessment";
@@ -568,6 +571,7 @@ public class EntityIssuerPage extends PageBase {
                 styleColor.equals(expectedColor);
     }
 
+    // ESG content to be de-scoped , remove. check with furkan ???
     public boolean verifyMidBodyOfText() {
         boolean result = false;
         List<String> expectedMidLines = Arrays.asList(
@@ -905,6 +909,10 @@ public class EntityIssuerPage extends PageBase {
         assertTestCase.assertTrue(liItemsinBanner.get(2).getText().equals("• View your company's scorecard"), "Validated Bullet points in Banner");
     }
 
+    public void validateESGSubcategoriesavailability() {
+        BrowserUtils.scrollTo(mainDiv_ESGSubCategory);
+        assertTestCase.assertTrue(mainDiv_ESGSubCategory.isDisplayed(), "Valiadte if ESGsubcategories scetion is available");
+    }
     public void validateScoringMethodologyStaticText() {
         assertTestCase.assertTrue(ScoringMethodology.getText().equals("Scoring Methodology"), "Validate Grade and Score header");
         assertTestCase.assertEquals(ScoringMethodologyText.getText(), "The scoring outputs of an ESG Assessment comprise two types of scores: \n" +
@@ -912,17 +920,6 @@ public class EntityIssuerPage extends PageBase {
                 " 1. An Overall ESG Score from 0-100 based on the maturity of the entity’s approach against common global standards and industry practices. \n" +
                 "\n" +
                 " 2. Our assessment of an entity's managerial system to address defined responsibilities across different subcategories expressed, highest to lowest, as four levels: Advanced, Robust, Limited and Weak.");
-
-    }
-
-    public void validateESGSubcategoriesavailability() {
-        BrowserUtils.scrollTo(mainDiv_ESGSubCategory);
-        assertTestCase.assertTrue(mainDiv_ESGSubCategory.isDisplayed(), "Valiadte if ESGsubcategories scetion is available");
-    }
-
-    public void validateSummaryWidgetISVAvailable() {
-        assertTestCase.assertTrue(ESGScore.isDisplayed(), "Validate if ESG score widget is displayed");
-
 
     }
 
@@ -944,6 +941,12 @@ public class EntityIssuerPage extends PageBase {
 
     }
 
+    public void validateSummaryWidgetISVAvailable() {
+        assertTestCase.assertTrue(ESGScore.isDisplayed(), "Validate if ESG score widget is displayed");
+
+
+    }
+    // ESG content to be de-scoped , remove. check with furkan ???
     public void validateEsgSubCategoriesTableItems(String tab) {
         List<String> sections = Arrays.asList("Very High", "High", "Moderate", "Low");
         List<String> sectors = Arrays.asList("Environmental", "Social", "Governance");
@@ -1017,7 +1020,6 @@ public class EntityIssuerPage extends PageBase {
         }
 
     }
-
     public void validateEsgScoredateFormat() {
         // String esgScoreDate = EsgScoreRange.findElement(By.xpath("../following-sibling::div")).getText();
         assertTestCase.assertTrue(EsgScoreRange.getText().startsWith("Updated on"));
@@ -1208,6 +1210,14 @@ public class EntityIssuerPage extends PageBase {
         }
     }
 
+
+    public void ValidateOverallDisclosureRatioIsVailableAndValueisNumeric() {
+
+        assertTestCase.assertTrue(wait.until(ExpectedConditions.visibilityOf(P3OverallDisclosureRatio)).isDisplayed(), "If Overall Disclosure Ratio is available");
+        assertTestCase.assertTrue(NumberUtils.isParsable(P3OverallDisclosureRatio.getText().split(":")[1].split("%")[0].trim()), "Validate if Overall Disclosure Ratio value  is numeric ");
+
+    }
+
     public void validateESGScoresAsNumericalValues(String score) {
         if (score.equals("ESG Score")) {
             String esgScoreValue = ESGScore.findElement(By.xpath("../following-sibling::div")).getText();
@@ -1223,14 +1233,6 @@ public class EntityIssuerPage extends PageBase {
 
 
     }
-
-    public void ValidateOverallDisclosureRatioIsVailableAndValueisNumeric() {
-
-        assertTestCase.assertTrue(wait.until(ExpectedConditions.visibilityOf(P3OverallDisclosureRatio)).isDisplayed(), "If Overall Disclosure Ratio is available");
-        assertTestCase.assertTrue(NumberUtils.isParsable(P3OverallDisclosureRatio.getText().split(":")[1].split("%")[0].trim()), "Validate if Overall Disclosure Ratio value  is numeric ");
-
-    }
-
     public void navigateToSectorPage() {
         wait.until(ExpectedConditions.visibilityOf(P3_HeaderIdentifilerList.get(P3_HeaderIdentifilerList.size() - 1))).click();
     }

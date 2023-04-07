@@ -251,35 +251,5 @@ public class ESGClimateSummaryDBTest extends EntityClimateProfileDataValidationT
 
     }
 
-    @Test(enabled = false, groups = {REGRESSION, SMOKE,DATA_VALIDATION},
-            dataProviderClass = DataProviderClass.class, dataProvider = "orbisIDWithDisclosureScore")
-    @Xray(test = {9841}) //TODO ESG assessments de-scopped
-    public void verifyAPIForOverallESGScoreWidget(String orbis_id) {
-        EntityProfileClimatePageAPIController entityClimateProfileApiController = new EntityProfileClimatePageAPIController();
-        test.info("ESG Score widget API validation for " + orbis_id);
-        // Get the API response as ArrayList
-        Response response = entityClimateProfileApiController.getESGClimateSummary(orbis_id);
-        assertTestCase.assertEquals(response.getStatusCode(), 200, "ESG Climate Summary Projection API Response status is verified");
-        List<ESGScores> esgList = Arrays.asList(response.as(ESGScores[].class));
-        int size = esgList.get(0).getEsg_assessment().getScore_categories().size();
-        List<String> allScores = new ArrayList<>();
-        for (int i = 0; i < size; i++) {
-            if (!esgList.get(0).getEsg_assessment().getScore_categories().get(i).getScore().toString().contains("ESG")) {
-                Double value= (Double) esgList.get(0).getEsg_assessment().getScore_categories().get(i).getScore();
-                allScores.add(String.valueOf(Math.round(value*10000.0)/10000.0));
-            }
-        }
-        System.out.println("allScores = " + allScores);
 
-        List<String> dbResults = getESGDbScores(orbis_id);
-        List<String> dbScores=new ArrayList<>();
-        for(String dbScore: dbResults){
-            dbScores.add(String.valueOf(Math.round(Double.parseDouble(dbScore)*10000.0)/10000.0));
-        }
-        System.out.println("dbScores = " + dbScores);
-        //Compare both values
-        Collections.sort(allScores);
-        Collections.sort(dbScores);
-        assertTestCase.assertSame(allScores,dbScores);
-    }
 }

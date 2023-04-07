@@ -19,10 +19,9 @@ import static com.esgc.Utilities.Groups.*;
 public class CoverageDataVAlidation extends DataValidationTestBase {
 
     @Test(groups = {REGRESSION, DATA_VALIDATION, DASHBOARD})
-    @Xray(test = {3643, 3645, 3646, 3647,
-            8272, //ESG
-            11049//Subs
-    })
+    @Xray(test = {3643, 3645, 3646, 3647})
+
+    // Coverage link text  should be Climate Coverage
     public void verifyCoverage() {
         Response portfoliosResponse = APIUtilities.getAvailablePortfoliosForUser();
         JsonPath jsonPathEvaluator = portfoliosResponse.jsonPath();
@@ -39,7 +38,7 @@ public class CoverageDataVAlidation extends DataValidationTestBase {
         DashboardQueries dashboardQueries = new DashboardQueries();
         Map<String, String> dbResult = dashboardQueries.getCoverage(portfolioId, 2022, 03);
         assertTestCase.assertEquals(coverageAPIResponse.getCoverage(),
-                dbResult.get("Coverage") + "/" + dbResult.get("TotalCompanies"), "Validating Total coverage");
+                dbResult.get("Climate Coverage") + "/" + dbResult.get("TotalCompanies"), "Validating Total coverage");
         assertTestCase.assertEquals(Math.round(coverageAPIResponse.getPerc_investment()), Integer.parseInt(dbResult.get("CoveragePercent")),
                 "Validating Total percentage of coverage");
 

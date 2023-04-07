@@ -4,14 +4,14 @@
         <listener class-name="com.esgc.Utilities.XrayListener"/>
     </listeners>
     <test name="ESGC Smoke Test via Module">
-        <parameter name="reportName" value="Smoke Issuer Test Automation Report"/>
+        <parameter name="reportName" value="Smoke OnDemand Test Automation Report"/>
         <groups>
             <run>
                 <include name="smoke"/>
             </run>
         </groups>
         <packages>
-            <package name="com.esgc.Test.UI.*"/>
+            <package name="com.esgc.ONDEMAND.UI.Tests"/>
         </packages>
     </test>
 </suite>

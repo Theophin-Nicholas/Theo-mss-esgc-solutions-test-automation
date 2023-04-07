@@ -93,10 +93,6 @@ public class HeatMapBrownShareTests extends DashboardUITestBase {
         BrowserUtils.wait(5);
         dashboardPage.selectOrDeselectHeatMapSection("Brown Share Assessment");
         BrowserUtils.wait(5);
-        dashboardPage.selectOrDeselectHeatMapSection("Overall ESG Score");
-        BrowserUtils.wait(5);
-        dashboardPage.selectOrDeselectHeatMapSection("Overall ESG Score");
-        BrowserUtils.wait(10);
 
         DashboardQueries dashboardQueries = new DashboardQueries();
         DatabaseDriver.createDBConnection();
@@ -149,10 +145,6 @@ public class HeatMapBrownShareTests extends DashboardUITestBase {
         dashboardPage.selectSamplePortfolioFromPortfolioSelectionModal();
         BrowserUtils.wait(5);
         dashboardPage.selectOrDeselectHeatMapSection("Brown Share Assessment");
-        BrowserUtils.wait(5);
-        dashboardPage.selectOrDeselectHeatMapSection("Overall ESG Score");
-        BrowserUtils.wait(5);
-        dashboardPage.selectOrDeselectHeatMapSection("Overall ESG Score");
         BrowserUtils.wait(5);
 
         List<Map<String, String>> apiBrownShareHeatMapData = getPortfolioBrownShareData("00000000-0000-0000-0000-000000000000","2022","12");

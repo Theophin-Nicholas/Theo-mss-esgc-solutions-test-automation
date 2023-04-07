@@ -46,7 +46,7 @@ public class EsgMaterialityMatrixTests extends EntityPageTestBase {
 
     }
 
-    @Test(groups = {ENTITY_PROFILE, SMOKE, REGRESSION, UI}, dataProvider = "ESGMaterialitycredentials", dataProviderClass = IssuerDataProviderClass.class)
+    @Test(groups = {ENTITY_PROFILE, SMOKE, REGRESSION, UI}, dataProvider = "ESGMaterialitycredentials",  dataProviderClass = IssuerDataProviderClass.class)
     @Xray(test = {9924})
     public void validateEsgMaterialityMatrixColumns(String... dataProvider) {
         EntityIssuerPage entityIssuerpage = new EntityIssuerPage();
@@ -82,7 +82,7 @@ public class EsgMaterialityMatrixTests extends EntityPageTestBase {
     }
 
 
-    @Test(groups = {"esg_materiality", SMOKE, REGRESSION, UI}, dataProvider = "ESGMaterialitycredentials", dataProviderClass = IssuerDataProviderClass.class)
+    @Test(groups = {"esg_materiality", SMOKE, REGRESSION, UI}, dataProvider = "ESGMaterialitycredentials",  dataProviderClass = IssuerDataProviderClass.class)
     @Xray(test = {9925})
     public void validateEsgMaterialityFooter(String... dataProvider) {
         EntityIssuerPage entityIssuerpage = new EntityIssuerPage();
@@ -100,7 +100,7 @@ public class EsgMaterialityMatrixTests extends EntityPageTestBase {
             List<String> methodologies = Arrays.asList(new String[]{"Double Materiality", "Business Materiality", "Stakeholder Materiality", "ESG", "Environmental", "Social", "Governance"});
             for (String e : methodologies) {
                 assertTestCase.assertTrue(entityIssuerpage.isProvidedFilterClickableInMaterialityMatrixFooter(e), "Verify " + e + "filter is clickable in Materiality Matrix Footer");
-                if (e.equals("Double Materiality") || e.equals("ESG")) {
+                if (e.equals("Double Materiality")|| e.equals("ESG")) {
                     assertTestCase.assertTrue(entityIssuerpage.isProvidedFilterSelectedByDefaultInMaterialityMatrixFooter(e), "Verify" + e + "filter is selected as default in Materiality Matrix Footer");
                 } else {
                     assertTestCase.assertTrue(!entityIssuerpage.isProvidedFilterSelectedByDefaultInMaterialityMatrixFooter(e), "Verify" + e + "filter is not selected in Materiality Matrix Footer");

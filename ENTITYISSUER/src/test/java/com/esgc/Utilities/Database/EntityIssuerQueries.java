@@ -41,6 +41,7 @@ public class EntityIssuerQueries {
     }
 
 
+    // ESG content to be de-scoped , remove. check with furkan ???
     public static List<SummaryWidgetDBModel> getESGScoreSummaryWidgetData(String orbisID) {
         String query = "Select ORBIS_ID, 'ESG Score' as category,VALUE, SCORED_TIMESTAMP from DF_TARGET.ESG_MODEL_SCORES\n" +
                 "where CRITERIA='ESG' and DATA_TYPE= 'esg_pillar_score' and ORBIS_ID= '" + orbisID + "'\n" +
@@ -147,6 +148,7 @@ public class EntityIssuerQueries {
         return headerIdentifier;
     }
 
+    // ESG content to be de-scoped , remove. check with furkan ???
     public static List<ESGScoreSummaryDBModel> getEsgScore(String orbisID) {
         String query = "  SELECT g.ORBIS_ID,case when criteria = 'Environmental' then 'Environment' \n" +
                 "                            when criteria = 'ESG' then iff ((DATA_TYPE = 'esg_pillar_score'),'ESG Score','ESG Rating') \n" +

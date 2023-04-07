@@ -1,12 +1,10 @@
 package com.esgc.Dashboard.UI.Tests.Widgets;
 
 import com.esgc.Base.TestBases.DashboardUITestBase;
+import com.esgc.Base.UI.Pages.LoginPage;
 import com.esgc.Dashboard.UI.Pages.DashboardPage;
 import com.esgc.TestBase.DataProviderClass;
-import com.esgc.Utilities.BrowserUtils;
-import com.esgc.Utilities.Environment;
-import com.esgc.Utilities.PortfolioUtilities;
-import com.esgc.Utilities.Xray;
+import com.esgc.Utilities.*;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.testng.annotations.Test;
@@ -34,14 +32,12 @@ public class PerformanceChart extends DashboardUITestBase {
         test.info("Check if Performance Charts are Displayed");
 
         BrowserUtils.scrollTo(dashboardPage.performanceChart);
-        //TODO remove Overall ESG Score after March release
         List<String> expectedColumnNames = Arrays.asList("Company", "% Investment", "Total Critical Controversies",
                 "Highest Risk Hazard", "Facilities Exposed to High Risk/Red Flag",
                 "Physical Risk Management", "Temperature Alignment",
                 "Carbon Footprint (tCO2eq)", "Green Share Assessment", "Brown Share Assessment");
 
         if (Environment.environment.equalsIgnoreCase("uat"))
-            expectedColumnNames.add(2, "Overall ESG Score");
 
         dashboardPage.clickAndSelectAPerformanceChart("Leaders");
 
@@ -94,7 +90,7 @@ public class PerformanceChart extends DashboardUITestBase {
         test.info("Check Score categories in Performance Charts");
 
         List<String> headersToClick =
-                Arrays.asList("Facilities Exposed to High Risk/Red Flag", "Overall ESG Score", "Physical Risk Management", "Temperature Alignment",
+                Arrays.asList("Facilities Exposed to High Risk/Red Flag", "Physical Risk Management", "Temperature Alignment",
                         "Carbon Footprint (tCO2eq)", "Green Share Assessment", "Brown Share Assessment");
 
         List<String> expectedCategories = dashboardPage.getScoreCategoriesByResearchLine(researchLine);
@@ -435,7 +431,7 @@ public class PerformanceChart extends DashboardUITestBase {
         test.info("Check Score categories in Performance Charts");
 
         List<String> headersToClick =
-                Arrays.asList("Facilities Exposed to High Risk/Red Flag", "Overall ESG Score", "Physical Risk Management", "Temperature Alignment",
+                Arrays.asList("Facilities Exposed to High Risk/Red Flag", "Physical Risk Management", "Temperature Alignment",
                         "Carbon Footprint (tCO2eq)", "Green Share Assessment", "Brown Share Assessment");
 
 
@@ -499,6 +495,36 @@ public class PerformanceChart extends DashboardUITestBase {
         assertTestCase.assertTrue(dashboardPage.checkIfAllCellsUnderSelectedPerformanceChartHeaderColumnAreHighlighted(header),
                 "Cells under header Highlighted Verification: " + header);
 
+    }
+
+    @Test(groups = {REGRESSION, UI, SMOKE})
+    @Xray(test = {8691})
+    public void validateEsgScoreIsNotDisplayedInPerformanceChart(){
+        DashboardPage dashboardPage = new DashboardPage();
+
+        List<String> performanceChartTypes = Arrays.asList("Leaders", "Laggards", "Largest Holding");
+
+        for (String performanceChartType : performanceChartTypes) {
+            dashboardPage.clickAndSelectAPerformanceChart(performanceChartType);
+            assertTestCase.assertTrue(!dashboardPage.isOverAllESGColumAvailable(), "Verify Overall ESG Score coloumn is not avaialble in performance widget");
+        }
+    }
+
+    @Test(groups = {REGRESSION, UI, SMOKE, ENTITLEMENTS})
+    @Xray(test = {8692})
+    public void validateTotalControversiesNotAvailableBundle(){
+        DashboardPage dashboardPage = new DashboardPage();
+        LoginPage login = new LoginPage();
+
+        test.info("Login with user is not having ESG Entitlement");
+        login.entitlementsLogin(EntitlementsBundles.PHYSICAL_RISK_TRANSITION_RISK);
+
+        test.info("ESG Score widget in Dashboard Page");
+        List<String> performanceChartTypes = Arrays.asList("Leaders", "Laggards", "Largest Holding");
+        for (String performanceChartType : performanceChartTypes) {
+            dashboardPage.clickAndSelectAPerformanceChart(performanceChartType);
+            assertTestCase.assertTrue(!dashboardPage.isTotalControversiesColumAvailable(), "Verify Total Controversies coloumn is not avaialble in performance widget");
+        }
     }
 
 
