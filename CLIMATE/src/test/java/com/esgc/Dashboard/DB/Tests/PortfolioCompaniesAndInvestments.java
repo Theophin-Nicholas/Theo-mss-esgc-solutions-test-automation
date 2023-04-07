@@ -20,7 +20,7 @@ import static com.esgc.Utilities.Groups.*;
 public class PortfolioCompaniesAndInvestments extends DataValidationTestBase {
     // TODO: update queries (db methods should take month and year)
     @Test(groups = {REGRESSION, DASHBOARD})
-    @Xray(test = {6218, 6385, 6386, 11049})
+    @Xray(test = {6218, 6385, 6386})
     public void verifyInvestmentsAndControversies() throws ParseException {
         Response portfoliosResponse = APIUtilities.getAvailablePortfoliosForUser();
         JsonPath jsonPathEvaluator = portfoliosResponse.jsonPath();
@@ -67,6 +67,16 @@ public class PortfolioCompaniesAndInvestments extends DataValidationTestBase {
 
     }
 
+    @Test(groups = {DASHBOARD, REGRESSION, UI, SMOKE})
+    @Xray(test = { 8321})
+    public void verifyDashboardCoverageHyperlink(){
+        DashboardPage dashboardPage = new DashboardPage();
 
+        // ESGCA-8321: Verify Summary Companies Panel Hyperlink is Changed
+        dashboardPage.clickViewCompaniesAndInvestments();
+        assertTestCase.assertTrue(dashboardPage.isExportButtonEnabled(), "Verify Export button is available");
+
+        dashboardPage.closePortfolioExportDrawer();
+    }
 
 }

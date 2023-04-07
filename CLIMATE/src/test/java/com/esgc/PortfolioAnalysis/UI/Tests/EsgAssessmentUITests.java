@@ -19,6 +19,7 @@ public class EsgAssessmentUITests extends UITestBase {
     @Test(groups = {REGRESSION, UI, ESG})
     @Xray(test = {11371})
     public void verifyEsgAssessmentExcelColumnsOrder_PortfolioAnalysis() {
+
         ResearchLinePage researchLinePage = new ResearchLinePage();
         researchLinePage.selectSamplePortfolioFromPortfolioSelectionModal();
         researchLinePage.navigateToResearchLine("ESG Assessments");

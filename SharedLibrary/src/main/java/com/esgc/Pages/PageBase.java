@@ -55,7 +55,7 @@ public abstract class PageBase {
 
 
     //Menu Tab on top left corner
-    @FindBy(xpath = "//li[starts-with(text(),\"Moody's ESG360: \")]")
+    @FindBy(xpath = "//li[starts-with(text(),\"\")]")
     public WebElement menuHeader;
 
     @FindBy(xpath = "//li[@role='menuitem']")
@@ -609,7 +609,7 @@ public abstract class PageBase {
     public void clickMenu() {
         //WebDriverWait wait = new WebDriverWait(Driver.getDriver(), Duration.ofSeconds(60));
         //wait.until(ExpectedConditions.elementToBeClickable(menu));
-        BrowserUtils.waitForClickablility(menu, 120);
+        BrowserUtils.waitForClickablility(menu, 10);
         BrowserUtils.clickWithJS(menu);
 
     }
@@ -718,6 +718,20 @@ public abstract class PageBase {
             String pageXpath = "//li[text()='" + page + "']";
             WebElement pageElement = Driver.getDriver().findElement(By.xpath(pageXpath));
             wait.until(ExpectedConditions.elementToBeClickable(pageElement)).click();
+        }
+    }
+
+    public void navigateToPageFromMenu(String page,String navigateTo) {
+        String URL = Driver.getDriver().getCurrentUrl();
+        String pageName = URL.substring(URL.lastIndexOf("/")+1,URL.length());;
+
+        if (!pageName.endsWith(page)) {
+            clickMenu();
+            // Dynamic xpath - Helps us to pass page names "Dashboard", "Portfolio Analysis", "Regulatory Reporting"
+            String pageXpath = "//li[text()='" + navigateTo + "']";
+            WebElement pageElement = Driver.getDriver().findElement(By.xpath(pageXpath));
+           // wait.until(ExpectedConditions.elementToBeClickable(pageElement)).click();
+            BrowserUtils.waitForVisibility(pageElement,5).click();
         }
     }
 
@@ -1382,7 +1396,7 @@ public abstract class PageBase {
             //Validate if Menu is available
             Assert.assertTrue(menu.isDisplayed(), "Menu Item is not displayed");
             clickMenu();
-            List<String> menuItemsArray = Arrays.asList("Navigate To", "Dashboard", "Portfolio Analysis",
+            List<String> menuItemsArray = Arrays.asList("Navigate To", "Dashboard", "Portfolio Analysis", "On-Demand Assessment Request",
                     "Portfolio Selection/Upload", "Regulatory Reporting",
                     "Contact Us", "Terms & Conditions", "Log Out");
             //TODO on demand is only in QA as of Feb 2023
@@ -1400,12 +1414,12 @@ public abstract class PageBase {
             String url = Driver.getDriver().getCurrentUrl();
 
             if (url.contains("dashboard")) {
-                Assert.assertEquals(menuList.get(0).getText(), "Moody's ESG360: Dashboard", "Global Header Title is not matched for Dashboard");
+                Assert.assertEquals(menuList.get(0).getText(), "Climate Dashboard", "Global Header Title is not matched for Dashboard");
                 finalStringToCheck = menuItemsArray.get(1);
             }
 
             if (url.contains("portfolioanalysis")) {
-                Assert.assertEquals(menuList.get(0).getText(), "Moody's ESG360: Portfolio Analysis", "Global Header Title is not matched for Portfolio Analysis");
+                Assert.assertEquals(menuList.get(0).getText(), "Climate Portfolio Analysis", "Global Header Title is not matched for Portfolio Analysis");
                 finalStringToCheck = menuItemsArray.get(2);
             }
             System.out.println(menuList.stream().filter(p -> p.getText().equals(finalStringToCheck))

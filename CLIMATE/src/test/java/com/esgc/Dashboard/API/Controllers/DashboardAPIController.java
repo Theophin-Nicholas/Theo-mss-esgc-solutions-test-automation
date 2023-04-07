@@ -8,7 +8,6 @@ import com.esgc.Dashboard.API.APIModels.APIHeatMapPayload;
 import com.esgc.Dashboard.API.APIModels.APIHeatMapSinglePayload;
 import com.esgc.Dashboard.API.APIModels.APIPerformanceChartPayload;
 import com.esgc.Dashboard.API.DashboardEndPoints;
-import com.esgc.EntityProfile.API.EntityProfilePageEndpoints;
 import com.esgc.PortfolioAnalysis.API.PortfolioAnalysisEndpoints;
 import io.restassured.RestAssured;
 import io.restassured.parsing.Parser;
@@ -46,42 +45,6 @@ public class DashboardAPIController extends APIController {
                     .body("{\"region\":\"" + region + "\",\"sector\":\"" + sector + "\",\"month\":\"" + month + "\",\"year\":\"" + year + "\"}")
                     .when()
                     .post(DashboardEndPoints.POST_CONTROVERSIES);
-
-            System.out.println(response.prettyPrint());
-
-        } catch (Exception e) {
-            System.out.println("Inside exception " + e.getMessage());
-        }
-
-        return response;
-    }
-
-    // to be de-scoped remove esg content. validate with furkan ???
-    public synchronized Response getEsgCoverageScore(String portfolioId, String benchMark, String region, String sector, String year, String month) {
-        Response response = null;
-        try {
-            response = configSpec()
-                    .pathParam("portfolio_id", portfolioId).log().all()
-                    .body("{\"region\":\"" + region + "\",\"sector\":\"" + sector + "\",\"month\":\"" + month + "\",\"year\":\"" + year + "\",\"benchmark\":\"" + benchMark + "\"}")
-                    .when()
-                    .post(DashboardEndPoints.POST_ESG_SCORES);
-
-            System.out.println(response.prettyPrint());
-
-        } catch (Exception e) {
-            System.out.println("Inside exception " + e.getMessage());
-        }
-
-        return response;
-    }
-
-    public synchronized Response getExportSourceDocuments(String entityId) {
-        Response response = null;
-        try {
-            response = configSpec()
-                    .pathParam("entity_id", entityId).log().all()
-                    .when()
-                    .post(EntityProfilePageEndpoints.POST_EXPORT_SOURCE_DOCUMENTS);
 
             System.out.println(response.prettyPrint());
 

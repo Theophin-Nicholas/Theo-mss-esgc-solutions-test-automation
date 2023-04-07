@@ -201,7 +201,6 @@ public class EntityIssuerPageAPIController {
 
         return response;
     }
-    // ESG content to be de-scoped , remove. check with furkan ???
 
     public static  List<ESGCategories> getESGSubCategories(String methodology) {
 

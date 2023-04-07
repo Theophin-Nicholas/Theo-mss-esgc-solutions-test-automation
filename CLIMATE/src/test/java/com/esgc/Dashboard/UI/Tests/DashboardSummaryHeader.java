@@ -16,7 +16,7 @@ import static com.esgc.Utilities.Groups.*;
 public class DashboardSummaryHeader extends DashboardUITestBase {
 
     @Test(groups = {DASHBOARD, REGRESSION, UI, SMOKE}, dataProvider = "filters")
-    @Xray(test = {3632, 5067, 6313, 6277, 6278, 7707, 8343, 4267})
+    @Xray(test = {3632, 5067, 6313, 6277, 6278, 4267})
     public void validateDashboardSummaryHeader(@Optional String sector, @Optional String region, @Optional String month, @Optional String year) {
         DashboardPage dashboardPage = new DashboardPage();
         ResearchLinePage researchLinePage = new ResearchLinePage();
@@ -56,6 +56,7 @@ public class DashboardSummaryHeader extends DashboardUITestBase {
         BrowserUtils.wait(5);
         assertTestCase.assertTrue(dashboardPage.verifyStickyHeaderInfo(), "Verify Sticky Header Info");
     }
+
 
     @Test(groups = {DASHBOARD, REGRESSION, UI, SMOKE})
     @Xray(test = {4260, 5074, 5076, 7892})

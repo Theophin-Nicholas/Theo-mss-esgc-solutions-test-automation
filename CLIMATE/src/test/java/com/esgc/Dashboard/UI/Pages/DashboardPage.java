@@ -3,7 +3,6 @@ package com.esgc.Dashboard.UI.Pages;
 
 import com.esgc.Base.UI.Pages.UploadPage;
 import com.esgc.Dashboard.DB.DBQueries.DashboardQueries;
-import com.esgc.PortfolioAnalysis.UI.Pages.PhysicalRiskPages.PhysicalRiskManagementPages.PhysicalRiskManagementPage;
 import com.esgc.Utilities.*;
 import com.esgc.Utilities.Database.DatabaseDriver;
 import org.openqa.selenium.By;
@@ -31,12 +30,6 @@ public class DashboardPage extends UploadPage {
 
     @FindBy(xpath = "//header[.//*[starts-with(text(),'View')]]")
     public WebElement stickyHeader;
-
-    @FindBy(xpath = "//div[text()='ESG score']")
-    public WebElement averageEsgScoreLabel;
-
-    @FindBy(xpath = "//div[text()='ESG score']/following-sibling::div/div")
-    public WebElement esgScoreValue;
 
     @FindBy(xpath = "//*[@heap_menu='Dashboard']")
     public WebElement dashboardButton;
@@ -236,9 +229,6 @@ public class DashboardPage extends UploadPage {
     @FindBy(xpath = "//table/thead//th[text()='Overall ESG Score']")
     public WebElement OverallESGScoreColoumn;
 
-    @FindBy(xpath = "//table[./thead//th[text()='Overall ESG Score']]/tbody/tr/td[3]")
-    public List<WebElement> OverallESGScoreTabledata;
-
     @FindBy(xpath = "//table/thead//th[text()='Total Critical Controversies']")
     public WebElement TotalCriticalControversiesColoumn;
 
@@ -317,9 +307,6 @@ public class DashboardPage extends UploadPage {
     @FindBy(xpath = "(//div[@id='div-mainlayout']//table)[3]//tbody//td")
     public List<WebElement> heatMapCells;
 
-    @FindBy(xpath = "//td//div[@heap_id='heatmap']/span[2]")
-    public List<WebElement> heatMapEsgScoreCells;
-
     @FindBy(xpath = "(//table[.//thead//div[text()]])[1]//*[@heap_id='heatmap']//span")
     public List<WebElement> heatMapYAxisIndicators;
 
@@ -365,12 +352,6 @@ public class DashboardPage extends UploadPage {
     @FindBy(xpath = " //button[@id='button-holdings']/span/div")
     public WebElement verifyPortfolioName;
 
-    @FindBy(xpath = "(//div[@heap_heatmap_id='gridcell']/span[2])[2]")
-    public WebElement overallESGCell;
-
-    @FindBy(xpath = "//p[contains(text(),'ESG performance. They measure the degree to which ')]")
-    public WebElement overallESGDescription;
-
     @FindBy(xpath = "//p[contains(text(),'We score companies for Operations Risk by aggregat')]")
     public WebElement operationRiskDescription;
 
@@ -409,19 +390,7 @@ public class DashboardPage extends UploadPage {
         }
     }
 
-    /*
-    public void verifyPortfolioOnPortfolioAnalysisPage(){
 
-    //verify portfolio on portfolio analysis page
-        dashboardPage.navigateToPageFromMenu("Portfolio Analysis");
-    PhysicalRiskManagementPage portfolioAnalysisPage = new PhysicalRiskManagementPage();
-        BrowserUtils.waitFor(10);
-        portfolioAnalysisPage.clickPortfolioSelectionButton();
-    actualPortfolioList = BrowserUtils.getElementsText(portfolioAnalysisPage.portfolioNameList);
-        assertTestCase.assertTrue(actualPortfolioList.contains(newPortfolioName), "New Portfolio is verified on portfolio analysis page");
-    }
-
-    */
     public void navigateToDashboardPage() {
 
         Driver.getDriver().navigate().to(Environment.URL);
@@ -539,11 +508,6 @@ public class DashboardPage extends UploadPage {
         }
     }
 
-
-
-
-
-
     public boolean verifyPhysicalRiskWidget() {
         try {
             WebElement highestRiskValue = Driver.getDriver().findElement(By.xpath("//div[@id='Highest_Risk_Hazard_id']//span[2]"));
@@ -572,40 +536,6 @@ public class DashboardPage extends UploadPage {
         }
     }
 
-    public boolean verifyEsgInfo() {
-        String portfolioId = "00000000-0000-0000-0000-000000000000";
-        DashboardQueries dashboardQueries = new DashboardQueries();
-        String latestMonthAndYearWithData = dashboardQueries.getLatestMonthAndYearWithData(portfolioId);
-        String month = latestMonthAndYearWithData.split(":")[0];
-        String year = latestMonthAndYearWithData.split(":")[1];
-        System.out.println(month + year);
-        List<Map<String, Object>> dbEsgInfo = dashboardQueries.getEsgInfo(portfolioId, year, month);
-        List<WebElement> uiRecords = Driver.getDriver().findElements(By.xpath("//table[contains(@id, 'viewcomapnies')]/tbody/tr"));
-
-        for (int i = 1; i <= uiRecords.size(); i++) {
-            String companyName = Driver.getDriver().findElement(By.xpath("(//table[contains(@id, 'viewcomapnies')]/tbody/tr)[" + i + "]/td[1]/span")).getText();
-            String esgScore = Driver.getDriver().findElement(By.xpath("(//table[contains(@id, 'viewcomapnies')]/tbody/tr)[" + i + "]/td[2]/span")).getText();
-            System.out.println("companyName = " + companyName);
-            System.out.println("esgScore = " + esgScore);
-            if (!esgScore.equals("-")) {
-                boolean match = false;
-                System.out.print("UI Info:" + companyName + "--" + esgScore);
-                for (Map<String, Object> dbRecord : dbEsgInfo) {
-                    if (dbRecord.get("COMPANY_NAME").toString().equals(companyName)) {
-                        System.out.println("-- Company Found");
-                        if (dbRecord.get("VALUE_ESG").toString().equals(esgScore)) {
-                            match = true;
-                        } else {
-                            System.out.print("DB ESG - " + dbRecord.get("VALUE_ESG").toString() + " is not matched");
-                        }
-                        break;
-                    }
-                }
-                Assert.assertTrue(match, companyName + " esg info is not found/matched in Database");
-            }
-        }
-        return true;
-    }
 
     public void selectViewMethodologies() {
         //  BrowserUtils.waitForInvisibility(btnViewMethodologies, 50);

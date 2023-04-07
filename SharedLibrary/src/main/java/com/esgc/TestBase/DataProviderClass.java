@@ -1,7 +1,6 @@
 package com.esgc.TestBase;
 
 import com.esgc.Utilities.EntitlementsBundles;
-import com.esgc.Utilities.Environment;
 import org.testng.annotations.DataProvider;
 
 public class DataProviderClass {
@@ -228,7 +227,9 @@ public class DataProviderClass {
                 {"esg-test6@outlook.com", "Helloworld26", "Transition Risk", "Rogers Corp."},//
                 {"esg-test1+export@outlook.com", "Moodys123", "Physical Risk and Transition Risk", "Apple, Inc."},//
                 {"esg-test33@outlook.com", "Helloworld21", "ESG", "Apple, Inc."},//
+
                 {"esg-test33@outlook.com", "Helloworld21", "EsgWithMethodology1Entity", "Rogers Corp."},//
+
                 {"esg-test1+controversyandexport@outlook.com", "Helloworld21", "Controversy entitlement", "Rogers Corp."},
                 {"esg-test1+no-controversy@outlook.com", "Moodys123","No Controversy", "Rogers Corp."}
         };
@@ -298,18 +299,6 @@ public class DataProviderClass {
 
     @DataProvider(name = "Research Lines")
     public Object[][] availableResearchLines() {
-        //TODO: ESG Assessment is available only in QA environment as of 12Jan2023
-        if(Environment.environment.equalsIgnoreCase("qa")){
-            return new Object[][]{
-                    {"ESG Assessments"},
-                    {"Physical Risk Hazards"},
-                    {"Carbon Footprint"},
-                    {"Physical Risk Management"},
-                    {"Temperature Alignment"},
-                    {"Brown Share Assessment"},
-                    {"Green Share Assessment"},
-            };
-        }else{
             return new Object[][]{
                     {"Physical Risk Hazards"},
                     {"Carbon Footprint"},
@@ -318,8 +307,6 @@ public class DataProviderClass {
                     {"Brown Share Assessment"},
                     {"Green Share Assessment"},
             };
-        }
-
     }
 
     @DataProvider(name = "CompaniesWithMESGScore")

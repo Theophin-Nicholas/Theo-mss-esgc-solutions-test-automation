@@ -33,7 +33,7 @@ public class EntityIssuerP3PageSummaryWidget extends EntityPageTestBase {
             entitypage.validateSummaryWidgetISVAvailable();
             //TODO : Need to update as per new header chnages
           //  assertTestCase.assertTrue(entitypage.verifyOverallEsgScoreWidget(), "Verify overall ESG Score widget");
-            List<String> summarySections = Arrays.asList(new String[]{ "Environment", "Social", "Governance"});
+            List<String> summarySections = Arrays.asList(new String[]{"ESG Score", "Environment", "Social", "Governance"});
             for (String ss : summarySections) entitypage.validateESGScoresAsNumericalValues(ss);
 
             entitypage.validateEsgScoredateFormat();
