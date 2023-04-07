@@ -18,7 +18,6 @@ import java.util.Map;
 import static com.esgc.Utilities.Groups.*;
 
 public class SubsidiaryTests extends UITestBase {
-//Check
 
     @Test(groups = {REGRESSION, UI, SEARCH_ENTITY, ESG})
     @Xray(test = {11042})

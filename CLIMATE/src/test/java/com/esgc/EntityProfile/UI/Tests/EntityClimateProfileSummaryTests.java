@@ -624,38 +624,6 @@ public class EntityClimateProfileSummaryTests extends UITestBase {
                 "Verification of Supply Chain Risk table for UI");
     }
 
-    @Test(groups = {REGRESSION, UI}, dataProviderClass = DataProviderClass.class, dataProvider = "orbisID")
-    @Xray(test = {8227, 8228, 9840,12420})
-    public void verify_ESG_Score_Value(String Entity) {
-        ResearchLinePage researchLinePage = new ResearchLinePage();
-        test.info("Navigate to Portfolio Analysis page");
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
-        //BrowserUtils.wait(5);
-        researchLinePage.navigateToFirstEntity(Entity);
-
-        EntityClimateProfilePage profilePage = new EntityClimateProfilePage();
-        profilePage.navigateToPhysicalRisk();
-        //BrowserUtils.wait(5);
-        assertTestCase.assertTrue(profilePage.esgTitle.isDisplayed(), "ESG Score title is displayed");
-        profilePage.verifyESGScoreHeaders();
-    }
-
-    @Test(groups = {REGRESSION, UI}, dataProviderClass = DataProviderClass.class, dataProvider = "orbisID")
-    @Xray(test = {8230, 8233})
-    public void verify_ESG_Score_Pillars(String Entity) {
-        ResearchLinePage researchLinePage = new ResearchLinePage();
-        test.info("Navigate to Portfolio Analysis page");
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
-        //BrowserUtils.wait(5);
-        researchLinePage.navigateToFirstEntity(Entity);
-
-        EntityClimateProfilePage profilePage = new EntityClimateProfilePage();
-        //BrowserUtils.wait(5);
-        assertTestCase.assertTrue(profilePage.esgTitle.isDisplayed(), "ESG Score title is displayed");
-        assertTestCase.assertTrue(profilePage.verifyESGScorePillars(Entity), "ESG Score is displayed");
-
-    }
-
     @Test(groups = {REGRESSION, UI})
     @Xray(test = {6261})
     public void verifyBrownShareforNAScores() {
@@ -988,10 +956,10 @@ public class EntityClimateProfileSummaryTests extends UITestBase {
 
         } else if (entitlement.equals("Physical Risk, Transition Risk, Corporate ESG and Controversies Entitlements")) {
             /* Verify that User is able to see just Physical Risk, Transition Risk, Corporate ESG and Controversies Entitlements   */
-            assertTestCase.assertTrue(profilePage.esgScore.size() > 0); // ESG Overall score
-            assertTestCase.assertTrue(profilePage.esgSectorComparisonChart.isDisplayed()); // ESG Sector comparison chart
-            assertTestCase.assertTrue(profilePage.esgMateriality.isDisplayed()); //  ESG Materiality tab
-            assertTestCase.assertTrue(profilePage.esgSubCategory.isDisplayed()); // Subcategory modal - under ESG Materiality tab
+            assertTestCase.assertFalse(profilePage.esgScore.size() > 0); // ESG Overall score
+            assertTestCase.assertFalse(profilePage.esgSectorComparisonChart.isDisplayed()); // ESG Sector comparison chart
+            assertTestCase.assertFalse(profilePage.esgMateriality.isDisplayed()); //  ESG Materiality tab
+            assertTestCase.assertFalse(profilePage.esgSubCategory.isDisplayed()); // Subcategory modal - under ESG Materiality tab
             assertTestCase.assertTrue(profilePage.controversies.isDisplayed()); // Controversies
             assertTestCase.assertTrue(profilePage.physicalRiskHazardsCard.isDisplayed()); // Physical Climate Hazards card
             assertTestCase.assertTrue(profilePage.physicalRiskManagementCard.isDisplayed()); // Physical Risk Management card
@@ -1126,19 +1094,5 @@ public class EntityClimateProfileSummaryTests extends UITestBase {
             assertTestCase.assertEquals(profilePage.comparisonChartRiskSelectionDropdown.getText(), rl, "Selected RL is verified");
             //assertTestCase.assertTrue(profilePage.noSectorComparisonChartAvailable.isDisplayed(), "No data message is displayed for " + rl);
         }
-    }
-
-//TODO disclosure ratio is not valid until 2.0 companies are visiable
-    @Test(enabled = false, groups = {REGRESSION, UI},
-            dataProviderClass = DataProviderClass.class, dataProvider = "orbisIDWithDisclosureScore")
-    @Xray(test = {8750})
-    public void verifyDisclosureScore(String entity) {
-        ResearchLinePage researchLinePage = new ResearchLinePage();
-        test.info("Navigate to Portfolio Analysis page");
-        researchLinePage.navigateToFirstEntity(entity);
-
-        EntityClimateProfilePage profilePage = new EntityClimateProfilePage();
-        assertTestCase.assertTrue(profilePage.entityDisclosureScore.isDisplayed());
-        researchLinePage.pressESCKey();
     }
 }

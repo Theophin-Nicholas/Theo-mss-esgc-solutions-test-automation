@@ -1240,59 +1240,6 @@ public class EntityClimateProfilePage extends ClimatePageBase {
         }
     }
 
-    public void validateSubCategories() {
-
-        for (int i = 1; i <= esgMaterialityColumns.size(); i++) {
-            String xpathCategories = "(//div/section//ul)[" + i + "]//li";
-            int categoriesCount = Driver.getDriver().findElements(By.xpath(xpathCategories)).size();
-            int scores[] = new int[categoriesCount];
-            for (int j = 1; j <= categoriesCount; j++) {
-                String categoryBgColor = Driver.getDriver().findElement(By.xpath("(//div/section//ul)[" + i + "]//li[" + j + "]")).getCssValue("background-color");
-                System.out.println("BG Color: " + categoryBgColor);
-                if (i != 4) {
-                    String xpathCategoryScore = "(//div/section//ul)[" + i + "]//li[" + j + "]/section/span[1]/span[2]";
-                    String score = Driver.getDriver().findElement(By.xpath(xpathCategoryScore)).getText();
-                    int iScore = Integer.parseInt(score);
-                    scores[i - 1] = iScore;
-                    System.out.println("Score: " + iScore);
-                    if (iScore >= 60) {
-                        assertTestCase.assertEquals(categoryBgColor, "rgba(219, 229, 163, 1)");
-                    } else if (iScore >= 50) {
-                        assertTestCase.assertEquals(categoryBgColor, "rgba(234, 197, 80, 1)");
-                    } else if (iScore >= 30) {
-                        assertTestCase.assertEquals(categoryBgColor, "rgba(232, 149, 28, 1)");
-                    } else {
-                        assertTestCase.assertEquals(categoryBgColor, "rgba(221, 88, 29, 1)");
-                    }
-                } else {
-                    assertTestCase.assertEquals(categoryBgColor, "rgba(255, 255, 255, 1)");
-                }
-            }
-            for (int k = 0; k < (scores.length - 1); k++) {
-                assertTestCase.assertTrue(scores[i] >= scores[i + 1], "Verify the order of categories");
-            }
-        }
-
-    }
-
-//    public void validateSubCategoriesButtonColorProperties() {
-//        List<WebElement> SubCategoriesPercentageLabels = Driver.getDriver().findElements(By.xpath("//section//li/section/span[2]"));
-//
-//        //Verify Disclosure ratio text under all subcategories
-//        int i=0;
-//        for (WebElement section : materialityElements) {
-//            String colorCode = Color.fromString(section.getCssValue("background-color")).asHex();
-//            String score = Driver.getDriver().findElement(By.xpath("(//section//li/section/span[2])["+(++i)+"]")).getText();
-//            score = score.substring(score.lastIndexOf(' '), score.length()-1);
-//            if(Integer.parseInt(score)>=60){
-//                assertTestCase.assertEquals(colorCode, "");
-//            } else if(Integer.parseInt(score)>=40){
-//                assertTestCase.assertEquals(colorCode, "");
-//            } else if(Integer.parseInt(score)>=20){
-//                assertTestCase.assertEquals(colorCode, "");
-//            }
-//        }
-//    }
 
     public void validateNoneForTheSectorButton() {
         // Based on the xpath - can say element is not clickable
@@ -1300,26 +1247,6 @@ public class EntityClimateProfilePage extends ClimatePageBase {
         Assert.assertTrue(sectors.size() != 0, "Check 'None for the Sector' button");
     }
 
-    public void validateEsgMaterialityLegends() {
-
-        String labelXpath = "//button[@heap_perfchart_id='Materiality']/../../..//div[contains(@class,'MuiPaper-elevation1')]//span";
-
-        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("(" + labelXpath + ")[1]")).getText(), "Weak");
-        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("(" + labelXpath + "/div)[1]")).getAttribute("style"), "background: rgb(221, 88, 29);");
-
-        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("(" + labelXpath + ")[2]")).getText(), "Limited");
-        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("(" + labelXpath + "/div)[2]")).getAttribute("style"), "background: rgb(232, 149, 28);");
-
-        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("(" + labelXpath + ")[3]")).getText(), "Robust");
-        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("(" + labelXpath + "/div)[3]")).getAttribute("style"), "background: rgb(234, 197, 80);");
-
-        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("(" + labelXpath + ")[4]")).getText(), "Advanced");
-        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("(" + labelXpath + "/div)[4]")).getAttribute("style"), "background: rgb(219, 229, 163);");
-
-        String criticalControversiesXpath = "//button[@heap_perfchart_id='Materiality']/../../..//div[text()='Critical controversies']";
-        assertTestCase.assertTrue(Driver.getDriver().findElement(By.xpath(criticalControversiesXpath)).isDisplayed());
-
-    }
 
     public boolean validateNoPopupIsDisplayedWhenClickedOnSubCategories() {
         Driver.getDriver().findElement(By.xpath("(//ul/li/section)[1]")).click();
@@ -1341,14 +1268,6 @@ public class EntityClimateProfilePage extends ClimatePageBase {
         for (WebElement element : lowMaterialityElements) {
             Assert.assertTrue(Color.fromString(element.getCssValue("background-color")).asHex().equals("#ffffff"));
         }
-    }
-
-    public List<String> readEsgMaterialityColumns() {
-        List<String> columns = new ArrayList<String>();
-        for (WebElement column : esgMaterialityColumns) {
-            columns.add(column.getText());
-        }
-        return columns;
     }
 
     public void selectMaterialityMatrixFilter(String filterName) {
@@ -2345,83 +2264,6 @@ public class EntityClimateProfilePage extends ClimatePageBase {
         return true;//End of code
     }
 
-    public void verifyESGScoreHeaders() {
-       List<String> pillars= Arrays.asList(new String[]{"Environment","Social","Governance"});
-        int count = 0;
-        //actPillars.put("ESG Rating");
-        for (WebElement pillar : esgScorePillars) {
-            if (count == 0) {
-                count++;
-                continue;
-            }
-
-            String pillarName = pillar.getText().substring(0, pillar.getText().indexOf("\n"));
-            String pillarScore = pillar.getText().substring(pillar.getText().indexOf("\n") + 1);
-            assertTestCase.assertTrue(pillars.contains(pillarName),"Validating the pillar name " + pillarName);
-            assertTestCase.assertEquals(pillarScore.split("/")[1],("100"), "Validating " + pillarName + " Score format" ) ;
-            String color = Color.fromString(pillar.getCssValue("color")).asHex();
-            System.out.println("color = " + color);
-            assertTestCase.assertEquals(color,"#ffffff","validating color");
-        }
-
-
-    }
-
-    public boolean verifyESGScorePillars(String Entity) {
-        Map<String, String> actPillars = new HashMap<>();
-        //we need to skip first element because xpath locates an extra element which is not a pillar
-        int count = 0;
-        //actPillars.put("ESG Rating");
-        for (WebElement pillar : esgScorePillars) {
-            if (count == 0) {
-                count++;
-                continue;
-            }
-
-            String pillarName = pillar.getText().substring(0, pillar.getText().indexOf("\n"));
-            String pillarScore = pillar.getText().substring(pillar.getText().indexOf("\n") + 1);
-            if (pillarName.equalsIgnoreCase("ESG Score")) {
-                actPillars.put("ESG Rating", pillarScore);
-                continue;
-            }
-            actPillars.put(pillarName, pillarScore);
-        }
-        System.out.println("actPillars = " + actPillars);
-
-        //run query
-        DatabaseDriver.createDBConnection();
-
-        String query = "SELECT P.RESEARCH_LINE_ID ,ORBIS_ID, lkp1.scale,lkp1.grade, SUB_CATEGORY,DATA_TYPE,p.SCORE, score_msg, lkp1.QUALIFIER QUAL, lkp2.QUALIFIER as score_category, lkp1.score_range, lkp1.as_of_date,lkp2.score_range sc_range FROM (SELECT ESG.ORBIS_ID,ESG.RESEARCH_LINE_ID,ESG.DATA_TYPE, ESG.YEAR,ESG.MONTH,CASE WHEN ESG.SUB_CATEGORY = 'Environmental' THEN 'Environment' WHEN SUB_CATEGORY = 'ESG' THEN iff ((DATA_TYPE = 'esg_pillar_score'),'ESG Rating','ESG Score') WHEN DATA_TYPE = 'overall_alphanumeric_score' THEN 'ESG Score' ELSE SUB_CATEGORY END as SUB_CATEGORY, CASE WHEN DATA_TYPE = 'esg_pillar_score' THEN try_to_double(VALUE) ELSE NULL END as score , CASE WHEN DATA_TYPE = 'overall_alphanumeric_score' THEN VALUE ELSE NULL END as score_msg FROM DF_TARGET.ESG_OVERALL_SCORES ESG JOIN DF_TARGET.ENTITY_COVERAGE_TRACKING CT ON ESG.ORBIS_ID = CT.ORBIS_ID AND CT.COVERAGE_STATUS = 'Published' AND PUBLISH = 'yes' AND CT.RESEARCH_LINE_ID IN (1015,1008) WHERE ESG.ORBIS_ID = '" + Entity + "' AND ESG.DATA_TYPE IN('overall_alphanumeric_score' ,'esg_pillar_score') QUALIFY ROW_NUMBER() OVER(PARTITION BY ESG.ORBIS_ID,DATA_TYPE,SUB_CATEGORY ORDER BY SCORED_DATE DESC) = 1 limit 5) p LEFT OUTER JOIN DF_LOOKUP.ESG_SCORE_REFERENCE lkp1  ON lkp1.GRADE = P.SCORE_MSG AND lkp1.RESEARCH_LINE_ID = P.RESEARCH_LINE_ID AND lkp1.STATUS = 'Active' LEFT OUTER JOIN DF_LOOKUP.ESG_SCORE_REFERENCE lkp2 ON 1=1 AND lkp2.RESEARCH_LINE_ID = P.RESEARCH_LINE_ID and lkp2.GRADE  IS NULL AND split(lkp2.SCORE_RANGE,'')[1]::number AND (floor(score) BETWEEN lkp2.LOWER_SCORE_THRESHOLD AND lkp2.UPPER_SCORE_THRESHOLD) AND lkp2.STATUS = 'Active'";
-        List<Map<String, Object>> dbResult = DatabaseDriver.getQueryResultMap(query);
-        //result.forEach(System.out::println);
-        //Verify the value for Environment , Social, Governance pillar value for the entity is reflecting correctly
-        //actPillars = {Social=42/100, Environment=51/100, Governance=51/100}
-        for (String pillar : actPillars.keySet()) {
-            for (Map<String, Object> row : dbResult) {
-                if (row.get("SUB_CATEGORY").toString().equals(pillar)) {
-                    // String expScoreCategory = new ESGUtilities().getESGPillarsCategory(row.get("RESEARCH_LINE_ID").toString(), (int) Double.parseDouble(row.get("SCORE").toString()));
-                    String value = String.valueOf((int) Double.parseDouble(row.get("SCORE").toString()));
-                    if (!actPillars.get(pillar).split("/")[0].equals(value)) {
-                        System.out.println("ESg Pillar Category Doesnt Match for " + pillar + " = " + actPillars.get(pillar) + " with " + row.get("SCORE"));
-                        return false;
-                    }
-                }
-            }
-        }
-
-        // to be de scoped . remove . review with furkan
-        //Verify the data on the UI for Overall ESG score matches with the db
-        String escScore = String.valueOf((int) Double.parseDouble(dbResult.get(0).get("SCORE").toString()));
-        System.out.println("escScore = " + escScore);
-        for (WebElement score : esgScores) {
-            if (score.getText().contains(escScore)) {
-                System.out.println("ESG Score is verified = " + score.getText());
-                return score.isDisplayed();
-            }
-        }
-        return false;
-    }
-
     public boolean validatePhysicalRiskMananagementTableIsAvailable() {
         try {
             BrowserUtils.scrollTo(PhysicalRiskManagementTable);
@@ -2830,21 +2672,6 @@ public class EntityClimateProfilePage extends ClimatePageBase {
             returnString = listOfIdentifiers;
         }
         return returnString;
-    }
-
-    public List<String> getESGSummaryDetails() {
-        BrowserUtils.scrollTo(esgScores.get(0));
-        List<String> returnList = new ArrayList<>();
-        for (WebElement e : esgScores) {
-            if (e.getText().contains("\n")) {
-                String[] a = e.getText().split("\n");
-                returnList.add(a[1] + " " + (a[0].contains("Environment") ? "Environmental" : a[0]));
-            } else {
-                returnList.add(e.getText());
-            }
-        }
-        return returnList;
-
     }
 
     public void verifyUnderlyingDataForBrownShareWidget(String orbisID) {

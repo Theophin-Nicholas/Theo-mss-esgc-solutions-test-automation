@@ -4,14 +4,10 @@ package com.esgc.ONDEMAND.UI.Pages;
 import com.esgc.Common.UI.Pages.CommonPage;
 import com.esgc.ONDEMAND.API.Controllers.OnDemandFilterAPIController;
 import com.esgc.Utilities.BrowserUtils;
-import com.esgc.Utilities.ConfigurationReader;
 import com.esgc.Utilities.Driver;
-import com.esgc.Utilities.RobotRunner;
 import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.remote.Browser;
 import org.openqa.selenium.support.FindBy;
 
 import java.awt.*;
@@ -693,7 +689,7 @@ public WebElement menuButton;
     }
 
     public void validateOnDemandPageHeader() {
-        assertTestCase.assertEquals(BrowserUtils.waitForVisibility(menuOptionPageHeader, 90).getText(), "Moody's ESG360: Request On-Demand Assessment", "Moody's ESG360: Request On-Demand Assessment page verified");
+        assertTestCase.assertEquals(BrowserUtils.waitForVisibility(menuOptionPageHeader, 90).getText(), "On Demand Reporting", "On Demand Reporting page verified");
     }
 
     public void validateProceedOnConfirmRequestPopup(String countOfCompanies) {

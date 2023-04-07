@@ -390,19 +390,7 @@ public class DashboardPage extends UploadPage {
         }
     }
 
-    /*
-    public void verifyPortfolioOnPortfolioAnalysisPage(){
 
-    //verify portfolio on portfolio analysis page
-        dashboardPage.navigateToPageFromMenu("Portfolio Analysis");
-    PhysicalRiskManagementPage portfolioAnalysisPage = new PhysicalRiskManagementPage();
-        BrowserUtils.waitFor(10);
-        portfolioAnalysisPage.clickPortfolioSelectionButton();
-    actualPortfolioList = BrowserUtils.getElementsText(portfolioAnalysisPage.portfolioNameList);
-        assertTestCase.assertTrue(actualPortfolioList.contains(newPortfolioName), "New Portfolio is verified on portfolio analysis page");
-    }
-
-    */
     public void navigateToDashboardPage() {
 
         Driver.getDriver().navigate().to(Environment.URL);
@@ -461,6 +449,64 @@ public class DashboardPage extends UploadPage {
         }
     }
 
+    public boolean verifyStickyHeaderInfo() {
+        try {
+            DashboardPage dashboardPage = new DashboardPage();
+            String portfolio = "Sample Portfolio";
+            selectPortfolio(portfolio);
+            BrowserUtils.scrollTo(dashboardPage.endOfPage);// scrolling to the last widget on the page
+            System.out.println("Sticky1");
+            BrowserUtils.wait(4);
+            if (!dashboardPage.isStickyHeaderDisplayed()) {
+                System.out.println("Sticky2");
+                return false;
+            }
+            assertTestCase.assertTrue(dashboardPage.regionTitleInStickyHeader.isDisplayed(), "Verify Title and Region/Sector Toggle are in Sticky Header in the Drawer ");
+            System.out.println("Sticky3");
+            assertTestCase.assertTrue(dashboardPage.isStickyHeaderDisplayed(), "Sticky header is not displayed");
+            System.out.println("Sticky4");
+            // Verify portfolio name in sticky header
+            //assertTestCase.assertTrue(Driver.getDriver().findElement(By.xpath("//header[contains(@class,'Sticky')]//div[contains(text(),'Viewing " + portfolio + ": All Regions, All Sectors')]")).isDisplayed(), "Portfolio name is not displayed in sticky header");
+            // assertTestCase.assertTrue(Driver.getDriver().findElements(By.xpath("//header[contains(@class,'Sticky')]//div[contains(text(),'Viewing " + portfolio + "')]")).get(0).isDisplayed(), "Portfolio name is not displayed in sticky header");
+
+            System.out.println("Sticky5");
+            // Verify physical risk climate tile details in sticky header
+            String highestRiskHazardStatus = Driver.getDriver().findElement(By.xpath("//header//div[text()='Highest Risk Hazard']/..//span[2]")).getText();
+            System.out.println("Sticky6");
+            ArrayList<String> highestRiskHazardStatusList = new ArrayList<String>();
+            highestRiskHazardStatusList.add("Floods");
+            highestRiskHazardStatusList.add("Heat Stress");
+            highestRiskHazardStatusList.add("Hurricanes & Typhoons");
+            highestRiskHazardStatusList.add("Sea Level Rise");
+            highestRiskHazardStatusList.add("Water Stress");
+            highestRiskHazardStatusList.add("Wildfires");
+
+            String facilitiesExposedValue = Driver.getDriver().findElement(By.xpath("//header//div[text()='Facilities Exposed to " + highestRiskHazardStatus + "']/..//span[1]")).getText();
+            assertTestCase.assertTrue(highestRiskHazardStatusList.contains(highestRiskHazardStatus) &&
+                    facilitiesExposedValue.substring(0, facilitiesExposedValue.indexOf('%') - 1).chars().allMatch(Character::isDigit), "Physical Risk climate tile details are not displayed in sticky header");
+            System.out.println("Sticky7");
+
+            // Verify transition risk climate tile details in sticky header
+            String temperatureAlignmentValue = Driver.getDriver().findElement(By.xpath("//header//div[text()='Temperature Alignment']/..//span[1]")).getText();
+            System.out.println("Sticky8");
+            ArrayList<String> carbonFootprintScores = new ArrayList<String>();
+            carbonFootprintScores.add("Moderate");
+            carbonFootprintScores.add("Significant");
+            carbonFootprintScores.add("High");
+            carbonFootprintScores.add("Intense");
+
+            String carbonFootprintScore = Driver.getDriver().findElement(By.xpath("//header//div[text()='Carbon Footprint']/..//span[1]")).getText();
+            assertTestCase.assertTrue(temperatureAlignmentValue.contains("°C")
+                    && carbonFootprintScores.contains(carbonFootprintScore), "Transition Risk climate tile details are not displayed in sticky header");
+            System.out.println("Sticky9");
+            return true;
+
+        } catch (Exception e) {
+            System.out.println("Sticky10");
+            e.printStackTrace();
+            return false;
+        }
+    }
 
     public boolean verifyPhysicalRiskWidget() {
         try {

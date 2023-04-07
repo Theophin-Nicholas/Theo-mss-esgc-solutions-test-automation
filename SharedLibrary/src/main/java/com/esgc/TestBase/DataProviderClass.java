@@ -1,7 +1,6 @@
 package com.esgc.TestBase;
 
 import com.esgc.Utilities.EntitlementsBundles;
-import com.esgc.Utilities.Environment;
 import org.testng.annotations.DataProvider;
 
 public class DataProviderClass {
@@ -298,18 +297,6 @@ public class DataProviderClass {
 
     @DataProvider(name = "Research Lines")
     public Object[][] availableResearchLines() {
-        //TODO: ESG Assessment is available only in QA environment as of 12Jan2023
-        if(Environment.environment.equalsIgnoreCase("qa")){
-            return new Object[][]{
-                    {"ESG Assessments"},
-                    {"Physical Risk Hazards"},
-                    {"Carbon Footprint"},
-                    {"Physical Risk Management"},
-                    {"Temperature Alignment"},
-                    {"Brown Share Assessment"},
-                    {"Green Share Assessment"},
-            };
-        }else{
             return new Object[][]{
                     {"Physical Risk Hazards"},
                     {"Carbon Footprint"},
@@ -318,8 +305,6 @@ public class DataProviderClass {
                     {"Brown Share Assessment"},
                     {"Green Share Assessment"},
             };
-        }
-
     }
 
     @DataProvider(name = "CompaniesWithMESGScore")

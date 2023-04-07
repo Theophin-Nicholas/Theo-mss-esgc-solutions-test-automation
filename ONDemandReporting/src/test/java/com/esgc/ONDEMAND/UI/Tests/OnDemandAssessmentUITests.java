@@ -1,22 +1,18 @@
 package com.esgc.ONDEMAND.UI.Tests;
 
-import com.esgc.Common.API.Controllers.CommonAPIController;
 import com.esgc.Common.UI.Pages.LoginPage;
 import com.esgc.Common.UI.TestBases.UITestBase;
 import com.esgc.ONDEMAND.API.Controllers.OnDemandFilterAPIController;
 import com.esgc.ONDEMAND.UI.Pages.OnDemandAssessmentPage;
-
-import com.esgc.ONDEMAND.UI.Pages.ViewDetailPage;
 import com.esgc.Utilities.*;
-import org.apache.commons.collections.bag.SynchronizedSortedBag;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import static com.esgc.Utilities.Groups.*;
 
 public class OnDemandAssessmentUITests extends UITestBase {
-    @Test(groups = {REGRESSION,UI,COMMON })
-    @Xray(test = {11985,12001,12002,12011,12054,12092,12822,12824})
+    @Test(groups = {REGRESSION, UI, COMMON})
+    @Xray(test = {11985, 12001, 12002, 12011, 12054, 12092, 12822, 12824})
     public void validateOnDemandAssessmentRequest() {
 
         String portfolioName = "500 predicted p";
@@ -56,7 +52,7 @@ public class OnDemandAssessmentUITests extends UITestBase {
 
         onDemandAssessmentPage.sendESCkey();
         BrowserUtils.wait(2);
-        Assert.assertTrue(onDemandAssessmentPage.verifyMainPageHeader("Moody's ESG360: Dashboard"), "Global Header Title is not matched for Dashboard");
+        Assert.assertTrue(onDemandAssessmentPage.verifyMainPageHeader("Climate Dashboard"), "Global Header Title is not matched for Dashboard");
 
         onDemandAssessmentPage.clickMenu();
         onDemandAssessmentPage.clickonOnRequestAssessmentButton();
@@ -64,7 +60,7 @@ public class OnDemandAssessmentUITests extends UITestBase {
 
         onDemandAssessmentPage.clickESCkey();
         BrowserUtils.wait(2);
-        Assert.assertTrue(onDemandAssessmentPage.verifyMainPageHeader("Moody's ESG360: Dashboard"), "Global Header Title is not matched for Dashboard");
+        Assert.assertTrue(onDemandAssessmentPage.verifyMainPageHeader("Climate Dashboard"), "Global Header Title is not matched for Dashboard");
     }
 
     @Test(groups = {REGRESSION, UI})
@@ -95,8 +91,8 @@ public class OnDemandAssessmentUITests extends UITestBase {
         onDemandAssessmentPage.validateOnDemandPageHeader();
     }
 
-    @Test(groups = {REGRESSION,UI })
-    @Xray(test = {12010,12827})
+    @Test(groups = {REGRESSION, UI})
+    @Xray(test = {12010, 12827})
     public void verifyOnDemandAssessmentRequestIsNotAvailable() {
         LoginPage login = new LoginPage();
         login.clickOnLogout();
@@ -221,21 +217,18 @@ public class OnDemandAssessmentUITests extends UITestBase {
 
     }
 
-    @Test(groups = {REGRESSION,UI , SMOKE})
+    @Test(groups = {REGRESSION, UI, SMOKE})
     @Xray(test = {})
-public void testOnDemandDetailPanel(){
+    public void testOnDemandDetailPanel() {
 
-    String portfolioName = "500 predicted p";
-    OnDemandAssessmentPage onDemandAssessmentPage = new OnDemandAssessmentPage();
-    onDemandAssessmentPage.navigateToReportingService("On-Demand Assessment");
-    onDemandAssessmentPage.selectPortfolioOptionByName(portfolioName);
-    BrowserUtils.wait(5);
-    onDemandAssessmentPage.clickonOnRequestAssessmentButton();
-    onDemandAssessmentPage.clickReviewAndSendRequestButton();
-}
-
-
-
+        String portfolioName = "500 predicted p";
+        OnDemandAssessmentPage onDemandAssessmentPage = new OnDemandAssessmentPage();
+        onDemandAssessmentPage.navigateToReportingService("On-Demand Assessment");
+        onDemandAssessmentPage.selectPortfolioOptionByName(portfolioName);
+        BrowserUtils.wait(5);
+        onDemandAssessmentPage.clickonOnRequestAssessmentButton();
+        onDemandAssessmentPage.clickReviewAndSendRequestButton();
+    }
 
 
 }
