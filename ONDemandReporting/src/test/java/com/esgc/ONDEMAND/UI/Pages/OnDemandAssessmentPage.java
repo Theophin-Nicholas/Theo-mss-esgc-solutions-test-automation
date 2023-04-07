@@ -1,6 +1,5 @@
 package com.esgc.ONDEMAND.UI.Pages;
 
-
 import com.esgc.Common.UI.Pages.CommonPage;
 import com.esgc.ONDEMAND.API.Controllers.OnDemandFilterAPIController;
 import com.esgc.Utilities.BrowserUtils;
@@ -11,11 +10,10 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-
 import java.text.ParseException;
 import java.util.*;
 import java.io.File;
-import java.util.*;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class OnDemandAssessmentPage extends CommonPage {
@@ -190,6 +188,25 @@ public class OnDemandAssessmentPage extends CommonPage {
 
     @FindBy(xpath = "//div[contains(text(),'Select Portfolio')]/../div[2]/following-sibling::div/div[2]")
     public List<WebElement> LastUpdateColumn;
+
+
+    @FindBy(xpath = "//*[@id=\"topbar-appbar-test-id\"]/div/li")
+    public WebElement menuButton;
+    @FindBy(xpath = "//div[text()='View Detail']")
+    public List<WebElement> viewDetailButton;
+
+    @FindBy(xpath = "//li[contains(text(), 'Log Out')]")
+    public WebElement logOutButton;
+
+    @FindBy(xpath= "//div[text()= 'remaining']")
+    public WebElement assessmentRemainingHeader;
+
+    @FindBy(xpath = "//*[@id='div-mainlayout']/div/div[2]/main/div/div/div[2]/div[2]/div")
+    public List<WebElement> coverageList;
+
+    @FindBy(xpath= ("//button[contains(@title, 'Download')]"))
+    public List<WebElement> downloadButtonList;
+
 
     public String landingPage = "";
 
@@ -737,6 +754,100 @@ public class OnDemandAssessmentPage extends CommonPage {
         }
         return returnValue ;
     }
+    public void verifyZeroAssessmentRemainingForOnDemand(){
+        BrowserUtils.wait(5);
+        assertTestCase.assertTrue(assessmentRemainingHeader.isDisplayed(), "Verification that 0 Assessment Remaining is displayed");
+        assertTestCase.assertEquals(assessmentRemainingHeader.getText(), "0 Assessment remaining", "Verification 0 Assessment Remaining text is done");
+    }
+
+    public void validateViewDetailButtonAndDownloadButtonDisabledForZeroCoveragePortfolios(String portfolioName){
+        clickOnViewDetailButton(portfolioName);
+        System.out.println("Validating that View Detail button is disabled");
+        String disabledProperty = viewDetailButton.get(0).getDomProperty("disabled");
+        boolean isEnabled = viewDetailButton.get(0).isEnabled();
+        System.out.println(" attribute of view detail button :    : "+viewDetailButton.get(0).getDomAttribute("disabled"));
+        System.out.println(disabledProperty);
+        System.out.println(isEnabled);
+
+        System.out.println("validation that view Detail button is disable is done");
+        //assertTestCase.assertEquals(false, viewDetailButton.get(0).isEnabled(), "Validating that View Detail button is disabled");
+        assertTestCase.assertFalse(isDownloadButtonEnabled(), "Verification that the download button is disabled");
+    }
 
 
+    public void clickOnMenuButton(){
+        BrowserUtils.waitForClickablility(menuButton, 5);
+        menuButton.click();
+    }
+    public void clickOnLogOutButton(){
+        BrowserUtils.waitForVisibility(logOutButton).click();
+    }
+
+    public List<String> getCoverageValuesList() {
+        return BrowserUtils.getElementsText(coverageList);
+    }
+
+    public void checkViewDetailButtonDisabled (){
+        System.out.println("Checking if view detail button is disabled..... ");
+        /*for(int i =0 ; i < viewDetailButton.size(); i++){
+            if(viewDetailButton.get(i).isEnabled()){
+                System.out.println("the view Detail Button is Enabled"+ viewDetailButton.get(i));
+            } else {
+                System.out.println("the View Detail Button is Disabled"+viewDetailButton.get(i));
+            }
+        }*/
+        for(int i=0; i < viewDetailButton.size(); i++){
+            if(viewDetailButton.get(i).getAttribute("disabled").equals("")){
+                System.out.println("the view detail button is disabled for "+ viewDetailButton.get(i).getText());
+            } else {
+                System.out.println("the view detail button is enabled");
+            }
+        }
+
+    }
+
+    public void isViewDetailButtonDisabled(){
+        // JavascriptExecutor jse = (JavascriptExecutor) Driver.getDriver();
+        // System.out.println("is the View Detail Button disabled " + jse.executeScript("return arguments[0].disabled", viewDetailButton.get(0)));
+
+        viewDetailButton.get(0).getAttribute("disabled");
+    }
+    public boolean isViewDetailButtonEnabled(String portfolioName){
+        if(IsPortfolioTableLoaded()){
+            int index = getPortfolioList().indexOf(portfolioName.trim());
+            System.out.println("index of : "+ portfolioName + " is : "+viewDetailButton.get(index));
+            viewDetailButton.get(index).isEnabled();
+        }
+        return false;
+    }
+
+    public boolean isRequestAssessmentButtonEnabled(){
+        BrowserUtils.wait(4);
+        return buttonRequestAssessment.isEnabled();
+    }
+    public void clickOnViewDetailButton(String portfolioName){
+        if(IsPortfolioTableLoaded()) {
+            int index = getPortfolioList().indexOf(portfolioName.trim());
+            viewDetailButton.get(index).click();
+        } else{
+            System.out.println("please select a portfolio first!!!");
+        }
+    }
+
+    public boolean isDownloadButtonEnabled(){
+        return downloadButtonList.get(0).isEnabled();
+    }
+    public String getAssessmentRemainingHeaderText(){
+        return assessmentRemainingHeader.getText();
+    }
+
+    public int checkPortfolioWithZeroCoverage(){
+        int index =0;
+        for (index = 0 ; index < coverageList.size(); index++){
+            if(  coverageList.get(index).getText().equals("0.00%")) {
+                return index;
+            }
+        }
+        return index;
+    }
 }
