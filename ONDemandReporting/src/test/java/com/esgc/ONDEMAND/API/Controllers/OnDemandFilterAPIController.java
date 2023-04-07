@@ -44,21 +44,6 @@ public class OnDemandFilterAPIController extends CommonAPIController {
         return response;
     }
 
-    public Response getOnDemandInfo() {
-        Response response = null;
-        try {
-            response = configSpec()
-                    .log().all()
-                    .when()
-                    .get(OnDemandEndpoints.GET_ON_DEMAND_INFO).prettyPeek();
-
-        } catch (Exception e) {
-            System.out.println("Inside exception " + e.getMessage());
-        }
-        System.out.println(response != null ? response.prettyPrint() : null);
-        return response;
-    }
-
     public String getLandingPage(String portfolioName){
         String landingPage;
         String portfolioId = getPortfolioId(portfolioName);
