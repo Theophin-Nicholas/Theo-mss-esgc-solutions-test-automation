@@ -26,7 +26,6 @@ public class CommonPage extends UploadPortfolio {
     @FindBy(xpath = "//div[@heap_id='portfolio-selection']//div[1]/span")
     public List<WebElement> portfolioNameList;
 
-
     @FindBy(id = "upload-button-upload-test-id")
     public WebElement uploadButton;
 
