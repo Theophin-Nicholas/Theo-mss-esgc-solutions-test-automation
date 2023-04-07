@@ -1,0 +1,40 @@
+Currency: Please only enter in values of USD or GBP or EUR. Platform values will be converted into USD. Only one currency is allowed per portfolio
+As of Date: Please enter date in yyyy-mm-dd format
+Identifier type: Please specify the values as one of the following Identifiers: ISIN or BBG_TICKER
+Identifier: First column below !AsOfDate: Enter an ISIN or a Bloomberg Ticker. For example: T UN or CMP UN
+Value: Second Column below !AsOfDate: Please enter total monetary value of investment. This must be in one single currency
+
+!Currency,USD
+!AsOfDate,1/28/2019
+
+Identifier type,Identifier,Value
+ORBIS_ID,000000116,7
+ORBIS_ID,000000110,7
+ORBIS_ID,000000106,3
+ORBIS_ID,000000146,6
+ORBIS_ID,000000080,4
+ORBIS_ID,000000028,10
+ORBIS_ID,000000042,8
+ORBIS_ID,000000096,9
+ORBIS_ID,000000075,9
+ORBIS_ID,000000056,6
+ORBIS_ID,328598224,9
+ORBIS_ID,193538855,3
+ORBIS_ID,206062067,9
+ORBIS_ID,232553067,2
+ORBIS_ID,207800120,7
+ORBIS_ID,250538331,2
+ORBIS_ID,413301996,5
+ORBIS_ID,559923090,6
+ORBIS_ID,210139644,9
+ORBIS_ID,327217073,3
+ORBIS_ID,000316850,9
+ORBIS_ID,000316850,3
+ORBIS_ID,000316850,5
+ORBIS_ID,001387406,6
+ORBIS_ID,000316850,9
+ORBIS_ID,012029021,5
+ORBIS_ID,050166591,8
+ORBIS_ID,000316850,7
+ORBIS_ID,191451452,2
+ORBIS_ID,001217110,3
