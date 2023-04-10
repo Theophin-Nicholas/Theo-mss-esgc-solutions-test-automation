@@ -105,6 +105,9 @@ public class Environment {
     public static final String ODA_ESG_PREDICTOR_DATA_ENTITLEMENT_USERNAME;
     public static final String ODA_ESG_PREDICTOR_DATA_ENTITLEMENT_PASSWORD;
 
+    public static final String ZERO_ASSESSMENT_USERNAME;
+    public static final String ZERO_ASSESSMENT_PASSWORD;
+
     public static final String MESG_APPLICATION_NAME;
     public static final String X_API_KEY;
     public static  String environment ;
@@ -223,5 +226,7 @@ public class Environment {
 
         ONDEMAND_USER_WITHOUT_EXPORT_ENTITLEMENT_USERNAME = properties.getProperty("ONDEMAND_USER_Without_Export_Entitlement_username");
         ONDEMAND_USER_WITHOUT_EXPORT_ENTITLEMENT_PASSWORD = properties.getProperty("ONDEMAND_USER_Without_Export_Entitlement_password");
+        ZERO_ASSESSMENT_USERNAME = properties.getProperty("Zero_Assessment_username");
+        ZERO_ASSESSMENT_PASSWORD = properties.getProperty("Zero_Assessment_password");
     }
 }

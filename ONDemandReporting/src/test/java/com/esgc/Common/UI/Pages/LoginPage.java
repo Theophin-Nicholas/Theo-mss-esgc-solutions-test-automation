@@ -346,6 +346,10 @@ public class LoginPage extends PageBase {
             case ONDEMAND_USER_WITHOUT_EXPORT_ENTITLEMENT:
                 wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.ONDEMAND_USER_WITHOUT_EXPORT_ENTITLEMENT_USERNAME, Keys.ENTER);
                 wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.ONDEMAND_USER_WITHOUT_EXPORT_ENTITLEMENT_PASSWORD);
+            case USER_WITH_ZERO_ASSESSMENT_AVAILABLE:
+                wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.ZERO_ASSESSMENT_USERNAME, Keys.ENTER);
+                wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.ZERO_ASSESSMENT_PASSWORD);
+
                 break;
                 default:
                 Assert.fail("Bundle not found!");
