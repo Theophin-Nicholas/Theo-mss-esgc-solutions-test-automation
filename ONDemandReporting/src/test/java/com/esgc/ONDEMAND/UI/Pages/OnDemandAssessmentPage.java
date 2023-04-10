@@ -824,7 +824,7 @@ public class OnDemandAssessmentPage extends CommonPage {
         return BrowserUtils.getElementsText(coverageList);
     }
 
-    public void checkViewDetailButtonDisabled (){
+    public void checkViewDetailButtonDisabled () {
         System.out.println("Checking if view detail button is disabled..... ");
         /*for(int i =0 ; i < viewDetailButton.size(); i++){
             if(viewDetailButton.get(i).isEnabled()){
@@ -833,13 +833,14 @@ public class OnDemandAssessmentPage extends CommonPage {
                 System.out.println("the View Detail Button is Disabled"+viewDetailButton.get(i));
             }
         }*/
-        for(int i=0; i < viewDetailButton.size(); i++){
-            if(viewDetailButton.get(i).getAttribute("disabled").equals("")){
-                System.out.println("the view detail button is disabled for "+ viewDetailButton.get(i).getText());
+        for (int i = 0; i < viewDetailButton.size(); i++) {
+            if (viewDetailButton.get(i).getAttribute("disabled").equals("")) {
+                System.out.println("the view detail button is disabled for " + viewDetailButton.get(i).getText());
             } else {
                 System.out.println("the view detail button is enabled");
             }
         }
+    }
 
     public boolean viewDetailForPortfolio(String portfolioName) {
         int index = getPortfolioList().indexOf(portfolioName);

@@ -340,7 +340,7 @@ public class AccountsPageTests extends EMCUITestBase {
         assertTestCase.assertTrue(detailsPage.isSortedByName(), "Users Table is displayed");
     }
 
-    @Test(groups = {EMC, UI, REGRESSION, SMOKE, PROD})
+    @Test(groups = {EMC, UI, REGRESSION, SMOKE})
     @Xray(test = {2351, 5043})
     public void verifyAllAccountsSortedByNameTest() {
         navigateToAccountsPage("", "users");
@@ -452,7 +452,7 @@ public class AccountsPageTests extends EMCUITestBase {
         editUserPage.deleteUser();
     }
 
-    @Test(groups = {EMC, UI, SMOKE, REGRESSION, PROD})
+    @Test(groups = {EMC, UI, SMOKE, REGRESSION})
     @Xray(test = {5736, 5746, 5764, 5765, 6185})
     public void resetPasswordButtonTest() {
         navigateToAccountsPage(accountName, "users");
@@ -1119,7 +1119,7 @@ public class AccountsPageTests extends EMCUITestBase {
 
     }
 
-    @Test(groups = {EMC, UI, REGRESSION, PROD}, description = "UI | EMC | Accounts | Verify the ability to search for an account")
+    @Test(groups = {EMC, UI, REGRESSION}, description = "UI | EMC | Accounts | Verify the ability to search for an account")
     @Xray(test = {4514})
     public void verifySearchForAccountTest() {
         EMCMainPage homePage = new EMCMainPage();
