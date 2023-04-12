@@ -23,7 +23,7 @@ public class FilterSelectionTests extends UITestBase {
 
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio Analysis page");
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
         researchLinePage.selectSamplePortfolioFromPortfolioSelectionModal();
         BrowserUtils.wait(5);
         researchLinePage.openSelectionModalPopUp();
@@ -70,7 +70,7 @@ public class FilterSelectionTests extends UITestBase {
 
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio Analysis page");
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
         BrowserUtils.wait(5);
         researchLinePage.openSelectionModalPopUp();
         assertTestCase.assertTrue(researchLinePage.checkIfSelectionModalPopupIsDisplayed(), "Selection Modal Popup was opened");
@@ -114,7 +114,7 @@ public class FilterSelectionTests extends UITestBase {
 
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio Analysis page");
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
         BrowserUtils.wait(5);
         researchLinePage.openSelectionModalPopUp();
         assertTestCase.assertTrue(researchLinePage.checkIfSelectionModalPopupIsDisplayed(), "Selection Modal Popup was opened");
@@ -163,7 +163,7 @@ public class FilterSelectionTests extends UITestBase {
     public void verifyFilterSelectionAsOfDateTest() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio Analysis page");
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
         BrowserUtils.wait(5);
 
         //Verify the 'As of date' filter is set to latest update date automatically
@@ -186,7 +186,7 @@ public class FilterSelectionTests extends UITestBase {
     public void verifyDifferentSectionsRespondingSelectionsTest() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio Analysis page");
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
         BrowserUtils.waitForVisibility(researchLinePage.portfolioSelectionButton, 10);
         researchLinePage.openSelectionModalPopUp();
         assertTestCase.assertTrue(researchLinePage.checkIfSelectionModalPopupIsDisplayed(), "Selection Modal Popup was opened");
@@ -220,7 +220,7 @@ public class FilterSelectionTests extends UITestBase {
     public void verifyUserChangesPagesPortfolioSelectionTest() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio Analysis page");
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
         BrowserUtils.waitForVisibility(researchLinePage.portfolioSelectionButton, 10);
         researchLinePage.openSelectionModalPopUp();
         assertTestCase.assertTrue(researchLinePage.checkIfSelectionModalPopupIsDisplayed(), "Selection Modal Popup was opened");

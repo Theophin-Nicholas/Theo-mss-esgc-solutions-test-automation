@@ -20,7 +20,7 @@ public class ExportEntitlementTests extends DashboardUITestBase {
         login.entitlementsLogin(EntitlementsBundles.USER_WITH_EXPORT_ENTITLEMENT);
 
         DashboardPage dashboardPage = new DashboardPage();
-        dashboardPage.navigateToPageFromMenu("Dashboard");
+        dashboardPage.navigateToPageFromMenu("Climate Dashboard");
         test.info("Navigated to Dashboard Page");
 
         dashboardPage.clickViewCompaniesAndInvestments();
@@ -42,7 +42,7 @@ public class ExportEntitlementTests extends DashboardUITestBase {
         login.entitlementsLogin(EntitlementsBundles.USER_WITH_OUT_EXPORT_ENTITLEMENT);
 
         DashboardPage dashboardPage = new DashboardPage();
-        dashboardPage.navigateToPageFromMenu("Dashboard");
+        dashboardPage.navigateToPageFromMenu("Climate Dashboard");
         test.info("Navigated to Dashboard Page");
 
         dashboardPage.clickViewCompaniesAndInvestments();

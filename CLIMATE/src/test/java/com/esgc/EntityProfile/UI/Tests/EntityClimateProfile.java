@@ -30,7 +30,7 @@ public class EntityClimateProfile extends UITestBase {
             dataProviderClass = DataProviderClass.class, dataProvider = "CompanyNames")
     public void testCompanyHeader(String company) {
         ResearchLinePage researchLinePage = new ResearchLinePage();
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
         BrowserUtils.wait(5);
         EntityClimateProfilePage entityProfilePage = new EntityClimateProfilePage();
         String companyName = entityProfilePage.searchAndLoadClimateProfilePage(company);
@@ -47,7 +47,7 @@ public class EntityClimateProfile extends UITestBase {
             dataProviderClass = DataProviderClass.class, dataProvider = "CompanyNames")
     public void testGreenShareCard(@Optional String Company) {
         ResearchLinePage researchLinePage = new ResearchLinePage();
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
         BrowserUtils.wait(5);
         EntityClimateProfilePage entityProfilePage = new EntityClimateProfilePage();
         String companyName = entityProfilePage.searchAndLoadClimateProfilePage(Company);
@@ -68,7 +68,7 @@ public class EntityClimateProfile extends UITestBase {
             dataProviderClass = DataProviderClass.class, dataProvider = "CompanyNames")
     public void testBrownShareCard(@Optional String Company) {
         ResearchLinePage researchLinePage = new ResearchLinePage();
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
         BrowserUtils.wait(5);
         EntityClimateProfilePage entityProfilePage = new EntityClimateProfilePage();
         String companyName = entityProfilePage.searchAndLoadClimateProfilePage(Company);
@@ -86,7 +86,7 @@ public class EntityClimateProfile extends UITestBase {
             description = "Verify if Company headers are Displayed as Expected")
     public void testTemperatureAlignmentWidget() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
         BrowserUtils.wait(5);
         EntityClimateProfilePage entityProfilePage = new EntityClimateProfilePage();
         String companyName = entityProfilePage.searchAndLoadClimateProfilePage("Apple, Inc.");
@@ -105,7 +105,7 @@ public class EntityClimateProfile extends UITestBase {
             dataProviderClass = DataProviderClass.class, dataProvider = "CompanyNames")
     public void testSectorComparisonChartForTransitionRisk(String CompanyName) {
         ResearchLinePage researchLinePage = new ResearchLinePage();
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
         EntityClimateProfilePage entityProfilePage = new EntityClimateProfilePage();
         entityProfilePage.searchAndLoadClimateProfilePage(CompanyName);
         entityProfilePage.navigateToTransitionRisk();

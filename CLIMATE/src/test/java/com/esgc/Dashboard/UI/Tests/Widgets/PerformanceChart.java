@@ -24,7 +24,7 @@ public class PerformanceChart extends DashboardUITestBase {
     public void verifyPerformanceChartsAreDisplayed() {
         DashboardPage dashboardPage = new DashboardPage();
 
-        dashboardPage.navigateToPageFromMenu("Dashboard");
+        dashboardPage.navigateToPageFromMenu("Climate Dashboard");
         test.info("Navigated to Dashboard Page");
 
         dashboardPage.selectRandomPortfolioFromPortfolioSelectionModal();
@@ -84,7 +84,7 @@ public class PerformanceChart extends DashboardUITestBase {
     @Xray(test = {2041, 2043, 2048, 2052, 2067, 3131, 3132, 3152, 3153, 4375, 4376, 4380, 6235, 7111, 7112, 7114, 12268, 12264})
     public void verifyPerformanceChartScoreCategoriesUnderColumns(String researchLine) {
         DashboardPage dashboardPage = new DashboardPage();
-        dashboardPage.navigateToPageFromMenu("Dashboard");
+        dashboardPage.navigateToPageFromMenu("Climate Dashboard");
         test.info("Navigated to Dashboard Page");
         dashboardPage.selectRandomPortfolioFromPortfolioSelectionModal();
         test.info("Check Score categories in Performance Charts");
@@ -343,7 +343,7 @@ public class PerformanceChart extends DashboardUITestBase {
     public void verifyPerformanceChartSizes() {
         DashboardPage dashboardPage = new DashboardPage();
 
-        dashboardPage.navigateToPageFromMenu("Dashboard");
+        dashboardPage.navigateToPageFromMenu("Climate Dashboard");
         test.info("Navigated to Dashboard Page");
 
         dashboardPage.selectSamplePortfolioFromPortfolioSelectionModal();
@@ -425,7 +425,7 @@ public class PerformanceChart extends DashboardUITestBase {
     public void verifyPerformanceChartSelectedColumnRemainsSameForOtherTables() {
         DashboardPage dashboardPage = new DashboardPage();
 
-        dashboardPage.navigateToPageFromMenu("Dashboard");
+        dashboardPage.navigateToPageFromMenu("Climate Dashboard");
         test.info("Navigated to Dashboard Page");
 
         test.info("Check Score categories in Performance Charts");
