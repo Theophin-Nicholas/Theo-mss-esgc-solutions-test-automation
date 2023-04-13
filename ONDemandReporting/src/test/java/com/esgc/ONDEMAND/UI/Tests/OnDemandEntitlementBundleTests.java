@@ -175,12 +175,6 @@ public class OnDemandEntitlementBundleTests extends UITestBase {
     @Xray(test = {14467, 14468})
     public void validateThePopUpModelForUserWithInvalidEntitlementsCombinations(){
 
-
-//                USER_ESG_PREDICTOR,
-//                USER_ESG_ESG_PREDICTOR_EXPORT,
-//                USER_ESG_PREDICTOR_EXPORT,
-//                USER_ESG_PREDICTOR_ODA,
-//                USER_EXPORT,
         LoginPage login = new LoginPage();
         PopUpPage popPage = new PopUpPage();
         EntitlementsBundles [] entitlements = {EntitlementsBundles.USER_ESG_PREDICTOR,EntitlementsBundles.USER_ESG_ESG_PREDICTOR_EXPORT,EntitlementsBundles.USER_ESG_PREDICTOR_EXPORT,EntitlementsBundles.USER_ESG_PREDICTOR_ODA,EntitlementsBundles.USER_EXPORT};
@@ -203,9 +197,6 @@ public class OnDemandEntitlementBundleTests extends UITestBase {
         login.entitlementsLogin(EntitlementsBundles.USER_WITH_EUTAXONOMY_SFDR_ESG_ESGPREDICTOR_ONDEMAND_EXPORT);
         OnDemandAssessmentPage onDemandAssessmentPage = new OnDemandAssessmentPage();
         assertTestCase.assertTrue(onDemandAssessmentPage.validateOnDemandReportingLandingPage(), "Validating that landing page is On-Demand Reporting Page");
-        //BrowserUtils.wait(50);
-
-
 
     }
 }
