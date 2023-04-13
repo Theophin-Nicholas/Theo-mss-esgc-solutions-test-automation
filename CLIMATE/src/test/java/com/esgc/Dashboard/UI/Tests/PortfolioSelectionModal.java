@@ -28,7 +28,7 @@ public class PortfolioSelectionModal extends DashboardUITestBase {
         try {
             DashboardPage dashboardPage = new DashboardPage();
             test.info("Navigate to Portfolio Analysis page");
-            dashboardPage.navigateToPageFromMenu("Portfolio Analysis");
+            dashboardPage.navigateToPageFromMenu("Climate Portfolio Analysis");
             BrowserUtils.wait(5);
             dashboardPage.openSelectionModalPopUp();
             Assert.assertTrue(dashboardPage.checkIfSelectionModalPopupIsDisplayed(), "Selection Modal Popup was not opened");
@@ -52,7 +52,7 @@ public class PortfolioSelectionModal extends DashboardUITestBase {
         try {
             DashboardPage dashboardPage = new DashboardPage();
             test.info("Navigate to Portfolio analysis page");
-            dashboardPage.navigateToPageFromMenu("Portfolio Analysis");
+            dashboardPage.navigateToPageFromMenu("Climate Portfolio Analysis");
             BrowserUtils.wait(5);
 
             test.info("Open the selection Modal Popup");
@@ -78,7 +78,7 @@ public class PortfolioSelectionModal extends DashboardUITestBase {
         try {
             DashboardPage dashboardPage = new DashboardPage();
             test.info("Navigate to Portfolio Analysis page");
-            dashboardPage.navigateToPageFromMenu("Portfolio Analysis");
+            dashboardPage.navigateToPageFromMenu("Climate Portfolio Analysis");
             BrowserUtils.wait(5);
             dashboardPage.openSelectionModalPopUp();
             Assert.assertTrue(dashboardPage.checkIfSelectionModalPopupIsDisplayed(), "Selection Modal Popup was not opened");
@@ -100,7 +100,7 @@ public class PortfolioSelectionModal extends DashboardUITestBase {
         try {
             DashboardPage dashboardPage = new DashboardPage();
             test.info("Navigate to Portfolio Analysis page");
-            dashboardPage.navigateToPageFromMenu("Portfolio Analysis");
+            dashboardPage.navigateToPageFromMenu("Climate Portfolio Analysis");
             BrowserUtils.wait(5);
             dashboardPage.openSelectionModalPopUp();
             Assert.assertTrue(dashboardPage.checkIfSelectionModalPopupIsDisplayed(), "Selection Modal Popup was not opened");
@@ -119,7 +119,7 @@ public class PortfolioSelectionModal extends DashboardUITestBase {
         try {
             DashboardPage dashboardPage = new DashboardPage();
             test.info("Navigate to Portfolio analysis page");
-            dashboardPage.navigateToPageFromMenu("Portfolio Analysis");
+            dashboardPage.navigateToPageFromMenu("Climate Portfolio Analysis");
             BrowserUtils.wait(5);
 
             test.info("Open the selection Modal Popup");
@@ -158,7 +158,7 @@ public class PortfolioSelectionModal extends DashboardUITestBase {
         try {
             DashboardPage dashboardPage = new DashboardPage();
             test.info("Navigate to Portfolio analysis page");
-            dashboardPage.navigateToPageFromMenu("Portfolio Analysis");
+            dashboardPage.navigateToPageFromMenu("Climate Portfolio Analysis");
 
             dashboardPage.clickUploadPortfolioButton();
             test.info("Navigated to Upload Page");
@@ -212,7 +212,7 @@ public class PortfolioSelectionModal extends DashboardUITestBase {
         try {
             DashboardPage dashboardPage = new DashboardPage();
             test.info("Navigate to Portfolio Analysis page");
-            dashboardPage.navigateToPageFromMenu("Portfolio Analysis");
+            dashboardPage.navigateToPageFromMenu("Climate Portfolio Analysis");
             BrowserUtils.wait(5);
             dashboardPage.openSelectionModalPopUp();
             assertTestCase.assertTrue(dashboardPage.checkIfSelectionModalPopupIsDisplayed(), "Selection Modal Popup was opened");

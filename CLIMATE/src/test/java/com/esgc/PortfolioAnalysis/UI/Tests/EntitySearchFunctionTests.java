@@ -18,7 +18,7 @@ public class EntitySearchFunctionTests extends UITestBase {
     public void testSearchFunction() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio Analysis page");
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
         //BrowserUtils.wait(5);
         assertTestCase.assertTrue(researchLinePage.isSearchIconDisplayed());
         researchLinePage.searchIconPortfolioPage.click();
@@ -34,7 +34,7 @@ public class EntitySearchFunctionTests extends UITestBase {
     public void testSearchFunctionWildCharacter1() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio Analysis page");
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
         assertTestCase.assertTrue(researchLinePage.isSearchIconDisplayed());
         researchLinePage.searchIconPortfolioPage.click();
         researchLinePage.checkSearchResultWithWildChars("app%");
@@ -46,7 +46,7 @@ public class EntitySearchFunctionTests extends UITestBase {
     public void testSearchFunctionWildCharacter2() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio Analysis page");
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
         assertTestCase.assertTrue(researchLinePage.isSearchIconDisplayed());
         researchLinePage.searchIconPortfolioPage.click();
         researchLinePage.checkSearchResultWithWildChars("app*");
@@ -58,7 +58,7 @@ public class EntitySearchFunctionTests extends UITestBase {
     public void testSearchBoxIsGivingCorrectResult() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio Analysis page");
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
         //BrowserUtils.wait(5);
         assertTestCase.assertTrue(researchLinePage.isSearchIconDisplayed());
         researchLinePage.searchIconPortfolioPage.click();
@@ -74,7 +74,7 @@ public class EntitySearchFunctionTests extends UITestBase {
     public void testSearchFunctionForNoMatchEntry() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio Analysis page");
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
         //BrowserUtils.wait(5);
         researchLinePage.searchIconPortfolioPage.click();
         //BrowserUtils.wait(3);
@@ -88,7 +88,7 @@ public class EntitySearchFunctionTests extends UITestBase {
     public void testSearchBox() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio Analysis page");
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
         //BrowserUtils.wait(5);
         assertTestCase.assertTrue(researchLinePage.isSearchIconDisplayed());
         researchLinePage.searchIconPortfolioPage.click();
@@ -104,7 +104,7 @@ public class EntitySearchFunctionTests extends UITestBase {
     public void testSearchBoxInPortfolioPage() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio Analysis page");
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
         //BrowserUtils.wait(5);
         assertTestCase.assertTrue(researchLinePage.isSearchIconDisplayed());
         researchLinePage.searchIconPortfolioPage.click();
@@ -120,7 +120,7 @@ public class EntitySearchFunctionTests extends UITestBase {
     public void testClickingOnEntityNameOnPortfolioPage() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio Analysis page");
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
         //BrowserUtils.wait(5);
         researchLinePage.searchIconPortfolioPage.click();
         //BrowserUtils.wait(3);
@@ -136,7 +136,7 @@ public class EntitySearchFunctionTests extends UITestBase {
     public void testESCbuttonClosingEntityPage() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio Analysis page");
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
         BrowserUtils.wait(3);
         researchLinePage.searchIconPortfolioPage.click();
         assertTestCase.assertFalse(researchLinePage.checkClickingOnEntityName("Apple, Inc."), "Clicking on entity name on search bar worked");

@@ -14,7 +14,7 @@ public class ControversiesTable extends DashboardUITestBase {
     public void verifyPortfolioMonitoringIsDisplayed() {
         DashboardPage dashboardPage = new DashboardPage();
 
-        dashboardPage.navigateToPageFromMenu("Dashboard");
+        dashboardPage.navigateToPageFromMenu("Climate Dashboard");
         test.info("Navigated to Dashboard Page");
 
         dashboardPage.clickFiltersDropdown();

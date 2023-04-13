@@ -22,7 +22,7 @@ public class ImportPortfolio extends DashboardUITestBase {
     @Xray(test = 3218)
     public void VerifyFileUploadSuccessPopup() {
         DashboardPage dashboardPage = new DashboardPage();
-        dashboardPage.navigateToPageFromMenu("Dashboard");
+        dashboardPage.navigateToPageFromMenu("Climate Dashboard");
         test.info("Navigated to Dashboard Page");
 
         dashboardPage.clickUploadPortfolioButton();
@@ -85,7 +85,7 @@ public class ImportPortfolio extends DashboardUITestBase {
     public void VerifyFileUploadErrorPopup() {
         DashboardPage dashboardPage = new DashboardPage();
 
-        dashboardPage.navigateToPageFromMenu("Dashboard");
+        dashboardPage.navigateToPageFromMenu("Climate Dashboard");
         test.info("Navigated to Dashboard Page");
         test.info("Clicked on Upload button");
 
@@ -115,7 +115,7 @@ public class ImportPortfolio extends DashboardUITestBase {
     public void VerifyPortfolioCanBeRenamed() {
         DashboardPage dashboardPage = new DashboardPage();
 
-        dashboardPage.navigateToPageFromMenu("Dashboard");
+        dashboardPage.navigateToPageFromMenu("Climate Dashboard");
         test.info("Navigated to Dashboard Page");
         test.info("Clicked on Upload button");
 
@@ -162,7 +162,7 @@ public class ImportPortfolio extends DashboardUITestBase {
     @Test(groups = {REGRESSION, UI, SMOKE, DASHBOARD})
     public void VerifyUploadModal() {
         DashboardPage dashboardPage = new DashboardPage();
-        dashboardPage.navigateToPageFromMenu("Dashboard");
+        dashboardPage.navigateToPageFromMenu("Climate Dashboard");
         test.info("Navigated to Dashboard Page");
 
         dashboardPage.clickUploadPortfolioButton();
@@ -191,7 +191,7 @@ public class ImportPortfolio extends DashboardUITestBase {
 
         DashboardPage dashboardPage = new DashboardPage();
 
-        dashboardPage.navigateToPageFromMenu("Dashboard");
+        dashboardPage.navigateToPageFromMenu("Climate Dashboard");
         test.info("Navigated to Dashboard Page");
         test.info("Clicked on Upload button");
 
@@ -231,7 +231,7 @@ public class ImportPortfolio extends DashboardUITestBase {
 
         DashboardPage dashboardPage = new DashboardPage();
 
-        dashboardPage.navigateToPageFromMenu("Dashboard");
+        dashboardPage.navigateToPageFromMenu("Climate Dashboard");
         test.info("Navigated to Dashboard Page");
         test.info("Clicked on Upload button");
 
@@ -264,7 +264,7 @@ public class ImportPortfolio extends DashboardUITestBase {
     public void importPortfolio_verifyErrorPopupMessages(String fileName, String errorMessage, Integer... testCaseNumber) {
         DashboardPage dashboardPage = new DashboardPage();
 
-        dashboardPage.navigateToPageFromMenu("Dashboard");
+        dashboardPage.navigateToPageFromMenu("Climate Dashboard");
         test.info("Navigated to Dashboard Page");
         test.info("Clicked on Upload button");
 
@@ -299,7 +299,7 @@ public class ImportPortfolio extends DashboardUITestBase {
     public void importPortfolio_verifyUnknownIdentifierMessage() {
         DashboardPage dashboardPage = new DashboardPage();
 
-        dashboardPage.navigateToPageFromMenu("Dashboard");
+        dashboardPage.navigateToPageFromMenu("Climate Dashboard");
         test.info("Navigated to Dashboard Page");
         test.info("Clicked on Upload button");
 

@@ -33,7 +33,7 @@ public class ImportPortfolio extends UITestBase {
     public void VerifyFileUploadErrorPopup() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
 
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
         test.info("Navigated to Portfolio Analysis Page");
         test.info("Clicked on Upload button");
 
@@ -71,7 +71,7 @@ public class ImportPortfolio extends UITestBase {
     @Xray(test = {493, 497, 500, 1027, 1297, 3044, 11069})
     public void VerifyFileUploadSuccessPopup(String portfolio) {
         ResearchLinePage researchLinePage = new ResearchLinePage();
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
         test.info("Navigated to Portfolio Analysis Page");
         test.info("Clicked on Upload button");
 
@@ -135,7 +135,7 @@ public class ImportPortfolio extends UITestBase {
     @Xray(test = {985})
     public void VerifyUploadModal() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
         test.info("Navigated to Portfolio Analysis Page");
 
         researchLinePage.clickUploadPortfolioButton();
@@ -168,7 +168,7 @@ public class ImportPortfolio extends UITestBase {
     @Xray(test = {336, 3045})
     public void VerifyPortfolioCanBeRenamed() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
         test.info("Navigated to Portfolio Analysis Page");
 
         test.info("Clicked on Upload button");
@@ -224,7 +224,7 @@ public class ImportPortfolio extends UITestBase {
     public void VerifySaveButtonVisibility() {
 
         ResearchLinePage researchLinePage = new ResearchLinePage();
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
         test.info("Navigated to Portfolio Analysis Page");
         test.info("Clicked on Upload button");
 
@@ -263,7 +263,7 @@ public class ImportPortfolio extends UITestBase {
 
         ResearchLinePage researchLinePage = new ResearchLinePage();
 
-        researchLinePage.navigateToPageFromMenu("Dashboard");
+        researchLinePage.navigateToPageFromMenu("Climate Dashboard");
         test.info("Navigated to Dashboard Page");
         test.info("Clicked on Upload button");
 
@@ -301,7 +301,7 @@ public class ImportPortfolio extends UITestBase {
     public void importPortfolio_verifyErrorPopupMessages(String fileName, String errorMessage, Integer... testCaseNumber) {
         ResearchLinePage researchLinePage = new ResearchLinePage();
 
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
         test.info("Navigated to Portfolio Analysis Page");
         test.info("Clicked on Upload button");
 
@@ -342,7 +342,7 @@ public class ImportPortfolio extends UITestBase {
     public void importPortfolio_verifyUnknownIdentifierMessage() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
 
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
         test.info("Navigated to Portfolio Analysis Page");
         test.info("Clicked on Upload button");
 
@@ -386,7 +386,7 @@ public class ImportPortfolio extends UITestBase {
     public void importPortfolio_ErrorMessageMissingBBGorISINIndetifier(String fileName, String errorMessage) {
         ResearchLinePage researchLinePage = new ResearchLinePage();
 
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
         test.info("Navigated to Portfolio Analysis Page");
         test.info("Clicked on Upload button");
 
@@ -450,7 +450,7 @@ public class ImportPortfolio extends UITestBase {
 
     public boolean uploadPortfolio(String fileName) {
         try {
-            researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+            researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
             test.info("Navigated to Portfolio Analysis Page");
             test.info("Clicked on Upload button");
 
@@ -663,7 +663,7 @@ public class ImportPortfolio extends UITestBase {
     @Test(groups = {REGRESSION, UI, ROBOT_DEPENDENCY}, description = "UI | Portfolio Upload | Verify UI changes on Portfolio modal")
     @Xray(test = {10358})
     public void verifyUIChangesOnPortfolioUploadModal() {
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
         test.info("Navigated to Portfolio Analysis Page");
         test.info("Clicked on Upload button");
 
@@ -685,7 +685,7 @@ public class ImportPortfolio extends UITestBase {
 
         ResearchLinePage researchLinePage = new ResearchLinePage();
 
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
         test.info("Navigated to Portfolio Analysis Page");
         test.info("Clicked on Upload button");
 
@@ -716,7 +716,7 @@ public class ImportPortfolio extends UITestBase {
 
         ResearchLinePage researchLinePage = new ResearchLinePage();
 
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
         test.info("Navigated to Portfolio Analysis Page");
         test.info("Clicked on Upload button");
 

@@ -21,7 +21,7 @@ public class PhysicalRiskMgmtInfoTests extends DataValidationTestBase {
     public void comparePhysicalRiskDataFromExcelToDB() {
         DashboardPage dashboardPage = new DashboardPage();
 
-        dashboardPage.navigateToPageFromMenu("Dashboard");
+        dashboardPage.navigateToPageFromMenu("Climate Dashboard");
         test.info("Navigated to Dashboard Page");
 
         dashboardPage.clickViewCompaniesAndInvestments();
@@ -60,7 +60,7 @@ public class PhysicalRiskMgmtInfoTests extends DataValidationTestBase {
     public void comparePhysicalRiskManagementFromExcelToDB() {
         DashboardPage dashboardPage = new DashboardPage();
 
-        dashboardPage.navigateToPageFromMenu("Dashboard");
+        dashboardPage.navigateToPageFromMenu("Climate Dashboard");
         test.info("Navigated to Dashboard Page");
 
         dashboardPage.clickViewCompaniesAndInvestments();
