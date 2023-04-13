@@ -5,7 +5,9 @@ import com.esgc.Common.UI.Pages.LoginPage;
 import com.esgc.Common.UI.TestBases.UITestBase;
 import com.esgc.ONDEMAND.API.Controllers.OnDemandFilterAPIController;
 import com.esgc.ONDEMAND.UI.Pages.OnDemandAssessmentPage;
+import com.esgc.ONDEMAND.UI.Pages.PopUpPage;
 import com.esgc.Utilities.*;
+import org.openqa.selenium.Alert;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -166,6 +168,44 @@ public class OnDemandEntitlementBundleTests extends UITestBase {
         if (onDemandAssessmentPage.IsPortfolioTableLoaded() && onDemandAssessmentPage.getAvailablePortfolioCountt()>0) {
            assertTestCase.assertTrue(onDemandAssessmentPage.isExportbuttonDisabled(),"validating that export button is disabled");
         }
+
+    }
+
+    @Test(groups = {UI, SMOKE, REGRESSION})
+    @Xray(test = {14467, 14468})
+    public void validateThePopUpModelForUserWithInvalidEntitlementsCombinations(){
+
+
+//                USER_ESG_PREDICTOR,
+//                USER_ESG_ESG_PREDICTOR_EXPORT,
+//                USER_ESG_PREDICTOR_EXPORT,
+//                USER_ESG_PREDICTOR_ODA,
+//                USER_EXPORT,
+        LoginPage login = new LoginPage();
+        PopUpPage popPage = new PopUpPage();
+        EntitlementsBundles [] entitlements = {EntitlementsBundles.USER_ESG_PREDICTOR,EntitlementsBundles.USER_ESG_ESG_PREDICTOR_EXPORT,EntitlementsBundles.USER_ESG_PREDICTOR_EXPORT,EntitlementsBundles.USER_ESG_PREDICTOR_ODA,EntitlementsBundles.USER_EXPORT};
+
+        for(EntitlementsBundles e : entitlements){
+            login.entitlementsLogin(e);
+            System.out.println("------------Logged in to Check pop up box using " + e.toString()+" entitlements ------------");
+            popPage.validateTheContentOfPopUp(popPage);
+            System.out.println("Just clicked on Ok button and In login Page now .............");
+
+        }
+
+    }
+
+    @Test(groups = {UI, SMOKE, REGRESSION})
+    @Xray(test = {14466})
+
+    public void validateTheLandingPageForOnDemandEntitlements(){
+
+        login.entitlementsLogin(EntitlementsBundles.USER_WITH_EUTAXONOMY_SFDR_ESG_ESGPREDICTOR_ONDEMAND_EXPORT);
+        OnDemandAssessmentPage onDemandAssessmentPage = new OnDemandAssessmentPage();
+        assertTestCase.assertTrue(onDemandAssessmentPage.validateOnDemandReportingLandingPage(), "Validating that landing page is On-Demand Reporting Page");
+        //BrowserUtils.wait(50);
+
+
 
     }
 }
