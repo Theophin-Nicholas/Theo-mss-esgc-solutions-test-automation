@@ -359,6 +359,7 @@ public class LoginPage extends ClimatePageBase {
                 username = Environment.NO_PREVIOUSLY_DOWNLOADED_REGULATORY_REPORTS_USERNAME;
                 password = Environment.NO_PREVIOUSLY_DOWNLOADED_REGULATORY_REPORTS_PASSWORD;
                 break;
+
             default:
                 Assert.fail("Bundle not found!");
         }

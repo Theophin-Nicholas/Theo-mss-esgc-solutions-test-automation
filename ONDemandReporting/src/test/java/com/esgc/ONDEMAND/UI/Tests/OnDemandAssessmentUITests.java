@@ -4,6 +4,7 @@ import com.esgc.Common.API.Controllers.CommonAPIController;
 import com.esgc.Common.UI.Pages.LoginPage;
 import com.esgc.Common.UI.TestBases.UITestBase;
 import com.esgc.ONDEMAND.API.Controllers.OnDemandFilterAPIController;
+import com.esgc.ONDEMAND.DB.DBQueries.OnDemandAssessmentQueries;
 import com.esgc.ONDEMAND.UI.Pages.OnDemandAssessmentPage;
 import com.esgc.Pages.Page404;
 import com.esgc.Utilities.*;
@@ -17,6 +18,7 @@ import java.text.ParseException;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import static com.esgc.Utilities.Groups.*;
 
@@ -412,4 +414,68 @@ Faker faker = new Faker();
         // ESGCA - 14002 - Verify the sorting of the Portfolios in the portfolio table
         onDemandAssessmentPage.ValidateSortingOnLastUpdateColumn();
     }
+
+    @Test(groups = {UI, REGRESSION })
+    @Xray(test = {14015, 14013})
+    public void ValidateNewNameInGlobalMenu(){
+        OnDemandAssessmentPage odaPage = new OnDemandAssessmentPage();
+        LoginPage login = new LoginPage();
+        odaPage.clickOnMenuButton();
+        odaPage.clickOnLogOutButton();
+        login.entitlementsLogin(EntitlementsBundles.USER_WITH_PREDICTEDSCORE_AND_CLIMATE);
+        odaPage.clickOnMenuButton();
+        odaPage.validateRemovalOnDemandLinkFromGlobalMenu();
+        odaPage.validateMenuNewNames();
+        odaPage.clickOnClimateDashboardTab();
+        odaPage.validateClimateDashboardPageHeaders();
+        odaPage.clickOnMenuButton();
+        odaPage.clickOnPortfolioAnalysisTab();
+        odaPage.validateClimatePortfolioAnalysisPageHeaders();
+        odaPage.clickOnMenuButton();
+        odaPage.clickOnReportingPortalTab();
+        odaPage.validateReportingPortalPageHeaders();
+
+    }
+@Test(groups = {UI, REGRESSION})
+@Xray(test = {14017})
+    public void ValidateRemovalOfCalculationsFromGlobalMenu(){
+        OnDemandAssessmentPage odaPage = new OnDemandAssessmentPage();
+        LoginPage login = new LoginPage();
+        odaPage.clickOnMenuButton();
+        odaPage.clickOnLogOutButton();
+        login.entitlementsLogin(EntitlementsBundles.TRANSITION_RISK_CLIMATE_GOVERNANCE);
+        odaPage.clickOnMenuButton();
+        odaPage.validateRemovalCalculationsFromGlobalMenu();
+    }
+
+    @Test(groups ={UI,REGRESSION, SMOKE})
+    @Xray(test = {14094})
+    public void ValidateNoDataforEntitiesWithEsgDataOnly() {
+        OnDemandAssessmentPage odaPage = new OnDemandAssessmentPage();
+        LoginPage login = new LoginPage();
+        odaPage.clickOnMenuButton();
+        odaPage.clickOnLogOutButton();
+        login.entitlementsLogin(EntitlementsBundles.USER_CLIMATE_ESG);
+        System.out.println("---------------Logged back in using climate and esg entitlements--------------------");
+
+        odaPage.clickOnSearchButton();
+        String[] entityList = {"C5 Eiendom AS", "Entergy Utility Affiliates LLC", "Solutia, Inc.", "Resolution Life Australasia Ltd."};
+        for (int i = 0; i < entityList.length; i++) {
+            odaPage.searchForEntitities(entityList[i]);
+            odaPage.validateEntitiesWithOnlyEsgDataDontShowInSearch(entityList[i]);
+        }
+        Driver.getDriver().navigate().refresh();
+        odaPage.clickOnMenuButton();
+        odaPage.clickOnLogOutButton();
+        login.entitlementsLogin(EntitlementsBundles.USER_CLIMATE_ESG_ESG_PREDICTOR_EXPORT);
+        System.out.println("---------------Logged back in using climate esg- esg predictor and export entitlements--------------------");
+        odaPage.clickOnSearchButton();
+        String[] entityList1 = {"C5 Eiendom AS", "Entergy Utility Affiliates LLC", "Solutia, Inc.", "Resolution Life Australasia Ltd."};
+        for (int i = 0; i < entityList1.length; i++) {
+            odaPage.searchForEntitities(entityList1[i]);
+            odaPage.validateEntitiesWithOnlyEsgDataDontShowInSearch(entityList1[i]);
+        }
+    }
+
+
 }

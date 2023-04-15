@@ -168,4 +168,60 @@ public class OnDemandEntitlementBundleTests extends UITestBase {
         }
 
     }
-}
+
+    @Test(groups ={REGRESSION, UI, SMOKE})
+    @Xray(test = {14095, 14096})
+    public void validateDashboardAndPortfolioAnalysisNotPresentInGlobalMenu(){
+        login.entitlementsLogin(EntitlementsBundles.ONDEMAND_USER_WITHOUT_EXPORT_ENTITLEMENT);
+        OnDemandAssessmentPage odaPage = new OnDemandAssessmentPage();
+        odaPage.clickOnMenuButton();
+        odaPage.validateDashboardTabNotPresentFromGlobalMenu("Climate Dashboard");
+        odaPage.validateDashboardTabNotPresentFromGlobalMenu("Climate Portfolio Analysis");
+        odaPage.validateSearchButtonNotDisplayed();
+
+    }
+
+    @Test(groups ={REGRESSION, UI})
+    @Xray(test = {14100})
+    public void validateCalculationsIsVisibleForEntitlements(){
+
+        LoginPage login = new LoginPage();
+        OnDemandAssessmentPage odaPage = new OnDemandAssessmentPage();
+        EntitlementsBundles [] entitlements = {EntitlementsBundles.USER_CLIMATE_ESG_ESG_PREDICTOR_EXPORT,EntitlementsBundles.USER_CLIMATE_ESG};
+
+        for(EntitlementsBundles e : entitlements){
+            login.entitlementsLogin(e);
+            System.out.println("------------Logged in to Check Calculations tab in Global Menu using " + e.toString()+" entitlements ------------");
+            odaPage.clickOnMenuButton();
+            odaPage.validateAnyTabPresentInGlobalMenu("Calculations");
+            odaPage.clickOnLogOutButton();
+
+        }
+
+    }
+
+    @Test(groups ={REGRESSION, UI, SMOKE})
+    @Xray(test = {14295})
+    public void validateOnDemandSfdrEuTaxonomyForEntitlements() {
+
+        LoginPage login = new LoginPage();
+        OnDemandAssessmentPage odaPage = new OnDemandAssessmentPage();
+        EntitlementsBundles[] entitlements = {EntitlementsBundles.USER_SFDR_ESG_ESG_PREDICTOR_ODA,
+                EntitlementsBundles.USER_EUTAXONOMY_SFDR_ESG_ESG_PREDICTOR_ODA_EXCEL,
+                EntitlementsBundles.USER_SFDR_ESG_ESG_PREDICTOR_ODA_EXCEL,
+                EntitlementsBundles.USER_EUTAXONOMY_ESG_ESG_PREDICTOR_ODA,
+                EntitlementsBundles.USER_EUTAXONOMY_ESG_ESG_PREDICTOR_ODA_EXCEL,
+                EntitlementsBundles.USER_ESG_ESG_PREDICTOR_ODA_EXCEL,
+                EntitlementsBundles.USER_CLIMATE_ESG_ESG_PREDICTOR_EXPORT,
+                EntitlementsBundles.USER_CLIMATE_ESG,
+                EntitlementsBundles.USER_ESG_ESG_PREDICTOR_ODA};
+
+        for (EntitlementsBundles e : entitlements) {
+            System.out.println("------------Logged in to Check OnDemand Reporting tab in Global Menu using " + e.toString() + " entitlements ------------");
+            odaPage.validateReportingOptionsInReportingPage(login, e);
+        }
+    }
+
+    }
+
+
