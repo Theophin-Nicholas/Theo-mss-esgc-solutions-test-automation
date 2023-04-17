@@ -936,6 +936,18 @@ public class OnDemandAssessmentPage extends CommonPage {
         return index;
     }
 
+    @FindBy(xpath = "//*[@id='viewcomapnies-0-Financials-tableCell-0-0']")
+    public WebElement entityInViewBySectorTab;
+    @FindBy(xpath = "//*[@id='dashboard_PageHeader']/div/div/div[2]/div/div[1]/div/div[2]/span")
+    public WebElement climateCoverageLink;
+
+
+    public void clickOnClimateCoverageLink(){
+        BrowserUtils.waitForClickablility(climateCoverageLink, 50);
+        climateCoverageLink.click();
+    }
+
+
     public boolean isUserOnFilterCritriaScreen(String PortfolioName){
         return BrowserUtils.waitForVisibility(btnReviewRequest,60).isDisplayed() && onDemandCoverageHeaderValidation(PortfolioName);
     }
