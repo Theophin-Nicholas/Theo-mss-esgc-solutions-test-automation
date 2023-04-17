@@ -23,14 +23,18 @@ import static com.esgc.Utilities.Groups.*;
 public class OnDemandAssessmentUITests extends UITestBase {
 Faker faker = new Faker();
     @Test(groups = {REGRESSION, UI, COMMON})
-    @Xray(test = {11985, 12001, 12002, 12011, 12054, 12092, 12822, 12824})
+    @Xray(test = {11985, 12001, 12002, 12011, 12054, 12092, 12822, 12824,14103,14105})
     public void validateOnDemandAssessmentRequest() {
 
         String portfolioName = "500 predicted p";
         OnDemandAssessmentPage onDemandAssessmentPage = new OnDemandAssessmentPage();
         onDemandAssessmentPage.navigateToReportingService("On-Demand Assessment");
+        assertTestCase.assertTrue(onDemandAssessmentPage.isReequestAssessmentButtonDisabled(), "Validating that Request Assessment button is disabled");
+        assertTestCase.assertTrue(onDemandAssessmentPage.isViewAssessmentRequestButtonDisabled(), "Validating that View Assessment Request button is disabled");
         onDemandAssessmentPage.selectPortfolioOptionByName(portfolioName);
         BrowserUtils.wait(5);
+        assertTestCase.assertTrue(!onDemandAssessmentPage.isReequestAssessmentButtonDisabled(), "Validating that Request Assessment button is enabled");
+        assertTestCase.assertTrue(!onDemandAssessmentPage.isViewAssessmentRequestButtonDisabled(), "Validating that View Assessment Request button is enabled");
         onDemandAssessmentPage.clickonOnRequestAssessmentButton();
         onDemandAssessmentPage.clickReviewAndSendRequestButton();
 
@@ -41,8 +45,7 @@ Faker faker = new Faker();
 
         onDemandAssessmentPage.validateProceedOnConfirmRequestPopup(CompaniesCount);
         onDemandAssessmentPage.clickCancelButtonAndValidateRequestPage();
-
-        //onDemandAssessmentPage.confirmRequestAndGetCompaniesCount("qatest" + Math.random() + "@gmail.com");
+        onDemandAssessmentPage.clickOnConfirmRequestButton();
         onDemandAssessmentPage.clickProceedOnConfirmRequestPopup();
 
         onDemandAssessmentPage.validateOnDemandPageHeader();

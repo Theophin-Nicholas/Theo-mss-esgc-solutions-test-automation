@@ -29,7 +29,7 @@ public class DashboardEntitlementsTests extends DashboardUITestBase {
         System.out.println("bundleName = " + bundleName);
 
         login.entitlementsLogin(bundleName);
-        dashboardPage.navigateToPageFromMenu("Dashboard");
+        dashboardPage.navigateToPageFromMenu("Climate Dashboard");
 
         dashboardPage.selectSamplePortfolioFromPortfolioSelectionModal();
 

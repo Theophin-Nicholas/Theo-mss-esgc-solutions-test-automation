@@ -14,7 +14,7 @@ public class PerfomanceWidget extends DashboardUITestBase {
 
         DashboardPage dashboardPage = new DashboardPage();
         try {
-            dashboardPage.navigateToPageFromMenu("Dashboard");
+            dashboardPage.navigateToPageFromMenu("Climate Dashboard");
             BrowserUtils.wait(4);
             dashboardPage.selectSamplePortfolioFromPortfolioSelectionModal();
 

@@ -20,7 +20,7 @@ public class EntityClimateProfileEntitlementsTests extends UITestBase {
         login.entitlementsLogin(EntitlementsBundles.PHYSICAL_RISK);
 
         test.info("Navigating to Portfolio Analysis page");
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
         BrowserUtils.wait(5);
 
         String company = "Apple, Inc.";
@@ -46,7 +46,7 @@ public class EntityClimateProfileEntitlementsTests extends UITestBase {
         LoginPage login = new LoginPage();
 
         login.entitlementsLogin(EntitlementsBundles.TRANSITION_RISK);
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
         BrowserUtils.wait(5);
         test.info("Navigated to Portfolio Analysis page");
 
@@ -74,7 +74,7 @@ public class EntityClimateProfileEntitlementsTests extends UITestBase {
         LoginPage login = new LoginPage();
 
         login.entitlementsLogin(EntitlementsBundles.PHYSICAL_RISK_TRANSITION_RISK);
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
         BrowserUtils.wait(5);
         test.info("Navigated to Portfolio Analysis page");
 
@@ -108,7 +108,7 @@ public class EntityClimateProfileEntitlementsTests extends UITestBase {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         LoginPage login = new LoginPage();
         login.entitlementsLogin(EntitlementsBundles.CLIMATE_GOVERNANCE);
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
         BrowserUtils.wait(5);
         test.info("Navigated to Portfolio Analysis page");
 

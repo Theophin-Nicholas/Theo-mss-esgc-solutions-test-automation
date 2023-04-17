@@ -23,7 +23,7 @@ public class NoDataMessageTests extends UITestBase {
         dashboardPage.selectSamplePortfolioFromPortfolioSelectionModal();
 
         ResearchLinePage researchLinePage = new ResearchLinePage();
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
         BrowserUtils.wait(5);
         researchLinePage.clickUploadPortfolioButton();
         researchLinePage.clickBrowseFile();
@@ -47,7 +47,7 @@ public class NoDataMessageTests extends UITestBase {
         assertTestCase.assertTrue(researchLinePage.verifyMessage("Laggards by Score", "There are no updates in All Regions, All Sectors for the time period you selected."),
                 "Verify No Updates under Laggards by Score");
 
-        researchLinePage.navigateToPageFromMenu("Dashboard");
+        researchLinePage.navigateToPageFromMenu("Climate Dashboard");
         BrowserUtils.wait(5);
 
         // ESGCA-7419: Verify No Controversies messages
@@ -66,7 +66,7 @@ public class NoDataMessageTests extends UITestBase {
         dashboardPage.selectSamplePortfolioFromPortfolioSelectionModal();
         //Go to research line and choose one sector.
         ResearchLinePage researchLinePage = new ResearchLinePage();
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
 
         researchLinePage.clickRegionsSectionAndAsOfDateDropdown();
         researchLinePage.selectSector("Sovereign");
@@ -87,7 +87,7 @@ public class NoDataMessageTests extends UITestBase {
         DashboardPage dashboardPage = new DashboardPage();
         dashboardPage.selectSamplePortfolioFromPortfolioSelectionModal();
         ResearchLinePage researchLinePage = new ResearchLinePage();
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
 
         // This dates might need to update depends on data avail
         researchLinePage.clickRegionsSectionAndAsOfDateDropdown();
