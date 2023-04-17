@@ -112,6 +112,17 @@ public class Environment {
     public static final String X_API_KEY;
     public static  String environment ;
 
+    public static final String USER_ESG_PREDICTOR_USERNAME;
+    public static final String USER_ESG_ESG_PREDICTOR_EXPORT_USERNAME;
+    public static final String USER_ESG_PREDICTOR_EXPORT_USERNAME;
+    public static final String USER_ESG_PREDICTOR_ODA_USERNAME;
+    public static final String USER_EXPORT_USERNAME;
+    public static final String USER_ESG_PREDICTOR_PASSWORD;
+    public static final String USER_ESG_ESG_PREDICTOR_EXPORT_PASSWORD;
+    public static final String USER_ESG_PREDICTOR_EXPORT_PASSWORD;
+    public static final String USER_ESG_PREDICTOR_ODA_PASSWORD;
+    public static final String USER_EXPORT_PASSWORD;
+
     public static final String ODAWITHEXHAUTEDASSEMENTLIMIT_USERNAME;
     public static final String ODAWITHEXHAUTEDASSEMENTLIMIT_PASSWORD;
 
@@ -231,6 +242,23 @@ public class Environment {
         ONDEMAND_USER_WITHOUT_EXPORT_ENTITLEMENT_PASSWORD = properties.getProperty("ONDEMAND_USER_Without_Export_Entitlement_password");
         ZERO_ASSESSMENT_USERNAME = properties.getProperty("Zero_Assessment_username");
         ZERO_ASSESSMENT_PASSWORD = properties.getProperty("Zero_Assessment_password");
+
+       USER_ESG_PREDICTOR_USERNAME = properties.getProperty("USER_ESG_PREDICTOR_USERNAME");
+        USER_ESG_PREDICTOR_PASSWORD = properties.getProperty("USER_ESG_PREDICTOR_PASSWORD");
+        USER_ESG_ESG_PREDICTOR_EXPORT_USERNAME = properties.getProperty("USER_ESG_ESG_PREDICTOR_EXPORT_USERNAME");
+        USER_ESG_ESG_PREDICTOR_EXPORT_PASSWORD= properties.getProperty("USER_ESG_ESG_PREDICTOR_EXPORT_PASSWORD");
+        USER_ESG_PREDICTOR_EXPORT_USERNAME= properties.getProperty("USER_ESG_PREDICTOR_EXPORT_USERNAME");
+        USER_ESG_PREDICTOR_EXPORT_PASSWORD= properties.getProperty("USER_ESG_PREDICTOR_EXPORT_PASSWORD");
+       USER_ESG_PREDICTOR_ODA_USERNAME= properties.getProperty("USER_ESG_PREDICTOR_ODA_USERNAME");
+        USER_ESG_PREDICTOR_ODA_PASSWORD= properties.getProperty("USER_ESG_PREDICTOR_ODA_PASSWORD");
+        USER_EXPORT_USERNAME= properties.getProperty("USER_EXPORT_USERNAME");
+        USER_EXPORT_PASSWORD= properties.getProperty("USER_EXPORT_PASSWORD");
+
+
+
+
+
+
 
         ODAWITHEXHAUTEDASSEMENTLIMIT_USERNAME = properties.getProperty("oda_with_exhausted_AssessmentLimit_username");
         ODAWITHEXHAUTEDASSEMENTLIMIT_PASSWORD = properties.getProperty("oda_with_exhausted_AssessmentLimit_password");
