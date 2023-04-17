@@ -24,7 +24,7 @@ public class ExportDashboardDataDictionary extends DashboardUITestBase {
     public void verifyDataDictionary() {
         DashboardPage dashboardPage = new DashboardPage();
 
-        dashboardPage.navigateToPageFromMenu("Dashboard");
+        dashboardPage.navigateToPageFromMenu("Climate Dashboard");
         test.info("Navigated to Dashboard Page");
 
         dashboardPage.clickViewCompaniesAndInvestments();
@@ -64,7 +64,7 @@ public class ExportDashboardDataDictionary extends DashboardUITestBase {
     public void verifyAllResearchLinesTabInfo() {
         DashboardPage dashboardPage = new DashboardPage();
 
-        dashboardPage.navigateToPageFromMenu("Dashboard");
+        dashboardPage.navigateToPageFromMenu("Climate Dashboard");
         test.info("Navigated to Dashboard Page");
 
         dashboardPage.clickViewCompaniesAndInvestments();

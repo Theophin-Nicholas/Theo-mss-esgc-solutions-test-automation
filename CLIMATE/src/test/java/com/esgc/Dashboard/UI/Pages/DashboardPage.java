@@ -553,7 +553,7 @@ public class DashboardPage extends UploadPage {
     }
 
     public void downloadDashboardExportFile() {
-        navigateToPageFromMenu("Dashboard");
+        navigateToPageFromMenu("Climate Dashboard");
         clickViewCompaniesAndInvestments();
         selectViewBySector();
         deleteDownloadFolder();

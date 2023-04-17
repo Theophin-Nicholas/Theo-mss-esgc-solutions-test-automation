@@ -74,7 +74,7 @@ public class SubsidiaryTests extends UITestBase {
     public void searchWithInactiveSubsidiaryCompanyName(String subsidiaryCompanyName) {
 
         DashboardPage dashboardPage = new DashboardPage();
-        dashboardPage.navigateToPageFromMenu("Dashboard");
+        dashboardPage.navigateToPageFromMenu("Climate Dashboard");
         dashboardPage.selectPortfolioByNameFromPortfolioSelectionModal("PortfolioWithInactiveSubsidiaryCompany");
 
         ResearchLinePage researchLinePage = new ResearchLinePage();

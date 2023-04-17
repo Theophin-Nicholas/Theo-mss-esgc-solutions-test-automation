@@ -109,7 +109,22 @@ public class Environment {
     public static final String ZERO_ASSESSMENT_PASSWORD;
 
     public static final String MESG_APPLICATION_NAME;
+    public static final String X_API_KEY;
     public static  String environment ;
+
+    public static final String USER_ESG_PREDICTOR_USERNAME;
+    public static final String USER_ESG_ESG_PREDICTOR_EXPORT_USERNAME;
+    public static final String USER_ESG_PREDICTOR_EXPORT_USERNAME;
+    public static final String USER_ESG_PREDICTOR_ODA_USERNAME;
+    public static final String USER_EXPORT_USERNAME;
+    public static final String USER_ESG_PREDICTOR_PASSWORD;
+    public static final String USER_ESG_ESG_PREDICTOR_EXPORT_PASSWORD;
+    public static final String USER_ESG_PREDICTOR_EXPORT_PASSWORD;
+    public static final String USER_ESG_PREDICTOR_ODA_PASSWORD;
+    public static final String USER_EXPORT_PASSWORD;
+
+    public static final String ODAWITHEXHAUTEDASSEMENTLIMIT_USERNAME;
+    public static final String ODAWITHEXHAUTEDASSEMENTLIMIT_PASSWORD;
 
 
     public static final String USER_CLIMATE_ESG_USERNAME;
@@ -216,6 +231,7 @@ public class Environment {
         QA_TEST_ACCOUNT_ID = properties.getProperty("account_id");
         QA_TEST_APPLICATION_ID = properties.getProperty("application_id");
         MESG_APPLICATION_NAME = properties.getProperty("mesg_application_name");
+        X_API_KEY = properties.getProperty("x_api_key");
         VIEWER_ROLE_KEY = properties.getProperty("viewer_role_key");
         ADMIN_ROLE_KEY = properties.getProperty("admin_role_key");
         FULFILLMENT_ROLE_KEY = properties.getProperty("fulfillment_role_key");
@@ -272,5 +288,25 @@ public class Environment {
         USER_SFDR_ESG_ESG_PREDICTOR_ODA_PASSWORD= properties.getProperty("USER_SFDR_ESG_ESG_PREDICTOR_ODA_PASSWORD");
         USER_EUTAXONOMY_SFDR_ESG_ESG_PREDICTOR_ODA_EXCEL_USERNAME= properties.getProperty("USER_EUTAXONOMY_SFDR_ESG_ESG_PREDICTOR_ODA_EXCEL_USERNAME");
         USER_EUTAXONOMY_SFDR_ESG_ESG_PREDICTOR_ODA_EXCEL_PASSWORD= properties.getProperty("USER_EUTAXONOMY_SFDR_ESG_ESG_PREDICTOR_ODA_EXCEL_PASSWORD");
+
+       USER_ESG_PREDICTOR_USERNAME = properties.getProperty("USER_ESG_PREDICTOR_USERNAME");
+        USER_ESG_PREDICTOR_PASSWORD = properties.getProperty("USER_ESG_PREDICTOR_PASSWORD");
+        USER_ESG_ESG_PREDICTOR_EXPORT_USERNAME = properties.getProperty("USER_ESG_ESG_PREDICTOR_EXPORT_USERNAME");
+        USER_ESG_ESG_PREDICTOR_EXPORT_PASSWORD= properties.getProperty("USER_ESG_ESG_PREDICTOR_EXPORT_PASSWORD");
+        USER_ESG_PREDICTOR_EXPORT_USERNAME= properties.getProperty("USER_ESG_PREDICTOR_EXPORT_USERNAME");
+        USER_ESG_PREDICTOR_EXPORT_PASSWORD= properties.getProperty("USER_ESG_PREDICTOR_EXPORT_PASSWORD");
+       USER_ESG_PREDICTOR_ODA_USERNAME= properties.getProperty("USER_ESG_PREDICTOR_ODA_USERNAME");
+        USER_ESG_PREDICTOR_ODA_PASSWORD= properties.getProperty("USER_ESG_PREDICTOR_ODA_PASSWORD");
+        USER_EXPORT_USERNAME= properties.getProperty("USER_EXPORT_USERNAME");
+        USER_EXPORT_PASSWORD= properties.getProperty("USER_EXPORT_PASSWORD");
+
+
+
+
+
+
+
+        ODAWITHEXHAUTEDASSEMENTLIMIT_USERNAME = properties.getProperty("oda_with_exhausted_AssessmentLimit_username");
+        ODAWITHEXHAUTEDASSEMENTLIMIT_PASSWORD = properties.getProperty("oda_with_exhausted_AssessmentLimit_password");
     }
 }

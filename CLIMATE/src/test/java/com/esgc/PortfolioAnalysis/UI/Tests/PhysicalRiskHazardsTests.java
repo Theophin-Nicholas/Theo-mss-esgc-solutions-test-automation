@@ -18,7 +18,7 @@ public class PhysicalRiskHazardsTests extends UITestBase {
     public void validatePhysicalRiskPage() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio Analysis page");
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
         researchLinePage.selectResearchLineFromDropdown("Physical Risk Hazards");
         assertTestCase.assertTrue(researchLinePage.isPhysicalRiskHazardTextsDisplayed(),
                 "Underlying Data Operations Risk Facilities Exposed Widget is displayed under Portfolio Summary section");
@@ -32,7 +32,7 @@ public class PhysicalRiskHazardsTests extends UITestBase {
     public void verifyPortfolioScoreSectionTest() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio Analysis page");
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
         researchLinePage.selectResearchLineFromDropdown("Physical Risk Hazards");
         assertTestCase.assertTrue(researchLinePage.isPhysicalRiskHazardTextsDisplayed(),
                 "Underlying Data Operations Risk Facilities Exposed Widget is displayed under Portfolio Summary section");
@@ -92,7 +92,7 @@ public class PhysicalRiskHazardsTests extends UITestBase {
 
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio Analysis page");
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
         researchLinePage.selectResearchLineFromDropdown("Physical Risk Hazards");
 
         researchLinePage.waitForDataLoadCompletion();
@@ -110,7 +110,7 @@ public class PhysicalRiskHazardsTests extends UITestBase {
 
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio Analysis page");
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
         researchLinePage.selectResearchLineFromDropdown("Physical Risk Hazards");
 
         BrowserUtils.wait(5);
@@ -124,7 +124,7 @@ public class PhysicalRiskHazardsTests extends UITestBase {
 
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio Analysis page");
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
         researchLinePage.selectResearchLineFromDropdown("Physical Risk Hazards");
 
         BrowserUtils.wait(10);

@@ -743,7 +743,7 @@ public abstract class PageBase {
      * @param page
      */
     public void navigateToResearchLine(String page) {
-        navigateToPageFromMenu("Portfolio Analysis");
+        navigateToPageFromMenu("Climate Portfolio Analysis");
         selectResearchLineFromDropdown(page);
         // clickFiltersDropdown();
         // selectOptionFromFiltersDropdown("as_of_date", "April 2021");
@@ -752,7 +752,7 @@ public abstract class PageBase {
     }
 
     public void navigateToResearchLineByIndex(int index) {
-        navigateToPageFromMenu("Portfolio Analysis");
+        navigateToPageFromMenu("Climate Portfolio Analysis");
         selectResearchLineFromDropdownByIndex(index);
     }
 
@@ -1638,7 +1638,7 @@ public abstract class PageBase {
 
     public void clickCloseIcon() {
         List<WebElement> closeIcon = Driver.getDriver().findElements(By.xpath("//div[@class='MuiToolbar-root MuiToolbar-regular']//*[local-name()='svg' and @class='MuiSvgIcon-root']"));
-        closeIcon.get(1).click();
+        closeIcon.get(0).click();
     }
 
     public void sendESCkey() {

@@ -22,7 +22,7 @@ public class DownloadTemplate extends UITestBase {
     public void downloadTemplateLinkTest() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
 
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
         test.info("Navigated to Portfolio Analysis Page");
         test.info("Clicked on Upload button");
 
@@ -49,7 +49,7 @@ public class DownloadTemplate extends UITestBase {
     public void verifyTemplateIsAccessibleTest() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
 
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
         test.info("Navigated to \"Portfolio Analysis Page\"");
         test.info("Clicked on Upload button");
 

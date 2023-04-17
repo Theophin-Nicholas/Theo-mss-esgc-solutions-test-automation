@@ -3675,5 +3675,8 @@ public class ResearchLinePage extends UploadPage {
             return false;
         }
     }
+    public String getPortfolioNameFromEntityPage(){
+        return BrowserUtils.waitForVisibility(portfolioEntityName,60).getText();
+    }
 }
 

@@ -27,7 +27,7 @@ public class HeatMapTemperatureAlignment extends DashboardUITestBase {
         DashboardPage dashboardPage = new DashboardPage();
 
         test.info("Navigating to Dashboard page");
-        dashboardPage.navigateToPageFromMenu("Dashboard");
+        dashboardPage.navigateToPageFromMenu("Climate Dashboard");
 
         BrowserUtils.wait(5);
         assertTestCase.assertTrue(dashboardPage.isHeatMapTempratureAlignmentAvailable(), "Verify Heat Map's Temperature Alignment is available");
@@ -43,7 +43,7 @@ public class HeatMapTemperatureAlignment extends DashboardUITestBase {
         DashboardPage dashboardPage = new DashboardPage();
 
         test.info("Navigating to Dashboard page");
-        dashboardPage.navigateToPageFromMenu("Dashboard");
+        dashboardPage.navigateToPageFromMenu("Climate Dashboard");
 
         assertTestCase.assertTrue(!dashboardPage.isHeatMapTempratureAlignmentAvailable(), "Verify Heat Map's Temperature Alignment not is available");
     }

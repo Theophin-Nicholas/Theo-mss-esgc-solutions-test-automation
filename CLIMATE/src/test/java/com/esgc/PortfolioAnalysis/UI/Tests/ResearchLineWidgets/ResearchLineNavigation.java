@@ -17,7 +17,7 @@ public class ResearchLineNavigation extends UITestBase {
             description = "Verify research line navigation")
     public void verifyResearchLineNavigation() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
         BrowserUtils.wait(5);
 
         List<String> actualResearchLines = researchLinePage.getAvailableResearchLines();

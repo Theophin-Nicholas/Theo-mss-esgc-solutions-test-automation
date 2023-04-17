@@ -1,5 +1,6 @@
 package com.esgc.ONDEMAND.UI.Pages;
 
+
 import com.esgc.Common.UI.Pages.CommonPage;
 import com.esgc.Common.UI.Pages.LoginPage;
 import com.esgc.ONDEMAND.API.Controllers.OnDemandFilterAPIController;
@@ -8,10 +9,11 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+
 import java.text.ParseException;
 import java.util.*;
 import java.io.File;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class OnDemandAssessmentPage extends CommonPage {
@@ -187,11 +189,46 @@ public class OnDemandAssessmentPage extends CommonPage {
     @FindBy(xpath = "//div[contains(text(),'Select Portfolio')]/../div[2]/following-sibling::div/div[2]")
     public List<WebElement> LastUpdateColumn;
 
+    //OnDemand Request Page - View Details Panel Elements
+    @FindBy(xpath = "//button[.='View Detail']")
+    public List<WebElement> viewDetailButton;
+
+    //View Detail Panel Elements
+    @FindBy(xpath = "//div[starts-with(text(),'Companies in')]")
+    public WebElement detailPanelHeader;
+
+    @FindBy(xpath = "//div[@id='button-button-test-id-1']//button")
+    public List<WebElement> detailPanelFilterButtons;
+
+    @FindBy(xpath = "//table[@id='viewcompanies']/../preceding-sibling::div")
+    public List<WebElement> detailPanelTableTitles;
+
+    @FindBy(xpath = "(//table[@id='viewcompanies'])//th")
+    public List<WebElement> detailPanelTableHeaders;
+
+    @FindBy(xpath = "(//table[@id='viewcompanies'])//td[1]")
+    public List<WebElement> detailPanelCompanyNames;
+
+    @FindBy(xpath = "(//table[@id='viewcompanies'])//td[2]")
+    public List<WebElement> detailPanelESGScores;
+
+    @FindBy(xpath = "(//table[@id='viewcompanies'])//td[3]")
+    public List<WebElement> detailPanelInvestmentPercentages;
+
+    @FindBy(xpath = "(//table[@id='viewcompanies'])//td[4]")
+    public List<WebElement> detailPanelLastColumn;
+
+    @FindBy(xpath = "//button[.='Export To Excel']/../..//p/..")
+    public WebElement detailPanelShowingStatement;
+
+    @FindBy(xpath = "//button[.='Export To Excel']")
+    public WebElement detailPanelExportToExcelButton;
+
 
     @FindBy(xpath = "//*[@id=\"topbar-appbar-test-id\"]/div/li")
     public WebElement menuButton;
-    @FindBy(xpath = "//div[text()='View Detail']")
-    public List<WebElement> viewDetailButton;
+//    @FindBy(xpath = "//div[text()='View Detail']")
+//    public List<WebElement> viewDetailButton;
 
     @FindBy(xpath = "//li[contains(text(), 'Log Out')]")
     public WebElement logOutButton;
@@ -209,7 +246,7 @@ public class OnDemandAssessmentPage extends CommonPage {
     public String landingPage = "";
 
     public void goToSendRequestPage(String portfolioName) {
-        if (landingPage.equals("")) getLandingPage(portfolioName);
+        if (landingPage.equals("")) getLandingPageFromAPI(portfolioName);
         if (landingPage.equals("batchProcessingPage")) {
             BrowserUtils.waitForPageToLoad(30);
             clickCreateNewRequestButton();
@@ -217,9 +254,9 @@ public class OnDemandAssessmentPage extends CommonPage {
         BrowserUtils.waitForVisibility(btnReviewRequest, 80);
     }
 
-    public void getLandingPage(String portfolioName) {
+    public void getLandingPageFromAPI(String portfolioName) {
         OnDemandFilterAPIController controller = new OnDemandFilterAPIController();
-        landingPage = controller.getLandingPage(portfolioName);
+        landingPage = controller.getExpectedLandingPageFromAPI(portfolioName);
     }
 
     public void clickReviewAndSendRequestButton() {
@@ -245,9 +282,13 @@ public class OnDemandAssessmentPage extends CommonPage {
         BrowserUtils.scrollTo(removeButtons.get(0));
         txtSendTo.sendKeys(emailid);
         String compniesCountForRequest = getCompaniesCountFromConfirmRequestButton();
-        btnConfirmRequest.click();
+        clickOnConfirmRequestButton();
         return compniesCountForRequest;
 
+    }
+
+    public void clickOnConfirmRequestButton(){
+        BrowserUtils.waitForVisibility(btnConfirmRequest,30).click();
     }
 
     public void selectFilter(String filterOption) {
@@ -405,10 +446,15 @@ public class OnDemandAssessmentPage extends CommonPage {
         }
     }
 
-    public void onDemandCoverageHeaderValidation(String portfolioName) {
-        BrowserUtils.waitForPageToLoad(80);
-        assertTestCase.assertTrue(BrowserUtils.waitForVisibility(coverageHeader.get(0), 30).getText().equals("Request On-Demand Assessments for " + portfolioName));
-        assertTestCase.assertTrue(BrowserUtils.waitForVisibility(coverageHeader.get(1), 30).getText().matches("\\d+% assessment eligible \\(\\d+ companies\\)"));
+    public boolean onDemandCoverageHeaderValidation(String portfolioName) {
+        try {
+            BrowserUtils.waitForPageToLoad(80);
+            assertTestCase.assertTrue(BrowserUtils.waitForVisibility(coverageHeader.get(0), 30).getText().equals("Request On-Demand Assessments for " + portfolioName));
+            assertTestCase.assertTrue(BrowserUtils.waitForVisibility(coverageHeader.get(1), 30).getText().matches("\\d+% assessment eligible \\(\\d+ companies\\)"));
+            return true;
+        }catch(Exception e){
+            return false;
+        }
     }
 
     public boolean isCancelButtonAvailable() {
@@ -785,7 +831,7 @@ public class OnDemandAssessmentPage extends CommonPage {
         return BrowserUtils.getElementsText(coverageList);
     }
 
-    public void checkViewDetailButtonDisabled (){
+    public void checkViewDetailButtonDisabled () {
         System.out.println("Checking if view detail button is disabled..... ");
         /*for(int i =0 ; i < viewDetailButton.size(); i++){
             if(viewDetailButton.get(i).isEnabled()){
@@ -794,16 +840,57 @@ public class OnDemandAssessmentPage extends CommonPage {
                 System.out.println("the View Detail Button is Disabled"+viewDetailButton.get(i));
             }
         }*/
-        for(int i=0; i < viewDetailButton.size(); i++){
-            if(viewDetailButton.get(i).getAttribute("disabled").equals("")){
-                System.out.println("the view detail button is disabled for "+ viewDetailButton.get(i).getText());
+        for (int i = 0; i < viewDetailButton.size(); i++) {
+            if (viewDetailButton.get(i).getAttribute("disabled").equals("")) {
+                System.out.println("the view detail button is disabled for " + viewDetailButton.get(i).getText());
             } else {
                 System.out.println("the view detail button is enabled");
             }
         }
-
     }
 
+    public boolean viewDetailForPortfolio(String portfolioName) {
+        int index = getPortfolioList().indexOf(portfolioName);
+        return viewDetailForPortfolio(index);
+    }
+
+
+    public boolean viewDetailForPortfolio(int index) {
+        if(index == -1) {
+            System.out.println("Portfolio not found");
+            return false;
+        }
+        if(viewDetailButton.size() <= index) {
+            System.out.println("View detail button not found");
+            return false;
+        }
+        if(!viewDetailButton.get(index).isDisplayed()) {
+            System.out.println("View detail button not displayed");
+            return false;
+        }
+        viewDetailButton.get(index).click();
+        System.out.println("View detail button clicked");
+        BrowserUtils.waitForVisibility(detailPanelHeader, 10);
+        return true;
+    }
+
+    public void verifyDetailsPanel() {
+        //click on first enabled view detail button
+        for(int i = 0; i < viewDetailButton.size(); i++) {
+            if(viewDetailForPortfolio(i)) break;
+        }
+        BrowserUtils.waitForVisibility(detailPanelCompanyNames, 10);
+        assertTestCase.assertTrue(detailPanelHeader.isDisplayed(), "Details panel header is displayed");
+        assertTestCase.assertTrue(detailPanelFilterButtons.size()>0, "Details panel filter buttons are displayed");
+        assertTestCase.assertTrue(detailPanelTableTitles.size()>0, "Details panel table titles are displayed");
+        assertTestCase.assertTrue(detailPanelTableHeaders.size()>0, "Details panel table headers are displayed");
+        assertTestCase.assertTrue(detailPanelCompanyNames.size()>0, "Details panel company names are displayed");
+        assertTestCase.assertTrue(detailPanelESGScores.size()>0, "Details panel ESG scores are displayed");
+        assertTestCase.assertTrue(detailPanelInvestmentPercentages.size()>0, "Details panel investment percentages are displayed");
+        assertTestCase.assertTrue(detailPanelLastColumn.size()>0, "Details panel last column is displayed");
+        assertTestCase.assertTrue(detailPanelShowingStatement.isDisplayed(), "Details panel showing statement is displayed");
+        assertTestCase.assertTrue(detailPanelExportToExcelButton.isDisplayed(), "Details panel export to excel button is displayed");
+    }
     public void isViewDetailButtonDisabled(){
         // JavascriptExecutor jse = (JavascriptExecutor) Driver.getDriver();
         // System.out.println("is the View Detail Button disabled " + jse.executeScript("return arguments[0].disabled", viewDetailButton.get(0)));
@@ -848,6 +935,22 @@ public class OnDemandAssessmentPage extends CommonPage {
         }
         return index;
     }
+
+    public boolean isUserOnFilterCritriaScreen(String PortfolioName){
+        return BrowserUtils.waitForVisibility(btnReviewRequest,60).isDisplayed() && onDemandCoverageHeaderValidation(PortfolioName);
+    }
+    public String SelectAndGetOnDemandEligiblePortfolioName() {
+        String portfolioName = "";
+        for(int i = 0 ; i< getPortfolioList().size() ; i++ ) {
+            if(Double.valueOf(OnDemandEligibility.get(i).getText().split("%")[0])>(0)) {
+                portfolioRadioButtonList.get(i).click();
+                portfolioName = getPortfolioList().get(i);
+                break;
+            }
+        }
+        return portfolioName;
+    }
+
 
     @FindBy(xpath = "//*[@id=\"Climate Dashboardtopbar-menuitem-test-id\"]")
     public WebElement climateDashboardTab;

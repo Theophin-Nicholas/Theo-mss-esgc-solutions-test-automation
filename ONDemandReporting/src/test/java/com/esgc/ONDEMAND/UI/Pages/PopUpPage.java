@@ -23,7 +23,7 @@ public class PopUpPage extends CommonPage {
     }
 
     public boolean isOkButtonEnabled(){
-       return okButton.isEnabled();
+        return okButton.isEnabled();
     }
 
     public String popUpHeaderText(){

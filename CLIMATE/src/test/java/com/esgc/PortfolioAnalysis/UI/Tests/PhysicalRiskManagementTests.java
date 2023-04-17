@@ -15,7 +15,7 @@ public class PhysicalRiskManagementTests extends UITestBase {
     @Xray(test = {7994})
     public void validatePhysicalRiskManagementPage() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
         researchLinePage.selectSamplePortfolioFromPortfolioSelectionModal();
         researchLinePage.selectResearchLineFromDropdown("Physical Risk Management");
         researchLinePage.clickFiltersDropdown();
@@ -39,7 +39,7 @@ public class PhysicalRiskManagementTests extends UITestBase {
     public void validateNoDataMessage() {
         //TODO we need to handle no data messages in one place, should not be separate tests for each section/research line
         ResearchLinePage researchLinePage = new ResearchLinePage();
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
         researchLinePage.selectSamplePortfolioFromPortfolioSelectionModal();
         researchLinePage.selectResearchLineFromDropdown("Physical Risk Management");
         PhysicalRiskManagementPage physicalRiskManagementPage = new PhysicalRiskManagementPage();

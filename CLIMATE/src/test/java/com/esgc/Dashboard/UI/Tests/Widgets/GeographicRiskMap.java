@@ -21,7 +21,7 @@ public class GeographicRiskMap extends DashboardUITestBase {
     public void verifyGeographicRiskMapIsDisplayed(String researchLine) {
         DashboardPage dashboardPage = new DashboardPage();
 
-        dashboardPage.navigateToPageFromMenu("Dashboard");
+        dashboardPage.navigateToPageFromMenu("Climate Dashboard");
         test.info("Navigated to Dashboard Page");
 
         dashboardPage.selectSamplePortfolioFromPortfolioSelectionModal();
@@ -55,7 +55,7 @@ public class GeographicRiskMap extends DashboardUITestBase {
     public void verifyGeographicRiskMapRedirectLink(String researchLine) {
         DashboardPage dashboardPage = new DashboardPage();
 
-        dashboardPage.navigateToPageFromMenu("Dashboard");
+        dashboardPage.navigateToPageFromMenu("Climate Dashboard");
         test.info("Navigated to Dashboard Page");
 
         dashboardPage.selectSamplePortfolioFromPortfolioSelectionModal();
