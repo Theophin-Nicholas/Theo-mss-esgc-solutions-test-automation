@@ -15,7 +15,7 @@ public class ExportDashboardTests extends DashboardUITestBase {
     public void exportCompaniesInPortfolioBySectorTest() {
         DashboardPage dashboardPage = new DashboardPage();
 
-        dashboardPage.navigateToPageFromMenu("Dashboard");
+        dashboardPage.navigateToPageFromMenu("Climate Dashboard");
         test.info("Navigated to Dashboard Page");
 
         dashboardPage.clickViewCompaniesAndInvestments();
@@ -37,7 +37,7 @@ public class ExportDashboardTests extends DashboardUITestBase {
     public void exportCompaniesInPortfolioByRegionTest() {
         DashboardPage dashboardPage = new DashboardPage();
 
-        dashboardPage.navigateToPageFromMenu("Dashboard");
+        dashboardPage.navigateToPageFromMenu("Climate Dashboard");
         test.info("Navigated to Dashboard Page");
 
         dashboardPage.clickViewCompaniesAndInvestments();
@@ -59,7 +59,7 @@ public class ExportDashboardTests extends DashboardUITestBase {
     public void temperatureAlignmentFieldsInExportedFile() {
         DashboardPage dashboardPage = new DashboardPage();
 
-        dashboardPage.navigateToPageFromMenu("Dashboard");
+        dashboardPage.navigateToPageFromMenu("Climate Dashboard");
         test.info("Navigated to Dashboard Page");
 
         dashboardPage.clickCoverageLink();

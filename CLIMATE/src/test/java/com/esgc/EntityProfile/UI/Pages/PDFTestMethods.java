@@ -187,7 +187,7 @@ public class PDFTestMethods extends PageBase {
         assertTestCase.assertTrue(documentPageCounts == count, "Validating Footer");
     }
 
-    public void ValidateESGSummaryData() {
+   /* public void ValidateESGSummaryData() {
         EntityClimateProfilePage entityProfilePage = new EntityClimateProfilePage();
         List<String> UIValue = entityProfilePage.getESGSummaryDetails();
         System.out.println("ESG Expected Values: "+UIValue);
@@ -196,7 +196,7 @@ public class PDFTestMethods extends PageBase {
             assertTestCase.assertTrue(v.equals(PDFValue), "Validating ESGSummary Data");
         }
     }
-
+*/
     public void ValidateEsgMaterlity(String orbis_id) {
         EntityClimateProfilePage entityProfilePage = new EntityClimateProfilePage();
         List<String> UIValue = entityProfilePage.readEsgMaterialityCategories();

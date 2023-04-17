@@ -17,7 +17,7 @@ public class HeatMapTests extends DataValidationTestBase {
     public void verifyUpdatesTableForAllRLs(String portfolioId, String researchLine, String year, String month) {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         PortfolioQueries portfolioQueries = new PortfolioQueries();
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
         researchLinePage.selectSamplePortfolioFromPortfolioSelectionModal();
 
         researchLinePage.selectResearchLineFromDropdown(researchLine);

@@ -20,7 +20,7 @@ public class DownloadTemplate extends DashboardUITestBase {
     public void downloadTemplateLinkTest() {
         DashboardPage dashboardPage = new DashboardPage();
 
-        dashboardPage.navigateToPageFromMenu("Dashboard");
+        dashboardPage.navigateToPageFromMenu("Climate Dashboard");
         test.info("Navigated to Dashboard Page");
         test.info("Clicked on Upload button");
 

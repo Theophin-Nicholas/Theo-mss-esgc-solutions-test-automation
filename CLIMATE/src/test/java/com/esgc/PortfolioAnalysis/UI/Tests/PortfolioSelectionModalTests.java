@@ -29,7 +29,7 @@ public class PortfolioSelectionModalTests extends UITestBase {
     public void verifySearchFunctionOnSelectionModalPopup() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio Analysis page");
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
         researchLinePage.waitForDataLoadCompletion();
         researchLinePage.openSelectionModalPopUp();
         assertTestCase.assertTrue(researchLinePage.checkIfSelectionModalPopupIsDisplayed(), "Selection Modal Popup was not opened");
@@ -48,7 +48,7 @@ public class PortfolioSelectionModalTests extends UITestBase {
     public void verifyUserCanSelectSinglePortfolioOnSelectionModalPopup() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio analysis page");
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
         BrowserUtils.wait(5);
 
         test.info("Open the selection Modal Popup");
@@ -69,7 +69,7 @@ public class PortfolioSelectionModalTests extends UITestBase {
     public void verifySelectionModalPopupBehaviour() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio Analysis page");
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
         BrowserUtils.wait(5);
         researchLinePage.openSelectionModalPopUp();
         assertTestCase.assertTrue(researchLinePage.checkIfSelectionModalPopupIsDisplayed(), "Selection Modal Popup was not opened");
@@ -87,7 +87,7 @@ public class PortfolioSelectionModalTests extends UITestBase {
     public void verifyUploadPortfolioLinkOnSelectionModalPopup() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio Analysis page");
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
         BrowserUtils.wait(5);
         researchLinePage.openSelectionModalPopUp();
         assertTestCase.assertTrue(researchLinePage.checkIfSelectionModalPopupIsDisplayed(), "Selection Modal Popup was not opened");
@@ -102,7 +102,7 @@ public class PortfolioSelectionModalTests extends UITestBase {
     public void verifyPortfolioSelectionOnSelectionModalPopup() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio analysis page");
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
         researchLinePage.waitForDataLoadCompletion();
 
         test.info("Open the selection Modal Popup");
@@ -136,7 +136,7 @@ public class PortfolioSelectionModalTests extends UITestBase {
     public void verifyRegionAndSectorSetAsperSelectedPortfolio() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio analysis page");
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
         BrowserUtils.wait(5);
 
         researchLinePage.clickUploadPortfolioButton();
@@ -192,7 +192,7 @@ public class PortfolioSelectionModalTests extends UITestBase {
     public void verifyPortfolioSortingOnSelectionModalPopup() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio Analysis page");
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
         BrowserUtils.wait(5);
         researchLinePage.openSelectionModalPopUp();
         assertTestCase.assertTrue(researchLinePage.checkIfSelectionModalPopupIsDisplayed(), "Selection Modal Popup was opened");
@@ -227,7 +227,7 @@ public class PortfolioSelectionModalTests extends UITestBase {
 
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio Analysis page");
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
         researchLinePage.waitForDataLoadCompletion();
         researchLinePage.openSelectionModalPopUp();
 
@@ -243,7 +243,7 @@ public class PortfolioSelectionModalTests extends UITestBase {
     public void verifyEllipsesForPortfolioWithLongName() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio analysis page");
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
         BrowserUtils.wait(5);
 
         researchLinePage.clickUploadPortfolioButton();

@@ -20,7 +20,7 @@ public class DashboardSummaryHeader extends DashboardUITestBase {
     public void validateDashboardSummaryHeader(@Optional String sector, @Optional String region, @Optional String month, @Optional String year) {
         DashboardPage dashboardPage = new DashboardPage();
         ResearchLinePage researchLinePage = new ResearchLinePage();
-        dashboardPage.navigateToPageFromMenu("Dashboard");
+        dashboardPage.navigateToPageFromMenu("Climate Dashboard");
         test.info("Navigated to Dashboard Page");
 
         String dateFilter = CaseUtils.toCamelCase(Month.of(Integer.valueOf(month)).name(), true, ' ') + " " + year;
@@ -50,7 +50,7 @@ public class DashboardSummaryHeader extends DashboardUITestBase {
         DashboardPage dashboardPage = new DashboardPage();
 
         test.info("Navigate to Dashboard Page");
-        dashboardPage.navigateToPageFromMenu("Dashboard");
+        dashboardPage.navigateToPageFromMenu("Climate Dashboard");
 
         test.info("Verify sticky header information");
         BrowserUtils.wait(5);
@@ -63,7 +63,7 @@ public class DashboardSummaryHeader extends DashboardUITestBase {
     public void validateClimateTiles() {
         DashboardPage dashboardPage = new DashboardPage();
         test.info("Navigate to Dashboard Page");
-        dashboardPage.navigateToPageFromMenu("Dashboard");
+        dashboardPage.navigateToPageFromMenu("Climate Dashboard");
         BrowserUtils.wait(3);
         dashboardPage.selectSamplePortfolioFromPortfolioSelectionModal();
         System.out.println("Sample Portfolio Selected");

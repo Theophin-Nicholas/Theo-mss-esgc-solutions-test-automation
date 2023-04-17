@@ -30,8 +30,11 @@ public class EMCAPITests extends APITestBase {
         assertTestCase.assertEquals(response.statusCode(), 200, "Status code 200 OK is verified");
         List<String> roleNames = response.jsonPath().getList("firstName");
         System.out.println("roleNames = " + roleNames);
-        System.out.println("roleNames.contains(Environment.INTERNAL_USER_USERNAME) = " + roleNames.contains(Environment.INTERNAL_USER_USERNAME));
-        assertTestCase.assertTrue(roleNames.contains(Environment.INTERNAL_USER_USERNAME), "Admin role is verified");
+        String name = Environment.INTERNAL_USER_USERNAME;
+        System.out.println("name = " + name);
+        if(name.contains("@")) name = name.split("@")[0];
+        System.out.println("roleNames.contains(name) = " + roleNames.contains(name));
+        assertTestCase.assertTrue(roleNames.contains(name), "Admin role is verified");
         assertTestCase.assertTrue(response.as(AdminUser[].class).length > 0, "User details are verified");
     }
 

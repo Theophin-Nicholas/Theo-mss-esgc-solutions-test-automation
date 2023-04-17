@@ -22,7 +22,7 @@ public class CarbonFootprint_EmissionWidgetsTest extends UITestBase {
 
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio Analysis page");
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
         BrowserUtils.wait(5);
         researchLinePage.navigateToResearchLine("Carbon Footprint");
         Assert.assertTrue(researchLinePage.checkIfPageTitleIsDisplayed("Carbon Footprint"));
@@ -41,7 +41,7 @@ public class CarbonFootprint_EmissionWidgetsTest extends UITestBase {
 
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio Analysis page");
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
         BrowserUtils.wait(5);
         researchLinePage.navigateToResearchLine("Carbon Footprint");
         Assert.assertTrue(researchLinePage.checkIfPageTitleIsDisplayed("Carbon Footprint"));

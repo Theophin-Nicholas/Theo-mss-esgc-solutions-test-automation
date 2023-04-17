@@ -17,7 +17,7 @@ public class DashboardUiFilterTests extends UITestBase {
     public void verifySectorsSorting() {
 
         DashboardPage dashboardPage = new DashboardPage();
-        dashboardPage.navigateToPageFromMenu("Dashboard");
+        dashboardPage.navigateToPageFromMenu("Climate Dashboard");
         test.info("Navigated to Dashboard Page");
 
         dashboardPage.clickFiltersDropdown();
@@ -33,7 +33,7 @@ public class DashboardUiFilterTests extends UITestBase {
     public void verifyRegions() {
 
         DashboardPage dashboardPage = new DashboardPage();
-        dashboardPage.navigateToPageFromMenu("Dashboard");
+        dashboardPage.navigateToPageFromMenu("Climate Dashboard");
         test.info("Navigated to Dashboard Page");
 
         dashboardPage.clickFiltersDropdown();
@@ -56,7 +56,7 @@ public class DashboardUiFilterTests extends UITestBase {
     public void verifyAsOfDates() {
 
         DashboardPage dashboardPage = new DashboardPage();
-        dashboardPage.navigateToPageFromMenu("Dashboard");
+        dashboardPage.navigateToPageFromMenu("Climate Dashboard");
         test.info("Navigated to Dashboard Page");
 
         dashboardPage.clickFiltersDropdown();
@@ -76,7 +76,7 @@ public class DashboardUiFilterTests extends UITestBase {
         dashboardPage.selectSamplePortfolioFromPortfolioSelectionModal();
 
         // Verify filter by using sector
-        dashboardPage.navigateToPageFromMenu("Dashboard");
+        dashboardPage.navigateToPageFromMenu("Climate Dashboard");
         int initControversiesCount = dashboardPage.controversies.size();
         System.out.println("initControversiesCount = " + initControversiesCount);
         dashboardPage.clickFiltersDropdown();
@@ -89,7 +89,7 @@ public class DashboardUiFilterTests extends UITestBase {
         assertTestCase.assertTrue(initControversiesCount>afterControversiesCount);
 
         // Verify filter by using region
-        dashboardPage.navigateToPageFromMenu("Dashboard");
+        dashboardPage.navigateToPageFromMenu("Climate Dashboard");
         initControversiesCount = dashboardPage.controversies.size();
         dashboardPage.clickFiltersDropdown();
         dashboardPage.selectOptionFromFiltersDropdown("regions","Europe, Middle East & Africa");

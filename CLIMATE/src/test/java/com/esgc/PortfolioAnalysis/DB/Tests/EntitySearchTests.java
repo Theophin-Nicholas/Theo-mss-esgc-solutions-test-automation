@@ -28,7 +28,7 @@ public class EntitySearchTests extends DataValidationTestBase {
     public void testSearchBoxIsGivingCorrectLastUpdateDate_PortfolioAnalysis() {
         String entityName = "Apple, Inc.";
         ResearchLinePage researchLinePage = new ResearchLinePage();
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
         researchLinePage.searchIconPortfolioPage.click();
         researchLinePage.searchBarOfPortfolio.sendKeys(entityName);
         String uiLastUpdatedDate = researchLinePage.getLastUpdatedDateContainsSearchKeyWord(entityName).replace("Last Update: ", "");

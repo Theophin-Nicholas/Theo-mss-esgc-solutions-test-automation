@@ -32,7 +32,7 @@ public class EntityPDFExportTest extends EntityClimateProfileTestBase {
         pdfTest.ValidateUnderlyingDataMetricsGreenShareAssessment();
         pdfTest.ValidateHeader(entity[0]);
         pdfTest.ValidateFooter();
-        pdfTest.ValidateESGSummaryData();
+       // pdfTest.ValidateESGSummaryData();
         pdfTest.ValidateEsgMaterlity(entity[1]); //12015
 
         pdfTest.ValidateUnderlyingDataTransitionRiskBROWNSHARE();

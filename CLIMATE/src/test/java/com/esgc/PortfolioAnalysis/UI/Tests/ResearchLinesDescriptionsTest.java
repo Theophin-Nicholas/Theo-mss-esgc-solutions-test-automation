@@ -62,7 +62,7 @@ public class ResearchLinesDescriptionsTest extends UITestBase {
     public void validateDescriptionsForAdditionalPhysicalRiskHazards() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio Analysis page");
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
 
         test.info("Verify Market Risk -> Country of Sales Description");
         String countryOfSalesDescription = "Country of Sales measures climate risk in the countries in which a company generates its sales. Country of Sales is a percentile score between 0 (low risk) and 100 (high risk).";

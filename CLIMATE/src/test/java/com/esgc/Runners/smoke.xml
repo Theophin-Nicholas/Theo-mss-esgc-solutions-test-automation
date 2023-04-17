@@ -7,7 +7,7 @@
     </listeners>
     <test name="ESGC Climate Smoke Test Results" >
 
-        <parameter name="reportName" value="Smoke Test Report"/>
+        <parameter name="reportName" value="Test Report"/>
 
         <groups>
             <run>
