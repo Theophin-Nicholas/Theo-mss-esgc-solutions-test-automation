@@ -419,7 +419,7 @@ Faker faker = new Faker();
     }
 
     @Test(groups = {UI, REGRESSION })
-    @Xray(test = {14015, 14013})
+    @Xray(test = {14015})
     public void ValidateNewNameInGlobalMenu(){
         OnDemandAssessmentPage odaPage = new OnDemandAssessmentPage();
         LoginPage login = new LoginPage();
