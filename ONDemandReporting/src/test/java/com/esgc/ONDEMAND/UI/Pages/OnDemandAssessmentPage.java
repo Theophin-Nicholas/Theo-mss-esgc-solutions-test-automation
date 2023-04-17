@@ -1010,9 +1010,8 @@ public class OnDemandAssessmentPage extends CommonPage {
 
     public void validateEntitiesWithOnlyEsgDataDontShowInSearch(String entity) {
 
-
-        String expectedSearchResult = BrowserUtils.waitForVisibility(searchResultLineOne, 20).getText();
-        assertTestCase.assertTrue(!entity.equals(expectedSearchResult), "Validating that " + entity + " which is an Entity with ESG data only is not returned or suggested in search option : Status Done");
+       String expectedSearchResult = BrowserUtils.waitForVisibility(searchResultLineOne, 20).getText();
+        assertTestCase.assertTrue(!entity.equals(searchResultLineOne.getText()), "Validating that " + entity + " which is an Entity with ESG data only is not returned or suggested in search option : Status Done");
 
     }
 

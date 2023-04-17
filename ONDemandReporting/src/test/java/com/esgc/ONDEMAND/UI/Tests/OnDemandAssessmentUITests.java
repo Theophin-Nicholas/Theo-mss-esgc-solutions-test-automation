@@ -452,35 +452,6 @@ Faker faker = new Faker();
         odaPage.validateCalculationsFromGlobalMenuIsHidden();
     }
 
-    @Test(groups ={UI,REGRESSION, SMOKE})
-    @Xray(test = {14094})
-    public void ValidateNoDataforEntitiesWithEsgDataOnly() {
-        OnDemandAssessmentPage odaPage = new OnDemandAssessmentPage();
-        LoginPage login = new LoginPage();
-        odaPage.clickOnMenuButton();
-        odaPage.clickOnLogOutButton();
-        login.entitlementsLogin(EntitlementsBundles.USER_CLIMATE_ESG);
-        System.out.println("---------------Logged back in using climate and esg entitlements--------------------");
-
-        odaPage.clickOnSearchButton();
-        String[] entityList = {"C5 Eiendom AS", "Entergy Utility Affiliates LLC", "Solutia, Inc.", "Resolution Life Australasia Ltd."};
-        for (int i = 0; i < entityList.length; i++) {
-            odaPage.searchForEntitities(entityList[i]);
-            odaPage.validateEntitiesWithOnlyEsgDataDontShowInSearch(entityList[i]);
-        }
-        Driver.getDriver().navigate().refresh();
-        odaPage.clickOnMenuButton();
-        odaPage.clickOnLogOutButton();
-        login.entitlementsLogin(EntitlementsBundles.USER_CLIMATE_ESG_ESG_PREDICTOR_EXPORT);
-        System.out.println("---------------Logged back in using climate esg- esg predictor and export entitlements--------------------");
-        odaPage.clickOnSearchButton();
-        String[] entityList1 = {"C5 Eiendom AS", "Entergy Utility Affiliates LLC", "Solutia, Inc.", "Resolution Life Australasia Ltd."};
-        for (int i = 0; i < entityList1.length; i++) {
-            odaPage.searchForEntitities(entityList1[i]);
-            odaPage.validateEntitiesWithOnlyEsgDataDontShowInSearch(entityList1[i]);
-        }
-    }
-
 
 
     @Test(groups = {REGRESSION, UI, COMMON, SMOKE}, description = "UI | On-Demand Reporting | On-Demand Assessments | Verify Different ways to download the portfolio/export file")
@@ -493,4 +464,5 @@ Faker faker = new Faker();
         System.out.println(BrowserUtils.getElementsText(onDemandAssessmentPage.portfolioNamesList));
         onDemandAssessmentPage.verifyDetailsPanel();
     }
+
 }

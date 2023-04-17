@@ -3,6 +3,7 @@ package com.esgc.ONDEMAND.UI.Tests;
 import com.esgc.Common.API.Controllers.CommonAPIController;
 import com.esgc.Common.UI.Pages.LoginPage;
 import com.esgc.Common.UI.TestBases.UITestBase;
+import com.esgc.ONDEMAND.TestDataProviders.EntityWithEsgDataOnlyDataProviders;
 import com.esgc.ONDEMAND.UI.Pages.OnDemandAssessmentPage;
 import com.esgc.ONDEMAND.UI.Pages.PopUpPage;
 import com.esgc.Utilities.*;
@@ -272,6 +273,40 @@ public class OnDemandEntitlementBundleTests extends UITestBase {
         }
     }
 
+    @Test(groups = {UI, REGRESSION, SMOKE}, dataProvider = "entityWithEsgDataOnly-DP", dataProviderClass = EntityWithEsgDataOnlyDataProviders.class)
+    @Xray(test = {14094})
+    public void ValidateNoDataForEntitiesWithEsgDataOnly(String... entity) {
+        LoginPage login = new LoginPage();
+
+        login.entitlementsLogin(EntitlementsBundles.USER_CLIMATE_ESG);
+        System.out.println("---------------Logged back in using climate and esg entitlements--------------------");
+        OnDemandAssessmentPage odaPage = new OnDemandAssessmentPage();
+        odaPage.clickOnSearchButton();
+        odaPage.searchForEntitities(entity[0]);
+        //assertTestCase.assertTrue(!entity.equals(odaPage.searchResultLineOne.getText()), "Validating that " + entity + " which is an Entity with ESG data only is not returned or suggested in search option : Status Done");
+
+        odaPage.validateEntitiesWithOnlyEsgDataDontShowInSearch(entity[0]);
+
     }
+
+    @Test(groups = {UI, REGRESSION, SMOKE}, dataProvider = "entityWithEsgDataOnly-DP", dataProviderClass = EntityWithEsgDataOnlyDataProviders.class)
+    @Xray(test = {14094})
+    public void validate() {
+
+        login.entitlementsLogin(EntitlementsBundles.USER_CLIMATE_ESG_ESG_PREDICTOR_EXPORT);
+        System.out.println("---------------Logged back in using climate esg- esg predictor and export entitlements--------------------");
+        OnDemandAssessmentPage odaPage = new OnDemandAssessmentPage();
+
+        odaPage.clickOnSearchButton();
+        String[] entityList1 = {"C5 Eiendom AS", "Entergy Utility Affiliates LLC", "Solutia, Inc.", "Resolution Life Australasia Ltd."};
+        for (int i = 0; i < entityList1.length; i++) {
+            odaPage.searchForEntitities(entityList1[i]);
+            odaPage.validateEntitiesWithOnlyEsgDataDontShowInSearch(entityList1[i]);
+        }
+    }
+
+
+
+}
 
 
