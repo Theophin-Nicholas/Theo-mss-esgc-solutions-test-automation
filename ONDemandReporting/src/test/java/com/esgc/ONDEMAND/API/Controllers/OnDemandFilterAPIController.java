@@ -44,7 +44,7 @@ public class OnDemandFilterAPIController extends CommonAPIController {
         return response;
     }
 
-    public String getLandingPage(String portfolioName){
+    public String getExpectedLandingPageFromAPI(String portfolioName){
         String landingPage;
         String portfolioId = getPortfolioId(portfolioName);
         Response response = CommonAPIController.getDashboardCoverage(portfolioId);
