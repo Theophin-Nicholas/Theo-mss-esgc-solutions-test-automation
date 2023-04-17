@@ -109,6 +109,7 @@ public class Environment {
     public static final String ZERO_ASSESSMENT_PASSWORD;
 
     public static final String MESG_APPLICATION_NAME;
+    public static final String X_API_KEY;
     public static  String environment ;
 
     public static final String ODAWITHEXHAUTEDASSEMENTLIMIT_USERNAME;
@@ -194,6 +195,7 @@ public class Environment {
         QA_TEST_ACCOUNT_ID = properties.getProperty("account_id");
         QA_TEST_APPLICATION_ID = properties.getProperty("application_id");
         MESG_APPLICATION_NAME = properties.getProperty("mesg_application_name");
+        X_API_KEY = properties.getProperty("x_api_key");
         VIEWER_ROLE_KEY = properties.getProperty("viewer_role_key");
         ADMIN_ROLE_KEY = properties.getProperty("admin_role_key");
         FULFILLMENT_ROLE_KEY = properties.getProperty("fulfillment_role_key");

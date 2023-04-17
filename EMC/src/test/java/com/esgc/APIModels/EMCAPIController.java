@@ -1046,8 +1046,10 @@ public class EMCAPIController extends APITestBase {
         String payload = "{\n" +
                 "\"usedAssessmentsDelta\": "+value+"\n" +
                 "}";
+        System.out.println("payload = " + payload);
+        System.out.println("EMCEndpoints = " + EMCEndpoints.ASSESSMENT_USAGE);
         try {
-            response = configSpec("x-api-key", "455TEbpBTO4vMaW0NVGcF3EqhHbLhoCu4PMPAFqX")
+            response = configSpec("x-api-key", Environment.X_API_KEY)
                     .when()
                     .body(payload)
                     .pathParam("accountKey", accountKey)

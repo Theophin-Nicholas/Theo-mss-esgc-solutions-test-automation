@@ -416,5 +416,14 @@ Faker faker = new Faker();
         onDemandAssessmentPage.ValidateSortingOnLastUpdateColumn();
     }
 
-
+    @Test(groups = {REGRESSION, UI, COMMON, SMOKE}, description = "UI | On-Demand Reporting | On-Demand Assessments | Verify Different ways to download the portfolio/export file")
+    @Xray(test = {13691})
+    public void verifyDifferentWaysToDownloadThePortfolioTest() {
+        OnDemandAssessmentPage onDemandAssessmentPage = new OnDemandAssessmentPage();
+        onDemandAssessmentPage.navigateToReportingService("On-Demand Assessment");
+        onDemandAssessmentPage.waitForPortfolioTableToLoad();
+        // ESGCA - 13987 Verify that for a portfolio having 0% On Demand Assessment eligible coverage , request assessment button is disabled
+        System.out.println(BrowserUtils.getElementsText(onDemandAssessmentPage.portfolioNamesList));
+        onDemandAssessmentPage.verifyDetailsPanel();
+    }
 }

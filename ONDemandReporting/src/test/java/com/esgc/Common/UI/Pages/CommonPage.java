@@ -90,11 +90,6 @@ public class CommonPage extends UploadPortfolio {
     @FindBy(xpath = "//div[contains(text(),'Select Portfolio')]/../div[2]/following-sibling::div//button[2]")
     public List<WebElement> ExportButton;
 
-
-
-    //-----
-
-
     // To Delete any portfolio
     public void deletePortfolio(String portfolioName) {
         System.out.println("Deleting portfolio: " + portfolioName);
@@ -357,7 +352,6 @@ public class CommonPage extends UploadPortfolio {
         }
     }
 
-
     public void deleteFilesInDownloadsFolder() {
         File dir = new File(BrowserUtils.downloadPath());
         File[] dir_contents = dir.listFiles();
@@ -370,5 +364,4 @@ public class CommonPage extends UploadPortfolio {
         }
         System.out.println("All files in the directory are deleted");
     }
-
 }
