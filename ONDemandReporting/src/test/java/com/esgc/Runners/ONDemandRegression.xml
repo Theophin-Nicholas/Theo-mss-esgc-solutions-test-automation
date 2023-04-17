@@ -17,7 +17,7 @@
 
         <packages>
 
-            <package name="com.esgc.ONDEMAND.UI.Tests.OnDemandEntitlementBundleTests"/>
+            <package name="com.esgc.ONDEMAND.*"/>
            <!-- <package name="com.esgc.API.*"/>
             <package name="com.esgc.DB.*"/>-->
 

@@ -855,7 +855,7 @@ public class OnDemandAssessmentPage extends CommonPage {
         int index = getPortfolioList().indexOf(portfolioName);
         return viewDetailForPortfolio(index);
     }
-    }
+
 
     public boolean viewDetailForPortfolio(int index) {
         if(index == -1) {

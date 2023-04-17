@@ -34,19 +34,19 @@ public class PopUpPage extends CommonPage {
         return BrowserUtils.waitForVisibility(popUpMessage).getText();
     }
 
-    public void validateTheContentOfPopUp(PopUpPage popPage){
+    public void validateTheContentOfPopUp(){
         String expectedPopHeaderText = "Invalid Entitlement";
         String expectedPopMessageLineOne = "Invalid product combinations.";
         String expectedPopMessageLineTwo = "Please contact clientservices@moodys.com for further assistance.";
 
 
-        System.out.println(popPage.popUpHeaderText());
-        System.out.println(popPage.popUpMessageText());
-        assertTestCase.assertEquals(popPage.popUpHeaderText(), expectedPopHeaderText, "The PopUp contains Invalid Entitlement text");
-        assertTestCase.assertTrue(popPage.popUpMessageText().contains(expectedPopMessageLineOne), "The PopUp contains Invalid product combinations text description");
-        assertTestCase.assertTrue(popPage.popUpMessageText().contains(expectedPopMessageLineTwo), "The PopUp contains Please contact clientservices@moodys.com for further assistance text description");
-        assertTestCase.assertTrue(popPage.isOkButtonEnabled(), "the OK button is enabled");
-        popPage.clickOnOKButton();
+        System.out.println(popUpHeaderText());
+        System.out.println(popUpMessageText());
+        assertTestCase.assertEquals(popUpHeaderText(), expectedPopHeaderText, "The PopUp contains Invalid Entitlement text");
+        assertTestCase.assertTrue(popUpMessageText().contains(expectedPopMessageLineOne), "The PopUp contains Invalid product combinations text description");
+        assertTestCase.assertTrue(popUpMessageText().contains(expectedPopMessageLineTwo), "The PopUp contains Please contact clientservices@moodys.com for further assistance text description");
+        assertTestCase.assertTrue(isOkButtonEnabled(), "the OK button is enabled");
+        clickOnOKButton();
 
     }
 
