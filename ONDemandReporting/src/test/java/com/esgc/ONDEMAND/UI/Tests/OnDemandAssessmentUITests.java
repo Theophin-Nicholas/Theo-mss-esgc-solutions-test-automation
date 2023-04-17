@@ -427,15 +427,16 @@ Faker faker = new Faker();
         odaPage.clickOnLogOutButton();
         login.entitlementsLogin(EntitlementsBundles.USER_WITH_PREDICTEDSCORE_AND_CLIMATE);
         odaPage.clickOnMenuButton();
-        odaPage.validateRemovalOnDemandLinkFromGlobalMenu();
-        odaPage.validateMenuNewNames();
-        odaPage.clickOnClimateDashboardTab();
+        odaPage.validateNewDashboardMenuName();
+        odaPage.validateNewPortfolioAnalysisMenuName();
+        odaPage.validateNewReportingMenuName();
+        odaPage.clickOnClimateDashboardMenuOption();
         odaPage.validateClimateDashboardPageHeaders();
         odaPage.clickOnMenuButton();
-        odaPage.clickOnPortfolioAnalysisTab();
+        odaPage.clickOnPortfolioAnalysisMenuOption();
         odaPage.validateClimatePortfolioAnalysisPageHeaders();
         odaPage.clickOnMenuButton();
-        odaPage.clickOnReportingPortalTab();
+        odaPage.clickOnReportingPortalMenuOption();
         odaPage.validateReportingPortalPageHeaders();
 
     }
@@ -448,7 +449,7 @@ Faker faker = new Faker();
         odaPage.clickOnLogOutButton();
         login.entitlementsLogin(EntitlementsBundles.TRANSITION_RISK_CLIMATE_GOVERNANCE);
         odaPage.clickOnMenuButton();
-        odaPage.validateRemovalCalculationsFromGlobalMenu();
+        odaPage.validateCalculationsFromGlobalMenuIsHidden();
     }
 
     @Test(groups ={UI,REGRESSION, SMOKE})

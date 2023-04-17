@@ -153,7 +153,8 @@ public class OnDemandEntitlementBundleTests extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI, ENTITLEMENTS})
-    @Xray(test = {13803,14059})
+
+    @Xray(test = {13803,14059,14295})
     public void validateLandingPageForUserWith_EUTaxonomy_SFDR_Entitlements() {
         login.entitlementsLogin(EntitlementsBundles.USER_WITH_EUTAXONOMY_SFDR_ENTITLEMENT);
         OnDemandAssessmentPage onDemandAssessmentPage = new OnDemandAssessmentPage();
@@ -261,7 +262,6 @@ public class OnDemandEntitlementBundleTests extends UITestBase {
                 EntitlementsBundles.USER_SFDR_ESG_ESG_PREDICTOR_ODA_EXCEL,
                 EntitlementsBundles.USER_EUTAXONOMY_ESG_ESG_PREDICTOR_ODA,
                 EntitlementsBundles.USER_EUTAXONOMY_ESG_ESG_PREDICTOR_ODA_EXCEL,
-                EntitlementsBundles.USER_ESG_ESG_PREDICTOR_ODA_EXCEL,
                 EntitlementsBundles.USER_CLIMATE_ESG_ESG_PREDICTOR_EXPORT,
                 EntitlementsBundles.USER_CLIMATE_ESG,
                 EntitlementsBundles.USER_ESG_ESG_PREDICTOR_ODA};

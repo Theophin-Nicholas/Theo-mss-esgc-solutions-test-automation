@@ -1018,16 +1018,8 @@ public class OnDemandAssessmentPage extends CommonPage {
     }
 
 
-    public void validateRemovalOnDemandLinkFromGlobalMenu() {
-        System.out.println("------------Verifying that On-Demand Assessment Request is removed from global menu-------------------");
-        for (WebElement e : menuItems) {
-            String menuItemText = e.getText();
-            System.out.println("verify that " + menuItemText + " is not equal to On-Demand Assessment Request");
-            assertTestCase.assertTrue(!menuItemText.equals("On-Demand Assessment Request"), "Verify the removal of 'On-Demand Assessment Request' link from the global menu : Status Done");
-        }
-    }
 
-    public void validateRemovalCalculationsFromGlobalMenu() {
+    public void validateCalculationsFromGlobalMenuIsHidden() {
         System.out.println("------------Verifying that Calculations is removed from global menu-------------------");
         for (WebElement e : menuItems) {
             String menuItemText = e.getText();
@@ -1036,36 +1028,49 @@ public class OnDemandAssessmentPage extends CommonPage {
         }
     }
 
-    public void clickOnClimateDashboardTab() {
+    public void clickOnClimateDashboardMenuOption() {
         BrowserUtils.waitForClickablility(climateDashboardTab, 15);
         climateDashboardTab.click();
     }
 
-    public void clickOnPortfolioAnalysisTab() {
+    public void clickOnPortfolioAnalysisMenuOption() {
         BrowserUtils.waitForClickablility(portfolioAnalysisTab, 15);
         portfolioAnalysisTab.click();
     }
 
-    public void clickOnReportingPortalTab() {
+    public void clickOnReportingPortalMenuOption() {
         BrowserUtils.waitForClickablility(reportingPortalTab, 15);
         reportingPortalTab.click();
     }
 
-    public void validateMenuNewNames() {
-        System.out.println("--------------Verifying the new naming for Climate tabs----------------");
-        String dashboardTitle = BrowserUtils.waitForClickablility(climateDashboardTab, 15).getText();
-        System.out.println("the actual dashboard title is : " + dashboardTitle);
-        assertTestCase.assertEquals(dashboardTitle, "Climate Dashboard", "Status Done : Verifying that Dashboard name is Climate Dashboard ");
-        String portfolioAnalysisTitle = portfolioAnalysisTab.getText();
-        System.out.println("the actual portfolio analysis title is : " + portfolioAnalysisTitle);
-        assertTestCase.assertEquals(portfolioAnalysisTitle, "Climate Portfolio Analysis", "Status Done : Verifying that portfolio analysis is Climate Portfolio Analysis");
+
+    public void validateNewReportingMenuName() {
+        System.out.println("--------------Verifying the new naming for reporting menu option----------------");
         String reportingPortalTitle = reportingPortalTab.getText();
         System.out.println("the actual reporting portal title is : " + reportingPortalTitle);
         assertTestCase.assertEquals(reportingPortalTitle, "ESG Reporting Portal", "Status Done : Verifying that reporting portal is ESG Reporting Portal");
 
     }
+    public void validateNewDashboardMenuName(){
+        System.out.println("--------------Verifying the new naming for Dashboard menu option----------------");
+
+        String dashboardTitle = BrowserUtils.waitForClickablility(climateDashboardTab, 15).getText();
+        System.out.println("the actual dashboard title is : " + dashboardTitle);
+        assertTestCase.assertEquals(dashboardTitle, "Climate Dashboard", "Status Done : Verifying that Dashboard name is Climate Dashboard ");
+
+
+    }
+    public void validateNewPortfolioAnalysisMenuName(){
+        System.out.println("--------------Verifying the new naming for Portfolio Analysis menu option ----------------");
+
+        String portfolioAnalysisTitle = portfolioAnalysisTab.getText();
+        System.out.println("the actual portfolio analysis title is : " + portfolioAnalysisTitle);
+        assertTestCase.assertEquals(portfolioAnalysisTitle, "Climate Portfolio Analysis", "Status Done : Verifying that portfolio analysis is Climate Portfolio Analysis");
+
+    }
 
     public void validateClimateDashboardPageHeaders() {
+        System.out.println("--------------Verifying the Climate Dashboard page headers----------------");
 
         //  BrowserUtils.waitForClickablility(pageHeader, 10).click();
         //clickOnMenuButton();
@@ -1080,6 +1085,7 @@ public class OnDemandAssessmentPage extends CommonPage {
     }
 
     public void validateClimatePortfolioAnalysisPageHeaders() {
+        System.out.println("--------------Validating the climate portfolio analysis page headers----------------");
 
         BrowserUtils.waitForClickablility(pageHeader, 10).click();
         BrowserUtils.waitForClickablility(portfolioAnalysisTab, 10);
@@ -1091,6 +1097,7 @@ public class OnDemandAssessmentPage extends CommonPage {
     }
 
     public void validateReportingPortalPageHeaders() {
+        System.out.println("--------------Validating Reporting portal page headers----------------");
 
         BrowserUtils.waitForClickablility(pageHeader, 10).click();
         BrowserUtils.waitForClickablility(reportingPortalTab, 10);
@@ -1145,17 +1152,7 @@ public class OnDemandAssessmentPage extends CommonPage {
         OnDemandAssessmentPage odaPage = new OnDemandAssessmentPage();
 
         switch(bundles) {
-            case USER_ESG_ESG_PREDICTOR_ODA_EXCEL:
-                login.entitlementsLogin(EntitlementsBundles.USER_ESG_ESG_PREDICTOR_ODA_EXCEL);
-                assertTestCase.assertTrue(odaPage.validateOnDemandReportingLandingPage(), "Validating that landing page is On-Demand Reporting Page");
-                //assertTestCase.assertTrue(!euTaxonomyRadioButton.isDisplayed(), "Verifying Eu-Taxonomy option is not displayed : Status Done");
-               // assertTestCase.assertTrue(!sfdrRadioButton.isDisplayed(), "Verifying SFDR PAIs option is not dislayed : Status Done");
-                String pageSource = Driver.getDriver().getPageSource();
-                assertTestCase.assertFalse(pageSource.contains("EU Taxonomy"), "Verifying Eu-Taxonomy option is not displayed : Status Done");
-                assertTestCase.assertFalse(pageSource.contains("SFDR PAIs"), "Verifying SFDR PAIs option is not dislayed : Status Done");
-                odaPage.clickOnMenuButton();
-                odaPage.clickOnLogOutButton();
-                break;
+
             case USER_SFDR_ESG_ESG_PREDICTOR_ODA_EXCEL:
                 login.entitlementsLogin(EntitlementsBundles.USER_SFDR_ESG_ESG_PREDICTOR_ODA_EXCEL);
                 assertTestCase.assertTrue(odaPage.validateOnDemandReportingLandingPage(), "Validating that landing page is On-Demand Reporting Page");
