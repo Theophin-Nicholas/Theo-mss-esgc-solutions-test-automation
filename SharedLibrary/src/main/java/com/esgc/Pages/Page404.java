@@ -28,7 +28,7 @@ public class Page404 {
     public WebElement returnToMoodysESG360Button;
 
     public void verify404Page() {
-        assertTestCase.assertTrue(true);
+        BrowserUtils.waitForVisibility(pageHeader, 15);
         assertTestCase.assertTrue(pageHeader.isDisplayed(), "Page header is displayed");
         assertTestCase.assertTrue(pageTitle.isDisplayed(), "Page title is displayed");
         assertTestCase.assertTrue(pageStatement.isDisplayed(), "Page statement is displayed");
