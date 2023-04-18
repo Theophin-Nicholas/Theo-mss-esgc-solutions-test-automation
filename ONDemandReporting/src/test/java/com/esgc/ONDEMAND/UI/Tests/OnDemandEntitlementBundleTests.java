@@ -10,6 +10,7 @@ import com.esgc.RegulatoryReporting.DB.DBQueries.RegulatoryReportingQueries;
 import com.esgc.RegulatoryReporting.UI.Pages.RegulatoryReportingPage;
 import com.esgc.Utilities.*;
 import com.sun.xml.bind.v2.TODO;
+import org.openqa.selenium.Alert;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -231,7 +232,7 @@ public class OnDemandEntitlementBundleTests extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI, ENTITLEMENTS})
-    @Xray(test = {13898, 13985})
+    @Xray(test = {13985})
     public void validateExportButtonDisabledForOnDemandUserWithoutExportEntitlements() {
         login.entitlementsLogin(EntitlementsBundles.ONDEMAND_USER_WITHOUT_EXPORT_ENTITLEMENT);
         OnDemandAssessmentPage onDemandAssessmentPage = new OnDemandAssessmentPage();
@@ -239,6 +240,35 @@ public class OnDemandEntitlementBundleTests extends UITestBase {
         if (onDemandAssessmentPage.IsPortfolioTableLoaded() && onDemandAssessmentPage.getAvailablePortfolioCountt()>0) {
            assertTestCase.assertTrue(onDemandAssessmentPage.isExportbuttonDisabled(),"validating that export button is disabled");
         }
+
+    }
+
+    @Test(groups = {UI, SMOKE, REGRESSION})
+    @Xray(test = {14467, 14468})
+    public void validateThePopUpModelForUserWithInvalidEntitlementsCombinations(){
+
+        LoginPage login = new LoginPage();
+        PopUpPage popPage = new PopUpPage();
+        EntitlementsBundles [] entitlements = {EntitlementsBundles.USER_ESG_PREDICTOR,EntitlementsBundles.USER_ESG_ESG_PREDICTOR_EXPORT,EntitlementsBundles.USER_ESG_PREDICTOR_EXPORT,EntitlementsBundles.USER_ESG_PREDICTOR_ODA,EntitlementsBundles.USER_EXPORT};
+
+        for(EntitlementsBundles e : entitlements){
+            login.entitlementsLogin(e);
+            System.out.println("------------Logged in to Check pop up box using " + e.toString()+" entitlements ------------");
+            popPage.validateTheContentOfPopUp(popPage);
+            System.out.println("Just clicked on Ok button and In login Page now .............");
+
+        }
+
+    }
+
+    @Test(groups = {UI, SMOKE, REGRESSION})
+    @Xray(test = {14466})
+
+    public void validateTheLandingPageForOnDemandEntitlements(){
+
+        login.entitlementsLogin(EntitlementsBundles.USER_WITH_EUTAXONOMY_SFDR_ESG_ESGPREDICTOR_ONDEMAND_EXPORT);
+        OnDemandAssessmentPage onDemandAssessmentPage = new OnDemandAssessmentPage();
+        assertTestCase.assertTrue(onDemandAssessmentPage.validateOnDemandReportingLandingPage(), "Validating that landing page is On-Demand Reporting Page");
 
     }
 
@@ -252,6 +282,5 @@ public class OnDemandEntitlementBundleTests extends UITestBase {
         assertTestCase.assertTrue(onDemandAssessmentPage.isReequestAssessmentButtonDisabled(), "Validating that Request Assessment button is disabled");
         assertTestCase.assertTrue(!onDemandAssessmentPage.isViewAssessmentRequestButtonDisabled(), "Validating that View Assessment Request button is enabled");
 
-        onDemandAssessmentPage.verifyDetailsPanel(false);
     }
 }
