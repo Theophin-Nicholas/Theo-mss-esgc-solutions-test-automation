@@ -611,7 +611,7 @@ public abstract class PageBase {
         //wait.until(ExpectedConditions.elementToBeClickable(menu));
         BrowserUtils.waitForClickablility(menu, 10);
         BrowserUtils.clickWithJS(menu);
-
+        System.out.println("Menu clicked");
     }
 
     /**
@@ -723,7 +723,7 @@ public abstract class PageBase {
 
     public void navigateToPageFromMenu(String page,String navigateTo) {
         String URL = Driver.getDriver().getCurrentUrl();
-        String pageName = URL.substring(URL.lastIndexOf("/")+1,URL.length());;
+        String pageName = URL.substring(URL.lastIndexOf("/")+1,URL.length());
 
         if (!pageName.endsWith(page)) {
             clickMenu();

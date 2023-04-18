@@ -81,7 +81,8 @@ Faker faker = new Faker();
         String portfolioName = "500 predicted portfolio";
         OnDemandAssessmentPage onDemandAssessmentPage = new OnDemandAssessmentPage();
         //onDemandAssessmentPage.selectPortfolioByNameFromPortfolioSelectionModal(portfolioName);
-        onDemandAssessmentPage.navigateToPageFromMenu("reportingservice","On-Demand Reporting");
+        onDemandAssessmentPage.navigateToPageFromMenu("reportingservice", "ESG Reporting Portal");
+
         BrowserUtils.waitForVisibility(onDemandAssessmentPage.portfolioNamesList, 15);
         assertTestCase.assertTrue(onDemandAssessmentPage.verifyPortfolio(portfolioName), "Portfolio is not available");
         onDemandAssessmentPage.selectPortfolio(portfolioName);
@@ -246,7 +247,7 @@ Faker faker = new Faker();
         String portfolioName = "500 predicted portfolio";
         OnDemandAssessmentPage onDemandAssessmentPage = new OnDemandAssessmentPage();
         //onDemandAssessmentPage.selectPortfolioByNameFromPortfolioSelectionModal(portfolioName);
-        onDemandAssessmentPage.navigateToPageFromMenu("reportingservice","On-Demand Reporting");
+        onDemandAssessmentPage.navigateToPageFromMenu("reportingservice", "ESG Reporting Portal");
         BrowserUtils.waitForVisibility(onDemandAssessmentPage.portfolioNamesList, 15);
 
         onDemandAssessmentPage.verifyMethodologies();
@@ -361,7 +362,7 @@ Faker faker = new Faker();
 
         OnDemandAssessmentPage ODAPage = new OnDemandAssessmentPage();
         //onDemandAssessmentPage.selectPortfolioByNameFromPortfolioSelectionModal(portfolioName);
-        ODAPage.navigateToPageFromMenu("reportingservice","On-Demand Reporting");
+        ODAPage.navigateToPageFromMenu("reportingservice","ESG Reporting Portal");
         BrowserUtils.waitForVisibility(ODAPage.portfolioNamesList, 15);
 
         String portfolioName = "500 predicted portfolio";
@@ -414,13 +415,21 @@ Faker faker = new Faker();
     }
 
     @Test(groups = {REGRESSION, UI, COMMON, SMOKE}, description = "UI | On-Demand Reporting | On-Demand Assessments | Verify Different ways to download the portfolio/export file")
-    @Xray(test = {13691})
+    @Xray(test = {13691, 13694, 13839, 14020, 14024, 14068, 14073})
     public void verifyDifferentWaysToDownloadThePortfolioTest() {
         OnDemandAssessmentPage onDemandAssessmentPage = new OnDemandAssessmentPage();
         onDemandAssessmentPage.navigateToReportingService("On-Demand Assessment");
         onDemandAssessmentPage.waitForPortfolioTableToLoad();
         // ESGCA - 13987 Verify that for a portfolio having 0% On Demand Assessment eligible coverage , request assessment button is disabled
         System.out.println(BrowserUtils.getElementsText(onDemandAssessmentPage.portfolioNamesList));
-        onDemandAssessmentPage.verifyDetailsPanel();
+        if(!onDemandAssessmentPage.verifyPortfolio("500 predicted portfolio")){
+            onDemandAssessmentPage.uploadPortfolio("500predictedportfolio");
+        }
+        onDemandAssessmentPage.viewDetailForPortfolio("500 predicted portfolio");
+        assertTestCase.assertTrue(onDemandAssessmentPage.identifyPredictedCompanies(), "Identify predicted companies");
+
+        onDemandAssessmentPage.verifyDetailsPanel(true);
+        onDemandAssessmentPage.verifyDownloadPortfolio("page");
+        onDemandAssessmentPage.verifyDownloadPortfolio("details");
     }
 }

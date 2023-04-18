@@ -2724,4 +2724,18 @@ public class EntityClimateProfilePage extends ClimatePageBase {
     }
 
 
+    public List<String> getESGSummaryDetails() {
+        return null;
+    }
+
+    public List<String> readEsgMaterialityColumns() {
+        return null;
+    }
+
+    public void validateSubCategories() {
+
+    }
+
+    public void validateEsgMaterialityLegends() {
+    }
 }

@@ -679,37 +679,7 @@ public class RegulatoryReportingPage extends CommonPage {
         return true;
     }
 
-    public ExcelUtil getExcelData(String excelName, int sheetIndex) {
-        File dir = new File(BrowserUtils.downloadPath());
-        File[] dir_contents = dir.listFiles();
-        assert dir_contents != null;
-        File excelFile = Arrays.stream(dir_contents).filter(e -> (e.getName().contains(excelName))).findAny().get();
-        //System.out.println("excelFile = " + excelFile.getAbsolutePath());
-        if (!excelFile.exists()) {
-            System.out.println(excelName + " file does not exist");
-            return null;
-        }
-        //System.out.println(excelName + " file found");
-        //System.out.println("excelFile = " + excelFile.getAbsolutePath());
-        ExcelUtil excelUtil = new ExcelUtil(excelFile.getAbsolutePath(), sheetIndex);
-        return excelUtil;
-    }
 
-    public ExcelUtil getExcelData(String excelName, String sheetName) {
-        File dir = new File(BrowserUtils.downloadPath());
-        File[] dir_contents = dir.listFiles();
-        assert dir_contents != null;
-        File excelFile = Arrays.stream(dir_contents).filter(e -> (e.getName().contains(excelName))).findAny().get();
-        //System.out.println("excelFile = " + excelFile.getAbsolutePath());
-        if (!excelFile.exists()) {
-            System.out.println(excelName + " file does not exist");
-            return null;
-        }
-        //System.out.println(excelName + " file found");
-        //System.out.println("excelFile = " + excelFile.getAbsolutePath());
-        ExcelUtil excelUtil = new ExcelUtil(excelFile.getAbsolutePath(), sheetName);
-        return excelUtil;
-    }
 
     public List<String> getExcelDataList(String excelName, String sheetName, int columnIndex) {
         File dir = new File(BrowserUtils.downloadPath());

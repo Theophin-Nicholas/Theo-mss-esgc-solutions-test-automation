@@ -4,7 +4,10 @@ import com.esgc.Common.API.Controllers.CommonAPIController;
 import com.esgc.Common.UI.Pages.LoginPage;
 import com.esgc.Common.UI.TestBases.UITestBase;
 import com.esgc.ONDEMAND.API.Controllers.OnDemandFilterAPIController;
+import com.esgc.ONDEMAND.DB.DBQueries.OnDemandAssessmentQueries;
 import com.esgc.ONDEMAND.UI.Pages.OnDemandAssessmentPage;
+import com.esgc.RegulatoryReporting.DB.DBQueries.RegulatoryReportingQueries;
+import com.esgc.RegulatoryReporting.UI.Pages.RegulatoryReportingPage;
 import com.esgc.Utilities.*;
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -13,6 +16,7 @@ import org.testng.annotations.Test;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import static com.esgc.Utilities.Groups.*;
 
@@ -144,21 +148,82 @@ public class OnDemandEntitlementBundleTests extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI, ENTITLEMENTS})
-    @Xray(test = {13803})
+    @Xray(test = {13803, 14347, 14348, 14364, 14365, 14366})
     public void validateLandingPageForUserWith_EUTaxonomy_SFDR_Entitlements() {
         login.entitlementsLogin(EntitlementsBundles.USER_WITH_EUTAXONOMY_SFDR_ENTITLEMENT);
         OnDemandAssessmentPage onDemandAssessmentPage = new OnDemandAssessmentPage();
-        assertTestCase.assertTrue(onDemandAssessmentPage.validateOnDemandReportingLandingPage(), "Validating if landing page is On-Demand Repoting Page");
+        assertTestCase.assertTrue(onDemandAssessmentPage.validateOnDemandReportingLandingPage(), "Validating if landing page is On-Demand Reporting Page");
         if (onDemandAssessmentPage.IsPortfolioTableLoaded()) {
             List<String> reportingOptions = Arrays.asList(new String[]{"EU Taxonomy","SFDR PAIs"});
             onDemandAssessmentPage.ValidateReportingOptions(reportingOptions);
             assertTestCase.assertTrue(!onDemandAssessmentPage.getReportingList().contains("On-Demand Assessment"),"Validate that OnDemand option is not visible");
         }
 
+        RegulatoryReportingPage reportingPage = new RegulatoryReportingPage();
+
+        //upload 100% SFDR coverage portfolio and verify
+        String portfolioName = "SFDROnlyPortfolioDelete";
+        String portfolioFilePath = ImportPortfolioUtility.getOnDemandPortfolioFileToUpload(Arrays.asList(new String[]{"SFDR Only"}), "", 10, portfolioName,false);
+        reportingPage.uploadPortfolio(portfolioFilePath, "OnDemand");
+        BrowserUtils.wait(10);
+        Driver.getDriver().navigate().refresh();
+//        try {
+            reportingPage.selectReportingOptionByName("SFDR");
+            reportingPage.verifyPortfolio(portfolioName);
+            reportingPage.verifySFDRPortfolioCoverageForUI(portfolioName);
+            assertTestCase.assertTrue(reportingPage.verifyPortfolioEnabled(portfolioName), "Validating that the portfolio is enabled for SFDR");
+            reportingPage.selectReportingOptionByName("EU Taxonomy");
+            reportingPage.verifyEUTaxonomyPortfolioCoverageForUI(portfolioName);
+            assertTestCase.assertFalse(reportingPage.verifyPortfolioEnabled(portfolioName), "Validating that the portfolio is disabled for EU Taxonomy");
+            CommonAPIController.deletePortfolioThroughAPI(portfolioName);
+//        } catch (Exception e) {
+//            CommonAPIController.deletePortfolioThroughAPI(portfolioName);
+//            e.printStackTrace();
+//        }
+
+        //upload 100% EU Taxonomy coverage portfolio and verify
+        portfolioName = "EUTaxonomyOnlyPortfolioDelete";
+        portfolioFilePath = ImportPortfolioUtility.getOnDemandPortfolioFileToUpload(Arrays.asList(new String[]{"EU Taxonomy Only"}), "", 10, portfolioName,false);
+        reportingPage.uploadPortfolio(portfolioFilePath, "OnDemand");
+        BrowserUtils.wait(10);
+        Driver.getDriver().navigate().refresh();
+//        try {
+            reportingPage.selectReportingOptionByName("SFDR");
+            reportingPage.verifyPortfolio(portfolioName);
+            reportingPage.verifySFDRPortfolioCoverageForUI(portfolioName);
+            assertTestCase.assertFalse(reportingPage.verifyPortfolioEnabled(portfolioName), "Validating that the portfolio is disabled for SFDR");
+            reportingPage.selectReportingOptionByName("EU Taxonomy");
+//            reportingPage.verifyEUTaxonomyPortfolioCoverageForUI(portfolioName);
+//            assertTestCase.assertFalse(reportingPage.verifyPortfolioEnabled(portfolioName), "Validating that the portfolio is disabled for EU Taxonomy");
+            CommonAPIController.deletePortfolioThroughAPI(portfolioName);
+//        } catch (Exception e) {
+//            CommonAPIController.deletePortfolioThroughAPI(portfolioName);
+//            e.printStackTrace();
+//        }
+
+        //User upload Portfolio A with entities not covered by SFDR nor EU Taxonomy
+        portfolioName = "PortfolioDelete";
+        portfolioFilePath = ImportPortfolioUtility.getOnDemandPortfolioFileToUpload(Arrays.asList(new String[]{"NotSFDRNotEUTaxonomy"}), "", 10, portfolioName,false);
+        reportingPage.uploadPortfolio(portfolioFilePath, "OnDemand");
+        BrowserUtils.wait(10);
+        Driver.getDriver().navigate().refresh();
+//        try {
+            reportingPage.selectReportingOptionByName("SFDR");
+            reportingPage.verifyPortfolio(portfolioName);
+            reportingPage.verifySFDRPortfolioCoverageForUI(portfolioName);
+            assertTestCase.assertFalse(reportingPage.verifyPortfolioEnabled(portfolioName), "Validating that the portfolio is disabled for SFDR");
+            reportingPage.selectReportingOptionByName("EU Taxonomy");
+            reportingPage.verifyEUTaxonomyPortfolioCoverageForUI(portfolioName);
+            assertTestCase.assertTrue(reportingPage.verifyPortfolioEnabled(portfolioName), "Validating that the portfolio is enabled for EU Taxonomy");
+            CommonAPIController.deletePortfolioThroughAPI(portfolioName);
+//        } catch (Exception e) {
+//            CommonAPIController.deletePortfolioThroughAPI(portfolioName);
+//            e.printStackTrace();
+//        }
     }
 
     @Test(groups = {REGRESSION, UI, ENTITLEMENTS})
-    @Xray(test = {13985})
+    @Xray(test = {13898, 13985})
     public void validateExportButtonDisabledForOnDemandUserWithoutExportEntitlements() {
         login.entitlementsLogin(EntitlementsBundles.ONDEMAND_USER_WITHOUT_EXPORT_ENTITLEMENT);
         OnDemandAssessmentPage onDemandAssessmentPage = new OnDemandAssessmentPage();
@@ -166,6 +231,6 @@ public class OnDemandEntitlementBundleTests extends UITestBase {
         if (onDemandAssessmentPage.IsPortfolioTableLoaded() && onDemandAssessmentPage.getAvailablePortfolioCountt()>0) {
            assertTestCase.assertTrue(onDemandAssessmentPage.isExportbuttonDisabled(),"validating that export button is disabled");
         }
-
+        onDemandAssessmentPage.verifyDetailsPanel(false);
     }
 }
