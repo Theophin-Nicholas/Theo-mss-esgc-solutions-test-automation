@@ -156,7 +156,7 @@ public class PortfolioScore extends UITestBase {
     public void verifyPortfolioScoreNotUpdated() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         String title = "Score";
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
         test.info("Navigated to Portfolio Analysis Page");
         researchLinePage.navigateToResearchLine("Carbon Footprint");
         assertTestCase.assertTrue(researchLinePage.checkIfPortfolioLoadMaskIsDisplayed(title), "Widget is loading");

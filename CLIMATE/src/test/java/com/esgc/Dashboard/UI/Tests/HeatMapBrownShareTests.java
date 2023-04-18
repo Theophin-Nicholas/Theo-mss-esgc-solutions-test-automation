@@ -29,7 +29,7 @@ public class HeatMapBrownShareTests extends DashboardUITestBase {
     public void VerifyBrownShareAssessmentCategories() {
 
         DashboardPage dashboardPage = new DashboardPage();
-        dashboardPage.navigateToPageFromMenu("Dashboard");
+        dashboardPage.navigateToPageFromMenu("Climate Dashboard");
         dashboardPage.selectSamplePortfolioFromPortfolioSelectionModal();
         BrowserUtils.wait(5);
         dashboardPage.selectOrDeselectHeatMapSection("Brown Share Assessment");
@@ -62,7 +62,7 @@ public class HeatMapBrownShareTests extends DashboardUITestBase {
     @Xray(test = {12264})
     public void verifyBrownShareCategoryPercentages() {
         DashboardPage dashboardPage = new DashboardPage();
-        dashboardPage.navigateToPageFromMenu("Dashboard");
+        dashboardPage.navigateToPageFromMenu("Climate Dashboard");
         test.info("Navigated to Dashboard Page");
         dashboardPage.selectSamplePortfolioFromPortfolioSelectionModal();
         dashboardPage.waitForDataLoadCompletion();
@@ -88,7 +88,7 @@ public class HeatMapBrownShareTests extends DashboardUITestBase {
     @Xray(test = {12323, 12324})
     public void compareUIandDBHeatMapBrownShareData() {
         DashboardPage dashboardPage = new DashboardPage();
-        dashboardPage.navigateToPageFromMenu("Dashboard");
+        dashboardPage.navigateToPageFromMenu("Climate Dashboard");
         dashboardPage.selectSamplePortfolioFromPortfolioSelectionModal();
         BrowserUtils.wait(5);
         dashboardPage.selectOrDeselectHeatMapSection("Brown Share Assessment");
@@ -141,7 +141,7 @@ public class HeatMapBrownShareTests extends DashboardUITestBase {
     @Xray(test = {12322})
     public void compareUIandApiHeatMapBrownShareData() {
         DashboardPage dashboardPage = new DashboardPage();
-        dashboardPage.navigateToPageFromMenu("Dashboard");
+        dashboardPage.navigateToPageFromMenu("Climate Dashboard");
         dashboardPage.selectSamplePortfolioFromPortfolioSelectionModal();
         BrowserUtils.wait(5);
         dashboardPage.selectOrDeselectHeatMapSection("Brown Share Assessment");

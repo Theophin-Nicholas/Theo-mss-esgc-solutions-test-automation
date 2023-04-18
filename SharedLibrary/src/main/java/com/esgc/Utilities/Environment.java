@@ -112,6 +112,9 @@ public class Environment {
     public static final String X_API_KEY;
     public static  String environment ;
 
+    public static final String ODAWITHEXHAUTEDASSEMENTLIMIT_USERNAME;
+    public static final String ODAWITHEXHAUTEDASSEMENTLIMIT_PASSWORD;
+
 
     static String getPropertiesPath() {
         return System.getProperty("user.dir") + File.separator + "src" +
@@ -228,5 +231,8 @@ public class Environment {
         ONDEMAND_USER_WITHOUT_EXPORT_ENTITLEMENT_PASSWORD = properties.getProperty("ONDEMAND_USER_Without_Export_Entitlement_password");
         ZERO_ASSESSMENT_USERNAME = properties.getProperty("Zero_Assessment_username");
         ZERO_ASSESSMENT_PASSWORD = properties.getProperty("Zero_Assessment_password");
+
+        ODAWITHEXHAUTEDASSEMENTLIMIT_USERNAME = properties.getProperty("oda_with_exhausted_AssessmentLimit_username");
+        ODAWITHEXHAUTEDASSEMENTLIMIT_PASSWORD = properties.getProperty("oda_with_exhausted_AssessmentLimit_password");
     }
 }

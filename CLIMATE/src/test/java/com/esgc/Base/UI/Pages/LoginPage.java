@@ -22,11 +22,11 @@ public class LoginPage extends ClimatePageBase {
     public WebElement loginButton;
     @FindBy(id = "idp-discovery-submit")
     public List<WebElement> loginButtons;
-    @FindBy(id = "idp-discovery-username")
+    @FindBy(xpath = "//input[@id = 'idp-discovery-username']")
     public WebElement usernameBox;
 
-    @FindBy(id = "idp-discovery-username")
-    public List<WebElement> usernameBoxs;
+   /* @FindBy(id = "idp-discovery-username")
+    public List<WebElement> usernameBoxs;*/
 
     @FindBy(id = "okta-signin-username")
     public WebElement PTusernameBox;

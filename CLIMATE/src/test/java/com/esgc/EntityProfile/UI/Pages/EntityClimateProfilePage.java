@@ -44,7 +44,7 @@ public class EntityClimateProfilePage extends ClimatePageBase {
     @FindBy(xpath = "//div[@aria-labelledby='alert-dialog-title']/div[@style]//*[text()]")
     public List<WebElement> companyHeaderItems;
 
-    @FindBy(xpath="//span[@data-testid='confidence_level_test_id_2']")
+    @FindBy(xpath = "//span[@data-testid='confidence_level_test_id_2']")
     public WebElement confidenceLevel;
 
     @FindBy(xpath = " (//*[name()='g'][contains(@class,'highcharts-legend-item highcharts-line-')])")
@@ -452,7 +452,6 @@ public class EntityClimateProfilePage extends ClimatePageBase {
     public List<WebElement> esgScores;
 
 
-
     //Ignore first element
     @FindBy(xpath = "//div[ @id='portfolio_box' ]/div/div/div/div")
     public List<WebElement> esgScorePillars;
@@ -529,6 +528,9 @@ public class EntityClimateProfilePage extends ClimatePageBase {
     @FindBy(xpath = "//body/div[@id='company-summary-panel']/div/div/div[5]")
     public WebElement companyDrawerSector;
 
+    @FindBy(xpath = "//button[@id='ref_Meth_button']")
+    public WebElement ReferenceAndMethodology_Button;
+
 
     ///============= Methods
 
@@ -554,15 +556,15 @@ public class EntityClimateProfilePage extends ClimatePageBase {
     }
 
     public boolean validateGlobalCompanyNameHeader(String companyName) {
-        try{
-            return wait.until(ExpectedConditions.visibilityOf(Driver.getDriver().findElement(By.xpath("//li//span[text()='"+companyName+"']")))).isDisplayed();
-        }catch(Exception e){
+        try {
+            return wait.until(ExpectedConditions.visibilityOf(Driver.getDriver().findElement(By.xpath("//li//span[text()='" + companyName + "']")))).isDisplayed();
+        } catch (Exception e) {
             return false;
         }
     }
 
     public void clickGlobalHeader() {
-        BrowserUtils.waitForClickablility(globalHeaderCompanyNameLabel,20).click();
+        BrowserUtils.waitForClickablility(globalHeaderCompanyNameLabel, 20).click();
     }
 
     public void clickSubsidiaryCompaniesLink() {
@@ -571,15 +573,15 @@ public class EntityClimateProfilePage extends ClimatePageBase {
 
     public void verifySubsidiaryCompaniesCount(int count) {
         String subsidiaryText = subsidiaryLink.getText();
-        subsidiaryText = subsidiaryText.substring(0,subsidiaryText.indexOf(" "));
-        assertTestCase.assertEquals(count, Integer.parseInt(subsidiaryText),"Verification of Subsidiary Companies Count");
+        subsidiaryText = subsidiaryText.substring(0, subsidiaryText.indexOf(" "));
+        assertTestCase.assertEquals(count, Integer.parseInt(subsidiaryText), "Verification of Subsidiary Companies Count");
     }
 
     public boolean verifySubsidiaryCompaniesLink() {
         try {
-            BrowserUtils.waitForVisibility(subsidiaryLink,30);
+            BrowserUtils.waitForVisibility(subsidiaryLink, 30);
             return true;
-        }catch(Exception e){
+        } catch (Exception e) {
             return false;
         }
     }
@@ -587,31 +589,31 @@ public class EntityClimateProfilePage extends ClimatePageBase {
     public void verifySubsidiaryCompaniesPopup(String companyName) {
         verifyCompanyNameInCoveragePopup(companyName);
         verifyCompanyIsClickableInCoveragePopup(companyName);
-        assertTestCase.assertTrue(subsidiaryCompaniesHeader.isDisplayed(),"Verify Subsidiary Companies popup header");
+        assertTestCase.assertTrue(subsidiaryCompaniesHeader.isDisplayed(), "Verify Subsidiary Companies popup header");
 
-        String expDescription="Unless assessed, subsidiaries have the same score as their parent company";
-        String actDescription=subsidiaryCompaniesPopupDescription.getText();
-        assertTestCase.assertEquals(actDescription,expDescription,"Verify Subsidiary Companies popup description");
+        String expDescription = "Unless assessed, subsidiaries have the same score as their parent company";
+        String actDescription = subsidiaryCompaniesPopupDescription.getText();
+        assertTestCase.assertEquals(actDescription, expDescription, "Verify Subsidiary Companies popup description");
 
-        assertTestCase.assertEquals(subsidiaryCompaniesTableColumns.get(0).getText(),"Company Name","Verify Subsidiary Companies Table columns");
-        assertTestCase.assertEquals(subsidiaryCompaniesTableColumns.get(1).getText(),"ESG Score","Verify Subsidiary Companies Table columns");
+        assertTestCase.assertEquals(subsidiaryCompaniesTableColumns.get(0).getText(), "Company Name", "Verify Subsidiary Companies Table columns");
+        assertTestCase.assertEquals(subsidiaryCompaniesTableColumns.get(1).getText(), "ESG Score", "Verify Subsidiary Companies Table columns");
     }
 
     public boolean verifySubsidiaryCompaniesSectionInCoveragePopup() {
-        try{
+        try {
             return subsidiaryCompaniesHeader.isDisplayed();
-        }catch(Exception e){
+        } catch (Exception e) {
             return false;
         }
     }
 
     public void verifyCompanyNameInCoveragePopup(String subsidiaryCompanyName) {
-        String xpath = "//div[contains(@class,'CompanyNameWrapper')]//span[@title][text()='"+subsidiaryCompanyName+"']";
+        String xpath = "//div[contains(@class,'CompanyNameWrapper')]//span[@title][text()='" + subsidiaryCompanyName + "']";
         assertTestCase.assertEquals(Driver.getDriver().findElements(By.xpath(xpath)).size(), 1);
     }
 
     public void verifyCompanyIsClickableInCoveragePopup(String companyName) {
-        String xpath = "//div[contains(@class,'CompanyNameWrapper')]//span[@title][text()='"+companyName+"']";
+        String xpath = "//div[contains(@class,'CompanyNameWrapper')]//span[@title][text()='" + companyName + "']";
         WebElement element = Driver.getDriver().findElement(By.xpath(xpath));
         assertTestCase.assertTrue(element.getCssValue("text-decoration").contains("underline"));
     }
@@ -639,7 +641,7 @@ public class EntityClimateProfilePage extends ClimatePageBase {
 
     public void validateCompanyHeader(String companyName) {
         List<String> actualHeaderItems = new ArrayList<>();
-        for(WebElement item:companyHeaderItems) {
+        for (WebElement item : companyHeaderItems) {
             actualHeaderItems.add(item.getText());
         }
 
@@ -651,15 +653,15 @@ public class EntityClimateProfilePage extends ClimatePageBase {
         expectedHeaderItems.add("Reference and Methodologies");
         expectedHeaderItems.add("ESC");
 
-        for(String expItem:expectedHeaderItems) {
+        for (String expItem : expectedHeaderItems) {
             boolean matched = false;
-            for(String actItem:actualHeaderItems){
-                if(actItem.contains(expItem)){
+            for (String actItem : actualHeaderItems) {
+                if (actItem.contains(expItem)) {
                     matched = true;
                     break;
                 }
             }
-            assertTestCase.assertTrue(matched, expItem+" is not available in the header");
+            assertTestCase.assertTrue(matched, expItem + " is not available in the header");
         }
     }
 
@@ -696,9 +698,9 @@ public class EntityClimateProfilePage extends ClimatePageBase {
     }
 
     public boolean IsPdfDownloadButtonAvailable() {
-        try{
-         return pdfDownloadButton.isDisplayed();
-        }catch(Exception e){
+        try {
+            return pdfDownloadButton.isDisplayed();
+        } catch (Exception e) {
             return false;
         }
     }
@@ -1372,16 +1374,20 @@ public class EntityClimateProfilePage extends ClimatePageBase {
     }
 
     public boolean clickAndVerifyMethodologyLink(String researchLine) {
-        String METHODOLOGY_PHYSICAL_CLIMATE_RISK_JAN_2022 = "Methodology_CorporatePhysicalClimateRiskOperationsRisk(Jan2022)";
-        String TRANSITION_RISK_TEMPERATURE_ALIGNMENT = "Methodology_Climate_TemperatureAlignmentData";
-        String TRANSITION_RISK = "Methodology_Climate_ClimateRiskAssessment";
-        String DEFAULT = "Methodology_VEC_Climate_v4";
+        String METHODOLOGY_PHYSICAL_CLIMATE_RISK_JAN_2022 = "Methodology_Corporate Physical Climate Risk  Operations Risk";
+        String PhysicalRiskManagementMethodology = "Methodology_VEC_Climate";
+        String TemperatureAlignmentMethodology = "Methodology_Climate_Temperature Alignment Data";
+        String TransitionRiskMethodology = "Methodology_Climate_Climate Risk Assessment";
+        String ControversyRiskAssessmentMethodology = "Controversy Risk Assessment Methodology";
+        // String DEFAULT = researchLine  ; //"Methodology_VEC_Climate_v4";
+
         try {
-            WebElement methodology;
-            if (researchLine.equals("Physical Risk"))
-                methodology = Driver.getDriver().findElement(By.xpath("//span[text()='" + researchLine + "']/../../../..//a[contains(@id,'link-test-id')]"));
+            // methodology;
+           /*    if (researchLine.equals("Physical Risk"))
+             methodology = Driver.getDriver().findElement(By.xpath("//span[text()='" + researchLine + "']/../../../..//a[contains(@id,'link-test-id')]"));
             else
-                methodology = Driver.getDriver().findElement(By.xpath("//span[contains(text(),'Risk')]/../../..//div[text()='" + researchLine + "']/../../../..//a[contains(@id,'link-test-id')]"));
+                methodology = Driver.getDriver().findElement(By.xpath("//span[contains(text(),'Risk')]/../../..//div[text()='" + researchLine + "']/../../../..//a[contains(@id,'link-test-id')]"));*/
+            WebElement methodology = Driver.getDriver().findElement(By.xpath("//a[text()='" + researchLine + "']"));
 
             wait.until(ExpectedConditions.visibilityOf(methodology)).click();
             //Switch to the new tab
@@ -1392,20 +1398,21 @@ public class EntityClimateProfilePage extends ClimatePageBase {
                     if (!handle.equals(currentWindowHandle)) {
                         Driver.getDriver().switchTo().window(handle);
                         String url = Driver.getDriver().getCurrentUrl();
-                        url = url.replaceAll("%20", "");
+                        url = url.replaceAll("%20", " ");
+                        url = url.replaceAll("- ", "");
                         Driver.getDriver().close();
                         Driver.getDriver().switchTo().window(currentWindowHandle);
                         switch (researchLine) {
-                            case "Physical Risk":
+                            case "Physical Risk methodology":
                                 return url.contains(METHODOLOGY_PHYSICAL_CLIMATE_RISK_JAN_2022);
-                            case "Temperature Alignment":
-                                return url.contains(TRANSITION_RISK_TEMPERATURE_ALIGNMENT);
-                            case "Carbon Footprint":
-                            case "Brown Share Assessment":
-                            case "Green Share Assessment":
-                                return url.contains(TRANSITION_RISK);
-                            default:
-                                return url.contains(DEFAULT);
+                            case "Physical Risk Management methodology":
+                                return url.contains(PhysicalRiskManagementMethodology);
+                            case "Temperature Alignment methodology":
+                                return url.contains(TemperatureAlignmentMethodology);
+                            case "Transition Risk methodology":
+                                return url.contains(TransitionRiskMethodology);
+                            case "Controversy Risk Assessment Methodology":
+                                return url.contains(ControversyRiskAssessmentMethodology);
                         }
                     }
                 }
@@ -2387,41 +2394,41 @@ public class EntityClimateProfilePage extends ClimatePageBase {
         expectedCategories.add("MINOR INVOLVEMENT");
         expectedCategories.add("MAJOR INVOLVEMENT");
         String actualCategory = transitionRiskBrownShareCategory.getText();
-        assertTestCase.assertTrue(expectedCategories.contains(actualCategory), expectedCategories+" Category is not available from Expected Brown share Categories");
+        assertTestCase.assertTrue(expectedCategories.contains(actualCategory), expectedCategories + " Category is not available from Expected Brown share Categories");
     }
 
     public void verifyBrownShareWidgetOverallRevenue(String orbisId) {
         String uiOverallRevenuePercent = transitionRiskBrownShareWidgetOverallRevenue.getText();
         EntityClimateProfilePageQueries queries = new EntityClimateProfilePageQueries();
         String dbOverallRevenuePercent = queries.getBrownShareData(orbisId).get("SCORE_RANGE");
-        assertTestCase.assertEquals(uiOverallRevenuePercent.replace(" ",""),dbOverallRevenuePercent, "Overall Revenue Percent from UI is not matching with DB");
+        assertTestCase.assertEquals(uiOverallRevenuePercent.replace(" ", ""), dbOverallRevenuePercent, "Overall Revenue Percent from UI is not matching with DB");
 
     }
 
     public void verifyBrownShareComparisonChartLegends(String sectorName, String companyName) {
-        assertTestCase.assertEquals(brownShareComparisonChartLegends.get(0).getAttribute("style"),"background: rgb(178, 133, 89);", "Brown Share Comparison Chart - Verify first legend color");
+        assertTestCase.assertEquals(brownShareComparisonChartLegends.get(0).getAttribute("style"), "background: rgb(178, 133, 89);", "Brown Share Comparison Chart - Verify first legend color");
         assertTestCase.assertTrue(brownShareComparisonChartLegends.get(1).getText().contains(sectorName), "Brown Share Comparison Chart - Verify first legend label");
-        assertTestCase.assertEquals(brownShareComparisonChartLegends.get(2).getAttribute("style"),"background: rgb(31, 140, 255);", "Brown Share Comparison Chart - Verify second legend color");
+        assertTestCase.assertEquals(brownShareComparisonChartLegends.get(2).getAttribute("style"), "background: rgb(31, 140, 255);", "Brown Share Comparison Chart - Verify second legend color");
         assertTestCase.assertTrue(brownShareComparisonChartLegends.get(3).getText().contains(companyName), "Brown Share Comparison Chart - Verify second legend label");
     }
 
     public void verifyBrownShareComparisonChartAxes() {
-        assertTestCase.assertEquals(brownShareComparisonChartAxes.get(1).getText(),"Major", "Brown Share Comparison Chart - Verify X-Axis Label");
-        assertTestCase.assertEquals(brownShareComparisonChartAxes.get(2).getText(),"None", "Brown Share Comparison Chart - Verify X-Axis Label");
-        assertTestCase.assertEquals(brownShareComparisonChartAxes.get(3).getText(),"0%", "Brown Share Comparison Chart - Verify Y-Axis Label");
-        assertTestCase.assertEquals(brownShareComparisonChartAxes.get(4).getText(),">=50%", "Brown Share Comparison Chart - Verify Y-Axis Label");
+        assertTestCase.assertEquals(brownShareComparisonChartAxes.get(1).getText(), "Major", "Brown Share Comparison Chart - Verify X-Axis Label");
+        assertTestCase.assertEquals(brownShareComparisonChartAxes.get(2).getText(), "None", "Brown Share Comparison Chart - Verify X-Axis Label");
+        assertTestCase.assertEquals(brownShareComparisonChartAxes.get(3).getText(), "0%", "Brown Share Comparison Chart - Verify Y-Axis Label");
+        assertTestCase.assertEquals(brownShareComparisonChartAxes.get(4).getText(), ">=50%", "Brown Share Comparison Chart - Verify Y-Axis Label");
     }
 
     public void verifyBrownShareComparisonChartAverageLine() {
-        try{
+        try {
             brownShareComparisonChartAverageLine.isDisplayed();
-        }catch (Exception e) {
+        } catch (Exception e) {
             assertTestCase.assertTrue(false, "Average Line is not available");
         }
     }
 
     public void verifyBrownShareComparisonChartSectorDesc(String sectorName, int sectorCompaniesCount, String companyName) {
-        String expDescription = companyName+" compared to "+sectorCompaniesCount+" companies in "+sectorName;
+        String expDescription = companyName + " compared to " + sectorCompaniesCount + " companies in " + sectorName;
         String actualDescription = brownShareComparisonChartAxes.get(0).getText();
         assertTestCase.assertEquals(actualDescription, expDescription, "Brown Share Comparison Chart - Verify entity description");
     }
@@ -2561,10 +2568,10 @@ public class EntityClimateProfilePage extends ClimatePageBase {
     public String getPhysicalRiskManagement() {
         BrowserUtils.scrollTo(wait.until(ExpectedConditions.visibilityOf(physicalRiskManagementWidget)));
         String str = physicalRiskManagementWidget.getText();
-        str=str.replaceAll("\n", " ");
+        str = str.replaceAll("\n", " ");
         String Values[] = str.split((" "));
         str = str.replace("Physical Risk Management Anticipation", "Physical Risk Management " + Values[Values.length - 1] + " Anticipation").split("Updated")[0].trim();
-        str=str.replace("Anticipation"," Anticipation").replace("  "," ");
+        str = str.replace("Anticipation", " Anticipation").replace("  ", " ");
         return str;
     }
 
@@ -2709,7 +2716,7 @@ public class EntityClimateProfilePage extends ClimatePageBase {
 
     }
 
-    public void verifyStrengthsAndWeakness(String content){
+    public void verifyStrengthsAndWeakness(String content) {
         ArrayList<String> expStrengthsAndWeaknessOrder = new ArrayList<>();
         expStrengthsAndWeaknessOrder.add("Social Standards in the Supply Chain");
         expStrengthsAndWeaknessOrder.add("Social Dialogue");
@@ -2717,8 +2724,8 @@ public class EntityClimateProfilePage extends ClimatePageBase {
         expStrengthsAndWeaknessOrder.add("Career Management");
         expStrengthsAndWeaknessOrder.add("Anti-Competition");
         int currentIndex = 0;
-        for(String str: expStrengthsAndWeaknessOrder){
-            assertTestCase.assertTrue(currentIndex<content.indexOf(str), "Strengths or Weaknesses are not in Expected Order");
+        for (String str : expStrengthsAndWeaknessOrder) {
+            assertTestCase.assertTrue(currentIndex < content.indexOf(str), "Strengths or Weaknesses are not in Expected Order");
             currentIndex = content.indexOf(str);
         }
     }

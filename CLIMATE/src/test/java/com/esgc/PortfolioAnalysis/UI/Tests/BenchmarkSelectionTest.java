@@ -61,7 +61,7 @@ public class BenchmarkSelectionTest extends UITestBase {
 
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio Analysis page");
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
         BrowserUtils.wait(5);
 
         researchLinePage.clickOnBenchmarkDropdown()
@@ -81,7 +81,7 @@ public class BenchmarkSelectionTest extends UITestBase {
 
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio Analysis page");
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
         BrowserUtils.wait(5);
 
         researchLinePage.clickOnBenchmarkDropdown()
@@ -98,7 +98,7 @@ public class BenchmarkSelectionTest extends UITestBase {
     @Xray(test = 1329)
     public void verifyNoBenchMark() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
         test.info("Navigated to Portfolio Analysis page");
         BrowserUtils.wait(5);
 
@@ -116,7 +116,7 @@ public class BenchmarkSelectionTest extends UITestBase {
     @Xray(test = 1436)
     public void verifyBenchmarkChangesPersistence() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
         test.info("Navigated to Portfolio Analysis page");
         BrowserUtils.wait(10);
 
@@ -140,7 +140,7 @@ public class BenchmarkSelectionTest extends UITestBase {
     @Xray(test = 2254)
     public void verifyCarbonFootprint() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
         researchLinePage.navigateToResearchLine("Carbon Footprint");
         test.info("Navigated to Carbon Footprint page");
         BrowserUtils.wait(5);
@@ -163,7 +163,7 @@ public class BenchmarkSelectionTest extends UITestBase {
     @Xray(test = 2254)
     public void verifyShadowedSelectBenchmark() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
         test.info("Navigated to Portfolio Analysis page");
         BrowserUtils.wait(5);
 
@@ -179,7 +179,7 @@ public class BenchmarkSelectionTest extends UITestBase {
 
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio Analysis page");
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
         BrowserUtils.wait(3);
         researchLinePage.navigateToResearchLine("ESG Assessments");
         BrowserUtils.wait(3);

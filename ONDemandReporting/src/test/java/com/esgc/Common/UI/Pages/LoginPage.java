@@ -352,6 +352,10 @@ public class LoginPage extends PageBase {
                 wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.ZERO_ASSESSMENT_USERNAME, Keys.ENTER);
                 wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.ZERO_ASSESSMENT_PASSWORD);
                 break;
+            case ODA_USER_WITH_EXHAUSTED_ASSESSMENT_LIMIT:
+                wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.ODAWITHEXHAUTEDASSEMENTLIMIT_USERNAME, Keys.ENTER);
+                wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.ODAWITHEXHAUTEDASSEMENTLIMIT_PASSWORD);
+                break;
 
                 default:
                 Assert.fail("Bundle not found!");

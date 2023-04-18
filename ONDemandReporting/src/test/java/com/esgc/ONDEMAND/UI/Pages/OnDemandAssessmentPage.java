@@ -253,7 +253,7 @@ public class OnDemandAssessmentPage extends CommonPage {
     public String landingPage = "";
 
     public void goToSendRequestPage(String portfolioName) {
-        if (landingPage.equals("")) getLandingPage(portfolioName);
+        if (landingPage.equals("")) getLandingPageFromAPI(portfolioName);
         if (landingPage.equals("batchProcessingPage")) {
             BrowserUtils.waitForPageToLoad(30);
             clickCreateNewRequestButton();
@@ -261,9 +261,9 @@ public class OnDemandAssessmentPage extends CommonPage {
         BrowserUtils.waitForVisibility(btnReviewRequest, 80);
     }
 
-    public void getLandingPage(String portfolioName) {
+    public void getLandingPageFromAPI(String portfolioName) {
         OnDemandFilterAPIController controller = new OnDemandFilterAPIController();
-        landingPage = controller.getLandingPage(portfolioName);
+        landingPage = controller.getExpectedLandingPageFromAPI(portfolioName);
     }
 
     public void clickReviewAndSendRequestButton() {
@@ -289,9 +289,13 @@ public class OnDemandAssessmentPage extends CommonPage {
         BrowserUtils.scrollTo(removeButtons.get(0));
         txtSendTo.sendKeys(emailid);
         String compniesCountForRequest = getCompaniesCountFromConfirmRequestButton();
-        btnConfirmRequest.click();
+        clickOnConfirmRequestButton();
         return compniesCountForRequest;
 
+    }
+
+    public void clickOnConfirmRequestButton(){
+        BrowserUtils.waitForVisibility(btnConfirmRequest,30).click();
     }
 
     public void selectFilter(String filterOption) {
@@ -449,10 +453,15 @@ public class OnDemandAssessmentPage extends CommonPage {
         }
     }
 
-    public void onDemandCoverageHeaderValidation(String portfolioName) {
-        BrowserUtils.waitForPageToLoad(80);
-        assertTestCase.assertTrue(BrowserUtils.waitForVisibility(coverageHeader.get(0), 30).getText().equals("Request On-Demand Assessments for " + portfolioName));
-        assertTestCase.assertTrue(BrowserUtils.waitForVisibility(coverageHeader.get(1), 30).getText().matches("\\d+% assessment eligible \\(\\d+ companies\\)"));
+    public boolean onDemandCoverageHeaderValidation(String portfolioName) {
+        try {
+            BrowserUtils.waitForPageToLoad(80);
+            assertTestCase.assertTrue(BrowserUtils.waitForVisibility(coverageHeader.get(0), 30).getText().equals("Request On-Demand Assessments for " + portfolioName));
+            assertTestCase.assertTrue(BrowserUtils.waitForVisibility(coverageHeader.get(1), 30).getText().matches("\\d+% assessment eligible \\(\\d+ companies\\)"));
+            return true;
+        }catch(Exception e){
+            return false;
+        }
     }
 
     public boolean isCancelButtonAvailable() {
@@ -1123,4 +1132,20 @@ public class OnDemandAssessmentPage extends CommonPage {
         System.out.println("Number companies in Excel = " + (excelData.getLastRowNum()-3));//Last 3 rows are not companies
         assertTestCase.assertEquals(excelData.getLastRowNum()-3, dbEntitiesList.size(), "Number of companies in Excel and DB are the same");
     }
+
+    public boolean isUserOnFilterCritriaScreen(String PortfolioName){
+        return BrowserUtils.waitForVisibility(btnReviewRequest,60).isDisplayed() && onDemandCoverageHeaderValidation(PortfolioName);
+    }
+    public String SelectAndGetOnDemandEligiblePortfolioName() {
+        String portfolioName = "";
+        for(int i = 0 ; i< getPortfolioList().size() ; i++ ) {
+            if(Double.valueOf(OnDemandEligibility.get(i).getText().split("%")[0])>(0)) {
+                portfolioRadioButtonList.get(i).click();
+                portfolioName = getPortfolioList().get(i);
+                break;
+            }
+        }
+        return portfolioName;
+    }
+
 }
