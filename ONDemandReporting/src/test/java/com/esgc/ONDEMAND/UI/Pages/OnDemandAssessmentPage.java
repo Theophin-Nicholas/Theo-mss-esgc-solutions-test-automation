@@ -12,9 +12,8 @@ import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
-import java.text.ParseException;
-import java.util.*;
 import java.io.File;
+import java.text.ParseException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -854,7 +853,6 @@ public class OnDemandAssessmentPage extends CommonPage {
     public boolean viewDetailForPortfolio(String portfolioName) {
         int index = getPortfolioList().indexOf(portfolioName);
         return viewDetailForPortfolio(index);
-    }
     }
 
     public boolean viewDetailForPortfolio(int index) {
