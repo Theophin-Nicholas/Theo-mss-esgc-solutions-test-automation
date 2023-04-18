@@ -418,41 +418,6 @@ Faker faker = new Faker();
         onDemandAssessmentPage.ValidateSortingOnLastUpdateColumn();
     }
 
-    @Test(groups = {UI, REGRESSION })
-    @Xray(test = {14015})
-    public void ValidateNewNameInGlobalMenu(){
-        OnDemandAssessmentPage odaPage = new OnDemandAssessmentPage();
-        LoginPage login = new LoginPage();
-        odaPage.clickOnMenuButton();
-        odaPage.clickOnLogOutButton();
-        login.entitlementsLogin(EntitlementsBundles.USER_WITH_PREDICTEDSCORE_AND_CLIMATE);
-        odaPage.clickOnMenuButton();
-        odaPage.validateNewDashboardMenuName();
-        odaPage.validateNewPortfolioAnalysisMenuName();
-        odaPage.validateNewReportingMenuName();
-        odaPage.clickOnClimateDashboardMenuOption();
-        odaPage.validateClimateDashboardPageHeaders();
-        odaPage.clickOnMenuButton();
-        odaPage.clickOnPortfolioAnalysisMenuOption();
-        odaPage.validateClimatePortfolioAnalysisPageHeaders();
-        odaPage.clickOnMenuButton();
-        odaPage.clickOnReportingPortalMenuOption();
-        odaPage.validateReportingPortalPageHeaders();
-
-    }
-@Test(groups = {UI, REGRESSION})
-@Xray(test = {14017})
-    public void ValidateRemovalOfCalculationsFromGlobalMenu(){
-        OnDemandAssessmentPage odaPage = new OnDemandAssessmentPage();
-        LoginPage login = new LoginPage();
-        odaPage.clickOnMenuButton();
-        odaPage.clickOnLogOutButton();
-        login.entitlementsLogin(EntitlementsBundles.TRANSITION_RISK_CLIMATE_GOVERNANCE);
-        odaPage.clickOnMenuButton();
-        odaPage.validateCalculationsFromGlobalMenuIsHidden();
-    }
-
-
 
     @Test(groups = {REGRESSION, UI, COMMON, SMOKE}, description = "UI | On-Demand Reporting | On-Demand Assessments | Verify Different ways to download the portfolio/export file")
     @Xray(test = {13691})

@@ -31,7 +31,7 @@ public class DashboardPage extends UploadPage {
     @FindBy(xpath = "//header[.//*[starts-with(text(),'View')]]")
     public WebElement stickyHeader;
 
-    @FindBy(xpath = "//*[@heap_menu='Dashboard']")
+    @FindBy(xpath = "//*[@heap_menu='Climate Dashboard']")
     public WebElement dashboardButton;
 
     @FindBy(xpath = "//*[@id='topbar-appbar-test-id']/div/li")
@@ -406,8 +406,7 @@ public class DashboardPage extends UploadPage {
     }
 
     public void clickOnMenuButton() {
-        BrowserUtils.waitForVisibility(menuButton, 25).click();
-        //BrowserUtils.waitForStaleElement(menuButton);
+        BrowserUtils.waitForVisibility(menuButton, 10).click();
     }
 
     public void clickOnPortfolioSelectionUploadButton() {
@@ -1566,5 +1565,106 @@ public class DashboardPage extends UploadPage {
             return false;
         }
     }
+
+    @FindBy(xpath = "//*[@id=\"mini-0\"]/div[2]/span")
+    public WebElement searchResultLineOne;
+    public void validateEntitiesWithOnlyEsgDataDontShowInSearch(String entity) {
+
+        String expectedSearchResult = BrowserUtils.waitForVisibility(searchResultLineOne, 20).getText();
+        assertTestCase.assertTrue(!entity.equals(searchResultLineOne.getText()), "Validating that " + entity + " which is an Entity with ESG data only is not returned or suggested in search option : Status Done");
+
+    }
+
+    @FindBy(xpath = "//li[contains(@class,'MuiButtonBase')]")
+    public List<WebElement> menuItems;
+    public void validateCalculationsFromGlobalMenuIsHidden() {
+        System.out.println("------------Verifying that Calculations is removed from global menu-------------------");
+        for (WebElement e : menuItems) {
+            String menuItemText = e.getText();
+            System.out.println("verify that " + menuItemText + " is not equal to Calculations");
+            assertTestCase.assertTrue(!menuItemText.equals("Calculations"), "Verify the removal of 'Calculations' link or tab from the global menu : Status Done");
+        }
+    }
+
+
+    @FindBy(xpath = "//*[@heap_menu='Climate Portfolio Analysis']")
+    public WebElement portfolioAnalysisTab;
+
+    @FindBy(xpath = "//*[@heap_menu='ESG Reporting Portal']")
+    public WebElement reportingPortalTab;
+
+    @FindBy(xpath = "//*[@id='topbar-appbar-test-id']/div/li")
+    public WebElement pageHeader;
+
+    public void clickOnClimateDashboardMenuOption() {
+
+        BrowserUtils.waitForClickablility(dashboardButton, 15);
+        dashboardButton.click();
+    }
+
+    public void clickOnPortfolioAnalysisMenuOption() {
+        BrowserUtils.waitForClickablility(portfolioAnalysisTab, 15);
+        portfolioAnalysisTab.click();
+    }
+
+    public void clickOnReportingPortalMenuOption() {
+        BrowserUtils.waitForClickablility(reportingPortalTab, 15);
+        reportingPortalTab.click();
+    }
+
+    public void validateNewReportingMenuName() {
+        System.out.println("--------------Verifying the new naming for reporting menu option----------------");
+        String reportingPortalTitle = reportingPortalTab.getText();
+        System.out.println("the actual reporting portal title is : " + reportingPortalTitle);
+        assertTestCase.assertEquals(reportingPortalTitle, "ESG Reporting Portal", "Status Done : Verifying that reporting portal is ESG Reporting Portal");
+
+    }
+    public void validateNewDashboardMenuName(){
+        System.out.println("--------------Verifying the new naming for Dashboard menu option----------------");
+
+        String dashboardTitle = BrowserUtils.waitForClickablility(dashboardButton, 15).getText();
+        System.out.println("the actual dashboard title is : " + dashboardTitle);
+        assertTestCase.assertEquals(dashboardTitle, "Climate Dashboard", "Status Done : Verifying that Dashboard name is Climate Dashboard ");
+
+
+    }
+    public void validateNewPortfolioAnalysisMenuName(){
+        System.out.println("--------------Verifying the new naming for Portfolio Analysis menu option ----------------");
+
+        String portfolioAnalysisTitle = portfolioAnalysisTab.getText();
+        System.out.println("the actual portfolio analysis title is : " + portfolioAnalysisTitle);
+        assertTestCase.assertEquals(portfolioAnalysisTitle, "Climate Portfolio Analysis", "Status Done : Verifying that portfolio analysis is Climate Portfolio Analysis");
+
+    }
+
+    public void validateClimateDashboardPageHeaders() {
+        System.out.println("--------------Verifying the Climate Dashboard page headers----------------");
+        BrowserUtils.waitForClickablility(dashboardButton, 10);
+
+        dashboardButton.click();
+        BrowserUtils.waitForClickablility(pageHeader, 10).click();
+        String actualDashboardHeader = pageHeader.getText();
+        String expectedDashboardHeader = "Climate Dashboard";
+        assertTestCase.assertEquals(actualDashboardHeader, expectedDashboardHeader, "Verifying dashboard header is equal to Climate Dashboard : Status Done");
+    }
+
+    public void validateClimatePortfolioAnalysisPageHeaders() {
+        System.out.println("--------------Validating the climate portfolio analysis page headers----------------");
+        BrowserUtils.waitForClickablility(pageHeader, 10).click();
+        String actualPortfolioTabHeader = pageHeader.getText();
+        String expectedPortfolioTabHeader = "Climate Portfolio Analysis";
+        assertTestCase.assertEquals(actualPortfolioTabHeader, expectedPortfolioTabHeader, "Verifying portfolio Analysis header is equal to Climate Portfolio Analysis : Status Done");
+
+    }
+
+    public void validateReportingPortalPageHeaders() {
+        System.out.println("--------------Validating Reporting portal page headers----------------");
+        BrowserUtils.waitForClickablility(pageHeader, 20).click();
+        String actualReportingTabHeader = pageHeader.getText();
+        String expectedReportingTabHeader = "ESG Reporting Portal";
+        assertTestCase.assertEquals(actualReportingTabHeader, expectedReportingTabHeader, "Verifying ESG Reporting Portal header is equal to ESG Reporting Portal : Status Done");
+
+    }
+
 
 }
