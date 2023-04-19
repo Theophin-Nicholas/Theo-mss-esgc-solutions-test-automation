@@ -803,9 +803,15 @@ public class RegulatoryReportingPage extends CommonPage {
         RegulatoryReportingAPIController apiController = new RegulatoryReportingAPIController();
         String portfolioId = apiController.getPortfolioId(portfolioName);
         RegulatoryReportingQueries queries = new RegulatoryReportingQueries();
+        List<Map<String, Object>> dbTest = queries.getReportingYearDetails(portfolioId);
+        String uiCoverage = getCoveragePercentage(portfolioName);
+        if (dbTest.size() == 0) {
+            System.out.println("No data found in DB");
+            return uiCoverage.contains("NA");
+        }
         Map<String, Object> dbData = queries.getReportingYearDetails(portfolioId).get(0);
         System.out.println("dbData.size() = " + dbData.size());
-        String uiCoverage = getCoveragePercentage(portfolioName);
+
         String dbCoverage = dbData.get("TAXONOMY_COVERAGE").toString();
         if (!uiCoverage.contains(dbCoverage)) {
             System.out.println("Coverage is not matching for " + uiCoverage + " : " + dbCoverage);

@@ -75,7 +75,7 @@ public class CommonAPIController {
                 deletePortfolio(id);
             }
         }catch(Exception e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         }
     }
 

@@ -114,10 +114,17 @@ public class OnDemandAssessmentQueries {
                     "where orbis_id not in (select orbis_ID from EU_TAXONOMY_OVERVIEW)\n" +
                     "and orbis_id not in (select BVD9_NUMBER from \"DF_TARGET\".\"REGULATORY_REPORT_SFDR\")\n" +
                     "limit "+dataCount;
+
         if(ScoreQuality.equals("DataAlliance"))
             query="select distinct orbis_id, data_alliance from ENTITY_SCORE_TYPE\n" +
                     "where data_alliance is not null\n" +
                     "order by data_alliance desc limit "+dataCount;
+
+        if(ScoreQuality.equals("BothSFDRAndEUTaxonomy"))
+            query="select distinct ORBIS_ID from \"DF_TARGET\".\"ORBIS_ENTITY_SCORE\"\n" +
+                    "where orbis_id in (select orbis_ID from EU_TAXONOMY_OVERVIEW)\n" +
+                    "and orbis_id in (select BVD9_NUMBER from \"DF_TARGET\".\"REGULATORY_REPORT_SFDR\")\n" +
+                    "limit "+dataCount;
         List<String> dataList =  new ArrayList<>();
         for (Map<String, Object> result : DatabaseDriver.getQueryResultMap(query)){
             dataList.add(result.get("ORBIS_ID").toString());
