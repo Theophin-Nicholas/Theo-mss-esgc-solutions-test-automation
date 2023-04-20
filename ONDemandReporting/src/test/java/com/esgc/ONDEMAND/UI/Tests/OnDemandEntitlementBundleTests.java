@@ -244,6 +244,10 @@ public class OnDemandEntitlementBundleTests extends UITestBase {
         reportingPage.verifyEUTaxonomyPortfolioCoverageForUI(portfolioName);
         assertTestCase.assertTrue(reportingPage.verifyPortfolioEnabled(portfolioName), "Validating that the portfolio is disabled for EU Taxonomy");
         CommonAPIController.deletePortfolioThroughAPI(portfolioName);
+
+        //Why do programmers prefer dark chocolate?
+        //
+        //Because it's bitter, just like their code.
     }
 
     @Test(groups = {REGRESSION, UI, ENTITLEMENTS})
