@@ -14,7 +14,6 @@ import io.restassured.response.Response;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-
 import java.util.Arrays;
 import java.util.List;
 
@@ -130,7 +129,7 @@ public class OnDemandEntitlementBundleTests extends UITestBase {
             LoginPage login = new LoginPage();
             login.entitlementsLogin(EntitlementsBundles.USER_WITH_ONLYONDEMAND_ENTITLEMENT_FIRSTTIMEUSER);
             OnDemandAssessmentPage onDemandAssessmentPage = new OnDemandAssessmentPage();
-            assertTestCase.assertTrue(onDemandAssessmentPage.validateOnDemandReportingLandingPage(), "Validating if landing page is On-Demand Repoting Page");
+            assertTestCase.assertTrue(onDemandAssessmentPage.validateOnDemandReportingLandingPage(), "Validating if landing page is On-Demand Repoting Page", 14529);
             if (onDemandAssessmentPage.IsPortfolioTableLoaded()) {
                 assertTestCase.assertTrue(onDemandAssessmentPage.isSelectActionHeadingAvailable(), "Validate Select Action heading available");
                 assertTestCase.assertTrue(onDemandAssessmentPage.isServiceSubHeadingAvailable(), "Validate Service subheading available");
@@ -141,7 +140,7 @@ public class OnDemandEntitlementBundleTests extends UITestBase {
                 assertTestCase.assertTrue(onDemandAssessmentPage.isViewAssessmentRequestButtonDisabled(), "Validating that View Assessment Request button is disabled");
                 assertTestCase.assertTrue(!onDemandAssessmentPage.isbuttonMethodologiesEnabled(), "Validating that the Methodologies button is enabled");
                 String portfolioName = "TempPortfolioFprDelection";
-                String portfolioFilePath = ImportPortfolioUtility.getOnDemandPortfolioFileToUpload(Arrays.asList(new String[]{"Self-Assessed"}), "", 10, portfolioName, false);
+                String portfolioFilePath = ImportPortfolioUtility.getOnDemandPortfolioFileToUpload(Arrays.asList(new String[]{"Self-Assessed"}), "", 10, portfolioName,false);
                 onDemandAssessmentPage.uploadPortfolio(portfolioFilePath, "OnDemand");
                 BrowserUtils.wait(10);
                 Driver.getDriver().navigate().refresh();
@@ -153,7 +152,7 @@ public class OnDemandEntitlementBundleTests extends UITestBase {
                     assertTestCase.assertTrue(!onDemandAssessmentPage.isReequestAssessmentButtonDisabled(), "Validating that Request Assessment button is disabled");
                     assertTestCase.assertTrue(onDemandAssessmentPage.isViewAssessmentRequestButtonDisabled(), "Validating that View Assessment Request button is disabled");
                     onDemandAssessmentPage.clickonOnRequestAssessmentButton();
-                    assertTestCase.assertTrue(onDemandAssessmentPage.isUserOnFilterCritriaScreen(portfolioName), "Validate that user landed on Filter Criteria Screen");
+                    assertTestCase.assertTrue(onDemandAssessmentPage.isUserOnFilterCritriaScreen(portfolioName),"Validate that user landed on Filter Criteria Screen");
                     CommonAPIController.deletePortfolioThroughAPI(portfolioName);
                 } catch (Exception e) {
                     CommonAPIController.deletePortfolioThroughAPI(portfolioName);
@@ -175,7 +174,7 @@ public class OnDemandEntitlementBundleTests extends UITestBase {
             LoginPage login = new LoginPage();
             login.entitlementsLogin(EntitlementsBundles.USER_WITH_EUTAXONOMY_SFDR_ESG_ESGPREDICTOR_ONDEMAND_EXPORT);
             OnDemandAssessmentPage onDemandAssessmentPage = new OnDemandAssessmentPage();
-            assertTestCase.assertTrue(onDemandAssessmentPage.validateOnDemandReportingLandingPage(), "Validating if landing page is On-Demand Repoting Page");
+            assertTestCase.assertTrue(onDemandAssessmentPage.validateOnDemandReportingLandingPage(), "Validating if landing page is On-Demand Repoting Page",14529);
             if (onDemandAssessmentPage.IsPortfolioTableLoaded()) {
                 List<String> reportingOptions = Arrays.asList(new String[]{"EU Taxonomy", "SFDR PAIs", "On-Demand Assessment"});
                 onDemandAssessmentPage.ValidateReportingOptions(reportingOptions);
@@ -198,7 +197,7 @@ public class OnDemandEntitlementBundleTests extends UITestBase {
             LoginPage login = new LoginPage();
             login.entitlementsLogin(EntitlementsBundles.USER_WITH_EUTAXONOMY_SFDR_ENTITLEMENT);
             OnDemandAssessmentPage onDemandAssessmentPage = new OnDemandAssessmentPage();
-            assertTestCase.assertTrue(onDemandAssessmentPage.validateOnDemandReportingLandingPage(), "Validating if landing page is On-Demand Repoting Page");
+            assertTestCase.assertTrue(onDemandAssessmentPage.validateOnDemandReportingLandingPage(), "Validating if landing page is On-Demand Repoting Page", 14529);
             if (onDemandAssessmentPage.IsPortfolioTableLoaded()) {
                 List<String> reportingOptions = Arrays.asList(new String[]{"EU Taxonomy", "SFDR PAIs"});
                 onDemandAssessmentPage.ValidateReportingOptions(reportingOptions);
@@ -219,7 +218,7 @@ public class OnDemandEntitlementBundleTests extends UITestBase {
             LoginPage login = new LoginPage();
             login.entitlementsLogin(EntitlementsBundles.ONDEMAND_USER_WITHOUT_EXPORT_ENTITLEMENT);
             OnDemandAssessmentPage onDemandAssessmentPage = new OnDemandAssessmentPage();
-            assertTestCase.assertTrue(onDemandAssessmentPage.validateOnDemandReportingLandingPage(), "Validating if landing page is On-Demand Repoting Page");
+            assertTestCase.assertTrue(onDemandAssessmentPage.validateOnDemandReportingLandingPage(), "Validating if landing page is On-Demand Repoting Page",14529);
             if (onDemandAssessmentPage.IsPortfolioTableLoaded() && onDemandAssessmentPage.getAvailablePortfolioCountt() > 0) {
                 assertTestCase.assertTrue(onDemandAssessmentPage.isExportbuttonDisabled(), "validating that export button is disabled");
             }
@@ -263,7 +262,7 @@ public class OnDemandEntitlementBundleTests extends UITestBase {
             LoginPage login = new LoginPage();
             login.entitlementsLogin(EntitlementsBundles.USER_WITH_EUTAXONOMY_SFDR_ESG_ESGPREDICTOR_ONDEMAND_EXPORT);
             OnDemandAssessmentPage onDemandAssessmentPage = new OnDemandAssessmentPage();
-            assertTestCase.assertTrue(onDemandAssessmentPage.validateOnDemandReportingLandingPage(), "Validating that landing page is On-Demand Reporting Page");
+            assertTestCase.assertTrue(onDemandAssessmentPage.validateOnDemandReportingLandingPage(), "Validating that landing page is On-Demand Reporting Page", 14529);
         } catch (Exception e) {
             e.printStackTrace();
             login.clickOnLogout();
@@ -279,7 +278,7 @@ public class OnDemandEntitlementBundleTests extends UITestBase {
             LoginPage login = new LoginPage();
             login.entitlementsLogin(EntitlementsBundles.ODA_USER_WITH_EXHAUSTED_ASSESSMENT_LIMIT);
             OnDemandAssessmentPage onDemandAssessmentPage = new OnDemandAssessmentPage();
-            assertTestCase.assertTrue(onDemandAssessmentPage.validateOnDemandReportingLandingPage(), "Validating if landing page is On-Demand Repoting Page");
+            assertTestCase.assertTrue(onDemandAssessmentPage.validateOnDemandReportingLandingPage(), "Validating if landing page is On-Demand Repoting Page", 14529);
             onDemandAssessmentPage.waitForPortfolioTableToLoad();
             String PortfolioName = onDemandAssessmentPage.SelectAndGetOnDemandEligiblePortfolioName();
             assertTestCase.assertTrue(onDemandAssessmentPage.isReequestAssessmentButtonDisabled(), "Validating that Request Assessment button is disabled");

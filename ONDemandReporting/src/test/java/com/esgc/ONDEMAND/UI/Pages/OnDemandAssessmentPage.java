@@ -12,9 +12,8 @@ import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
-import java.text.ParseException;
-import java.util.*;
 import java.io.File;
+import java.text.ParseException;
 import java.util.*;
 import java.util.stream.Collectors;
 
