@@ -2,13 +2,14 @@ package com.esgc.ONDEMAND.UI.Pages;
 
 import com.esgc.Common.UI.Pages.CommonPage;
 import com.esgc.Utilities.BrowserUtils;
+import com.esgc.Utilities.Driver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 public class PopUpPage extends CommonPage {
 
     @FindBy(xpath = "//*[@id='invalid-entitlements-test-id']/div[3]/div/div[1]/h2")
-    WebElement popUpHeader;
+    public WebElement popUpHeader;
 
     @FindBy( xpath = "//*[@id=\"invalid-entitlements-test-id\"]/div[3]/div/div[2]")
     WebElement popUpMessage;
@@ -19,7 +20,7 @@ public class PopUpPage extends CommonPage {
 
     public void clickOnOKButton(){
         System.out.println("Clicking on OK button now and going to login Page.....");
-        okButton.click();
+        BrowserUtils.clickWithJS(BrowserUtils.waitForVisibility(okButton));
     }
 
     public boolean isOkButtonEnabled(){
@@ -47,6 +48,8 @@ public class PopUpPage extends CommonPage {
         assertTestCase.assertTrue(popUpMessageText().contains(expectedPopMessageLineTwo), "The PopUp contains Please contact clientservices@moodys.com for further assistance text description");
         assertTestCase.assertTrue(isOkButtonEnabled(), "the OK button is enabled");
         clickOnOKButton();
+        BrowserUtils.wait(3);
+        assertTestCase.assertTrue(Driver.getDriver().getCurrentUrl().endsWith("login"), "User is landed back on Login page");
 
     }
 

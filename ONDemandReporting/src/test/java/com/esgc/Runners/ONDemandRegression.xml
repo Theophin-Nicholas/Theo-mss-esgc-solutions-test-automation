@@ -17,9 +17,8 @@
 
         <packages>
 
-            <package name="com.esgc.ONDEMAND.*"/>
-           <!-- <package name="com.esgc.API.*"/>
-            <package name="com.esgc.DB.*"/>-->
+            <package name="com.esgc.ONDEMAND.UI.*"/>
+            <package name="com.esgc.ONDEMAND.API.*"/>
 
         </packages>
 
