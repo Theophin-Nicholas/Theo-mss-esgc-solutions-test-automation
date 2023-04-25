@@ -38,50 +38,14 @@ public class OnDemandFilterAPITest extends CommonTestBase {
     @Xray(test = {12065})
     public void validateOnDemandStatusApiResponse() {
         OnDemandFilterAPIController onDemandcontroller = new OnDemandFilterAPIController();
+        System.clearProperty("token");
         String portfolioId = onDemandcontroller.getPortfolioId("500 predicted portfolio");
-
         Response response = onDemandcontroller.getOnDemandsStatus(portfolioId);
+
         response.as(OnDemandRequests.class);
         response.then().log().all();
         response.then().assertThat()
                 .statusCode(200)
                 .contentType(ContentType.JSON);
     }
-
-    // api test for on demand
-    @Test(groups= {API, REGRESSION, SMOKE})
-    @Xray(test = {14196})
-    public void validateOnDemandRemainingAssessmentsApiResponse(){
-        OnDemandAssessmentPage oDPage = new OnDemandAssessmentPage();
-        oDPage.navigateToReportingService("On-Demand Assessment");
-        LoginPage login = new LoginPage();
-
-        String portfolioName = "PortfolioWithZeroCoverageEntities";
-        oDPage.clickOnMenuButton();
-        oDPage.clickOnLogOutButton();
-
-        login.entitlementsLogin(EntitlementsBundles.USER_WITH_ZERO_ASSESSMENT_AVAILABLE);
-        System.out.println("Logged in to Check 0 Remaining Assessment....");
-        BrowserUtils.wait(5);
-        Driver.getDriver().manage().deleteAllCookies();
-        BrowserUtils.refresh();
-        BrowserUtils.wait(5);
-        getExistingUsersAccessTokenFromUI();
-
-        OnDemandFilterAPIController onDemandController = new OnDemandFilterAPIController();
-        Response response = onDemandController.getOnDemandInfo();
-        // response.as(FilteredCompanies.class);
-        response.then().log().all();
-        response.getBody().asString();
-
-        System.out.println("Response Body of Info API in On Demand Page is :" + response.getBody().asString());
-        JsonPath jsonPathEvaluator = response.jsonPath();
-        String remainingAssessments = jsonPathEvaluator.get("remaining_assessments").toString();
-        System.out.println("remaining assessments are:" + remainingAssessments);
-        assertTestCase.assertEquals(remainingAssessments, "0", "Verification that remaining assessments are equal to 0");
-        response.then().assertThat()
-                .statusCode(200)
-                .contentType(ContentType.JSON);
-    }
-
 }

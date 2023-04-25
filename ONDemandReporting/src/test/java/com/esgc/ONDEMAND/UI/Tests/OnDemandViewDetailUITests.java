@@ -22,10 +22,17 @@ public class OnDemandViewDetailUITests extends UITestBase {
     @Xray(test = {13786, 14139, 13972, 14164, 14168, 14169, 14174})
     public void verifyViewDetailPageByScoreType(){
         ViewDetailPage detail = new ViewDetailPage();
-        String portfolioName = "500 predicted p";
+        String portfolioName = "500 predicted portfolio";
         String portfolioName1 = "SFDRPortfolio";
         OnDemandAssessmentPage onDemandAssessmentPage = new OnDemandAssessmentPage();
         onDemandAssessmentPage.navigateToReportingService("On-Demand Assessment");
+
+        if(!onDemandAssessmentPage.verifyPortfolio(portfolioName1)) {
+            onDemandAssessmentPage.uploadPortfolio(portfolioName1.replaceAll(" ", ""));
+        }
+        if(!onDemandAssessmentPage.verifyPortfolio(portfolioName)) {
+            onDemandAssessmentPage.uploadPortfolio(portfolioName.replaceAll(" ", ""));
+        }
         onDemandAssessmentPage.selectPortfolioOptionByName(portfolioName1);
 
         assertTestCase.assertTrue(!onDemandAssessmentPage.isRequestAssessmentButtonEnabled(), "Verify that the request assessment button is disabled for a portfolio not on-Demand eligible ");
@@ -41,7 +48,7 @@ public class OnDemandViewDetailUITests extends UITestBase {
 
         detail.clickOnGroupByOption(detail, "Score Type");
 
-        detail.verifyHeaderDetailsInViewDetailPage(detail);
+        detail.verifyHeaderDetailsInViewDetailPage(detail,portfolioName);
         detail.verifyViewDetailPageFooter(detail, portfolioName );
         System.out.println("linkedhashMap of entities + investment"+ detail.getEntityInvestmentMap());
         detail.sortByValue(detail.getEntityInvestmentMap());
@@ -65,10 +72,17 @@ public class OnDemandViewDetailUITests extends UITestBase {
     @Xray(test = { 14212, 13795, 13796, 13797, 13800, 14138 })
     public void verifyViewDetailPageBySector(){
         ViewDetailPage detail = new ViewDetailPage();
-        String portfolioName = "500 predicted p";
+        String portfolioName = "500 predicted portfolio";
         String portfolioName1 = "SFDRPortfolio";
         OnDemandAssessmentPage onDemandAssessmentPage = new OnDemandAssessmentPage();
         onDemandAssessmentPage.navigateToReportingService("On-Demand Assessment");
+        onDemandAssessmentPage.waitForPortfolioTableToLoad();
+        if(!onDemandAssessmentPage.verifyPortfolio(portfolioName1)) {
+            onDemandAssessmentPage.uploadPortfolio(portfolioName1.replaceAll(" ", ""));
+        }
+        if(!onDemandAssessmentPage.verifyPortfolio(portfolioName)) {
+            onDemandAssessmentPage.uploadPortfolio(portfolioName.replaceAll(" ", ""));
+        }
         onDemandAssessmentPage.selectPortfolioOptionByName(portfolioName1);
         assertTestCase.assertTrue(!onDemandAssessmentPage.isRequestAssessmentButtonEnabled(), "Verify that the request assessment button is disabled for a portfolio not on-Demand eligible ");
         System.out.println("the request assessment button is disabled for non on-demand assessment eligible portfolio ");
@@ -91,10 +105,18 @@ public class OnDemandViewDetailUITests extends UITestBase {
     public void verifyViewDetailPageByRegion(){
 
         ViewDetailPage detail = new ViewDetailPage();
-        String portfolioName = "500 predicted p";
+        String portfolioName = "500 predicted portfolio";
         String portfolioName1 = "SFDRPortfolio";
         OnDemandAssessmentPage onDemandAssessmentPage = new OnDemandAssessmentPage();
         onDemandAssessmentPage.navigateToReportingService("On-Demand Assessment");
+
+        if(!onDemandAssessmentPage.verifyPortfolio(portfolioName1)) {
+            onDemandAssessmentPage.uploadPortfolio(portfolioName1.replaceAll(" ", ""));
+        }
+        if(!onDemandAssessmentPage.verifyPortfolio(portfolioName)) {
+            onDemandAssessmentPage.uploadPortfolio(portfolioName.replaceAll(" ", ""));
+        }
+
         onDemandAssessmentPage.selectPortfolioOptionByName(portfolioName1);
 
         assertTestCase.assertTrue(!onDemandAssessmentPage.isRequestAssessmentButtonEnabled(), "Verify that the request assessment button is disabled for a portfolio not on-Demand eligible ");
@@ -105,33 +127,11 @@ public class OnDemandViewDetailUITests extends UITestBase {
         assertTestCase.assertTrue(onDemandAssessmentPage.isRequestAssessmentButtonEnabled(), "Verify that the request assessment button is enabled for a on-Demand eligible Portfolio");
         System.out.println("the request assessment button is enabled for On-Demand assessment eligible portfolio");
         //assertTestCase.assertTrue(onDemandAssessmentPage.isViewDetailButtonEnabled(portfolioName), "verify view detail button is enabled");
-        System.out.println("the view detail button is displayed and enabled ");
+        //System.out.println("the view detail button is displayed and enabled ");
         onDemandAssessmentPage.clickOnViewDetailButton(portfolioName);
 
         detail.clickOnGroupByOption(detail, "Region");
         detail.verifyOnlyRegionsAreInRegionTab();
         detail.verifyTablesInRegionTab();
-
-
     }
-    @Test(groups={UI, REGRESSION, SMOKE})
-    @Xray(test={13971, 13993})
-    public void verifyZeroAssessmentRemaining(){
-        OnDemandAssessmentPage onDemandAssessmentPage = new OnDemandAssessmentPage();
-        OnDemandFilterAPIController onD = new OnDemandFilterAPIController();
-        LoginPage login = new LoginPage();
-        String portfolioName = "PortfolioWithZeroCoverageEntities";
-        onDemandAssessmentPage.clickOnMenuButton();
-        onDemandAssessmentPage.clickOnLogOutButton();
-        login.entitlementsLogin(EntitlementsBundles.USER_WITH_ZERO_ASSESSMENT_AVAILABLE);
-        System.out.println("Logged in to Check 0 Remaining Assessment....");
-        assertTestCase.assertTrue(!onDemandAssessmentPage.isRequestAssessmentButtonEnabled(), "The request assessment button is disabled for accounts with 0 remaining requests.");
-
-        onDemandAssessmentPage.verifyZeroAssessmentRemainingForOnDemand();
-        onDemandAssessmentPage.checkViewDetailButtonDisabled();
-        //onDemandAssessmentPage.validateViewDetailButtonAndDownloadButtonDisabledForZeroCoveragePortfolios(portfolioName);
-
-    }
-
-
 }

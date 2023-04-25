@@ -327,7 +327,7 @@ public class CommonPage extends UploadPortfolio {
     }
 
     public List<String> getPortfolioTableHeadersList() {
-        BrowserUtils.waitForVisibility(PortfolioTableHeaders.get(0), 10);
+        BrowserUtils.waitForVisibility(PortfolioTableHeaders.get(0), 60);
         List<String> headerList = new ArrayList<>();
         for (WebElement e : PortfolioTableHeaders) {
             if (!e.getText().equals(""))

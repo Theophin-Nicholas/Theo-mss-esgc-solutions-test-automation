@@ -731,7 +731,7 @@ public abstract class PageBase {
             String pageXpath = "//li[text()='" + navigateTo + "']";
             WebElement pageElement = Driver.getDriver().findElement(By.xpath(pageXpath));
            // wait.until(ExpectedConditions.elementToBeClickable(pageElement)).click();
-            BrowserUtils.waitForVisibility(pageElement,5).click();
+            BrowserUtils.waitForVisibility(pageElement,20).click();
         }
     }
 

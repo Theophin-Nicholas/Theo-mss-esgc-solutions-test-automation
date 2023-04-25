@@ -17,6 +17,7 @@ class Request{
     public String id;
     public ArrayList<Status> status;
     public int total;
+    public String create_datetime;
     public String create_date;
     public int eligible_entity_count;
     public int entity_request_count;
@@ -35,9 +36,12 @@ class Detail{
     public String region;
     public String region_name;
     public String score;
+    public String score_quality;
     public String sector;
     public String state;
+    public int actual_size;
     public String size;
+
 }
 
 class ScoreRange{
@@ -52,6 +56,6 @@ class Status{
 
 class Summary{
     public int entity_request_count;
-    public double eligible_pct;
+   public double eligible_pct;
     public int company_count;
 }

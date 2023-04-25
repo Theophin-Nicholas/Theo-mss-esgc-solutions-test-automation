@@ -60,7 +60,7 @@ public class ViewDetailPage extends CommonPage {
     @FindBy(xpath = "//span[text()='% Investment']")
     public WebElement investmentCell;
 
-    @FindBy(xpath = "//span[text()='Region/Country']")
+    @FindBy(xpath = "//span[text()='Region']")
     public WebElement regionCountryCell;
 
     @FindBy(xpath = "/html/body/div[2]/div[3]/div/div/div[1]/div/div[3]")
@@ -171,16 +171,16 @@ public class ViewDetailPage extends CommonPage {
         return exportToExcelButton.getText();
     }
     public void clickScoreTypeButton(){
-        BrowserUtils.waitForVisibility(scoreTypeButton, 25).click();
+        BrowserUtils.waitForClickablility(scoreTypeButton, 25).click();
 
     }
     public void clickSectorButton(){
 
-        BrowserUtils.waitForVisibility(sectorButton, 25).click();
+        BrowserUtils.waitForClickablility(sectorButton, 25).click();
     }
     public void clickRegionButton(){
 
-        BrowserUtils.waitForVisibility(regionButton, 25).click();
+        BrowserUtils.waitForClickablility(regionButton, 25).click();
     }
     public String getScoreButtonTitle(){
         return scoreTypeButton.getText();
@@ -250,19 +250,19 @@ public class ViewDetailPage extends CommonPage {
         return regionButton.isEnabled();
     }
 
-    public void verifyHeaderDetailsInViewDetailPage(ViewDetailPage detail){
+    public void verifyHeaderDetailsInViewDetailPage(ViewDetailPage detail, String portfolioName){
         System.out.println("----------Verify the Header details in the View Detail Page ------------");
 
         System.out.println("the header title of the view detail page is: " + detail.getHeaderTitle());
         assertTestCase.assertTrue(detail.isPredictedScoreLegendDisplayed() , "Verification that predicted legend is displayed");
         assertTestCase.assertEquals(detail.getPredictedScoreLegendText(), "Predicted Score", "Verification of predicted legend text is done");
-        assertTestCase.assertEquals(detail.getHeaderTitle(), "Companies in 500 predicted p", "verify that header is equal to Companies in selected portfolio name ");
+        assertTestCase.assertEquals(detail.getHeaderTitle(), "Companies in " + portfolioName, "verify that header is equal to Companies in selected portfolio name ");
         assertTestCase.assertEquals(detail.getColorOfWebelement(header), "#26415e", "Verification of the header color is done.");
         //assertTestCase.assertEquals(detail.getEscButtonTitle(), "Esc", "Verification that Esc button text is done");
         assertTestCase.assertEquals(detail.getGroupByHeaderTitle(), "Group By:", "Verification of Group By button text is done");
         assertTestCase.assertEquals(detail.getSectorButtonTitle(), "Sector", "Verification of Sector button text is done");
         assertTestCase.assertEquals(detail.getScoreButtonTitle(), "Score Type", "Verification of Score Type button text is done");
-        assertTestCase.assertEquals(detail.getRegionButtonTitle(), "Region", "Verification of Region/country button text is done");
+        assertTestCase.assertEquals(detail.getRegionButtonTitle(), "Region", "Verification of Region button text is done");
         assertTestCase.assertEquals(detail.getExportToExcelButtonTitle(), "Export To Excel", "Verification of Export To Excel button text is done");
         assertTestCase.assertTrue(detail.isExportToExcelButtonEnabled(), "Verification that Export To Excel button is enabled is done");
         assertTestCase.assertTrue(detail.isExportToExcelButtonDisplayed(), "Verification that Export To Excel button is displayed is done");
@@ -284,8 +284,8 @@ public class ViewDetailPage extends CommonPage {
         System.out.println("the actual line 1 of the footer is:" + detail.getFooterLineOneText());
         System.out.println("the actual line 2 of the footer is:" + detail.getFooterLineTwoText());
 
-        assertTestCase.assertEquals(detail.getFooterLineOneText(), expectedFooterLine1 , "Verification of line 1 of the view detail page footer is done");
-        assertTestCase.assertEquals(detail.getFooterLineTwoText(), expectedFooterLine2, "Verification of line 2 of the view detail page footer is done");
+        assertTestCase.assertTrue(detail.getFooterLineOneText().matches("Showing \\d+ out \\d+ in " + portfolioName + ".") , "Verification of line 1 of the view detail page footer is done");
+        assertTestCase.assertTrue(detail.getFooterLineTwoText().matches("Export to view all data for \\d+ companies."), "Verification of line 2 of the view detail page footer is done");
         assertTestCase.assertEquals(detail.getColorOfWebelement(exportToExcelButton), "#ffffff", "Verification of Export To Excel button Color is done");
     }
     public void verifyViewDetailTables(ViewDetailPage detail){
@@ -294,7 +294,7 @@ public class ViewDetailPage extends CommonPage {
         assertTestCase.assertEquals(detail.getEntityCellTitle(), "Entity","Verification of the Entity cell is done");
         assertTestCase.assertEquals(detail.getEsgScoreCellTitle(), "ESG Score", "Verification of the ESG Score cell is done");
         assertTestCase.assertEquals(detail.getInvestmentCellTitle(), "% Investment" , "Verification of the % investment cell is done");
-        assertTestCase.assertEquals(detail.getRegionCountryCellTitle(), "Region/Country" , "Verification of the Region/Country cell is done");
+        assertTestCase.assertEquals(detail.getRegionCountryCellTitle(), "Region" , "Verification of the Region cell is done");
 
     }
 
@@ -312,7 +312,7 @@ public class ViewDetailPage extends CommonPage {
             detail.verifyEntitiesAreNotClickable();
             detail.getColorOfElements();
             detail.verifyTheColorOfPredictedScoreEntities();
-        } else if (option == "Region/Country"){
+        } else if (option == "Region"){
 
             detail.clickRegionButton();
             detail.verifyViewDetailTables(detail);
@@ -381,7 +381,7 @@ public class ViewDetailPage extends CommonPage {
         sectorsName1.addAll(Arrays.asList(sectorsName));
 
         for (WebElement element : getSectorTables()){
-            String sectorText =  element.getText();
+            String sectorText =  element.getText().split("\n")[0];
             System.out.println(sectorText);
             assertTestCase.assertTrue(sectorsName1.contains(sectorText), "the" + sectorText +" is displayed in the sector page in the view detail page");
         }
