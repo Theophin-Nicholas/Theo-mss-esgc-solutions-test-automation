@@ -19,4 +19,5 @@ public class Groups {
     public static final String REGULATORY_REPORTING = "regulatoryReporting";
     public static final String SEARCH_ENTITY = "search_entity";
     public static final String COMMON = "common";
+    public static final String INCLUDEDAPITEST = "includedApiTest";
 }
