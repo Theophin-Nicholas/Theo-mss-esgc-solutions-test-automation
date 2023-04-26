@@ -11,8 +11,8 @@ public class PopUpPage extends CommonPage {
     @FindBy(xpath = "//*[@id='invalid-entitlements-test-id']/div[3]/div/div[1]/h2")
     public WebElement popUpHeader;
 
-    @FindBy( xpath = "//*[@id=\"invalid-entitlements-test-id\"]/div[3]/div/div[2]")
-    WebElement popUpMessage;
+   @FindBy( xpath = "//*[@id=\"invalid-entitlements-test-id\"]/div[3]/div/div[2]")
+   WebElement popUpMessage;
 
     @FindBy(xpath = "//*[@id=\"invalid-entitlements-button-test-id\"]")
     WebElement okButton;

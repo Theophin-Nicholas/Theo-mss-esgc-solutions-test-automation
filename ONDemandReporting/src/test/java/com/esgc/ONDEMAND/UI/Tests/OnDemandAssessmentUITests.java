@@ -4,6 +4,7 @@ import com.esgc.Common.API.Controllers.CommonAPIController;
 import com.esgc.Common.UI.Pages.LoginPage;
 import com.esgc.Common.UI.TestBases.UITestBase;
 import com.esgc.ONDEMAND.API.Controllers.OnDemandFilterAPIController;
+import com.esgc.ONDEMAND.DB.DBQueries.OnDemandAssessmentQueries;
 import com.esgc.ONDEMAND.UI.Pages.OnDemandAssessmentPage;
 import com.esgc.Pages.Page404;
 import com.esgc.Utilities.*;
@@ -17,6 +18,7 @@ import java.text.ParseException;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import static com.esgc.Utilities.Groups.*;
 
@@ -284,6 +286,7 @@ Faker faker = new Faker();
         onDemandAssessmentPage.ValidateSortingOnLastUpdateColumn();
     }
 
+
     @Test(groups = {REGRESSION, UI, COMMON, SMOKE}, description = "UI | On-Demand Reporting | On-Demand Assessments | Verify Different ways to download the portfolio/export file")
     @Xray(test = {13691})
     public void verifyDifferentWaysToDownloadThePortfolioTest() {
@@ -294,4 +297,5 @@ Faker faker = new Faker();
         System.out.println(BrowserUtils.getElementsText(onDemandAssessmentPage.portfolioNamesList));
         onDemandAssessmentPage.verifyDetailsPanel();
     }
+
 }
