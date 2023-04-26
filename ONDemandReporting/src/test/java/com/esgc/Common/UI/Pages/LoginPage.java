@@ -15,6 +15,8 @@ import org.testng.Assert;
 
 import java.util.List;
 
+import static com.esgc.Common.UI.TestBases.UITestBase.setAccessTokenFromUI;
+
 public class LoginPage extends PageBase {
 
 
@@ -370,6 +372,7 @@ public class LoginPage extends PageBase {
             case USER_EXPORT:
                 wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.USER_EXPORT_USERNAME, Keys.ENTER);
                 wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.USER_EXPORT_PASSWORD);
+                break;
             case ODA_USER_WITH_EXHAUSTED_ASSESSMENT_LIMIT:
                 wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.ODAWITHEXHAUTEDASSEMENTLIMIT_USERNAME, Keys.ENTER);
                 wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.ODAWITHEXHAUTEDASSEMENTLIMIT_PASSWORD);
@@ -422,6 +425,7 @@ public class LoginPage extends PageBase {
      /*   if (!termsAndConditionsCheckBox.isSelected())
             wait.until(ExpectedConditions.visibilityOf(termsAndConditionsLabel)).click();*/
         wait.until(ExpectedConditions.visibilityOf(loginButton)).click();
+
 
     }
 

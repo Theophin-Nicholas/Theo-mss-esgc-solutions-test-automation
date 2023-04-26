@@ -3,9 +3,7 @@ package com.esgc.Dashboard.UI.Tests;
 import com.esgc.Base.TestBases.UITestBase;
 import com.esgc.Base.UI.Pages.LoginPage;
 import com.esgc.PortfolioAnalysis.UI.Pages.ResearchLinePage;
-import com.esgc.Utilities.BrowserUtils;
-import com.esgc.Utilities.Driver;
-import com.esgc.Utilities.Xray;
+import com.esgc.Utilities.*;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.testng.annotations.Test;
@@ -64,7 +62,7 @@ public class GlobalHeaderSidePanel extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI})
-    @Xray(test = 1905)
+    @Xray(test = {1905, 11828})
     public void validateGlobalHeaderActions() {
 
         ResearchLinePage researchLinePage = new ResearchLinePage();
@@ -81,6 +79,21 @@ public class GlobalHeaderSidePanel extends UITestBase {
         String currentURL = Driver.getDriver().getCurrentUrl();
 
         assertTestCase.assertEquals(currentURL, "https://www.moodys.com/Pages/contactus.aspx", "Contact Us page verified");
+
+        Driver.getDriver().close();
+        Driver.getDriver().switchTo().window(firstPage);
+
+        researchLinePage.navigateToPageFromMenu("Terms & Conditions");
+
+        for (String windowHandle : Driver.getDriver().getWindowHandles()) {
+            Driver.getDriver().switchTo().window(windowHandle);
+        }
+
+        currentURL = Driver.getDriver().getCurrentUrl();
+
+        assertTestCase.assertEquals(currentURL, Environment.URL + "terms", "Terms & Conditions page verified");
+        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("(//header)[3]//../following-sibling::div")).getText(),
+                TermsConditionsUtilities.termsAndConditionText());
 
         Driver.getDriver().close();
         Driver.getDriver().switchTo().window(firstPage);
