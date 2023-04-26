@@ -1,12 +1,14 @@
 package com.esgc.ONDEMAND.DB.Tests;
 
 import com.esgc.Common.API.Controllers.CommonAPIController;
+import com.esgc.Common.UI.Pages.LoginPage;
 import com.esgc.ONDEMAND.API.Controllers.OnDemandFilterAPIController;
 import com.esgc.ONDEMAND.DB.DBModels.OnDemandPortfolioTable;
 import com.esgc.ONDEMAND.DB.DBQueries.OnDemandAssessmentQueries;
 import com.esgc.Common.DB.TestBases.DataValidationTestBase;
 
 import com.esgc.ONDEMAND.UI.Pages.OnDemandAssessmentPage;
+import com.esgc.RegulatoryReporting.UI.Pages.RegulatoryReportingPage;
 import com.esgc.Utilities.*;
 import org.testng.annotations.Test;
 
@@ -190,5 +192,4 @@ public class OnDemandAssessmentDBTests extends DataValidationTestBase {
         assertTestCase.assertTrue(UIValues.get("Coverage").equals(CommonUtility.round((float) sumOfCoveredEntities/dbData.get(0).getTOTAL_VALUE()*100,2)+"%"),"Validating Coverage Value");
         assertTestCase.assertTrue(UIValues.get("ONDemandEligibility").equals(CommonUtility.round((float) sumOfPredictedEntities/dbData.get(0).getTOTAL_VALUE()*100,2)+"%"),"Validating On Demand Eligibility Value");
     }
-
 }

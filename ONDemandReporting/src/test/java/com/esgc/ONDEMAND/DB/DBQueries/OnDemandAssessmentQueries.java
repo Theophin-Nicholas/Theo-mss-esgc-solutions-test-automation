@@ -2,6 +2,7 @@ package com.esgc.ONDEMAND.DB.DBQueries;
 
 import com.esgc.ONDEMAND.DB.DBModels.OnDemandPortfolioTable;
 import com.esgc.Utilities.Database.DatabaseDriver;
+import com.esgc.Utilities.DateTimeUtilities;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -16,6 +17,7 @@ public class OnDemandAssessmentQueries {
         String totalInvestments = DatabaseDriver.getQueryResultMap(query1).get(0).get("TOTALINV").toString();
 
         String query2 = "select COMPANY_NAME, VALUE, Round((VALUE/"+totalInvestments+")*100, 2) as InvPerc from df_target.df_portfolio Where portfolio_id = '"+portfolioId+"' order by COMPANY_NAME ASC";
+        System.out.println("getCompaniesInvestmentInfo query: "+query2);
         return DatabaseDriver.getQueryResultMap(query2);
     }
 
@@ -96,6 +98,33 @@ public class OnDemandAssessmentQueries {
             query = query + "DATA_ALLIANCE= '" + DataAlliance+ "' And ";
         }
         query = query + "est.SCORE_QUALITY ='" + ScoreQuality+ "' and est.Entity_Status = 'Active' and est.IS_Current = 'Y' limit " + dataCount;
+
+        if(ScoreQuality.equals("SFDR Only"))
+            query="select BVD9_NUMBER as ORBIS_ID from \"DF_TARGET\".\"REGULATORY_REPORT_SFDR\" sf\n" +
+                    "where sf.BVD9_NUMBER not in (select eu.orbis_ID from EU_TAXONOMY_OVERVIEW eu)\n" +
+                    "limit "+dataCount;
+
+        if(ScoreQuality.equals("EU Taxonomy Only"))
+            query="select eu.orbis_ID from EU_TAXONOMY_OVERVIEW eu\n" +
+                    "where eu.orbis_id not in (select BVD9_NUMBER from \"DF_TARGET\".\"REGULATORY_REPORT_SFDR\")\n" +
+                    "limit "+dataCount;
+
+        if(ScoreQuality.equals("NotSFDRNotEUTaxonomy"))
+            query="select ORBIS_ID from \"DF_TARGET\".\"ORBIS_ENTITY_SCORE\"\n" +
+                    "where orbis_id not in (select orbis_ID from EU_TAXONOMY_OVERVIEW)\n" +
+                    "and orbis_id not in (select BVD9_NUMBER from \"DF_TARGET\".\"REGULATORY_REPORT_SFDR\")\n" +
+                    "limit "+dataCount;
+
+        if(ScoreQuality.equals("DataAlliance"))
+            query="select distinct orbis_id, data_alliance from ENTITY_SCORE_TYPE\n" +
+                    "where data_alliance is not null\n" +
+                    "order by data_alliance desc limit "+dataCount;
+
+        if(ScoreQuality.equals("BothSFDRAndEUTaxonomy"))
+            query="select distinct ORBIS_ID from \"DF_TARGET\".\"ORBIS_ENTITY_SCORE\"\n" +
+                    "where orbis_id in (select orbis_ID from EU_TAXONOMY_OVERVIEW)\n" +
+                    "and orbis_id in (select BVD9_NUMBER from \"DF_TARGET\".\"REGULATORY_REPORT_SFDR\")\n" +
+                    "limit "+dataCount;
         List<String> dataList =  new ArrayList<>();
         for (Map<String, Object> result : DatabaseDriver.getQueryResultMap(query)){
             dataList.add(result.get("ORBIS_ID").toString());
@@ -114,7 +143,7 @@ public class OnDemandAssessmentQueries {
                 "("+scoreQuality+") " +
                 "where portfolio_id = '"+portfolioID+"' " +
                 "GROUP BY dp.portfolio_id, \"bvd9_number\", dp.region,dp.company_name, dp.sector ,est.SCORE_QUALITY \n" ;
-
+        System.out.println("getDataForPortfolioTable query : "+query);
         List<OnDemandPortfolioTable> dataList =  new ArrayList<>();
         for (Map<String, Object> result : DatabaseDriver.getQueryResultMap(query)){
             OnDemandPortfolioTable list = new OnDemandPortfolioTable();
@@ -155,9 +184,10 @@ public class OnDemandAssessmentQueries {
                 "                    GROUP BY dp.portfolio_id, \"bvd9_number\", dp.region,dp.company_name, dp.sector ,est.SCORE_QUALITY ";
 
 
-
+        System.out.println("getEntitiesWithScoreType query : "+query);
         return DatabaseDriver.getQueryResultMap(query);
     }
+
     public List<Object> getEntitiesNameList(String portfolioId){
 
         List<Object> rowList = new ArrayList<>();
@@ -179,25 +209,27 @@ public class OnDemandAssessmentQueries {
                 "                                                and est.score_quality in ('Analytical', 'Subsidiary', 'Predicted', 'Self-Assessed')\n" +
                 "                    where portfolio_id = '"+portfolioId+"'\n" +
                 "                    GROUP BY dp.portfolio_id, \"bvd9_number\", dp.region,dp.company_name, dp.sector ,est.SCORE_QUALITY ";
-
+        System.out.println("getEntitiesNameList query : "+query);
         rowList.addAll(DatabaseDriver.getColumnData(query, "COMPANY_NAME"));
         return rowList;
     }
 
-
-    public List<String> getEntitieNamesFromResultSet(String portfolioId){
+    public List<String> getEntitiesNamesFromResultSet(String portfolioId){
         List<Map<String, Object>> resultSet = getEntitiesWithScoreType(portfolioId);
-
-
 
         List<String> entityNames = new LinkedList<>();
 
         for(int i=0; i<entityNames.size(); i++){
             entityNames.add(resultSet.get(i).get("COMPANY_NAME").toString());
         }
-
         return entityNames;
     }
 
-
+    public List<Map<String, Object>> getESGENTITYEXPORT(String portfolioId) {
+        String query="select * from VW_DASHBOARD_CLIMATE_ENTITY_DATA_EXPORT\n" +
+                "where portfolio_id = '"+portfolioId+"'\n" +
+                "and year='"+ DateTimeUtilities.getCurrentYear() +"' and month = '"+DateTimeUtilities.getCurrentMonthNumeric()+"'";
+        System.out.println("getESGENTITYEXPORT query : "+query);
+        return DatabaseDriver.getQueryResultMap(query);
+    }
 }
