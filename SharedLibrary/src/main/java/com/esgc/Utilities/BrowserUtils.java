@@ -27,27 +27,9 @@ public class BrowserUtils {
      */
     public static String downloadPath (){
 
-        String path = "";
-        boolean isRemote = System.getProperty("browser").contains("remote");
-        if(isRemote){
-            try{
-                String command = "pwd";
-                Process process = Runtime.getRuntime().exec(command);
-                BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-                String currentPath = reader.readLine();
-                System.out.println("Current working directory on remote node: " + currentPath);
-                path = currentPath + File.separator + "download";
-            }catch (IOException e) {
-                System.out.println("FILE ERRORRR!!!!");
-                e.printStackTrace();
-            }
+        return System.getProperty("user.dir") + File.separator + "src" +
+                File.separator + "test" + File.separator + "resources" + File.separator + "download";
 
-        }else{
-            path = System.getProperty("user.dir") + File.separator + "src" +
-                    File.separator + "test" + File.separator + "resources" + File.separator + "download";
-        }
-
-        return path;
     }
 
     /**
