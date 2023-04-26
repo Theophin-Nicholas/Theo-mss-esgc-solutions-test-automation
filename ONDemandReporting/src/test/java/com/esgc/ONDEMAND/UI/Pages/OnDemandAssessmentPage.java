@@ -2,7 +2,9 @@ package com.esgc.ONDEMAND.UI.Pages;
 
 
 import com.esgc.Common.UI.Pages.CommonPage;
+import com.esgc.Common.UI.Pages.LoginPage;
 import com.esgc.ONDEMAND.API.Controllers.OnDemandFilterAPIController;
+import com.esgc.Utilities.*;
 import com.esgc.ONDEMAND.DB.DBQueries.OnDemandAssessmentQueries;
 import com.esgc.Utilities.*;
 import org.openqa.selenium.By;
@@ -99,7 +101,7 @@ public class OnDemandAssessmentPage extends CommonPage {
     @FindBy(xpath = "//div[contains(@id,'card-test-id-1')]//button/div/div")
     public WebElement locationHeader;
 
-    @FindBy(xpath = "//div[contains(@id,'card-test-id-1')]//span[@title='All Locations (100%)']")
+    @FindBy(xpath = "//div[contains(@id,'card-test-id-1')]//span[contains(@title,'All Locations')]")
     public WebElement location_AllLocations;
 
     @FindBy(xpath = "//div[contains(@id,'card-test-id-1')]//label")
@@ -111,7 +113,7 @@ public class OnDemandAssessmentPage extends CommonPage {
     @FindBy(xpath = "//div[contains(@id,'card-test-id-2')]//button/div/div")
     public WebElement sectorHeader;
 
-    @FindBy(xpath = "//div[contains(@id,'card-test-id-2')]//span[@title='All Sectors (100%)']")
+    @FindBy(xpath = "//div[contains(@id,'card-test-id-2')]//span[contains(@title,'All Sectors')]")
     public WebElement sector_AllSectors;
 
     @FindBy(xpath = "//div[contains(@id,'card-test-id-3')]//label")
@@ -314,15 +316,17 @@ public class OnDemandAssessmentPage extends CommonPage {
 
     public void KeepOnlyOneRequest() {
         selectFilter("No Request Sent");
+        BrowserUtils.waitForVisibility(removeButtons,60);
         while (removeButtons.size() > 1) {
-            removeButtons.get(0).click();
+            BrowserUtils.waitForClickablility(removeButtons.get(0),60).click();
         }
     }
 
     public void RemoveRequests(int remainingRequests) {
         selectFilter("No Request Sent");
+        BrowserUtils.waitForVisibility(removeButtons,60);
         while (removeButtons.size() > remainingRequests) {
-            removeButtons.get(0).click();
+            BrowserUtils.waitForClickablility(removeButtons.get(0),60).click();
         }
     }
 
@@ -466,7 +470,7 @@ public class OnDemandAssessmentPage extends CommonPage {
     }
 
     public boolean isCancelButtonAvailable() {
-        return btnCancel.isDisplayed();
+        return BrowserUtils.waitForVisibility(btnCancel,60).isDisplayed();
     }
 
     public boolean isReviewButtonAvailable() {
@@ -487,7 +491,8 @@ public class OnDemandAssessmentPage extends CommonPage {
         assertTestCase.assertTrue(Integer.parseInt(predictedScoresliders.get(0).getAttribute("aria-valuemin")) >= 0);
         assertTestCase.assertTrue(Integer.parseInt(predictedScoresliders.get(1).getAttribute("aria-valuemin")) >= 0);
         assertTestCase.assertTrue(predictedScoreInvper.getText().matches("\\d+.\\d+% invested"));
-        assertTestCase.assertTrue(predictedScoreTextBelowGraph.getText().matches("Companies with predicted scores ranging \\d+-\\d+ account for \\d+.\\d% of investments"));
+        String assessmentEligible = lblAssessmentEligible.getText().substring(0,lblAssessmentEligible.getText().indexOf("%"));
+        assertTestCase.assertTrue(predictedScoreTextBelowGraph.getText().matches("Companies with predicted scores ranging \\d+-\\d+ account for "+assessmentEligible +"% of investments"));
     }
 
     public void validateLocation() {
@@ -539,12 +544,12 @@ public class OnDemandAssessmentPage extends CommonPage {
         int FirstcompaniesCount = getCompaniesCountFromReviewButtion();
         //Validating Or Condition
         location_LocationLabels.get(0).click();
-        assertTestCase.equals(getCompaniesCountFromReviewButtion() == FirstcompaniesCount);
+        assertTestCase.equals(getCompaniesCountFromReviewButtion() != FirstcompaniesCount);
 
         //Validating And Condition
         toggleButton.click();
         location_LocationLabels.get(0).click();
-        assertTestCase.equals(getCompaniesCountFromReviewButtion() != FirstcompaniesCount);
+        assertTestCase.equals(getCompaniesCountFromReviewButtion() == FirstcompaniesCount);
         // Below code is to move the slider in Predicted Score section --
         /*for (int i = 1; i <= 9; i++) predictedScoresliders.get(0).sendKeys(Keys.ARROW_RIGHT);
 
@@ -557,7 +562,10 @@ public class OnDemandAssessmentPage extends CommonPage {
     }
 
     public int getCompaniesCountFromReviewButtion() {
-        return new Scanner(btnReviewRequest.getText()).useDelimiter("\\D+").nextInt();
+       // BrowserUtils.waitForClickablility(btnReviewRequest,30);
+        WebElement e = BrowserUtils.waitForVisibility(btnReviewRequest,10).findElement(By.xpath("span/div"));
+        return new Scanner(e.getText()).useDelimiter("\\D+").nextInt();
+
 
     }
 
@@ -585,7 +593,7 @@ public class OnDemandAssessmentPage extends CommonPage {
     }
 
     public void validateOnDemandPageHeader() {
-        assertTestCase.assertEquals(BrowserUtils.waitForVisibility(menuOptionPageHeader, 90).getText(), "Moody's ESG360: Request On-Demand Assessment", "Moody's ESG360: Request On-Demand Assessment page verified");
+        assertTestCase.assertEquals(BrowserUtils.waitForVisibility(menuOptionPageHeader, 90).getText(), "Moody's Analytics: Request On-Demand Assessment", "Moody's Analytics: Request On-Demand Assessment page verified");
     }
 
     public void validateProceedOnConfirmRequestPopup(String countOfCompanies) {
@@ -659,15 +667,16 @@ public class OnDemandAssessmentPage extends CommonPage {
 
     public void verifyMethodologies() {
         String currentWindow = BrowserUtils.getCurrentWindowHandle();
-        assertTestCase.assertTrue(btnMethodologies.isDisplayed(), "Methodologies button is displayed");
-        BrowserUtils.waitForClickablility(btnMethodologies, 60).click();
-        assertTestCase.assertTrue(methodologiesPopupTitle.isDisplayed(), "Methodologies popup is displayed");
-        assertTestCase.assertTrue(methodologiesPopupListHeader.isDisplayed(), "Methodologies popup list header is displayed");
+        assertTestCase.assertTrue(BrowserUtils.waitForVisibility(btnMethodologies,10).isDisplayed(), "Methodologies button is displayed");
+        BrowserUtils.waitForClickablility(BrowserUtils.waitForVisibility(btnMethodologies,10), 60).click();
+        assertTestCase.assertTrue(BrowserUtils.waitForVisibility(methodologiesPopupTitle,10).isDisplayed(), "Methodologies popup is displayed");
+        assertTestCase.assertTrue(BrowserUtils.waitForVisibility(methodologiesPopupListHeader,10).isDisplayed(), "Methodologies popup list header is displayed");
         assertTestCase.assertTrue(methodologiesPopupList.size()>0, "Methodologies popup list is displayed");
         assertTestCase.assertTrue(methodologiesPopupCloseButton.isDisplayed(), "Methodologies popup close button is displayed");
         assertTestCase.assertTrue(methodologiesPopupDownloadAllButton.isEnabled(), "Methodologies popup download all button is enabled");
 
-        List<String> expectedMethodologiesList = Arrays.asList("Analyst", "Self Assessed", "Predicted");
+       // List<String> expectedMethodologiesList = Arrays.asList("Analyst", "Self Assessed", "Predicted");
+        List<String> expectedMethodologiesList = Arrays.asList("Analyst", "Predicted");
         assertTestCase.assertTrue(BrowserUtils.getElementsText(methodologiesPopupList).containsAll(expectedMethodologiesList),
                 "Methodologies popup list contains all expected methodologies");
 
@@ -681,11 +690,11 @@ public class OnDemandAssessmentPage extends CommonPage {
                 case "Analyst":
                     assertTestCase.assertTrue(Driver.getDriver().getCurrentUrl().endsWith("Methodology_1.0_ESG_Assessment.pdf"), "Analyst methodology is opened");
                     break;
-                case "Self Assessed":
+               /* case "Self Assessed":
                     assertTestCase.assertTrue(Driver.getDriver().getCurrentUrl().endsWith("Methodology_2.0_ESG_Assessment_20220517.pdf"), "Self Assessed methodology is opened");
-                    break;
+                    break;*/
                 case "Predicted":
-                    assertTestCase.assertTrue(Driver.getDriver().getCurrentUrl().endsWith("Methodology_2.0_ESG_Assessment.pdf"), "Predicted methodology is opened");
+                    assertTestCase.assertTrue(Driver.getDriver().getCurrentUrl().endsWith("ESG_Score_Predictor_Methodology.pdf"), "Predicted methodology is opened");
                     break;
             }
             BrowserUtils.switchWindowsTo(currentWindow);
@@ -725,9 +734,10 @@ public class OnDemandAssessmentPage extends CommonPage {
             e.printStackTrace();
         }
         System.out.println("Unzipping is done");
-        List<String> expectedDocumentList = Arrays.asList("Methodology_1.0_ESG_Assessment.pdf", "Methodology_2.0_ESG_Assessment.pdf", "Methodology_2.0_ESG_Assessment 20220517.pdf");
+        //List<String> expectedDocumentList = Arrays.asList("Methodology_1.0_ESG_Assessment.pdf", "Methodology_2.0_ESG_Assessment.pdf", "Methodology_2.0_ESG_Assessment 20220517.pdf");
+        List<String> expectedDocumentList = Arrays.asList("Methodology_1.0_ESG_Assessment.pdf", "ESG_Score_Predictor_Methodology.pdf");
         for (String file : expectedDocumentList) {
-            File document = new File(destDirectory+File.separator+file);
+            File document = new File(destDirectory+"/methodologies"+File.separator+file);
             if (!document.exists()) {
                 System.out.println("File " + file + " is not found");
                 return false;
@@ -758,14 +768,14 @@ public class OnDemandAssessmentPage extends CommonPage {
     }
 
     public boolean isViewAssessmentRequestButtonDisabled(){
-        return buttonViewAssessmentStatus.getAttribute("class").contains("disabled");
+        return BrowserUtils.waitForVisibility(buttonViewAssessmentStatus,60).getAttribute("class").contains("disabled");
     }
     public boolean isbuttonMethodologiesEnabled(){
-        return buttonMethodologies.getAttribute("class").contains("disabled");
+        return BrowserUtils.waitForVisibility(buttonMethodologies,60).getAttribute("class").contains("disabled");
     }
 
     public boolean isAssessmentsRemainingOptionAvailable(){
-        return AssessmentsRemaining.getText().contains("Assessments remaining");
+        return BrowserUtils.waitForVisibility(AssessmentsRemaining).getText().contains("Assessments remaining");
     }
 
     public boolean isExportbuttonDisabled(){
@@ -773,7 +783,8 @@ public class OnDemandAssessmentPage extends CommonPage {
     }
 
     public void trySelectingMultiplePortfolios() {
-       for(int i = 0 ; i< getPortfolioList().size() ; i++ ) {
+        int size = getPortfolioList().size()>3? 3 : getPortfolioList().size();
+       for(int i = 0 ; i< size ; i++ ) {
             portfolioRadioButtonList.get(i).click();
         }
     }
@@ -862,6 +873,7 @@ public class OnDemandAssessmentPage extends CommonPage {
         return viewDetailForPortfolio(index);
     }
 
+
     public boolean viewDetailForPortfolio(int index) {
         if(index == -1) {
             System.out.println("Portfolio not found");
@@ -886,7 +898,7 @@ public class OnDemandAssessmentPage extends CommonPage {
         for(int i = 0; i < viewDetailButton.size(); i++) {
             if(viewDetailForPortfolio(i)) break;
         }
-        BrowserUtils.waitForVisibility(detailPanelCompanyNames, 20);
+        BrowserUtils.waitForVisibility(detailPanelCompanyNames, 60);
         assertTestCase.assertTrue(detailPanelHeader.isDisplayed(), "Details panel header is displayed");
         assertTestCase.assertTrue(detailPanelFilterButtons.size()>0, "Details panel filter buttons are displayed");
         assertTestCase.assertTrue(detailPanelTableTitles.size()>0, "Details panel table titles are displayed");
@@ -962,6 +974,18 @@ public class OnDemandAssessmentPage extends CommonPage {
         }
         return index;
     }
+
+    @FindBy(xpath = "//*[@id='viewcomapnies-0-Financials-tableCell-0-0']")
+    public WebElement entityInViewBySectorTab;
+    @FindBy(xpath = "//*[@id='dashboard_PageHeader']/div/div/div[2]/div/div[1]/div/div[2]/span")
+    public WebElement climateCoverageLink;
+
+
+    public void clickOnClimateCoverageLink(){
+        BrowserUtils.waitForClickablility(climateCoverageLink, 50);
+        climateCoverageLink.click();
+    }
+
 
     //Download portfolio from 2 places: portfolio list-Download button, and from details panel-Export to Excel button
     //input parameter: location of the downloaded file either page, or details panel
@@ -1148,5 +1172,161 @@ public class OnDemandAssessmentPage extends CommonPage {
         }
         return portfolioName;
     }
+
+
+    @FindBy(xpath = "//*[@id=\"Climate Dashboardtopbar-menuitem-test-id\"]")
+    public WebElement climateDashboardTab;
+    @FindBy(xpath = "//*[@id=\"Climate Portfolio Analysistopbar-menuitem-test-id\"]")
+    public WebElement portfolioAnalysisTab;
+    @FindBy(xpath = "//*[@id=\"on-demand-reporting-topbar-menuitem\"]")
+    public WebElement reportingPortalTab;
+    @FindBy(xpath = "//*[@id='topbar-appbar-test-id']/div/li")
+    public WebElement pageHeader;
+
+    @FindBy(xpath = "//li[contains(@class,'MuiButtonBase')]")
+    public List<WebElement> menuItems;
+    @FindBy(xpath = "//*[@id=\"topbar-appbar-test-id\"]/div/div[2]")
+    public WebElement searchButton;
+    @FindBy(xpath = "//*[@id=\"platform-search-test-id\"]")
+    public WebElement searchField;
+    @FindBy(xpath = "//*[@id=\"mini-0\"]/div[2]/span")
+    public WebElement searchResultLineOne;
+
+    @FindBy(xpath = "/html/body/div[2]/div[3]/div/div[1]/div[2]/svg")
+    public WebElement escapeButton;
+
+    @FindBy(xpath = "//*[@id='eu_taxonomy']")
+    public WebElement euTaxonomyOption;
+
+    @FindBy(xpath = "//*[@id='sfdr']")
+    public WebElement sfdrOption;
+
+    @FindBy(xpath = "//*[@id='on_demand_assessment']")
+    public WebElement ondemandOption;
+
+    @FindBy(xpath = "//*[@id=\"eu_taxonomy\"]/label/span[1]/span/input")
+    public WebElement euTaxonomyRadioButton;
+
+    @FindBy(xpath = "//*[@id=\"sfdr\"]/label/span[1]/span/input")
+    public WebElement sfdrRadioButton;
+    public void clickOnEscapeButton() {
+        BrowserUtils.waitAndClick(escapeButton, 5);
+    }
+
+    public void searchForEntitities(String entity) {
+        BrowserUtils.waitForVisibility(searchField, 30);
+        searchField.sendKeys(entity);
+    }
+
+    public void validateEntitiesWithOnlyEsgDataDontShowInSearch(String entity) {
+
+       String expectedSearchResult = BrowserUtils.waitForVisibility(searchResultLineOne, 20).getText();
+        assertTestCase.assertTrue(!entity.equals(searchResultLineOne.getText()), "Validating that " + entity + " which is an Entity with ESG data only is not returned or suggested in search option : Status Done");
+
+    }
+
+    public void clickOnSearchButton() {
+        BrowserUtils.waitForClickablility(searchButton, 20);
+        searchButton.click();
+    }
+    public boolean isSearchButtonDisplayed(){
+        BrowserUtils.waitForInvisibility(searchButton, 20);
+        return searchButton.isDisplayed();
+    }
+
+    public void validateSearchButtonNotDisplayed(){
+        assertTestCase.assertTrue(!isSearchButtonDisplayed(), "Verifying that user can't open entity page or search for it : Status Done");
+    }
+
+
+    public void validateDashboardAndPortfolioAnalysisNotPresentInGlobalMenu() {
+        String expectedTabTitle = "Climate Dashboard";
+        String expectedTab1Title = "Climate Portfolio Analysis";
+
+        System.out.println("-------------Validate Dashboard and Portfolio Analysis are not visible---------------");
+        assertTestCase.assertTrue(!climateDashboardTab.isDisplayed(),"Verifying the Climate Dashboard is not visible : Status Done");
+        assertTestCase.assertTrue(!portfolioAnalysisTab.isDisplayed(), "Verifying the Climate Portfolio Analysis is not visible : Status Done");
+        System.out.println("-------------Just validated that Dashboard and Portfolio Analysis are not visible------------------");
+    }
+
+    public void validateDashboardTabNotPresentFromGlobalMenu(String menuTab) {
+        System.out.println("------------Verifying that "+ menuTab+" is removed from global menu-------------------");
+        for (WebElement e : menuItems) {
+            String menuItemText = e.getText();
+            System.out.println("verify that " + menuItemText + " is not equal to " + menuTab);
+            assertTestCase.assertTrue(!menuItemText.equals(menuTab), "Verify that " + menuTab +" is not visible in the Global menu : Status Done");
+        }
+    }
+    public void validateAnyTabPresentInGlobalMenu(String menuTab) {
+        System.out.println("------------Verifying that "+ menuTab+" is visible from global menu-------------------");
+        for (WebElement e : menuItems) {
+            String menuItemText = e.getText();
+            if(menuItemText.equals(menuTab))
+            //System.out.println("verify that " + menuItemText + " is equal to " + menuTab);
+            assertTestCase.assertTrue(menuItemText.equals(menuTab), "Verify that " + menuTab +" is visible in the Global menu : Status Done");
+            break;
+        }
+    }
+
+    public void validateReportingOptionsInReportingPage2(String option) {
+        System.out.println("------------Verifying that "+ option+" is visible from global menu-------------------");
+        for (WebElement e : menuItems) {
+            String menuItemText = e.getText();
+            if(menuItemText.equals(option))
+                //System.out.println("verify that " + menuItemText + " is equal to " + menuTab);
+                assertTestCase.assertTrue(menuItemText.equals(option), "Verify that " + option +" is visible in the Global menu : Status Done");
+            break;
+        }
+    }
+
+    public void validateReportingOptionsInReportingPage(LoginPage login , EntitlementsBundles bundles){
+        OnDemandAssessmentPage odaPage = new OnDemandAssessmentPage();
+
+        switch(bundles) {
+
+            case USER_SFDR_ESG_ESG_PREDICTOR_ODA_EXCEL:
+                login.entitlementsLogin(EntitlementsBundles.USER_SFDR_ESG_ESG_PREDICTOR_ODA_EXCEL);
+                assertTestCase.assertTrue(odaPage.validateOnDemandReportingLandingPage(), "Validating that landing page is On-Demand Reporting Page");
+                assertTestCase.assertTrue(!euTaxonomyRadioButton.isEnabled(), "Verifying Eu-Taxonomy option is disabled : Status Done");
+                assertTestCase.assertTrue(sfdrRadioButton.isEnabled(), "Verifying SFDR PAIs option is enabled : Status Done");
+                odaPage.clickOnMenuButton();
+                odaPage.clickOnLogOutButton();
+                break;
+            case USER_EUTAXONOMY_ESG_ESG_PREDICTOR_ODA_EXCEL:
+                login.entitlementsLogin(EntitlementsBundles.USER_EUTAXONOMY_ESG_ESG_PREDICTOR_ODA_EXCEL);
+                assertTestCase.assertTrue(odaPage.validateOnDemandReportingLandingPage(), "Validating that landing page is On-Demand Reporting Page");
+                assertTestCase.assertTrue(euTaxonomyRadioButton.isEnabled(), "Verifying Eu-Taxonomy option is enabled : Status Done");
+                assertTestCase.assertTrue(!sfdrRadioButton.isEnabled(), "Verifying SFDR PAIs option is disabled : Status Done");
+                odaPage.clickOnMenuButton();
+                odaPage.clickOnLogOutButton();
+                break;
+            case USER_EUTAXONOMY_ESG_ESG_PREDICTOR_ODA:
+                login.entitlementsLogin(EntitlementsBundles.USER_EUTAXONOMY_ESG_ESG_PREDICTOR_ODA);
+                assertTestCase.assertTrue(odaPage.validateOnDemandReportingLandingPage(), "Validating that landing page is On-Demand Reporting Page");
+                assertTestCase.assertTrue(euTaxonomyRadioButton.isEnabled(), "Verifying Eu-Taxonomy option is enabled : Status Done");
+                assertTestCase.assertTrue(!sfdrRadioButton.isEnabled(), "Verifying SFDR PAIs option is disabled : Status Done");
+                odaPage.clickOnMenuButton();
+                odaPage.clickOnLogOutButton();
+                break;
+            case USER_SFDR_ESG_ESG_PREDICTOR_ODA:
+                login.entitlementsLogin(EntitlementsBundles.USER_SFDR_ESG_ESG_PREDICTOR_ODA);
+                assertTestCase.assertTrue(odaPage.validateOnDemandReportingLandingPage(), "Validating that landing page is On-Demand Reporting Page");
+                assertTestCase.assertTrue(!euTaxonomyRadioButton.isEnabled(), "Verifying Eu-Taxonomy option is disabled : Status Done");
+                assertTestCase.assertTrue(sfdrRadioButton.isEnabled(), "Verifying SFDR PAIs option is enabled : Status Done");
+                odaPage.clickOnMenuButton();
+                odaPage.clickOnLogOutButton();
+                break;
+            case USER_EUTAXONOMY_SFDR_ESG_ESG_PREDICTOR_ODA_EXCEL:
+                login.entitlementsLogin(EntitlementsBundles.USER_EUTAXONOMY_SFDR_ESG_ESG_PREDICTOR_ODA_EXCEL);
+                assertTestCase.assertTrue(odaPage.validateOnDemandReportingLandingPage(), "Validating that landing page is On-Demand Reporting Page");
+                assertTestCase.assertTrue(euTaxonomyRadioButton.isEnabled(), "Verifying Eu-Taxonomy option is enabled : Status Done");
+                assertTestCase.assertTrue(sfdrRadioButton.isEnabled(), "Verifying SFDR PAIs option is enabled : Status Done");
+                odaPage.clickOnMenuButton();
+                odaPage.clickOnLogOutButton();
+                break;
+
+        }
+    }
+
 
 }

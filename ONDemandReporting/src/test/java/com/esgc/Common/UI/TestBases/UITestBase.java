@@ -42,7 +42,7 @@ public abstract class UITestBase extends TestBase implements ITestListener {
 
     }
 
-    @BeforeMethod(onlyForGroups = {ENTITLEMENTS}, groups = {SMOKE, REGRESSION, ENTITLEMENTS}, alwaysRun = true)
+   /* @BeforeMethod(onlyForGroups = {ENTITLEMENTS}, groups = {SMOKE, REGRESSION, ENTITLEMENTS}, alwaysRun = true)
     public synchronized void setupEntitlementsForUITesting(@Optional String browser) {
         System.out.println("Before method called");
         String URL = Environment.URL;
@@ -59,7 +59,7 @@ public abstract class UITestBase extends TestBase implements ITestListener {
         Driver.getDriver().manage().window().maximize();
         Driver.getDriver().manage().timeouts().implicitlyWait(Duration.ofSeconds(30));
         isUITest = true;
-    }
+    }*/
 
     @BeforeMethod(alwaysRun = true)
     public synchronized void loginForTestsIfUserLoggedOut() {
@@ -95,6 +95,11 @@ public abstract class UITestBase extends TestBase implements ITestListener {
        LoginPage login = new LoginPage();
        if (!Driver.getDriver().getCurrentUrl().endsWith("login")) login.clickOnLogout();
     }
+
+    /*@BeforeMethod(onlyForGroups = {INCLUDEDAPITEST}, groups = {SMOKE, REGRESSION, UI, ENTITLEMENTS,INCLUDEDAPITEST} )
+    public synchronized void getToken(){
+        setAccessTokenFromUI();
+    }*/
 
    /* @BeforeMethod(onlyForGroups = {COMMON} )
     public void commonStarttup() {

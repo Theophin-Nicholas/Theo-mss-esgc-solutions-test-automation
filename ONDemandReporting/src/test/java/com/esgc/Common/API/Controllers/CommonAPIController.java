@@ -75,7 +75,7 @@ public class CommonAPIController {
                 deletePortfolio(id);
             }
         }catch(Exception e) {
-            //e.printStackTrace();
+            e.printStackTrace();
         }
     }
 
@@ -109,7 +109,7 @@ public class CommonAPIController {
                 File.separator+"upload"+File.separator+fileName;
     }
 
-    public static List<String> getPortfolioIds(String portfolioName) {
+    public synchronized static List<String> getPortfolioIds(String portfolioName) {
         Response response = getPortfolioDetails();
 //        response.prettyPrint();
         List<PortfolioDetails> portfolios = new ArrayList<>();
@@ -138,7 +138,7 @@ public class CommonAPIController {
         return null;
     }
 
-    public static Response getPortfolioDetails() {
+    public synchronized static Response getPortfolioDetails() {
         Response response = null;
         try {
             response = configSpec()
@@ -156,7 +156,7 @@ public class CommonAPIController {
         return portfolioNames;
     }
 
-    public String getPortfolioId(String portfolioName) {
+    public synchronized String getPortfolioId(String portfolioName) {
         Response response = getPortfolioDetails();
 //        response.prettyPrint();
         List<String> portfolioNames = response.jsonPath().getList("portfolios.portfolio_name");
@@ -208,6 +208,7 @@ public class CommonAPIController {
         try {
             response = configSpec()
                     .when()
+                    .log().all()
                     .get(CommonEndPoints.GET_ENTITLEMENT_HANDLER);
         } catch (Exception e) {
             System.out.println("Inside exception " + e.getMessage());
