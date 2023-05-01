@@ -2,6 +2,7 @@ package com.esgc.Dashboard.UI.Tests;
 
 import com.esgc.Base.TestBases.DashboardUITestBase;
 import com.esgc.Base.UI.Pages.LoginPage;
+import com.esgc.Dashboard.TestDataProviders.EntityWithEsgDataOnlyDataProviders;
 import com.esgc.Dashboard.UI.Pages.DashboardPage;
 import com.esgc.TestBase.DataProviderClass;
 import com.esgc.Utilities.BrowserUtils;
@@ -83,6 +84,8 @@ public class DashboardEntitlementsTests extends DashboardUITestBase {
                 dashboardPage.getExpectedListOfHeatMapResearchLines(bundleName),
                 "Validating Heat Map Research Lines", testCase);
     }
+
+
 
 
 }

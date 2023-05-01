@@ -377,6 +377,49 @@ public class LoginPage extends PageBase {
                 wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.ODAWITHEXHAUTEDASSEMENTLIMIT_USERNAME, Keys.ENTER);
                 wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.ODAWITHEXHAUTEDASSEMENTLIMIT_PASSWORD);
                 break;
+            case USER_CLIMATE_ESG:
+
+                wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.USER_CLIMATE_ESG_USERNAME, Keys.ENTER);
+                wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.USER_CLIMATE_ESG_PASSWORD);
+
+                break;
+            case USER_CLIMATE_ESG_ESG_PREDICTOR_EXPORT:
+
+                wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.USER_CLIMATE_ESG_ESG_PREDICTOR_EXPORT_USERNAME, Keys.ENTER);
+                wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.USER_CLIMATE_ESG_ESG_PREDICTOR_EXPORT_PASSWORD);
+
+                break;
+
+
+            case USER_ESG_ESG_PREDICTOR_ODA:
+                wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.USER_ESG_ESG_PREDICTOR_ODA_USERNAME, Keys.ENTER);
+                wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.USER_ESG_ESG_PREDICTOR_ODA_PASSWORD);
+                break;
+            case USER_ESG_ESG_PREDICTOR_ODA_EXCEL:
+                wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.USER_ESG_ESG_PREDICTOR_ODA_EXCEL_USERNAME, Keys.ENTER);
+                wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.USER_ESG_ESG_PREDICTOR_ODA_EXCEL_PASSWORD);
+                break;
+            case USER_SFDR_ESG_ESG_PREDICTOR_ODA_EXCEL:
+                wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.USER_SFDR_ESG_ESG_PREDICTOR_ODA_EXCEL_USERNAME, Keys.ENTER);
+                wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.USER_SFDR_ESG_ESG_PREDICTOR_ODA_EXCEL_PASSWORD);
+                break;
+            case USER_EUTAXONOMY_ESG_ESG_PREDICTOR_ODA_EXCEL:
+                wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.USER_EUTAXONOMY_ESG_ESG_PREDICTOR_ODA_EXCEL_USERNAME, Keys.ENTER);
+                wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.USER_EUTAXONOMY_ESG_ESG_PREDICTOR_ODA_EXCEL_PASSWORD);
+                break;
+            case USER_EUTAXONOMY_ESG_ESG_PREDICTOR_ODA:
+                wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.USER_EUTAXONOMY_ESG_ESG_PREDICTOR_ODA_USERNAME, Keys.ENTER);
+                wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.USER_EUTAXONOMY_ESG_ESG_PREDICTOR_ODA_PASSWORD);
+                break;
+            case USER_SFDR_ESG_ESG_PREDICTOR_ODA:
+                wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.USER_SFDR_ESG_ESG_PREDICTOR_ODA_USERNAME, Keys.ENTER);
+                wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.USER_SFDR_ESG_ESG_PREDICTOR_ODA_PASSWORD);
+                break;
+            case USER_EUTAXONOMY_SFDR_ESG_ESG_PREDICTOR_ODA_EXCEL:
+                wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.USER_EUTAXONOMY_SFDR_ESG_ESG_PREDICTOR_ODA_EXCEL_USERNAME, Keys.ENTER);
+                wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.USER_EUTAXONOMY_SFDR_ESG_ESG_PREDICTOR_ODA_EXCEL_PASSWORD);
+                break;
+
                 default:
                 Assert.fail("Bundle not found!");
         }

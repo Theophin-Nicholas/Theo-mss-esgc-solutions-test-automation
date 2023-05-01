@@ -67,7 +67,7 @@ public class RegulatoryReportingPageTests extends UITestBase {
         reportingPage.navigateToPageFromMenu("Dashboard");
         TestBase.test.info("Navigated to Dashboard Page");
         reportingPage.clickPortfolioSelectionButton();
-        List<String> expectedPortfoliosList = BrowserUtils.getElementsText(reportingPage.portfolioNameList);
+        List<String> expectedPortfoliosList = BrowserUtils.getElementsText(reportingPage.portfolioNamesList);
         assertTestCase.assertTrue(expectedPortfoliosList.size() > 0, "Dashboard Page - Portfolio list is verified");
         reportingPage.navigateToPageFromMenu("ESG Reporting Portal");
         TestBase.test.info("Navigated to Regulatory Reporting Page");
@@ -192,7 +192,7 @@ public class RegulatoryReportingPageTests extends UITestBase {
         reportingPage.navigateToPageFromMenu("Dashboard");
         BrowserUtils.waitFor(10);
         reportingPage.clickPortfolioSelectionButton();
-        List<String> actualPortfolioList = BrowserUtils.getElementsText(reportingPage.portfolioNameList);
+        List<String> actualPortfolioList = BrowserUtils.getElementsText(reportingPage.portfolioNamesList);
         assertTestCase.assertTrue(actualPortfolioList.contains(newPortfolioName), "New Portfolio is verified on dashboard page");
         reportingPage.clickAwayinBlankArea();
 
@@ -201,7 +201,7 @@ public class RegulatoryReportingPageTests extends UITestBase {
 
         BrowserUtils.waitFor(10);
         reportingPage.clickPortfolioSelectionButton();
-        actualPortfolioList = BrowserUtils.getElementsText(reportingPage.portfolioNameList);
+        actualPortfolioList = BrowserUtils.getElementsText(reportingPage.portfolioNamesList);
         assertTestCase.assertTrue(actualPortfolioList.contains(newPortfolioName), "New Portfolio is verified on portfolio analysis page");
 
         //verify portfolio on portfolio selection modal
@@ -226,7 +226,7 @@ public class RegulatoryReportingPageTests extends UITestBase {
         reportingPage.navigateToPageFromMenu("Dashboard");
         TestBase.test.info("Navigated to Dashboard Page");
         reportingPage.clickPortfolioSelectionButton();
-        List<String> expectedPortfoliosList = BrowserUtils.getElementsText(reportingPage.portfolioNameList);
+        List<String> expectedPortfoliosList = BrowserUtils.getElementsText(reportingPage.portfolioNamesList);
         assertTestCase.assertTrue(expectedPortfoliosList.size() > 0, "Dashboard Page - Portfolio list is verified");
         reportingPage.navigateToPageFromMenu("ESG Reporting Portal");
         TestBase.test.info("Navigated to Regulatory Reporting Page");

@@ -12,12 +12,12 @@ import static com.esgc.Utilities.CommonUtility.*;
 
 public class ImportPortfolioUtility {
 
-    public static String getOnDemandPortfolioFileToUpload(List<String> ScoreQuality, String dataAllliance, int dataCount, String portfolioName, boolean addNull) {
+    public static String getOnDemandPortfolioFileToUpload(List<String> ScoreQuality, String dataAlliance, int dataCount, String portfolioName, boolean addNull) {
         OnDemandAssessmentQueries portfolioToUpload = new OnDemandAssessmentQueries();
 
      List<String> orbisIds = new ArrayList<>();
      for (String e : ScoreQuality) {
-         List<String> temp = portfolioToUpload.getOnDemandOrbisIDsForPortfolioCreation(e, dataAllliance, dataCount);
+         List<String> temp = portfolioToUpload.getOnDemandOrbisIDsForPortfolioCreation(e, dataAlliance, dataCount);
          for(String t : temp ){
              orbisIds.add(t);
          }

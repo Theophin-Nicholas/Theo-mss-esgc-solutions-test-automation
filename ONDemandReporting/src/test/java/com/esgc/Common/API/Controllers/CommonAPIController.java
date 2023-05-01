@@ -111,7 +111,7 @@ public class CommonAPIController {
 
     public synchronized static List<String> getPortfolioIds(String portfolioName) {
         Response response = getPortfolioDetails();
-        response.prettyPrint();
+//        response.prettyPrint();
         List<PortfolioDetails> portfolios = new ArrayList<>();
         List<String> portfolioIds = new ArrayList<>();
         for (PortfolioDetails i : Arrays.asList(response.as(Portfolio.class)).get(0).getPortfolios()) {
@@ -143,7 +143,7 @@ public class CommonAPIController {
         try {
             response = configSpec()
                     .when()
-                    .log().all()
+//                    .log().all()
                     .get(CommonEndPoints.GET_PORTFOLIO_DETAILS);
         } catch (Exception e) {
             System.out.println("Inside exception " + e.getMessage());
@@ -158,6 +158,7 @@ public class CommonAPIController {
 
     public synchronized String getPortfolioId(String portfolioName) {
         Response response = getPortfolioDetails();
+//        response.prettyPrint();
         List<String> portfolioNames = response.jsonPath().getList("portfolios.portfolio_name");
         List<String> portfolioIds = response.jsonPath().getList("portfolios.portfolio_id");
         for (int i = 0; i < portfolioNames.size(); i++) {

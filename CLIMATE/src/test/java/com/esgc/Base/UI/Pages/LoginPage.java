@@ -359,6 +359,31 @@ public class LoginPage extends ClimatePageBase {
                 username = Environment.NO_PREVIOUSLY_DOWNLOADED_REGULATORY_REPORTS_USERNAME;
                 password = Environment.NO_PREVIOUSLY_DOWNLOADED_REGULATORY_REPORTS_PASSWORD;
                 break;
+
+            case USER_CLIMATE_ESG:
+                username = Environment.USER_CLIMATE_ESG_USERNAME;
+                password = Environment.USER_CLIMATE_ESG_PASSWORD;
+               // wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.USER_CLIMATE_ESG_USERNAME, Keys.ENTER);
+               // wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.USER_CLIMATE_ESG_PASSWORD);
+
+                break;
+            case USER_CLIMATE_ESG_ESG_PREDICTOR_EXPORT:
+
+                username = Environment.USER_CLIMATE_ESG_ESG_PREDICTOR_EXPORT_USERNAME;
+                password = Environment.USER_CLIMATE_ESG_ESG_PREDICTOR_EXPORT_PASSWORD;
+
+                //wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.USER_CLIMATE_ESG_ESG_PREDICTOR_EXPORT_USERNAME, Keys.ENTER);
+               // wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.USER_CLIMATE_ESG_ESG_PREDICTOR_EXPORT_PASSWORD);
+
+                break;
+
+            case USER_WITH_PREDICTEDSCORE_AND_CLIMATE:
+                username = Environment.USER_WITH_PREDICTEDSCORE_AND_CLIMATE_USERNAME;
+                password = Environment.USER_WITH_PREDICTEDSCORE_AND_CLIMATE_PASSWORD;
+                break;
+
+
+
             default:
                 Assert.fail("Bundle not found!");
         }
@@ -613,6 +638,8 @@ public class LoginPage extends ClimatePageBase {
     public void checkTermsAndConditions() {
         wait.until(ExpectedConditions.visibilityOf(termsAndConditionsLabel)).click();
     }
+
+
 }
 
 

@@ -4,8 +4,13 @@ import com.esgc.Common.API.Controllers.CommonAPIController;
 import com.esgc.Common.UI.Pages.LoginPage;
 import com.esgc.Common.UI.TestBases.UITestBase;
 import com.esgc.ONDEMAND.API.Controllers.OnDemandFilterAPIController;
+import com.esgc.ONDEMAND.DB.DBQueries.OnDemandAssessmentQueries;
+import com.esgc.ONDEMAND.API.Controllers.OnDemandFilterAPIController;
+import com.esgc.ONDEMAND.TestDataProviders.EntityWithEsgDataOnlyDataProviders;
 import com.esgc.ONDEMAND.UI.Pages.OnDemandAssessmentPage;
 import com.esgc.ONDEMAND.UI.Pages.PopUpPage;
+import com.esgc.RegulatoryReporting.DB.DBQueries.RegulatoryReportingQueries;
+import com.esgc.RegulatoryReporting.UI.Pages.RegulatoryReportingPage;
 import com.esgc.Pages.Page404;
 import com.esgc.Utilities.*;
 import com.github.javafaker.Faker;
@@ -15,7 +20,9 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import static com.esgc.Utilities.Groups.*;
 
@@ -191,15 +198,15 @@ public class OnDemandEntitlementBundleTests extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI, ENTITLEMENTS})
-    @Xray(test = {13803, 14059})
+    @Xray(test = {13803, 14059, 14347, 14348, 14364, 14365, 14366, 14473, 14474, 14475, 14476})
     public void validateLandingPageForUserWith_EUTaxonomy_SFDR_Entitlements() {
         try {
             LoginPage login = new LoginPage();
             login.entitlementsLogin(EntitlementsBundles.USER_WITH_EUTAXONOMY_SFDR_ENTITLEMENT);
             OnDemandAssessmentPage onDemandAssessmentPage = new OnDemandAssessmentPage();
-            assertTestCase.assertTrue(onDemandAssessmentPage.validateOnDemandReportingLandingPage(), "Validating if landing page is On-Demand Repoting Page", 14529);
+            assertTestCase.assertTrue(onDemandAssessmentPage.validateOnDemandReportingLandingPage(), "Validating if landing page is On-Demand Reporting Page", 14529);
             if (onDemandAssessmentPage.IsPortfolioTableLoaded()) {
-                List<String> reportingOptions = Arrays.asList(new String[]{"EU Taxonomy", "SFDR PAIs"});
+                List<String> reportingOptions = Arrays.asList("EU Taxonomy", "SFDR PAIs");
                 onDemandAssessmentPage.ValidateReportingOptions(reportingOptions);
                 assertTestCase.assertTrue(!onDemandAssessmentPage.getReportingList().contains("On-Demand Assessment"), "Validate that OnDemand option is not visible");
             }
@@ -209,6 +216,87 @@ public class OnDemandEntitlementBundleTests extends UITestBase {
             assertTestCase.assertTrue(false, "TestCase Failed - Please see stack trace for details");
         }
 
+        RegulatoryReportingPage reportingPage = new RegulatoryReportingPage();
+
+        //upload 100% SFDR coverage portfolio and verify
+        String portfolioName = "SFDROnlyPortfolioDelete";
+        CommonAPIController.deletePortfolioThroughAPI(portfolioName);
+        String portfolioFilePath = ImportPortfolioUtility.getOnDemandPortfolioFileToUpload(Collections.singletonList("SFDR Only"), "", 10, portfolioName,false);
+        reportingPage.uploadPortfolio(portfolioFilePath, "OnDemand");
+        BrowserUtils.wait(10);
+        Driver.getDriver().navigate().refresh();
+        reportingPage.selectReportingOptionByName("SFDR");
+        reportingPage.verifyPortfolio(portfolioName);
+        reportingPage.verifySFDRPortfolioCoverageForUI(portfolioName);
+        assertTestCase.assertTrue(reportingPage.verifyPortfolioEnabled(portfolioName), "Validating that the portfolio is enabled for SFDR");
+        reportingPage.selectReportingOptionByName("EU Taxonomy");
+        reportingPage.verifyEUTaxonomyPortfolioCoverageForUI(portfolioName);
+        assertTestCase.assertFalse(reportingPage.verifyPortfolioEnabled(portfolioName), "Validating that the portfolio is disabled for EU Taxonomy");
+        CommonAPIController.deletePortfolioThroughAPI(portfolioName);
+
+        /**
+         * We don't have data for EU Taxonomy Only portfolio So Code below is commented
+         */
+
+
+//        //upload 100% EU Taxonomy coverage portfolio and verify
+//        portfolioName = "EUTaxonomyOnlyPortfolioDelete";
+//        portfolioFilePath = ImportPortfolioUtility.getOnDemandPortfolioFileToUpload(Collections.singletonList("EU Taxonomy Only"), "", 10, portfolioName,false);
+//        reportingPage.uploadPortfolio(portfolioFilePath, "OnDemand");
+//        BrowserUtils.wait(10);
+//        Driver.getDriver().navigate().refresh();
+////        try {
+//            reportingPage.selectReportingOptionByName("SFDR");
+//            reportingPage.verifyPortfolio(portfolioName);
+//            reportingPage.verifySFDRPortfolioCoverageForUI(portfolioName);
+//            assertTestCase.assertFalse(reportingPage.verifyPortfolioEnabled(portfolioName), "Validating that the portfolio is disabled for SFDR");
+//            reportingPage.selectReportingOptionByName("EU Taxonomy");
+//            reportingPage.verifyEUTaxonomyPortfolioCoverageForUI(portfolioName);
+//            assertTestCase.assertFalse(reportingPage.verifyPortfolioEnabled(portfolioName), "Validating that the portfolio is disabled for EU Taxonomy");
+//            CommonAPIController.deletePortfolioThroughAPI(portfolioName);
+//        } catch (Exception e) {
+//            CommonAPIController.deletePortfolioThroughAPI(portfolioName);
+//            e.printStackTrace();
+//        }
+
+        //User upload Portfolio A with entities not covered by SFDR nor EU Taxonomy
+        portfolioName = "NotSFDRNotEUTaxonomyPortfolioDelete";
+        CommonAPIController.deletePortfolioThroughAPI(portfolioName);
+        //Below we use EU Taxonomy Only because we don't have data for EU Tax only entities. so it gives use a portfolio wich disabled for both eu tax and sfdr
+        portfolioFilePath = ImportPortfolioUtility.getOnDemandPortfolioFileToUpload(Collections.singletonList("EU Taxonomy Only"), "", 10, portfolioName,false);
+        reportingPage.uploadPortfolio(portfolioFilePath, "OnDemand");
+        BrowserUtils.wait(10);
+        Driver.getDriver().navigate().refresh();
+        reportingPage.selectReportingOptionByName("SFDR");
+        reportingPage.verifyPortfolio(portfolioName);
+        reportingPage.verifySFDRPortfolioCoverageForUI(portfolioName);
+        assertTestCase.assertFalse(reportingPage.verifyPortfolioEnabled(portfolioName), "Validating that the portfolio is disabled for SFDR");
+        reportingPage.selectReportingOptionByName("EU Taxonomy");
+        reportingPage.verifyEUTaxonomyPortfolioCoverageForUI(portfolioName);
+        assertTestCase.assertFalse(reportingPage.verifyPortfolioEnabled(portfolioName), "Validating that the portfolio is disabled for EU Taxonomy");
+        CommonAPIController.deletePortfolioThroughAPI(portfolioName);
+
+
+        //Upload  a Portfolio A with all entities overed by SFDR and EU Taxonomy
+        portfolioName = "BothSFDRAndEXTaxonomyPortfolioDelete";
+        CommonAPIController.deletePortfolioThroughAPI(portfolioName);
+        //Below we use EU Taxonomy Only because we don't have data for EU Tax only entities. so it gives use a portfolio wich disabled for both eu tax and sfdr
+        portfolioFilePath = ImportPortfolioUtility.getOnDemandPortfolioFileToUpload(Collections.singletonList("BothSFDRAndEUTaxonomy"), "", 10, portfolioName,false);
+        reportingPage.uploadPortfolio(portfolioFilePath, "OnDemand");
+        BrowserUtils.wait(10);
+        Driver.getDriver().navigate().refresh();
+        reportingPage.selectReportingOptionByName("SFDR");
+        reportingPage.verifyPortfolio(portfolioName);
+        reportingPage.verifySFDRPortfolioCoverageForUI(portfolioName);
+        assertTestCase.assertTrue(reportingPage.verifyPortfolioEnabled(portfolioName), "Validating that the portfolio is disabled for SFDR");
+        reportingPage.selectReportingOptionByName("EU Taxonomy");
+        reportingPage.verifyEUTaxonomyPortfolioCoverageForUI(portfolioName);
+        assertTestCase.assertTrue(reportingPage.verifyPortfolioEnabled(portfolioName), "Validating that the portfolio is disabled for EU Taxonomy");
+        CommonAPIController.deletePortfolioThroughAPI(portfolioName);
+
+        //Why do programmers prefer dark chocolate?
+        //
+        //Because it's bitter, just like their code.
     }
 
     @Test(groups = {REGRESSION, UI, ENTITLEMENTS})
@@ -457,4 +545,91 @@ public class OnDemandEntitlementBundleTests extends UITestBase {
             assertTestCase.assertTrue(false, "TestCase Failed - Please see stack trace for details");
         }
     }
+
+    @Test(groups ={REGRESSION, UI, SMOKE})
+    @Xray(test = {14095, 14096})
+    public void validateDashboardAndPortfolioAnalysisNotPresentInGlobalMenu(){
+        login.entitlementsLogin(EntitlementsBundles.ONDEMAND_USER_WITHOUT_EXPORT_ENTITLEMENT);
+        OnDemandAssessmentPage odaPage = new OnDemandAssessmentPage();
+        odaPage.clickOnMenuButton();
+        odaPage.validateDashboardTabNotPresentFromGlobalMenu("Climate Dashboard");
+        odaPage.validateDashboardTabNotPresentFromGlobalMenu("Climate Portfolio Analysis");
+        odaPage.validateSearchButtonNotDisplayed();
+
+    }
+
+    @Test(groups ={REGRESSION, UI})
+    @Xray(test = {14100})
+    public void validateCalculationsIsVisibleForEntitlements(){
+
+        LoginPage login = new LoginPage();
+        OnDemandAssessmentPage odaPage = new OnDemandAssessmentPage();
+        EntitlementsBundles [] entitlements = {EntitlementsBundles.USER_CLIMATE_ESG_ESG_PREDICTOR_EXPORT,EntitlementsBundles.USER_CLIMATE_ESG};
+
+        for(EntitlementsBundles e : entitlements){
+            login.entitlementsLogin(e);
+            System.out.println("------------Logged in to Check Calculations tab in Global Menu using " + e.toString()+" entitlements ------------");
+            odaPage.clickOnMenuButton();
+            odaPage.validateAnyTabPresentInGlobalMenu("Calculations");
+            odaPage.clickOnLogOutButton();
+
+        }
+
+    }
+
+    @Test(groups ={REGRESSION, UI, SMOKE})
+    @Xray(test = {14295})
+    public void validateOnDemandSfdrEuTaxonomyForEntitlements() {
+
+        LoginPage login = new LoginPage();
+        OnDemandAssessmentPage odaPage = new OnDemandAssessmentPage();
+        EntitlementsBundles[] entitlements = {EntitlementsBundles.USER_SFDR_ESG_ESG_PREDICTOR_ODA,
+                EntitlementsBundles.USER_EUTAXONOMY_SFDR_ESG_ESG_PREDICTOR_ODA_EXCEL,
+                EntitlementsBundles.USER_SFDR_ESG_ESG_PREDICTOR_ODA_EXCEL,
+                EntitlementsBundles.USER_EUTAXONOMY_ESG_ESG_PREDICTOR_ODA,
+                EntitlementsBundles.USER_EUTAXONOMY_ESG_ESG_PREDICTOR_ODA_EXCEL,
+                EntitlementsBundles.USER_CLIMATE_ESG_ESG_PREDICTOR_EXPORT,
+                EntitlementsBundles.USER_CLIMATE_ESG,
+                EntitlementsBundles.USER_ESG_ESG_PREDICTOR_ODA};
+
+        for (EntitlementsBundles e : entitlements) {
+            System.out.println("------------Logged in to Check OnDemand Reporting tab in Global Menu using " + e.toString() + " entitlements ------------");
+            odaPage.validateReportingOptionsInReportingPage(login, e);
+        }
+    }
+
+    @Test(groups = {UI, REGRESSION, SMOKE}, dataProvider = "entityWithEsgDataOnly-DP", dataProviderClass = EntityWithEsgDataOnlyDataProviders.class)
+    @Xray(test = {14094})
+    public void ValidateNoDataForEntitiesWithEsgDataOnly(String... entity) {
+        LoginPage login = new LoginPage();
+
+        login.entitlementsLogin(EntitlementsBundles.USER_CLIMATE_ESG);
+        System.out.println("---------------Logged back in using climate and esg entitlements--------------------");
+        OnDemandAssessmentPage odaPage = new OnDemandAssessmentPage();
+        odaPage.clickOnSearchButton();
+        odaPage.searchForEntitities(entity[0]);
+        //assertTestCase.assertTrue(!entity.equals(odaPage.searchResultLineOne.getText()), "Validating that " + entity + " which is an Entity with ESG data only is not returned or suggested in search option : Status Done");
+
+        odaPage.validateEntitiesWithOnlyEsgDataDontShowInSearch(entity[0]);
+
+    }
+
+    @Test(groups = {UI, REGRESSION, SMOKE}, dataProvider = "entityWithEsgDataOnly-DP", dataProviderClass = EntityWithEsgDataOnlyDataProviders.class)
+    @Xray(test = {14094})
+    public void validate() {
+
+        login.entitlementsLogin(EntitlementsBundles.USER_CLIMATE_ESG_ESG_PREDICTOR_EXPORT);
+        System.out.println("---------------Logged back in using climate esg- esg predictor and export entitlements--------------------");
+        OnDemandAssessmentPage odaPage = new OnDemandAssessmentPage();
+
+        odaPage.clickOnSearchButton();
+        String[] entityList1 = {"C5 Eiendom AS", "Entergy Utility Affiliates LLC", "Solutia, Inc.", "Resolution Life Australasia Ltd."};
+        for (int i = 0; i < entityList1.length; i++) {
+            odaPage.searchForEntitities(entityList1[i]);
+            odaPage.validateEntitiesWithOnlyEsgDataDontShowInSearch(entityList1[i]);
+        }
+    }
+
+
+
 }

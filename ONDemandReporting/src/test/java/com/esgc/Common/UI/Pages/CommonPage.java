@@ -3,10 +3,7 @@ package com.esgc.Common.UI.Pages;
 
 import com.esgc.Common.UI.TestBases.UITestBase;
 import com.esgc.ONDEMAND.API.Controllers.OnDemandFilterAPIController;
-import com.esgc.Utilities.BrowserUtils;
-import com.esgc.Utilities.ConfigurationReader;
-import com.esgc.Utilities.Driver;
-import com.esgc.Utilities.RobotRunner;
+import com.esgc.Utilities.*;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.Color;
@@ -23,8 +20,6 @@ import java.util.List;
 public class CommonPage extends UploadPortfolio {
 
     //=============== Summary Header
-    @FindBy(xpath = "//div[@heap_id='portfolio-selection']//div[1]/span")
-    public List<WebElement> portfolioNameList;
 
     @FindBy(id = "upload-button-upload-test-id")
     public WebElement uploadButton;
@@ -149,6 +144,7 @@ public class CommonPage extends UploadPortfolio {
         BrowserUtils.wait(5);
         BrowserUtils.waitForVisibility(OnDemandAssessment, 20);
         BrowserUtils.clickWithJS(OnDemandAssessment);
+        System.out.println("On Demand Assessment option is selected");
     }
 
     public void clickOnEUTaxonomyOption() {
@@ -161,6 +157,7 @@ public class CommonPage extends UploadPortfolio {
     }
 
     public List<String> getReportingList() {
+        System.out.println("reportingNamesList = " + BrowserUtils.getElementsText(reportingNamesList));
         return BrowserUtils.getElementsText(reportingNamesList);
     }
 
@@ -181,8 +178,12 @@ public class CommonPage extends UploadPortfolio {
     }
 
     public void selectReportingOptionByName(String name) {
-        //todo: add more flexibility to the method
-        reportingRadioButtonList.get(getReportingList().indexOf(name)).click();
+        for (int i = 0; i < reportingNamesList.size(); i++) {
+            if (reportingNamesList.get(i).getText().toLowerCase().contains(name.toLowerCase())) {
+                reportingRadioButtonList.get(i).click();
+                break;
+            }
+        }
     }
 
     public void ValidateReportingOptions(List<String> reportingOptions) {
@@ -363,5 +364,41 @@ public class CommonPage extends UploadPortfolio {
             file.delete();
         }
         System.out.println("All files in the directory are deleted");
+    }
+
+    public ExcelUtil getExcelData(String excelName, int sheetIndex) {
+        File dir = new File(BrowserUtils.downloadPath());
+        File[] dir_contents = dir.listFiles();
+        assert dir_contents != null;
+        File excelFile = Arrays.stream(dir_contents).filter(e -> (e.getName().contains(excelName))).findAny().get();
+        //System.out.println("excelFile = " + excelFile.getAbsolutePath());
+        if (!excelFile.exists()) {
+            System.out.println(excelName + " file does not exist");
+            return null;
+        }
+        //System.out.println(excelName + " file found");
+        //System.out.println("excelFile = " + excelFile.getAbsolutePath());
+        ExcelUtil excelUtil = new ExcelUtil(excelFile.getAbsolutePath(), sheetIndex);
+        return excelUtil;
+    }
+
+    public ExcelUtil getExcelData(String excelName, String sheetName) {
+        File dir = new File(BrowserUtils.downloadPath());
+        File[] dir_contents = dir.listFiles();
+        assert dir_contents != null;
+        File excelFile = Arrays.stream(dir_contents).filter(e -> (e.getName().contains(excelName))).findAny().get();
+        //System.out.println("excelFile = " + excelFile.getAbsolutePath());
+        if (!excelFile.exists()) {
+            System.out.println(excelName + " file does not exist");
+            return null;
+        }
+        //System.out.println(excelName + " file found");
+        //System.out.println("excelFile = " + excelFile.getAbsolutePath());
+        ExcelUtil excelUtil = new ExcelUtil(excelFile.getAbsolutePath(), sheetName);
+        return excelUtil;
+    }
+
+    public boolean verifyPortfolioEnabled(String portfolioName) {
+        return portfolioRadioButtonList.get(getPortfolioList().indexOf(portfolioName)).isEnabled();
     }
 }
