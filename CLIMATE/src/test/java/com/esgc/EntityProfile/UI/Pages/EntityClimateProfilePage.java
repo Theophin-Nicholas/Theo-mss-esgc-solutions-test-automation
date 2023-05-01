@@ -528,6 +528,9 @@ public class EntityClimateProfilePage extends ClimatePageBase {
     @FindBy(xpath = "//body/div[@id='company-summary-panel']/div/div/div[5]")
     public WebElement companyDrawerSector;
 
+    @FindBy(xpath = "//a[.='hide']")
+    public WebElement hideDrawerButton;
+
     @FindBy(xpath = "//button[@id='ref_Meth_button']")
     public WebElement ReferenceAndMethodology_Button;
 

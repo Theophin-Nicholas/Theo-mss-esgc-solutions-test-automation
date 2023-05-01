@@ -16,6 +16,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
 import org.testng.SkipException;
 
+import java.io.File;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -62,6 +63,9 @@ public class DashboardPage extends UploadPage {
 
     @FindBy(xpath = "//div[contains(@id,'Facilities_Exposed_to_')]")
     public WebElement facilitiesExposed;
+
+    @FindBy(xpath = "//div[@id='RegSector-test-id-1']")
+    public WebElement coverageLink;
 
     @FindBy(xpath = "//div[text()='View Methodologies']")
     public WebElement btnViewMethodologies;
@@ -133,7 +137,7 @@ public class DashboardPage extends UploadPage {
     public List<WebElement> summaryHeaderTitles;
 
     //=========== Portfolio - View All Companies (Summary Companies) Panel Elements
-    @FindBy(xpath = "//span[starts-with(text(),'Coverage: Across')]")
+    @FindBy(xpath = "//span[@heap_id='view-panel']")
     public WebElement viewAllCompaniesButton;
 
     @FindBy(xpath = "//div[@id='button-button-test-id-1']/../div[starts-with(.,'Companies')]")
@@ -143,6 +147,9 @@ public class DashboardPage extends UploadPage {
     public WebElement viewBySectorBtn;
     @FindBy(xpath = "//button[.='View By Region']")
     public WebElement viewByRegionBtn;
+
+    @FindBy(xpath = "//div[starts-with(.,'Companies in')]//header/..//table/../preceding-sibling::div")
+    public List<WebElement> panelCategoryHeaders;
 
     @FindBy(xpath = "//td[contains(@id,'viewcomapnies')]/parent::tr")
     public List<WebElement> coveragePopupRows;
@@ -185,18 +192,25 @@ public class DashboardPage extends UploadPage {
 
     @FindBy(xpath = "//*[text()='Portfolio Monitoring']/../following-sibling::div")
     public WebElement controversiesTable;
+
     @FindBy(xpath = "//*[text()='Portfolio Monitoring']/../following-sibling::div//tr/td[1]")
     public List<WebElement> controversiesTableDates;
+
     @FindBy(xpath = "//*[text()='Portfolio Monitoring']/../following-sibling::div//tr/td[2]")
     public List<WebElement> controversiesTableSeverity;
+
     @FindBy(xpath = "//*[text()='Portfolio Monitoring']/../following-sibling::div//tr/td[2]//*[local-name()='svg']")
     public List<WebElement> controversiesTableCriticalSeverityIcons;
+
     @FindBy(xpath = "//*[text()='Portfolio Monitoring']/../following-sibling::div//tr/td[3]/span")
     public List<WebElement> controversiesTableTitles;
+
     @FindBy(xpath = "//*[text()='Portfolio Monitoring']/../following-sibling::div//tr/td[4]")
     public List<WebElement> controversiesTableCompanyNames;
+
     @FindBy(xpath = "//*[text()='Portfolio Monitoring']/../following-sibling::div//tr/td[5]")
     public List<WebElement> controversiesTableSectors;
+
     @FindBy(xpath = "//*[text()='Portfolio Monitoring']/../following-sibling::div//tr/td[6]")
     public List<WebElement> controversiesTableCountries;
 
@@ -1567,4 +1581,41 @@ public class DashboardPage extends UploadPage {
         }
     }
 
+    public void openCoverageDrawer(){
+        BrowserUtils.waitForVisibility(viewAllCompaniesButton, 30);
+        assertTestCase.assertTrue(viewAllCompaniesButton.isDisplayed(),
+                "User can see and click on View Companies and Investments in Portfolio link on dashboard.");
+        BrowserUtils.waitForClickablility(viewAllCompaniesButton,10).click();
+    }
+
+    public String getSelectedFilterValue(String filterOption){
+        String[] options = coverageLink.getText().split(", ");
+        System.out.println("Arrays.toString() = " + Arrays.toString(options));
+        switch (filterOption.toLowerCase()){
+            case "regions":
+                return options[0].replaceAll("Viewing data in ","");
+            case "sectors":
+                return options[1].trim();
+            case "date":
+                return options[2].replaceAll("at the end of ","");
+        }
+        System.out.println("Filter option not found");
+        return "";
+    }
+
+    public ExcelUtil getExcelData(String excelName, String sheetName) {
+            File dir = new File(BrowserUtils.downloadPath());
+            File[] dir_contents = dir.listFiles();
+            assert dir_contents != null;
+            File excelFile = Arrays.stream(dir_contents).filter(e -> (e.getName().contains(excelName))).findAny().get();
+            //System.out.println("excelFile = " + excelFile.getAbsolutePath());
+            if (!excelFile.exists()) {
+                System.out.println(excelName + " file does not exist");
+                return null;
+            }
+            //System.out.println(excelName + " file found");
+            //System.out.println("excelFile = " + excelFile.getAbsolutePath());
+            ExcelUtil excelUtil = new ExcelUtil(excelFile.getAbsolutePath(), sheetName);
+            return excelUtil;
+    }
 }

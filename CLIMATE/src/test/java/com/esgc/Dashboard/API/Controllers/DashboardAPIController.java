@@ -121,7 +121,7 @@ public class DashboardAPIController extends APIController {
         return response;
     }
 
-    public synchronized Response getPortfolioSummaryCompanies(String portfolioId) {
+    public synchronized Response getPortfolioSummaryCompanies(String portfolioId, String filterBy) {
         Response response = null;
         try {
             LocalDate now = LocalDate.now();
@@ -129,6 +129,7 @@ public class DashboardAPIController extends APIController {
             String month = String.valueOf(earlier.getMonthValue());
             if (month.length() == 1) month = "0" + month;
             String year = String.valueOf(earlier.getYear());
+            System.out.println("Getting portfolio summary companies response for:");
             System.out.println("portfolio_id=" + portfolioId);
             System.out.println("month=" + month);
             System.out.println("year=" + year);
@@ -136,15 +137,19 @@ public class DashboardAPIController extends APIController {
             response = configSpec()
                     .pathParam("portfolio_id", portfolioId)
                     .when()
-                    .body("{\"region\":\"all\",\"sector\":\"all\",\"month\":\"" + month + "\",\"year\":\"" + year + "\",\"view_by\":\"sector\",\"limit\":20}")
+                    .body("{\"region\":\"all\",\"sector\":\"all\",\"month\":\"" + month + "\",\"year\":\"" + year + "\",\"view_by\":\""+filterBy+"\",\"limit\":20}")
                     .post(DashboardEndPoints.POST_PORTFOLIO_SUMMARY_COMPANIES);
 
 
         } catch (Exception e) {
             System.out.println("Inside exception " + e.getMessage());
         }
-        System.out.println(response.prettyPrint());
+        //System.out.println(response.prettyPrint());
         return response;
+    }
+
+    public synchronized Response getPortfolioSummaryCompanies(String portfolioId){
+        return getPortfolioSummaryCompanies(portfolioId,"sector");
     }
 
     /**

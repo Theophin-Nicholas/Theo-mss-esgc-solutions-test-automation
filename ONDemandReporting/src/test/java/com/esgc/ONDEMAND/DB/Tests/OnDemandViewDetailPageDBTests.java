@@ -46,9 +46,6 @@ public class OnDemandViewDetailPageDBTests extends DataValidationTestBase {
         BrowserUtils.wait(15);
         List<String> uiEntityList = detail.getEntityCellsText();
         assertTestCase.assertTrue(columnData.containsAll(uiEntityList), "verify entities listed are in the result of the DB query");
-
-
-
     }
 
 }

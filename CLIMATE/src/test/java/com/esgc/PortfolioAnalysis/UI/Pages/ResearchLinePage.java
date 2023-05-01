@@ -149,6 +149,12 @@ public class ResearchLinePage extends UploadPage {
     @FindBy(xpath = "//*[text()='Updates']//..//table/tbody/tr")
     public List<WebElement> updatesCompaniesList;
 
+    @FindBy(xpath = "//*[text()='Updates']//..//table/tbody/tr/td[1]")
+    public List<WebElement> updatesCompanyNamesList;
+
+    @FindBy(xpath = "//*[text()='Updates']//..//table/tbody/tr/td[7]")
+    public List<WebElement> updatesCompanySectorsList;
+
     @FindBy(id = "laggardsError")
     public WebElement updatesNoDataMessage;
 
