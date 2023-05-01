@@ -43,8 +43,6 @@ public class ViewDetailPage extends CommonPage {
     @FindBy(xpath = "//div[text()='Export To Excel']")
     public WebElement exportToExcelButton;
 
-
-
     @FindBy(xpath = "/html/body/div[2]/div[3]/div/div/div[2]/div[1]/p[1]")
     public WebElement viewDetailFooterLineOne;
 
@@ -80,13 +78,18 @@ public class ViewDetailPage extends CommonPage {
 
     @FindBy(xpath="//div[text()= 'Americas']")
     public WebElement regionOneTableTitle;
+
     @FindBy(xpath="//div[text()= 'Asia Pacific']")
     public WebElement regionTwoTableTitle;
+
     @FindBy(xpath="//div[text()= 'Europe, Middle East & Africa']")
     public WebElement regionThreeTableTitle;
 
     @FindBy(xpath="/html/body/div[2]/div[3]/div")
     public WebElement tablesInViewDetailPage;
+
+    @FindBy(xpath = "//table/../preceding-sibling::div")
+    public List<WebElement> tableTitles;//this will give you the list of all the table titles based on the filter
 
     public void verifyOnlyRegionsAreInRegionTab(){
 
@@ -390,7 +393,7 @@ public class ViewDetailPage extends CommonPage {
     public List<WebElement> getRegionTables(){
         List<WebElement> regionTables = new LinkedList<>();
         for(int i=1; i < 4 ; i++){
-            String xpathRegionTables = "/html/body/div[2]/div[3]/div/div/div[1]/div["+i+"]";
+            String xpathRegionTables = "//html/body/div[2]/div[3]/div/div/div[1]/div["+i+"]";
             WebElement sectorsElement = Driver.getDriver().findElement(By.xpath(xpathRegionTables));
             regionTables.add(sectorsElement);
         }
@@ -537,4 +540,53 @@ public class ViewDetailPage extends CommonPage {
     }
 
 
+    public List<Map<String, String>> getPanelDataForRegion() {
+        String[] filterOptions = new String[]{"Americas", "Asia Pacific", "Europe, Middle East & Africa"};
+        List<Map<String, String>> panelData = new ArrayList<>();
+        for(String option : filterOptions) {
+            String xpath = "//div[.='" + option + "']/following-sibling::div//td";
+            List<WebElement> rows = Driver.getDriver().findElements(By.xpath(xpath));
+            if (rows.size() > 0) {
+                List<WebElement> entities = Driver.getDriver().findElements(By.xpath(xpath + "[1]"));
+                List<WebElement> esgScore = Driver.getDriver().findElements(By.xpath(xpath + "[2]"));
+                List<WebElement> investmentPercentage = Driver.getDriver().findElements(By.xpath(xpath + "[3]"));
+                List<WebElement> sector = Driver.getDriver().findElements(By.xpath(xpath + "[4]"));
+                for (int i = 0; i < entities.size(); i++) {
+                    Map<String, String> map = new HashMap<>();
+                    map.put("entity", entities.get(i).getText());
+                    map.put("esgScore", esgScore.get(i).getText());
+                    map.put("investmentPercentage", investmentPercentage.get(i).getText());
+                    map.put("sector", sector.get(i).getText());
+                    map.put("region", option);
+                    panelData.add(map);
+                }
+            }
+        }
+        return panelData;
+    }
+
+    public List<Map<String, String>> getPanelDataForSector() {
+        String[] filterOptions = new String[]{"Basic Materials", "Communication", "Consumer Discretionary", "Consumer Staples", "Energy", "Financials", "Health Care", "Industry", "Sovereign", "Technology", "Utilities"};
+        List<Map<String, String>> panelData = new ArrayList<>();
+        for(String option : filterOptions) {
+            String xpath = "//div[.='" + option + "']/following-sibling::div//td";
+            List<WebElement> rows = Driver.getDriver().findElements(By.xpath(xpath));
+            if (rows.size() > 0) {
+                List<WebElement> entities = Driver.getDriver().findElements(By.xpath(xpath + "[1]"));
+                List<WebElement> esgScore = Driver.getDriver().findElements(By.xpath(xpath + "[2]"));
+                List<WebElement> investmentPercentage = Driver.getDriver().findElements(By.xpath(xpath + "[3]"));
+                List<WebElement> region = Driver.getDriver().findElements(By.xpath(xpath + "[4]"));
+                for (int i = 0; i < entities.size(); i++) {
+                    Map<String, String> map = new HashMap<>();
+                    map.put("entity", entities.get(i).getText());
+                    map.put("esgScore", esgScore.get(i).getText());
+                    map.put("investmentPercentage", investmentPercentage.get(i).getText());
+                    map.put("region", region.get(i).getText());
+                    map.put("sector", option);
+                    panelData.add(map);
+                }
+            }
+        }
+        return panelData;
+    }
 }

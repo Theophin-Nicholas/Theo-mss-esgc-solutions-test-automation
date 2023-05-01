@@ -87,4 +87,81 @@ public class OnDemandViewDetailPageDBTests extends DataValidationTestBase {
         reportingPage.verifyDataAllianceFlag(portfolioName);
         CommonAPIController.deletePortfolioThroughAPI(portfolioName);
     }
+
+    @Test(groups = {REGRESSION, DATA_VALIDATION},
+            description = "Data Validation | On-Demand Reporting | On-Demand Assessment | View Details Button | Drawer | Verify the Sector for entities in Group by Sector & Group by Region")
+    @Xray(test = {14323})
+    public void verifySectorForEntitiesForRegionAndSectorTest(){
+
+        ViewDetailPage detail = new ViewDetailPage();
+        String portfolioName = "500 predicted portfolio";
+        OnDemandAssessmentPage onDemandAssessmentPage = new OnDemandAssessmentPage();
+        onDemandAssessmentPage.navigateToReportingService("On-Demand Assessment");
+        if(!onDemandAssessmentPage.verifyPortfolio(portfolioName)) {
+            onDemandAssessmentPage.uploadPortfolio(portfolioName.replaceAll(" ", ""));
+        }
+
+        onDemandAssessmentPage.selectPortfolioOptionByName(portfolioName);
+
+        assertTestCase.assertTrue(onDemandAssessmentPage.isRequestAssessmentButtonEnabled(), "Verify that the request assessment button is enabled for a on-Demand eligible Portfolio");
+        System.out.println("the request assessment button is enabled for On-Demand assessment eligible portfolio");
+        onDemandAssessmentPage.clickOnViewDetailButton(portfolioName);
+        OnDemandFilterAPIController controller = new OnDemandFilterAPIController();
+        String portfolioId = controller.getPortfolioId(portfolioName);
+        System.out.println("portfolioId = " + portfolioId);
+        OnDemandAssessmentQueries queries = new OnDemandAssessmentQueries();
+        List<Map<String, Object>> dbData = queries.getPortfolioDetail(portfolioId);
+        System.out.println("dbData.size() = " + dbData.size());
+        detail.clickOnGroupByOption(detail, "Region");
+        List<Map<String, String>> panelData = detail.getPanelDataForRegion();
+        //System.out.println("panelData = " + panelData);
+
+        for(Map<String, String> map : panelData){
+            boolean check = false;
+            for(Map<String, Object> data: dbData){
+                //if(data.get("COMPANY_NAME") == null || map.get("REGION_NAME") == null || data.get("SECTOR") == null) continue;
+
+                if(data.get("COMPANY_NAME").toString().equals(map.get("entity"))){
+                    //System.out.println(map.get("entity")+ " found in the database");
+                    if(data.get("SECTOR").toString().equals(map.get("sector")) && data.get("REGION_NAME").toString().equals(map.get("region"))){
+                        check = true;
+                        break;
+                    }
+                }
+            }
+            if(!check){
+                System.out.println(map);
+                assertTestCase.fail("The sector for the entity "+map.get("entity")+" is not matching with the sector in the database");
+            }
+        }
+
+        detail.clickOnGroupByOption(detail, "Sector");
+        panelData = detail.getPanelDataForSector();
+        //System.out.println("panelData = " + panelData);
+
+        for(Map<String, String> map : panelData){
+            boolean check = false;
+            for(Map<String, Object> data: dbData){
+//                if(data.get("COMPANY_NAME") == null || map.get("REGION_NAME") == null || data.get("SECTOR") == null) continue;
+//                if(data.get("COMPANY_NAME") == null || map.get("REGION_NAME") == null || data.get("SECTOR") == null) continue;
+                String companyName = data.get("COMPANY_NAME").toString();
+                String region = data.get("REGION").toString()+"/"+data.get("COUNTRY_NAME").toString();
+                String sector = data.get("SECTOR").toString();
+                if(companyName.equals(map.get("entity"))){
+//                    System.out.println(map.get("entity")+ " found in the database");
+//                    System.out.println("companyName = " + companyName);
+//                    System.out.println("region = " + region);
+//                    System.out.println("sector = " + sector);
+                    if(sector.equals(map.get("sector")) && region.equals(map.get("region"))){
+                        check = true;
+                        break;
+                    }
+                }
+            }
+            if(!check){
+                System.out.println(map);
+                assertTestCase.fail("The sector for the entity "+map.get("entity")+" is not matching with the sector in the database");
+            }
+        }
+    }
 }
