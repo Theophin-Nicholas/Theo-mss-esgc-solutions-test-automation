@@ -1599,7 +1599,7 @@ public class AccountsPageTests extends EMCUITestBase {
         assertTestCase.assertTrue(importPage.uploadTemplateAndVerifyTemplateWithWrongData(), "Import Users modal is displayed");
     }
 
-    @Test(groups = {EMC, UI, REGRESSION, SMOKE, PROD},
+    @Test(groups = {EMC, UI, REGRESSION, SMOKE},
             description = "UI | EMC | ImportUsers | Verify Mass Import User is only available on User tab inside the Account")
     @Xray(test = {13304})
     public void verifyMassImportUserOnlyAvailableOnUsersTabTest() {

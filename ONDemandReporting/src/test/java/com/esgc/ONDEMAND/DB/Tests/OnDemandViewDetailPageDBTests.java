@@ -164,4 +164,25 @@ public class OnDemandViewDetailPageDBTests extends DataValidationTestBase {
             }
         }
     }
+
+    @Test(groups = {REGRESSION, DATA_VALIDATION},
+            description = "Data Validation | On-Demand Reporting Page | On-Demand Assessment Checkbox | Portfolio Wise View Details Button | Drawer | Export To Excel | Verify the Sector for entities in Exported file")
+    @Xray(test = {14324, 14326})
+    public void verifySectorForEntitiesInExportedFileTest(){
+
+        String portfolioName = "500 predicted portfolio";
+        OnDemandAssessmentPage onDemandAssessmentPage = new OnDemandAssessmentPage();
+        onDemandAssessmentPage.navigateToReportingService("On-Demand Assessment");
+        BrowserUtils.waitForVisibility(onDemandAssessmentPage.portfolioNamesList, 20);
+        if(!onDemandAssessmentPage.verifyPortfolio(portfolioName)) onDemandAssessmentPage.uploadPortfolio(portfolioName.replaceAll(" ", ""));
+
+
+        onDemandAssessmentPage.downloadPortfolio(portfolioName, "page");
+        System.out.println("Downloaded portfolio: " + portfolioName);
+        onDemandAssessmentPage.verifySectorAndRegion(portfolioName);
+
+        onDemandAssessmentPage.downloadPortfolio(portfolioName, "details panel");
+        System.out.println("Downloaded portfolio: " + portfolioName);
+        onDemandAssessmentPage.verifySectorAndRegion(portfolioName);
+    }
 }

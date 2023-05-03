@@ -1574,20 +1574,20 @@ public class DashboardPage extends UploadPage {
         BrowserUtils.waitForClickablility(viewAllCompaniesButton,10).click();
     }
 
-    public String getSelectedFilterValue(String filterOption){
-        String[] options = coverageLink.getText().split(", ");
-        System.out.println("Arrays.toString() = " + Arrays.toString(options));
-        switch (filterOption.toLowerCase()){
-            case "regions":
-                return options[0].replaceAll("Viewing data in ","");
-            case "sectors":
-                return options[1].trim();
-            case "date":
-                return options[2].replaceAll("at the end of ","");
-        }
-        System.out.println("Filter option not found");
-        return "";
-    }
+//    public String getSelectedFilterValue(String filterOption){
+//        String[] options = coverageLink.getText().split(", ");
+//        System.out.println("Arrays.toString() = " + Arrays.toString(options));
+//        switch (filterOption.toLowerCase()){
+//            case "regions":
+//                return options[0].replaceAll("Viewing data in ","");
+//            case "sectors":
+//                return options[1].trim();
+//            case "date":
+//                return options[2].replaceAll("at the end of ","");
+//        }
+//        System.out.println("Filter option not found");
+//        return "";
+//    }
 
     public ExcelUtil getExcelData(String excelName, String sheetName) {
             File dir = new File(BrowserUtils.downloadPath());
