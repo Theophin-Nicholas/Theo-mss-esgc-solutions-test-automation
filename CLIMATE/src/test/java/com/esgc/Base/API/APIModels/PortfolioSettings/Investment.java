@@ -5,6 +5,7 @@ import lombok.Data;
 
 @Data
 public class Investment {
+    String climate;
     String company_name;
     double investment_pct;
     String orbis_id;

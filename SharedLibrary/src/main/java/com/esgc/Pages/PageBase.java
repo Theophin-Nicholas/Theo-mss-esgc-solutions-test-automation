@@ -223,7 +223,7 @@ public abstract class PageBase {
     @FindBy(id = "RegSector-test-id-1")
     public WebElement filtersDropdown;
 
-    @FindBy(xpath = "//div[contains(@class, 'MuiPopover-paper')]")
+    @FindBy(xpath = "//ul[.//*[contains(text(),'Region')]]")
     public WebElement filtersDropdownPopup;
 
     @FindBy(xpath = "//div[contains(@heap_filter,'month_')]")
@@ -281,6 +281,9 @@ public abstract class PageBase {
     // =======================Search Box elements=======
     @FindBy(xpath = "//input[@id='platform-search-test-id']")
     public WebElement SearchInputBox;
+
+    @FindBy(xpath = "//div[.//li[contains(text(),'Search for Entities')]]//*[name()='svg']")
+    public WebElement closeIconInSearchBox;
 
     @FindBy(xpath = "//header[.//*[contains(text(),'Companies in')]]//*[name()='svg']")
     public WebElement closeIconInCompanySummariesDrawer;
@@ -421,7 +424,9 @@ public abstract class PageBase {
         } catch (Exception e) {
             return false;
         }
-    };
+    }
+
+    ;
 
     public boolean isElementDisplayed(WebElement element, int timeToWaitInSecond) {
         try {
@@ -429,7 +434,9 @@ public abstract class PageBase {
         } catch (Exception e) {
             return false;
         }
-    };
+    }
+
+    ;
 
 
     public boolean isRegulatoryReportingDisplayed() {
@@ -440,9 +447,10 @@ public abstract class PageBase {
         regulatoryReporting.click();
     }
 
-    public void clickOnPortfolioSelectionUploadButton(){
+    public void clickOnPortfolioSelectionUploadButton() {
         portfolioSelectionUploadButton.click();
     }
+
     /*
      * This method will verify if Regions Sections and As Of Date drop down
      */
@@ -703,7 +711,7 @@ public abstract class PageBase {
             String pageXpath = "//li[text()='" + menuItem + "']";
             WebElement pageElement = Driver.getDriver().findElement(By.xpath(pageXpath));
             return wait.until(ExpectedConditions.elementToBeClickable(pageElement)).isDisplayed();
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
@@ -721,17 +729,17 @@ public abstract class PageBase {
         }
     }
 
-    public void navigateToPageFromMenu(String page,String navigateTo) {
+    public void navigateToPageFromMenu(String page, String navigateTo) {
         String URL = Driver.getDriver().getCurrentUrl();
-        String pageName = URL.substring(URL.lastIndexOf("/")+1,URL.length());
+        String pageName = URL.substring(URL.lastIndexOf("/") + 1, URL.length());
 
         if (!pageName.endsWith(page)) {
             clickMenu();
             // Dynamic xpath - Helps us to pass page names "Dashboard", "Portfolio Analysis", "Regulatory Reporting"
             String pageXpath = "//li[text()='" + navigateTo + "']";
             WebElement pageElement = Driver.getDriver().findElement(By.xpath(pageXpath));
-           // wait.until(ExpectedConditions.elementToBeClickable(pageElement)).click();
-            BrowserUtils.waitForVisibility(pageElement,20).click();
+            // wait.until(ExpectedConditions.elementToBeClickable(pageElement)).click();
+            BrowserUtils.waitForVisibility(pageElement, 20).click();
         }
     }
 
@@ -1404,7 +1412,7 @@ public abstract class PageBase {
                 menuItemsArray.set(4, "ESG Reporting Portal");
                 menuItemsArray.add(4, "Calculations");
             }
-
+            menuList.remove(0);
             //Validate if all menu items are available
             for (String m : menuItemsArray) {
                 System.out.println("Menu Item: " + m);
@@ -1637,9 +1645,8 @@ public abstract class PageBase {
     }
 
 
-    public void clickCloseIcon() {
-        List<WebElement> closeIcon = Driver.getDriver().findElements(By.xpath("//div[@class='MuiToolbar-root MuiToolbar-regular']//*[local-name()='svg' and @class='MuiSvgIcon-root']"));
-        closeIcon.get(0).click();
+    public void clickCloseIconInSearchBox() {
+        wait.until(ExpectedConditions.visibilityOf(closeIconInSearchBox)).click();
     }
 
     public void sendESCkey() {
@@ -1956,15 +1963,18 @@ public abstract class PageBase {
         String portfolio = getSelectedPortfolioNameFromDropdown();
         BrowserUtils.wait(5);
         String coverage = Driver.getDriver().findElement(By.xpath("(//div[text()='" + portfolio + "']/following-sibling::div/span)[1]")).getText();
-        String[] coverageText = coverage.split("\n")[0].split(" ");
-        return coverageText[0].equals("Coverage:")
-                && coverageText[1].equals("Across")
-                && coverageText[2].chars().allMatch(Character::isDigit)
-                && coverageText[3].equals("companies,")
-                && coverageText[4].equals("representing")
-                && coverageText[5].substring(0, coverageText[5].indexOf('%') - 1).chars().allMatch(Character::isDigit)
-                && coverageText[6].equals("of")
-                && coverageText[7].equals("investments");
+        System.out.println("coverage = " + coverage);
+        String[] coverageText = coverage.split(" ");
+        Arrays.stream(coverageText).forEach(System.out::println);
+        return coverageText[0].equals("Climate")
+                && coverageText[1].equals("Coverage:")
+                && coverageText[2].equals("Across")
+                && coverageText[3].chars().allMatch(Character::isDigit)
+                && coverageText[4].equals("companies,")
+                && coverageText[5].equals("representing")
+                && coverageText[6].substring(0, coverageText[6].indexOf('%') - 1).chars().allMatch(Character::isDigit)
+                && coverageText[7].equals("of")
+                && coverageText[8].equals("investments");
     }
 
     public boolean verifyClimateRisk() {
