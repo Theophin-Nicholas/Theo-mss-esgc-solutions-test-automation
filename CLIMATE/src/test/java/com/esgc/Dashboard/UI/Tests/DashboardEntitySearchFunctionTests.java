@@ -51,7 +51,7 @@ public class DashboardEntitySearchFunctionTests extends UITestBase {
         researchLinePage.clickSearchIcon();
         assertTestCase.assertTrue(researchLinePage.isSearchBoxDisplayed(), "Search Box is displayed on the Portfolio Analysis page after clicking Search Icon.");
         test.info("Search box was appearing on Portfolio Analysis page after clicking Search Icon");
-        researchLinePage.clickCloseIcon();
+        researchLinePage.clickCloseIconInSearchBox();
         BrowserUtils.wait(2);
         assertTestCase.assertFalse(researchLinePage.isSearchBoxDisplayed(), "Search Box disappeared on the Portfolio Analysis page even after clicking close Icon.");
         test.info("Search box was appearing on Portfolio Analysis page even after clicking Close Icon");
@@ -68,7 +68,7 @@ public class DashboardEntitySearchFunctionTests extends UITestBase {
         dashboardPage.clickSearchIcon();
         assertTestCase.assertTrue(dashboardPage.isSearchBoxDisplayed(), "Search Box is displayed on the Dashboard page after clicking Search Icon.");
         test.info("Search box was appearing on Dashboard page after clicking Search Icon");
-        dashboardPage.clickCloseIcon();
+        dashboardPage.clickCloseIconInSearchBox();
         BrowserUtils.wait(2);
         assertTestCase.assertFalse(dashboardPage.isSearchBoxDisplayed(), "Search Box disappeared on the Dashboard page even after clicking close Icon.");
 

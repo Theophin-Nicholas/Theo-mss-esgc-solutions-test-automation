@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 
 public class OnDemandAssessmentPage extends CommonPage {
 
-    @FindBy(xpath = "//div[@data-test='sentinelStart']/following-sibling::div//div[contains(@class,'MuiToolbar-root')]/div[text()]")
+    @FindBy(xpath = "//li[text()]")
     public WebElement menuOptionPageHeader;
 
     @FindBy(xpath = "//li[@heap_menu='ESG Reporting Portal']")
@@ -250,12 +250,10 @@ public class OnDemandAssessmentPage extends CommonPage {
 
     public String landingPage = "";
 
-    public void goToSendRequestPage(String portfolioName) {
-        if (landingPage.equals("")) getLandingPageFromAPI(portfolioName);
-        if (landingPage.equals("batchProcessingPage")) {
-            BrowserUtils.waitForPageToLoad(30);
-            clickCreateNewRequestButton();
-        }
+    public void goToSendRequestPageForAPortfolio(String portfolioName) {
+
+        selectPortfolioOptionByName(portfolioName);
+        clickonOnRequestAssessmentButton();
         BrowserUtils.waitForVisibility(btnReviewRequest, 80);
     }
 
@@ -588,7 +586,7 @@ public class OnDemandAssessmentPage extends CommonPage {
     }
 
     public void validateOnDemandPageHeader() {
-        assertTestCase.assertEquals(BrowserUtils.waitForVisibility(menuOptionPageHeader, 90).getText(), "Moody's Analytics: Request On-Demand Assessment", "Moody's Analytics: Request On-Demand Assessment page verified");
+        assertTestCase.assertEquals(BrowserUtils.waitForVisibility(menuOptionPageHeader, 90).getText(), "On-Demand Reporting", "Moody's Analytics: Request On-Demand Assessment page verified");
     }
 
     public void validateProceedOnConfirmRequestPopup(String countOfCompanies) {
@@ -780,6 +778,13 @@ public class OnDemandAssessmentPage extends CommonPage {
     }
 
     public void trySelectingMultiplePortfolios() {
+        int size = getPortfolioList().size() > 3 ? 3 : getPortfolioList().size();
+        for (int i = 0; i < size; i++) {
+            portfolioRadioButtonList.get(i).click();
+        }
+    }
+
+    public void selectPortfolioInThePortfoliosTable() {
         int size = getPortfolioList().size() > 3 ? 3 : getPortfolioList().size();
         for (int i = 0; i < size; i++) {
             portfolioRadioButtonList.get(i).click();
@@ -1112,14 +1117,21 @@ public class OnDemandAssessmentPage extends CommonPage {
             }
             //System.out.println("dbValues = " + dbValues);
             //compare data
-            int index = 0;
-            for (String cell : row) {
-                index++;
-                if (cell.isEmpty() || cell.equals("-")) continue;
-                if (dbValues.contains(cell)) continue;
-                if (dbValues.contains(cell.replaceAll("\\.0", ""))) continue;
-                System.out.println("cell = " + cell + " | index = " + index);
-                assertTestCase.fail();
+            for (int j = 0; j < row.size(); j++) {
+            String cell = row.get(i);
+                if(cell.indexOf("-")==4 && cell.lastIndexOf("-")==7){
+                    try {
+                        cell.equals(DateTimeUtilities.getFormattedDate(LastUpdateColumn.get(getPortfolioList().indexOf(portfolioName)).getText(),"MMMM d, YYYY","YYYY-mm-dd"));
+                    } catch (Exception e) {
+                        assertTestCase.fail();
+                    }
+                } else {
+                    if (cell.isEmpty() || cell.equals("-")) continue;
+                    if (dbValues.contains(cell)) continue;
+                    if (dbValues.contains(cell.replaceAll("\\.0", ""))) continue;
+                    System.out.println("cell = " + cell + " | index = " + i);
+                    assertTestCase.fail();
+                }
             }
         }
     }

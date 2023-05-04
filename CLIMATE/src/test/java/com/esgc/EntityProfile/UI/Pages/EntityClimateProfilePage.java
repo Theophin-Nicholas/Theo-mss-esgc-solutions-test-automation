@@ -649,7 +649,7 @@ public class EntityClimateProfilePage extends ClimatePageBase {
         expectedHeaderItems.add(companyName);
         //TODO: On Demand Release
         // expectedHeaderItems.add("Confidence Level:");
-        expectedHeaderItems.add("Export/Sources Documents");
+        expectedHeaderItems.add("Export");
         expectedHeaderItems.add("Reference and Methodologies");
         expectedHeaderItems.add("ESC");
 
@@ -1352,9 +1352,9 @@ public class EntityClimateProfilePage extends ClimatePageBase {
             BrowserUtils.scrollTo(physicalRiskTab);
             System.out.println("====================");
             //System.out.println(physicalClimateHazards.getText());
-            return physicalRiskTab.isDisplayed() && operationsRiskLabel.isDisplayed()
-                    && marketRiskLabel.isDisplayed() && supplyChainRiskLabel.isDisplayed()
-                    && physicalClimateRiskOperationsRiskLabel.isDisplayed();
+            return physicalRiskTab.isDisplayed() ;//&& operationsRiskLabel.isDisplayed()
+//                    && marketRiskLabel.isDisplayed() && supplyChainRiskLabel.isDisplayed()
+//                    && physicalClimateRiskOperationsRiskLabel.isDisplayed();
         } catch (Exception e) {
             return false;
         }

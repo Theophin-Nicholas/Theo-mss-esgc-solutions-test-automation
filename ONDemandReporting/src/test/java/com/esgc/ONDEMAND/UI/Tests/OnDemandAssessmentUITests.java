@@ -3,10 +3,12 @@ package com.esgc.ONDEMAND.UI.Tests;
 import com.esgc.Common.API.Controllers.CommonAPIController;
 import com.esgc.Common.UI.Pages.LoginPage;
 import com.esgc.Common.UI.TestBases.UITestBase;
-import com.esgc.ONDEMAND.API.Controllers.OnDemandFilterAPIController;
 import com.esgc.ONDEMAND.UI.Pages.OnDemandAssessmentPage;
 import com.esgc.Pages.Page404;
-import com.esgc.Utilities.*;
+import com.esgc.Utilities.BrowserUtils;
+import com.esgc.Utilities.EntitlementsBundles;
+import com.esgc.Utilities.Environment;
+import com.esgc.Utilities.Xray;
 import com.github.javafaker.Faker;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
@@ -14,7 +16,6 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import java.text.ParseException;
-
 import java.util.Arrays;
 import java.util.List;
 
