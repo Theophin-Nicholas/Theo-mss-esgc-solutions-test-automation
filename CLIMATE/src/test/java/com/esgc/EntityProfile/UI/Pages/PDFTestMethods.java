@@ -354,4 +354,10 @@ public class PDFTestMethods extends PageBase {
         assertTestCase.assertTrue(content.equals("No ParaGraph Found"), "Validating Very High Materiality is not displayed");
 
     }
+
+    public void verifySectorForEntity(String sector) {
+        EntityClimateProfilePage entityProfilePage = new EntityClimateProfilePage();
+        String content = PdfUtil.extractPDFText(pdfFileText, sector);
+        assertTestCase.assertTrue(!content.equals("No ParaGraph Found"), "Validating Sector is displayed");
+    }
 }

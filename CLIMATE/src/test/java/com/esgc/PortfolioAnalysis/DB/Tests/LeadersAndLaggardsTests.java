@@ -3,11 +3,15 @@ package com.esgc.PortfolioAnalysis.DB.Tests;
 import com.esgc.Base.API.APIModels.APIFilterPayload;
 import com.esgc.Base.DB.DBModels.ResearchLineIdentifier;
 import com.esgc.Base.TestBases.DataValidationTestBase;
+import com.esgc.Dashboard.DB.DBQueries.DashboardQueries;
+import com.esgc.Dashboard.UI.Pages.DashboardPage;
 import com.esgc.PortfolioAnalysis.API.APIModels.LeadersAndLaggards;
 import com.esgc.PortfolioAnalysis.API.APIModels.LeadersAndLaggardsWrapper;
 import com.esgc.PortfolioAnalysis.DB.DBModels.ESGLeaderANDLaggers;
+import com.esgc.PortfolioAnalysis.UI.Pages.ResearchLinePage;
 import com.esgc.Reporting.CustomAssertion;
 import com.esgc.Utilities.APIUtilities;
+import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.PortfolioUtilities;
 import com.esgc.Utilities.Xray;
 import io.restassured.response.Response;
@@ -18,10 +22,7 @@ import org.testng.annotations.Test;
 
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.esgc.Utilities.Groups.*;
@@ -441,5 +442,55 @@ public class LeadersAndLaggardsTests extends DataValidationTestBase {
                 };
     }
 
+    @Test(groups = {REGRESSION, DATA_VALIDATION},
+            description = "Data Validation | Analysis Page | Impact, and Current Leaders/Laggards Widget | Verify the Sector for entities in widget")
+    @Xray(test = {14318, 14320})
+    public void verifySectorForEntitiesInLeadersAndLaggardsWidget() {
+        ResearchLinePage researchLinePage = new ResearchLinePage();
+        test.info("Navigate to Portfolio Analysis page");
+        researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
+        researchLinePage.waitForDataLoadCompletion();
+        if(!researchLinePage.portfolioSelectionButton.getText().equals("Sample Portfolio")) {
+            researchLinePage.selectPortfolioByNameFromPortfolioSelectionModal("Sample Portfolio");
+        }
+        String portfolioId = "00000000-0000-0000-0000-000000000000";
+        DashboardQueries dashboardQueries = new DashboardQueries();
+        List<Map<String, Object>> dbData = dashboardQueries.getPortfolioDetail(portfolioId);
 
+        for (int i = 0; i < researchLinePage.updatesCompanyNamesList.size(); i++) {
+            String companyName = researchLinePage.updatesCompanyNamesList.get(i).getText();
+            String sector = researchLinePage.updatesCompanySectorsList.get(i).getText();
+            boolean check = false;
+            //get list on ENTITY_NAME_BVD from db
+            for (Map<String, Object> data : dbData) {
+                if (data.get("COMPANY_NAME") == null) continue;
+                if (data.containsValue(companyName)) {
+                    //System.out.println("Entity " + companyName + " found in DB");
+                    if (data.containsValue(sector)) {
+                        check = true;
+                        break;
+                    }
+                }
+            }
+            if (!check) {
+                System.out.println("Entity " + companyName + " not found in DB");
+                assertTestCase.fail("Entity " + companyName + " not found in DB");
+            }
+        }
+        Set<String> regionsAndSector = new HashSet<>();
+        //add all Regions and Sectors to the set
+        for (Map<String, Object> data : dbData) {
+            if (data.get("REGION_NAME") == null) continue;
+            regionsAndSector.add(data.get("REGION_NAME").toString());
+            if (data.get("SECTOR") == null) continue;
+            regionsAndSector.add(data.get("SECTOR").toString());
+        }
+        System.out.println("regionsAndSector = " + regionsAndSector);
+
+        List<String> uiRegionSectorNames = BrowserUtils.getElementsText(researchLinePage.regionSectorChartNames);
+        System.out.println("uiRegionSectorNames = " + uiRegionSectorNames);
+
+        assertTestCase.assertTrue(uiRegionSectorNames.containsAll(regionsAndSector), "All regions and sectors are displayed in the chart");
+
+    }
 }
