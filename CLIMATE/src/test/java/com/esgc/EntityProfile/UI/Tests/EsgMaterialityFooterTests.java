@@ -44,7 +44,7 @@ public class EsgMaterialityFooterTests extends UITestBase {
         assertTestCase.assertTrue(!entityProfilePage.isProvidedFilterSelectedByDefaultInMaterialityMatrixFooter("Governance"), "Verify default selected filter in Materiality Matrix Footer");
 
 
-        entityProfilePage.clickCloseIcon();
+        entityProfilePage.clickCloseIconInSearchBox();
     }
 
     @Test(groups = {"esg_materiality", REGRESSION, UI})
@@ -69,7 +69,7 @@ public class EsgMaterialityFooterTests extends UITestBase {
         assertTestCase.assertTrue(entityProfilePage.isProvidedFilterClickableInMaterialityMatrixFooter("Social"), "Verify filter is clickable in Materiality Matrix Footer");
         assertTestCase.assertTrue(entityProfilePage.isProvidedFilterClickableInMaterialityMatrixFooter("Governance"), "Verify filter is clickable in Materiality Matrix Footer");
 
-        entityProfilePage.clickCloseIcon();
+        entityProfilePage.clickCloseIconInSearchBox();
     }
 
     @Test(groups = {"esg_materiality", REGRESSION, UI, ESG})
@@ -106,7 +106,7 @@ public class EsgMaterialityFooterTests extends UITestBase {
         List<String> uiEsgCategories = entityProfilePage.readEsgMaterialityCategories();
         assertTestCase.assertTrue(compareCategories(uiEsgMaterialityCategories, uiEsgCategories), "Verify ESG Categories");
 
-        entityProfilePage.clickCloseIcon();
+        entityProfilePage.clickCloseIconInSearchBox();
 
         // Verify Categories are reset when selected another company
         String company2 = "Apple, Inc.";
@@ -120,7 +120,7 @@ public class EsgMaterialityFooterTests extends UITestBase {
 
         assertTestCase.assertFalse(compareCategories(uiEsgMaterialityCategories, uiEsgMaterialityCategories2), "Compare 2 companies categories");
 
-        entityProfilePage.clickCloseIcon();
+        entityProfilePage.clickCloseIconInSearchBox();
     }
 
     public boolean validateEnvironmentalCategories(List<String> actualCategories){

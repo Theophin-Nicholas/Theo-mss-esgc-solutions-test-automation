@@ -99,10 +99,10 @@ public abstract class DashboardUITestBase extends TestBase {
 
         return new Object[][]
                 {
-                        {"all", "all", "03", "2022"},
-                        {"all", "APAC", "03", "2021"},
-                        {"all", "EMEA", "09", "2022"},
-                        {"all", "AMER", "03", "2022"}
+                        {"All Sectors", "All Regions", "03", "2022"},
+                        {"All Sectors", "APAC", "03", "2021"},
+                        {"All Sectors", "EMEA", "09", "2022"},
+                        {"All Sectors", "AMER", "03", "2022"}
 
                 };
     }

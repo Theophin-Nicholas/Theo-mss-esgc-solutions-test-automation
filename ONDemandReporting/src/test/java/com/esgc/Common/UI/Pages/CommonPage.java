@@ -1,18 +1,13 @@
 package com.esgc.Common.UI.Pages;
 
 
-import com.esgc.Common.UI.TestBases.UITestBase;
-import com.esgc.ONDEMAND.API.Controllers.OnDemandFilterAPIController;
 import com.esgc.Utilities.*;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.Color;
-import org.openqa.selenium.support.Colors;
 import org.openqa.selenium.support.FindBy;
-import org.testng.annotations.BeforeClass;
 
 import java.io.File;
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -123,8 +118,11 @@ public class CommonPage extends UploadPortfolio {
 
     //This method is to select the reporting option on reporting landing page
     public void navigateToReportingService(String reportingService) {
-       // BrowserUtils.wait(3);
-        navigateToPageFromMenu("reportingservice", "ESG Reporting Portal");
+        // BrowserUtils.wait(3);
+        if (Environment.environment.equalsIgnoreCase("qa"))
+            navigateToPageFromMenu("reportingservice", "ESG Reporting Portal");
+        else
+            navigateToPageFromMenu("reportingservice", "On-Demand Reporting");
         if (reportingService.contains("SFDR")) {
             clickOnEUTaxonomyOption();
         }
@@ -228,13 +226,13 @@ public class CommonPage extends UploadPortfolio {
     }
 
     public boolean IsPortfolioTableLoaded() {
-        return (BrowserUtils.waitForVisibility(divSelectPortfolio, 80).isDisplayed() && getAvailablePortfolioCountt()>0) ;
+        return (BrowserUtils.waitForVisibility(divSelectPortfolio, 80).isDisplayed() && getAvailablePortfolioCountt() > 0);
     }
 
     public void waitForPortfolioTableToLoad() {
-       if (IsPortfolioTableLoaded()){
-           System.out.println("Portfolio Table Successfully loaded ");
-       }
+        if (IsPortfolioTableLoaded()) {
+            System.out.println("Portfolio Table Successfully loaded ");
+        }
     }
 
     public int deSelectPortfolioOptionByName(String name) {
@@ -256,7 +254,7 @@ public class CommonPage extends UploadPortfolio {
     public void selectAllPortfolioOptions() {
         //select all buttons if not selected
         int count = 0;
-        while (getSelectedPortfolioOptions().size() < 4 ) {
+        while (getSelectedPortfolioOptions().size() < 4) {
             portfolioRadioButtonList.get(count).click();
             count++;
         }
