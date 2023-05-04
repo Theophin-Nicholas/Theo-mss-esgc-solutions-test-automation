@@ -75,7 +75,7 @@ public class CommonAPIController {
                 deletePortfolio(id);
             }
         }catch(Exception e) {
-            //e.printStackTrace();
+            e.printStackTrace();
         }
     }
 
@@ -158,6 +158,7 @@ public class CommonAPIController {
 
     public synchronized String getPortfolioId(String portfolioName) {
         Response response = getPortfolioDetails();
+//        response.prettyPrint();
         List<String> portfolioNames = response.jsonPath().getList("portfolios.portfolio_name");
         List<String> portfolioIds = response.jsonPath().getList("portfolios.portfolio_id");
         for (int i = 0; i < portfolioNames.size(); i++) {

@@ -2,7 +2,9 @@ package com.esgc.ONDEMAND.UI.Pages;
 
 
 import com.esgc.Common.UI.Pages.CommonPage;
+import com.esgc.Common.UI.Pages.LoginPage;
 import com.esgc.ONDEMAND.API.Controllers.OnDemandFilterAPIController;
+import com.esgc.Utilities.*;
 import com.esgc.ONDEMAND.DB.DBQueries.OnDemandAssessmentQueries;
 import com.esgc.Utilities.*;
 import org.openqa.selenium.By;
@@ -989,6 +991,18 @@ public class OnDemandAssessmentPage extends CommonPage {
         return index;
     }
 
+    @FindBy(xpath = "//*[@id='viewcomapnies-0-Financials-tableCell-0-0']")
+    public WebElement entityInViewBySectorTab;
+    @FindBy(xpath = "//*[@id='dashboard_PageHeader']/div/div/div[2]/div/div[1]/div/div[2]/span")
+    public WebElement climateCoverageLink;
+
+
+    public void clickOnClimateCoverageLink(){
+        BrowserUtils.waitForClickablility(climateCoverageLink, 50);
+        climateCoverageLink.click();
+    }
+
+
     //Download portfolio from 2 places: portfolio list-Download button, and from details panel-Export to Excel button
     //input parameter: location of the downloaded file either page, or details panel
     public void verifyDownloadPortfolio(String location) {
@@ -1195,5 +1209,161 @@ public class OnDemandAssessmentPage extends CommonPage {
         }
         return portfolioName;
     }
+
+
+    @FindBy(xpath = "//*[@id=\"Climate Dashboardtopbar-menuitem-test-id\"]")
+    public WebElement climateDashboardTab;
+    @FindBy(xpath = "//*[@id=\"Climate Portfolio Analysistopbar-menuitem-test-id\"]")
+    public WebElement portfolioAnalysisTab;
+    @FindBy(xpath = "//*[@id=\"on-demand-reporting-topbar-menuitem\"]")
+    public WebElement reportingPortalTab;
+    @FindBy(xpath = "//*[@id='topbar-appbar-test-id']/div/li")
+    public WebElement pageHeader;
+
+    @FindBy(xpath = "//li[contains(@class,'MuiButtonBase')]")
+    public List<WebElement> menuItems;
+    @FindBy(xpath = "//*[@id=\"topbar-appbar-test-id\"]/div/div[2]")
+    public WebElement searchButton;
+    @FindBy(xpath = "//*[@id=\"platform-search-test-id\"]")
+    public WebElement searchField;
+    @FindBy(xpath = "//*[@id=\"mini-0\"]/div[2]/span")
+    public WebElement searchResultLineOne;
+
+    @FindBy(xpath = "/html/body/div[2]/div[3]/div/div[1]/div[2]/svg")
+    public WebElement escapeButton;
+
+    @FindBy(xpath = "//*[@id='eu_taxonomy']")
+    public WebElement euTaxonomyOption;
+
+    @FindBy(xpath = "//*[@id='sfdr']")
+    public WebElement sfdrOption;
+
+    @FindBy(xpath = "//*[@id='on_demand_assessment']")
+    public WebElement ondemandOption;
+
+    @FindBy(xpath = "//*[@id=\"eu_taxonomy\"]/label/span[1]/span/input")
+    public WebElement euTaxonomyRadioButton;
+
+    @FindBy(xpath = "//*[@id=\"sfdr\"]/label/span[1]/span/input")
+    public WebElement sfdrRadioButton;
+    public void clickOnEscapeButton() {
+        BrowserUtils.waitAndClick(escapeButton, 5);
+    }
+
+    public void searchForEntitities(String entity) {
+        BrowserUtils.waitForVisibility(searchField, 30);
+        searchField.sendKeys(entity);
+    }
+
+    public void validateEntitiesWithOnlyEsgDataDontShowInSearch(String entity) {
+
+       String expectedSearchResult = BrowserUtils.waitForVisibility(searchResultLineOne, 20).getText();
+        assertTestCase.assertTrue(!entity.equals(searchResultLineOne.getText()), "Validating that " + entity + " which is an Entity with ESG data only is not returned or suggested in search option : Status Done");
+
+    }
+
+    public void clickOnSearchButton() {
+        BrowserUtils.waitForClickablility(searchButton, 20);
+        searchButton.click();
+    }
+    public boolean isSearchButtonDisplayed(){
+        BrowserUtils.waitForInvisibility(searchButton, 20);
+        return searchButton.isDisplayed();
+    }
+
+    public void validateSearchButtonNotDisplayed(){
+        assertTestCase.assertTrue(!isSearchButtonDisplayed(), "Verifying that user can't open entity page or search for it : Status Done");
+    }
+
+
+    public void validateDashboardAndPortfolioAnalysisNotPresentInGlobalMenu() {
+        String expectedTabTitle = "Climate Dashboard";
+        String expectedTab1Title = "Climate Portfolio Analysis";
+
+        System.out.println("-------------Validate Dashboard and Portfolio Analysis are not visible---------------");
+        assertTestCase.assertTrue(!climateDashboardTab.isDisplayed(),"Verifying the Climate Dashboard is not visible : Status Done");
+        assertTestCase.assertTrue(!portfolioAnalysisTab.isDisplayed(), "Verifying the Climate Portfolio Analysis is not visible : Status Done");
+        System.out.println("-------------Just validated that Dashboard and Portfolio Analysis are not visible------------------");
+    }
+
+    public void validateDashboardTabNotPresentFromGlobalMenu(String menuTab) {
+        System.out.println("------------Verifying that "+ menuTab+" is removed from global menu-------------------");
+        for (WebElement e : menuItems) {
+            String menuItemText = e.getText();
+            System.out.println("verify that " + menuItemText + " is not equal to " + menuTab);
+            assertTestCase.assertTrue(!menuItemText.equals(menuTab), "Verify that " + menuTab +" is not visible in the Global menu : Status Done");
+        }
+    }
+    public void validateAnyTabPresentInGlobalMenu(String menuTab) {
+        System.out.println("------------Verifying that "+ menuTab+" is visible from global menu-------------------");
+        for (WebElement e : menuItems) {
+            String menuItemText = e.getText();
+            if(menuItemText.equals(menuTab))
+            //System.out.println("verify that " + menuItemText + " is equal to " + menuTab);
+            assertTestCase.assertTrue(menuItemText.equals(menuTab), "Verify that " + menuTab +" is visible in the Global menu : Status Done");
+            break;
+        }
+    }
+
+    public void validateReportingOptionsInReportingPage2(String option) {
+        System.out.println("------------Verifying that "+ option+" is visible from global menu-------------------");
+        for (WebElement e : menuItems) {
+            String menuItemText = e.getText();
+            if(menuItemText.equals(option))
+                //System.out.println("verify that " + menuItemText + " is equal to " + menuTab);
+                assertTestCase.assertTrue(menuItemText.equals(option), "Verify that " + option +" is visible in the Global menu : Status Done");
+            break;
+        }
+    }
+
+    public void validateReportingOptionsInReportingPage(LoginPage login , EntitlementsBundles bundles){
+        OnDemandAssessmentPage odaPage = new OnDemandAssessmentPage();
+
+        switch(bundles) {
+
+            case USER_SFDR_ESG_ESG_PREDICTOR_ODA_EXCEL:
+                login.entitlementsLogin(EntitlementsBundles.USER_SFDR_ESG_ESG_PREDICTOR_ODA_EXCEL);
+                assertTestCase.assertTrue(odaPage.validateOnDemandReportingLandingPage(), "Validating that landing page is On-Demand Reporting Page");
+                assertTestCase.assertTrue(!euTaxonomyRadioButton.isEnabled(), "Verifying Eu-Taxonomy option is disabled : Status Done");
+                assertTestCase.assertTrue(sfdrRadioButton.isEnabled(), "Verifying SFDR PAIs option is enabled : Status Done");
+                odaPage.clickOnMenuButton();
+                odaPage.clickOnLogOutButton();
+                break;
+            case USER_EUTAXONOMY_ESG_ESG_PREDICTOR_ODA_EXCEL:
+                login.entitlementsLogin(EntitlementsBundles.USER_EUTAXONOMY_ESG_ESG_PREDICTOR_ODA_EXCEL);
+                assertTestCase.assertTrue(odaPage.validateOnDemandReportingLandingPage(), "Validating that landing page is On-Demand Reporting Page");
+                assertTestCase.assertTrue(euTaxonomyRadioButton.isEnabled(), "Verifying Eu-Taxonomy option is enabled : Status Done");
+                assertTestCase.assertTrue(!sfdrRadioButton.isEnabled(), "Verifying SFDR PAIs option is disabled : Status Done");
+                odaPage.clickOnMenuButton();
+                odaPage.clickOnLogOutButton();
+                break;
+            case USER_EUTAXONOMY_ESG_ESG_PREDICTOR_ODA:
+                login.entitlementsLogin(EntitlementsBundles.USER_EUTAXONOMY_ESG_ESG_PREDICTOR_ODA);
+                assertTestCase.assertTrue(odaPage.validateOnDemandReportingLandingPage(), "Validating that landing page is On-Demand Reporting Page");
+                assertTestCase.assertTrue(euTaxonomyRadioButton.isEnabled(), "Verifying Eu-Taxonomy option is enabled : Status Done");
+                assertTestCase.assertTrue(!sfdrRadioButton.isEnabled(), "Verifying SFDR PAIs option is disabled : Status Done");
+                odaPage.clickOnMenuButton();
+                odaPage.clickOnLogOutButton();
+                break;
+            case USER_SFDR_ESG_ESG_PREDICTOR_ODA:
+                login.entitlementsLogin(EntitlementsBundles.USER_SFDR_ESG_ESG_PREDICTOR_ODA);
+                assertTestCase.assertTrue(odaPage.validateOnDemandReportingLandingPage(), "Validating that landing page is On-Demand Reporting Page");
+                assertTestCase.assertTrue(!euTaxonomyRadioButton.isEnabled(), "Verifying Eu-Taxonomy option is disabled : Status Done");
+                assertTestCase.assertTrue(sfdrRadioButton.isEnabled(), "Verifying SFDR PAIs option is enabled : Status Done");
+                odaPage.clickOnMenuButton();
+                odaPage.clickOnLogOutButton();
+                break;
+            case USER_EUTAXONOMY_SFDR_ESG_ESG_PREDICTOR_ODA_EXCEL:
+                login.entitlementsLogin(EntitlementsBundles.USER_EUTAXONOMY_SFDR_ESG_ESG_PREDICTOR_ODA_EXCEL);
+                assertTestCase.assertTrue(odaPage.validateOnDemandReportingLandingPage(), "Validating that landing page is On-Demand Reporting Page");
+                assertTestCase.assertTrue(euTaxonomyRadioButton.isEnabled(), "Verifying Eu-Taxonomy option is enabled : Status Done");
+                assertTestCase.assertTrue(sfdrRadioButton.isEnabled(), "Verifying SFDR PAIs option is enabled : Status Done");
+                odaPage.clickOnMenuButton();
+                odaPage.clickOnLogOutButton();
+                break;
+
+        }
+    }
+
 
 }

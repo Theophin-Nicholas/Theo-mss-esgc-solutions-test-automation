@@ -6,11 +6,14 @@ import com.esgc.Common.UI.TestBases.UITestBase;
 import com.esgc.ONDEMAND.API.Controllers.OnDemandFilterAPIController;
 import com.esgc.ONDEMAND.API.Controllers.OnDemandFilterAPIController;
 import com.esgc.ONDEMAND.DB.DBQueries.OnDemandAssessmentQueries;
+import com.esgc.ONDEMAND.API.Controllers.OnDemandFilterAPIController;
+import com.esgc.ONDEMAND.TestDataProviders.EntityWithEsgDataOnlyDataProviders;
 import com.esgc.ONDEMAND.UI.Pages.OnDemandAssessmentPage;
 import com.esgc.ONDEMAND.UI.Pages.PopUpPage;
 import com.esgc.Pages.Page404;
 import com.esgc.RegulatoryReporting.DB.DBQueries.RegulatoryReportingQueries;
 import com.esgc.RegulatoryReporting.UI.Pages.RegulatoryReportingPage;
+import com.esgc.Pages.Page404;
 import com.esgc.Utilities.*;
 import com.github.javafaker.Faker;
 import io.restassured.path.json.JsonPath;
@@ -205,7 +208,7 @@ public class OnDemandEntitlementBundleTests extends UITestBase {
             OnDemandAssessmentPage onDemandAssessmentPage = new OnDemandAssessmentPage();
             assertTestCase.assertTrue(onDemandAssessmentPage.validateOnDemandReportingLandingPage(), "Validating if landing page is On-Demand Reporting Page", 14529);
             if (onDemandAssessmentPage.IsPortfolioTableLoaded()) {
-                List<String> reportingOptions = Arrays.asList(new String[]{"EU Taxonomy", "SFDR PAIs"});
+                List<String> reportingOptions = Arrays.asList("EU Taxonomy", "SFDR PAIs");
                 onDemandAssessmentPage.ValidateReportingOptions(reportingOptions);
                 assertTestCase.assertTrue(!onDemandAssessmentPage.getReportingList().contains("On-Demand Assessment"), "Validate that OnDemand option is not visible");
             }
@@ -544,4 +547,91 @@ public class OnDemandEntitlementBundleTests extends UITestBase {
             assertTestCase.assertTrue(false, "TestCase Failed - Please see stack trace for details");
         }
     }
+
+    @Test(groups ={REGRESSION, UI, SMOKE})
+    @Xray(test = {14095, 14096})
+    public void validateDashboardAndPortfolioAnalysisNotPresentInGlobalMenu(){
+        login.entitlementsLogin(EntitlementsBundles.ONDEMAND_USER_WITHOUT_EXPORT_ENTITLEMENT);
+        OnDemandAssessmentPage odaPage = new OnDemandAssessmentPage();
+        odaPage.clickOnMenuButton();
+        odaPage.validateDashboardTabNotPresentFromGlobalMenu("Climate Dashboard");
+        odaPage.validateDashboardTabNotPresentFromGlobalMenu("Climate Portfolio Analysis");
+        odaPage.validateSearchButtonNotDisplayed();
+
+    }
+
+    @Test(groups ={REGRESSION, UI})
+    @Xray(test = {14100})
+    public void validateCalculationsIsVisibleForEntitlements(){
+
+        LoginPage login = new LoginPage();
+        OnDemandAssessmentPage odaPage = new OnDemandAssessmentPage();
+        EntitlementsBundles [] entitlements = {EntitlementsBundles.USER_CLIMATE_ESG_ESG_PREDICTOR_EXPORT,EntitlementsBundles.USER_CLIMATE_ESG};
+
+        for(EntitlementsBundles e : entitlements){
+            login.entitlementsLogin(e);
+            System.out.println("------------Logged in to Check Calculations tab in Global Menu using " + e.toString()+" entitlements ------------");
+            odaPage.clickOnMenuButton();
+            odaPage.validateAnyTabPresentInGlobalMenu("Calculations");
+            odaPage.clickOnLogOutButton();
+
+        }
+
+    }
+
+    @Test(groups ={REGRESSION, UI, SMOKE})
+    @Xray(test = {14295})
+    public void validateOnDemandSfdrEuTaxonomyForEntitlements() {
+
+        LoginPage login = new LoginPage();
+        OnDemandAssessmentPage odaPage = new OnDemandAssessmentPage();
+        EntitlementsBundles[] entitlements = {EntitlementsBundles.USER_SFDR_ESG_ESG_PREDICTOR_ODA,
+                EntitlementsBundles.USER_EUTAXONOMY_SFDR_ESG_ESG_PREDICTOR_ODA_EXCEL,
+                EntitlementsBundles.USER_SFDR_ESG_ESG_PREDICTOR_ODA_EXCEL,
+                EntitlementsBundles.USER_EUTAXONOMY_ESG_ESG_PREDICTOR_ODA,
+                EntitlementsBundles.USER_EUTAXONOMY_ESG_ESG_PREDICTOR_ODA_EXCEL,
+                EntitlementsBundles.USER_CLIMATE_ESG_ESG_PREDICTOR_EXPORT,
+                EntitlementsBundles.USER_CLIMATE_ESG,
+                EntitlementsBundles.USER_ESG_ESG_PREDICTOR_ODA};
+
+        for (EntitlementsBundles e : entitlements) {
+            System.out.println("------------Logged in to Check OnDemand Reporting tab in Global Menu using " + e.toString() + " entitlements ------------");
+            odaPage.validateReportingOptionsInReportingPage(login, e);
+        }
+    }
+
+    @Test(groups = {UI, REGRESSION, SMOKE}, dataProvider = "entityWithEsgDataOnly-DP", dataProviderClass = EntityWithEsgDataOnlyDataProviders.class)
+    @Xray(test = {14094})
+    public void ValidateNoDataForEntitiesWithEsgDataOnly(String... entity) {
+        LoginPage login = new LoginPage();
+
+        login.entitlementsLogin(EntitlementsBundles.USER_CLIMATE_ESG);
+        System.out.println("---------------Logged back in using climate and esg entitlements--------------------");
+        OnDemandAssessmentPage odaPage = new OnDemandAssessmentPage();
+        odaPage.clickOnSearchButton();
+        odaPage.searchForEntitities(entity[0]);
+        //assertTestCase.assertTrue(!entity.equals(odaPage.searchResultLineOne.getText()), "Validating that " + entity + " which is an Entity with ESG data only is not returned or suggested in search option : Status Done");
+
+        odaPage.validateEntitiesWithOnlyEsgDataDontShowInSearch(entity[0]);
+
+    }
+
+    @Test(groups = {UI, REGRESSION, SMOKE}, dataProvider = "entityWithEsgDataOnly-DP", dataProviderClass = EntityWithEsgDataOnlyDataProviders.class)
+    @Xray(test = {14094})
+    public void validate() {
+
+        login.entitlementsLogin(EntitlementsBundles.USER_CLIMATE_ESG_ESG_PREDICTOR_EXPORT);
+        System.out.println("---------------Logged back in using climate esg- esg predictor and export entitlements--------------------");
+        OnDemandAssessmentPage odaPage = new OnDemandAssessmentPage();
+
+        odaPage.clickOnSearchButton();
+        String[] entityList1 = {"C5 Eiendom AS", "Entergy Utility Affiliates LLC", "Solutia, Inc.", "Resolution Life Australasia Ltd."};
+        for (int i = 0; i < entityList1.length; i++) {
+            odaPage.searchForEntitities(entityList1[i]);
+            odaPage.validateEntitiesWithOnlyEsgDataDontShowInSearch(entityList1[i]);
+        }
+    }
+
+
+
 }
