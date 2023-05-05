@@ -166,7 +166,7 @@ public class OnDemandAssessmentDBTests extends DataValidationTestBase {
     }
 
     @Test(groups = {REGRESSION, UI, COMMON})
-    @Xray(test = {13988})
+    @Xray(test = {13988,13766,13767,13768})
     public void OnDemandAssessmentPortfolioTableDataValidationsWithOnyPredictedAndAnalyticalEntities() throws ParseException {
         String portfolioName = "OnDemandEntities";
         OnDemandAssessmentPage onDemandAssessmentPage = new OnDemandAssessmentPage();
@@ -189,6 +189,8 @@ public class OnDemandAssessmentDBTests extends DataValidationTestBase {
         Map<String,String> UIValues = onDemandAssessmentPage.getPortfolioCoverageAndOnDemadEligibilityValues(portfolioName);
         assertTestCase.assertTrue(UIValues.get("Coverage").equals(CommonUtility.round((float) sumOfCoveredEntities/dbData.get(0).getTOTAL_VALUE()*100,2)+"%"),"Validating Coverage Value");
         assertTestCase.assertTrue(UIValues.get("ONDemandEligibility").equals(CommonUtility.round((float) sumOfPredictedEntities/dbData.get(0).getTOTAL_VALUE()*100,2)+"%"),"Validating On Demand Eligibility Value");
+       onDemandAssessmentPage.selectPortfolio(portfolioName);
+        onDemandAssessmentPage.clickonOnRequestAssessmentButton();
+        onDemandAssessmentPage.getEligibleAssessment();
     }
-
 }

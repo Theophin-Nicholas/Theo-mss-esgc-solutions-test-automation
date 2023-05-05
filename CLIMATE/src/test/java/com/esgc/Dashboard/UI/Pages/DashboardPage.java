@@ -1666,5 +1666,55 @@ public class DashboardPage extends UploadPage {
 
     }
 
+    @FindBy(xpath = "//span[text()='Portfolio Calculations']")
+    public  WebElement PortfolioCalculationHeader;
+    @FindBy(xpath = "//span[text()='Weighted Average Calculations']")
+    public  WebElement weightedAverageCalculations;
+
+    @FindBy(xpath = "//li/span[text()='Carbon Footprint']/../following-sibling::li/span")
+    public  WebElement CarbonFootPrintSection;
+
+    @FindBy(xpath = "//li/span[text()='Carbon Footprint']/../../following-sibling::li")
+    public  List<WebElement> portfilioCalculationsOptions;
+
+    @FindBy(xpath = "//div[@class='MuiAlert-message']")
+    public WebElement alertMessage ;
+
+    public void verifyCalculationDrawer(){
+        assertTestCase.assertTrue(BrowserUtils.waitForVisibility(PortfolioCalculationHeader,60).isDisplayed(),"Validate PortfolioCalculationHeader is displayed");
+        assertTestCase.assertTrue(weightedAverageCalculations.isDisplayed(),"Validate weightedAverageCalculations is displayed");
+        assertTestCase.assertTrue(CarbonFootPrintSection.getText().equals("In alignment with the Partnership for Carbon " +
+                "Accounting Financials (PCAF) recommends we offer the below options to calculation portfolio aggregations " +
+                "for Carbon Footprint."), "Validating Carbon Footprint Section");
+
+        List<String> expectedOptions= Arrays.asList(new String[]{"Investment Value","Enterprise Value Including Cash","Market Capitalization","Total Assets"}) ;
+        for(int i =0;i<portfilioCalculationsOptions.size();i++){
+            assertTestCase.assertEquals(expectedOptions.get(i),(portfilioCalculationsOptions.get(i).getText()),"Validating " + portfilioCalculationsOptions.get(i).getText() + " menu Options");
+        }
+
+
+    }
+    public String getSelectedOption (){
+        String returnValue = "";
+        BrowserUtils.wait(5);
+        for(int i =0;i<portfilioCalculationsOptions.size();i++){
+            if(portfilioCalculationsOptions.get(i).findElement(By.xpath("div/fieldset/label/span/span/input")).getAttribute("checked")!=null){
+                returnValue = portfilioCalculationsOptions.get(i).getText();
+                break;
+            }
+        }
+        return returnValue;
+    }
+
+    public void selectOtherOptionAndValidateSaveMessage(String currentSelectedValue){
+        for(int i =0;i<portfilioCalculationsOptions.size();i++){
+            if (!portfilioCalculationsOptions.get(i).getText().equals(currentSelectedValue)){
+                portfilioCalculationsOptions.get(i).findElement(By.xpath("div/fieldset/label/span/span/input")).click();
+                assertTestCase.assertTrue(BrowserUtils.waitForVisibility(alertMessage,20).getText().equals("Changes Saved"),"Validate success message");
+                break;
+            }
+        }
+    }
+
 
 }
