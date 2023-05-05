@@ -5,19 +5,23 @@ import com.esgc.Common.UI.Pages.CommonPage;
 import com.esgc.Common.UI.Pages.LoginPage;
 import com.esgc.ONDEMAND.API.Controllers.OnDemandFilterAPIController;
 import com.esgc.Utilities.*;
+import com.esgc.ONDEMAND.DB.DBQueries.OnDemandAssessmentQueries;
+import com.esgc.Utilities.*;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.Color;
 import org.openqa.selenium.support.FindBy;
 
 import java.io.File;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class OnDemandAssessmentPage extends CommonPage {
 
-    @FindBy(xpath = "//div[@data-test='sentinelStart']/following-sibling::div//div[contains(@class,'MuiToolbar-root')]/div[text()]")
+    @FindBy(xpath = "//li[text()]")
     public WebElement menuOptionPageHeader;
 
     @FindBy(xpath = "//li[@heap_menu='ESG Reporting Portal']")
@@ -127,14 +131,14 @@ public class OnDemandAssessmentPage extends CommonPage {
 //"//*[contains(text(),'Please confirm email addresses. The listed contacts will receive an email prompting them to complete an ESG assessment questionnaire.')]")
     public WebElement emailAlertMessage;
 
-    @FindBy(xpath="//div[text()='Confirm Request']")
-    public WebElement confirmRequestPopupHeader ;
+    @FindBy(xpath = "//div[text()='Confirm Request']")
+    public WebElement confirmRequestPopupHeader;
 
-    @FindBy(xpath="//div[text()='Confirm Request']//following-sibling::div")
-    public WebElement confirmRequestPopupSubHeader ;
+    @FindBy(xpath = "//div[text()='Confirm Request']//following-sibling::div")
+    public WebElement confirmRequestPopupSubHeader;
 
-    @FindBy(xpath="//button[@id='ondemand-assessment-cancel']")
-    public WebElement confirmRequestPopupBtnCancel ;
+    @FindBy(xpath = "//button[@id='ondemand-assessment-cancel']")
+    public WebElement confirmRequestPopupBtnCancel;
 
     @FindBy(xpath = "//button[@id='ondemand-assessment-confirmation']")
     public WebElement confirmRequestPopupBtnProceed;
@@ -143,16 +147,16 @@ public class OnDemandAssessmentPage extends CommonPage {
     public WebElement SomeThingWentWrongErrorMessage;
 
     @FindBy(xpath = "//button[@id='button-report-test-id-1']")
-    public WebElement buttonRequestAssessment ;
+    public WebElement buttonRequestAssessment;
 
-    @FindBy(xpath="//button[@id='button-prev-status-test-id-1']")
-    public WebElement buttonViewAssessmentStatus ;
+    @FindBy(xpath = "//button[@id='button-prev-status-test-id-1']")
+    public WebElement buttonViewAssessmentStatus;
 
-    @FindBy(xpath="//button[@id='button-prev-methodologies-test-id-1']")
-    public WebElement buttonMethodologies ;
+    @FindBy(xpath = "//button[@id='button-prev-methodologies-test-id-1']")
+    public WebElement buttonMethodologies;
 
-    @FindBy(xpath="//div[contains(@class,'MuiGrid-root MuiGrid-item MuiGrid-grid')][3]//div/div/div/div/div/div[1]")
-    public WebElement AssessmentsRemaining ;
+    @FindBy(xpath = "//div[contains(@class,'MuiGrid-root MuiGrid-item MuiGrid-grid')][3]//div/div/div/div/div/div[1]")
+    public WebElement AssessmentsRemaining;
 
     @FindBy(xpath = "//div[contains(text(),'Select Portfolio')]/../div[2]/following-sibling::div/div[3]")
     public List<WebElement> portfolioCoverage;
@@ -181,7 +185,6 @@ public class OnDemandAssessmentPage extends CommonPage {
     public WebElement methodologiesPopupCloseButton;
 
 
-
     @FindBy(xpath = "//div[contains(text(),'Select Portfolio')]/../div[2]/following-sibling::div/div[4]")
     public List<WebElement> OnDemandEligibility;
 
@@ -205,6 +208,9 @@ public class OnDemandAssessmentPage extends CommonPage {
     @FindBy(xpath = "(//table[@id='viewcompanies'])//th")
     public List<WebElement> detailPanelTableHeaders;
 
+    @FindBy(xpath = "(//table[@id='viewcompanies'])//tr")
+    public List<WebElement> detailPanelCompanyRows;
+
     @FindBy(xpath = "(//table[@id='viewcompanies'])//td[1]")
     public List<WebElement> detailPanelCompanyNames;
 
@@ -223,6 +229,8 @@ public class OnDemandAssessmentPage extends CommonPage {
     @FindBy(xpath = "//button[.='Export To Excel']")
     public WebElement detailPanelExportToExcelButton;
 
+    @FindBy(xpath = "//div[@id='button-button-test-id-1']/../../../..//*[local-name()='svg']")
+    public WebElement detailPanelCloseButton;
 
     @FindBy(xpath = "//*[@id=\"topbar-appbar-test-id\"]/div/li")
     public WebElement menuButton;
@@ -232,24 +240,22 @@ public class OnDemandAssessmentPage extends CommonPage {
     @FindBy(xpath = "//li[contains(text(), 'Log Out')]")
     public WebElement logOutButton;
 
-    @FindBy(xpath= "//div[text()= 'remaining']")
+    @FindBy(xpath = "//div[text()= 'remaining']")
     public WebElement assessmentRemainingHeader;
 
     @FindBy(xpath = "//*[@id='div-mainlayout']/div/div[2]/main/div/div/div[2]/div[2]/div")
     public List<WebElement> coverageList;
 
-    @FindBy(xpath= ("//button[contains(@title, 'Download')]"))
+    @FindBy(xpath = ("//button[contains(@title, 'Download')]"))
     public List<WebElement> downloadButtonList;
 
 
     public String landingPage = "";
 
-    public void goToSendRequestPage(String portfolioName) {
-        if (landingPage.equals("")) getLandingPageFromAPI(portfolioName);
-        if (landingPage.equals("batchProcessingPage")) {
-            BrowserUtils.waitForPageToLoad(30);
-            clickCreateNewRequestButton();
-        }
+    public void goToSendRequestPageForAPortfolio(String portfolioName) {
+
+        selectPortfolioOptionByName(portfolioName);
+        clickonOnRequestAssessmentButton();
         BrowserUtils.waitForVisibility(btnReviewRequest, 80);
     }
 
@@ -286,14 +292,14 @@ public class OnDemandAssessmentPage extends CommonPage {
 
     }
 
-    public void clickOnConfirmRequestButton(){
-        BrowserUtils.waitForVisibility(btnConfirmRequest,30).click();
+    public void clickOnConfirmRequestButton() {
+        BrowserUtils.waitForVisibility(btnConfirmRequest, 30).click();
     }
 
     public void selectFilter(String filterOption) {
         // BrowserUtils.waitForVisibility(drdShowFilter,30).click();
-       // drdShowOptions.get(0).click();
-        BrowserUtils.waitForVisibility(FilterDropDown,30).click();
+        // drdShowOptions.get(0).click();
+        BrowserUtils.waitForVisibility(FilterDropDown, 30).click();
         for (WebElement option : drdShowOptions) {
             if (option.getText().equals(filterOption)) {
                 option.click();
@@ -305,17 +311,17 @@ public class OnDemandAssessmentPage extends CommonPage {
 
     public void KeepOnlyOneRequest() {
         selectFilter("No Request Sent");
-        BrowserUtils.waitForVisibility(removeButtons,60);
+        BrowserUtils.waitForVisibility(removeButtons, 60);
         while (removeButtons.size() > 1) {
-            BrowserUtils.waitForClickablility(removeButtons.get(0),60).click();
+            BrowserUtils.waitForClickablility(removeButtons.get(0), 60).click();
         }
     }
 
     public void RemoveRequests(int remainingRequests) {
         selectFilter("No Request Sent");
-        BrowserUtils.waitForVisibility(removeButtons,60);
+        BrowserUtils.waitForVisibility(removeButtons, 60);
         while (removeButtons.size() > remainingRequests) {
-            BrowserUtils.waitForClickablility(removeButtons.get(0),60).click();
+            BrowserUtils.waitForClickablility(removeButtons.get(0), 60).click();
         }
     }
 
@@ -453,17 +459,17 @@ public class OnDemandAssessmentPage extends CommonPage {
             assertTestCase.assertTrue(BrowserUtils.waitForVisibility(coverageHeader.get(0), 30).getText().equals("Request On-Demand Assessments for " + portfolioName));
             assertTestCase.assertTrue(BrowserUtils.waitForVisibility(coverageHeader.get(1), 30).getText().matches("\\d+% assessment eligible \\(\\d+ companies\\)"));
             return true;
-        }catch(Exception e){
+        } catch (Exception e) {
             return false;
         }
     }
 
     public boolean isCancelButtonAvailable() {
-        return BrowserUtils.waitForVisibility(btnCancel,60).isDisplayed();
+        return BrowserUtils.waitForVisibility(btnCancel, 60).isDisplayed();
     }
 
     public boolean isReviewButtonAvailable() {
-        return BrowserUtils.waitForVisibility(btnReviewRequest,60).isDisplayed();
+        return BrowserUtils.waitForVisibility(btnReviewRequest, 60).isDisplayed();
     }
 
     public void clickOnESCButton() {
@@ -480,8 +486,8 @@ public class OnDemandAssessmentPage extends CommonPage {
         assertTestCase.assertTrue(Integer.parseInt(predictedScoresliders.get(0).getAttribute("aria-valuemin")) >= 0);
         assertTestCase.assertTrue(Integer.parseInt(predictedScoresliders.get(1).getAttribute("aria-valuemin")) >= 0);
         assertTestCase.assertTrue(predictedScoreInvper.getText().matches("\\d+.\\d+% invested"));
-        String assessmentEligible = lblAssessmentEligible.getText().substring(0,lblAssessmentEligible.getText().indexOf("%"));
-        assertTestCase.assertTrue(predictedScoreTextBelowGraph.getText().matches("Companies with predicted scores ranging \\d+-\\d+ account for "+assessmentEligible +"% of investments"));
+        String assessmentEligible = lblAssessmentEligible.getText().substring(0, lblAssessmentEligible.getText().indexOf("%"));
+        assertTestCase.assertTrue(predictedScoreTextBelowGraph.getText().matches("Companies with predicted scores ranging \\d+-\\d+ account for " + assessmentEligible + "% of investments"));
     }
 
     public void validateLocation() {
@@ -551,8 +557,8 @@ public class OnDemandAssessmentPage extends CommonPage {
     }
 
     public int getCompaniesCountFromReviewButtion() {
-       // BrowserUtils.waitForClickablility(btnReviewRequest,30);
-        WebElement e = BrowserUtils.waitForVisibility(btnReviewRequest,10).findElement(By.xpath("span/div"));
+        // BrowserUtils.waitForClickablility(btnReviewRequest,30);
+        WebElement e = BrowserUtils.waitForVisibility(btnReviewRequest, 10).findElement(By.xpath("span/div"));
         return new Scanner(e.getText()).useDelimiter("\\D+").nextInt();
 
 
@@ -574,7 +580,7 @@ public class OnDemandAssessmentPage extends CommonPage {
 
     public void clickonOnRequestAssessmentButton() {
         BrowserUtils.scrollTo(buttonRequestAssessment);
-        BrowserUtils.waitForClickablility(buttonRequestAssessment,60).click();
+        BrowserUtils.waitForClickablility(buttonRequestAssessment, 60).click();
 
        /* if (validateIfOndemandmenuOptionIsEnabled()) {
             onDemandReportingMenu.click();
@@ -582,38 +588,39 @@ public class OnDemandAssessmentPage extends CommonPage {
     }
 
     public void validateOnDemandPageHeader() {
-        assertTestCase.assertEquals(BrowserUtils.waitForVisibility(menuOptionPageHeader, 90).getText(), "Moody's Analytics: Request On-Demand Assessment", "Moody's Analytics: Request On-Demand Assessment page verified");
+        assertTestCase.assertEquals(BrowserUtils.waitForVisibility(menuOptionPageHeader, 90).getText(), "On-Demand Reporting", "Moody's Analytics: Request On-Demand Assessment page verified");
     }
 
     public void validateProceedOnConfirmRequestPopup(String countOfCompanies) {
-        assertTestCase.assertTrue(BrowserUtils.waitForVisibility(confirmRequestPopupHeader,10).getText().equals("Confirm Request"),"Validate Confirm Request header");
-        assertTestCase.assertTrue(BrowserUtils.waitForVisibility(confirmRequestPopupSubHeader,10).getText().equals("Assessment request will be sent to " + countOfCompanies + " company. You will receive confirmation when all requests have been sent."),"Validate Sub Header Count and Text");
-        assertTestCase.assertTrue(confirmRequestPopupBtnCancel.isDisplayed(),"Validate Cancel button is available in popup");
-        assertTestCase.assertTrue(confirmRequestPopupBtnProceed.isDisplayed(),"Validate proceed button is available in popup");
-    }
-    public void clickCancelButtonAndValidateRequestPage(){
-        BrowserUtils.waitForVisibility(confirmRequestPopupBtnCancel,10).click();
-        assertTestCase.assertTrue(BrowserUtils.waitForVisibility(btnConfirmRequest,30).isDisplayed(),"Validate it is back on Confirm euest page");
+        assertTestCase.assertTrue(BrowserUtils.waitForVisibility(confirmRequestPopupHeader, 10).getText().equals("Confirm Request"), "Validate Confirm Request header");
+        assertTestCase.assertTrue(BrowserUtils.waitForVisibility(confirmRequestPopupSubHeader, 10).getText().equals("Assessment request will be sent to " + countOfCompanies + " company. You will receive confirmation when all requests have been sent."), "Validate Sub Header Count and Text");
+        assertTestCase.assertTrue(confirmRequestPopupBtnCancel.isDisplayed(), "Validate Cancel button is available in popup");
+        assertTestCase.assertTrue(confirmRequestPopupBtnProceed.isDisplayed(), "Validate proceed button is available in popup");
     }
 
-    public void validateDashboardPageButtonForOnDemand(){
-        BrowserUtils.waitForVisibility(dashboardPageMenuOption,60);
+    public void clickCancelButtonAndValidateRequestPage() {
+        BrowserUtils.waitForVisibility(confirmRequestPopupBtnCancel, 10).click();
+        assertTestCase.assertTrue(BrowserUtils.waitForVisibility(btnConfirmRequest, 30).isDisplayed(), "Validate it is back on Confirm euest page");
+    }
+
+    public void validateDashboardPageButtonForOnDemand() {
+        BrowserUtils.waitForVisibility(dashboardPageMenuOption, 60);
         assertTestCase.assertTrue(dashboardPageMenuOption.isDisplayed(), "Validate that Dasboard on demand button is visible");
         assertTestCase.assertTrue(dashboardPageMenuOption.getText().matches("\\d+% On-Demand Assessment Eligible"), "Validate that Dasboard on demand button is visible");
     }
 
-    public void validateDashboardPageButtonCoverage(String portfolioID){
-        BrowserUtils.waitForVisibility(dashboardPageMenuOption,60);
+    public void validateDashboardPageButtonCoverage(String portfolioID) {
+        BrowserUtils.waitForVisibility(dashboardPageMenuOption, 60);
         assertTestCase.assertTrue(dashboardPageMenuOption.isDisplayed(), "Validate that Dasboard on demand button is visible");
-        double uiValue = Double.valueOf(dashboardPageMenuOption.getText().substring(0,dashboardPageMenuOption.getText().indexOf("%")));
+        double uiValue = Double.valueOf(dashboardPageMenuOption.getText().substring(0, dashboardPageMenuOption.getText().indexOf("%")));
         OnDemandFilterAPIController apiController = new OnDemandFilterAPIController();
-       double apiValue =  apiController.getDashboardCoverage(portfolioID).jsonPath().getDouble("perc_avail_for_assessment")*100;
-       assertTestCase.assertEquals(uiValue,apiValue,"Validating Coverage %");
+        double apiValue = apiController.getDashboardCoverage(portfolioID).jsonPath().getDouble("perc_avail_for_assessment") * 100;
+        assertTestCase.assertEquals(uiValue, apiValue, "Validating Coverage %");
 
     }
 
-    public void validateErrormessage(){
-        assertTestCase.assertTrue(BrowserUtils.waitForVisibility(SomeThingWentWrongErrorMessage,20).isDisplayed(), "Validating if error message has displayed");
+    public void validateErrormessage() {
+        assertTestCase.assertTrue(BrowserUtils.waitForVisibility(SomeThingWentWrongErrorMessage, 20).isDisplayed(), "Validating if error message has displayed");
     }
 
     public int getNumberOfEmailInputs() {
@@ -626,7 +633,7 @@ public class OnDemandAssessmentPage extends CommonPage {
             System.out.println("Index is greater than number of email inputs");
             return;
         }
-        while(emailInputs.get(index).getAttribute("value").length() > 0)
+        while (emailInputs.get(index).getAttribute("value").length() > 0)
             emailInputs.get(index).sendKeys(Keys.BACK_SPACE);
         emailInputs.get(index).sendKeys(email, Keys.TAB);
     }
@@ -646,30 +653,29 @@ public class OnDemandAssessmentPage extends CommonPage {
         assertTestCase.assertTrue(confirmRequestPopupSubHeader.isDisplayed(), "Validate Sub Header Count and Text");
         assertTestCase.assertTrue(confirmRequestPopupBtnCancel.isDisplayed(), "Validate Cancel button is available in popup");
         assertTestCase.assertTrue(confirmRequestPopupBtnProceed.isDisplayed(), "Validate proceed button is available in popup");
-        if(prompt.toLowerCase().equals("proceed")) {
+        if (prompt.toLowerCase().equals("proceed")) {
             BrowserUtils.waitForClickablility(confirmRequestPopupBtnProceed, 60).click();
-        }
-        else{
+        } else {
             BrowserUtils.waitForClickablility(confirmRequestPopupBtnCancel, 60).click();
         }
     }
 
     public void verifyMethodologies() {
         String currentWindow = BrowserUtils.getCurrentWindowHandle();
-        assertTestCase.assertTrue(BrowserUtils.waitForVisibility(btnMethodologies,10).isDisplayed(), "Methodologies button is displayed");
-        BrowserUtils.waitForClickablility(BrowserUtils.waitForVisibility(btnMethodologies,10), 60).click();
-        assertTestCase.assertTrue(BrowserUtils.waitForVisibility(methodologiesPopupTitle,10).isDisplayed(), "Methodologies popup is displayed");
-        assertTestCase.assertTrue(BrowserUtils.waitForVisibility(methodologiesPopupListHeader,10).isDisplayed(), "Methodologies popup list header is displayed");
-        assertTestCase.assertTrue(methodologiesPopupList.size()>0, "Methodologies popup list is displayed");
+        assertTestCase.assertTrue(BrowserUtils.waitForVisibility(btnMethodologies, 10).isDisplayed(), "Methodologies button is displayed");
+        BrowserUtils.waitForClickablility(BrowserUtils.waitForVisibility(btnMethodologies, 10), 60).click();
+        assertTestCase.assertTrue(BrowserUtils.waitForVisibility(methodologiesPopupTitle, 10).isDisplayed(), "Methodologies popup is displayed");
+        assertTestCase.assertTrue(BrowserUtils.waitForVisibility(methodologiesPopupListHeader, 10).isDisplayed(), "Methodologies popup list header is displayed");
+        assertTestCase.assertTrue(methodologiesPopupList.size() > 0, "Methodologies popup list is displayed");
         assertTestCase.assertTrue(methodologiesPopupCloseButton.isDisplayed(), "Methodologies popup close button is displayed");
         assertTestCase.assertTrue(methodologiesPopupDownloadAllButton.isEnabled(), "Methodologies popup download all button is enabled");
 
-       // List<String> expectedMethodologiesList = Arrays.asList("Analyst", "Self Assessed", "Predicted");
+        // List<String> expectedMethodologiesList = Arrays.asList("Analyst", "Self Assessed", "Predicted");
         List<String> expectedMethodologiesList = Arrays.asList("Analyst", "Predicted");
         assertTestCase.assertTrue(BrowserUtils.getElementsText(methodologiesPopupList).containsAll(expectedMethodologiesList),
                 "Methodologies popup list contains all expected methodologies");
 
-        for(WebElement document : methodologiesPopupList) {
+        for (WebElement document : methodologiesPopupList) {
             Set<String> currentWindowHandles = Driver.getDriver().getWindowHandles();
             String documentName = document.getText();
             document.click();
@@ -692,12 +698,12 @@ public class OnDemandAssessmentPage extends CommonPage {
         //Download and verify Zip file
         deleteFilesInDownloadsFolder();
         methodologiesPopupDownloadAllButton.click();
-        assertTestCase.assertTrue(verifyIfDocumentsDownloaded(), "Methodologies zip file is downloaded");
+        assertTestCase.assertTrue(verifyIfDocumentsDownloaded("methodologies", "zip"), "Methodologies zip file is downloaded");
         assertTestCase.assertTrue(unzipFile(), "Documents in ZIP File extracted and verified");
         BrowserUtils.waitForClickablility(methodologiesPopupCloseButton, 60).click();
     }
 
-    public boolean verifyIfDocumentsDownloaded() {
+    public boolean verifyIfDocumentsDownloaded(String name, String extension) {
         BrowserUtils.wait(10);
         File dir = new File(BrowserUtils.downloadPath());
         File[] dir_contents = dir.listFiles();
@@ -705,7 +711,7 @@ public class OnDemandAssessmentPage extends CommonPage {
             System.out.println("No files in the directory");
             return false;
         }
-        return Arrays.stream(dir_contents).anyMatch(e -> ((e.getName().startsWith("methodologies")) && (e.getName().endsWith(".zip"))));
+        return Arrays.stream(dir_contents).anyMatch(e -> ((e.getName().startsWith(name)) && (e.getName().endsWith("." + extension))));
     }
 
     public boolean unzipFile() {
@@ -726,7 +732,7 @@ public class OnDemandAssessmentPage extends CommonPage {
         //List<String> expectedDocumentList = Arrays.asList("Methodology_1.0_ESG_Assessment.pdf", "Methodology_2.0_ESG_Assessment.pdf", "Methodology_2.0_ESG_Assessment 20220517.pdf");
         List<String> expectedDocumentList = Arrays.asList("Methodology_1.0_ESG_Assessment.pdf", "ESG_Score_Predictor_Methodology.pdf");
         for (String file : expectedDocumentList) {
-            File document = new File(destDirectory+"/methodologies"+File.separator+file);
+            File document = new File(destDirectory + "/methodologies" + File.separator + file);
             if (!document.exists()) {
                 System.out.println("File " + file + " is not found");
                 return false;
@@ -738,48 +744,58 @@ public class OnDemandAssessmentPage extends CommonPage {
     public int getRemainingAssessmentLimit() {
         //remainingAssessmentLimit.getText(); will give you "996 assessment requests" etc
         BrowserUtils.waitForVisibility(remainingAssessmentLimit, 30);
-        return Integer.parseInt(remainingAssessmentLimit.getText().replaceAll("\\D",""));
+        return Integer.parseInt(remainingAssessmentLimit.getText().replaceAll("\\D", ""));
     }
-   public boolean validateNoPortfolio(){
+
+    public boolean validateNoPortfolio() {
         try {
             return BrowserUtils.waitForVisibility(noPortfolioAvailable, 10).isDisplayed();
-        }catch(Exception e){
+        } catch (Exception e) {
             return false;
         }
-   }
-
-    public boolean validateOnDemandReportingLandingPage(){
-        return BrowserUtils.waitForVisibility(OnDemandMenuItem,10).getText().equals("ESG Reporting Portal");
     }
 
-    public boolean isReequestAssessmentButtonDisabled(){
+    public boolean validateOnDemandReportingLandingPage() {
+        return BrowserUtils.waitForVisibility(OnDemandMenuItem, 10).getText().equals("ESG Reporting Portal");
+    }
+
+    public boolean isReequestAssessmentButtonDisabled() {
         return buttonRequestAssessment.getAttribute("class").contains("disabled");
     }
 
-    public boolean isViewAssessmentRequestButtonDisabled(){
-        return BrowserUtils.waitForVisibility(buttonViewAssessmentStatus,60).getAttribute("class").contains("disabled");
-    }
-    public boolean isbuttonMethodologiesEnabled(){
-        return BrowserUtils.waitForVisibility(buttonMethodologies,60).getAttribute("class").contains("disabled");
+    public boolean isViewAssessmentRequestButtonDisabled() {
+        return BrowserUtils.waitForVisibility(buttonViewAssessmentStatus, 60).getAttribute("class").contains("disabled");
     }
 
-    public boolean isAssessmentsRemainingOptionAvailable(){
+    public boolean isbuttonMethodologiesEnabled() {
+        return BrowserUtils.waitForVisibility(buttonMethodologies, 60).getAttribute("class").contains("disabled");
+    }
+
+    public boolean isAssessmentsRemainingOptionAvailable() {
         return BrowserUtils.waitForVisibility(AssessmentsRemaining).getText().contains("Assessments remaining");
     }
 
-    public boolean isExportbuttonDisabled(){
+    public boolean isExportbuttonDisabled() {
         return ExportButton.get(0).getAttribute("class").contains("disabled");
     }
 
     public void trySelectingMultiplePortfolios() {
-        int size = getPortfolioList().size()>3? 3 : getPortfolioList().size();
-       for(int i = 0 ; i< size ; i++ ) {
+        int size = getPortfolioList().size() > 3 ? 3 : getPortfolioList().size();
+        for (int i = 0; i < size; i++) {
             portfolioRadioButtonList.get(i).click();
         }
     }
+
+    public void selectPortfolioInThePortfoliosTable() {
+        int size = getPortfolioList().size() > 3 ? 3 : getPortfolioList().size();
+        for (int i = 0; i < size; i++) {
+            portfolioRadioButtonList.get(i).click();
+        }
+    }
+
     public void SelectPortfolioWithZeroOnDemandAssessmentEligibility() {
-        for(int i = 0 ; i< getPortfolioList().size() ; i++ ) {
-            if(OnDemandEligibility.get(i).getText().equals("0.00%")) {
+        for (int i = 0; i < getPortfolioList().size(); i++) {
+            if (OnDemandEligibility.get(i).getText().equals("0.00%")) {
                 portfolioRadioButtonList.get(i).click();
                 break;
             }
@@ -787,37 +803,38 @@ public class OnDemandAssessmentPage extends CommonPage {
     }
 
     public void ValidateSortingOnLastUpdateColumn() throws ParseException {
-        for(int i = 1 ; i< getPortfolioList().size() ; i++ ) {
-            Date previousRowDate = DateTimeUtilities.convertStringToDate(LastUpdateColumn.get(i-1).getText(),"MMMM dd, yyyy");
-            Date currentRowDate = DateTimeUtilities.convertStringToDate(LastUpdateColumn.get(i).getText(),"MMMM dd, yyyy");
-            assertTestCase.assertTrue(previousRowDate.compareTo(currentRowDate) >= 0,"Validating sorting order of Last Updated column in portfolio table, Dates should be in Descending order");
+        for (int i = 1; i < getPortfolioList().size(); i++) {
+            Date previousRowDate = DateTimeUtilities.convertStringToDate(LastUpdateColumn.get(i - 1).getText(), "MMMM dd, yyyy");
+            Date currentRowDate = DateTimeUtilities.convertStringToDate(LastUpdateColumn.get(i).getText(), "MMMM dd, yyyy");
+            assertTestCase.assertTrue(previousRowDate.compareTo(currentRowDate) >= 0, "Validating sorting order of Last Updated column in portfolio table, Dates should be in Descending order");
         }
     }
 
-    public Map<String,String> getPortfolioCoverageAndOnDemadEligibilityValues(String PortfolioName){
-        Map<String,String> returnValue = new HashMap<>();
-         for(int i = 0 ; i< getPortfolioList().size() ; i++ ) {
-            if (getPortfolioList().get(i).equals(PortfolioName)){
-                returnValue.put("Coverage",portfolioCoverage.get(i).getText());
-                returnValue.put("ONDemandEligibility",OnDemandEligibility.get(i).getText());
-             break;
+    public Map<String, String> getPortfolioCoverageAndOnDemadEligibilityValues(String PortfolioName) {
+        Map<String, String> returnValue = new HashMap<>();
+        for (int i = 0; i < getPortfolioList().size(); i++) {
+            if (getPortfolioList().get(i).equals(PortfolioName)) {
+                returnValue.put("Coverage", portfolioCoverage.get(i).getText());
+                returnValue.put("ONDemandEligibility", OnDemandEligibility.get(i).getText());
+                break;
             }
 
         }
-        return returnValue ;
+        return returnValue;
     }
-    public void verifyZeroAssessmentRemainingForOnDemand(){
+
+    public void verifyZeroAssessmentRemainingForOnDemand() {
         BrowserUtils.wait(5);
         assertTestCase.assertTrue(assessmentRemainingHeader.isDisplayed(), "Verification that 0 Assessment Remaining is displayed");
         assertTestCase.assertEquals(assessmentRemainingHeader.getText(), "0 Assessment remaining", "Verification 0 Assessment Remaining text is done");
     }
 
-    public void validateViewDetailButtonAndDownloadButtonDisabledForZeroCoveragePortfolios(String portfolioName){
+    public void validateViewDetailButtonAndDownloadButtonDisabledForZeroCoveragePortfolios(String portfolioName) {
         clickOnViewDetailButton(portfolioName);
         System.out.println("Validating that View Detail button is disabled");
         String disabledProperty = viewDetailButton.get(0).getDomProperty("disabled");
         boolean isEnabled = viewDetailButton.get(0).isEnabled();
-        System.out.println(" attribute of view detail button :    : "+viewDetailButton.get(0).getDomAttribute("disabled"));
+        System.out.println(" attribute of view detail button :    : " + viewDetailButton.get(0).getDomAttribute("disabled"));
         System.out.println(disabledProperty);
         System.out.println(isEnabled);
 
@@ -827,11 +844,12 @@ public class OnDemandAssessmentPage extends CommonPage {
     }
 
 
-    public void clickOnMenuButton(){
+    public void clickOnMenuButton() {
         BrowserUtils.waitForClickablility(menuButton, 5);
         menuButton.click();
     }
-    public void clickOnLogOutButton(){
+
+    public void clickOnLogOutButton() {
         BrowserUtils.waitForVisibility(logOutButton).click();
     }
 
@@ -839,7 +857,7 @@ public class OnDemandAssessmentPage extends CommonPage {
         return BrowserUtils.getElementsText(coverageList);
     }
 
-    public void checkViewDetailButtonDisabled () {
+    public void checkViewDetailButtonDisabled() {
         System.out.println("Checking if view detail button is disabled..... ");
         /*for(int i =0 ; i < viewDetailButton.size(); i++){
             if(viewDetailButton.get(i).isEnabled()){
@@ -864,80 +882,109 @@ public class OnDemandAssessmentPage extends CommonPage {
 
 
     public boolean viewDetailForPortfolio(int index) {
-        if(index == -1) {
+        if (index == -1) {
             System.out.println("Portfolio not found");
             return false;
         }
-        if(viewDetailButton.size() <= index) {
+        if (viewDetailButton.size() <= index) {
             System.out.println("View detail button not found");
             return false;
         }
-        if(!viewDetailButton.get(index).isDisplayed()) {
+        if (!viewDetailButton.get(index).isDisplayed()) {
             System.out.println("View detail button not displayed");
             return false;
         }
-        viewDetailButton.get(index).click();
+        clickOnViewDetailButton(index);
         System.out.println("View detail button clicked");
         BrowserUtils.waitForVisibility(detailPanelHeader, 10);
         return true;
     }
 
-    public void verifyDetailsPanel() {
+    public void verifyDetailsPanel(boolean exportEntitlement) {
         //click on first enabled view detail button
-        for(int i = 0; i < viewDetailButton.size(); i++) {
-            if(viewDetailForPortfolio(i)) break;
+        for (int i = 0; i < viewDetailButton.size(); i++) {
+            if (viewDetailForPortfolio(i)) break;
         }
         BrowserUtils.waitForVisibility(detailPanelCompanyNames, 60);
         assertTestCase.assertTrue(detailPanelHeader.isDisplayed(), "Details panel header is displayed");
-        assertTestCase.assertTrue(detailPanelFilterButtons.size()>0, "Details panel filter buttons are displayed");
-        assertTestCase.assertTrue(detailPanelTableTitles.size()>0, "Details panel table titles are displayed");
-        assertTestCase.assertTrue(detailPanelTableHeaders.size()>0, "Details panel table headers are displayed");
-        assertTestCase.assertTrue(detailPanelCompanyNames.size()>0, "Details panel company names are displayed");
-        assertTestCase.assertTrue(detailPanelESGScores.size()>0, "Details panel ESG scores are displayed");
-        assertTestCase.assertTrue(detailPanelInvestmentPercentages.size()>0, "Details panel investment percentages are displayed");
-        assertTestCase.assertTrue(detailPanelLastColumn.size()>0, "Details panel last column is displayed");
-        assertTestCase.assertTrue(detailPanelShowingStatement.isDisplayed(), "Details panel showing statement is displayed");
-        assertTestCase.assertTrue(detailPanelExportToExcelButton.isDisplayed(), "Details panel export to excel button is displayed");
+        assertTestCase.assertTrue(detailPanelFilterButtons.size() > 0, "Details panel filter buttons are displayed");
+        assertTestCase.assertTrue(detailPanelTableTitles.size() > 0, "Details panel table titles are displayed");
+        assertTestCase.assertTrue(detailPanelTableHeaders.size() > 0, "Details panel table headers are displayed");
+        assertTestCase.assertTrue(detailPanelCompanyNames.size() > 0, "Details panel company names are displayed");
+        assertTestCase.assertTrue(detailPanelESGScores.size() > 0, "Details panel ESG scores are displayed");
+        assertTestCase.assertTrue(detailPanelInvestmentPercentages.size() > 0, "Details panel investment percentages are displayed");
+        assertTestCase.assertTrue(detailPanelLastColumn.size() > 0, "Details panel last column is displayed");
+
+        if (exportEntitlement) {
+            assertTestCase.assertTrue(detailPanelShowingStatement.isDisplayed(), "Details panel showing statement is displayed");
+            assertTestCase.assertTrue(detailPanelExportToExcelButton.isEnabled(), "Details panel export to excel button is displayed");
+        } else {
+            try {
+                assertTestCase.assertFalse(detailPanelShowingStatement.isDisplayed(), "Details panel showing statement is not displayed");
+            } catch (Exception e) {
+                System.out.println("Details panel showing statement is not displayed");
+            }
+
+            try {
+                assertTestCase.assertFalse(detailPanelExportToExcelButton.isEnabled(), "Details panel export to excel button is not displayed");
+            } catch (Exception e) {
+                System.out.println("Details panel export to excel button is not displayed");
+            }
+
+        }
+        closePanel();
     }
-    public void isViewDetailButtonDisabled(){
+
+    public void isViewDetailButtonDisabled() {
         // JavascriptExecutor jse = (JavascriptExecutor) Driver.getDriver();
         // System.out.println("is the View Detail Button disabled " + jse.executeScript("return arguments[0].disabled", viewDetailButton.get(0)));
 
         viewDetailButton.get(0).getAttribute("disabled");
     }
-    public boolean isViewDetailButtonEnabled(String portfolioName){
-        if(IsPortfolioTableLoaded()){
+
+    public boolean isViewDetailButtonEnabled(String portfolioName) {
+        if (IsPortfolioTableLoaded()) {
             int index = getPortfolioList().indexOf(portfolioName.trim());
-            System.out.println("index of : "+ portfolioName + " is : "+viewDetailButton.get(index));
+            System.out.println("index of : " + portfolioName + " is : " + viewDetailButton.get(index));
             viewDetailButton.get(index).isEnabled();
         }
         return false;
     }
 
-    public boolean isRequestAssessmentButtonEnabled(){
+    public boolean isRequestAssessmentButtonEnabled() {
         BrowserUtils.wait(4);
         return buttonRequestAssessment.isEnabled();
     }
-    public void clickOnViewDetailButton(String portfolioName){
-        if(IsPortfolioTableLoaded()) {
+
+    public void clickOnViewDetailButton(String portfolioName) {
+        if (IsPortfolioTableLoaded()) {
             int index = getPortfolioList().indexOf(portfolioName.trim());
             viewDetailButton.get(index).click();
-        } else{
+        } else {
             System.out.println("please select a portfolio first!!!");
         }
     }
 
-    public boolean isDownloadButtonEnabled(){
+    public void clickOnViewDetailButton(int index) {
+        if (IsPortfolioTableLoaded()) {
+            viewDetailButton.get(index).click();
+        } else {
+            System.out.println("please select a portfolio first!!!");
+        }
+    }
+
+    public boolean isDownloadButtonEnabled() {
         return downloadButtonList.get(0).isEnabled();
     }
-    public String getAssessmentRemainingHeaderText(){
+
+    public String getAssessmentRemainingHeaderText() {
         return assessmentRemainingHeader.getText();
     }
 
-    public int checkPortfolioWithZeroCoverage(){
-        int index =0;
-        for (index = 0 ; index < coverageList.size(); index++){
-            if(  coverageList.get(index).getText().equals("0.00%")) {
+    public int checkPortfolioWithZeroCoverage() {
+        int index = 0;
+        for (index = 0; index < coverageList.size(); index++) {
+            if (coverageList.get(index).getText().equals("0.00%")) {
                 return index;
             }
         }
@@ -956,13 +1003,205 @@ public class OnDemandAssessmentPage extends CommonPage {
     }
 
 
-    public boolean isUserOnFilterCritriaScreen(String PortfolioName){
-        return BrowserUtils.waitForVisibility(btnReviewRequest,60).isDisplayed() && onDemandCoverageHeaderValidation(PortfolioName);
+    //Download portfolio from 2 places: portfolio list-Download button, and from details panel-Export to Excel button
+    //input parameter: location of the downloaded file either page, or details panel
+    public void verifyDownloadPortfolio(String location) {
+        //get first clickable download button
+        BrowserUtils.waitForVisibility(downloadButtonList.get(0), 10);
+        int index = 0;
+        for (index = 0; index < downloadButtonList.size(); index++) {
+            if (downloadButtonList.get(index).isEnabled()) break;
+        }
+        System.out.println("index = " + index);
+
+        String portfolioName = portfolioNamesList.get(index).getText();
+        downloadPortfolio(portfolioName, location);
+
+        String exportedDocumentName = portfolioName + "_ESG Scores_" + DateTimeUtilities.getCurrentDate("dd_MMM_yyyy") + "_";//11_Apr_2023_";
+        System.out.println("exportedDocumentName = " + exportedDocumentName);
+
+        ExcelUtil excelData = getExcelData(exportedDocumentName, 0);
+        List<String> expColumnNames = Arrays.asList("ENTITY", "ISIN(PRIMARY)", "USER INPUT", "ORBIS_ID", "SECTOR", "REGION",
+                "Portfolio Upload Date", "% Investment", "LEI", "Country (Country ISO code)", "Scored Date", "Evaluation Year",
+                "Score Type", "Parent Orbis ID", "Subsidiary", "Input location type", "Input location", "Input industry type",
+                "Input industry", "Input size type", "Input size", "Overall ESG Score", "Overall ESG Score Qualifier",
+                "Overall Environmental score", "Overall Environmental score Qualifier", "Overall Social score",
+                "Overall Social score Qualifier", "Overall Governance score", "Overall Governance score Qualifier",
+                "HRS - Human Resources Domain Score", "ENV - Environment Domain Score", "CS - Business Behaviour Domain Score",
+                "CIN - Community Involvement Domain Score", "CGV - Corporate Governance Domain Score", "HRT - Human Rights Domain Score",
+                "HRS 1.1 - Promotion of labour relations", "HRS 2.3 - Responsible management of restructurings",
+                "HRS 2.4 - Career management and promotion of employability", "HRS 3.1 - Quality of remuneration systems",
+                "HRS 3.2 - Improvement of health and safety conditions", "HRS 3.3 - Respect and management of working hours",
+                "ENV 1.1 - Environmental strategy and eco-design", "ENV 1.2 - Pollution prevention and control (soil, accident)",
+                "ENV 1.3 - Development of green products and services", "ENV 1.4 - Protection of biodiversity",
+                "ENV 2.1 - Protection of water resources", "ENV 2.2 - Minimising environmental impacts from energy use",
+                "ENV 2.4 - Management of atmospheric emissions", "ENV 2.5 - Waste management", "ENV 2.6 - Management of local pollution",
+                "ENV 2.7 - Management of environmental impacts from transportation",
+                "ENV 3.1 - Management of environmental impacts from the use and disposal of products/services",
+                "CS 1.1 - Product Safety (process and use)", "CS 1.2 - Information to customers", "CS 1.3 - Responsible Customer Relations",
+                "CS 2.2 - Sustainable relationships with suppliers", "CS 2.3 - Integration of environmental factors in the supply chain",
+                "CS 2.4 - Integration of social factors in the supply chain", "CS 3.1 - Prevention of corruption",
+                "CS 3.2 - Prevention of anti-competitive practices", "CS 3.3 - Transparency and integrity of influence strategies and practices",
+                "CIN 1.1 - Promotion of the social and economic development", "CIN 2.1 - Societal impacts of the company's products / services",
+                "CIN 2.2 - Contribution to general interest causes", "CGV 1.1 - Board of Directors", "CGV 2.1 - Audit & Internal Controls",
+                "CGV 3.1 - Shareholders", "CGV 4.1 - Executive Remuneration", "HRT 1.1 - Respect for human rights standards and prevention of violations",
+                "HRT 2.1 - Respect for freedom of association and the right to collective bargaining", "HRT 2.4 - Non-discrimination",
+                "HRT 2.5 -  Elimination of child labour and forced labour");
+        //there should be two tabs: Data - Scores, Data Dictionary
+        assertTestCase.assertEquals(excelData.getSheetName(), "Data - Scores", "Data - Scores tab is displayed");
+        //System.out.println("excelData.getColumnsNames() = " + excelData.getColumnsNames());
+
+        for (int i = 0; i < excelData.getColumnsNames().size(); i++) {
+            assertTestCase.assertEquals(excelData.getColumnsNames().get(i), expColumnNames.get(i), "Column name check for Data - Scores tab: " + expColumnNames.get(i));
+        }
+
+
+        int lastRow = excelData.getLastRowNum();
+        String actualDisclaimerText = excelData.getCellData(lastRow, 0);
+        String expectedDisclaimerText = "Disclaimer: ESG self-assessment report is calculated based on data the company has provided, which Moody's does not validate. Moody's ESG on Demand Assessments measure the extent to which a company effectively integrates industry-relevant ESG factors into its management and operational practices based on their self-reported data through a tailored questionnaire. An ESG self-assessment is distinct from a credit rating, which rates an entity's creditworthiness";
+        assertTestCase.assertEquals(actualDisclaimerText, expectedDisclaimerText, "Disclaimer Text Validation", 14499, 14523);
+
+        excelData = getExcelData(exportedDocumentName, 1);
+        expColumnNames = Arrays.asList("Data Type", "Definition");
+        assertTestCase.assertEquals(excelData.getSheetName(), "Data Dictionary", "Data Dictionary tab is displayed");
+        assertTestCase.assertTrue(excelData.getColumnsNames().containsAll(expColumnNames), "Column names are correct for Data Dictionary tab");
     }
+
+    public void closePanel() {
+        BrowserUtils.waitForClickablility(detailPanelCloseButton, 30).click();
+    }
+
+    public boolean identifyPredictedCompanies() {
+        BrowserUtils.waitForVisibility(detailPanelCompanyRows, 20);
+        for (WebElement row : detailPanelCompanyRows) {
+            String color = Color.fromString(row.getCssValue("background-color")).asHex().toUpperCase();
+            System.out.println("color = " + color);
+            if (color.equals("#FDF7DA")) {
+                closePanel();
+                return true;
+            }
+        }
+        closePanel();
+        return false;
+    }
+
+    public void verifyDataScores(String portfolioName) {
+        ExcelUtil excelData = getExcelData(portfolioName, 0);
+        OnDemandFilterAPIController controller = new OnDemandFilterAPIController();
+        String portfolioId = controller.getPortfolioId(portfolioName);
+        System.out.println("portfolioId = " + portfolioId);
+        OnDemandAssessmentQueries queries = new OnDemandAssessmentQueries();
+        List<Map<String, Object>> dbEntitiesList = queries.getESGENTITYEXPORT(portfolioId);
+        System.out.println("dbEntitiesList = " + dbEntitiesList.size());
+        //Data should match between exported file and query in Snowflake
+        //go through excel and get each row
+        //find data in dbEntitiesList and compare
+
+        for (int i = 0; i < excelData.getLastRowNum(); i++) {
+            List<String> row = excelData.getRowData(i + 1);
+            System.out.println("row = " + row);
+            String companyName = row.get(0);
+            System.out.println("companyName = " + companyName);
+            //print all company names in dbEntitiesList
+            Map<String, Object> dbData = null;
+            for (Map<String, Object> data : dbEntitiesList) {
+                //System.out.println(data.get("ENTITY"));
+                if (data.containsValue(companyName)) {
+                    //System.out.println("data = " + data.values());
+                    dbData = data;
+                    break;
+                }
+            }
+            if (dbData == null) {
+                System.out.println("Company " + companyName + " is not found in DB");
+                assertTestCase.fail();
+            }
+            //System.out.println("dbData.values() = " + dbData.values());
+            //create Set<String> dbValues and add all dbData values as string to it
+            DecimalFormat df = new DecimalFormat("#.##");
+
+            Set<String> dbValues = new HashSet<>();
+            for (Object value : dbData.values()) {
+                if (value == null) continue;
+                //if there is trailing 0s after point remove them
+                if (value.toString().matches("\\d+\\.\\d0+")) {
+                    value = df.format(Double.parseDouble(value.toString()));
+                }
+                dbValues.add(value.toString());
+            }
+            //System.out.println("dbValues = " + dbValues);
+            //compare data
+            for (int j = 0; j < row.size(); j++) {
+            String cell = row.get(i);
+                if(cell.indexOf("-")==4 && cell.lastIndexOf("-")==7){
+                    try {
+                        cell.equals(DateTimeUtilities.getFormattedDate(LastUpdateColumn.get(getPortfolioList().indexOf(portfolioName)).getText(),"MMMM d, YYYY","YYYY-mm-dd"));
+                    } catch (Exception e) {
+                        assertTestCase.fail();
+                    }
+                } else {
+                    if (cell.isEmpty() || cell.equals("-")) continue;
+                    if (dbValues.contains(cell)) continue;
+                    if (dbValues.contains(cell.replaceAll("\\.0", ""))) continue;
+                    System.out.println("cell = " + cell + " | index = " + i);
+                    assertTestCase.fail();
+                }
+            }
+        }
+    }
+
+    public void downloadPortfolio(String portfolioName, String location) {
+        //get first clickable download button
+        BrowserUtils.waitForVisibility(downloadButtonList.get(0), 10);
+        int index = BrowserUtils.getElementsText(portfolioNamesList).indexOf(portfolioName);
+        System.out.println("index = " + index);
+        if (index == -1) {
+            System.out.println("Portfolio with name " + portfolioName + " is not found");
+            return;
+        }
+        portfolioName = portfolioNamesList.get(index).getText() + "_ESG Scores_" + DateTimeUtilities.getCurrentDate("dd_MMM_yyyy") + "_";//11_Apr_2023_";
+        System.out.println("portfolioName = " + portfolioName);
+        deleteFilesInDownloadsFolder();
+        if (location.equals("page")) {
+            assertTestCase.assertTrue(downloadButtonList.get(index).isDisplayed(), "Download button is displayed");
+            assertTestCase.assertTrue(downloadButtonList.get(index).isEnabled(), "Download button is enabled");
+            downloadButtonList.get(index).click();
+        } else {
+            assertTestCase.assertTrue(viewDetailButton.get(index).isDisplayed(), "View detail button is displayed");
+            assertTestCase.assertTrue(viewDetailButton.get(index).isEnabled(), "View detail button is enabled");
+            clickOnViewDetailButton(index);
+            BrowserUtils.waitForVisibility(detailPanelExportToExcelButton, 10);
+            assertTestCase.assertTrue(detailPanelExportToExcelButton.isDisplayed(), "Export to excel button is displayed");
+            assertTestCase.assertTrue(detailPanelExportToExcelButton.isEnabled(), "Export to excel button is enabled");
+            detailPanelExportToExcelButton.click();
+            closePanel();
+        }
+        BrowserUtils.wait(10);
+        verifyIfDocumentsDownloaded(portfolioName, "xlsx");
+    }
+
+    public void verifyDataAllianceFlag(String portfolioName) {
+        ExcelUtil excelData = getExcelData(portfolioName, 0);
+        OnDemandFilterAPIController controller = new OnDemandFilterAPIController();
+        String portfolioId = controller.getPortfolioId(portfolioName);
+        System.out.println("portfolioId = " + portfolioId);
+        OnDemandAssessmentQueries queries = new OnDemandAssessmentQueries();
+        List<Object> dbEntitiesList = queries.getEntitiesNameList(portfolioId);
+        System.out.println("dbEntitiesList = " + dbEntitiesList.size());
+        dbEntitiesList.removeIf(Objects::isNull);
+        System.out.println("Number companies in DB = " + dbEntitiesList.size());
+        System.out.println("Number companies in Excel = " + (excelData.getLastRowNum() - 3));//Last 3 rows are not companies
+        assertTestCase.assertEquals(excelData.getLastRowNum() - 3, dbEntitiesList.size(), "Number of companies in Excel and DB are the same");
+    }
+
+    public boolean isUserOnFilterCritriaScreen(String PortfolioName) {
+        return BrowserUtils.waitForVisibility(btnReviewRequest, 60).isDisplayed() && onDemandCoverageHeaderValidation(PortfolioName);
+    }
+
     public String SelectAndGetOnDemandEligiblePortfolioName() {
         String portfolioName = "";
-        for(int i = 0 ; i< getPortfolioList().size() ; i++ ) {
-            if(Double.valueOf(OnDemandEligibility.get(i).getText().split("%")[0])>(0)) {
+        for (int i = 0; i < getPortfolioList().size(); i++) {
+            if (Double.valueOf(OnDemandEligibility.get(i).getText().split("%")[0]) > (0)) {
                 portfolioRadioButtonList.get(i).click();
                 portfolioName = getPortfolioList().get(i);
                 break;
@@ -1036,7 +1275,7 @@ public class OnDemandAssessmentPage extends CommonPage {
         assertTestCase.assertTrue(!isSearchButtonDisplayed(), "Verifying that user can't open entity page or search for it : Status Done");
     }
 
-    
+
     public void validateDashboardAndPortfolioAnalysisNotPresentInGlobalMenu() {
         String expectedTabTitle = "Climate Dashboard";
         String expectedTab1Title = "Climate Portfolio Analysis";
@@ -1127,4 +1366,45 @@ public class OnDemandAssessmentPage extends CommonPage {
     }
 
 
+    public void verifySectorAndRegion(String portfolioName) {
+        ExcelUtil excelData = getExcelData(portfolioName, 0);
+        OnDemandFilterAPIController controller = new OnDemandFilterAPIController();
+        String portfolioId = controller.getPortfolioId(portfolioName);
+        System.out.println("portfolioId = " + portfolioId);
+        OnDemandAssessmentQueries queries = new OnDemandAssessmentQueries();
+        List<Map<String, Object>> dbData= queries.getPortfolioDetail(portfolioId);
+        System.out.println("dbEntitiesList = " + dbData.size());
+        //Data should match between exported file and query in Snowflake
+        //go through excel and get each row
+        //find data in dbEntitiesList and compare
+
+        for (int i = 0; i < excelData.getLastRowNum()-3; i++) {
+            //System.out.println("i = " + i);
+            List<String> row = excelData.getRowData(i+1);
+//            System.out.println("row = " + row);
+            String companyName = row.get(0);
+//            System.out.println("companyName = " + companyName);
+            String sector = row.get(4);
+//            System.out.println("sector = " + sector);
+            String region = row.get(5);
+//            System.out.println("region = " + region);
+
+            boolean check = false;
+            for(Map<String, Object> data: dbData){
+//                if(data.get("COMPANY_NAME") == null || map.get("REGION_NAME") == null || data.get("SECTOR") == null) continue;
+//                if(data.get("COMPANY_NAME") == null || map.get("REGION_NAME") == null || data.get("SECTOR") == null) continue;
+                String dbcompanyName = data.get("COMPANY_NAME").toString();
+                String dbregion = data.get("REGION").toString();
+                String dbsector = data.get("SECTOR").toString();
+                if(companyName.equals(dbcompanyName) && region.equals(dbregion) && sector.equals(dbsector)){
+                    check = true;
+                    break;
+                }
+            }
+            if(!check){
+                System.out.println(companyName + " not found in DB");
+                assertTestCase.fail("Company Name: "+companyName+" Region: "+region+" Sector: "+sector+" not found in DB");
+            }
+        }
+    }
 }

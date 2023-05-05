@@ -153,7 +153,7 @@ public class NoDataMessageTests extends UITestBase {
 
         EntityClimateProfilePage entityClimateProfile = new EntityClimateProfilePage();
 
-        entityClimateProfile.clickCloseIcon();
+        entityClimateProfile.clickCloseIconInSearchBox();
 
         companyName = entityProfilePage.searchAndLoadClimateProfilePage("Axis Bank Ltd");
         assertTestCase.assertTrue(entityProfilePage.validateGlobalCompanyNameHeader(companyName),companyName+" Header Verification");

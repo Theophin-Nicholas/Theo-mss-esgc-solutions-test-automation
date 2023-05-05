@@ -303,7 +303,7 @@ public class UsersPageTests extends EMCUITestBase {
         assertTestCase.assertTrue(usersPage.verifyUser(userName, false), "User is verified with partial account name and upper case");
     }
 
-    @Test(groups = {EMC, UI, REGRESSION, SMOKE, PROD}, description = "UI | EMC | Users | Verify the Sorting in User section")
+    @Test(groups = {EMC, UI, REGRESSION, SMOKE}, description = "UI | EMC | Users | Verify the Sorting in User section")
     @Xray(test = {6256})
     public void verifyUserListSortedTest() {
         navigateToUser("");

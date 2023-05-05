@@ -2,7 +2,6 @@ package com.esgc.Dashboard.UI.Tests;
 
 import com.esgc.Base.TestBases.DashboardUITestBase;
 import com.esgc.Dashboard.UI.Pages.DashboardPage;
-import com.esgc.PortfolioAnalysis.UI.Pages.ResearchLinePage;
 import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.Xray;
 import org.apache.commons.text.CaseUtils;
@@ -19,14 +18,14 @@ public class DashboardSummaryHeader extends DashboardUITestBase {
     @Xray(test = {3632, 5067, 6313, 6277, 6278, 4267})
     public void validateDashboardSummaryHeader(@Optional String sector, @Optional String region, @Optional String month, @Optional String year) {
         DashboardPage dashboardPage = new DashboardPage();
-        ResearchLinePage researchLinePage = new ResearchLinePage();
         dashboardPage.navigateToPageFromMenu("Climate Dashboard");
         test.info("Navigated to Dashboard Page");
 
         String dateFilter = CaseUtils.toCamelCase(Month.of(Integer.valueOf(month)).name(), true, ' ') + " " + year;
 
-        researchLinePage.selectOptionFromFiltersDropdown("regions", region);
-        researchLinePage.selectOptionFromFiltersDropdown("as_of_date", dateFilter);
+        dashboardPage.clickFiltersDropdown();
+        dashboardPage.selectOptionFromFiltersDropdown("regions", region);
+        dashboardPage.selectOptionFromFiltersDropdown("as_of_date", dateFilter);
         BrowserUtils.wait(5);
 
 

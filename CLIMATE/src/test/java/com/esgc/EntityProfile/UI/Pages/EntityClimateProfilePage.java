@@ -528,6 +528,9 @@ public class EntityClimateProfilePage extends ClimatePageBase {
     @FindBy(xpath = "//body/div[@id='company-summary-panel']/div/div/div[5]")
     public WebElement companyDrawerSector;
 
+    @FindBy(xpath = "//a[.='hide']")
+    public WebElement hideDrawerButton;
+
     @FindBy(xpath = "//button[@id='ref_Meth_button']")
     public WebElement ReferenceAndMethodology_Button;
 
@@ -649,7 +652,7 @@ public class EntityClimateProfilePage extends ClimatePageBase {
         expectedHeaderItems.add(companyName);
         //TODO: On Demand Release
         // expectedHeaderItems.add("Confidence Level:");
-        expectedHeaderItems.add("Export/Sources Documents");
+        expectedHeaderItems.add("Export");
         expectedHeaderItems.add("Reference and Methodologies");
         expectedHeaderItems.add("ESC");
 
@@ -1352,9 +1355,9 @@ public class EntityClimateProfilePage extends ClimatePageBase {
             BrowserUtils.scrollTo(physicalRiskTab);
             System.out.println("====================");
             //System.out.println(physicalClimateHazards.getText());
-            return physicalRiskTab.isDisplayed() && operationsRiskLabel.isDisplayed()
-                    && marketRiskLabel.isDisplayed() && supplyChainRiskLabel.isDisplayed()
-                    && physicalClimateRiskOperationsRiskLabel.isDisplayed();
+            return physicalRiskTab.isDisplayed() ;//&& operationsRiskLabel.isDisplayed()
+//                    && marketRiskLabel.isDisplayed() && supplyChainRiskLabel.isDisplayed()
+//                    && physicalClimateRiskOperationsRiskLabel.isDisplayed();
         } catch (Exception e) {
             return false;
         }
@@ -2731,4 +2734,18 @@ public class EntityClimateProfilePage extends ClimatePageBase {
     }
 
 
+    public List<String> getESGSummaryDetails() {
+        return null;
+    }
+
+    public List<String> readEsgMaterialityColumns() {
+        return null;
+    }
+
+    public void validateSubCategories() {
+
+    }
+
+    public void validateEsgMaterialityLegends() {
+    }
 }

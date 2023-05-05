@@ -679,37 +679,7 @@ public class RegulatoryReportingPage extends CommonPage {
         return true;
     }
 
-    public ExcelUtil getExcelData(String excelName, int sheetIndex) {
-        File dir = new File(BrowserUtils.downloadPath());
-        File[] dir_contents = dir.listFiles();
-        assert dir_contents != null;
-        File excelFile = Arrays.stream(dir_contents).filter(e -> (e.getName().contains(excelName))).findAny().get();
-        //System.out.println("excelFile = " + excelFile.getAbsolutePath());
-        if (!excelFile.exists()) {
-            System.out.println(excelName + " file does not exist");
-            return null;
-        }
-        //System.out.println(excelName + " file found");
-        //System.out.println("excelFile = " + excelFile.getAbsolutePath());
-        ExcelUtil excelUtil = new ExcelUtil(excelFile.getAbsolutePath(), sheetIndex);
-        return excelUtil;
-    }
 
-    public ExcelUtil getExcelData(String excelName, String sheetName) {
-        File dir = new File(BrowserUtils.downloadPath());
-        File[] dir_contents = dir.listFiles();
-        assert dir_contents != null;
-        File excelFile = Arrays.stream(dir_contents).filter(e -> (e.getName().contains(excelName))).findAny().get();
-        //System.out.println("excelFile = " + excelFile.getAbsolutePath());
-        if (!excelFile.exists()) {
-            System.out.println(excelName + " file does not exist");
-            return null;
-        }
-        //System.out.println(excelName + " file found");
-        //System.out.println("excelFile = " + excelFile.getAbsolutePath());
-        ExcelUtil excelUtil = new ExcelUtil(excelFile.getAbsolutePath(), sheetName);
-        return excelUtil;
-    }
 
     public List<String> getExcelDataList(String excelName, String sheetName, int columnIndex) {
         File dir = new File(BrowserUtils.downloadPath());
@@ -833,9 +803,15 @@ public class RegulatoryReportingPage extends CommonPage {
         RegulatoryReportingAPIController apiController = new RegulatoryReportingAPIController();
         String portfolioId = apiController.getPortfolioId(portfolioName);
         RegulatoryReportingQueries queries = new RegulatoryReportingQueries();
+        List<Map<String, Object>> dbTest = queries.getReportingYearDetails(portfolioId);
+        String uiCoverage = getCoveragePercentage(portfolioName);
+        if (dbTest.size() == 0) {
+            System.out.println("No data found in DB");
+            return uiCoverage.contains("NA");
+        }
         Map<String, Object> dbData = queries.getReportingYearDetails(portfolioId).get(0);
         System.out.println("dbData.size() = " + dbData.size());
-        String uiCoverage = getCoveragePercentage(portfolioName);
+
         String dbCoverage = dbData.get("TAXONOMY_COVERAGE").toString();
         if (!uiCoverage.contains(dbCoverage)) {
             System.out.println("Coverage is not matching for " + uiCoverage + " : " + dbCoverage);

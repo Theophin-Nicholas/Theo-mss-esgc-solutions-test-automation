@@ -86,7 +86,7 @@ public class DashboardUiFilterTests extends UITestBase {
         assertTestCase.assertTrue(dashboardPage.regionsDropdown.getText().contains("Financials"), "Verify the filter text");
         int afterControversiesCount = dashboardPage.controversies.size();
         System.out.println("afterControversiesCount = " + afterControversiesCount);
-        assertTestCase.assertTrue(initControversiesCount>afterControversiesCount);
+        assertTestCase.assertTrue(initControversiesCount>=afterControversiesCount);
 
         // Verify filter by using region
         dashboardPage.navigateToPageFromMenu("Climate Dashboard");

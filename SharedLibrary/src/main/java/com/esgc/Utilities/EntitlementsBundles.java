@@ -52,6 +52,4 @@ public enum EntitlementsBundles {
    // ODA_ESG_PREDICTOR_DATA_ENTITLEMENT, ALL,
 
     ODA_USER_WITH_EXHAUSTED_ASSESSMENT_LIMIT
-
-
 }

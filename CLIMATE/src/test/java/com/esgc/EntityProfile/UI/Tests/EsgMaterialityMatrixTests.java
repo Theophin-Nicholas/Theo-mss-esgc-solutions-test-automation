@@ -6,9 +6,6 @@ import com.esgc.Utilities.Xray;
 
 import org.testng.annotations.Test;
 
-import java.util.Arrays;
-import java.util.List;
-
 import static com.esgc.Utilities.Groups.*;
 
 public class EsgMaterialityMatrixTests extends UITestBase {
@@ -49,7 +46,7 @@ public class EsgMaterialityMatrixTests extends UITestBase {
         entityProfilePage.selectEsgMaterialityTab();
         entityProfilePage.verifyLowMaterialityMatrixColumnProperties();
 
-        entityProfilePage.clickCloseIcon();
+        entityProfilePage.clickCloseIconInSearchBox();
     }
 
     @Test(groups = {ENTITY_PROFILE, REGRESSION, UI})
@@ -65,7 +62,7 @@ public class EsgMaterialityMatrixTests extends UITestBase {
         entityProfilePage.selectEsgMaterialityTab();
         entityProfilePage.validateSubCategoriesButtonProperties();
 
-        entityProfilePage.clickCloseIcon();
+        entityProfilePage.clickCloseIconInSearchBox();
     }
     //TODO : Disabling this method due to ESG removal
     @Test(enabled = false, groups = {ENTITY_PROFILE, REGRESSION, UI})
@@ -95,7 +92,7 @@ public class EsgMaterialityMatrixTests extends UITestBase {
 
         entityProfilePage.selectEsgMaterialityTab();
         entityProfilePage.validateNoneForTheSectorButton();
-        entityProfilePage.clickCloseIcon();
+        entityProfilePage.clickCloseIconInSearchBox();
     }
 
     @Test(groups = {ENTITY_PROFILE, REGRESSION, UI})
@@ -111,7 +108,7 @@ public class EsgMaterialityMatrixTests extends UITestBase {
         entityProfilePage.selectPhysicalRiskTab();
         entityProfilePage.selectEsgMaterialityTab();
 
-        entityProfilePage.clickCloseIcon();
+        entityProfilePage.clickCloseIconInSearchBox();
     }
     //TODO : Disabling this method due to ESG removal
     @Test(enabled = false ,groups = {ENTITY_PROFILE, REGRESSION, UI})
@@ -141,6 +138,6 @@ public class EsgMaterialityMatrixTests extends UITestBase {
 
         assertTestCase.assertTrue(entityProfilePage.validateNoPopupIsDisplayedWhenClickedOnSubCategories(), "Verify popup is not displayed");
 
-        entityProfilePage.clickCloseIcon();
+        entityProfilePage.clickCloseIconInSearchBox();
     }
 }

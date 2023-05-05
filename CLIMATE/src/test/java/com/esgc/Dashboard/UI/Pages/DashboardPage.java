@@ -16,6 +16,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
 import org.testng.SkipException;
 
+import java.io.File;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -1566,6 +1567,43 @@ public class DashboardPage extends UploadPage {
         }
     }
 
+    public void openCoverageDrawer(){
+        BrowserUtils.waitForVisibility(viewAllCompaniesButton, 30);
+        assertTestCase.assertTrue(viewAllCompaniesButton.isDisplayed(),
+                "User can see and click on View Companies and Investments in Portfolio link on dashboard.");
+        BrowserUtils.waitForClickablility(viewAllCompaniesButton,10).click();
+    }
+
+//    public String getSelectedFilterValue(String filterOption){
+//        String[] options = coverageLink.getText().split(", ");
+//        System.out.println("Arrays.toString() = " + Arrays.toString(options));
+//        switch (filterOption.toLowerCase()){
+//            case "regions":
+//                return options[0].replaceAll("Viewing data in ","");
+//            case "sectors":
+//                return options[1].trim();
+//            case "date":
+//                return options[2].replaceAll("at the end of ","");
+//        }
+//        System.out.println("Filter option not found");
+//        return "";
+//    }
+
+    public ExcelUtil getExcelData(String excelName, String sheetName) {
+            File dir = new File(BrowserUtils.downloadPath());
+            File[] dir_contents = dir.listFiles();
+            assert dir_contents != null;
+            File excelFile = Arrays.stream(dir_contents).filter(e -> (e.getName().contains(excelName))).findAny().get();
+            //System.out.println("excelFile = " + excelFile.getAbsolutePath());
+            if (!excelFile.exists()) {
+                System.out.println(excelName + " file does not exist");
+                return null;
+            }
+            //System.out.println(excelName + " file found");
+            //System.out.println("excelFile = " + excelFile.getAbsolutePath());
+            ExcelUtil excelUtil = new ExcelUtil(excelFile.getAbsolutePath(), sheetName);
+            return excelUtil;
+    }
     @FindBy(xpath = "//*[@id=\"mini-0\"]/div[2]/span")
     public WebElement searchResultLineOne;
     public void validateEntitiesWithOnlyEsgDataDontShowInSearch(String entity) {
