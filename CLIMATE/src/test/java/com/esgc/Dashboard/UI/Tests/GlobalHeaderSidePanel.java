@@ -2,9 +2,11 @@ package com.esgc.Dashboard.UI.Tests;
 
 import com.esgc.Base.TestBases.UITestBase;
 import com.esgc.Base.UI.Pages.LoginPage;
+import com.esgc.Dashboard.UI.Pages.DashboardPage;
 import com.esgc.PortfolioAnalysis.UI.Pages.ResearchLinePage;
 import com.esgc.Utilities.*;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.testng.annotations.Test;
 
@@ -103,6 +105,35 @@ public class GlobalHeaderSidePanel extends UITestBase {
         LoginPage login = new LoginPage();
 
         assertTestCase.assertTrue(login.isUsernameBoxDisplayed(), "Logout successfully");
+
+    }
+
+    @Test(groups = {UI, REGRESSION})
+    @Xray(test = {12840, 12841, 12916, 12850, 12855, 12852})
+    public void ValidateCalculationsOptionsFromGlobalMenu() {
+        DashboardPage dashboardPage = new DashboardPage();
+        dashboardPage.clickOnMenuButton();
+        assertTestCase.assertTrue(dashboardPage.menuItems.stream().filter(e -> e.getText().equals("Calculations")).count() > 0, "Verify \"Calculation\" option is shown under global settings menu", 12840);
+        assertTestCase.assertTrue(dashboardPage.menuItems.stream().filter(e -> e.getText().equals("Portfolio Selection/Upload")).count() > 0, "Verify option of \"Portfolio selection\" is shown under global settings menu", 12841);
+        dashboardPage.navigateToPageFromMenu("Calculations");
+        dashboardPage.verifyCalculationDrawer();
+        dashboardPage.selectOtherOptionAndValidateSaveMessage(dashboardPage.getSelectedOption());
+
+        String before_SelectedOption = dashboardPage.getSelectedOption();
+        BrowserUtils.ActionKeyPress(Keys.ESCAPE);
+        dashboardPage.selectRandomPortfolioFromPortfolioSelectionModal();
+
+        dashboardPage.clickOnMenuButton();
+        dashboardPage.navigateToPageFromMenu("Calculations");
+        assertTestCase.assertEquals(before_SelectedOption, dashboardPage.getSelectedOption(), "Verify changed made on \"Calculation\" drawer are retained on switching portfolios", 12855);
+        BrowserUtils.ActionKeyPress(Keys.ESCAPE);
+        LoginPage login = new LoginPage();
+        login.clickOnLogout();
+        login.login();
+        dashboardPage.clickOnMenuButton();
+        dashboardPage.navigateToPageFromMenu("Calculations");
+        assertTestCase.assertEquals(before_SelectedOption, dashboardPage.getSelectedOption(), "Verify changed made on \"Calculation\" drawer are retained on switching portfolios", 12852);
+
 
     }
 

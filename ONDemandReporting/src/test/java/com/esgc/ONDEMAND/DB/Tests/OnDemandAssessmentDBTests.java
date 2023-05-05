@@ -168,7 +168,7 @@ public class OnDemandAssessmentDBTests extends DataValidationTestBase {
     }
 
     @Test(groups = {REGRESSION, UI, COMMON})
-    @Xray(test = {13988})
+    @Xray(test = {13988,13766,13767,13768})
     public void OnDemandAssessmentPortfolioTableDataValidationsWithOnyPredictedAndAnalyticalEntities() {
         String portfolioName = "OnDemandEntities";
         OnDemandAssessmentPage onDemandAssessmentPage = new OnDemandAssessmentPage();
@@ -197,5 +197,8 @@ public class OnDemandAssessmentDBTests extends DataValidationTestBase {
         String actualEligibility = String.format("%.2f", (float) sumOfPredictedEntities / dbData.get(0).getTOTAL_VALUE() * 100) + "%";
         String expectedEligibility = UIValues.get("ONDemandEligibility");
         assertTestCase.assertEquals(actualEligibility, expectedEligibility, "Validating On Demand Eligibility Value");
+       onDemandAssessmentPage.selectPortfolio(portfolioName);
+        onDemandAssessmentPage.clickonOnRequestAssessmentButton();
+        onDemandAssessmentPage.getEligibleAssessment();
     }
 }
