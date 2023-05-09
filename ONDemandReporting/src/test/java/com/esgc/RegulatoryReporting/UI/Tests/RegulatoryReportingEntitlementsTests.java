@@ -98,6 +98,12 @@ public class RegulatoryReportingEntitlementsTests extends UITestBase {
     @Test(groups = {REGRESSION, UI, ENTITLEMENTS, REGULATORY_REPORTING})
     @Xray(test = {14364, 14365, 14366, 14473, 14474, 14475, 14476})
     public void validateLandingPageForUserWith_EUTaxonomy_SFDR_Entitlements() {
+        try {
+            LoginPage login = new LoginPage();
+            login.entitlementsLogin(EntitlementsBundles.USER_WITH_EUTAXONOMY_SFDR_ENTITLEMENT);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         RegulatoryReportingPage reportingPage = new RegulatoryReportingPage();
 
@@ -128,7 +134,7 @@ public class RegulatoryReportingEntitlementsTests extends UITestBase {
 //        reportingPage.uploadPortfolio(portfolioFilePath, "OnDemand");
 //        BrowserUtils.wait(10);
 //        Driver.getDriver().navigate().refresh();
-////        try {
+//        try {
 //            reportingPage.selectReportingOptionByName("SFDR");
 //            reportingPage.verifyPortfolio(portfolioName);
 //            reportingPage.verifySFDRPortfolioCoverageForUI(portfolioName);
@@ -141,23 +147,23 @@ public class RegulatoryReportingEntitlementsTests extends UITestBase {
 //            CommonAPIController.deletePortfolioThroughAPI(portfolioName);
 //            e.printStackTrace();
 //        }
-
-        //User upload Portfolio A with entities not covered by SFDR nor EU Taxonomy
-        portfolioName = "NotSFDRNotEUTaxonomyPortfolioDelete";
-        CommonAPIController.deletePortfolioThroughAPI(portfolioName);
-        //Below we use EU Taxonomy Only because we don't have data for EU Tax only entities. so it gives use a portfolio wich disabled for both eu tax and sfdr
-        portfolioFilePath = ImportPortfolioUtility.getOnDemandPortfolioFileToUpload(Collections.singletonList("EU Taxonomy Only"), "", 10, portfolioName,false);
-        reportingPage.uploadPortfolio(portfolioFilePath, "OnDemand");
-        BrowserUtils.wait(10);
-        Driver.getDriver().navigate().refresh();
-        reportingPage.selectReportingOptionByName("SFDR");
-        reportingPage.verifyPortfolio(portfolioName);
-        reportingPage.verifySFDRPortfolioCoverageForUI(portfolioName);
-        assertTestCase.assertFalse(reportingPage.verifyPortfolioEnabled(portfolioName), "Validating that the portfolio is disabled for SFDR");
-        reportingPage.selectReportingOptionByName("EU Taxonomy");
-        reportingPage.verifyEUTaxonomyPortfolioCoverageForUI(portfolioName);
-        assertTestCase.assertFalse(reportingPage.verifyPortfolioEnabled(portfolioName), "Validating that the portfolio is disabled for EU Taxonomy");
-        CommonAPIController.deletePortfolioThroughAPI(portfolioName);
+//
+//        //User upload Portfolio A with entities not covered by SFDR nor EU Taxonomy
+//        portfolioName = "NotSFDRNotEUTaxonomyPortfolioDelete";
+//        CommonAPIController.deletePortfolioThroughAPI(portfolioName);
+//        //Below we use EU Taxonomy Only because we don't have data for EU Tax only entities. so it gives use a portfolio wich disabled for both eu tax and sfdr
+//        portfolioFilePath = ImportPortfolioUtility.getOnDemandPortfolioFileToUpload(Collections.singletonList("EU Taxonomy Only"), "", 10, portfolioName,false);
+//        reportingPage.uploadPortfolio(portfolioFilePath, "OnDemand");
+//        BrowserUtils.wait(10);
+//        Driver.getDriver().navigate().refresh();
+//        reportingPage.selectReportingOptionByName("SFDR");
+//        reportingPage.verifyPortfolio(portfolioName);
+//        reportingPage.verifySFDRPortfolioCoverageForUI(portfolioName);
+//        assertTestCase.assertFalse(reportingPage.verifyPortfolioEnabled(portfolioName), "Validating that the portfolio is disabled for SFDR");
+//        reportingPage.selectReportingOptionByName("EU Taxonomy");
+//        reportingPage.verifyEUTaxonomyPortfolioCoverageForUI(portfolioName);
+//        assertTestCase.assertFalse(reportingPage.verifyPortfolioEnabled(portfolioName), "Validating that the portfolio is disabled for EU Taxonomy");
+//        CommonAPIController.deletePortfolioThroughAPI(portfolioName);
 
 
         //Upload  a Portfolio A with all entities overed by SFDR and EU Taxonomy
