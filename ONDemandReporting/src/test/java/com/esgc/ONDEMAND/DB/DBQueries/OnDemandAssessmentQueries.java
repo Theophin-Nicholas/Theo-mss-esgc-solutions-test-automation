@@ -63,29 +63,36 @@ public class OnDemandAssessmentQueries {
     public String getHighestInvestment(String portfolioId) {
         String query1 = "select SUM(VALUE) as TotalInv from df_target.df_portfolio Where portfolio_id = '"+portfolioId+"'";
         String totalInvestments = DatabaseDriver.getQueryResultMap(query1).get(0).get("TOTALINV").toString();
-
+        System.out.println("totalInvestments = " + totalInvestments);
         String query2 = "select ROUND(max(score)/"+totalInvestments+"*100,2) as MAXSCORE from (\n" +
                 "select SUM(ptf.VALUE) score from df_target.ESG_OVERALL_SCORES EST\n" +
                 "JOIN df_target.df_portfolio ptf on ptf.BVD9_NUMBER = EST.ORBIS_ID\n" +
                 "Where portfolio_id = '"+portfolioId+"'\n" +
                 "and SUB_CATEGORY = 'ESG' and DATA_TYPE = 'esg_pillar_score' and EST.score_quality='Predicted' group by EST.VALUE)";
         String maxScore = DatabaseDriver.getQueryResultMap(query2).get(0).get("MAXSCORE").toString()+"%";
-
+        System.out.println("maxScore = " + maxScore);
         return maxScore;
     }
 
     public String getEligibleAssessment(String portfolioId) {
-        String query1 = "select count(DISTINCT ORBIS_ID) as companiesCount from df_target.ESG_OVERALL_SCORES EST\n" +
-                "JOIN df_target.df_portfolio ptf on ptf.BVD9_NUMBER = EST.ORBIS_ID\n" +
-                "Where portfolio_id = '"+portfolioId+"'\n" +
-                "and SUB_CATEGORY = 'ESG' and DATA_TYPE = 'esg_pillar_score'";
-        int companiesWithPredictedScores = Integer.parseInt(DatabaseDriver.getQueryResultMap(query1).get(0).get("COMPANIESCOUNT").toString());
+        String query1 = "SELECT Sum(ptf.value) as NOMINATOR\n" +
+                "FROM   df_target.df_portfolio ptf\n" +
+                "       JOIN df_target.esg_overall_scores EST\n" +
+                "         ON ptf.bvd9_number = EST.orbis_id\n" +
+                "WHERE  portfolio_id = '" + portfolioId + "'\n" +
+                "       AND sub_category = 'ESG'\n" +
+                "       AND data_type = 'esg_pillar_score'\n" +
+                "       AND est.score_quality = 'Predicted'; ";
+        System.out.println("query1 = " + query1);
+        
+        double companiesWithPredictedScores = Double.parseDouble(DatabaseDriver.getQueryResultMap(query1).get(0).get("NOMINATOR").toString());
 
-        String query2 = "select count(DISTINCT ORBIS_ID) as companiesCount from df_target.ESG_OVERALL_SCORES EST\n" +
-                "JOIN df_target.df_portfolio ptf on ptf.BVD9_NUMBER = EST.ORBIS_ID\n" +
-                "Where portfolio_id = '"+portfolioId+"'\n" +
-                "and SUB_CATEGORY = 'ESG'";
-        int companiesWithEsg = Integer.parseInt(DatabaseDriver.getQueryResultMap(query2).get(0).get("COMPANIESCOUNT").toString());
+        String query2 = "SELECT Sum(ptf.value) as TOTAL\n" +
+                "FROM   df_target.df_portfolio ptf\n" +
+                "WHERE  portfolio_id = '" + portfolioId + "'; ";
+
+        System.out.println("query2 = " + query2);
+        double companiesWithEsg = Double.parseDouble(DatabaseDriver.getQueryResultMap(query2).get(0).get("TOTAL").toString());
 
         return companiesWithPredictedScores/companiesWithEsg*100+"%";
     }

@@ -2,10 +2,8 @@ package com.esgc.ONDEMAND.API.Tests;
 
 import com.esgc.Common.API.TestBase.CommonTestBase;
 import com.esgc.Common.UI.Pages.LoginPage;
-import com.esgc.ONDEMAND.API.APIModels.OnDemandRequests;
 import com.esgc.ONDEMAND.API.Controllers.OnDemandFilterAPIController;
 import com.esgc.ONDEMAND.UI.Pages.OnDemandAssessmentPage;
-import com.esgc.RegulatoryReporting.API.APIModels.FilteredCompanies;
 import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.Driver;
 import com.esgc.Utilities.EntitlementsBundles;
@@ -15,13 +13,14 @@ import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import org.testng.annotations.Test;
 
-import static com.esgc.Utilities.Groups.*;
+import static com.esgc.Utilities.Groups.API;
+import static com.esgc.Utilities.Groups.REGRESSION;
 
 public class OnDemandAPIEntitlementBundleTest extends CommonTestBase {
 
 
     // api test for on demand
-    @Test(groups= {API, REGRESSION, SMOKE})
+    @Test(groups= {API, REGRESSION})
     @Xray(test = {14196})
     public void validateOnDemandRemainingAssessmentsApiResponse(){
         OnDemandAssessmentPage oDPage = new OnDemandAssessmentPage();

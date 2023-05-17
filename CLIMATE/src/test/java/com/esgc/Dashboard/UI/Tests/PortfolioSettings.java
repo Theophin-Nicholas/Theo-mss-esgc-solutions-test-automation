@@ -180,7 +180,7 @@ public class PortfolioSettings extends UITestBase {
             System.out.println("researchLinePage.portfolioEntityList.get(i) = " + researchLinePage.portfolioEntityList.get(i).getText());
             System.out.println("researchLinePage.portfolioEntityList.size() = " + researchLinePage.portfolioEntityList.size());
             researchLinePage.portfolioEntityList.get(i).click();
-            BrowserUtils.wait(8);
+            researchLinePage.waitForDataLoadCompletion();
             String actualEntityName =  researchLinePage.getPortfolioNameFromEntityPage();
             System.out.println("portfolioEntityName.getText() = " + actualEntityName);
             assertTestCase.assertTrue(actualEntityName.contains(entityName), "Expected=" + entityName + "\nActual=" + actualEntityName);
