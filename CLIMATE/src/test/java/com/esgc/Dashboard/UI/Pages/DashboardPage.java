@@ -304,7 +304,7 @@ public class DashboardPage extends UploadPage {
     @FindBy(xpath = "//div[@class='entityList']//br/../following-sibling::div/div[2]")
     public WebElement heatMapWidgetXIndicator;
 
-    @FindBy(xpath = "(//div[@id='div-mainlayout']//table)[3]//tbody//td")
+    @FindBy(xpath = "//table//td[.//span[contains(text(),'%')]]")
     public List<WebElement> heatMapCells;
 
     @FindBy(xpath = "(//table[.//thead//div[text()]])[1]//*[@heap_id='heatmap']//span")

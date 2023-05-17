@@ -91,7 +91,7 @@ public class GlobalHeaderSidePanel extends UITestBase {
 
         currentURL = Driver.getDriver().getCurrentUrl();
 
-        assertTestCase.assertEquals(currentURL, Environment.URL + "terms", "Terms & Conditions page verified");
+        assertTestCase.assertEquals(currentURL, Environment.URL + "terms", "Terms & Conditions page verified", 11833);
         assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("(//header)[3]//../following-sibling::div")).getText(),
                 TermsConditionsUtilities.termsAndConditionText());
 
