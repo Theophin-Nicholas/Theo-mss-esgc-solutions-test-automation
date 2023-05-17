@@ -241,4 +241,67 @@ public class OnDemandAssessmentQueries {
         System.out.println("getESGENTITYEXPORT query : " + query);
         return DatabaseDriver.getQueryResultMap(query);
     }
+
+    public List<Map<String, Object>> getPortfolioDetail(String portfolioId) {
+        String query = "select * from df_portfolio where portfolio_id='"+portfolioId+"' and bvd9_number is not null";
+        return DatabaseDriver.getQueryResultMap(query);
+    }
+
+    public List<Map<String, Object>> getPortfolioSectorDetail(String portfolioId) {
+        String query = "WITH p AS (\n" +
+                "             SELECT p.bvd9_number as bvd9_number\n" +
+                "                   ,p.company_name\n" +
+                "                   ,MAX(e.parent_entity_name) as parent_entity_name\n" +
+                "               FROM df_portfolio p left join df_target.esg_entity_master e\n" +
+                "                                          ON p.bvd9_number = e.orbis_id\n" +
+                "                                         AND e.entity_status = 'Active'\n" +
+                "              WHERE p.portfolio_id = '"+portfolioId+"'\n" +
+                "             GROUP BY p.company_name,p.bvd9_number,p.sec_id,p.region, p.sector\n" +
+                "                            )\n" +
+                "   ,SEC_DET AS (\n" +
+                "             SELECT distinct\n" +
+                "                    orbis_id\n" +
+                "                   ,MST.MESG_SECTOR_ID\n" +
+                "                   ,sec.MESG_SECTOR\n" +
+                "                   ,SEC.L1_SECTOR\n" +
+                "                   ,SEC.L2_SECTOR\n" +
+                "               FROM df_target.ESG_ENTITY_MASTER MST\n" +
+                "                    JOIN DF_TARGET.SECTOR_HIERARCHY SEC\n" +
+                "                      ON MST.MESG_SECTOR_ID=SEC.MESG_SECTOR_ID\n" +
+                "\t\t\t\t     LEFT JOIN DF_TARGET.MESG_SECTOR_DESCRIPTION SEC_DESC\n" +
+                "                            ON MST.MESG_SECTOR_ID=SEC_DESC.MESG_SECTOR_ID\n" +
+                "            QUALIFY ROW_NUMBER() OVER(PARTITION BY mst.ORBIS_ID,mst.BVD_ID_NUMBER ORDER BY mst.AS_OF_DATE DESC) = 1 )\n" +
+                "    ,PRE_SEC_DET AS (\n" +
+                "             SELECT distinct\n" +
+                "                    orbis_id\n" +
+                "                   ,SEC.MESG_SECTOR_ID\n" +
+                "                   ,sec.MESG_SECTOR\n" +
+                "                   ,SEC.L1_SECTOR\n" +
+                "                   ,SEC.L2_SECTOR\n" +
+                "               FROM df_target.ORBIS_ENTITY_MASTER MST\n" +
+                "                    JOIN DF_LOOKUP.ESG_NACE_TO_MESG_SECTOR_ID_MAPPING NACE\n" +
+                "                      ON MST.NACE2_CORE_CODE =NACE.NACE_CODE\n" +
+                "                    JOIN DF_TARGET.SECTOR_HIERARCHY SEC\n" +
+                "                      ON NACE.MESG_SECTOR_ID=SEC.MESG_SECTOR_ID\n" +
+                "\t\t\t\t     LEFT JOIN DF_TARGET.MESG_SECTOR_DESCRIPTION SEC_DESC\n" +
+                "                            ON SEC.MESG_SECTOR_ID=SEC_DESC.MESG_SECTOR_ID\n" +
+                "            QUALIFY ROW_NUMBER() OVER(PARTITION BY mst.ORBIS_ID ORDER BY mst.MODIFY_DATE_TIME DESC) = 1 )\n" +
+                "    ,PF_SEC_DET  AS(\n" +
+                "            SELECT P.BVD9_NUMBER\n" +
+                "                  ,nvl(p.parent_entity_name,p.company_name) as entity_name\n" +
+                "                  ,nvl(SD.MESG_SECTOR_ID,PSD.MESG_SECTOR_ID) as MESG_SECTOR_ID\n" +
+                "                  ,nvl(SD.MESG_SECTOR,PSD.MESG_SECTOR) as MESG_SECTOR\n" +
+                "                  ,nvl(SD.L1_SECTOR,PSD.L1_SECTOR) as L1_SECTOR\n" +
+                "                  ,nvl(SD.L2_SECTOR,pSD.L2_SECTOR) as L2_SECTOR\n" +
+                "              FROM P\n" +
+                "                   LEFT JOIN SEC_DET SD\n" +
+                "                          ON P.bvd9_number = SD.orbis_id\n" +
+                "                   LEFT JOIN PRE_SEC_DET PSD\n" +
+                "                          ON P.bvd9_number = PSD.orbis_id\n" +
+                "             WHERE P.bvd9_number is not null\n" +
+                "   )\n" +
+                "   SELECT * FROM PF_SEC_DET;\n";
+        //System.out.println("query = " + query);
+        return DatabaseDriver.getQueryResultMap(query);
+    }
 }

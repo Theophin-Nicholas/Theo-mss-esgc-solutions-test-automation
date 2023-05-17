@@ -1,10 +1,15 @@
 package com.esgc.EntityProfile.DB.Tests;
 
 import com.esgc.Base.TestBases.DataValidationTestBase;
+import com.esgc.Dashboard.DB.DBQueries.DashboardQueries;
 import com.esgc.EntityProfile.API.APIModels.EntityHeader;
 import com.esgc.EntityProfile.API.Controllers.EntityProfileClimatePageAPIController;
+import com.esgc.EntityProfile.UI.Pages.EntityClimateProfilePage;
+import com.esgc.PortfolioAnalysis.UI.Pages.ResearchLinePage;
 import com.esgc.TestBase.DataProviderClass;
+import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.Xray;
+import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import java.util.Arrays;
@@ -47,4 +52,42 @@ public class EntityClimateCompanyAbout extends DataValidationTestBase {
         if(dbResults.get("ISIN")!=null)
             assertTestCase.assertTrue(dbResults.get("ISIN").toString().equals(companyHeaderAPIResponse.get(0).getPrimary_isin()));
     }
+
+    @Xray(test = {14321})
+    @Test(groups = {REGRESSION, ENTITY_PROFILE, DATA_VALIDATION},
+            description = "Data Validation | Entity Page | Entity Drawer | Verify the Sector, L1&L2 for entity")
+    public void verifySectorL1L2ForEntityTest() {
+        DashboardQueries queries = new DashboardQueries();
+        String portfolioId = "00000000-0000-0000-0000-000000000000";
+        List<Map<String, Object>> dbData = queries.getPortfolioSectorDetail(portfolioId);
+        for (int i = 0; i < 5; i++) {
+            if(dbData.get(i).get("ENTITY_NAME")==null) continue;
+            String companyName = dbData.get(i).get("ENTITY_NAME").toString();
+            System.out.println("companyName = " + companyName);
+            if(dbData.get(i).get("MESG_SECTOR")==null) continue;
+            String sector = dbData.get(i).get("MESG_SECTOR").toString();
+            System.out.println("sector = " + sector);
+
+            EntityClimateProfilePage entityProfilePage = new EntityClimateProfilePage();
+            entityProfilePage.searchAndLoadClimateProfilePage(companyName);
+            entityProfilePage.waitForDataLoadCompletion();
+            BrowserUtils.waitForClickablility(entityProfilePage.companyHeaderItems.get(0), 10).click();
+            BrowserUtils.waitForVisibility(entityProfilePage.companyDrawerSector, 10);
+            String uiSector = entityProfilePage.companyDrawerSector.getText();
+            System.out.println("Company Sector = " + uiSector);
+            if(!uiSector.equals("Company's Description - Coming Soon")) {
+                assertTestCase.assertTrue(uiSector.contains(sector), "Sector is verified");
+            }
+
+            BrowserUtils.waitForClickablility(entityProfilePage.hideDrawerButton, 10).click();
+            System.out.println("Drawer is closed");
+            entityProfilePage.closeEntityProfilePage();
+            BrowserUtils.waitFor(2);
+            System.out.println("ESC key is pressed");
+        }
+
+
+    }
+
+
 }

@@ -1374,4 +1374,45 @@ public class OnDemandAssessmentPage extends CommonPage {
     }
 
 
+    public void verifySectorAndRegion(String portfolioName) {
+        ExcelUtil excelData = getExcelData(portfolioName, 0);
+        OnDemandFilterAPIController controller = new OnDemandFilterAPIController();
+        String portfolioId = controller.getPortfolioId(portfolioName);
+        System.out.println("portfolioId = " + portfolioId);
+        OnDemandAssessmentQueries queries = new OnDemandAssessmentQueries();
+        List<Map<String, Object>> dbData= queries.getPortfolioDetail(portfolioId);
+        System.out.println("dbEntitiesList = " + dbData.size());
+        //Data should match between exported file and query in Snowflake
+        //go through excel and get each row
+        //find data in dbEntitiesList and compare
+
+        for (int i = 0; i < excelData.getLastRowNum()-3; i++) {
+            //System.out.println("i = " + i);
+            List<String> row = excelData.getRowData(i+1);
+//            System.out.println("row = " + row);
+            String companyName = row.get(0);
+//            System.out.println("companyName = " + companyName);
+            String sector = row.get(4);
+//            System.out.println("sector = " + sector);
+            String region = row.get(5);
+//            System.out.println("region = " + region);
+
+            boolean check = false;
+            for(Map<String, Object> data: dbData){
+//                if(data.get("COMPANY_NAME") == null || map.get("REGION_NAME") == null || data.get("SECTOR") == null) continue;
+//                if(data.get("COMPANY_NAME") == null || map.get("REGION_NAME") == null || data.get("SECTOR") == null) continue;
+                String dbcompanyName = data.get("COMPANY_NAME").toString();
+                String dbregion = data.get("REGION").toString();
+                String dbsector = data.get("SECTOR").toString();
+                if(companyName.equals(dbcompanyName) && region.equals(dbregion) && sector.equals(dbsector)){
+                    check = true;
+                    break;
+                }
+            }
+            if(!check){
+                System.out.println(companyName + " not found in DB");
+                assertTestCase.fail("Company Name: "+companyName+" Region: "+region+" Sector: "+sector+" not found in DB");
+            }
+        }
+    }
 }

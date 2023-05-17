@@ -16,6 +16,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
 import org.testng.SkipException;
 
+import java.io.File;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -1566,6 +1567,43 @@ public class DashboardPage extends UploadPage {
         }
     }
 
+    public void openCoverageDrawer(){
+        BrowserUtils.waitForVisibility(viewAllCompaniesButton, 30);
+        assertTestCase.assertTrue(viewAllCompaniesButton.isDisplayed(),
+                "User can see and click on View Companies and Investments in Portfolio link on dashboard.");
+        BrowserUtils.waitForClickablility(viewAllCompaniesButton,10).click();
+    }
+
+//    public String getSelectedFilterValue(String filterOption){
+//        String[] options = coverageLink.getText().split(", ");
+//        System.out.println("Arrays.toString() = " + Arrays.toString(options));
+//        switch (filterOption.toLowerCase()){
+//            case "regions":
+//                return options[0].replaceAll("Viewing data in ","");
+//            case "sectors":
+//                return options[1].trim();
+//            case "date":
+//                return options[2].replaceAll("at the end of ","");
+//        }
+//        System.out.println("Filter option not found");
+//        return "";
+//    }
+
+    public ExcelUtil getExcelData(String excelName, String sheetName) {
+            File dir = new File(BrowserUtils.downloadPath());
+            File[] dir_contents = dir.listFiles();
+            assert dir_contents != null;
+            File excelFile = Arrays.stream(dir_contents).filter(e -> (e.getName().contains(excelName))).findAny().get();
+            //System.out.println("excelFile = " + excelFile.getAbsolutePath());
+            if (!excelFile.exists()) {
+                System.out.println(excelName + " file does not exist");
+                return null;
+            }
+            //System.out.println(excelName + " file found");
+            //System.out.println("excelFile = " + excelFile.getAbsolutePath());
+            ExcelUtil excelUtil = new ExcelUtil(excelFile.getAbsolutePath(), sheetName);
+            return excelUtil;
+    }
     @FindBy(xpath = "//*[@id=\"mini-0\"]/div[2]/span")
     public WebElement searchResultLineOne;
     public void validateEntitiesWithOnlyEsgDataDontShowInSearch(String entity) {
@@ -1664,6 +1702,56 @@ public class DashboardPage extends UploadPage {
         String expectedReportingTabHeader = "ESG Reporting Portal";
         assertTestCase.assertEquals(actualReportingTabHeader, expectedReportingTabHeader, "Verifying ESG Reporting Portal header is equal to ESG Reporting Portal : Status Done");
 
+    }
+
+    @FindBy(xpath = "//span[text()='Portfolio Calculations']")
+    public  WebElement PortfolioCalculationHeader;
+    @FindBy(xpath = "//span[text()='Weighted Average Calculations']")
+    public  WebElement weightedAverageCalculations;
+
+    @FindBy(xpath = "//li/span[text()='Carbon Footprint']/../following-sibling::li/span")
+    public  WebElement CarbonFootPrintSection;
+
+    @FindBy(xpath = "//li/span[text()='Carbon Footprint']/../../following-sibling::li")
+    public  List<WebElement> portfilioCalculationsOptions;
+
+    @FindBy(xpath = "//div[@class='MuiAlert-message']")
+    public WebElement alertMessage ;
+
+    public void verifyCalculationDrawer(){
+        assertTestCase.assertTrue(BrowserUtils.waitForVisibility(PortfolioCalculationHeader,60).isDisplayed(),"Validate PortfolioCalculationHeader is displayed");
+        assertTestCase.assertTrue(weightedAverageCalculations.isDisplayed(),"Validate weightedAverageCalculations is displayed");
+        assertTestCase.assertTrue(CarbonFootPrintSection.getText().equals("In alignment with the Partnership for Carbon " +
+                "Accounting Financials (PCAF) recommends we offer the below options to calculation portfolio aggregations " +
+                "for Carbon Footprint."), "Validating Carbon Footprint Section");
+
+        List<String> expectedOptions= Arrays.asList(new String[]{"Investment Value","Enterprise Value Including Cash","Market Capitalization","Total Assets"}) ;
+        for(int i =0;i<portfilioCalculationsOptions.size();i++){
+            assertTestCase.assertEquals(expectedOptions.get(i),(portfilioCalculationsOptions.get(i).getText()),"Validating " + portfilioCalculationsOptions.get(i).getText() + " menu Options");
+        }
+
+
+    }
+    public String getSelectedOption (){
+        String returnValue = "";
+        BrowserUtils.wait(5);
+        for(int i =0;i<portfilioCalculationsOptions.size();i++){
+            if(portfilioCalculationsOptions.get(i).findElement(By.xpath("div/fieldset/label/span/span/input")).getAttribute("checked")!=null){
+                returnValue = portfilioCalculationsOptions.get(i).getText();
+                break;
+            }
+        }
+        return returnValue;
+    }
+
+    public void selectOtherOptionAndValidateSaveMessage(String currentSelectedValue){
+        for(int i =0;i<portfilioCalculationsOptions.size();i++){
+            if (!portfilioCalculationsOptions.get(i).getText().equals(currentSelectedValue)){
+                portfilioCalculationsOptions.get(i).findElement(By.xpath("div/fieldset/label/span/span/input")).click();
+                assertTestCase.assertTrue(BrowserUtils.waitForVisibility(alertMessage,20).getText().equals("Changes Saved"),"Validate success message");
+                break;
+            }
+        }
     }
 
 
