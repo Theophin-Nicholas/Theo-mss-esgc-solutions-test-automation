@@ -122,7 +122,7 @@ public class CommonPage extends UploadPortfolio {
         if (Environment.environment.equalsIgnoreCase("qa"))
             navigateToPageFromMenu("reportingservice", "ESG Reporting Portal");
         else
-            navigateToPageFromMenu("reportingservice", "On-Demand Reporting");
+            navigateToPageFromMenu("reportingservice", "ESG Reporting Portal");
         if (reportingService.contains("SFDR")) {
             clickOnEUTaxonomyOption();
         }

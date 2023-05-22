@@ -588,7 +588,7 @@ public class OnDemandAssessmentPage extends CommonPage {
     }
 
     public void validateOnDemandPageHeader() {
-        assertTestCase.assertEquals(BrowserUtils.waitForVisibility(menuOptionPageHeader, 90).getText(), "On-Demand Reporting", "Moody's Analytics: Request On-Demand Assessment page verified");
+        assertTestCase.assertEquals(BrowserUtils.waitForVisibility(menuOptionPageHeader, 90).getText(), "ESG Reporting Portal", "Moody's Analytics: Request On-Demand Assessment page verified");
     }
 
     public void validateProceedOnConfirmRequestPopup(String countOfCompanies) {
@@ -1174,6 +1174,7 @@ public class OnDemandAssessmentPage extends CommonPage {
             assertTestCase.assertTrue(detailPanelExportToExcelButton.isDisplayed(), "Export to excel button is displayed");
             assertTestCase.assertTrue(detailPanelExportToExcelButton.isEnabled(), "Export to excel button is enabled");
             detailPanelExportToExcelButton.click();
+            BrowserUtils.wait(5);
             closePanel();
         }
         BrowserUtils.wait(10);

@@ -106,9 +106,10 @@ public class OnDemandEntitlementBundleTests extends UITestBase {
             LoginPage login = new LoginPage();
             login.entitlementsLogin(EntitlementsBundles.ODA_ESG_PREDICTOR_DATA_ENTITLEMENT);
             String portfolioName = "OnDemandEntitiesOnDemandEntitlement";
+            CommonAPIController.deletePortfolioThroughAPI(portfolioName);
             OnDemandAssessmentPage onDemandAssessmentPage = new OnDemandAssessmentPage();
-            String portfolioFilePath = ImportPortfolioUtility.getOnDemandPortfolioFileToUpload(Arrays.asList(new String[]{"Self-Assessed", "Predicted"}), "", 10, portfolioName, false);
-            onDemandAssessmentPage.navigateToReportingService("On-Demand Assessment");
+            String portfolioFilePath = ImportPortfolioUtility.getOnDemandPortfolioFileToUpload(Arrays.asList("Self-Assessed", "Predicted"), "", 10, portfolioName, false);
+            //onDemandAssessmentPage.navigateToReportingService("On-Demand Assessment");
             if (onDemandAssessmentPage.IsPortfolioTableLoaded()) {
                 onDemandAssessmentPage.uploadPortfolio(portfolioFilePath, "OnDemand");
                 Assert.assertTrue(onDemandAssessmentPage.checkifSuccessPopUpIsDisplyed(), "Validating if portfolio uploaded successfully");
@@ -128,7 +129,6 @@ public class OnDemandEntitlementBundleTests extends UITestBase {
             login.clickOnLogout();
             assertTestCase.assertTrue(false, "TestCase Failed - Please see stack trace for details");
         }
-
     }
 
     @Test(groups = {REGRESSION, SMOKE, UI, ENTITLEMENTS})
@@ -248,6 +248,7 @@ public class OnDemandEntitlementBundleTests extends UITestBase {
             EntitlementsBundles[] entitlements = {EntitlementsBundles.USER_ESG_PREDICTOR, EntitlementsBundles.USER_ESG_ESG_PREDICTOR_EXPORT, EntitlementsBundles.USER_ESG_PREDICTOR_EXPORT, EntitlementsBundles.USER_ESG_PREDICTOR_ODA, EntitlementsBundles.USER_EXPORT};
 
             for (EntitlementsBundles e : entitlements) {
+                System.out.println("e = " + e);
                 login.entitlementsLogin(e);
                 System.out.println("------------Logged in to Check pop up box using " + e.toString() + " entitlements ------------");
                 popPage.validateTheContentOfPopUp();

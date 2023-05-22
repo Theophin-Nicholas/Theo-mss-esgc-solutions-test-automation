@@ -239,6 +239,7 @@ public class LoginPage extends PageBase {
 
     public void entitlementsLogin(EntitlementsBundles bundles) {
         switch (bundles) {
+            case ALL:
             case PHYSICAL_RISK:
                 wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.PHYSICAL_RISK_USERNAME, Keys.ENTER);
                 wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.PHYSICAL_RISK_PASSWORD);
