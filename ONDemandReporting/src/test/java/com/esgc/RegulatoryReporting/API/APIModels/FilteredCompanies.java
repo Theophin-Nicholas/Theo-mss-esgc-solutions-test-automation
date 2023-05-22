@@ -21,20 +21,18 @@ class Entity{
     public String country_name;
     public int current_investment;
     public double investment_pct;
-    public int number_of_companies;
     public String region_code;
     public String region_name;
-    public String score;
+    public int score;
     public String sector;
-    public int actual_size;
     public String sector_code;
-    public String size;
     public String state;
     public String type;
+    public int actual_size;
+    public String size;
 }
 
 class Info{
-    public double predicted_pct;
     public int number_of_predicted;
     public int remaining_assessments;
 }
@@ -46,10 +44,11 @@ class SmeStatus{
     public String iSIN;
     public String companyName;
     public String sectorCode;
-    public Object companySizeName;
+    public String companySizeName;
     public String countryCode;
-    public Object dataAlliance;
-    public Object evaluationYear;
+    public boolean dataAlliance;
+    public int evaluationYear;
     public String type;
     public String state;
+    public String entityState;
 }

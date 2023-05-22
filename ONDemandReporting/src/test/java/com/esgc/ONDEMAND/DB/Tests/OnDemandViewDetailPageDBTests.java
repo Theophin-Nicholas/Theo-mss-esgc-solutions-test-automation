@@ -49,6 +49,7 @@ public class OnDemandViewDetailPageDBTests extends DataValidationTestBase {
         assertTestCase.assertTrue(columnData.containsAll(uiEntityList), "verify entities listed are in the result of the DB query");
     }
 
+
     @Test(groups = {REGRESSION, DATA_VALIDATION}, description = "Verify Exported Document from 'View Details'")
     @Xray(test = {14025, 14026, 14067, 14069, 14070, 14071, 14072, 14074})
     public void verifyExportedDocumentFromViewDetailsTest(){
@@ -56,10 +57,10 @@ public class OnDemandViewDetailPageDBTests extends DataValidationTestBase {
         String portfolioName = "500 predicted portfolio";
         OnDemandAssessmentPage onDemandAssessmentPage = new OnDemandAssessmentPage();
         onDemandAssessmentPage.navigateToReportingService("On-Demand Assessment");
-        BrowserUtils.waitForVisibility(onDemandAssessmentPage.portfolioNamesList, 20);
+        onDemandAssessmentPage.waitForPortfolioTableToLoad();
         if(!onDemandAssessmentPage.verifyPortfolio(portfolioName)) onDemandAssessmentPage.uploadPortfolio(portfolioName.replaceAll(" ", ""));
         onDemandAssessmentPage.downloadPortfolio(portfolioName, "page");
-        System.out.println("Downloaded portfolio: " + portfolioName);
+        //System.out.println("Downloaded portfolio: " + portfolioName);
         onDemandAssessmentPage.verifyDataScores(portfolioName);
 
         onDemandAssessmentPage.downloadPortfolio(portfolioName, "details panel");

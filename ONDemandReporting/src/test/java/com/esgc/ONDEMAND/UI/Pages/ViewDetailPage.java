@@ -456,8 +456,9 @@ public class ViewDetailPage extends CommonPage {
 
     public List<String> getListOfInvestmentCellsText() {
         List<String> investmentCellData = new ArrayList<String>();
-        for (int i = 0; i < returnNumberOfRows(); i++) {
-            String xpathInvestmentCell = "//*[@id=\"viewcompanies-tableCell-" + i + "-2\"]";
+        for (int i = 0; i <= returnNumberOfRows(); i++) {
+            //String xpathInvestmentCell = "//*[@id=\"viewcompanies-tableCell-" + i + "-2\"]";
+            String xpathInvestmentCell = "//div[text()='Predicted']/following-sibling::div/table/tbody/tr["+i+"]/td[3]";
             WebElement investmentCellElement = Driver.getDriver().findElement(By.xpath(xpathInvestmentCell));
             investmentCellData.add(investmentCellElement.getText().substring(0, investmentCellElement.getText().indexOf("%")));
         }
