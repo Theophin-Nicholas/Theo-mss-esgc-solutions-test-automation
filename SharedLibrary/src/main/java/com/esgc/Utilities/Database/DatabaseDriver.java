@@ -1,6 +1,7 @@
 package com.esgc.Utilities.Database;
 
 import com.esgc.Utilities.Environment;
+import com.google.gson.Gson;
 import lombok.Data;
 
 import java.sql.*;
@@ -303,12 +304,15 @@ public class DatabaseDriver {
             statement.executeQuery("ALTER SESSION SET JDBC_QUERY_RESULT_FORMAT='JSON'");
             statement.executeQuery("ALTER USER SET TIMEZONE='America/Los_Angeles'");
             resultSet = statement.executeQuery(query);
+            //return resultSet;
 
         } catch (SQLException e) {
             System.out.println("ERROR OCCURRED WHILE RUNNING THE QUERY!");
             System.out.println("query = " + query);
             e.printStackTrace();
+            //return null;
         }
+
     }
 
     public static int getRowCount() throws Exception {
@@ -333,4 +337,20 @@ public class DatabaseDriver {
             e.printStackTrace();
         }
     }
+
+    public static String getJsonString(String query) {
+        executeQuery(query);
+        String jsonValue = "";
+
+        try {
+            while (resultSet.next()) {
+                jsonValue= resultSet.getObject(1).toString();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return jsonValue;
+    }
 }
+

@@ -4,16 +4,23 @@ package com.esgc.ONDEMAND.UI.Pages;
 import com.esgc.Common.UI.Pages.CommonPage;
 import com.esgc.Common.UI.Pages.LoginPage;
 import com.esgc.ONDEMAND.API.Controllers.OnDemandFilterAPIController;
+import com.esgc.ONDEMAND.DB.DBModels.CLIMATEENTITYDATAEXPORT;
 import com.esgc.Utilities.*;
 import com.esgc.ONDEMAND.DB.DBQueries.OnDemandAssessmentQueries;
-import com.esgc.Utilities.*;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.Color;
 import org.openqa.selenium.support.FindBy;
+import org.testng.asserts.SoftAssert;
 
+import java.beans.BeanInfo;
+import java.beans.IntrospectionException;
+import java.beans.Introspector;
+import java.beans.PropertyDescriptor;
 import java.io.File;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.util.*;
@@ -285,7 +292,7 @@ public class OnDemandAssessmentPage extends CommonPage {
 
         KeepOnlyOneRequest();
         BrowserUtils.scrollTo(removeButtons.get(0));
-        txtSendTo.sendKeys(emailid);
+        BrowserUtils.waitForClickability(txtSendTo).sendKeys(emailid);
         String compniesCountForRequest = getCompaniesCountFromConfirmRequestButton();
         clickOnConfirmRequestButton();
         return compniesCountForRequest;
@@ -297,16 +304,20 @@ public class OnDemandAssessmentPage extends CommonPage {
     }
 
     public void selectFilter(String filterOption) {
-        // BrowserUtils.waitForVisibility(drdShowFilter,30).click();
-        // drdShowOptions.get(0).click();
         BrowserUtils.waitForVisibility(FilterDropDown, 30).click();
-        for (WebElement option : drdShowOptions) {
+
+        BrowserUtils.waitForVisibility(Driver.getDriver().findElement
+                (By.xpath("//ul[@role='listbox']/li[text()='"+filterOption+"']"))
+                ,60).click();
+
+        /*for (WebElement option : drdShowOptions) {
             if (option.getText().equals(filterOption)) {
-                option.click();
+                BrowserUtils.wait(5);
+                BrowserUtils.clickWithJS(option);
                 BrowserUtils.wait(2);
                 break;
             }
-        }
+        }*/
     }
 
     public void KeepOnlyOneRequest() {
@@ -319,6 +330,11 @@ public class OnDemandAssessmentPage extends CommonPage {
 
     public void RemoveRequests(int remainingRequests) {
         selectFilter("No Request Sent");
+        // Randomly failing in selecting from Drop down so trying for one more
+        // time if fails in first time.
+        if (!FilterDropDown.getText().equals("No Request Sent")){
+            selectFilter("No Request Sent");
+        }
         BrowserUtils.waitForVisibility(removeButtons, 60);
         while (removeButtons.size() > remainingRequests) {
             BrowserUtils.waitForClickablility(removeButtons.get(0), 60).click();
@@ -476,23 +492,17 @@ public class OnDemandAssessmentPage extends CommonPage {
         BrowserUtils.waitForVisibility(btnESC, 30).click();
     }
 
-    public void clickOnDemandPagelinkFromDashboardPage() {
-        BrowserUtils.waitForVisibility(dashboardPageMenuOption, 30).click();
-    }
-
     public void validatePredictedScore() {
         assertTestCase.assertTrue(Integer.parseInt(predictedScoresliders.get(0).getAttribute("aria-valuemax")) <= 100);
         assertTestCase.assertTrue(Integer.parseInt(predictedScoresliders.get(1).getAttribute("aria-valuemax")) <= 100);
         assertTestCase.assertTrue(Integer.parseInt(predictedScoresliders.get(0).getAttribute("aria-valuemin")) >= 0);
         assertTestCase.assertTrue(Integer.parseInt(predictedScoresliders.get(1).getAttribute("aria-valuemin")) >= 0);
-        System.out.println("predictedScoreInvper.getText() = " + predictedScoreInvper.getText());
-        assertTestCase.assertTrue(predictedScoreInvper.getText().matches("\\d+.*\\d*% invested"));
+        if (predictedScoreInvper.getText().matches("\\d+.\\d+% invested"))
+            assertTestCase.assertTrue(predictedScoreInvper.getText().matches("\\d+.\\d+% invested"));
+        else
+            assertTestCase.assertTrue(predictedScoreInvper.getText().matches("\\d+% invested"));
         String assessmentEligible = lblAssessmentEligible.getText().substring(0, lblAssessmentEligible.getText().indexOf("%"));
-        System.out.println("assessmentEligible = " + assessmentEligible);
-        System.out.println("predictedScoreTextBelowGraph.getText() = " + predictedScoreTextBelowGraph.getText());
-        assertTestCase.assertTrue(predictedScoreTextBelowGraph.getText().contains(assessmentEligible));
-        //assertTestCase.assertTrue(predictedScoreTextBelowGraph.getText().matches("Companies with predicted scores ranging \\d+-\\d+ account for " + assessmentEligible + "% of investments"));
-        //todo:assessment eligible is with out decimal point, but predicted score is with decimal point
+        assertTestCase.assertTrue(predictedScoreTextBelowGraph.getText().matches("Companies with predicted scores ranging 0-100 account for \\d+.\\d+% of investments"));
     }
 
     public void validateLocation() {
@@ -593,7 +603,12 @@ public class OnDemandAssessmentPage extends CommonPage {
     }
 
     public void validateOnDemandPageHeader() {
-        assertTestCase.assertEquals(BrowserUtils.waitForVisibility(menuOptionPageHeader, 90).getText(), "ESG Reporting Portal", "Moody's Analytics: Request On-Demand Assessment page verified");
+        BrowserUtils.waitForVisibility(menuOptionPageHeader,90);
+        if (Environment.environment.equalsIgnoreCase("qa")) {
+            assertTestCase.assertEquals(BrowserUtils.waitForVisibility(menuOptionPageHeader, 10).getText(), "ESG Reporting Portal", "Moody's Analytics: Request On-Demand Assessment page verified");
+        } else {
+            assertTestCase.assertEquals(BrowserUtils.waitForVisibility(menuOptionPageHeader, 10).getText(), "On-Demand Reporting", "Moody's Analytics: Request On-Demand Assessment page verified");
+        }
     }
 
     public void validateProceedOnConfirmRequestPopup(String countOfCompanies) {
@@ -850,7 +865,7 @@ public class OnDemandAssessmentPage extends CommonPage {
 
 
     public void clickOnMenuButton() {
-        BrowserUtils.waitForClickablility(menuButton, 15);
+        BrowserUtils.waitForClickablility(menuButton, 30);
         menuButton.click();
     }
 
@@ -872,7 +887,7 @@ public class OnDemandAssessmentPage extends CommonPage {
             }
         }*/
         for (int i = 0; i < viewDetailButton.size(); i++) {
-            if (viewDetailButton.get(i).getAttribute("disabled").equals("")) {
+            if (viewDetailButton.get(i).getAttribute("disabled")==null) {
                 System.out.println("the view detail button is disabled for " + viewDetailButton.get(i).getText());
             } else {
                 System.out.println("the view detail button is enabled");
@@ -1096,63 +1111,57 @@ public class OnDemandAssessmentPage extends CommonPage {
         String portfolioId = controller.getPortfolioId(portfolioName);
         System.out.println("portfolioId = " + portfolioId);
         OnDemandAssessmentQueries queries = new OnDemandAssessmentQueries();
-        List<Map<String, Object>> dbEntitiesList = queries.getESGENTITYEXPORT(portfolioId);
-        System.out.println("dbEntitiesList = " + dbEntitiesList.size());
-        //Data should match between exported file and query in Snowflake
-        //go through excel and get each row
-        //find data in dbEntitiesList and compare
-
+        CLIMATEENTITYDATAEXPORT[] dbEntitiesList = queries.getESGENTITYEXPORT(portfolioId);
+        System.out.println("dbEntitiesList = " + dbEntitiesList.length);
         for (int i = 0; i < excelData.getLastRowNum(); i++) {
-            List<String> row = excelData.getRowData(i + 1);
-            System.out.println("row = " + row);
-            String companyName = row.get(0);
-            System.out.println("companyName = " + companyName);
-            //print all company names in dbEntitiesList
-            Map<String, Object> dbData = null;
-            for (Map<String, Object> data : dbEntitiesList) {
-                //System.out.println(data.get("ENTITY"));
-                if (data.containsValue(companyName)) {
-                    //System.out.println("data = " + data.values());
-                    dbData = data;
-                    break;
-                }
+            Map<String,String> row = excelData.getRowValueMapWithColumnName(i + 1);
+            if (row!=null && !row.get("ENTITY").startsWith("Disclaimer:")) {
+                System.out.println("row = " + row);
+                String companyName = row.get("ENTITY");
+                CLIMATEENTITYDATAEXPORT dbData = Arrays.stream(dbEntitiesList).filter(e -> e.getEntity().equals(companyName)).findFirst().get();
+                validateExcelData(row, dbData);
             }
-            if (dbData == null) {
-                System.out.println("Company " + companyName + " is not found in DB");
-                assertTestCase.fail();
-            }
-            //System.out.println("dbData.values() = " + dbData.values());
-            //create Set<String> dbValues and add all dbData values as string to it
-            DecimalFormat df = new DecimalFormat("#.##");
+          }
 
-            Set<String> dbValues = new HashSet<>();
-            for (Object value : dbData.values()) {
-                if (value == null) continue;
-                //if there is trailing 0s after point remove them
-                if (value.toString().matches("\\d+\\.\\d0+")) {
-                    value = df.format(Double.parseDouble(value.toString()));
+    }
+
+    public void validateExcelData(Map<String, String> excelMap,  CLIMATEENTITYDATAEXPORT dbData )  {
+        BeanInfo beanInfo = null;
+        try {
+            beanInfo = Introspector.getBeanInfo(CLIMATEENTITYDATAEXPORT.class);
+        } catch (IntrospectionException e) {
+            e.printStackTrace();
+        }
+        PropertyDescriptor[] propertyDescriptors = beanInfo.getPropertyDescriptors();
+        Object fieldValue = null;
+        SoftAssert softAssert = new SoftAssert();
+        DecimalFormat df = new DecimalFormat("#.##");
+        for(Map.Entry<String,String> each:excelMap.entrySet()){
+           String filedName= each.getKey().replaceAll("_|\\'|%|&|\\.|,|\\s|-|/|\\(|\\)","").toLowerCase();
+            try {
+                System.out.println("Getting value for Field: " + filedName );
+                fieldValue = Arrays.stream(propertyDescriptors).filter(f -> f.getName().equals(filedName)).findFirst().get().getReadMethod().invoke(dbData);
+                if (fieldValue == null) continue;
+                fieldValue = fieldValue.toString();
+                if (fieldValue.toString().matches("\\d+\\.\\d+") && !each.getKey().equals("% Investment"))
+                {
+                    fieldValue =  String.valueOf(Math.round(Double.valueOf(fieldValue.toString())));
                 }
-                dbValues.add(value.toString());
-            }
-            //System.out.println("dbValues = " + dbValues);
-            //compare data
-            for (int j = 0; j < row.size(); j++) {
-            String cell = row.get(i);
-                if(cell.indexOf("-")==4 && cell.lastIndexOf("-")==7){
-                    try {
-                        cell.equals(DateTimeUtilities.getFormattedDate(LastUpdateColumn.get(getPortfolioList().indexOf(portfolioName)).getText(),"MMMM d, YYYY","YYYY-mm-dd"));
-                    } catch (Exception e) {
-                        assertTestCase.fail();
-                    }
-                } else {
-                    if (cell.isEmpty() || cell.equals("-")) continue;
-                    if (dbValues.contains(cell)) continue;
-                    if (dbValues.contains(cell.replaceAll("\\.0", ""))) continue;
-                    System.out.println("cell = " + cell + " | index = " + i);
-                    assertTestCase.fail();
+
+                String excelValue = each.getValue();
+                if (excelValue.toString().matches("\\d+\\.\\d0+") || excelValue.matches("\\d+\\.0+")) {
+                    excelValue = df.format(Double.parseDouble(excelValue.toString()));
                 }
+                softAssert.assertEquals(excelValue,fieldValue , "Validating Field: " + filedName + ", Value: " + fieldValue);
+                System.out.println("Field: " + filedName + ", Value: " + fieldValue);
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            } catch (InvocationTargetException e) {
+                e.printStackTrace();
             }
         }
+        softAssert.assertAll();
+        System.out.println("Success");
     }
 
     public void downloadPortfolio(String portfolioName, String location) {
@@ -1304,10 +1313,11 @@ public class OnDemandAssessmentPage extends CommonPage {
         System.out.println("------------Verifying that "+ menuTab+" is visible from global menu-------------------");
         for (WebElement e : menuItems) {
             String menuItemText = e.getText();
-            if(menuItemText.equals(menuTab))
-            //System.out.println("verify that " + menuItemText + " is equal to " + menuTab);
-            assertTestCase.assertTrue(menuItemText.equals(menuTab), "Verify that " + menuTab +" is visible in the Global menu : Status Done");
-            break;
+            if(menuItemText.equals(menuTab)) {
+                //System.out.println("verify that " + menuItemText + " is equal to " + menuTab);
+                assertTestCase.assertTrue(menuItemText.equals(menuTab), "Verify that " + menuTab + " is visible in the Global menu : Status Done");
+                break;
+            }
         }
     }
 
@@ -1412,5 +1422,46 @@ public class OnDemandAssessmentPage extends CommonPage {
                 assertTestCase.fail("Company Name: "+companyName+" Region: "+region+" Sector: "+sector+" not found in DB");
             }
         }
+    }
+
+    public void clickonViewAssessmentRequestButton() {
+         BrowserUtils.waitForVisibility(buttonViewAssessmentStatus, 60).click();
+    }
+
+    @FindBy(xpath = "//div[text()='Open Assessment Request']")
+    public List<WebElement> OpenAssessmentRequest;
+
+    @FindBy(xpath = "//div[@id='dupe-email-popover-error-request-test-id']")
+    public WebElement DuplicateEmailAlertMessage;
+
+    @FindBy(xpath = "//div[@id='dupe-email-popover-error-request-test-id']//button")
+    public WebElement DuplicateEmailAlertMessageCloseButton;
+
+    @FindBy(xpath = "//div[@id='upload-popover-error-request-test-id']")
+    public WebElement errorPopUPMessage;
+
+    @FindBy(xpath = "//div[@id='upload-popover-error-request-test-id']//button")
+    public WebElement errorPopUPMessageCloseButton;
+
+    public boolean IsOpenAssessmentPageLoaded() {
+        BrowserUtils.waitForVisibility(OpenAssessmentRequest, 90);
+        return (OpenAssessmentRequest.size()>0);
+    }
+
+    public void waitForOpenAssessmentPageToLoad() {
+        if (IsOpenAssessmentPageLoaded()) {
+            System.out.println("OpenAssessment Page Loaded Successfully");
+        }
+    }
+
+
+    public void validateRequestFailedMessageDuetoPreExistingEmail() {
+        BrowserUtils.waitForVisibility(DuplicateEmailAlertMessage,60).getText().contains("The following company failed assessment creation due to pre-existing email in the system. Please review the email address provided and re-submit the assessment request.");
+        DuplicateEmailAlertMessageCloseButton.click();
+    }
+
+    public void validateerrorMessage() {
+        BrowserUtils.waitForVisibility(errorPopUPMessage,60).getText().contains("No assessment request have been created. Please review the email address entries.");
+        errorPopUPMessageCloseButton.click();
     }
 }

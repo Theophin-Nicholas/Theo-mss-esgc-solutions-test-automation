@@ -65,8 +65,8 @@ public class CommonPage extends UploadPortfolio {
     @FindBy(xpath = "//div[contains(text(),'Select Portfolio')]/following-sibling::div/div/p[text()='No portfolio available.']")
     public WebElement noPortfolioAvailable;
 
-    @FindBy(xpath = "//li[@heap_menu='ESG Reporting Portal']")
-    public WebElement OnDemandMenuItem;
+   // @FindBy(xpath = "//li[@heap_menu='ESG Reporting Portal']")
+   // public WebElement OnDemandMenuItem;
 
     @FindBy(xpath = "//div[contains(text(),'Select Portfolio')]/../div[2]/following-sibling::div/div[1]//input")
     public List<WebElement> portfolioRadioButtonList;
@@ -79,6 +79,19 @@ public class CommonPage extends UploadPortfolio {
 
     @FindBy(xpath = "//div[contains(text(),'Select Portfolio')]/../div[2]/following-sibling::div//button[2]")
     public List<WebElement> ExportButton;
+
+
+
+    /*public WebElement OnDemandMenuItem(){
+        WebElement e = null;
+        if (Environment.environment.equalsIgnoreCase("qa")){
+            e = BrowserUtils.waitForVisibility(Driver.getDriver().findElement(By.xpath("//li[@heap_menu='ESG Reporting Portal']")));
+
+        }else{
+            e = BrowserUtils.waitForVisibility(Driver.getDriver().findElement(By.xpath("//li[@heap_menu='On-Demand Reporting']")));
+        }
+        return e;
+    }*/
 
     // To Delete any portfolio
     public void deletePortfolio(String portfolioName) {
