@@ -2,6 +2,7 @@
 <suite name="ESGC Smoke Suite" >
     <listeners>
         <listener class-name="com.esgc.Utilities.XrayListener"/>
+        <listener class-name="com.esgc.Reporting.Listeners"/>
     </listeners>
     <test name="ESGC Smoke Test via Module">
         <parameter name="reportName" value="Smoke OnDemand Test Automation Report"/>
@@ -11,7 +12,7 @@
             </run>
         </groups>
         <packages>
-            <package name="com.esgc.ONDEMAND.UI.Tests"/>
+            <package name="com.esgc.ONDEMAND.*"/>
         </packages>
     </test>
 </suite>

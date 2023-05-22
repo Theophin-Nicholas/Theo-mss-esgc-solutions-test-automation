@@ -194,13 +194,22 @@ public class LoginPage extends PageBase {
      */
     public void login() {
         System.out.println("Login with default user");
-        wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.DATA_USERNAME, Keys.ENTER);
+        wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.INTERNAL_USER_USERNAME, Keys.ENTER);
         BrowserUtils.wait(5);
         boolean isUserOnNewLoginPage = Driver.getDriver().getCurrentUrl().contains("auth.moodys.com");
         if (isUserOnNewLoginPage) {
             clickOnNextButton();
         }
-        wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.DATA_PASSWORD);
+        try {
+            BrowserUtils.wait(5);
+            BrowserUtils.clearCache();
+            if (PTusernameBox.getAttribute("value").isEmpty())
+                PTusernameBox.sendKeys(Environment.INTERNAL_USER_USERNAME);
+        } catch (Exception e) {
+            System.out.println("No need to enter username");
+        }
+        wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.INTERNAL_USER_PASSWORD
+        );
         wait.until(ExpectedConditions.visibilityOf(loginButton)).click();
     }
 
