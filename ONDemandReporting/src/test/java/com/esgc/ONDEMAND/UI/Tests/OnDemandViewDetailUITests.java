@@ -23,10 +23,10 @@ public class OnDemandViewDetailUITests extends UITestBase {
     public void verifyViewDetailPageByScoreType(){
         ViewDetailPage detail = new ViewDetailPage();
         String portfolioName = "500 predicted portfolio";
-        String portfolioName1 = "SFDRPortfolio";
+        String portfolioName1 = "SamplePortfolioToDelete";
         OnDemandAssessmentPage onDemandAssessmentPage = new OnDemandAssessmentPage();
         onDemandAssessmentPage.navigateToReportingService("On-Demand Assessment");
-
+        onDemandAssessmentPage.waitForPortfolioTableToLoad();
         if(!onDemandAssessmentPage.verifyPortfolio(portfolioName1)) {
             onDemandAssessmentPage.uploadPortfolio(portfolioName1.replaceAll(" ", ""));
         }
@@ -35,7 +35,7 @@ public class OnDemandViewDetailUITests extends UITestBase {
         }
         onDemandAssessmentPage.selectPortfolioOptionByName(portfolioName1);
 
-        assertTestCase.assertTrue(!onDemandAssessmentPage.isRequestAssessmentButtonEnabled(), "Verify that the request assessment button is disabled for a portfolio not on-Demand eligible ");
+        assertTestCase.assertFalse(onDemandAssessmentPage.isRequestAssessmentButtonEnabled(), "Verify that the request assessment button is disabled for a portfolio not on-Demand eligible ");
         System.out.println("the request assessment button is disabled for non on-demand assessment eligible portfolio ");
 
         onDemandAssessmentPage.selectPortfolioOptionByName(portfolioName);

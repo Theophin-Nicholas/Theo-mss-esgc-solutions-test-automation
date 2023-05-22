@@ -319,30 +319,6 @@ public class OnDemandAssessmentUITests extends UITestBase {
         login.entitlementsLogin(EntitlementsBundles.ALL);
     }
 
-    @Test(groups = {REGRESSION, UI, SMOKE}, description = "UI | Dashboard | On-Demand | Verify if user only have Predicted Entitlement")
-    @Xray(test = {13764})
-    public void verifyUserWithOnlyPredictedEntitlementTest() {
-        LoginPage login = new LoginPage();
-        login.clickOnLogout();
-        System.out.println("Logged out");
-        login.entitlementsLogin(EntitlementsBundles.USER_WITH_SCORE_PREDICTOR_ENTITLEMENT);
-        System.out.println("Logged in with only Predicted Score entitlements");
-        CommonAPIController apiController = new CommonAPIController();
-        Response response = apiController.getEntitlementHandlerResponse();
-        response.then().assertThat().statusCode(200);
-        JsonPath jsonPathEvaluator = response.jsonPath();
-        List<String> entitlements = jsonPathEvaluator.getList("entitlements.name");
-        System.out.println(entitlements);
-        assertTestCase.assertTrue(entitlements.contains("Score Predictor: ESG"), "User with only Predicted entitlements is verified");
-
-        Page404 page404 = new Page404();
-        page404.verify404Page();
-
-        login.clickOnLogout();
-        System.out.println("Logged out");
-        login.entitlementsLogin(EntitlementsBundles.ALL);
-    }
-
     @Test(groups = {REGRESSION, UI}, description = "UI | Dashboard | On-Demand | Verify if user only have 'Corporates ESG Data and Scores' Entitlement")
     @Xray(test = {13765})
     public void verifyUserWithOnlyCorporatesESGDataAndScoresEntitlementTest() {

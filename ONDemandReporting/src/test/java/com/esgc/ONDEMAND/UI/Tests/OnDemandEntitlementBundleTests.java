@@ -245,7 +245,13 @@ public class OnDemandEntitlementBundleTests extends UITestBase {
         try {
             LoginPage login = new LoginPage();
             PopUpPage popPage = new PopUpPage();
-            EntitlementsBundles[] entitlements = {EntitlementsBundles.USER_ESG_PREDICTOR, EntitlementsBundles.USER_ESG_ESG_PREDICTOR_EXPORT, EntitlementsBundles.USER_ESG_PREDICTOR_EXPORT, EntitlementsBundles.USER_ESG_PREDICTOR_ODA, EntitlementsBundles.USER_EXPORT};
+            EntitlementsBundles[] entitlements = {
+                    EntitlementsBundles.USER_ESG_PREDICTOR,
+                    EntitlementsBundles.USER_ESG_ESG_PREDICTOR_EXPORT,
+                    EntitlementsBundles.USER_ESG_PREDICTOR_EXPORT,
+                    EntitlementsBundles.USER_ESG_PREDICTOR_ODA,
+                    EntitlementsBundles.USER_EXPORT
+            };
 
             for (EntitlementsBundles e : entitlements) {
                 System.out.println("e = " + e);
@@ -283,7 +289,7 @@ public class OnDemandEntitlementBundleTests extends UITestBase {
 
     @Test(groups = {REGRESSION, SMOKE, UI, ENTITLEMENTS})
     @Xray(test = {14107})
-    public void validateViewAssessmentButtonIsEnabledForUSERWithExaustedAssessmentLimit() {
+    public void validateViewAssessmentButtonIsEnabledForUSERWithExhaustedAssessmentLimit() {
         try {
             LoginPage login = new LoginPage();
             login.entitlementsLogin(EntitlementsBundles.ODA_USER_WITH_EXHAUSTED_ASSESSMENT_LIMIT);
@@ -405,7 +411,7 @@ public class OnDemandEntitlementBundleTests extends UITestBase {
             OnDemandAssessmentPage ODAPage = new OnDemandAssessmentPage();
             //onDemandAssessmentPage.selectPortfolioByNameFromPortfolioSelectionModal(portfolioName);
             //ODAPage.navigateToPageFromMenu("reportingservice","On-Demand Reporting");
-            ODAPage.navigateToReportingService("On-Demand Assessment");
+            //ODAPage.navigateToReportingService("On-Demand Assessment");
             BrowserUtils.waitForVisibility(ODAPage.portfolioNamesList, 15);
 
             String portfolioName = "500 predicted portfolio";

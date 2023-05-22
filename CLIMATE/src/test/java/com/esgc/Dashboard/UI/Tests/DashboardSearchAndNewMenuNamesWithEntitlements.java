@@ -26,6 +26,7 @@ public class DashboardSearchAndNewMenuNamesWithEntitlements extends UITestBase {
 
         }
     }
+
     @Test(groups = {UI, REGRESSION, SMOKE}, dataProvider = "entityWithEsgDataOnly-DP", dataProviderClass = EntityWithEsgDataOnlyDataProviders.class)
     @Xray(test = {14094})
     public void validateNoDataForEntitiesWithEsgDataOnly(String... entity) {

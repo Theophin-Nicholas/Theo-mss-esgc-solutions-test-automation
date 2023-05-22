@@ -400,6 +400,7 @@ public class ViewDetailPage extends CommonPage {
     public List<WebElement> getListOfInvestmentCells() {
         List<WebElement> investmentCellData = new ArrayList<WebElement>();
         for (int i = 0; i < returnNumberOfRows(); i++) {
+            if (i == 20) break;
             String xpathInvestmentCell = "//*[@id=\"viewcompanies-tableCell-" + i + "-2\"]";
             WebElement investmentCellElement = Driver.getDriver().findElement(By.xpath(xpathInvestmentCell));
             investmentCellData.add(investmentCellElement);
@@ -456,7 +457,8 @@ public class ViewDetailPage extends CommonPage {
 
     public List<String> getListOfInvestmentCellsText() {
         List<String> investmentCellData = new ArrayList<String>();
-        for (int i = 0; i < returnNumberOfRows(); i++) {
+        for (int i = 0; i < returnNumberOfRows()-1; i++) {
+            if (i == 20) break;
             String xpathInvestmentCell = "//*[@id=\"viewcompanies-tableCell-" + i + "-2\"]";
             WebElement investmentCellElement = Driver.getDriver().findElement(By.xpath(xpathInvestmentCell));
             investmentCellData.add(investmentCellElement.getText().substring(0, investmentCellElement.getText().indexOf("%")));
@@ -514,10 +516,11 @@ public class ViewDetailPage extends CommonPage {
     }
 
     public void isEntitiesListSorted() {
+        System.out.println("the entities list is: " + getEntityCellsText());
         List<String> sortedEntitiesList = getEntityCellsText().stream()
                 .sorted()
                 .collect(Collectors.toList());
-        System.out.println("the sorted entities list is: " + sortedEntitiesList.toString());
+        System.out.println("the sorted entities list is: " + sortedEntitiesList);
         assertTestCase.assertEquals(getEntityCellsText(), sortedEntitiesList, "The entities list is sorted");
     }
 

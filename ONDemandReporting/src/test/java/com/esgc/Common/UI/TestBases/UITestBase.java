@@ -68,7 +68,7 @@ public abstract class UITestBase extends TestBase implements ITestListener {
         if (Driver.getDriver().getCurrentUrl().endsWith("login")) {
             if (!isEntitlementsTest) {
                 loginPage.login();
-                BrowserUtils.wait(20);
+                BrowserUtils.wait(10);
                 setAccessTokenFromUI();
             }
 
