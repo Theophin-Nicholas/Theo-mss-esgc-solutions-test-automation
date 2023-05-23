@@ -79,7 +79,17 @@ public abstract class UITestBase extends TestBase implements ITestListener {
 
     public static synchronized void setAccessTokenFromUI() {
         String getAccessTokenScript = "return JSON.parse(localStorage.getItem('okta-token-storage')).accessToken.accessToken";
-        accessToken = ((JavascriptExecutor) Driver.getDriver()).executeScript(getAccessTokenScript).toString();
+        boolean check = true;
+        while(check){
+            try{
+                accessToken = ((JavascriptExecutor) Driver.getDriver()).executeScript(getAccessTokenScript).toString();
+                check = false;
+            }catch (Exception e){
+                System.out.println("Exception in getting access token from UI");
+                BrowserUtils.wait(1);
+            }
+        }
+        //accessToken = ((JavascriptExecutor) Driver.getDriver()).executeScript(getAccessTokenScript).toString();
         System.setProperty("token", accessToken);
     }
 

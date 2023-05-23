@@ -548,7 +548,7 @@ public class OnDemandEntitlementBundleTests extends UITestBase {
             if (!onDemandAssessmentPage.verifyPortfolio(portfolioName)) {
                 onDemandAssessmentPage.uploadPortfolio(portfolioName.replaceAll(" ", ""));
             }
-            int remainingAssessmentLimit = onDemandAssessmentPage.getRemainingAssessments();
+            int remainingAssessmentLimit = onDemandAssessmentPage.getRemainingAssessmentLimit();
             if (remainingAssessmentLimit>0){
                 onDemandAssessmentPage.selectPortfolio(portfolioName);
                 onDemandAssessmentPage.clickonOnRequestAssessmentButton();
@@ -703,5 +703,32 @@ public class OnDemandEntitlementBundleTests extends UITestBase {
         }
     }
 
+    @Test(groups = {REGRESSION, UI, COMMON}, description = "UI | On-Demand Reporting | On-Demand Assessment | Verify Download button is not displayed if Export entitlement is disabled")
+    @Xray(test = {13898})
+    public void verifyDownloadButtonNotDisplayedTest() {
+        LoginPage login = new LoginPage();
+        try {
+
+            login.entitlementsLogin(EntitlementsBundles.ODA_ESG_PREDICTOR_DATA_ENTITLEMENT);
+            System.out.println("---------------Logged back in using ODA ESG Predictor entitlements--------------------");
+            OnDemandAssessmentPage onDemandAssessmentPage = new OnDemandAssessmentPage();
+            //onDemandAssessmentPage.navigateToReportingService("On-Demand Assessment");
+            onDemandAssessmentPage.waitForPortfolioTableToLoad();
+            String portfolioName = "500 predicted portfolio";
+            if(!onDemandAssessmentPage.verifyPortfolio(portfolioName)){
+                onDemandAssessmentPage.uploadPortfolio(portfolioName.replaceAll(" ",""));
+            }
+            //onDemandAssessmentPage.viewDetailForPortfolio(portfolioName);
+
+            onDemandAssessmentPage.verifyDetailsPanel(false);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            login.clickOnLogout();
+            assertTestCase.assertTrue(false, "TestCase Failed - Please see stack trace for details");
+
+        }
+
+    }
 
 }
