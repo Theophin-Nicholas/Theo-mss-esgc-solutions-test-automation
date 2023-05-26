@@ -131,15 +131,12 @@ public class CommonPage extends UploadPortfolio {
 
     //This method is to select the reporting option on reporting landing page
     public void navigateToReportingService(String reportingService) {
-        // BrowserUtils.wait(3);
-        if (Environment.environment.equalsIgnoreCase("qa"))
-            navigateToPageFromMenu("reportingservice", "ESG Reporting Portal");
-        else
-            navigateToPageFromMenu("reportingservice", "ESG Reporting Portal");
-        if (reportingService.contains("SFDR")) {
+        BrowserUtils.wait(5);
+        navigateToPageFromMenu("reportingservice", "ESG Reporting Portal");
+        if (reportingService.contains("EU")) {
             clickOnEUTaxonomyOption();
         }
-        if (reportingService.contains("EU")) {
+        if (reportingService.contains("SFDR")) {
             clickOnSFDRPAIsOption();
         }
         if (reportingService.contains("On-Demand")) {
@@ -267,7 +264,7 @@ public class CommonPage extends UploadPortfolio {
     public void selectAllPortfolioOptions() {
         //select all buttons if not selected
         int count = 0;
-        while (getSelectedPortfolioOptions().size() < 4) {
+        while (getSelectedPortfolioOptions().size() < 4 && count < portfolioNamesList.size()) {
             portfolioRadioButtonList.get(count).click();
             count++;
         }

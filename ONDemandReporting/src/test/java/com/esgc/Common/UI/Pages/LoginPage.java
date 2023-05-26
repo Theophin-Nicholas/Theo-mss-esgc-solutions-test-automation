@@ -205,12 +205,12 @@ public class LoginPage extends PageBase {
             BrowserUtils.clearCache();
             if (PTusernameBox.getAttribute("value").isEmpty())
                 PTusernameBox.sendKeys(Environment.INTERNAL_USER_USERNAME);
+            wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.INTERNAL_USER_PASSWORD);
+            wait.until(ExpectedConditions.visibilityOf(loginButton)).click();
         } catch (Exception e) {
             System.out.println("No need to enter username");
         }
-        wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.INTERNAL_USER_PASSWORD
-        );
-        wait.until(ExpectedConditions.visibilityOf(loginButton)).click();
+
     }
 
     public void clickOnNextButton() {

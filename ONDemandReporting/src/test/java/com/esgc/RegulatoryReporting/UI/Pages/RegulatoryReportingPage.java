@@ -31,7 +31,7 @@ public class RegulatoryReportingPage extends CommonPage {
     @FindBy(xpath = "//div[.='Select Reporting']")
     public WebElement reportingTitle;
 
-    @FindBy(xpath = "//div[.='Reporting']")
+    @FindBy(xpath = "//div[.='Service']")
     public WebElement reportingSubtitle;
 
 
@@ -544,14 +544,17 @@ public class RegulatoryReportingPage extends CommonPage {
 
 
     public boolean verifyReportsReadyToDownload(List<String> selectedPortfolios) {
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 100; i++) {
             if (rrStatusPage_PortfoliosList.size() == 0) BrowserUtils.wait(1);
             else break;
         }
+        System.out.println("Number of portfolios ready to download: " + rrStatusPage_PortfoliosList.size());
+        //BrowserUtils.wait(1000);
         List<String> readyToDownloadPortfolios = BrowserUtils.getElementsText(rrStatusPage_PortfoliosList);
         if (readyToDownloadPortfolios.get(0).contains("SFDR_Annual_" + DateTimeUtilities.getCurrentDate("MM_dd_yyyy")))
             return true;
         isContainsElements(readyToDownloadPortfolios, selectedPortfolios);
+        System.out.println("All selected portfolios are ready to download");
         return rrStatusPage_DownloadButton.isDisplayed();
     }
 
@@ -715,7 +718,7 @@ public class RegulatoryReportingPage extends CommonPage {
         File dir = new File(BrowserUtils.uploadPath());
         File[] dir_contents = dir.listFiles();
         assert dir_contents != null;
-        File excelFile = Arrays.stream(dir_contents).filter(e -> (e.getName().contains("taxonomy_reporting_deliverable_template.xlsx"))).findAny().get();
+        File excelFile = Arrays.stream(dir_contents).filter(e -> (e.getName().contains("EU_taxonomy_reporting_template_new columns_more_identifiers.xlsx"))).findAny().get();
         //System.out.println("excelFile = " + excelFile.getAbsolutePath());
         if (!excelFile.exists()) {
             System.out.println("Template file does not exist");
@@ -854,12 +857,14 @@ public class RegulatoryReportingPage extends CommonPage {
     }
 
     public boolean verifyUnderlyingDataOverview() {
-        ExcelUtil template = getEUTaxonomyTemplate("Underlying Data - Overview");
+        List<String> template = getEUTaxonomyTemplate("Underlying Data - Overview").getColumnsNames();
         String excelName = rrStatusPage_PortfoliosList.get(0).getText().replaceAll("ready", "").trim();
         System.out.println("Verifying reports content for " + excelName);
-        ExcelUtil excelData = getExcelData(excelName, "Underlying Data - Overview");
-        for (String title : template.getColumnsNames()) {
-            if (!excelData.getColumnsNames().contains(title)) {
+        List<String> excelData = getExcelData(excelName, "Underlying Data - Overview").getColumnsNames();
+        System.out.println("Excel Column Names = " + excelData);
+        System.out.println("Template Column Names = " + template);
+        for (String title : template) {
+            if (!excelData.contains(title)) {
                 System.out.println(title);
                 return false;
             }

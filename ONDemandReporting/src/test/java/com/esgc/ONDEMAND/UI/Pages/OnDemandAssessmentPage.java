@@ -19,7 +19,6 @@ import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 import java.io.File;
-import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.text.DecimalFormat;
 import java.text.ParseException;
@@ -551,15 +550,15 @@ public class OnDemandAssessmentPage extends CommonPage {
 
 
     public void validateAndORLogic() {
-        int FirstcompaniesCount = getCompaniesCountFromReviewButtion();
+        int FirstcompaniesCount = getCompaniesCountFromReviewButton();
         //Validating Or Condition
         location_LocationLabels.get(0).click();
-        assertTestCase.equals(getCompaniesCountFromReviewButtion() != FirstcompaniesCount);
+        assertTestCase.equals(getCompaniesCountFromReviewButton() != FirstcompaniesCount);
 
         //Validating And Condition
         toggleButton.click();
         location_LocationLabels.get(0).click();
-        assertTestCase.equals(getCompaniesCountFromReviewButtion() == FirstcompaniesCount);
+        assertTestCase.equals(getCompaniesCountFromReviewButton() == FirstcompaniesCount);
         // Below code is to move the slider in Predicted Score section --
         /*for (int i = 1; i <= 9; i++) predictedScoresliders.get(0).sendKeys(Keys.ARROW_RIGHT);
 
@@ -571,8 +570,8 @@ public class OnDemandAssessmentPage extends CommonPage {
         return menuList.get(0).getText().equals(header);
     }
 
-    public int getCompaniesCountFromReviewButtion() {
-        // BrowserUtils.waitForClickablility(btnReviewRequest,30);
+    public int getCompaniesCountFromReviewButton() {
+        BrowserUtils.waitForVisibility(btnReviewRequest,30);
         WebElement e = BrowserUtils.waitForVisibility(btnReviewRequest, 10).findElement(By.xpath("span/div"));
         return new Scanner(e.getText()).useDelimiter("\\D+").nextInt();
 
@@ -604,11 +603,7 @@ public class OnDemandAssessmentPage extends CommonPage {
 
     public void validateOnDemandPageHeader() {
         BrowserUtils.waitForVisibility(menuOptionPageHeader,90);
-        if (Environment.environment.equalsIgnoreCase("qa")) {
-            assertTestCase.assertEquals(BrowserUtils.waitForVisibility(menuOptionPageHeader, 10).getText(), "ESG Reporting Portal", "Moody's Analytics: Request On-Demand Assessment page verified");
-        } else {
-            assertTestCase.assertEquals(BrowserUtils.waitForVisibility(menuOptionPageHeader, 10).getText(), "On-Demand Reporting", "Moody's Analytics: Request On-Demand Assessment page verified");
-        }
+        assertTestCase.assertEquals(BrowserUtils.waitForVisibility(menuOptionPageHeader, 10).getText(), "ESG Reporting Portal", "Moody's Analytics: Request On-Demand Assessment page verified");
     }
 
     public void validateProceedOnConfirmRequestPopup(String countOfCompanies) {
@@ -1037,7 +1032,7 @@ public class OnDemandAssessmentPage extends CommonPage {
     //input parameter: location of the downloaded file either page, or details panel
     public void verifyDownloadPortfolio(String location) {
         //get first clickable download button
-        BrowserUtils.waitForVisibility(downloadButtonList.get(0), 10);
+        BrowserUtils.waitForVisibility(downloadButtonList.get(0), 20);
         int index = 0;
         for (index = 0; index < downloadButtonList.size(); index++) {
             if (downloadButtonList.get(index).isEnabled()) break;

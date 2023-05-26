@@ -70,7 +70,7 @@ public abstract class PageBase {
     @FindBy(xpath = "//li[text()='Portfolio Selection/Upload']")
     public WebElement portfolioSettings;
 
-    @FindBy(xpath = "//li[text()='Regulatory Reporting']")
+    @FindBy(xpath = "//li[text()='ESG Reporting Portal']")
     public WebElement regulatoryReporting;
 
     @FindBy(xpath = "(//table[@id='table-id'])[1]/tbody/tr/td[1]")
@@ -739,7 +739,7 @@ public abstract class PageBase {
             String pageXpath = "//li[text()='" + navigateTo + "']";
             WebElement pageElement = Driver.getDriver().findElement(By.xpath(pageXpath));
             // wait.until(ExpectedConditions.elementToBeClickable(pageElement)).click();
-            BrowserUtils.waitForVisibility(pageElement, 20).click();
+            BrowserUtils.waitForVisibility(pageElement, 30).click();
         }
     }
 

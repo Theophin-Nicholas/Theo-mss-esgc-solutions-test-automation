@@ -47,14 +47,14 @@ public class RegulatoryReportingEntitlementsTests extends UITestBase {
     @Xray(test = {10867})
     public void verifyReportingPageWithoutSFDRUserTest() {
         LoginPage loginPage = new LoginPage();
-        loginPage.login();
+        loginPage.dataValidationLogin();
         RegulatoryReportingPage regulatoryReportingPage = new RegulatoryReportingPage();
         regulatoryReportingPage.clickMenu();
         assertTestCase.assertTrue(regulatoryReportingPage.isRegulatoryReportingOptionIsAvailableInSidePanel(), "Reporting page option is displayed");
         loginPage.clickOnLogout();
         loginPage.loginWithParams(Environment.PHYSICAL_RISK_USERNAME, Environment.PHYSICAL_RISK_PASSWORD);
         regulatoryReportingPage.clickMenu();
-        assertTestCase.assertFalse(BrowserUtils.getElementsText(regulatoryReportingPage.menuList).contains("Regulatory Reporting"), "Reporting page is not displayed as expected");
+        assertTestCase.assertFalse(BrowserUtils.getElementsText(regulatoryReportingPage.menuList).contains("ESG Reporting Portal"), "Reporting page is not displayed as expected");
         loginPage.clickOnLogout();
     }
 
@@ -63,8 +63,9 @@ public class RegulatoryReportingEntitlementsTests extends UITestBase {
     public void verifyProdEntitlementForRegulatoryReporting(String username, String password, String entitlements) {
         LoginPage login = new LoginPage();
         RegulatoryReportingPage regulatoryReportingPage = new RegulatoryReportingPage();
-        if (Environment.environment.equalsIgnoreCase("prod")) {
+//        if (Environment.environment.equalsIgnoreCase("prod")) {
             login.loginWithParams(username, password);
+            BrowserUtils.wait(10);
             if (entitlements.contains("SFDR") && entitlements.contains("EU")) {
                 regulatoryReportingPage.clickOnEUTaxonomy();
                 regulatoryReportingPage.clickOnSFDRPAIsOption();
@@ -73,9 +74,8 @@ public class RegulatoryReportingEntitlementsTests extends UITestBase {
             } else if (entitlements.contains("EU")) {
                 assertTestCase.assertTrue(regulatoryReportingPage.isSFDROptionNotClickable(), "Validating that SFDR option is not clickable to unentitled person ");
             }
-        } else {
-            //TODO
-        }
+//        }
+        //todo: add validation for lower environments
     }
 
     @DataProvider(name = "Regulatory Reporting Entitlements")
@@ -87,10 +87,11 @@ public class RegulatoryReportingEntitlementsTests extends UITestBase {
                     {"mesg360-testing+investor28@outlook.com", "Test12345@@", "SFDR + EU"},//SFDR + EU Taxonomy
             };
         } else {
+            System.out.println("Environment is not prod");
             return new Object[][]{
-                    {"mesg360-testing+investor6@outlook.com", "Test12345@@"},//SFDR
-                    {"mesg360-testing+investor24@outlook.com", "Test12345@@"},//EU Taxonomy
-                    {"mesg360-testing+investor28@outlook.com", "Test12345@@"},//SFDR + EU Taxonomy
+                    {"mesg360-testing+investor6@outlook.com", "Test12345@@", "SFDR"},//SFDR
+                    {"mesg360-testing+investor24@outlook.com", "Test12345@@", "EU"},//EU Taxonomy
+                    {"mesg360-testing+investor28@outlook.com", "Test12345@@", "SFDR + EU"},//SFDR + EU Taxonomy
             };
         }
     }

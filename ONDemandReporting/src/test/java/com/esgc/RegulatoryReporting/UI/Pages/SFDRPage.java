@@ -10,7 +10,7 @@ public class SFDRPage extends RegulatoryReportingPage {
 
     public void verifySFDRHeaders() {
         List<String> actualHeaders = tableHeaders.stream().map(WebElement::getText).collect(Collectors.toList());
-        List<String> expectedHeaders = Arrays.asList("Portfolio", "Last Uploaded", "Coverage", "Reporting for");
+        List<String> expectedHeaders = Arrays.asList("Portfolio", "Last Uploaded", "Coverage % Investment", "Reporting for");
         assertTestCase.assertEquals(actualHeaders, expectedHeaders, "SFDR Header verification", 11536);
     }
 

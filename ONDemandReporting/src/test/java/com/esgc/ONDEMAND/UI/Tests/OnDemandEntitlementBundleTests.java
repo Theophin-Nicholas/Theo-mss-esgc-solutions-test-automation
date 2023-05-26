@@ -349,7 +349,6 @@ public class OnDemandEntitlementBundleTests extends UITestBase {
 
     @Test(groups = {UI, SMOKE, REGRESSION, ENTITLEMENTS})
     @Xray(test = {14466})
-
     public void validateTheLandingPageForOnDemandEntitlements() {
         LoginPage login = new LoginPage();
         try {
