@@ -27,8 +27,8 @@ public class ExportEntitlementTests extends APITestBase {
         getNoExportBundleAccessTokenDataValidation();
         DashboardAPIController dashboardAPIController = new DashboardAPIController();
         dashboardAPIController.verifyExport(APITestBase.portfolioID, APITestBase.portfolioName,"all","all", "2022","05").then().assertThat().statusCode(403);
-        //TODO API endpoint should be updated:
-        dashboardAPIController.verifyPortfolioAnalysisExcelExport(portfolioId).then().assertThat().statusCode(403);
         dashboardAPIController.verifyPortfolioAnalysisUploadJsonUrl(portfolioId).then().assertThat().statusCode(403);
+        dashboardAPIController.verifyPortfolioAnalysisExcelExport(portfolioId).then().assertThat().statusCode(403);
+
     }
 }

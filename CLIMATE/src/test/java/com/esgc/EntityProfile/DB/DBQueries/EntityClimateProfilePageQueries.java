@@ -57,7 +57,7 @@ public class EntityClimateProfilePageQueries {
         String query = "select eem.* from esg_entity_master eem\n" +
                 "       join ENTITY_COVERAGE_TRACKING ect on ect.orbis_id=eem.orbis_id\n" +
                 "       left join brown_share bs on bs.bvd9_number=eem.orbis_id \n" +
-                "       where bvd9_number is null and eem.managed_type='Covered' and eem.ENTITY_STATUS='Active'; ";
+                "       where bvd9_number is null and eem.managed_type='Covered' and eem.ENTITY_STATUS='Active' and REASON_CODE is not null; ";
 
         return DatabaseDriver.getQueryResultMap(query);
     }

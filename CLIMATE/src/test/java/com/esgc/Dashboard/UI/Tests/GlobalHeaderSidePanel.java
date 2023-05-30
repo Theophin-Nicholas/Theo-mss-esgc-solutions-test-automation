@@ -21,12 +21,10 @@ public class GlobalHeaderSidePanel extends UITestBase {
     @Test(groups = {REGRESSION, UI, SMOKE})
     @Xray(test = {1899, 5939, 8967})
     public void validateGlobalHeader() {
-
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Check Global Header Side Panel");
         researchLinePage.ValidateGlobalSidePanel();
         test.pass("Global Header Side Panel Verified");
-
     }
 
     //TODO orders are different and this method should be moved to a separate class for Portfolio Settings

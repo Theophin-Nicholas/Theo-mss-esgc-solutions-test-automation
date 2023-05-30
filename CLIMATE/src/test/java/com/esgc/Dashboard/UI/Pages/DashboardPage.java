@@ -134,7 +134,7 @@ public class DashboardPage extends UploadPage {
     public List<WebElement> summaryHeaderTitles;
 
     //=========== Portfolio - View All Companies (Summary Companies) Panel Elements
-    @FindBy(xpath = "//span[starts-with(text(),'Coverage: Across')]")
+    @FindBy(xpath = "//span[starts-with(text(),'Climate Coverage: Across')]")
     public WebElement viewAllCompaniesButton;
 
     @FindBy(xpath = "//div[@id='button-button-test-id-1']/../div[starts-with(.,'Companies')]")

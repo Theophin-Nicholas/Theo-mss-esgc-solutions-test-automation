@@ -106,10 +106,12 @@ public class UnderlyingMetricsDetailsTest extends DataValidationTestBase {
 
     public boolean verifyCompanyDetailsInDatabaseResults(List<Map<String, Object>> dbResults, Entities company){
         boolean check = false;
+        List<Map<String, Object>> companiesPercentagesList = dashboardQueries.getCompanyInvestmentPercentageInThePortfolio(portfolioId);
         for(Map<String, Object> record: dbResults){
             if(record.get("COMPANY_NAME").toString().trim().equalsIgnoreCase(company.getCompany_name().trim())){
-                String dbInvestment = dashboardQueries.getCompanyInvestmentPercentage(portfolioId, company.getCompany_name());
-                if(Double.parseDouble(dbInvestment) == company.getInvestment_pct())
+                String dbPercentageInvestment = companiesPercentagesList.stream()
+                        .filter(e -> e.get("ORBIS_ID").toString().equals(company.getOrbis_id())).findFirst().get().get("% Investment").toString();
+                if(Double.parseDouble(dbPercentageInvestment) == company.getInvestment_pct())
                     return false;
                 check = true;
                 break;

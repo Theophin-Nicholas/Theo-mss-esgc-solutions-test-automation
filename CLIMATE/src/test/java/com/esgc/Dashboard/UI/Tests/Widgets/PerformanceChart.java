@@ -40,7 +40,7 @@ public class PerformanceChart extends DashboardUITestBase {
         if (Environment.environment.equalsIgnoreCase("uat"))
 
         dashboardPage.clickAndSelectAPerformanceChart("Leaders");
-
+        dashboardPage.waitForDataLoadCompletion();
         List<String> actualColumnNames = dashboardPage.getPerformanceChartColumnNames();
         int sizeOfTable = dashboardPage.getPerformanceChartRowCount();
         double actualTotalInvestment = PortfolioUtilities.round(dashboardPage.calculateTotalInvestmentFromPerformanceChart(), 1);
@@ -55,7 +55,7 @@ public class PerformanceChart extends DashboardUITestBase {
         assertTestCase.assertEquals(actualTotalInvestment, expectedTotalInvestment, "Total Investments are matching", 2066);
 
         dashboardPage.clickAndSelectAPerformanceChart("Laggards");
-
+        dashboardPage.waitForDataLoadCompletion();
         actualColumnNames = dashboardPage.getPerformanceChartColumnNames();
         sizeOfTable = dashboardPage.getPerformanceChartRowCount();
         actualTotalInvestment = PortfolioUtilities.round(dashboardPage.calculateTotalInvestmentFromPerformanceChart(), 1);
@@ -67,7 +67,7 @@ public class PerformanceChart extends DashboardUITestBase {
         assertTestCase.assertEquals(actualTotalInvestment, expectedTotalInvestment, "Total Investments are matching", 2066);
 
         dashboardPage.clickAndSelectAPerformanceChart("Largest Holdings");
-
+        dashboardPage.waitForDataLoadCompletion();
         actualColumnNames = dashboardPage.getPerformanceChartColumnNames();
         sizeOfTable = dashboardPage.getPerformanceChartRowCount();
         actualTotalInvestment = PortfolioUtilities.round(dashboardPage.calculateTotalInvestmentFromPerformanceChart(), 1);

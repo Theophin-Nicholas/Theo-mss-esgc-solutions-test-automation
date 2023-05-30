@@ -92,7 +92,7 @@ public class DashboardQueries {
         return result;
     }
 
-    public String getLatestMonthAndYearWithData(String portfolioId){
+    public String getLatestMonthAndYearWithData(String portfolioId) {
         String strMonth = "";
         String strYear = "";
         LocalDate now = LocalDate.now();
@@ -158,7 +158,7 @@ public class DashboardQueries {
 
     public List<Map<String, Object>> getSubsidiaryCompany(String subsidiaryCompanyIsin) {
         String query = "select bvd9_number, max(ISIN) from DF_DERIVED.ISIN_SORTED d\n" +
-                "join esg_entity_master e on d.bvd9_number=e.orbis_id where MANAGED_TYPE='Subsidiary' and entity_status='Active' and ISIN = '"+subsidiaryCompanyIsin+"'\n" +
+                "join esg_entity_master e on d.bvd9_number=e.orbis_id where MANAGED_TYPE='Subsidiary' and entity_status='Active' and ISIN = '" + subsidiaryCompanyIsin + "'\n" +
                 "group by 1;";
         List<Map<String, Object>> result = getQueryResultMap(query);
         return result;
@@ -189,12 +189,12 @@ public class DashboardQueries {
 
     public List<Map<String, Object>> getPortfolioBrownShareInfo(String portfolioId, String year, String month) {
         String query = "WITH p AS (SELECT p.bvd9_number,p.company_name,p.region_name,p.region,p.sector,SUM(p.value) OVER(PARTITION BY p.bvd9_number) value,SUM(p.value) OVER() total_value\n" +
-                "FROM df_target.df_portfolio p WHERE p.portfolio_id = '"+portfolioId+"'\n" +
+                "FROM df_target.df_portfolio p WHERE p.portfolio_id = '" + portfolioId + "'\n" +
                 "QUALIFY ROW_NUMBER() OVER(partition by p.BVD9_NUMBER ORDER BY p.REGION_NAME NULLS LAST)=1)\n" +
                 "SELECT s.bvd9_number,p.company_name,p.region_name,p.region,p.sector,p.value, p.total_value,s.YEAR,s.MONTH,s.BS_FOSF_INDUSTRY_REVENUES,s.BS_FOSF_INDUSTRY_REVENUES_ACCURATE_SOURCE,\n" +
                 "s.BS_FOSF_INDUSTRY_REVENUES_ACCURATE,s.SCORE_RANGE,s.SCORE_CATEGORY,s.PRODUCED_DATE,s.PREVIOUS_PRODUCED_DATE\n" +
                 "FROM Brown_Share s JOIN p ON p.bvd9_number=s.BVD9_NUMBER\n" +
-                "WHERE s.YEAR || s.MONTH = '"+year+""+month+"'";
+                "WHERE s.YEAR || s.MONTH = '" + year + "" + month + "'";
         List<Map<String, Object>> result = getQueryResultMap(query);
         return result;
     }
@@ -209,96 +209,70 @@ public class DashboardQueries {
         return result;
     }
 
-    public String getCompanyInvestmentPercentage(String portfolioId, String companyName) {
-        if (companyName.contains("'")) {
-            companyName = companyName.replaceAll("'", "''");
-        }
-        String query = "SELECT (\n" +
-                "(SELECT SUM(A.VALUE)\n" +
-                "FROM df_portfolio a\n" +
-                "WHERE portfolio_id='" + portfolioId + "' \n" +
-                "AND BVD9_NUMBER IS NOT NULL\n" +
-                "AND A.VALUE is not NULL\n" +
-                "AND A.VALUE >= 0\n" +
-                "AND company_name like '" + companyName + "')\n" +
-                "  /\n" +
-                "(SELECT SUM(A.VALUE)\n" +
-                "FROM df_portfolio a\n" +
-                "WHERE portfolio_id='" + portfolioId + "' \n" +
-                ") * 100) as \"% Investment\"";
-
-        String percentage = getQueryResultMap(query).get(0).get("% Investment").toString();
-        double roundOff = Math.round(Double.parseDouble(percentage) * 100) / 100D;
-
-        return roundOff + "";
+    public List<Map<String, Object>> getCompanyInvestmentPercentageInThePortfolio(String portfolioId) {
+        String query = "                SELECT company_name, bvd9_number as ORBIS_ID, (sum(A.VALUE)/(SELECT SUM(A.VALUE)\n" +
+                "                FROM df_portfolio a\n" +
+                "                WHERE portfolio_id='" + portfolioId + "')*100) as \"% Investment\"\n" +
+                "                FROM df_portfolio a\n" +
+                "                WHERE portfolio_id='" + portfolioId + "'\n" +
+                "                AND BVD9_NUMBER IS NOT NULL\n" +
+                "                group by bvd9_number, company_name;";
+        System.out.println(query);
+        return getQueryResultMap(query);
     }
 
-    public int getCompanyTotalControversies(String portfolioId, String companyName) {
-        if (companyName.contains("'")) {
-            companyName = companyName.replaceAll("'", "''");
-        }
+    public List<Map<String, Object>> getCompanyTotalControversiesInThePortfolio(String portfolioId) {
         LocalDate localDate = LocalDate.now();
+        int thisYear = localDate.getYear();
+        int lastYear = thisYear - 1;
+        int monthValue = localDate.getMonthValue() - 1;
 
-        String query = "select count (*) as count \n" +
-                "from df_portfolio a,CONTROVERSY_DETAILS b\n" +
-                "where a.portfolio_id='" + portfolioId + "'\n" +
-                "  and a.bvd9_number = b.orbis_id\n" +
-                "  and a.company_name = '" + companyName + "'\n" +
-                "  and b.controversy_status = 'Active'\n" +
-                "  and b.controversy_steps = 'last'\n" +
-                "  and (\n" +
-                "                       (\n" +
-                "                            to_varchar(extract(year from b.controversy_events)) = '" + localDate.getYear() + "'\n" +
-                "                            and extract(month from b.controversy_events) <=   7 \n" +
-                "                        )\n" +
-                "                        or \n" +
-                "                        (\n" +
-                "                            to_varchar(extract(year from b.controversy_events)) = '" + (localDate.getYear() - 1) + "'\n" +
-                "                            and extract(month from b.controversy_events) >  7 \n" +
-                "                        )\n" +
-                "                    )" +
-                "group by company_name, bvd9_number\n" +
-                ";";
+        String query = "SELECT orbis_id,\n" +
+                "       company_name,\n" +
+                "       Count(DISTINCT controversy_title) AS count\n" +
+                "FROM   df_portfolio a\n" +
+                "       JOIN controversy_details b\n" +
+                "         ON a.bvd9_number = b.orbis_id\n" +
+                "            AND b.controversy_status = 'Active'\n" +
+                "            AND b.controversy_steps = 'last'\n" +
+                "WHERE  a.portfolio_id = '" + portfolioId + "'\n" +
+                "                AND BVD9_NUMBER IS NOT NULL\n" +
+                "       AND ( ( To_varchar(Extract(year FROM b.controversy_events)) = '" + thisYear + "'\n" +
+                "               AND Extract(month FROM b.controversy_events) <= " + monthValue + " )\n" +
+                "              OR ( To_varchar(Extract(year FROM b.controversy_events)) = '" + lastYear + "'\n" +
+                "                   AND Extract(month FROM b.controversy_events) > " + monthValue + " ) )\n" +
+                "GROUP  BY b.orbis_id,\n" +
+                "          company_name;";
 
         System.out.println(query);
-        try {
-            return Integer.parseInt(getQueryResultMap(query).get(0).get("COUNT").toString());
-        } catch (Exception e) {
-            return 0;
-        }
+        return getQueryResultMap(query);
     }
 
-    public int getCompanyCriticalControversies(String portfolioId, String companyName) {
-        if (companyName.contains("'")) {
-            companyName = companyName.replaceAll("'", "''");
-        }
-        String query = "select count (*) as count \n" +
-                "from df_portfolio a,CONTROVERSY_DETAILS b\n" +
-                "where a.portfolio_id='" + portfolioId + "'\n" +
-                "  and a.bvd9_number = b.orbis_id\n" +
-                "  and a.company_name = '" + companyName + "'\n" +
-                "  and b.controversy_status = 'Active'\n" +
-                "  and b.controversy_steps = 'last'\n" +
-                "  and b.severity = 'Critical'\n" +
-                "  and (\n" +
-                "                       (\n" +
-                "                            to_varchar(extract(year from b.controversy_events)) = '2022'\n" +
-                "                            and extract(month from b.controversy_events) <=  7\n" +
-                "                        )\n" +
-                "                        or \n" +
-                "                        (\n" +
-                "                            to_varchar(extract(year from b.controversy_events)) = '2021'\n" +
-                "                            and extract(month from b.controversy_events) >  7\n" +
-                "                        )\n" +
-                "                    )" +
-                "group by company_name, bvd9_number\n" +
-                ";";
+    public List<Map<String, Object>> getCompanyTotalCriticalControversiesInThePortfolio(String portfolioId) {
+        LocalDate now = LocalDate.now();
+        int thisYear = now.getYear();
+        int lastYear = thisYear - 1;
+        int monthValue = now.getMonthValue() - 1;
+
+        String query = "SELECT orbis_id,\n" +
+                "       company_name,\n" +
+                "       Count(DISTINCT controversy_title) AS count\n" +
+                "FROM   df_portfolio a\n" +
+                "       JOIN controversy_details b\n" +
+                "         ON a.bvd9_number = b.orbis_id\n" +
+                "            AND b.controversy_status = 'Active'\n" +
+                "            AND b.controversy_steps = 'last'\n" +
+                "            and b.severity = 'Critical'\n" +
+                "WHERE  a.portfolio_id = '" + portfolioId + "'\n" +
+                "                AND BVD9_NUMBER IS NOT NULL\n" +
+                "       AND ( ( To_varchar(Extract(year FROM b.controversy_events)) = '" + thisYear + "'\n" +
+                "               AND Extract(month FROM b.controversy_events) <= " + monthValue + " )\n" +
+                "              OR ( To_varchar(Extract(year FROM b.controversy_events)) = '" + lastYear + "'\n" +
+                "                   AND Extract(month FROM b.controversy_events) > " + monthValue + " ) )\n" +
+                "GROUP  BY b.orbis_id,\n" +
+                "          company_name";
         System.out.println(query);
-        try {
-            return Integer.parseInt(getQueryResultMap(query).get(0).get("COUNT").toString());
-        } catch (Exception e) {
-            return 0;
-        }
+        return getQueryResultMap(query);
     }
 
     public List<Map<String, Object>> getPhysicalRiskInfo(String portfolioId, String bvd9Number) {
@@ -352,17 +326,17 @@ public class DashboardQueries {
 
     public List<Map<String, Object>> getPhysicalRiskManagementInfo(String portfolioId) {
         String queryForLatestMonthAndYear = "select * from physical_risk_management order by year desc, month desc limit 1;";
-        Map<String,Object> monthAndYear = getQueryResultMap(queryForLatestMonthAndYear).get(0);
+        Map<String, Object> monthAndYear = getQueryResultMap(queryForLatestMonthAndYear).get(0);
         String query = "select * from DF_TARGET.DF_PORTFOLIO df\n" +
                 "left JOIN DF_TARGET.physical_risk_management prm on df.BVD9_NUMBER = prm.bvd9_number " +
-                "AND prm.year='"+monthAndYear.get("YEAR").toString()+"' and prm.month='"+monthAndYear.get("MONTH").toString()+"' \n" +
-                "where df.portfolio_id='"+portfolioId+"' and prm.SCORE_CATEGORY is not null";
+                "AND prm.year='" + monthAndYear.get("YEAR").toString() + "' and prm.month='" + monthAndYear.get("MONTH").toString() + "' \n" +
+                "where df.portfolio_id='" + portfolioId + "' and prm.SCORE_CATEGORY is not null";
         System.out.println("query = " + query);
         return getQueryResultMap(query);
     }
 
     public List<Map<String, Object>> getEsgAssessmentInfo(String portfolioId, String year, String month) {
-        String query = "select * from DF_TARGET.VW_EXPORT_ESG_ASSESSMENTS where \"portfolio_id\" = '"+portfolioId+"' and \"Year\" = '"+year+"' and \"Month\" = '"+month+"'";
+        String query = "select * from DF_TARGET.VW_EXPORT_ESG_ASSESSMENTS where \"portfolio_id\" = '" + portfolioId + "' and \"Year\" = '" + year + "' and \"Month\" = '" + month + "'";
         System.out.println("query = " + query);
         return getQueryResultMap(query);
     }
@@ -396,17 +370,17 @@ public class DashboardQueries {
                 "from df_portfolio df\n" +
                 "JOIN BROWN_SHARE bs\n" +
                 "on df.bvd9_number = bs.bvd9_number\n" +
-                "where portfolio_id = '" + portfolioID + "'"+
-                "and year = '" + year + "'"+
-                "and month = '" + month + "'" ;
+                "where portfolio_id = '" + portfolioID + "'" +
+                "and year = '" + year + "'" +
+                "and month = '" + month + "'";
         List<DashboardPerformanceChart> performanceChartESGScore = new ArrayList<>();
 
         for (Map<String, Object> each : getQueryResultMap(Query)) {
             DashboardPerformanceChart model = new DashboardPerformanceChart();
             model.setBVD9_NUMBER(each.get("BVD9_NUMBER").toString());
-           model.setBS_FOSF_INDUSTRY_REVENUES_ACCURATE_SOURCE(each.get("BS_FOSF_INDUSTRY_REVENUES_ACCURATE_SOURCE")==null ? "NA":each.get("BS_FOSF_INDUSTRY_REVENUES_ACCURATE_SOURCE").toString());
-           model.setBS_FOSF_INDUSTRY_REVENUES_ACCURATE(each.get("BS_FOSF_INDUSTRY_REVENUES_ACCURATE").toString());
-           model.setSCORE_RANGE(each.get("SCORE_RANGE").toString());
+            model.setBS_FOSF_INDUSTRY_REVENUES_ACCURATE_SOURCE(each.get("BS_FOSF_INDUSTRY_REVENUES_ACCURATE_SOURCE") == null ? "NA" : each.get("BS_FOSF_INDUSTRY_REVENUES_ACCURATE_SOURCE").toString());
+            model.setBS_FOSF_INDUSTRY_REVENUES_ACCURATE(each.get("BS_FOSF_INDUSTRY_REVENUES_ACCURATE").toString());
+            model.setSCORE_RANGE(each.get("SCORE_RANGE").toString());
 
 
             performanceChartESGScore.add(model);
@@ -415,7 +389,7 @@ public class DashboardQueries {
     }
 
     public List<Map<String, Object>> getPortfolioDetail(String portfolioId) {
-        String query = "select * from df_portfolio where portfolio_id='"+portfolioId+"' and bvd9_number is not null";
+        String query = "select * from df_portfolio where portfolio_id='" + portfolioId + "' and bvd9_number is not null";
         return DatabaseDriver.getQueryResultMap(query);
     }
 
@@ -427,7 +401,7 @@ public class DashboardQueries {
                 "               FROM df_portfolio p left join df_target.esg_entity_master e\n" +
                 "                                          ON p.bvd9_number = e.orbis_id\n" +
                 "                                         AND e.entity_status = 'Active'\n" +
-                "              WHERE p.portfolio_id = '"+portfolioId+"'\n" +
+                "              WHERE p.portfolio_id = '" + portfolioId + "'\n" +
                 "             GROUP BY p.company_name,p.bvd9_number,p.sec_id,p.region, p.sector\n" +
                 "                            )\n" +
                 "   ,SEC_DET AS (\n" +
