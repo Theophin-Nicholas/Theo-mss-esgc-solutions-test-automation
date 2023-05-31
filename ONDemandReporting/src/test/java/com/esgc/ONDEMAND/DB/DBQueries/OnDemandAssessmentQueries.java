@@ -1,10 +1,15 @@
 package com.esgc.ONDEMAND.DB.DBQueries;
 
+import com.esgc.ONDEMAND.DB.DBModels.CLIMATEENTITYDATAEXPORT;
 import com.esgc.ONDEMAND.DB.DBModels.OnDemandPortfolioTable;
 import com.esgc.Utilities.CommonUtility;
 import com.esgc.Utilities.Database.DatabaseDriver;
 import com.esgc.Utilities.DateTimeUtilities;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -234,12 +239,92 @@ public class OnDemandAssessmentQueries {
         return entityNames;
     }
 
-    public List<Map<String, Object>> getESGENTITYEXPORT(String portfolioId) {
-        String query = "select * from VW_DASHBOARD_CLIMATE_ENTITY_DATA_EXPORT\n" +
-                "where portfolio_id = '" + portfolioId + "'\n" +
-                "and year='" + DateTimeUtilities.getCurrentYear() + "' and month = '" + DateTimeUtilities.getCurrentMonthNumeric() + "'";
-        System.out.println("getESGENTITYEXPORT query : " + query);
-        return DatabaseDriver.getQueryResultMap(query);
+    public CLIMATEENTITYDATAEXPORT[] getESGENTITYEXPORT(String portfolioId)  {
+        String query="Select array_agg(OBJECT_CONSTRUCT('ENTITY',\"ENTITY\",\n" +
+                "'ISIN(PRIMARY)',\"ISIN(PRIMARY)\",\n" +
+                "'USER INPUT',\"ISIN(USER_INPUT)\",\n" +
+                "'ORBIS_ID',\"ORBIS_ID\",\n" +
+                "'SECTOR',\"SECTOR\",\n" +
+                "'REGION',\"REGION\",\n" +
+                "'Portfolio Upload Date',\"Portfolio Upload Date\",\n" +
+                "'% Investment',\"% Investment\",\n" +
+                "'LEI',\"LEI\",\n" +
+                "'Country (Country ISO code)',\"Country (Country ISO code)\",\n" +
+                "'Scored Date',\"Scored Date\",\n" +
+                "'Evaluation Year',\"Evaluation Year\",\n" +
+                "'Score Type',\"Score Type\",\n" +
+                "'Parent Orbis ID',\"Parent Orbis ID\",\n" +
+                "'Subsidiary',\"Subsidiary\",\n" +
+                "'Input location type',\"Input location type\",\n" +
+                "'Input location',\"Input location\",\n" +
+                "'Input industry type',\"Input industry type\",\n" +
+                "'Input industry',\"Input industry\",\n" +
+                "'Input size type',\"Input size type\",\n" +
+                "'Input size',\"Input size\",\n" +
+                "'Overall ESG Score',\"Overall ESG Score\",\n" +
+                "'Overall ESG Score Qualifier',\"Overall ESG Score Qualifier\",\n" +
+                "'Overall Environmental score',\"Overall Environmental score\",\n" +
+                "'Overall Environmental score Qualifier',\"Overall Environmental score Qualifier\",\n" +
+                "'Overall Social score',\"Overall Social score\",\n" +
+                "'Overall Social score Qualifier',\"Overall Social score Qualifier\",\n" +
+                "'Overall Governance score',\"Overall Governance score\",\n" +
+                "'Overall Governance score Qualifier',\"Overall Governance score Qualifier\",\n" +
+                "'HRS - Human Resources Domain Score',\"HRS - Human Resources Domain Score\",\n" +
+                "'ENV - Environment Domain Score',\"ENV - Environment Domain Score\",\n" +
+                "'CS - Business Behaviour Domain Score',\"CS - Business Behaviour Domain Score\",\n" +
+                "'CIN - Community Involvement Domain Score',\"CIN - Community Involvement Domain Score\",\n" +
+                "'CGV - Corporate Governance Domain Score',\"CGV - Corporate Governance Domain Score\",\n" +
+                "'HRT - Human Rights Domain Score',\"HRT - Human Rights Domain Score\",\n" +
+                "'HRS 1.1 - Promotion of labour relations',\"HRS 1.1 - Promotion of labour relations\",\n" +
+                "'HRS 2.3 - Responsible management of restructurings',\"HRS 2.3 - Responsible management of restructurings\",\n" +
+                "'HRS 2.4 - Career management and promotion of employability',\"HRS 2.4 - Career management and promotion of employability\",\n" +
+                "'HRS 3.1 - Quality of remuneration systems',\"HRS 3.1 - Quality of remuneration systems\",\n" +
+                "'HRS 3.2 - Improvement of health and safety conditions',\"HRS 3.2 - Improvement of health and safety conditions\",\n" +
+                "'HRS 3.3 - Respect and management of working hours',\"HRS 3.3 - Respect and management of working hours\",\n" +
+                "'ENV 1.1 - Environmental strategy and eco-design',\"ENV 1.1 - Environmental strategy and eco-design\",\n" +
+                "'ENV 1.2 - Pollution prevention and control (soil, accident)',\"ENV 1.2 - Pollution prevention and control (soil, accident)\",\n" +
+                "'ENV 1.3 - Development of green products and services',\"ENV 1.3 - Development of green products and services\",\n" +
+                "'ENV 1.4 - Protection of biodiversity',\"ENV 1.4 - Protection of biodiversity\",\n" +
+                "'ENV 2.1 - Protection of water resources',\"ENV 2.1 - Protection of water resources\",\n" +
+                "'ENV 2.2 - Minimising environmental impacts from energy use',\"ENV 2.2 - Minimising environmental impacts from energy use\",\n" +
+                "'ENV 2.4 - Management of atmospheric emissions',\"ENV 2.4 - Management of atmospheric emissions\",\n" +
+                "'ENV 2.5 - Waste management',\"ENV 2.5 - Waste management\",\n" +
+                "'ENV 2.6 - Management of local pollution',\"ENV 2.6 - Management of local pollution\",\n" +
+                "'ENV 2.7 - Management of environmental impacts from transportation',\"ENV 2.7 - Management of environmental impacts from transportation\",\n" +
+                "'ENV 3.1 - Management of environmental impacts from the use and disposal of products/services',\"ENV 3.1 - Management of environmental impacts from the use and disposal of products/services\",\n" +
+                "'CS 1.1 - Product Safety (process and use)',\"CS 1.1 - Product Safety (process and use)\",\n" +
+                "'CS 1.2 - Information to customers',\"CS 1.2 - Information to customers\",\n" +
+                "'CS 1.3 - Responsible Customer Relations',\"CS 1.3 - Responsible Customer Relations\",\n" +
+                "'CS 2.2 - Sustainable relationships with suppliers',\"CS 2.2 - Sustainable relationships with suppliers\",\n" +
+                "'CS 2.3 - Integration of environmental factors in the supply chain',\"CS 2.3 - Integration of environmental factors in the supply chain\",\n" +
+                "'CS 2.4 - Integration of social factors in the supply chain',\"CS 2.4 - Integration of social factors in the supply chain\",\n" +
+                "'CS 3.1 - Prevention of corruption',\"CS 3.1 - Prevention of corruption\",\n" +
+                "'CS 3.2 - Prevention of anti-competitive practices',\"CS 3.2 - Prevention of anti-competitive practices\",\n" +
+                "'CS 3.3 - Transparency and integrity of influence strategies and practices',\"CS 3.3 - Transparency and integrity of influence strategies and practices\",\n" +
+                "'CIN 1.1 - Promotion of the social and economic development',\"CIN 1.1 - Promotion of the social and economic development\",\n" +
+                "'CIN 2.1 - Societal impacts of the companys products / services',\"CIN 2.1 - Societal impacts of the company's products / services\",\n" +
+                "'CIN 2.2 - Contribution to general interest causes',\"CIN 2.2 - Contribution to general interest causes\",\n" +
+                "'CGV 1.1 - Board of Directors',\"CGV 1.1 - Board of Directors\",\n" +
+                "'CGV 2.1 - Audit & Internal Controls',\"CGV 2.1 - Audit & Internal Controls\",\n" +
+                "'CGV 3.1 - Shareholders',\"CGV 3.1 - Shareholders\",\n" +
+                "'CGV 4.1 - Executive Remuneration',\"CGV 4.1 - Executive Remuneration\",\n" +
+                "'HRT 1.1 - Respect for human rights standards and prevention of violations',\"HRT 1.1 - Respect for human rights standards and prevention of violations\",\n" +
+                "'HRT 2.1 - Respect for freedom of association and the right to collective bargaining',\"HRT 2.1 - Respect for freedom of association and the right to collective bargaining\",\n" +
+                "'HRT 2.4 - Non-discrimination',\"HRT 2.4 - Non-discrimination\",\n" +
+                "'HRT 2.5 -  Elimination of child labour and forced labour',\"HRT 2.5 -  Elimination of child labour and forced labour\"\n" +
+                "  )) as response\n" +
+                "from VW_DASHBOARD_CLIMATE_ENTITY_DATA_EXPORT\n" +
+                "where portfolio_id = '"+portfolioId+"'\n" +
+                "and year='"+ DateTimeUtilities.getCurrentYear() +"' and month = '"+DateTimeUtilities.getCurrentMonthNumeric()+"'";
+
+        System.out.println("getESGENTITYEXPORT query : "+query);
+        CLIMATEENTITYDATAEXPORT[] data = new CLIMATEENTITYDATAEXPORT[0];
+        try {
+            data = new ObjectMapper().readValue(DatabaseDriver.getJsonString(query), CLIMATEENTITYDATAEXPORT[].class);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return data;
     }
 
     public List<Map<String, Object>> getPortfolioDetail(String portfolioId) {

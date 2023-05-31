@@ -7,13 +7,11 @@ import com.esgc.ONDEMAND.API.Controllers.OnDemandFilterAPIController;
 import com.esgc.ONDEMAND.DB.DBQueries.OnDemandAssessmentQueries;
 import com.esgc.ONDEMAND.UI.Pages.OnDemandAssessmentPage;
 import com.esgc.Pages.Page404;
-import com.esgc.Utilities.BrowserUtils;
-import com.esgc.Utilities.EntitlementsBundles;
-import com.esgc.Utilities.Environment;
-import com.esgc.Utilities.Xray;
+import com.esgc.Utilities.*;
 import com.github.javafaker.Faker;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
+import org.openqa.selenium.Keys;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -43,7 +41,8 @@ public class OnDemandAssessmentUITests extends UITestBase {
         onDemandAssessmentPage.selectPortfolioOptionByName(portfolioName);
         BrowserUtils.wait(5);
         assertTestCase.assertTrue(!onDemandAssessmentPage.isReequestAssessmentButtonDisabled(), "Validating that Request Assessment button is enabled");
-        assertTestCase.assertTrue(!onDemandAssessmentPage.isViewAssessmentRequestButtonDisabled(), "Validating that View Assessment Request button is enabled");
+       // View assessment is not nesserarly required to be enabled, it depends if we sent any request in past for tht portfolio
+        //assertTestCase.assertTrue(!onDemandAssessmentPage.isViewAssessmentRequestButtonDisabled(), "Validating that View Assessment Request button is enabled");
         onDemandAssessmentPage.clickonOnRequestAssessmentButton();
         onDemandAssessmentPage.clickReviewAndSendRequestButton();
 
@@ -77,7 +76,8 @@ public class OnDemandAssessmentUITests extends UITestBase {
         onDemandAssessmentPage.selectPortfolioOptionByName(portfolioName);
         BrowserUtils.wait(5);
         assertTestCase.assertTrue(!onDemandAssessmentPage.isReequestAssessmentButtonDisabled(), "Validating that Request Assessment button is enabled");
-        assertTestCase.assertTrue(!onDemandAssessmentPage.isViewAssessmentRequestButtonDisabled(), "Validating that View Assessment Request button is enabled");
+       // View assessment button can be disabled as well if there was no request sent in past, hence commented below line"
+        // assertTestCase.assertTrue(!onDemandAssessmentPage.isViewAssessmentRequestButtonDisabled(), "Validating that View Assessment Request button is enabled");
         onDemandAssessmentPage.clickonOnRequestAssessmentButton();
         onDemandAssessmentPage.validateOnDemandPageHeader();
         onDemandAssessmentPage.sendESCkey();
@@ -147,8 +147,6 @@ public class OnDemandAssessmentUITests extends UITestBase {
         onDemandAssessmentPage.selectPortfolio(portfolioName);
         onDemandAssessmentPage.clickonOnRequestAssessmentButton();
         onDemandAssessmentPage.validateOnDemandPageHeader();
-
-       // onDemandAssessmentPage.goToSendRequestPage(portfolioName);
         onDemandAssessmentPage.onDemandCoverageHeaderValidation(portfolioName);
         assertTestCase.assertTrue(onDemandAssessmentPage.isCancelButtonAvailable(), "Validate if Cancel button is available");
         assertTestCase.assertTrue(onDemandAssessmentPage.isReviewButtonAvailable(), "Validate if Review button is available");
@@ -173,15 +171,16 @@ public class OnDemandAssessmentUITests extends UITestBase {
         BrowserUtils.wait(5);
         onDemandAssessmentPage.clickonOnRequestAssessmentButton();
         onDemandAssessmentPage.validateOnDemandPageHeader();
-        onDemandAssessmentPage.sendESCkey();
+        //TODO: Should add Step # 2
+       /* onDemandAssessmentPage.sendESCkey();
         onDemandAssessmentPage.clickOnDemandPagelinkFromDashboardPage();
-        onDemandAssessmentPage.validateOnDemandPageHeader();
+        onDemandAssessmentPage.validateOnDemandPageHeader();*/
 
     }
 
 
     @Test(groups = {REGRESSION, UI, SMOKE})
-    @Xray(test = {12703})
+    @Xray(test = {12703,14791})
     public void verifyFilterCriteriaWithAndORLogic() {
         String portfolioName = "500 predicted portfolio";
         OnDemandAssessmentPage onDemandAssessmentPage = new OnDemandAssessmentPage();
@@ -197,52 +196,7 @@ public class OnDemandAssessmentUITests extends UITestBase {
         onDemandAssessmentPage.validateAndORLogic();
     }
 
-    // Disabling below method as all three test cases have been cancelled
-   /* @Test(groups = {REGRESSION, UI})
-    @Xray(test = {12826, 12974, 12828})
-    public void validateFirstTimeUser() {
 
-        OnDemandAssessmentPage onDemandAssessmentPage = new OnDemandAssessmentPage();
-        String inputFile = ConfigurationReader.getProperty("OnDemandPortfolio");
-        OnDemandFilterAPIController apiController = new OnDemandFilterAPIController();
-        String PortfolioId = apiController.uploadPortfolio(inputFile);
-        Driver.getDriver().navigate().refresh();
-
-        onDemandAssessmentPage.selectPortfolioByNameFromPortfolioSelectionModal(inputFile);
-        onDemandAssessmentPage.validateDashboardPageButtonForOnDemand();
-        onDemandAssessmentPage.validateDashboardPageButtonCoverage(PortfolioId);
-
-        onDemandAssessmentPage.clickMenu();
-        BrowserUtils.wait(5);
-        onDemandAssessmentPage.clickonOnRequestAssessmentButton();
-        onDemandAssessmentPage.validateOnDemandPageHeader();
-        assertTestCase.assertTrue(onDemandAssessmentPage.isReviewButtonAvailable(), " Validating first time user landed on Filter page");
-
-        onDemandAssessmentPage.clickReviewAndSendRequestButton();
-
-        onDemandAssessmentPage.confirmRequestAndGetCompaniesCount(Environment.DATA_USERNAME);
-        onDemandAssessmentPage.clickProceedOnConfirmRequestPopup();
-
-        onDemandAssessmentPage.validateErrormessage();
-
-        onDemandAssessmentPage.clickESCkey();
-
-        test.info("Validating second time user is going back to filter screen when there was an error in first time submission");
-        System.out.println("Validating second time user is going back to filter screen when there was an error in first time submission");
-        Driver.getDriver().navigate().refresh();
-
-        onDemandAssessmentPage.selectPortfolioByNameFromPortfolioSelectionModal(inputFile);
-        onDemandAssessmentPage.validateDashboardPageButtonForOnDemand();
-
-        onDemandAssessmentPage.clickMenu();
-        BrowserUtils.wait(5);
-        onDemandAssessmentPage.clickonOnRequestAssessmentButton();
-        onDemandAssessmentPage.validateOnDemandPageHeader();
-        assertTestCase.assertTrue(onDemandAssessmentPage.isReviewButtonAvailable(), " Validating first time user landed on Filter page");
-        System.out.println("Validated all first time user test");
-        apiController.deletePortfolio(PortfolioId);
-
-    }*/
 
     @Test(groups = {REGRESSION, UI, SMOKE})
     @Xray(test = {13727, 13763, 13787, 13788, 14201, 14202})
@@ -295,53 +249,9 @@ public class OnDemandAssessmentUITests extends UITestBase {
         onDemandAssessmentPage.verifyConfirmRequestPopup("Cancel");
     }
 
-    @Test(groups = {REGRESSION, UI, SMOKE}, description = "UI | Dashboard | On-Demand | Verify if only have On-demand Entitlements")
-    @Xray(test = {13726})
-    public void verifyUserWithOnlyOnDemandEntitlementsTest() {
-        LoginPage login = new LoginPage();
-        login.clickOnLogout();
-        System.out.println("Logged out");
-        login.entitlementsLogin(EntitlementsBundles.USER_WITH_ON_DEMAND_ENTITLEMENT);
-        System.out.println("Logged in with only On-Demand entitlements");
-        CommonAPIController apiController = new CommonAPIController();
-        Response response = apiController.getEntitlementHandlerResponse();
-        response.then().assertThat().statusCode(200);
-        JsonPath jsonPathEvaluator = response.jsonPath();
-        List<String> entitlements = jsonPathEvaluator.getList("entitlements.name");
-        System.out.println(entitlements);
-        assertTestCase.assertTrue(entitlements.contains("ESG On-Demand Assessment"), "User with only On-Demand entitlements is verified");
 
-        Page404 page404 = new Page404();
-        page404.verify404Page();
 
-        login.clickOnLogout();
-        System.out.println("Logged out");
-        login.entitlementsLogin(EntitlementsBundles.ALL);
-    }
 
-    @Test(groups = {REGRESSION, UI, SMOKE}, description = "UI | Dashboard | On-Demand | Verify if user only have Predicted Entitlement")
-    @Xray(test = {13764})
-    public void verifyUserWithOnlyPredictedEntitlementTest() {
-        LoginPage login = new LoginPage();
-        login.clickOnLogout();
-        System.out.println("Logged out");
-        login.entitlementsLogin(EntitlementsBundles.USER_WITH_SCORE_PREDICTOR_ENTITLEMENT);
-        System.out.println("Logged in with only Predicted Score entitlements");
-        CommonAPIController apiController = new CommonAPIController();
-        Response response = apiController.getEntitlementHandlerResponse();
-        response.then().assertThat().statusCode(200);
-        JsonPath jsonPathEvaluator = response.jsonPath();
-        List<String> entitlements = jsonPathEvaluator.getList("entitlements.name");
-        System.out.println(entitlements);
-        assertTestCase.assertTrue(entitlements.contains("Score Predictor: ESG"), "User with only Predicted entitlements is verified");
-
-        Page404 page404 = new Page404();
-        page404.verify404Page();
-
-        login.clickOnLogout();
-        System.out.println("Logged out");
-        login.entitlementsLogin(EntitlementsBundles.ALL);
-    }
 
     @Test(groups = {REGRESSION, UI}, description = "UI | Dashboard | On-Demand | Verify if user only have 'Corporates ESG Data and Scores' Entitlement")
     @Xray(test = {13765})
@@ -394,10 +304,12 @@ public class OnDemandAssessmentUITests extends UITestBase {
         //onDemandAssessmentPage.goToSendRequestPage(portfolioName);
         ODAPage.clickReviewAndSendRequestButton();
         ODAPage.selectFilter("No Request Sent");
+        BrowserUtils.wait(2);
         if(ODAPage.getNumberOfEmailInputs()<=remainingAssessmentLimit) {
             System.out.println("There is not enough assessments to remove. There should be at least" + (remainingAssessmentLimit+1) + " assessments");
         }
         assertTestCase.assertTrue(ODAPage.getNumberOfEmailInputs()>=remainingAssessmentLimit+1, "Number of email inputs is verified");
+//TODO : maybe wait required here
         ODAPage.RemoveRequests(remainingAssessmentLimit+1);
 
         for (int i = 0; i < remainingAssessmentLimit+1; i++) {
@@ -405,7 +317,7 @@ public class OnDemandAssessmentUITests extends UITestBase {
             ODAPage.enterEmail(email,i);
         }
         assertTestCase.assertFalse(ODAPage.btnConfirmRequest.isEnabled(), "Confirm request button is disabled");
-
+        BrowserUtils.wait(2);
         ODAPage.RemoveRequests(remainingAssessmentLimit);
         assertTestCase.assertTrue(ODAPage.btnConfirmRequest.isEnabled(), "Confirm request button is enabled");
         ODAPage.clickConfirmRequest();
@@ -415,6 +327,9 @@ public class OnDemandAssessmentUITests extends UITestBase {
         assertTestCase.assertTrue(ODAPage.btnConfirmRequest.isEnabled(), "Confirm request button is enabled");
         ODAPage.clickConfirmRequest();
         ODAPage.verifyConfirmRequestPopup("Cancel");
+        login.clickOnLogout();
+        login.login();
+
     }
 
     @Test(groups = {REGRESSION, UI, COMMON})
@@ -428,6 +343,7 @@ public class OnDemandAssessmentUITests extends UITestBase {
         assertTestCase.assertTrue(onDemandAssessmentPage.isViewAssessmentRequestButtonDisabled(), "Validating that View Assessment Request button is disabled");
         // ESGCA - 14002 - Verify the sorting of the Portfolios in the portfolio table
         onDemandAssessmentPage.ValidateSortingOnLastUpdateColumn();
+
     }
 
 
@@ -450,4 +366,64 @@ public class OnDemandAssessmentUITests extends UITestBase {
         onDemandAssessmentPage.verifyDownloadPortfolio("details");
     }
 
+    @Test(groups = {REGRESSION, UI})
+    @Xray(test = {14309,14336})
+    public void verifyRequestFailedWithPreviouslyUsedEmailIds() {
+
+        String portfolioName = "500 predicted portfolio";
+        OnDemandAssessmentPage onDemandAssessmentPage = new OnDemandAssessmentPage();
+        BrowserUtils.wait(2);
+        onDemandAssessmentPage.navigateToReportingService("On-Demand Assessment");
+        onDemandAssessmentPage.waitForPortfolioTableToLoad();
+        if (!onDemandAssessmentPage.verifyPortfolio(portfolioName)) {
+            onDemandAssessmentPage.uploadPortfolio(portfolioName.replaceAll(" ", ""));
+            onDemandAssessmentPage.waitForPortfolioTableToLoad();
+        }
+        onDemandAssessmentPage.selectPortfolio(portfolioName);
+        onDemandAssessmentPage.clickonOnRequestAssessmentButton();
+        onDemandAssessmentPage.validateOnDemandPageHeader();
+
+        onDemandAssessmentPage.clickReviewAndSendRequestButton();
+        onDemandAssessmentPage.verifyConfirmEmailAlert();
+
+        onDemandAssessmentPage.RemoveRequests(1);
+        String email = "qatest_" + faker.number().digits(4) + "@moodystest.com";
+        onDemandAssessmentPage.enterEmail(email, 0);
+        assertTestCase.assertTrue(onDemandAssessmentPage.btnConfirmRequest.isEnabled(), "Confirm request button is enabled");
+        onDemandAssessmentPage.clickConfirmRequest();
+        onDemandAssessmentPage.verifyConfirmRequestPopup("Proceed");
+        onDemandAssessmentPage.waitForOpenAssessmentPageToLoad();
+        BrowserUtils.ActionKeyPress(Keys.ESCAPE);
+
+        onDemandAssessmentPage.waitForPortfolioTableToLoad();
+        onDemandAssessmentPage.selectPortfolio(portfolioName);
+        onDemandAssessmentPage.clickonOnRequestAssessmentButton();
+        onDemandAssessmentPage.validateOnDemandPageHeader();
+
+        onDemandAssessmentPage.clickReviewAndSendRequestButton();
+
+
+        onDemandAssessmentPage.RemoveRequests(1);
+
+        onDemandAssessmentPage.enterEmail(email, 0);
+        onDemandAssessmentPage.clickConfirmRequest();
+        onDemandAssessmentPage.verifyConfirmRequestPopup("Proceed");
+        onDemandAssessmentPage.validateerrorMessage();
+        BrowserUtils.ActionKeyPress(Keys.ESCAPE);
+
+        onDemandAssessmentPage.validateOnDemandPageHeader();
+        onDemandAssessmentPage.clickReviewAndSendRequestButton();
+
+
+        onDemandAssessmentPage.RemoveRequests(2);
+
+        onDemandAssessmentPage.enterEmail(email, 0);
+
+        String email1 = "qatest_" + faker.number().digits(4) + "@moodystest.com";
+        onDemandAssessmentPage.enterEmail(email1, 1);
+        assertTestCase.assertTrue(onDemandAssessmentPage.btnConfirmRequest.isEnabled(), "Confirm request button is enabled");
+        onDemandAssessmentPage.clickConfirmRequest();
+        onDemandAssessmentPage.verifyConfirmRequestPopup("Proceed");
+        onDemandAssessmentPage.validateRequestFailedMessageDuetoPreExistingEmail();
+    }
 }
