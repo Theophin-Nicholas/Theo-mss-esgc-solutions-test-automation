@@ -59,10 +59,10 @@ public class EntityClimateProfilePage extends ClimatePageBase {
     @FindBy(xpath = "//div[@id='tempAlignErr']")
     public List<WebElement> noInfoElement;
 
-    @FindBy(xpath = "//span[text()='Transition Risk']/../../..//div[text()='Brown Share Assessment']/../../../following-sibling::div//div[text()='No information available.']")
+    @FindBy(xpath = "//div[./div[text()='Brown Share']]//div[text()='No information available.']")
     public WebElement trBrownShareAssessmentNoInfo;
 
-    @FindBy(xpath = "//span[text()='Transition Risk']/../../..//div[text()='Brown Share Assessment']/../../../../../following-sibling::div//div[text()='No sector comparison chart available.']")
+    @FindBy(xpath = "//div[.//div[text()='Brown Share Assessment']]/following-sibling::div[.//div[text()='No sector comparison chart available.']]")
     public WebElement trBrownShareAssessmentSectorChartNoInfo;
 
     @FindBy(xpath = "//li[@role='menuitem']/../../../div[2]//*[local-name()='svg']")
@@ -432,7 +432,7 @@ public class EntityClimateProfilePage extends ClimatePageBase {
     @FindBy(xpath = "//button/span[contains(text(),'Physical Risk')]")
     public WebElement button_PhysicalRiskTab;
 
-    @FindBy(xpath = "//div[normalize-space()='PHYSICAL RISK MANAGEMENT']")
+    @FindBy(xpath = "//span[text()='PHYSICAL RISK MANAGEMENT']")
     public WebElement header_PhysicalRiskManagement;
 
     @FindBy(xpath = "//div[contains(text(),'Physical Risk Management') and .//*[starts-with(text(),'Anticipation,')]]")
@@ -2285,7 +2285,7 @@ public class EntityClimateProfilePage extends ClimatePageBase {
 
     public void validatePhysicalRiskManagementTable() {
         assertTestCase.assertTrue(header_PhysicalRiskManagement.isDisplayed(), "Validate Physical Risk Management Title is available");
-        List<WebElement> columns = PhysicalRiskManagementTable.findElements(By.xpath("parent::div/following-sibling::div/div/table/thead/tr/th"));
+        List<WebElement> columns = Driver.getDriver().findElements(By.xpath("//div[./div/span[text()='PHYSICAL RISK MANAGEMENT']]//tr[./th[text()='Indicator']]/th"));
         assertTestCase.assertTrue(columns.get(0).getText().equals("Indicator"), "Validate Indicator column");
         assertTestCase.assertTrue(columns.get(1).getText().equals("Risk Level"), "Validate Risk Level column");
         assertTestCase.assertTrue(columns.get(2).getText().equals("Score"), "Validate Score column");

@@ -12,7 +12,8 @@ import static com.esgc.Utilities.Groups.*;
 public class MaterialityMetricsAPITests extends EntityClimateProfileTestBase {
 
     //TODO add materiality metrics API model
-    @Test(groups = {API, REGRESSION, ENTITY_PROFILE})
+    //TODO materiality metrics is removed from platform, can be used for oda side
+    @Test(enabled = false, groups = {API, REGRESSION, ENTITY_PROFILE})
     public void ValidateMaterialityMetricsAPIResponse() {
         String orbis_id = "000411117";
         System.out.println("orbis_id = " + orbis_id);

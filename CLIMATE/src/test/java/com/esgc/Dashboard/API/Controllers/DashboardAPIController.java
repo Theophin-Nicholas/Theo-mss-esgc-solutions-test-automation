@@ -133,12 +133,11 @@ public class DashboardAPIController extends APIController {
             System.out.println("portfolio_id=" + portfolioId);
             System.out.println("month=" + month);
             System.out.println("year=" + year);
-            month = "07";
             response = configSpec()
                     .pathParam("portfolio_id", portfolioId)
                     .when()
                     .body("{\"region\":\"all\",\"sector\":\"all\",\"month\":\"" + month + "\",\"year\":\"" + year + "\",\"view_by\":\""+filterBy+"\",\"limit\":20}")
-                    .post(DashboardEndPoints.POST_PORTFOLIO_SUMMARY_COMPANIES);
+                    .log().all().post(DashboardEndPoints.POST_PORTFOLIO_SUMMARY_COMPANIES).prettyPeek();
 
 
         } catch (Exception e) {
@@ -170,7 +169,7 @@ public class DashboardAPIController extends APIController {
                     .pathParam("research_line", apiResourceMapper(research_line))
                     .body(apiEntityListPayload)
                     .when()
-                    .post(DashboardEndPoints.POST_GEO_MAP_ENTITY_LIST);
+                    .post(DashboardEndPoints.POST_GEO_MAP_ENTITY_LIST).prettyPeek();
 
         } catch (Exception e) {
             System.out.println("Inside exception " + e.getMessage());
@@ -186,9 +185,9 @@ public class DashboardAPIController extends APIController {
             response = configSpec()
                     // .header("Authorization", "Bearer " + System.getProperty("token"))
                     .pathParam("portfolio_id", portfolio_id)
-                    .body(apiHeatMapPayload)
+                    .body(apiHeatMapPayload).log().all()
                     .when()
-                    .post(DashboardEndPoints.POST_HEAT_MAP);
+                    .post(DashboardEndPoints.POST_HEAT_MAP).prettyPeek();
 
         } catch (Exception e) {
             System.out.println("Inside exception " + e.getMessage());

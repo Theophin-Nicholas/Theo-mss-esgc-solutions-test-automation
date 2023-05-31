@@ -24,7 +24,7 @@ import static com.esgc.Utilities.Groups.*;
 
 public class HeatMapBrownShareTests extends DashboardUITestBase {
 
-    @Test(groups = {REGRESSION, UI, SMOKE})
+    @Test(groups = {REGRESSION, UI})
     @Xray(test = {12278,12279, 12320,12321})
     public void VerifyBrownShareAssessmentCategories() {
 

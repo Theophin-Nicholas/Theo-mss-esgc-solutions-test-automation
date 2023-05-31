@@ -97,8 +97,14 @@ public class HeatMap extends DataValidationTestBase {
 
             Response coverageResponse = dashboardAPIController.getPortfolioCoverageResponse(portfolioId, researchLine1, apiFilterPayload);
             String coverage = coverageResponse.jsonPath().getString("[0].portfolio_coverage.companies");
-            int coverageInvestmentPercentage = (int) Math.round(Double.parseDouble(coverageResponse.jsonPath()
-                    .getString("[0].portfolio_coverage.investment")));
+            int coverageInvestmentPercentage = 0;
+
+            String investment = coverageResponse.jsonPath()
+                    .getString("[0].portfolio_coverage.investment");
+
+            if (investment != null) {
+                coverageInvestmentPercentage = (int) Math.round(Double.parseDouble(investment));
+            }
 
             System.out.println("Count of distinct companies after filters: " + countOfDistinctCompaniesInPortfolio);
             System.out.println("coverage: " + coverage);

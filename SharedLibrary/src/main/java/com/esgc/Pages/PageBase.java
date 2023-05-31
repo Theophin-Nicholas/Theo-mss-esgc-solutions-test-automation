@@ -1405,19 +1405,16 @@ public abstract class PageBase {
             Assert.assertTrue(menu.isDisplayed(), "Menu Item is not displayed");
             clickMenu();
             List<String> menuItemsArray = Arrays.asList("Navigate To", "Climate Dashboard", "Climate Portfolio Analysis",
-                    "Portfolio Selection/Upload", "On-Demand Reporting",
+                    "Portfolio Selection/Upload", "ESG Reporting Portal",
                     "Contact Us", "Terms & Conditions", "Log Out");
             //TODO on demand is only in QA as of Feb 2023
             if (Environment.environment.equalsIgnoreCase("qa")) {
-                menuItemsArray.set(4, "ESG Reporting Portal");
                 menuItemsArray.add(4, "Calculations");
             }
-            menuList.remove(0);
-            //Validate if all menu items are available
-            for (String m : menuItemsArray) {
-                System.out.println("Menu Item: " + m);
-                Assert.assertEquals(menuList.stream().filter(p -> p.getText().equals(m)).count(), 1, m + " Menus are not correctly listed");
-            }
+
+            List<String> menuOptions = menuList.stream().map(WebElement::getText).collect(Collectors.toList());
+            menuOptions.remove(0);
+            assertTestCase.assertEquals(menuItemsArray, menuOptions, "Menu Options Validation");
 
             //To get page URL
             String url = Driver.getDriver().getCurrentUrl();
@@ -1431,12 +1428,12 @@ public abstract class PageBase {
                 Assert.assertEquals(menuList.get(0).getText(), "Climate Portfolio Analysis", "Global Header Title is not matched for Portfolio Analysis");
                 finalStringToCheck = menuItemsArray.get(2);
             }
-            System.out.println(menuList.stream().filter(p -> p.getText().equals(finalStringToCheck))
-                    .findFirst().get().getCssValue("background-color"));
+            String optionBackgroundColor = menuList.stream().filter(p -> p.getText().equals(finalStringToCheck))
+                    .findFirst().get().getCssValue("background");
+            System.out.println("optionBackgroundColor = " + optionBackgroundColor);
 
             //Validate if Menu Item in URL is selected
-            assertTestCase.assertTrue(menuList.stream().filter(p -> p.getText().equals(finalStringToCheck))
-                    .findFirst().get().getCssValue("background-color").equalsIgnoreCase("rgba(215, 237, 250, 1)"), "Open page menu is not selected");
+            assertTestCase.assertEquals(optionBackgroundColor, "rgba(215, 237, 250, 1)", "Open page menu is not selected");
 
             //Click on cross button
             Driver.getDriver().findElement(By.xpath("//li[text()]/span//*[name()='svg']")).click();
@@ -1797,7 +1794,8 @@ public abstract class PageBase {
 
     public void closePortfolioExportDrawer() {
         Actions actionBuilder = new Actions(Driver.getDriver());
-        actionBuilder.moveToElement(closeIconInCompanySummariesDrawer).pause(1000).click().build().perform();
+        BrowserUtils.waitForClickablility(closeIconInCompanySummariesDrawer, 10);
+        actionBuilder.moveToElement(closeIconInCompanySummariesDrawer).pause(2000).click().build().perform();
     }
 
     public void clickCloseXIconWithJs() {

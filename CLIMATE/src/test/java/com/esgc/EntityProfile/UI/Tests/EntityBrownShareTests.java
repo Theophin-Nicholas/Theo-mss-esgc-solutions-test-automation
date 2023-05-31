@@ -1,14 +1,12 @@
 package com.esgc.EntityProfile.UI.Tests;
 
 import com.esgc.Base.TestBases.UITestBase;
-import com.esgc.Base.UI.Pages.LoginPage;
 import com.esgc.EntityProfile.DB.DBQueries.EntityClimateProfilePageQueries;
 import com.esgc.EntityProfile.UI.Pages.EntityClimateProfilePage;
 import com.esgc.PortfolioAnalysis.UI.Pages.ResearchLinePage;
 import com.esgc.TestBase.DataProviderClass;
 import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.Driver;
-import com.esgc.Utilities.EntitlementsBundles;
 import com.esgc.Utilities.Xray;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
@@ -26,10 +24,6 @@ public class EntityBrownShareTests extends UITestBase {
             dataProviderClass = DataProviderClass.class, dataProvider = "orbisIDWithBrownShareScore")
     @Xray(test = {7890})
     public void verifyTooltipOverBrownShareSectorComparisonChart(String orbisID) {
-        LoginPage login = new LoginPage();
-        login.clickOnLogout();
-        login.entitlementsLogin(EntitlementsBundles.TRANSITION_RISK);
-
         ResearchLinePage researchLinePage = new ResearchLinePage();
         researchLinePage.navigateToFirstEntity(orbisID);
         EntityClimateProfilePage profilePage = new EntityClimateProfilePage();
@@ -52,18 +46,14 @@ public class EntityBrownShareTests extends UITestBase {
     @Test(groups = {REGRESSION, UI})
     @Xray(test = {7955})
     public void verifyNoDataMessageInBrownShareSection() {
-        LoginPage login = new LoginPage();
-        login.clickOnLogout();
-        login.entitlementsLogin(EntitlementsBundles.TRANSITION_RISK);
-
         EntityClimateProfilePageQueries entityClimateProfilepagequeries = new EntityClimateProfilePageQueries();
         String orbisID = entityClimateProfilepagequeries.getEntityWithNoBrownShareInfo().get(0).get("ORBIS_ID").toString();
 
         ResearchLinePage researchLinePage = new ResearchLinePage();
         researchLinePage.navigateToFirstEntity(orbisID);
         EntityClimateProfilePage profilePage = new EntityClimateProfilePage();
-        BrowserUtils.scrollTo(profilePage.transitionRiskBrownShareWidget);
         assertTestCase.assertTrue(profilePage.trBrownShareAssessmentNoInfo.isDisplayed(), "No information available.");
+        profilePage.navigateToTransitionRisk();
         assertTestCase.assertTrue(profilePage.trBrownShareAssessmentSectorChartNoInfo.isDisplayed(), "No information available.");
 
     }
@@ -71,11 +61,8 @@ public class EntityBrownShareTests extends UITestBase {
     @Test(groups = {REGRESSION, UI},
             dataProviderClass = DataProviderClass.class, dataProvider = "orbisIDWithBrownShareScore")
     @Xray(test = {7889, 7917, 12341, 12342})
+    //TODO check queries
     public void verifyBrownShareSectionInformation(String orbisID) {
-        LoginPage login = new LoginPage();
-        login.clickOnLogout();
-        login.entitlementsLogin(EntitlementsBundles.TRANSITION_RISK);
-
         EntityClimateProfilePageQueries entityClimateProfilepagequeries = new EntityClimateProfilePageQueries();
         List<Map<String, Object>> sectorRecords = entityClimateProfilepagequeries.getEntitySectorInfo(orbisID);
         String sectorName = sectorRecords.get(0).get("MESG_SECTOR").toString();

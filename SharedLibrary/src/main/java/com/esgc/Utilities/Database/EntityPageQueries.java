@@ -363,6 +363,7 @@ public class EntityPageQueries {
                 "                 AND cd.CONTROVERSY_EVENTS >= dateadd(day, -60, current_date)\n" +
                 "                AND cd.CONTROVERSY_STEPS='last' )\n" +
                 "GROUP BY TITLE HAVING count(*)>1";
+        System.out.println("query = " + query);
         Map<String, Object> record = getQueryResultMap(query).get(0);
         return record.get("TITLE").toString() + ";" + record.get("COUNT(*)").toString();
     }
