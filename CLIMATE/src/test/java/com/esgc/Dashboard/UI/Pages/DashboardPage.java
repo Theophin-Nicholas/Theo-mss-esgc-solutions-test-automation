@@ -1118,7 +1118,11 @@ public class DashboardPage extends UploadPage {
             element.click();
 //TODO better approach needed
             BrowserUtils.waitForVisibility(Driver.getDriver().findElement(By.xpath("//*[contains(text(),\"" + colText + "\")]")), 30);
-            Driver.getDriver().findElement(By.xpath("//*[text()='ESC']/following-sibling::* | //span[text()='X'] | //span[@class='close'] | //div[@role='dialog']/div/div[2]")).click();
+            WebElement closeButton =
+                    Driver.getDriver().findElement(
+                            By.xpath("//*[text()='ESC']/following-sibling::* | //span[text()='X'] | //span[@class='close'] | //div[@role='dialog']/div/div[2]"))
+                    ;
+            BrowserUtils.waitForClickablility(closeButton, 10);
             //""//"//span[text()='X'] | //span[@class='close'] | //div[@role='dialog']/div/div[2]")).click();
             return true;
         } catch (Exception e) {
@@ -1680,7 +1684,6 @@ public class DashboardPage extends UploadPage {
         BrowserUtils.waitForClickablility(dashboardButton, 10);
 
         dashboardButton.click();
-        BrowserUtils.waitForClickablility(pageHeader, 10).click();
         String actualDashboardHeader = pageHeader.getText();
         String expectedDashboardHeader = "Climate Dashboard";
         assertTestCase.assertEquals(actualDashboardHeader, expectedDashboardHeader, "Verifying dashboard header is equal to Climate Dashboard : Status Done");
@@ -1688,7 +1691,6 @@ public class DashboardPage extends UploadPage {
 
     public void validateClimatePortfolioAnalysisPageHeaders() {
         System.out.println("--------------Validating the climate portfolio analysis page headers----------------");
-        BrowserUtils.waitForClickablility(pageHeader, 10).click();
         String actualPortfolioTabHeader = pageHeader.getText();
         String expectedPortfolioTabHeader = "Climate Portfolio Analysis";
         assertTestCase.assertEquals(actualPortfolioTabHeader, expectedPortfolioTabHeader, "Verifying portfolio Analysis header is equal to Climate Portfolio Analysis : Status Done");

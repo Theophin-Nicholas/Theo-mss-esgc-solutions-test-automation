@@ -109,7 +109,8 @@ public class DashboardQueries {
             String query = "select gs.bvd9_number from df_portfolio df" +
                     "    left join temperature_alignment gs on gs.bvd9_number=df.bvd9_number and gs.month='" + strMonth + "' and gs.year='" + strYear + "'" +
                     "    where df.portfolio_id='" + portfolioId + "'" +
-                    "    and company_name is not null limit 1;";
+                    "    and company_name is not null" +
+                    "    and gs.bvd9_number is not null limit 1;";
             if (getQueryResultList(query).get(0).get(0) != null) {
                 break;
             }
@@ -141,7 +142,8 @@ public class DashboardQueries {
                 "    left join carbon_footprint cf on cf.bvd9_number=df.bvd9_number and cf.month=" + month + " and cf.year=" + year + "" +
                 "    where df.portfolio_id='" + portfolioId + "'" +
                 "    and df.bvd9_number='" + bvd9Number + "'" +
-                "    and company_name is not null";
+                "    and company_name is not null" +
+                "and AS_OF_DATE is not null";
         List<Map<String, Object>> result = getQueryResultMap(query);
         return result;
     }

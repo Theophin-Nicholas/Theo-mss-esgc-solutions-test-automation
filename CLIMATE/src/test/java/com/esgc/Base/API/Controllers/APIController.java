@@ -746,6 +746,7 @@ public class APIController {
     }
 
     public synchronized String apiResourceMapperWithoutphysicalriskinit(String researchLine) {
+        if (researchLine == null) return "";
         switch (researchLine) {
             case "tcfdstrategy":
             case "TCFD":

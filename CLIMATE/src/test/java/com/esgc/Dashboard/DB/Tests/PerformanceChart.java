@@ -18,7 +18,6 @@ import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Test;
-import org.testng.asserts.SoftAssert;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -37,7 +36,6 @@ public class PerformanceChart extends DataValidationTestBase {
         int size = limits.get(0);
 
         System.out.println(size);
-        SoftAssert softAssert = new SoftAssert();
 
         List<ResearchLineIdentifier> portfolioToUpload = dataValidationUtilities.getPortfolioToUpload(researchLine, month, year);
 
@@ -274,12 +272,12 @@ public class PerformanceChart extends DataValidationTestBase {
                 String expectedFacilitiesExposed = Double.valueOf(companyInDBResult.get("% Facilities Exposed to High Risk and Red Flag").toString()).intValue() + "";
 
 
-                softAssert.assertEquals(highestRiskHazardCategory, expectedHighestRiskHazard,
+                assertTestCase.assertEquals(highestRiskHazardCategory, expectedHighestRiskHazard,
                         "Highest Risk Hazard Verification for " + companyName + ":\n" +
                                 "actual:" + highestRiskHazardCategory + "\n" +
                                 "expected:" + expectedHighestRiskHazard);
 
-                softAssert.assertEquals(facilitiesExposed, expectedFacilitiesExposed,
+                assertTestCase.assertEquals(facilitiesExposed, expectedFacilitiesExposed,
                         "Facilities Exposed Verification for " + companyName + ":\n" +
                                 "actual:" + facilitiesExposed + "\n" +
                                 "expected:" + expectedFacilitiesExposed);
@@ -288,42 +286,41 @@ public class PerformanceChart extends DataValidationTestBase {
                 Double temperatureAlignmentScore = company.getCURRENT_TEMPERATURE_ALIGNMENT_SCORE();
                 RangeAndScoreCategory entityScoreRangeAndCategory4 = getRangeAndScoreCategoryByScore("Temperature Alignment", temperatureAlignmentScore);
                 String temperatureAlignmentScoreCategory = company.getSCORE_CATEGORY_TEMPERATURE_ALIGNMENT();
-                softAssert.assertEquals(temperatureAlignmentScoreCategory, entityScoreRangeAndCategory4.getCategory(), company.getCOMPANY_NAME() + " Score Category verification");
+                assertTestCase.assertEquals(temperatureAlignmentScoreCategory, entityScoreRangeAndCategory4.getCategory(), company.getCOMPANY_NAME() + " Score Category verification");
 
                 Integer carbonFootprintScore = company.getCURRENT_CARBON_SCORE();
                 RangeAndScoreCategory entityScoreRangeAndCategory5 = getRangeAndScoreCategoryByScore("Carbon Footprint", carbonFootprintScore);
                 String carbonFootprintScoreCategory = company.getSCORE_CATEGORY_CARBON_FOOTPRINT();
-                softAssert.assertEquals(carbonFootprintScoreCategory, entityScoreRangeAndCategory5.getCategory(), company.getCOMPANY_NAME() + " Score Category verification");
+                assertTestCase.assertEquals(carbonFootprintScoreCategory, entityScoreRangeAndCategory5.getCategory(), company.getCOMPANY_NAME() + " Score Category verification");
 
                 Integer brownShareScore =  (int) Math.round(company.getCURRENT_BROWN_SHARE_SCORE());
-                RangeAndScoreCategory entityScoreRangeAndCategory6 = getRangeAndScoreCategoryByScore("Brown Share", brownShareScore);
+                RangeAndScoreCategory entityScoreRangeAndCategory6 = getRangeAndScoreCategoryByScore("Brown Share Ranges", brownShareScore);
                 String brownShareScoreCategory = company.getSCORE_CATEGORY_BROWN_SHARE();
-                softAssert.assertEquals(brownShareScoreCategory, entityScoreRangeAndCategory6.getCategory(), company.getCOMPANY_NAME() + " Score Category verification");
+                assertTestCase.assertEquals(brownShareScoreCategory, entityScoreRangeAndCategory6.getCategory(), company.getCOMPANY_NAME() + " Score Category verification");
 
                 Integer greenShareScore = company.getCURRENT_GREEN_SHARE_SCORE();
                 RangeAndScoreCategory entityScoreRangeAndCategory9 = getRangeAndScoreCategoryByScore("Green Share", greenShareScore);
                 String greenShareScoreCategory = company.getSCORE_CATEGORY_GREEN_SHARE();
-                softAssert.assertEquals(greenShareScoreCategory, entityScoreRangeAndCategory9.getCategory(), company.getCOMPANY_NAME() + " Score Category verification");
+                assertTestCase.assertEquals(greenShareScoreCategory, entityScoreRangeAndCategory9.getCategory(), company.getCOMPANY_NAME() + " Score Category verification");
 
-                softAssert.assertEquals(company.getCOMPANY_NAME(), expectedList.get(j).getCOMPANY_NAME());
+                assertTestCase.assertEquals(company.getCOMPANY_NAME(), expectedList.get(j).getCOMPANY_NAME());
 
                 Double investmentPct = PortfolioUtilities.round((expectedList.get(j).getValue() / totalValueInPortfolio) * 100, 6);
                 double expectedPercentage = expectedList.get(j).getInvestmentPercentage();
                 double actualPercentage = company.getPERCENT_HOLDINGS();
 
 
-                softAssert.assertEquals(actualPercentage, expectedPercentage, String.format("%s  investment not matching", company.getCOMPANY_NAME()));
-                softAssert.assertEquals(investmentPct, expectedPercentage, String.format("%s  investment not matching", company.getCOMPANY_NAME()));
+                assertTestCase.assertEquals(actualPercentage, expectedPercentage, String.format("%s  investment not matching", company.getCOMPANY_NAME()));
+                assertTestCase.assertEquals(investmentPct, expectedPercentage, String.format("%s  investment not matching", company.getCOMPANY_NAME()));
                 System.out.printf("%.2f %50s  Actual", company.getPERCENT_HOLDINGS(), company.getCOMPANY_NAME());
                 System.out.println();
                 System.out.printf("%.2f %50s   Expected", investmentPct, expectedList.get(j).getCOMPANY_NAME());
                 System.out.println();
             }
-            softAssert.assertTrue(size >= expectedList.size());
+            assertTestCase.assertTrue(size >= expectedList.size());
             System.out.println("Actual count:" + expectedList.size());
             System.out.println("Expected count:" + size);
         }
-        softAssert.assertAll();
     }
 
 

@@ -1794,7 +1794,8 @@ public abstract class PageBase {
 
     public void closePortfolioExportDrawer() {
         Actions actionBuilder = new Actions(Driver.getDriver());
-        actionBuilder.moveToElement(closeIconInCompanySummariesDrawer).pause(1000).click().build().perform();
+        BrowserUtils.waitForClickablility(closeIconInCompanySummariesDrawer, 10);
+        actionBuilder.moveToElement(closeIconInCompanySummariesDrawer).pause(2000).click().build().perform();
     }
 
     public void clickCloseXIconWithJs() {
