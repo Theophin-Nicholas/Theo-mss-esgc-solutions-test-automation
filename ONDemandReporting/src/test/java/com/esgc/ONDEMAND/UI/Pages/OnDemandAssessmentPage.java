@@ -771,16 +771,16 @@ public class OnDemandAssessmentPage extends CommonPage {
     }
 
     public boolean validateOnDemandReportingLandingPage() {
-
-        if (!Environment.environment.equalsIgnoreCase("prod")) {
-            //return BrowserUtils.waitForVisibility(OnDemandMenuItem(), 60).getText().equals("ESG Reporting Portal");
-            return BrowserUtils.waitForVisibility(menu,30).getText().equals("ESG Reporting Portal");
-        } else {
-            return BrowserUtils.waitForVisibility(menu,30).getText().equals("On-Demand Reporting");
-            //return BrowserUtils.waitForVisibility(OnDemandMenuItem(), 60).getText().equals("On-Demand Reporting");
-            //return assertTestCase.assertEquals(BrowserUtils.waitForVisibility(OnDemandMenuItem, 90).getText(), "On-Demand Reporting", "Moody's Analytics: Request On-Demand Assessment page verified");
-        }
-        // return BrowserUtils.waitForVisibility(OnDemandMenuItem, 10).getText().equals("ESG Reporting Portal");
+        return BrowserUtils.waitForVisibility(menu,30).getText().equals("ESG Reporting Portal");
+//
+//        if (!Environment.environment.equalsIgnoreCase("prod")) {
+//            //return BrowserUtils.waitForVisibility(OnDemandMenuItem(), 60).getText().equals("ESG Reporting Portal");
+//        } else {
+//            return BrowserUtils.waitForVisibility(menu,30).getText().equals("On-Demand Reporting");
+//            //return BrowserUtils.waitForVisibility(OnDemandMenuItem(), 60).getText().equals("On-Demand Reporting");
+//            //return assertTestCase.assertEquals(BrowserUtils.waitForVisibility(OnDemandMenuItem, 90).getText(), "On-Demand Reporting", "Moody's Analytics: Request On-Demand Assessment page verified");
+//        }
+//        // return BrowserUtils.waitForVisibility(OnDemandMenuItem, 10).getText().equals("ESG Reporting Portal");
 
     }
 

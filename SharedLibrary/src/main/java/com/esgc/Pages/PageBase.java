@@ -740,6 +740,7 @@ public abstract class PageBase {
             WebElement pageElement = Driver.getDriver().findElement(By.xpath(pageXpath));
             // wait.until(ExpectedConditions.elementToBeClickable(pageElement)).click();
             BrowserUtils.waitForVisibility(pageElement, 30).click();
+            System.out.println(page + " page is loading...");
         }
     }
 

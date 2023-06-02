@@ -460,6 +460,7 @@ public class RegulatoryReportingPage extends CommonPage {
 
     //select interim reports
     public void selectInterimReports() {
+        BrowserUtils.waitForClickablility(interimReportsOption, 15);
         if (!isInterimReportsSelected()) {
             interimReportsOption.click();
         }
@@ -526,6 +527,7 @@ public class RegulatoryReportingPage extends CommonPage {
     public boolean verifyNewTabOpened(String currentWindowHandle) {
         BrowserUtils.wait(2);
         BrowserUtils.switchWindowsTo(currentWindowHandle);
+        BrowserUtils.waitForVisibility(rrStatusPage_ReportGeneratingMessage, 5);
         return rrStatusPage_ReportGeneratingMessage.isDisplayed();
     }
 
@@ -586,7 +588,10 @@ public class RegulatoryReportingPage extends CommonPage {
     }
 
     public boolean verifyIfReportsDownloaded(boolean clickDownload) {
-        if (clickDownload) rrStatusPage_DownloadButton.click();
+        if (clickDownload) {
+            BrowserUtils.waitForVisibility(rrStatusPage_DownloadButton, 50);
+            rrStatusPage_DownloadButton.click();
+        }
         BrowserUtils.wait(10);
         File dir = new File(BrowserUtils.downloadPath());
         File[] dir_contents = dir.listFiles();
@@ -1261,6 +1266,7 @@ public class RegulatoryReportingPage extends CommonPage {
 
 
                     String excelValue = excelData.getCellData(rowNumber, excelData.getColumnNum(colName));
+                    if(excelValue == null) continue;
                     if (BrowserUtils.isNumeric(excelValue) && !colName.equals("BVD9 ID")
                             && !colName.equals("TURNOVER REPORTING YEAR") && !colName.equals("CAPEX REPORTING YEAR")
                     ) {
@@ -1282,7 +1288,7 @@ public class RegulatoryReportingPage extends CommonPage {
         DecimalFormat dfZero = new DecimalFormat("0.00");
         //for (String portfolio : BrowserUtils.getElementsText(rrStatusPage_PortfoliosList)) {
         // String excelName = portfolio.replaceAll("ready", "").trim();
-        String excelName = "EUT_Portfolio Upload updated_good2_01_11_2023_1673474560860.xlsx";
+        String excelName = rrStatusPage_PortfoliosList.get(0).getText().replaceAll("ready", "").trim();
         System.out.println("Verifying reports content for " + excelName);
         ExcelUtil excelData = getExcelData(excelName, 2);
         System.out.println("excelData = " + excelData.getColumnsNames());
@@ -1315,6 +1321,7 @@ public class RegulatoryReportingPage extends CommonPage {
             Map<String, String> exlData = excelData.getfilteredData(params, requiredCols);
             for (String colName : checkValues) {
                 String excelValue = exlData.get(colName);
+                if (excelValue == null) continue;
                 if (BrowserUtils.isNumeric(excelValue) && !colName.equals("BVD9 ID")
                         && !colName.equals("REPORTING YEAR")) {
                     excelValue = dfZero.format(Double.valueOf(excelValue));
@@ -1504,4 +1511,11 @@ public class RegulatoryReportingPage extends CommonPage {
         BrowserUtils.waitForClickablility(createReportsButton, 5).click();
     }
 
+    public int getNumberOfDisabledPortfolioCount() {
+        int count = 0;
+        for (WebElement button : portfolioRadioButtonList) {
+            if (!button.isEnabled()) count++;
+        }
+        return count;
+    }
 }

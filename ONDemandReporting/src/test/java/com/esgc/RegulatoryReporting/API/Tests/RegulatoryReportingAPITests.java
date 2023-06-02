@@ -3,6 +3,7 @@ package com.esgc.RegulatoryReporting.API.Tests ;
 
 import com.esgc.Common.API.APIModels.Portfolio;
 import com.esgc.Common.API.APIModels.PortfolioDetails;
+import com.esgc.Common.API.Controllers.CommonAPIController;
 import com.esgc.Common.API.TestBase.CommonTestBase;
 import com.esgc.Common.UI.Pages.LoginPage;
 import com.esgc.RegulatoryReporting.API.Controllers.RegulatoryReportingAPIController;
@@ -32,7 +33,7 @@ public class RegulatoryReportingAPITests extends CommonTestBase {
         RegulatoryReportingPage reportingPage = new RegulatoryReportingPage();
         
         //Verify all the portfolios that the user has uploaded, are listed in the "select portfolio" section.
-        reportingPage.navigateToPageFromMenu("Dashboard");
+        reportingPage.navigateToPageFromMenu("Climate Dashboard");
         test.info("Navigated to Dashboard Page");
         reportingPage.clickPortfolioSelectionButton();
         List<String> expectedPortfoliosList = BrowserUtils.getElementsText(reportingPage.portfolioNamesList);
@@ -96,14 +97,14 @@ public class RegulatoryReportingAPITests extends CommonTestBase {
         reportingPage.navigateToPageFromMenu("ESG Reporting Portal");
         test.info("Navigated to Regulatory Reporting Page");
         getExistingUsersAccessTokenFromUI();
-        RegulatoryReportingAPIController apiController = new RegulatoryReportingAPIController();
-        Portfolio[] apiResponse = apiController.getPortfolioDetails().as(Portfolio[].class);
+        CommonAPIController apiController = new CommonAPIController();
+        Portfolio[] apiResponse = CommonAPIController.getPortfolioDetails().as(Portfolio[].class);
         for (Portfolio portfolio : apiResponse) {
             String portfolioName = portfolio.getPortfolios().get(0).getPortfolio_name();
             int index = reportingPage.selectPortfolioOptionByName(portfolioName);
             List<Integer> UIYears = BrowserUtils.convertStringListToIntList(reportingPage.getReportingFor_YearList(portfolioName, index), Integer::parseInt);
             if (portfolio.getPortfolios().get(0).getReporting_years().size() > 0 && BrowserUtils.convertStringListToIntList(portfolio.getPortfolios().get(0).getReporting_years(), Integer::parseInt).stream().min(Integer::compare).get() < 2019) {
-                assertTestCase.assertTrue(UIYears.stream().min(Integer::compare).get() > 2018, "Validating that years are not showing less tyhan 2019");
+                assertTestCase.assertTrue(UIYears.stream().min(Integer::compare).get() > 2018, "Validating that years are not showing less than 2019");
             }
             reportingPage.deSelectPortfolioOptionByName(portfolioName);
         }

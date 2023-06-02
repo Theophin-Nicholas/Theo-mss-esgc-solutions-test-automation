@@ -38,6 +38,7 @@ public class RegulatoryReportingEntitlementsTests extends UITestBase {
             assertTestCase.assertFalse(regulatoryReportingPage.ValidateMenuItemIsAvailable("Regulatory Reporting"), "Validating that Regulatory Reporting option is not visible to unentitled person ");
         } else {
             login.loginWithParams("qa-mesg+a15@outlook.com", "Moodys123");
+            BrowserUtils.waitForVisibility(regulatoryReportingPage.portfolioNamesList, 10);
             assertTestCase.assertTrue(regulatoryReportingPage.isEUTaxonomyOptionNotClickable(), "Validating that EU Taxonomy option is not clickable to unentitled person ");
         }
     }
@@ -59,7 +60,7 @@ public class RegulatoryReportingEntitlementsTests extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI, REGULATORY_REPORTING, ENTITLEMENTS, SMOKE}, dataProvider = "Regulatory Reporting Entitlements")
-    @Xray(test = {11563, 10867, 11563, 10858, 11563})
+    @Xray(test = {10867, 11563, 10858})
     public void verifyProdEntitlementForRegulatoryReporting(String username, String password, String entitlements) {
         LoginPage login = new LoginPage();
         RegulatoryReportingPage regulatoryReportingPage = new RegulatoryReportingPage();
@@ -89,9 +90,9 @@ public class RegulatoryReportingEntitlementsTests extends UITestBase {
         } else {
             System.out.println("Environment is not prod");
             return new Object[][]{
-                    {"mesg360-testing+investor6@outlook.com", "Test12345@@", "SFDR"},//SFDR
-                    {"mesg360-testing+investor24@outlook.com", "Test12345@@", "EU"},//EU Taxonomy
-                    {"mesg360-testing+investor28@outlook.com", "Test12345@@", "SFDR + EU"},//SFDR + EU Taxonomy
+                    {"mesg360-testing+investor6-trial@outlook.com", "Test12345", "SFDR"},//SFDR
+                    {"mesg360-testing+investor24@outlook.com", "Test12345", "EU"},//EU Taxonomy
+                    {"mesg360-testing+investor28@outlook.com", "Test12345", "SFDR + EU"},//SFDR + EU Taxonomy
             };
         }
     }

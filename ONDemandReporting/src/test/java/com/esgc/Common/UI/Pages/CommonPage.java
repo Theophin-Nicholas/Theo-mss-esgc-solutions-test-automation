@@ -56,8 +56,14 @@ public class CommonPage extends UploadPortfolio {
     @FindBy(xpath = "//div[.='Select Action']/..//input")
     public List<WebElement> reportingRadioButtonList;
 
-    @FindBy(xpath = "//div[contains(text(),'Select Portfolio')]/../div[2]/following-sibling::div/div[1]//span[2]")
+    @FindBy(xpath = "//div[.='Portfolio']/../following-sibling::div//label/span[2]")
     public List<WebElement> portfolioNamesList;
+
+    @FindBy(xpath = "//div[@id='prop-search']//*[@heap_id='portfolio-selection']/div[1]")
+    public List<WebElement> dashboardPortfolioNamesList;
+
+    @FindBy(xpath = "//*[@heap_id='portfolio-selection']/div[1]/span")
+    public List<WebElement> portfolioSelectionModalPortfolioNamesList;
 
     @FindBy(xpath = "//div[contains(text(),'Select Portfolio')]")
     public WebElement divSelectPortfolio;
@@ -134,14 +140,17 @@ public class CommonPage extends UploadPortfolio {
         BrowserUtils.wait(5);
         navigateToPageFromMenu("reportingservice", "ESG Reporting Portal");
         if (reportingService.contains("EU")) {
+            System.out.println("EU Taxonomy option is being selected");
             clickOnEUTaxonomyOption();
         }
         if (reportingService.contains("SFDR")) {
+            System.out.println("SFDR PAIs option is being selected");
             clickOnSFDRPAIsOption();
         }
         if (reportingService.contains("On-Demand")) {
             clickOnDemandOption();
         }
+        BrowserUtils.waitForVisibility(portfolioNamesList,10);
     }
 
     public void clickOnSFDRPAIsOption() {
@@ -170,6 +179,7 @@ public class CommonPage extends UploadPortfolio {
     }
 
     public List<String> getPortfolioList() {
+        BrowserUtils.waitForVisibility(portfolioNamesList, 10);
         return BrowserUtils.getElementsText(portfolioNamesList);
     }
 
@@ -192,6 +202,7 @@ public class CommonPage extends UploadPortfolio {
                 break;
             }
         }
+        BrowserUtils.waitForVisibility(portfolioNamesList, 10);
     }
 
     public void ValidateReportingOptions(List<String> reportingOptions) {
@@ -265,7 +276,8 @@ public class CommonPage extends UploadPortfolio {
         //select all buttons if not selected
         int count = 0;
         while (getSelectedPortfolioOptions().size() < 4 && count < portfolioNamesList.size()) {
-            portfolioRadioButtonList.get(count).click();
+            if(!portfolioRadioButtonList.get(count).isSelected())
+                portfolioRadioButtonList.get(count).click();
             count++;
         }
         //portfolioRadioButtonList.stream().filter(button -> !button.isSelected()).forEach(WebElement::click);
@@ -375,6 +387,7 @@ public class CommonPage extends UploadPortfolio {
     }
 
     public ExcelUtil getExcelData(String excelName, int sheetIndex) {
+        System.out.println("excelName = " + excelName);
         File dir = new File(BrowserUtils.downloadPath());
         File[] dir_contents = dir.listFiles();
         assert dir_contents != null;
@@ -408,5 +421,10 @@ public class CommonPage extends UploadPortfolio {
 
     public boolean verifyPortfolioEnabled(String portfolioName) {
         return portfolioRadioButtonList.get(getPortfolioList().indexOf(portfolioName)).isEnabled();
+    }
+
+    public boolean verifyPortfolioUploadLink() {
+        BrowserUtils.waitForVisibility(uploadAnotherPortfolioLink, 10);
+        return uploadAnotherPortfolioLink.isDisplayed();
     }
 }

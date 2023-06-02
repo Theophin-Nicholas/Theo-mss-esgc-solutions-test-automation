@@ -3,9 +3,9 @@
     <listeners>
         <listener class-name="com.esgc.Utilities.XrayListener"/>
     </listeners>
-    <test name="ESGC Regression Test">
+    <test name="ESGC Regulatory Reporting Regression Test">
 
-        <parameter name="reportName" value="Regression Test Report"/>
+        <parameter name="reportName" value="Regulatory Reporting Regression Test Report"/>
 
         <groups>
             <run>
