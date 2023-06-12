@@ -42,7 +42,7 @@ public abstract class TestBase {
     @BeforeTest(alwaysRun = true)
     @Parameters("reportName")
     public void setupTestBeforeExecution(@Optional String reportName) {
-        DatabaseDriver.createDBConnection();
+        //DatabaseDriver.createDBConnection();
         //Check if execution is in remote environment or local?
         if (System.getProperty("browser") != null) {
             isRemote = System.getProperty("browser").contains("remote");
@@ -92,7 +92,7 @@ public abstract class TestBase {
 
     @AfterTest(alwaysRun = true)
     public void tearDownAndGenerateReport() {
-        DatabaseDriver.destroy();
+        //DatabaseDriver.destroy();
         report.flush();
     }
 

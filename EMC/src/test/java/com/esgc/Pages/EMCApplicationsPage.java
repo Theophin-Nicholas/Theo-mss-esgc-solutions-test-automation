@@ -51,8 +51,6 @@ public class EMCApplicationsPage extends EMCBasePage{
     @FindBy (tagName = "input")
     public WebElement searchInput;
 
-    @FindBy (xpath = "//button[@type='submit']")
-    public WebElement searchButton;
     //Create Application Page Objects
 
     @FindBy (name = "key")
@@ -79,6 +77,12 @@ public class EMCApplicationsPage extends EMCBasePage{
     @FindBy (xpath = "//div[@role='dialog']//button[.='Cancel']")
     public WebElement deletePopupCancelButton;
 
+    @FindBy(xpath = "//button[@title='Next page']")
+    public WebElement nextPageButton;
+
+    @FindBy(xpath = "//button[@title='Previous page']")
+    public WebElement previousPageButton;
+
 
     public List<String> getApplicationNames() {
         List<String> names = new ArrayList<String>();
@@ -90,14 +94,24 @@ public class EMCApplicationsPage extends EMCBasePage{
 
     public void goToApplication(String applicationName) {
         searchApplication(applicationName);
-        for (WebElement element : applications) {
-            if (element.getText().equals(applicationName)) {
-                System.out.println("Application found: " + applicationName);
-                System.out.println("Application name: " + element.getText());
-                element.click();
-                return;
+        boolean check = true;
+        while (check){
+            for (WebElement element : applications) {
+                if (element.getText().equals(applicationName)) {
+                    System.out.println("Application found: " + applicationName);
+                    System.out.println("Application name: " + element.getText());
+                    element.click();
+                    return;
+                }
+            }
+            if (nextPageButton.isEnabled()) {
+                System.out.println("Application not found in current page, going to next page");
+                nextPageButton.click();
+            } else {
+                check = false;
             }
         }
+
         System.out.println("Application not found: " + applicationName);
     }
     public void clearSearchInput() {
@@ -195,7 +209,17 @@ public class EMCApplicationsPage extends EMCBasePage{
         createPage.applicationUrlInput.sendKeys(applicationUrl+Keys.TAB);
         assertTestCase.assertTrue(createPage.saveButton.isEnabled(), "Save Button is enabled");
         BrowserUtils.waitForClickablility(createPage.saveButton, 10).click();
-        wait(notification, 10);
+        BrowserUtils.waitForVisibility(createPage.notification, 5);
+        assertTestCase.assertTrue(createPage.notification.isDisplayed(), "Notification is displayed");
+        System.out.println("Notification text: " + createPage.notification.getText());
+        if(notification.getText().contains("success")){
+            System.out.println("Application created successfully");
+            EMCApplicationDetailsPage detailsPage = new EMCApplicationDetailsPage();
+            detailsPage.verifyApplicationDetails();
+            detailsPage.backToApplicationsButton.click();
+        }else{
+            System.out.println("Application creation failed");
+        }
     }
 
     public void clickOnCancelButton() {

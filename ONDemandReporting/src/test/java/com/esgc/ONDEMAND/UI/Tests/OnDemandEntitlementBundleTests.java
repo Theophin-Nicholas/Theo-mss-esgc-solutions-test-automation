@@ -491,7 +491,7 @@ public class OnDemandEntitlementBundleTests extends UITestBase {
             OnDemandAssessmentPage ODAPage = new OnDemandAssessmentPage();
             //onDemandAssessmentPage.selectPortfolioByNameFromPortfolioSelectionModal(portfolioName);
             //ODAPage.navigateToPageFromMenu("reportingservice","On-Demand Reporting");
-            ODAPage.navigateToReportingService("On-Demand Assessment");
+            //ODAPage.navigateToReportingService("On-Demand Assessment");
             BrowserUtils.waitForVisibility(ODAPage.portfolioNamesList, 15);
 
             String portfolioName = "500 predicted portfolio";

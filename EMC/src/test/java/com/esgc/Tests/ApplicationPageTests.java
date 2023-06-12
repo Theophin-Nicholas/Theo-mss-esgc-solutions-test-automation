@@ -473,8 +473,7 @@ public class ApplicationPageTests extends EMCUITestBase {
         //Warning error message is displayed "Role key already exist in EMC and OKTA"
         BrowserUtils.waitForVisibility(detailsPage.notification, 10);
         assertTestCase.assertTrue(detailsPage.notification.isDisplayed(), "Error Message is displayed");
-        assertTestCase.assertTrue(detailsPage.notification.getText().equals("A role with the same name already exists. Try a different name."), "Error Message is displayed");
-
+        assertTestCase.assertEquals(detailsPage.notification.getText(), "A role with the same key already exists. Try a different key.", "Error Message is displayed");
         //Click Cancel button
         detailsPage.clickOnCancelButton();
     }
@@ -535,7 +534,7 @@ public class ApplicationPageTests extends EMCUITestBase {
         applicationsPage.createApplication(applicationName + faker.number().digits(3), applicationKey, applicationUrl, "web");
         assertTestCase.assertTrue(applicationsPage.notification.isDisplayed(), "Application Created Notification is displayed");
         System.out.println("Notification: " + applicationsPage.notification.getText());
-        assertTestCase.assertEquals(applicationsPage.notification.getText(), "Failed creating application. Please try again.",
+        assertTestCase.assertEquals(applicationsPage.notification.getText(), "An application with same key already exists. Try a different key.",
                 "Application already exists Notification is displayed");
         applicationsPage.clickOnCancelButton();
         BrowserUtils.wait(5);
@@ -643,10 +642,11 @@ public class ApplicationPageTests extends EMCUITestBase {
     @Xray(test = {2353, 2313, 2311})
     public void verifyUserClickAccountMenuOnApplicationsPageTest() {
         navigateToApplicationsPage("", "details");
-        wait(applicationsPage.applications, 20);
+        wait(applicationsPage.createApplicationButton, 20);
         assertTestCase.assertTrue(applicationsPage.applications.size() > 0, "Applications are displayed");
         navigateToMenu("Accounts");
         EMCAccountsPage accountsPage = new EMCAccountsPage();
+        accountsPage.search("test");
         wait(accountsPage.accountNames, 20);
         assertTestCase.assertTrue(accountsPage.accountNames.size() > 0, "Accounts are displayed");
     }

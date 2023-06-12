@@ -19,22 +19,25 @@ public class EMCUsersPage extends EMCBasePage {
     @FindBy(xpath = "(//input)[1]")
     public WebElement searchInput;
 
+    @FindBy(xpath = "//button[.='Search']")
+    public WebElement searchButton;
+
     @FindBy(xpath = "//thead//th")
     public List<WebElement> tableHeaders;
 
     @FindBy(xpath = "//tbody//tr[1]/*")
     public List<WebElement> firstRow;
 
-    @FindBy(xpath = "//tbody//th/a")
+    @FindBy(xpath = "//tbody//td[2]/a")
     public List<WebElement> names;
 
-    @FindBy(xpath = "//tbody//td[2]/a")
+    @FindBy(xpath = "//tbody//td[3]/a")
     public List<WebElement> userNames;
 
-    @FindBy(xpath = "//tbody//td[3]/a")
+    @FindBy(xpath = "//tbody//td[4]/a")
     public List<WebElement> accountNames;
 
-    @FindBy(xpath = "//tbody//td[4]//span")
+    @FindBy(xpath = "//tbody//td[5]//span")
     public List<WebElement> providerList;
 
     @FindBy(xpath = "//tbody//td//input")
@@ -79,7 +82,8 @@ public class EMCUsersPage extends EMCBasePage {
     public void selectUser(String userName) {
         wait(searchInput, 15);
         clear(searchInput);
-        searchInput.sendKeys(userName);
+        searchInput.sendKeys(userName, Keys.ENTER);
+        BrowserUtils.waitForClickablility(searchButton, 5).click();
         for (WebElement name : names) {
             scrollTo(name);
             if (name.getText().equals(userName)) {
@@ -194,18 +198,26 @@ public class EMCUsersPage extends EMCBasePage {
     }
 
     public boolean verifyUser(String userName, boolean search) {
-        if(search) {
-            wait(searchInput, 15);
-            clear(searchInput);
-            searchInput.sendKeys(userName);
-        }
-        for (WebElement name : names) {
-            scrollTo(name);
-            if (name.getText().equalsIgnoreCase(userName)) {
-                System.out.println("User found: " + userName);
-                return true;
+        if (search) searchUser(userName);
+        boolean check = true;
+        while(check){
+            //System.out.println(BrowserUtils.getElementsText(names));
+            for (WebElement name : names) {
+                //scrollTo(name);
+                if (name.getText().equalsIgnoreCase(userName)) {
+                    System.out.println("User found: " + userName);
+                    return true;
+                }
             }
+            if(nextPageButton.isEnabled()){
+                System.out.println("Going to next page");
+                BrowserUtils.waitForClickablility(nextPageButton, 5).click();
+                BrowserUtils.wait(1);
+            }
+            else
+                check = false;
         }
+
         System.out.println("User not found: " + userName);
         return false;
     }
@@ -214,6 +226,7 @@ public class EMCUsersPage extends EMCBasePage {
         wait(searchInput, 15);
         clear(searchInput);
         searchInput.sendKeys(userName);
+        BrowserUtils.waitForClickablility(searchButton, 5).click();
     }
 
     public boolean verifyUserListSorted() {

@@ -121,19 +121,6 @@ public class EMCUserImportPage extends EMCBasePage{
         BrowserUtils.waitAndClick(popupImportButton, 10);
         wait(notification, 10);
         assertTestCase.assertTrue(notification.isDisplayed(),"Importing users notification is displayed");
-        EMCAccountDetailsPage accountDetailsPage = new EMCAccountDetailsPage();
-//
-//        wait(accountDetailsPage.userNamesList, 10);
-//        System.out.println("userNamesList.size() = " + accountDetailsPage.userNamesList.size());
-//        for (int i = 0; i < 10; i++) {
-//            if(accountDetailsPage.verifyUser("QA Test User1") && accountDetailsPage.verifyUser("QA Test User2")){
-//                break;
-//            }
-//            BrowserUtils.wait(1);
-//            BrowserUtils.refresh();
-//        }
-//        assertTestCase.assertTrue(accountDetailsPage.verifyUser("QA Test User1"),"QA Test User1 is imported");
-//        assertTestCase.assertTrue(accountDetailsPage.verifyUser("QA Test User2"),"QA Test User2 is imported");
         return true;
     }
 
