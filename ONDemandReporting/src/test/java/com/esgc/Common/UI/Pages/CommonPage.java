@@ -238,11 +238,20 @@ public class CommonPage extends UploadPortfolio {
     public int selectPortfolioOptionByName(String name) {
         if (IsPortfolioTableLoaded()) {
             int index = getPortfolioList().indexOf(name.trim());
+            if(index == -1){
+                System.out.println("Portfolio not found");
+                return -1;
+            }
             System.out.println("Index = " + index);
-            portfolioRadioButtonList.get(index).click();
-            return index;
+            if(portfolioRadioButtonList.get(index).isEnabled()){
+                portfolioRadioButtonList.get(index).click();
+                return index;
+            } else {
+                return -1;
+            }
+
         } else {
-            return 0;
+            return -1;
         }
     }
 

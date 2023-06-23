@@ -34,6 +34,7 @@ public class RegulatoryReportingPageTests extends UITestBase {
         assertTestCase.assertTrue(reportingPage.isRegulatoryReportingDisplayed(),
                 "Verify that user can navigate to Regulatory Reporting page");
         reportingPage.clickOnRegulatoryReporting();
+        reportingPage.waitForPortfolioTableToLoad();
         //reportingPage.navigateToPageFromMenu("ESG Reporting Portal");
         TestBase.test.info("Navigated to Regulatory Reporting Page");
         assertTestCase.assertTrue(reportingPage.isPageTitleDisplayed(),
@@ -42,7 +43,7 @@ public class RegulatoryReportingPageTests extends UITestBase {
                 "Regulatory Reporting Page - Reporting SubTitle is verified");
         assertTestCase.assertTrue(reportingPage.getReportingList().size() > 0,
                 "Regulatory Reporting Page - Reporting list is verified");
-        BrowserUtils.wait(100);
+        //BrowserUtils.wait(100);
         assertTestCase.assertTrue(reportingPage.portfolioNamesList.size() > 0,
                 "Regulatory Reporting Page - Portfolio list is verified");
         assertTestCase.assertTrue(reportingPage.getReportingList().contains("SFDR PAIs"),
@@ -473,7 +474,7 @@ public class RegulatoryReportingPageTests extends UITestBase {
 
         //verify create reports button after clicking
         BrowserUtils.wait(3);
-        // try{
+         try{
         //New tab should be opened and empty state message should be displayed as in the screenshot
         assertTestCase.assertTrue(reportingPage.verifyNewTabOpened(tabs), "New tab is opened");
         System.out.println("New tab is opened");
@@ -496,12 +497,12 @@ public class RegulatoryReportingPageTests extends UITestBase {
         System.out.println("Definitions sheet is verified");
         assertTestCase.assertTrue(reportingPage.verifyDisclaimer(), "Disclaimer sheet is verified");
         System.out.println("Disclaimer sheet is verified");
-        //  } catch (Exception e) {
-        //      assertTestCase.assertTrue(false, "Report verification failed");
-        //      e.printStackTrace();
-        //  } finally {
-        //      BrowserUtils.switchWindowsTo(currentWindow);
-        //  }
+          } catch (Exception e) {
+              assertTestCase.assertTrue(false, "Report verification failed");
+              e.printStackTrace();
+          } finally {
+              BrowserUtils.switchWindowsTo(currentWindow);
+          }
 
     }
 

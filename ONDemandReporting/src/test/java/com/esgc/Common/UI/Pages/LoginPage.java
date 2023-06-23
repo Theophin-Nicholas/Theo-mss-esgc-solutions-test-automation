@@ -436,7 +436,7 @@ public class LoginPage extends PageBase {
      /*   if (!termsAndConditionsCheckBox.isSelected())
             wait.until(ExpectedConditions.visibilityOf(termsAndConditionsLabel)).click();*/
         wait.until(ExpectedConditions.visibilityOf(loginButton)).click();
-
+        setAccessTokenFromUI();
 
     }
 

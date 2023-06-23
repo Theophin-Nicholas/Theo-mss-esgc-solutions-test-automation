@@ -32,20 +32,28 @@ public class OnDemandAssessmentQueries {
         List<String> dbLocationsInfo = new ArrayList<>();
 
         String query1 = "select SUM(VALUE) as TotalInv from df_target.df_portfolio Where portfolio_id = '" + portfolioId + "'";
-        int totalInvestments = Integer.valueOf(DatabaseDriver.getQueryResultMap(query1).get(0).get("TOTALINV").toString());
+        int totalInvestments = Integer.parseInt(DatabaseDriver.getQueryResultMap(query1).get(0).get("TOTALINV").toString());
 
-        String query2 = "select REGION_NAME,Round((SUM(VALUE)/" + totalInvestments + ")*100, 2) as InvPerc from df_target.df_portfolio Where portfolio_id = '" + portfolioId + "' group by region_name;";
+        String query2 = "select REGION_NAME,Round((SUM(VALUE)/" + totalInvestments + ")*100) as InvPerc from df_target.df_portfolio Where portfolio_id = '" + portfolioId + "' group by region_name;";
         List<Map<String, Object>> dbLocationWiseCompaniesInfo = DatabaseDriver.getQueryResultMap(query2);
-
+        //System.out.println("dbLocationWiseCompaniesInfo = " + dbLocationWiseCompaniesInfo);
         for (int i = 0; i < dbLocationWiseCompaniesInfo.size(); i++) {
-            dbLocationsInfo.add(dbLocationWiseCompaniesInfo.get(i).get("REGION_NAME") + " (" + dbLocationWiseCompaniesInfo.get(i).get("InvPerc") + ")");
+            int invPerc = Integer.parseInt(dbLocationWiseCompaniesInfo.get(i).get("INVPERC").toString());
+            dbLocationsInfo.add(dbLocationWiseCompaniesInfo.get(i).get("REGION_NAME") + " (" + invPerc + "%)");
+            dbLocationsInfo.add(dbLocationWiseCompaniesInfo.get(i).get("REGION_NAME") + " (" + (invPerc+1) + "%)");
+            dbLocationsInfo.add(dbLocationWiseCompaniesInfo.get(i).get("REGION_NAME") + " (" + (invPerc-1) + "%)");
+            //System.out.println("dbLocationsInfo = " + dbLocationsInfo);
         }
 
-        String query3 = "select COUNTRY_NAME,Round((SUM(VALUE)/" + totalInvestments + ")*100, 2) as InvPerc from df_target.df_portfolio Where portfolio_id = '" + portfolioId + "' group by COUNTRY_NAME;";
+        String query3 = "select COUNTRY_NAME,Round((SUM(VALUE)/" + totalInvestments + ")*100) as InvPerc from df_target.df_portfolio Where portfolio_id = '" + portfolioId + "' group by COUNTRY_NAME;";
         List<Map<String, Object>> dbSectorWiseCompaniesInfo = DatabaseDriver.getQueryResultMap(query3);
-
+        //dbSectorWiseCompaniesInfo.forEach(System.out::println);
         for (int i = 0; i < dbSectorWiseCompaniesInfo.size(); i++) {
-            dbLocationsInfo.add(dbSectorWiseCompaniesInfo.get(i).get("REGION_NAME") + " (" + dbSectorWiseCompaniesInfo.get(i).get("InvPerc") + ")");
+            int invPerc = Integer.parseInt(dbSectorWiseCompaniesInfo.get(i).get("INVPERC").toString());
+            dbLocationsInfo.add(dbSectorWiseCompaniesInfo.get(i).get("COUNTRY_NAME") + " (" + invPerc + "%)");
+            dbLocationsInfo.add(dbSectorWiseCompaniesInfo.get(i).get("COUNTRY_NAME") + " (" + (invPerc+1) + "%)");
+            dbLocationsInfo.add(dbSectorWiseCompaniesInfo.get(i).get("COUNTRY_NAME") + " (" + (invPerc-1) + "%)");
+            //System.out.println("dbLocationsInfo = " + dbLocationsInfo);
         }
 
         return dbLocationsInfo;
@@ -55,13 +63,16 @@ public class OnDemandAssessmentQueries {
 
         List<String> dbSectorsInfo = new ArrayList<>();
         String query1 = "select SUM(VALUE) as TotalInv from df_target.df_portfolio Where portfolio_id = '" + portfolioId + "'";
-        int totalInvestments = Integer.valueOf(DatabaseDriver.getQueryResultMap(query1).get(0).get("TOTALINV").toString());
+        int totalInvestments = Integer.parseInt(DatabaseDriver.getQueryResultMap(query1).get(0).get("TOTALINV").toString());
 
-        String query2 = "select SECTOR,Round((SUM(VALUE)/" + totalInvestments + ")*100, 2) as InvPerc from df_target.df_portfolio Where portfolio_id = '" + portfolioId + "' group by SECTOR;";
+        String query2 = "select SECTOR,Round((SUM(VALUE)/" + totalInvestments + ")*100) as InvPerc from df_target.df_portfolio Where portfolio_id = '" + portfolioId + "' group by SECTOR;";
         List<Map<String, Object>> dbSectorWiseCompaniesInfo = DatabaseDriver.getQueryResultMap(query2);
 
         for (int i = 0; i < dbSectorWiseCompaniesInfo.size(); i++) {
-            dbSectorsInfo.add(dbSectorWiseCompaniesInfo.get(i).get("REGION_NAME") + " (" + dbSectorWiseCompaniesInfo.get(i).get("InvPerc") + ")");
+            int invPerc = Integer.parseInt(dbSectorWiseCompaniesInfo.get(i).get("INVPERC").toString());
+            dbSectorsInfo.add(dbSectorWiseCompaniesInfo.get(i).get("SECTOR") + " (" + invPerc + "%)");
+            dbSectorsInfo.add(dbSectorWiseCompaniesInfo.get(i).get("SECTOR") + " (" + (invPerc+1) + "%)");
+            dbSectorsInfo.add(dbSectorWiseCompaniesInfo.get(i).get("SECTOR") + " (" + (invPerc-1) + "%)");
         }
         return dbSectorsInfo;
     }

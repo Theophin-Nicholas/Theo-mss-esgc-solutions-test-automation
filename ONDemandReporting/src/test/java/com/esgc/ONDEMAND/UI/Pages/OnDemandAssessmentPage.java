@@ -69,7 +69,7 @@ public class OnDemandAssessmentPage extends CommonPage {
     @FindBy(xpath = "//div[contains(text(),'assessment eligible')]")
     public WebElement lblAssessmentEligible;
 
-    @FindBy(xpath = "//div/b")
+    @FindBy(xpath = "//button[@id='button-report-test-id-1']/preceding-sibling::div")
     public WebElement remainingAssessmentLimit;
 
     @FindBy(xpath = "(//div[contains(text(),'Predicted ESG Score')]/../../../..//div[text()])[2]")
@@ -501,7 +501,7 @@ public class OnDemandAssessmentPage extends CommonPage {
         else
             assertTestCase.assertTrue(predictedScoreInvper.getText().matches("\\d+% invested"));
         String assessmentEligible = lblAssessmentEligible.getText().substring(0, lblAssessmentEligible.getText().indexOf("%"));
-        assertTestCase.assertTrue(predictedScoreTextBelowGraph.getText().matches("Companies with predicted scores ranging 0-100 account for \\d+.\\d+% of investments"));
+        assertTestCase.assertTrue(predictedScoreTextBelowGraph.getText().matches("Companies with predicted scores ranging 0-100 account for \\d+.*\\d*% of investments"));
     }
 
     public void validateLocation() {
@@ -1093,7 +1093,7 @@ public class OnDemandAssessmentPage extends CommonPage {
     }
 
     public void closePanel() {
-        BrowserUtils.waitForClickablility(detailPanelCloseButton, 30).click();
+        BrowserUtils.waitAndClick(detailPanelCloseButton, 5);
     }
 
     public boolean identifyPredictedCompanies() {

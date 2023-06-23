@@ -144,6 +144,7 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
         RegulatoryReportingPage reportingPage = new RegulatoryReportingPage();
         
         reportingPage.navigateToPageFromMenu("ESG Reporting Portal");
+        reportingPage.waitForPortfolioTableToLoad();
         TestBase.test.info("Navigated to Regulatory Reporting Page");
         //verify portfolio upload modal
         assertTestCase.assertTrue(reportingPage.uploadAnotherPortfolioLink.isDisplayed(), "Portfolio Upload button is displayed");
@@ -248,6 +249,7 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
         RegulatoryReportingPage reportingPage = new RegulatoryReportingPage();
         
         reportingPage.navigateToPageFromMenu("ESG Reporting Portal");
+        reportingPage.waitForPortfolioTableToLoad();
         String year = "2021";
         TestBase.test.info("Navigated to Regulatory Reporting Page");
         //verify portfolio upload modal

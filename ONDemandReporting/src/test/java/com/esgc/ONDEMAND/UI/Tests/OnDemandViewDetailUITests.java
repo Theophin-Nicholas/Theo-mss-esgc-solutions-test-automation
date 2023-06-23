@@ -74,7 +74,7 @@ public class OnDemandViewDetailUITests extends UITestBase {
     public void verifyViewDetailPageBySector(){
         ViewDetailPage detail = new ViewDetailPage();
         String portfolioName = "500 predicted portfolio";
-        String portfolioName1 = "SFDROnlyPortfolioDelete";
+        String portfolioName1 = "Portfolio Upload updated_good2";
         OnDemandAssessmentPage onDemandAssessmentPage = new OnDemandAssessmentPage();
         onDemandAssessmentPage.navigateToReportingService("On-Demand Assessment");
         onDemandAssessmentPage.waitForPortfolioTableToLoad();
@@ -99,15 +99,15 @@ public class OnDemandViewDetailUITests extends UITestBase {
         detail.verifyTablesInSectorTab();
 
         detail.closeViewDetailPanel(detail);
-
     }
+
     @Test(groups = {UI, REGRESSION, SMOKE})
     @Xray(test = {14145,14146,14150,14154,14158})
     public void verifyViewDetailPageByRegion(){
 
         ViewDetailPage detail = new ViewDetailPage();
         String portfolioName = "500 predicted portfolio";
-        String portfolioName1 = "SFDROnlyPortfolioDelete";
+        String portfolioName1 = "SamplePortfolioToDelete";
         OnDemandAssessmentPage onDemandAssessmentPage = new OnDemandAssessmentPage();
         onDemandAssessmentPage.navigateToReportingService("On-Demand Assessment");
 

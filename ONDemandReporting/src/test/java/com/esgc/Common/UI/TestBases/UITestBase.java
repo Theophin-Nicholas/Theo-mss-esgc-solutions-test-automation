@@ -75,7 +75,11 @@ public abstract class UITestBase extends TestBase implements ITestListener {
                 BrowserUtils.wait(10);
                 setAccessTokenFromUI();
             }
-
+        } else{
+            if (isEntitlementsTest) {
+                loginPage.clickOnLogout();
+                BrowserUtils.wait(5);
+            }
         }
 
     }

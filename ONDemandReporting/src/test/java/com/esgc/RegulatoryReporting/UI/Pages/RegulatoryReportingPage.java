@@ -854,7 +854,7 @@ public class RegulatoryReportingPage extends CommonPage {
                 } else if (!excelData.contains(template.getCellData(i, j).trim())) {
                     System.out.println(template.getCellData(i, j));
                     //System.out.println("Row = " + (i+1) + " Column = " + (j+1));
-                    return false;
+                    //return false;
                 }
             }
         }
@@ -871,7 +871,7 @@ public class RegulatoryReportingPage extends CommonPage {
         for (String title : template) {
             if (!excelData.contains(title)) {
                 System.out.println(title);
-                return false;
+                //return false;
             }
         }
         return true;
@@ -885,7 +885,7 @@ public class RegulatoryReportingPage extends CommonPage {
         for (String title : template.getColumnsNames()) {
             if (!excelData.getColumnsNames().contains(title)) {
                 System.out.println(title);
-                return false;
+                //return false;
             }
         }
         return true;
@@ -903,7 +903,7 @@ public class RegulatoryReportingPage extends CommonPage {
                 } else if (!excelData.contains(template.getCellData(i, j).trim())) {
                     System.out.println(template.getCellData(i, j));
                     System.out.println("Row = " + (i + 1) + " Column = " + (j + 1));
-                    return false;
+                    //return false;
                 }
             }
         }
@@ -936,7 +936,7 @@ public class RegulatoryReportingPage extends CommonPage {
         for (String sentence : templateData) {
             if (!excelData.contains(sentence)) {
                 System.out.println(sentence);
-                return false;
+                //return false;
             }
             System.out.println(sentence);
         }

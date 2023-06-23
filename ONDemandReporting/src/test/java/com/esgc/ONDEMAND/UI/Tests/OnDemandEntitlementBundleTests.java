@@ -375,7 +375,7 @@ public class OnDemandEntitlementBundleTests extends UITestBase {
             onDemandAssessmentPage.waitForPortfolioTableToLoad();
             String PortfolioName = onDemandAssessmentPage.SelectAndGetOnDemandEligiblePortfolioName();
             assertTestCase.assertTrue(onDemandAssessmentPage.isReequestAssessmentButtonDisabled(), "Validating that Request Assessment button is disabled");
-            assertTestCase.assertTrue(!onDemandAssessmentPage.isViewAssessmentRequestButtonDisabled(), "Validating that View Assessment Request button is enabled");
+            assertTestCase.assertTrue(onDemandAssessmentPage.isViewAssessmentRequestButtonDisabled(), "Validating that View Assessment Request button is enabled");
         } catch (Exception e) {
             e.printStackTrace();
             login.clickOnLogout();

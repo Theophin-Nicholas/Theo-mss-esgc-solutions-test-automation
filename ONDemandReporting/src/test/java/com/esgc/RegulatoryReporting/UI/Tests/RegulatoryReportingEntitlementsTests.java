@@ -66,7 +66,7 @@ public class RegulatoryReportingEntitlementsTests extends UITestBase {
         RegulatoryReportingPage regulatoryReportingPage = new RegulatoryReportingPage();
 //        if (Environment.environment.equalsIgnoreCase("prod")) {
             login.loginWithParams(username, password);
-            BrowserUtils.wait(10);
+            regulatoryReportingPage.waitForPortfolioTableToLoad();
             if (entitlements.contains("SFDR") && entitlements.contains("EU")) {
                 regulatoryReportingPage.clickOnEUTaxonomy();
                 regulatoryReportingPage.clickOnSFDRPAIsOption();
