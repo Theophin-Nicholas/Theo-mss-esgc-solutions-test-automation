@@ -388,6 +388,7 @@ public class LoginPage extends ClimatePageBase {
                 Assert.fail("Bundle not found!");
         }
         loginWithParams(username, password);
+        waitForDataLoadCompletion();
     }
 
     /*

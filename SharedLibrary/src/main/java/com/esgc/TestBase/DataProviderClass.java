@@ -352,7 +352,7 @@ public class DataProviderClass {
         return new Object[][]
                 {
                         {"Apple, Inc."},
-                        {"Twitter, Inc."},
+                        {"Airbus SE"},
                         {"SEEK Ltd."}
                 };
     }

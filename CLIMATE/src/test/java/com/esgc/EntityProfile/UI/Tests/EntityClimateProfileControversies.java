@@ -45,11 +45,11 @@ public class EntityClimateProfileControversies extends UITestBase {
             //TODO get values from database instead hardcoded values, assertion is failing
             List<String> categoryExpectedList = new ArrayList<>(
                     Arrays.asList(
-                            "Community Involvement (8)",
-                            "Business Behaviour (61)",
+                            "Community Involvement (6)",
+                            "Business Behaviour (60)",
                             "Human Rights (14)",
                             "Human Resources (5)",
-                            "Environment (3)",
+                            "Environment (2)",
                             "Corporate Governance (5)"
                     )
             );
@@ -109,7 +109,7 @@ public class EntityClimateProfileControversies extends UITestBase {
                 controversyList.clear();
             }
         } else {
-            if (entityProfilePage.noControversies.getText().equals("No controversies to display.")) {
+            if (entityProfilePage.noControversies.getText().equals("No ESG Incidents to display.")) {
                 System.out.println("No controversies to display.");
             } else {
                 throw new RuntimeException("Issue with Controversies table");

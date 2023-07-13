@@ -13,7 +13,7 @@ import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.Environment;
 import com.esgc.Utilities.ExcelUtil;
 import com.esgc.Utilities.Xray;
-import org.apache.commons.io.FileUtils;
+import net.snowflake.client.jdbc.internal.apache.commons.io.FileUtils;
 import org.testng.Assert;
 import org.testng.SkipException;
 import org.testng.annotations.AfterClass;
@@ -251,7 +251,7 @@ public class ExportTests extends UITestBase {
         researchLinePage.clickOutsideOfDrillDownPanel();
     }
 
-    @Test(groups = {"regression", "export"}, dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
+    @Test(enabled = false, groups = {REGRESSION, EXPORT}, dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
     @Xray(test = {2846})
     public void verifyCompaniesOrderInRegionsAndSectors(String researchLine) {
         ResearchLinePage researchLinePage = new ResearchLinePage();

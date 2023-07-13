@@ -17,7 +17,7 @@ public class FilterSelectionTests extends UITestBase {
 
 
     @Test(groups = {REGRESSION, UI, SMOKE},
-            description = "ESGCA-1293 - Verify the Filters Selection When a User Refreshes  the Page")
+            description = "ESGCA-1293 - Verify the Filters Selection When a User Refreshes  the Page", priority = 10000)
     @Xray(test = {1293, 1300})
     public void verifyFiltersDefaultSelectionWithRefresh() {
 

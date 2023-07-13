@@ -65,8 +65,8 @@ public class CommonPage extends UploadPortfolio {
     @FindBy(xpath = "//div[contains(text(),'Select Portfolio')]/following-sibling::div/div/p[text()='No portfolio available.']")
     public WebElement noPortfolioAvailable;
 
-   // @FindBy(xpath = "//li[@heap_menu='ESG Reporting Portal']")
-   // public WebElement OnDemandMenuItem;
+    // @FindBy(xpath = "//li[@heap_menu='ESG Reporting Portal']")
+    // public WebElement OnDemandMenuItem;
 
     @FindBy(xpath = "//div[contains(text(),'Select Portfolio')]/../div[2]/following-sibling::div/div[1]//input")
     public List<WebElement> portfolioRadioButtonList;
@@ -131,11 +131,8 @@ public class CommonPage extends UploadPortfolio {
 
     //This method is to select the reporting option on reporting landing page
     public void navigateToReportingService(String reportingService) {
-        // BrowserUtils.wait(3);
-        if (Environment.environment.equalsIgnoreCase("qa"))
-            navigateToPageFromMenu("reportingservice", "ESG Reporting Portal");
-        else
-            navigateToPageFromMenu("reportingservice", "On-Demand Reporting");
+        navigateToPageFromMenu("reportingservice", "ESG Reporting Portal");
+
         if (reportingService.contains("SFDR")) {
             clickOnEUTaxonomyOption();
         }
