@@ -33,7 +33,7 @@ public class UsersPageTests extends EMCUITestBase {
             System.out.println("Searching for user: " + userName);
             usersPage.selectUser(userName);
             EMCUserDetailsPage userDetailsPage = new EMCUserDetailsPage();
-            wait(userDetailsPage.firstNameInput, 10);
+            wait(userDetailsPage.applicationRolesTab, 10);
         }
     }
 
@@ -153,7 +153,7 @@ public class UsersPageTests extends EMCUITestBase {
         Driver.getDriver().get(Environment.EMC_URL);
         BrowserUtils.waitForPageToLoad(10);
         LoginPageEMC loginPageEMC = new LoginPageEMC();
-        loginPageEMC.loginEMCWithParams("ferhat.demir-non-empl@moodys.com", "Houston@2022");
+        loginPageEMC.loginEMCWithParams(Environment.VIEWER_USER_USERNAME, Environment.VIEWER_USER_PASSWORD);
         EMCMainPage mainPage = new EMCMainPage();
         BrowserUtils.waitForVisibility(mainPage.EMCTitle, 10);
         String getAccessTokenScript = "return JSON.parse(localStorage.getItem('okta-token-storage')).accessToken.claims.groups";
@@ -190,7 +190,7 @@ public class UsersPageTests extends EMCUITestBase {
         Driver.getDriver().get(Environment.EMC_URL);
         BrowserUtils.waitForPageToLoad(10);
         LoginPageEMC loginPageEMC = new LoginPageEMC();
-        loginPageEMC.loginEMCWithParams("ferhat.demir-non-empl@moodys.com", "Apple@2023??");
+        loginPageEMC.loginEMCWithParams(Environment.VIEWER_USER_USERNAME, Environment.VIEWER_USER_PASSWORD);
         EMCMainPage mainPage = new EMCMainPage();
         BrowserUtils.waitForVisibility(mainPage.EMCTitle, 10);
         String getAccessTokenScript = "return JSON.parse(localStorage.getItem('okta-token-storage')).accessToken.claims.groups";

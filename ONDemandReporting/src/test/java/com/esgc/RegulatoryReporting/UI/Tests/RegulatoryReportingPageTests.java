@@ -337,7 +337,7 @@ public class RegulatoryReportingPageTests extends UITestBase {
             System.out.println("Reports are downloaded");
 
         } catch (Exception e) {
-            assertTestCase.assertTrue(false, "New tab verification failed");
+            assertTestCase.assertTrue(false, "Report creation is failed");
             e.printStackTrace();
         } finally {
             Driver.closeBrowserTab();

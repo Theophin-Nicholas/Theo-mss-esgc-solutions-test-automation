@@ -80,18 +80,17 @@ public class EMCUsersPage extends EMCBasePage {
     }
 
     public void selectUser(String userName) {
-        wait(searchInput, 15);
-        clear(searchInput);
-        searchInput.sendKeys(userName, Keys.ENTER);
-        BrowserUtils.waitForClickablility(searchButton, 5).click();
+        System.out.println("userName = " + userName);
+        searchUser(userName);
         for (WebElement name : names) {
-            scrollTo(name);
+            System.out.println("name = " + name.getText());
             if (name.getText().equals(userName)) {
                 System.out.println("User found: " + userName);
                 name.click();
                 return;
             }
         }
+//        BrowserUtils.wait(19);
         System.out.println("User not found: " + userName);
     }
 
@@ -227,6 +226,7 @@ public class EMCUsersPage extends EMCBasePage {
         clear(searchInput);
         searchInput.sendKeys(userName);
         BrowserUtils.waitForClickablility(searchButton, 5).click();
+        BrowserUtils.waitForVisibility(names, 5);
     }
 
     public boolean verifyUserListSorted() {

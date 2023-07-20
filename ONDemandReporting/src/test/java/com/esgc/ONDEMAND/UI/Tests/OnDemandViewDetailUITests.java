@@ -79,7 +79,7 @@ public class OnDemandViewDetailUITests extends UITestBase {
         onDemandAssessmentPage.navigateToReportingService("On-Demand Assessment");
         onDemandAssessmentPage.waitForPortfolioTableToLoad();
         if(!onDemandAssessmentPage.verifyPortfolio(portfolioName1)) {
-            onDemandAssessmentPage.uploadPortfolio(portfolioName1.replaceAll(" ", ""));
+            onDemandAssessmentPage.uploadPortfolio("PortfolioWithValidData2");
         }
         if(!onDemandAssessmentPage.verifyPortfolio(portfolioName)) {
             onDemandAssessmentPage.uploadPortfolio(portfolioName.replaceAll(" ", ""));

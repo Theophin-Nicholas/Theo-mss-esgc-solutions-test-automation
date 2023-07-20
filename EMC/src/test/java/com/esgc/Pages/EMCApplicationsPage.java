@@ -148,27 +148,27 @@ public class EMCApplicationsPage extends EMCBasePage{
     }
 
     public boolean verifyApplication(String applicationName) {
-        clearSearchInput();
-        List<WebElement> applications = searchApplication(applicationName);
-        for (WebElement element : applications) {
-            if (element.getText().equals(applicationName)) {
-                System.out.println("Application found: " + applicationName);
-                System.out.println("Application name: " + element.getText());
-                return true;
-            }
-        }
-        return false;
+        return verifyApplication(applicationName, true);
     }
 
     public boolean verifyApplication(String applicationName, boolean isSearch) {
         if (isSearch) {
             searchApplication(applicationName);
         }
-        for (WebElement element : applications) {
-            if (element.getText().equals(applicationName)) {
-                System.out.println("Application found: " + applicationName);
-                System.out.println("Application name: " + element.getText());
-                return true;
+        boolean check = true;
+        while (check){
+            for (WebElement element : applications) {
+                if (element.getText().equals(applicationName)) {
+                    System.out.println("Application found: " + applicationName);
+                    System.out.println("Application name: " + element.getText());
+                    return true;
+                }
+            }
+            if (nextPageButton.isEnabled()) {
+                System.out.println("Application not found in current page, going to next page");
+                nextPageButton.click();
+            } else {
+                check = false;
             }
         }
         return false;

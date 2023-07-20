@@ -223,7 +223,9 @@ public class LoginPageEMC extends PageBase {
     public void loginEMCWithParams(String userName, String password) {
         Driver.getDriver().manage().window().maximize();
         wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(userName, Keys.ENTER);
-        BrowserUtils.wait(2);
+        BrowserUtils.waitAndClick(PTusernameBox, 10);
+        if(PTusernameBox.getAttribute("value").isEmpty())
+            wait.until(ExpectedConditions.visibilityOf(PTusernameBox)).sendKeys(userName);
         wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(password);
         wait.until(ExpectedConditions.visibilityOf(loginButton)).click();
         Driver.getDriver().manage().window().maximize();

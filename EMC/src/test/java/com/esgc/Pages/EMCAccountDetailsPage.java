@@ -146,7 +146,7 @@ public class EMCAccountDetailsPage extends EMCBasePage {
     @FindBy(xpath = "//li//div[1]//span")
     public List<WebElement> currentProductFeaturesList;
 
-    @FindBy(xpath = "//div[@aria-expanded='true']//following-sibling::div//button")
+    @FindBy(xpath = "//div[@aria-expanded='true']//following-sibling::div//button[last()]")
     public List<WebElement> currentProductFeaturesDeleteButtons;
 
     @FindBy(xpath = "//button[.='Proceed']")

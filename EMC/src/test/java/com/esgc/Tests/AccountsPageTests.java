@@ -943,14 +943,14 @@ public class AccountsPageTests extends EMCUITestBase {
         EMCAccountsEditUserPage editPage = new EMCAccountsEditUserPage();
 
         //Click over a User name
-        if (detailsPage.verifyUser("QA" + activeUserName)) {
-            System.out.println("QA" + activeUserName + " is already available under the account");
-            detailsPage.searchUser("QA" + activeUserName);
-            editPage.editUser(editPage.firstNameInput.getAttribute("value").replaceAll("QA", ""),
-                    editPage.lastNameInput.getAttribute("value"),
-                    editPage.emailInput.getAttribute("value"));
-            BrowserUtils.wait(5);
-        }
+//        if (detailsPage.verifyUser(activeUserName)) {
+//            System.out.println("QA" + activeUserName + " is already available under the account");
+//            detailsPage.searchUser("QA" + activeUserName);
+//            editPage.editUser(editPage.firstNameInput.getAttribute("value").replaceAll("QA", ""),
+//                    editPage.lastNameInput.getAttribute("value"),
+//                    editPage.emailInput.getAttribute("value"));
+//            BrowserUtils.wait(5);
+//        }
         detailsPage.searchUser(activeUserName);
 
         //User details is displayed with EDIT hyperlink on the upper right
@@ -973,6 +973,7 @@ public class AccountsPageTests extends EMCUITestBase {
         String firstName = editPage.firstNameInput.getAttribute("value");
         String lastName = editPage.lastNameInput.getAttribute("value");
         String email = editPage.emailInput.getAttribute("value");
+        System.out.println(firstName + " " + lastName + " " + email);
 
         //Update and remove one or more of the Required Fields inside the User Form
         //Fields display a Red colored Error message below the missing Field
@@ -1019,7 +1020,7 @@ public class AccountsPageTests extends EMCUITestBase {
         editPage.editUser("QA" + firstName, lastName, email);
         BrowserUtils.waitForVisibility(detailsPage.notification, 5);
         assertTestCase.assertTrue(detailsPage.notification.isDisplayed(), "Account Details Page - Notification is displayed");
-        detailsPage.searchUser("QA" + firstName + " " + lastName);
+        detailsPage.searchUser(activeUserName);
         assertTestCase.assertTrue(editPage.editButton.isDisplayed(), "Edit User Page - Edit Hyperlink is displayed");
         assertTestCase.assertEquals(editPage.firstNameInput.getAttribute("value"), "QA" + firstName, "Edit User Page - First Name Input is changed");
         assertTestCase.assertEquals(editPage.createdByInfo.getText(), createdInfo, "Edit User Page - Created By Info is not changed");

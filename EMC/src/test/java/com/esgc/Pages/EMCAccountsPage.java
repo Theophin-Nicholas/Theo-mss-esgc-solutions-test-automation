@@ -62,14 +62,12 @@ public class EMCAccountsPage extends EMCBasePage {
         clear(searchInput);
         searchInput.sendKeys(accountName);
         searchButton.click();
+        BrowserUtils.waitForVisibility(accountNames,5);
         if (accountNames.size()==0) System.out.println("No account found!");
     }
 
     public boolean verifyAccount(String accountName) {
-        wait(accountNames,20);
-        clear(searchInput);
-        searchInput.sendKeys(accountName, Keys.ENTER);
-        BrowserUtils.waitForClickablility(searchButton,5).click();
+        search(accountName);
         for(WebElement account : accountNames){
             if(account.getText().equalsIgnoreCase(accountName)){
                 return true;
@@ -80,9 +78,7 @@ public class EMCAccountsPage extends EMCBasePage {
     }
     public boolean verifyAccount(String accountName, boolean status) {
         String statusString = status ? "Active" : "Inactive";
-        wait(accountNames,20);
-        clear(searchInput);
-        searchInput.sendKeys(accountName);
+        search(accountName);
         boolean check = true;
         while (check){
             for (int i = 0; i < accountNames.size(); i++) {
@@ -126,12 +122,20 @@ public class EMCAccountsPage extends EMCBasePage {
 //    }
   
     public void goToAccount(String accountName){
-        clear(searchInput);
-        searchInput.sendKeys(accountName, Keys.ENTER);
-        for (WebElement account : accountNames) {
-            if (account.getText().equalsIgnoreCase(accountName)) {
-                account.click();
-                break;
+        search(accountName);
+        boolean check = true;
+        while (check){
+            for (int i = 0; i < accountNames.size(); i++) {
+                if (accountNames.get(i).getText().equalsIgnoreCase(accountName)) {
+                    accountNames.get(i).click();
+                    return;
+                }
+            }
+            if (nextPageButton.isEnabled()){
+                System.out.println("Account not found. Searching on next page...");
+                nextPageButton.click();
+            }else {
+                check = false;
             }
         }
     }
