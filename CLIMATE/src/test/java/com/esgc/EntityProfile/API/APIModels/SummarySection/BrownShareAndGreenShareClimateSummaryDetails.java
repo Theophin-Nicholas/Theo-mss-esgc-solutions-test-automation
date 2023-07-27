@@ -6,4 +6,5 @@ public class BrownShareAndGreenShareClimateSummaryDetails {
     public String name;
     public String ranking;
     public int score;
+    public String score_range;
 }

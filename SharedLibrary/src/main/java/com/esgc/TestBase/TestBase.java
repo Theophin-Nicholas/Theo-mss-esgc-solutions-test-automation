@@ -75,7 +75,7 @@ public abstract class TestBase {
     }
 
     @BeforeMethod(alwaysRun = true)
-    public void beforeMethodCreateReport(Method method) {
+    public synchronized void beforeMethodCreateReport(Method method) {
         test = report.createTest(method.getName());
         assertTestCase = new CustomAssertion();
     }
