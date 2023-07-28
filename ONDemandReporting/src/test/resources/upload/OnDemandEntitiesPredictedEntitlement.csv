@@ -4,17 +4,17 @@ Identifier type: Please specify the values as one of the following Identifiers: 
 Identifier: First column below !AsOfDate: Enter an ISIN or a Bloomberg Ticker. For example: T UN or CMP UN
 Value: Second Column below !AsOfDate: Please enter total monetary value of investment. This must be in one single currency
 
-!Currency,USD
-!AsOfDate,5/9/2019
+!Currency,EUR
+!AsOfDate,8/31/2020
 
 Identifier type,Identifier,Value
-ORBIS_ID,000000121,3
-ORBIS_ID,000000060,4
-ORBIS_ID,000000060,5
-ORBIS_ID,000000121,5
-ORBIS_ID,000000142,9
-ORBIS_ID,000000122,8
-ORBIS_ID,000000085,5
-ORBIS_ID,000000085,8
-ORBIS_ID,000000009,7
-ORBIS_ID,000000009,4
+ORBIS_ID,000000063,4
+ORBIS_ID,000000064,3
+ORBIS_ID,000000065,4
+ORBIS_ID,000000133,5
+ORBIS_ID,484641081,4
+ORBIS_ID,000000018,8
+ORBIS_ID,000000066,5
+ORBIS_ID,000000048,6
+ORBIS_ID,000000032,8
+ORBIS_ID,000000086,6

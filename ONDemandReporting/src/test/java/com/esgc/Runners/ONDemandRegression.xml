@@ -5,7 +5,7 @@
     </listeners>
     <test name="ESGC Regression Test">
 
-        <parameter name="reportName" value="Ondemand Test Report"/>
+        <parameter name="reportName" value="Regression Ondemand Test Report"/>
 
         <groups>
             <run>
@@ -17,9 +17,9 @@
 
         <packages>
 
-            <!--<package name="com.esgc.ONDEMAND.UI.*"/>
-            <package name="com.esgc.ONDEMAND.API.*"/>-->
-            <package name="com.esgc.ONDEMAND.DB.*"/>
+            <package name="com.esgc.ONDEMAND.UI.Tests.OnDemandAssessmentUITests"/>
+           <!-- <package name="com.esgc.ONDEMAND.API.*"/>
+            <package name="com.esgc.ONDEMAND.DB.*"/>-->
         </packages>
 
     </test>

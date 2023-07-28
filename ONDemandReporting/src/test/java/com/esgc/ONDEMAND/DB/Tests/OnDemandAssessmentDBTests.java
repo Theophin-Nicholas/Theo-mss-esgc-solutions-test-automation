@@ -36,7 +36,7 @@ public class OnDemandAssessmentDBTests extends DataValidationTestBase {
         String dbEligibleAssessment = queries.getEligibleAssessment(portfolioId);
         String dbHighestInvestment = queries.getHighestInvestment(portfolioId);
 
-        assertTestCase.assertEquals(uiEligibleAssessment, dbEligibleAssessment, "Eligible Assessments Percentage is not matching");
+        assertTestCase.assertEquals(String.format("%.2f", uiEligibleAssessment), dbEligibleAssessment, "Eligible Assessments Percentage is not matching");
         assertTestCase.assertEquals(uiHighestInvestment,dbHighestInvestment,"Eligible Assessments Percentage is not matching");
 
     }

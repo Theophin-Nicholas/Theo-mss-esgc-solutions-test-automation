@@ -68,6 +68,9 @@ public class ViewDetailPage extends CommonPage {
     @FindBy(xpath = "//table/tbody/tr")
     public List<WebElement> numberRowsTable;
 
+    @FindBy(xpath = "//div[text()='Predicted']/following-sibling::div/table/tbody/tr")
+    public List<WebElement> numberOfPredictedTableRows;
+
     @FindBy(xpath = "//div[text() = 'Predicted Score']")
     public WebElement predictedScoreLegend;
 
@@ -456,7 +459,7 @@ public class ViewDetailPage extends CommonPage {
 
     public List<String> getListOfInvestmentCellsText() {
         List<String> investmentCellData = new ArrayList<String>();
-        for (int i = 0; i <= returnNumberOfRows(); i++) {
+        for (int i = 1; i <= numberOfPredictedTableRows.size(); i++) {
             //String xpathInvestmentCell = "//*[@id=\"viewcompanies-tableCell-" + i + "-2\"]";
             String xpathInvestmentCell = "//div[text()='Predicted']/following-sibling::div/table/tbody/tr["+i+"]/td[3]";
             WebElement investmentCellElement = Driver.getDriver().findElement(By.xpath(xpathInvestmentCell));
