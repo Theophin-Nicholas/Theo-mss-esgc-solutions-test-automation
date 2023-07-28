@@ -205,12 +205,12 @@ public class LoginPage extends PageBase {
             BrowserUtils.clearCache();
             if (PTusernameBox.getAttribute("value").isEmpty())
                 PTusernameBox.sendKeys(Environment.INTERNAL_USER_USERNAME);
+            wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.INTERNAL_USER_PASSWORD);
+            wait.until(ExpectedConditions.visibilityOf(loginButton)).click();
         } catch (Exception e) {
             System.out.println("No need to enter username");
         }
-        wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.INTERNAL_USER_PASSWORD
-        );
-        wait.until(ExpectedConditions.visibilityOf(loginButton)).click();
+
     }
 
     public void clickOnNextButton() {
@@ -248,6 +248,7 @@ public class LoginPage extends PageBase {
 
     public void entitlementsLogin(EntitlementsBundles bundles) {
         switch (bundles) {
+            case ALL:
             case PHYSICAL_RISK:
                 wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.PHYSICAL_RISK_USERNAME, Keys.ENTER);
                 wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.PHYSICAL_RISK_PASSWORD);
@@ -435,7 +436,7 @@ public class LoginPage extends PageBase {
      /*   if (!termsAndConditionsCheckBox.isSelected())
             wait.until(ExpectedConditions.visibilityOf(termsAndConditionsLabel)).click();*/
         wait.until(ExpectedConditions.visibilityOf(loginButton)).click();
-
+        setAccessTokenFromUI();
 
     }
 

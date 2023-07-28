@@ -26,7 +26,7 @@ public class RegulatoryReporting_EUTaxonomy extends UITestBase {
     public void verifyEUTaxonomyReport() {
         RegulatoryReportingPage reportingPage = new RegulatoryReportingPage();
 
-        reportingPage.navigateToPageFromMenu("ESG Reporting Portal");
+        reportingPage.navigateToReportingService("EU");
         TestBase.test.info("Navigated to Regulatory Reporting Page");
         //verify portfolio upload modal
         assertTestCase.assertTrue(reportingPage.isUploadAnotherPortfolioLinkDisplayed(), "Portfolio Upload button is displayed");

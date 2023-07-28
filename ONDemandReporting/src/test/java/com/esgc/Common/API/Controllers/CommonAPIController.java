@@ -66,7 +66,7 @@ public class CommonAPIController {
                 .header("Content-Type", "application/json, text/plain, */*")
                 .pathParam("portfolio_id", portfolioId)
                 .when()
-                .delete(CommonEndPoints.DELETE_PORTFOLIO).prettyPeek();
+                .delete(CommonEndPoints.DELETE_PORTFOLIO);
     }
     public static void deletePortfolioByName(String portfolioName) {
         try {

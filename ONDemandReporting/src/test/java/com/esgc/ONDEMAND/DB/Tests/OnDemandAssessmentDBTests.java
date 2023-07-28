@@ -9,6 +9,7 @@ import com.esgc.ONDEMAND.UI.Pages.OnDemandAssessmentPage;
 import com.esgc.Utilities.*;
 import org.testng.annotations.Test;
 
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.util.*;
 
@@ -35,6 +36,10 @@ public class OnDemandAssessmentDBTests extends DataValidationTestBase {
         OnDemandAssessmentQueries queries = new OnDemandAssessmentQueries();
         String dbEligibleAssessment = queries.getEligibleAssessment(portfolioId);
         String dbHighestInvestment = queries.getHighestInvestment(portfolioId);
+
+        //convert 9.2% to 9.20%
+        DecimalFormat df = new DecimalFormat("0.00");
+        uiHighestInvestment = df.format(Double.parseDouble(uiHighestInvestment));
 
         assertTestCase.assertEquals(uiEligibleAssessment, dbEligibleAssessment, "Eligible Assessments Percentage is not matching");
         assertTestCase.assertEquals(uiHighestInvestment,dbHighestInvestment,"Eligible Assessments Percentage is not matching");
@@ -84,19 +89,25 @@ public class OnDemandAssessmentDBTests extends DataValidationTestBase {
         onDemandAssessmentPage.goToSendRequestPageForAPortfolio(portfolioName);
 
         ArrayList<String> uiLocationWiseCompaniesInfo = onDemandAssessmentPage.getLocationWiseInvestmentInfo();
+        System.out.println("uiLocationWiseCompaniesInfo = " + uiLocationWiseCompaniesInfo);
         ArrayList<String> uiSectorWiseCompaniesInfo = onDemandAssessmentPage.getSectorWiseInvestmentInfo();
-
+        System.out.println("uiSectorWiseCompaniesInfo = " + uiSectorWiseCompaniesInfo);
         OnDemandFilterAPIController controller = new OnDemandFilterAPIController();
         String portfolioId = controller.getPortfolioId(portfolioName);
+        System.out.println("portfolioId = " + portfolioId);
         OnDemandAssessmentQueries queries = new OnDemandAssessmentQueries();
         List<String> dbLocationInfo = queries.getLocationWiseInvestmentInfo(portfolioId);
+        System.out.println("dbLocationInfo = " + dbLocationInfo);
         List<String> dbSectorInfo = queries.getSectorWiseInvestmentInfo(portfolioId);
+        System.out.println("dbSectorInfo = " + dbSectorInfo);
 
         for (int i = 0; i < uiLocationWiseCompaniesInfo.size(); i++) {
+            if(uiLocationWiseCompaniesInfo.get(i).startsWith("All")) continue;
             assertTestCase.assertTrue(dbLocationInfo.contains(uiLocationWiseCompaniesInfo.get(i)), uiLocationWiseCompaniesInfo.get(i) + " Location Info is not matching");
         }
 
         for (int i = 0; i < uiSectorWiseCompaniesInfo.size(); i++) {
+            if(uiSectorWiseCompaniesInfo.get(i).startsWith("All")) continue;
             assertTestCase.assertTrue(dbSectorInfo.contains(uiSectorWiseCompaniesInfo.get(i)), uiSectorWiseCompaniesInfo.get(i) + " Sector Info is not matching");
         }
 

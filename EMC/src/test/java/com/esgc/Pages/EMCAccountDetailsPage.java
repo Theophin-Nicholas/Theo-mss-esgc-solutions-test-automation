@@ -146,7 +146,7 @@ public class EMCAccountDetailsPage extends EMCBasePage {
     @FindBy(xpath = "//li//div[1]//span")
     public List<WebElement> currentProductFeaturesList;
 
-    @FindBy(xpath = "//li//button[last()]")
+    @FindBy(xpath = "//div[@aria-expanded='true']//following-sibling::div//button[last()]")
     public List<WebElement> currentProductFeaturesDeleteButtons;
 
     @FindBy(xpath = "//button[.='Proceed']")
@@ -620,10 +620,11 @@ public class EMCAccountDetailsPage extends EMCBasePage {
                 wait(currentProductFeaturesDeleteButtons, 5);
                 System.out.println("Number of Features will be deleted = " + currentProductFeaturesDeleteButtons.size());
                 while (currentProductFeaturesDeleteButtons.size() > 0) {
-                    BrowserUtils.waitForClickablility(currentProductFeaturesDeleteButtons.get(0), 5).click();
+                    currentProductFeaturesDeleteButtons.get(0).click();
                     BrowserUtils.wait(1);
                     assertTestCase.assertTrue(deleteApplicationsProceedButton.isDisplayed(), "Delete Product Confirmation Popup is displayed");
                     BrowserUtils.waitForClickablility(deleteApplicationsProceedButton, 5).click();
+                    BrowserUtils.wait(1);
                 }
                 System.out.println("all features of " + applicationName + " product deleted");
                 break;
