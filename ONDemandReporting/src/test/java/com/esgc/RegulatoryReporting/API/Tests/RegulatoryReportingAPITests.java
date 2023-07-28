@@ -3,6 +3,7 @@ package com.esgc.RegulatoryReporting.API.Tests ;
 
 import com.esgc.Common.API.APIModels.Portfolio;
 import com.esgc.Common.API.APIModels.PortfolioDetails;
+import com.esgc.Common.API.Controllers.CommonAPIController;
 import com.esgc.Common.API.TestBase.CommonTestBase;
 import com.esgc.Common.UI.Pages.LoginPage;
 import com.esgc.RegulatoryReporting.API.Controllers.RegulatoryReportingAPIController;
@@ -15,10 +16,7 @@ import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import org.testng.annotations.Test;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static com.esgc.Utilities.Groups.*;
 import static org.hamcrest.Matchers.equalTo;
@@ -32,11 +30,12 @@ public class RegulatoryReportingAPITests extends CommonTestBase {
         RegulatoryReportingPage reportingPage = new RegulatoryReportingPage();
         
         //Verify all the portfolios that the user has uploaded, are listed in the "select portfolio" section.
-        reportingPage.navigateToPageFromMenu("Dashboard");
+        reportingPage.navigateToPageFromMenu("Climate Dashboard");
         test.info("Navigated to Dashboard Page");
         reportingPage.clickPortfolioSelectionButton();
-        List<String> expectedPortfoliosList = BrowserUtils.getElementsText(reportingPage.portfolioNamesList);
-        reportingPage.navigateToPageFromMenu("ESG Reporting Portal");
+        List<String> expectedPortfoliosList = BrowserUtils.getElementsText(reportingPage.dashboardPortfolioNamesList);
+        reportingPage.navigateToReportingService("SFDR");
+        reportingPage.waitForPortfolioTableToLoad();
         List<String> actualPortfoliosList = reportingPage.getPortfolioList();
         assertTestCase.assertTrue(expectedPortfoliosList.containsAll(actualPortfoliosList), "Regulatory Reporting Page - Portfolio list is verified");
 
@@ -56,12 +55,14 @@ public class RegulatoryReportingAPITests extends CommonTestBase {
         List<String> apiPortfoliosList = apiController.getPortfolioNames();
         //sort the list
         apiPortfoliosList.sort(String::compareToIgnoreCase);
-        assertTestCase.assertEquals(apiPortfoliosList.size(), actualPortfoliosList.size(), "API Portfolio list size is verified");
+
+        //subtract sample portfolio
+        assertTestCase.assertEquals(apiPortfoliosList.size()-1, actualPortfoliosList.size(), "API Portfolio list size is verified");
         //print the list
         expectedPortfoliosList.forEach(System.out::println);
-        for (String portfolioName : apiPortfoliosList) {
+        for (String portfolioName : actualPortfoliosList) {
             System.out.println("portfolioName = " + portfolioName);
-            assertTestCase.assertTrue(actualPortfoliosList.contains(portfolioName.trim()), "Portfolio name from API is verified in UI");
+            assertTestCase.assertTrue(apiPortfoliosList.contains(portfolioName.trim()), "Portfolio name from API is verified in UI");
         }
     }
 
@@ -78,14 +79,14 @@ public class RegulatoryReportingAPITests extends CommonTestBase {
     @Xray(test = {11681})
     public void verifyDownloadHistoryWhenNoDownloadReports() {
         LoginPage login = new LoginPage();
+        login.clickOnLogout();
         login.entitlementsLogin(EntitlementsBundles.NO_PREVIOUSLY_DOWNLOADED_REGULATORY_REPORTS);
-        BrowserUtils.wait(20);
-        getExistingUsersAccessTokenFromUI();
 
         RegulatoryReportingAPIController apiController = new RegulatoryReportingAPIController();
         List<String> apiReportsList1 = apiController.getDownloadHistory().jsonPath().getList("report_name");
         assertTestCase.assertTrue(apiReportsList1.size() == 0, "Verify downloaded reports not available in Previously Downloaded reports list");
-
+        login.clickOnLogout();
+        login.login();
     }
 
     @Test(groups = {REGRESSION, REGULATORY_REPORTING, API}, description = "Data Validation| MT | Regulatory Reporting | Validate Portfolio list and portfolio-details")
@@ -93,17 +94,21 @@ public class RegulatoryReportingAPITests extends CommonTestBase {
     public void ValidatePortfolioListAndPortfolioDetails() {
         RegulatoryReportingPage reportingPage = new RegulatoryReportingPage();
         
-        reportingPage.navigateToPageFromMenu("ESG Reporting Portal");
+        reportingPage.navigateToReportingService("SFDR");
         test.info("Navigated to Regulatory Reporting Page");
         getExistingUsersAccessTokenFromUI();
-        RegulatoryReportingAPIController apiController = new RegulatoryReportingAPIController();
-        Portfolio[] apiResponse = apiController.getPortfolioDetails().as(Portfolio[].class);
-        for (Portfolio portfolio : apiResponse) {
-            String portfolioName = portfolio.getPortfolios().get(0).getPortfolio_name();
+        Response response = CommonAPIController.getPortfolioDetails();
+        List<PortfolioDetails> portfolios = Collections.singletonList(response.as(Portfolio.class)).get(0).getPortfolios();
+
+        for (PortfolioDetails portfolio : portfolios) {
+            String portfolioName = portfolio.getPortfolio_name();
+            System.out.println("portfolioName = " + portfolioName);
             int index = reportingPage.selectPortfolioOptionByName(portfolioName);
-            List<Integer> UIYears = BrowserUtils.convertStringListToIntList(reportingPage.getReportingFor_YearList(portfolioName, index), Integer::parseInt);
-            if (portfolio.getPortfolios().get(0).getReporting_years().size() > 0 && BrowserUtils.convertStringListToIntList(portfolio.getPortfolios().get(0).getReporting_years(), Integer::parseInt).stream().min(Integer::compare).get() < 2019) {
-                assertTestCase.assertTrue(UIYears.stream().min(Integer::compare).get() > 2018, "Validating that years are not showing less tyhan 2019");
+            if (index == -1) continue;
+            if (portfolio.getReporting_years() != null && portfolio.getReporting_years().size() > 0
+                    && BrowserUtils.convertStringListToIntList(portfolio.getReporting_years(), Integer::parseInt).stream().min(Integer::compare).get() < 2019) {
+                List<Integer> UIYears = BrowserUtils.convertStringListToIntList(reportingPage.getReportingFor_YearList(portfolioName, index), Integer::parseInt);
+                assertTestCase.assertTrue(UIYears.stream().min(Integer::compare).get() > 2018, "Validating that years are not showing less than 2019");
             }
             reportingPage.deSelectPortfolioOptionByName(portfolioName);
         }
@@ -128,7 +133,8 @@ public class RegulatoryReportingAPITests extends CommonTestBase {
         });
         for (String portfolioName : portfolioNumbers.keySet()) {
             for (int i = 1; i < portfolioNumbers.get(portfolioName); i++) {
-                apiController.deletePortfolio(apiController.getPortfolioId(portfolioName));
+                CommonAPIController.deletePortfolio(apiController.getPortfolioId(portfolioName));
+                System.out.println("Remaining portfolios = " + apiController.getPortfolioNames().size());
             }
         }
     }
@@ -162,10 +168,10 @@ public class RegulatoryReportingAPITests extends CommonTestBase {
     public void VerifyAPIsResponseWithValidParameters() {
 
         RegulatoryReportingAPIController apiController = new RegulatoryReportingAPIController();
-
-        List<PortfolioDetails> portfolio = Arrays.asList(apiController.getPortfolioDetails().as(PortfolioDetails[].class));
+        Response response = CommonAPIController.getPortfolioDetails();
+        List<PortfolioDetails> portfolio = Collections.singletonList(response.as(Portfolio.class)).get(0).getPortfolios();
         String portfolioId = portfolio.stream().filter(i -> !(i.getPortfolio_name().contains("Sample"))).findFirst().get().getPortfolio_id();
-        Response response = apiController.getAysncGenerationAPIReposnse(portfolioId, DateTimeUtilities.getCurrentYear(), "Valid");
+        response = apiController.getAysncGenerationAPIReposnse(portfolioId, DateTimeUtilities.getCurrentYear(), "Valid");
         response.prettyPrint();
         response.then().assertThat()
                 .statusCode(200)

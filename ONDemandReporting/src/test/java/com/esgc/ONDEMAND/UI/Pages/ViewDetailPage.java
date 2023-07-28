@@ -50,6 +50,9 @@ public class ViewDetailPage extends CommonPage {
     @FindBy(xpath = "/html/body/div[2]/div[3]/div/div/div[2]/div[1]/p[2]")
     public WebElement viewDetailFooterLineTwo;
 
+    @FindBy(xpath = "//table[@id='viewcompanies']/../preceding-sibling::div")
+    public List<WebElement> viewPanelTableTitles;
+
     @FindBy(xpath = "//span[text()='Entity']")
     public WebElement entityCell;
 
@@ -67,6 +70,15 @@ public class ViewDetailPage extends CommonPage {
 
     @FindBy(xpath = "//table/tbody/tr")
     public List<WebElement> numberRowsTable;
+
+    @FindBy(xpath = "//table[@id='viewcompanies']//td[1]")
+    public List<WebElement> viewPanelEntityNames;
+
+    @FindBy(xpath = "//table[@id='viewcompanies']//td[2]")
+    public List<WebElement> viewPanelESGScores;
+
+    @FindBy(xpath = "//table[@id='viewcompanies']//td[3]")
+    public List<WebElement> viewPanelInvestments;
 
     @FindBy(xpath = "//div[text() = 'Predicted Score']")
     public WebElement predictedScoreLegend;
@@ -188,18 +200,18 @@ public class ViewDetailPage extends CommonPage {
     }
 
     public void clickScoreTypeButton() {
-        BrowserUtils.waitForClickablility(scoreTypeButton, 25).click();
+        BrowserUtils.waitForClickablility(scoreTypeButton, 30).click();
 
     }
 
     public void clickSectorButton() {
 
-        BrowserUtils.waitForClickablility(sectorButton, 25).click();
+        BrowserUtils.waitForClickablility(sectorButton, 30).click();
     }
 
     public void clickRegionButton() {
 
-        BrowserUtils.waitForClickablility(regionButton, 25).click();
+        BrowserUtils.waitForClickablility(regionButton, 30).click();
     }
 
     public String getScoreButtonTitle() {
@@ -242,7 +254,12 @@ public class ViewDetailPage extends CommonPage {
     }
 
     public boolean isHeaderDisplayed() {
-        return header.isDisplayed();
+        try {
+            return header.isDisplayed();
+        } catch (Exception e) {
+            return false;
+        }
+
     }
 
     public boolean isEscButtonDisplayed() {
@@ -386,25 +403,17 @@ public class ViewDetailPage extends CommonPage {
     }
 
     public List<String> getEntityCellsText() {
-        List<String> entityCellDataText = new ArrayList<String>();
-        for (int i = 0; i < returnNumberOfRows(); i++) {
-            if (i == 20) break;
-            String xpathEntityCell = "//*[@id=\"viewcompanies-tableCell-" + i + "-0\"]";
-            WebElement entityCellElement = Driver.getDriver().findElement(By.xpath(xpathEntityCell));
-            entityCellDataText.add(entityCellElement.getText());
-        }
-        //System.out.println("the number of the entities in the table is : "+entityCellDataText.size());
-        return entityCellDataText;
+        return BrowserUtils.getElementsText(viewPanelEntityNames);
+    }
+
+    public List<String> getEntityCellsText(int tableIndex) {
+        String xpath = "(//table[@id='viewcompanies']//tbody)["+tableIndex+"]//td[1]";
+        List<WebElement> elements = Driver.getDriver().findElements(By.xpath(xpath));
+        return BrowserUtils.getElementsText(elements);
     }
 
     public List<WebElement> getListOfInvestmentCells() {
-        List<WebElement> investmentCellData = new ArrayList<WebElement>();
-        for (int i = 0; i < returnNumberOfRows(); i++) {
-            String xpathInvestmentCell = "//*[@id=\"viewcompanies-tableCell-" + i + "-2\"]";
-            WebElement investmentCellElement = Driver.getDriver().findElement(By.xpath(xpathInvestmentCell));
-            investmentCellData.add(investmentCellElement);
-        }
-        return investmentCellData;
+        return viewPanelInvestments;
     }
 
     public List<WebElement> getSectorTables() {
@@ -456,12 +465,7 @@ public class ViewDetailPage extends CommonPage {
 
     public List<String> getListOfInvestmentCellsText() {
         List<String> investmentCellData = new ArrayList<String>();
-        for (int i = 0; i <= returnNumberOfRows(); i++) {
-            //String xpathInvestmentCell = "//*[@id=\"viewcompanies-tableCell-" + i + "-2\"]";
-            String xpathInvestmentCell = "//div[text()='Predicted']/following-sibling::div/table/tbody/tr["+i+"]/td[3]";
-            WebElement investmentCellElement = Driver.getDriver().findElement(By.xpath(xpathInvestmentCell));
-            investmentCellData.add(investmentCellElement.getText().substring(0, investmentCellElement.getText().indexOf("%")));
-        }
+        BrowserUtils.getElementsText(viewPanelInvestments).forEach(element -> investmentCellData.add(element.replace("%", "")));
         return investmentCellData;
     }
 
@@ -481,7 +485,6 @@ public class ViewDetailPage extends CommonPage {
         for (int i = 0; i < getListOfInvestmentCells().size(); i++) {
             entityInvestMap.put(entity.get(i), Double.parseDouble(investment.get(i)));
         }
-
         return entityInvestMap;
     }
 
@@ -515,11 +518,16 @@ public class ViewDetailPage extends CommonPage {
     }
 
     public void isEntitiesListSorted() {
-        List<String> sortedEntitiesList = getEntityCellsText().stream()
-                .sorted()
-                .collect(Collectors.toList());
-        System.out.println("the sorted entities list is: " + sortedEntitiesList.toString());
-        assertTestCase.assertEquals(getEntityCellsText(), sortedEntitiesList, "The entities list is sorted");
+        for(int i = 0; i < viewPanelTableTitles.size(); i++){
+            List<String> entitiesList = getEntityCellsText(i+1);
+            System.out.println("entitiesList = " + entitiesList);
+            List<String> sortedEntitiesList = entitiesList.stream()
+                    .sorted()
+                    .collect(Collectors.toList());
+            System.out.println("the sorted entities list is: " + sortedEntitiesList);
+            assertTestCase.assertEquals(getEntityCellsText(i+1), sortedEntitiesList, "The entities list is sorted");
+        }
+
     }
 
 
@@ -562,13 +570,21 @@ public class ViewDetailPage extends CommonPage {
         //odPage.clickOnViewDetailButton(portfolio);
         assertTestCase.assertTrue(detail.isHeaderDisplayed(), "We are still in the View Detail Page..+ clicking on esc button.");
         detail.clickEscButton();
-        assertTestCase.assertFalse(!detail.isHeaderDisplayed(), "the header of the View Detail page is not displayed. we are in the landing page");
+        assertTestCase.assertFalse(detail.isHeaderDisplayed(), "the header of the View Detail page is not displayed. we are in the landing page");
         odPage.clickOnViewDetailButton(portfolio);
         BrowserUtils.wait(10);
         assertTestCase.assertTrue(detail.isHeaderDisplayed(), "We are back in the View Detail Page..+ hitting the keyboard esc button.");
         detail.hitEscapeButton();
-        assertTestCase.assertFalse(!detail.isHeaderDisplayed(), "the header of the View Detail page is not displayed. we are back in the landing page");
+        assertTestCase.assertFalse(detail.isHeaderDisplayed(), "the header of the View Detail page is not displayed. we are back in the landing page");
 
+    }
+
+    public void closeViewDetailPanel(ViewDetailPage detail) {
+        OnDemandAssessmentPage odPage = new OnDemandAssessmentPage();
+        //odPage.clickOnViewDetailButton(portfolio);
+        while(detail.isHeaderDisplayed()){
+            detail.clickEscButton();
+        }
     }
 
     public void verifyEntitiesNotClickableInViewDetailPage(ViewDetailPage detailPage) {

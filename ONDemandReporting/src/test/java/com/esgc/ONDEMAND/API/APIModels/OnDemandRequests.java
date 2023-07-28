@@ -1,6 +1,7 @@
 package com.esgc.ONDEMAND.API.APIModels;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import java.util.ArrayList;
@@ -12,7 +13,7 @@ public class OnDemandRequests {
     public Summary summary;
 }
 
-class Request{
+class Request {
     public ArrayList<Detail> details;
     public String id;
     public ArrayList<Status> status;
@@ -26,7 +27,7 @@ class Request{
     public String location;
 }
 
-class Detail{
+class Detail {
     public String bvd9_number;
     public String company_name;
     public String country_code;
@@ -41,21 +42,22 @@ class Detail{
     public String state;
     public int actual_size;
     public String size;
+    public String cancel_reason;
 
 }
 
-class ScoreRange{
+class ScoreRange {
     public int min;
     public int max;
 }
 
-class Status{
+class Status {
     public String label;
     public int value;
 }
 
-class Summary{
+class Summary {
     public int entity_request_count;
-   public double eligible_pct;
+    public double eligible_pct;
     public int company_count;
 }

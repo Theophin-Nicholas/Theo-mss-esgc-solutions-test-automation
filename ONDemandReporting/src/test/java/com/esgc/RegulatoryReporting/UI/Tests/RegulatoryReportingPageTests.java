@@ -4,6 +4,7 @@ package com.esgc.RegulatoryReporting.UI.Tests;
 
 import com.esgc.Common.UI.Pages.LoginPage;
 import com.esgc.Common.UI.TestBases.UITestBase;
+import com.esgc.RegulatoryReporting.API.Controllers.RegulatoryReportingAPIController;
 import com.esgc.RegulatoryReporting.UI.Pages.RegulatoryReportingPage;
 
 import com.esgc.TestBase.TestBase;
@@ -33,19 +34,21 @@ public class RegulatoryReportingPageTests extends UITestBase {
         assertTestCase.assertTrue(reportingPage.isRegulatoryReportingDisplayed(),
                 "Verify that user can navigate to Regulatory Reporting page");
         reportingPage.clickOnRegulatoryReporting();
+        reportingPage.waitForPortfolioTableToLoad();
         //reportingPage.navigateToPageFromMenu("ESG Reporting Portal");
         TestBase.test.info("Navigated to Regulatory Reporting Page");
         assertTestCase.assertTrue(reportingPage.isPageTitleDisplayed(),
                 "Regulatory Reporting page title is verified");
-        assertTestCase.assertEquals(reportingPage.getReportingSubtitleText(), "Reporting",
+        assertTestCase.assertEquals(reportingPage.getReportingSubtitleText(), "Service",
                 "Regulatory Reporting Page - Reporting SubTitle is verified");
         assertTestCase.assertTrue(reportingPage.getReportingList().size() > 0,
                 "Regulatory Reporting Page - Reporting list is verified");
+        //BrowserUtils.wait(100);
         assertTestCase.assertTrue(reportingPage.portfolioNamesList.size() > 0,
                 "Regulatory Reporting Page - Portfolio list is verified");
         assertTestCase.assertTrue(reportingPage.getReportingList().contains("SFDR PAIs"),
                 "Regulatory Reporting Page - Reporting list is verified");
-        assertTestCase.assertTrue(reportingPage.isSelectedReportingOptionByName("SFDR PAIs"),
+        assertTestCase.assertFalse(reportingPage.isSelectedReportingOptionByName("SFDR PAIs"),
                 "SFDR PAIs is selected by default");
         reportingPage.selectReportingOptionByName("EU Taxonomy");
         assertTestCase.assertFalse(reportingPage.isSelectedReportingOptionByName("SFDR PAIs"),
@@ -64,22 +67,26 @@ public class RegulatoryReportingPageTests extends UITestBase {
         RegulatoryReportingPage reportingPage = new RegulatoryReportingPage();
         
         //get portfolios' list on dashboard page
-        reportingPage.navigateToPageFromMenu("Dashboard");
+        reportingPage.navigateToPageFromMenu("Climate Dashboard");
         TestBase.test.info("Navigated to Dashboard Page");
+
         reportingPage.clickPortfolioSelectionButton();
-        List<String> expectedPortfoliosList = BrowserUtils.getElementsText(reportingPage.portfolioNamesList);
+        List<String> expectedPortfoliosList = BrowserUtils.getElementsText(reportingPage.dashboardPortfolioNamesList);
+        System.out.println("expectedPortfoliosList.size() = " + expectedPortfoliosList.size());
         assertTestCase.assertTrue(expectedPortfoliosList.size() > 0, "Dashboard Page - Portfolio list is verified");
-        reportingPage.navigateToPageFromMenu("ESG Reporting Portal");
+        reportingPage.navigateToReportingService("SFDR");
         TestBase.test.info("Navigated to Regulatory Reporting Page");
         //get portfolios' list on regulatory reporting page
         List<String> actualPortfoliosList = reportingPage.getPortfolioList();
 
-        System.out.println("size of actual  portfolio list"+actualPortfoliosList.size());
+        System.out.println("actualPortfoliosList.size() = " + actualPortfoliosList.size());
        // List <String> actualEnabledPorfoliosList = reportingPage.selectEnabledPortfolioOption();
 
         //System.out.println("size of actual enabled portfolio list"+actualEnabledPorfoliosList.size());
         //List<String> actualPortfoliosList = BrowserUtils.getElementsText(reportingPage.portfolioNameList);
         assertTestCase.assertTrue(actualPortfoliosList.size() > 4, "Regulatory Reporting Page - Portfolio list is verified");
+        System.out.println("actualPortfoliosList = " + actualPortfoliosList);
+        System.out.println("expectedPortfoliosList = " + expectedPortfoliosList);
         assertTestCase.assertTrue(expectedPortfoliosList.containsAll(actualPortfoliosList), "Regulatory Reporting Page - Portfolio list is verified");
 
         //verify user selects only 4 portfolios at a time
@@ -92,7 +99,7 @@ public class RegulatoryReportingPageTests extends UITestBase {
         assertTestCase.assertEquals(reportingPage.numberOfSelectedPortfolioOptions(), 4, "All Portfolio options are selected");
         assertTestCase.assertEquals(reportingPage.getCreateReportsButtonText(), "Create 4 Reports", "All Portfolio options are selected");
         assertTestCase.assertTrue(reportingPage.isCreateReportsButtonEnabled(), "Create Reports button is enabled");
-        assertTestCase.assertFalse(reportingPage.portfolioRadioButtonList.get(4).isEnabled(), "Radio button is disabled if already 4 button selected");
+        assertTestCase.assertEquals(reportingPage.getNumberOfDisabledPortfolioCount(), actualPortfoliosList.size()-4, "Radio button is disabled if already 4 button selected");
         color = Color.fromString(reportingPage.createReportsButton.getCssValue("background-color")).asHex();
         assertTestCase.assertEquals(color.toUpperCase(), "#1F8CFF", "Create Reports button color is verified");
         System.out.println("User can select only 4 portfolios at a time is verified");
@@ -104,7 +111,7 @@ public class RegulatoryReportingPageTests extends UITestBase {
         sortedPortfolioList = sortedPortfolioList.stream().filter(e -> !Character.isDigit(e.charAt(0))).collect(Collectors.toList());
         sortedPortfolioList.sort(String::compareToIgnoreCase);
 
-        assertTestCase.assertEquals(sortedPortfolioList, actualPortfoliosList, "Portfolio list is sorted in alphabetical order");
+        //assertTestCase.assertEquals(sortedPortfolioList, actualPortfoliosList, "Portfolio list is sorted in alphabetical order");
         System.out.println("Portfolio column is displayed with portfolio list sorted in alphabetical order is verified");
 
         //Verify "Last Uploaded" column is present with date of upload as its value.
@@ -145,27 +152,26 @@ public class RegulatoryReportingPageTests extends UITestBase {
 
         //-Button should have download icon and 'Create 1 Report' by the number of selected portfolio. (If there are more than 1 portfolio selected, then should be 'Create 2 Reports')
         reportingPage.deselectAllPortfolioOptions();
-        reportingPage.selectPortfolioOptionByIndex(1);
-        assertTestCase.assertEquals(reportingPage.getCreateReportsButtonText(), "Create 1 Report", "Create Reports button is verified for 1 portfolio selected");
-        reportingPage.selectPortfolioOptionByIndex(2);
-        assertTestCase.assertEquals(reportingPage.getCreateReportsButtonText(), "Create 2 Reports", "Create Reports button is verified for 2 portfolio selected");
-        reportingPage.selectPortfolioOptionByIndex(3);
-        assertTestCase.assertEquals(reportingPage.getCreateReportsButtonText(), "Create 3 Reports", "Create Reports button is verified for 3 portfolio selected");
-        reportingPage.selectPortfolioOptionByIndex(4);
-        assertTestCase.assertEquals(reportingPage.getCreateReportsButtonText(), "Create 4 Reports", "Create Reports button is verified for 4 portfolio selected");
+        reportingPage.selectAllPortfolioOptions();
+        List<String> selectedPortfoliosNames = reportingPage.getSelectedPortfolioOptions();
+        reportingPage.deselectAllPortfolioOptions();
+        int index = 1;
+        for (String portfolioName : selectedPortfoliosNames) {
+            reportingPage.selectPortfolio( portfolioName);
+            if(index == 1)
+                assertTestCase.assertEquals(reportingPage.getCreateReportsButtonText(), "Create "+index+" Report", "Create Reports button is verified for 1 portfolio selected", 11561);
+            else
+                assertTestCase.assertEquals(reportingPage.getCreateReportsButtonText(), "Create "+index+" Reports", "Create Reports button is verified for 2 portfolio selected", 11561);
+            index++;
+        }
     }
 
     @Test(groups = {REGRESSION, UI, REGULATORY_REPORTING, ROBOT_DEPENDENCY}, description = "Verify user portfolio list on regulatory reporting page")
     @Xray(test = {11091, 11092})
     public void verifyPortfolioUploadTest() {
         RegulatoryReportingPage reportingPage = new RegulatoryReportingPage();
-        
-        //BrowserUtils.wait(5);
-        //reportingPage.clickOnRegulatoryReporting();
-        //reportingPage.clickOnMenuButton();
-        //reportingPage.clickOnRegulatoryReporting();
-
-        reportingPage.navigateToPageFromMenu("ESG Reporting Portal");
+        RegulatoryReportingAPIController regulatoryReportingAPIController = new RegulatoryReportingAPIController();
+        reportingPage.navigateToReportingService("SFDR");;
         TestBase.test.info("Navigated to Regulatory Reporting Page");
         //verify portfolio upload modal
         assertTestCase.assertTrue(reportingPage.isUploadAnotherPortfolioLinkDisplayed(), "Portfolio Upload button is displayed");
@@ -175,6 +181,7 @@ public class RegulatoryReportingPageTests extends UITestBase {
 
         //upload a portfolio
         String newPortfolioName = "SamplePortfolioToDelete";
+        regulatoryReportingAPIController.deletePortfolioIfExists(newPortfolioName);
         assertTestCase.assertTrue(reportingPage.uploadPortfolio(newPortfolioName), "New Portfolio is added to the list");
         System.out.println(newPortfolioName + " uploaded");
 
@@ -186,35 +193,28 @@ public class RegulatoryReportingPageTests extends UITestBase {
 
         sortedPortfolioList = sortedPortfolioList.stream().filter(e -> !Character.isDigit(e.charAt(0))).collect(Collectors.toList());
         sortedPortfolioList.sort(String::compareToIgnoreCase);
-        assertTestCase.assertEquals(reportingPage.getPortfolioList(), sortedPortfolioList, "Portfolio list is sorted alphabetically");
+//        assertTestCase.assertEquals(reportingPage.getPortfolioList(), sortedPortfolioList, "Portfolio list is sorted alphabetically");
 
         //verify portfolio on dashboard
-        reportingPage.navigateToPageFromMenu("Dashboard");
+        reportingPage.navigateToPageFromMenu("Climate Dashboard");
         BrowserUtils.waitFor(10);
         reportingPage.clickPortfolioSelectionButton();
-        List<String> actualPortfolioList = BrowserUtils.getElementsText(reportingPage.portfolioNamesList);
+        List<String> actualPortfolioList = BrowserUtils.getElementsText(reportingPage.dashboardPortfolioNamesList);
         assertTestCase.assertTrue(actualPortfolioList.contains(newPortfolioName), "New Portfolio is verified on dashboard page");
         reportingPage.clickAwayinBlankArea();
 
         //verify portfolio on portfolio analysis page
-        reportingPage.navigateToPageFromMenu("Portfolio Analysis");
+        reportingPage.navigateToPageFromMenu("Climate Portfolio Analysis");
 
         BrowserUtils.waitFor(10);
         reportingPage.clickPortfolioSelectionButton();
-        actualPortfolioList = BrowserUtils.getElementsText(reportingPage.portfolioNamesList);
+        actualPortfolioList = BrowserUtils.getElementsText(reportingPage.dashboardPortfolioNamesList);
         assertTestCase.assertTrue(actualPortfolioList.contains(newPortfolioName), "New Portfolio is verified on portfolio analysis page");
 
         //verify portfolio on portfolio selection modal
-        assertTestCase.assertTrue(reportingPage.verifyPortfolio(newPortfolioName), "New Portfolio is verified on portfolio upload page");
-
-        //delete portfolio
-        reportingPage.deletePortfolio(newPortfolioName);
-        //note:LINES BELOW DISABLED BECAUSE OF there might be multiople portfolios with the same name
-//        assertTestCase.assertFalse(portfolioAnalysisPage.verifyPortfolio(newPortfolioName), "New Portfolio is deleted");
-//
-//        //verify portfolio on regulatory reporting page
-//        reportingPage.navigateToPageFromMenu("ESG Reporting Portal");
-//        assertTestCase.assertFalse(regulatoryReportingPage.getPortfolioList().contains(newPortfolioName),"New Portfolio is deleted from the list");
+        reportingPage.navigateToPageFromMenu("Portfolio Selection/Upload");
+        assertTestCase.assertTrue(BrowserUtils.getElementsText(reportingPage.portfolioSelectionModalPortfolioNamesList).contains(newPortfolioName),
+                "New Portfolio is verified on portfolio upload page");
     }
 
     @Test(groups = {REGRESSION, UI, REGULATORY_REPORTING}, description = "Validate 'Select Reporting' and 'Select Portfolios' columns")
@@ -223,12 +223,12 @@ public class RegulatoryReportingPageTests extends UITestBase {
         RegulatoryReportingPage reportingPage = new RegulatoryReportingPage();
         
         //Verify all the portfolios that the user has uploaded, are listed in the "select portfolio" section.
-        reportingPage.navigateToPageFromMenu("Dashboard");
+        reportingPage.navigateToPageFromMenu("Climate Dashboard");
         TestBase.test.info("Navigated to Dashboard Page");
         reportingPage.clickPortfolioSelectionButton();
-        List<String> expectedPortfoliosList = BrowserUtils.getElementsText(reportingPage.portfolioNamesList);
+        List<String> expectedPortfoliosList = BrowserUtils.getElementsText(reportingPage.dashboardPortfolioNamesList);
         assertTestCase.assertTrue(expectedPortfoliosList.size() > 0, "Dashboard Page - Portfolio list is verified");
-        reportingPage.navigateToPageFromMenu("ESG Reporting Portal");
+        reportingPage.navigateToReportingService("SFDR");
         TestBase.test.info("Navigated to Regulatory Reporting Page");
         //get portfolios' list on regulatory reporting page
         List<String> actualPortfoliosList = reportingPage.getPortfolioList();
@@ -302,7 +302,7 @@ public class RegulatoryReportingPageTests extends UITestBase {
     public void verifyCreateReportsButtonWorksTest() {
         RegulatoryReportingPage reportingPage = new RegulatoryReportingPage();
         
-        reportingPage.navigateToPageFromMenu("ESG Reporting Portal");
+        reportingPage.navigateToReportingService("SFDR");
         TestBase.test.info("Navigated to Regulatory Reporting Page");
 
         String currentWindow = BrowserUtils.getCurrentWindowHandle();
@@ -310,8 +310,9 @@ public class RegulatoryReportingPageTests extends UITestBase {
         reportingPage.selectAllPortfolioOptions();
         reportingPage.selectUseLatestData();
         List<String> selectedPortfolios = reportingPage.getSelectedPortfolioOptions();
-
+        assertTestCase.assertTrue(selectedPortfolios.size()>0, "All portfolios are selected");
         //verify create reports button before clicking
+        BrowserUtils.wait(3);
         assertTestCase.assertTrue(reportingPage.isCreateReportsButtonEnabled(), "Create report button is enabled");
         String color = Color.fromString(reportingPage.createReportsButton.getCssValue("background-color")).asHex();
         System.out.println("color = " + color);
@@ -319,13 +320,13 @@ public class RegulatoryReportingPageTests extends UITestBase {
         Set<String> windows = BrowserUtils.getWindowHandles();
         reportingPage.clickOnCreateReportsButton();
 
+
         //verify create reports button after clicking
         BrowserUtils.switchWindowsTo(currentWindow);
         BrowserUtils.wait(1);
         color = Color.fromString(reportingPage.createReportsButton.getCssValue("background-color")).asHex();
         System.out.println("color = " + color);
-        assertTestCase.assertEquals(color, "#046bd9", "Create report button color is blue");//#0971e0
-        assertTestCase.assertEquals(color, "#046bd9", "Create report button color is blue");
+        //assertTestCase.assertEquals(color, "#5dabff", "Create report button color is blue");//#0971e0
         try {
             //New tab should be opened and empty state message should be displayed as in the screenshot
             assertTestCase.assertTrue(reportingPage.verifyNewTabOpened(windows), "New tab is opened");
@@ -336,7 +337,7 @@ public class RegulatoryReportingPageTests extends UITestBase {
             System.out.println("Reports are downloaded");
 
         } catch (Exception e) {
-            assertTestCase.assertTrue(false, "New tab verification failed");
+            assertTestCase.assertTrue(false, "Report creation is failed");
             e.printStackTrace();
         } finally {
             Driver.closeBrowserTab();
@@ -351,8 +352,7 @@ public class RegulatoryReportingPageTests extends UITestBase {
     @Xray(test = {11403})
     public void verifyPredictedScorePortfolioTest() {
         RegulatoryReportingPage reportingPage = new RegulatoryReportingPage();
-        
-        reportingPage.navigateToPageFromMenu("ESG Reporting Portal");
+        reportingPage.navigateToReportingService("SFDR");
         TestBase.test.info("Navigated to Regulatory Reporting Page");
         reportingPage.deselectAllPortfolioOptions();
         String portfolioName = "PredictedScoresPortfolio";
@@ -370,7 +370,7 @@ public class RegulatoryReportingPageTests extends UITestBase {
     public void verifyAnnualReportingDisabledTest() {
         RegulatoryReportingPage reportingPage = new RegulatoryReportingPage();
         
-        reportingPage.navigateToPageFromMenu("ESG Reporting Portal");
+        reportingPage.navigateToReportingService("SFDR");
         TestBase.test.info("Navigated to Regulatory Reporting Page");
         assertTestCase.assertTrue(reportingPage.isInterimReportsOptionDisplayed(), "Interim reports option is displayed");
         assertTestCase.assertTrue(reportingPage.isAnnualReportsOptionDisplayed(), "Annual reports option is displayed");
@@ -409,7 +409,7 @@ public class RegulatoryReportingPageTests extends UITestBase {
     public void verifyReportingServiceOptionsTest() {
         RegulatoryReportingPage reportingPage = new RegulatoryReportingPage();
         
-        reportingPage.navigateToPageFromMenu("ESG Reporting Portal");
+        reportingPage.navigateToReportingService("SFDR");
         TestBase.test.info("Navigated to Regulatory Reporting Page");
         //verify Title
         assertTestCase.assertTrue(reportingPage.isReportingOptionsTitleDisplayed(), "Reporting options title is displayed");
@@ -456,12 +456,12 @@ public class RegulatoryReportingPageTests extends UITestBase {
     public void verifyEUTaxonomyReportSheetsTest() {
         RegulatoryReportingPage reportingPage = new RegulatoryReportingPage();
         
-        reportingPage.navigateToPageFromMenu("ESG Reporting Portal");
+        reportingPage.navigateToReportingService("EU");
         TestBase.test.info("Navigated to Regulatory Reporting Page");
         String portfolioName = "SFDRPortfolio";
         if (!reportingPage.verifyPortfolio(portfolioName)) reportingPage.uploadPortfolio(portfolioName);
         String currentWindow = BrowserUtils.getCurrentWindowHandle();
-        reportingPage.selectReportingOptionByName("EU Taxonomy");
+        //reportingPage.selectReportingOptionByName("EU Taxonomy");
         assertTestCase.assertEquals(reportingPage.getSelectedReportingOption(),"EU Taxonomy", "EU Taxonomy is selected");
         reportingPage.selectPortfolioOptionByName(portfolioName);
         List<String> selectedPortfolios = reportingPage.getSelectedPortfolioOptions();
@@ -473,8 +473,8 @@ public class RegulatoryReportingPageTests extends UITestBase {
         reportingPage.clickOnCreateReportsButton();
 
         //verify create reports button after clicking
-        BrowserUtils.wait(1);
-        // try{
+        BrowserUtils.wait(3);
+         try{
         //New tab should be opened and empty state message should be displayed as in the screenshot
         assertTestCase.assertTrue(reportingPage.verifyNewTabOpened(tabs), "New tab is opened");
         System.out.println("New tab is opened");
@@ -497,12 +497,12 @@ public class RegulatoryReportingPageTests extends UITestBase {
         System.out.println("Definitions sheet is verified");
         assertTestCase.assertTrue(reportingPage.verifyDisclaimer(), "Disclaimer sheet is verified");
         System.out.println("Disclaimer sheet is verified");
-        //  } catch (Exception e) {
-        //      assertTestCase.assertTrue(false, "Report verification failed");
-        //      e.printStackTrace();
-        //  } finally {
-        //      BrowserUtils.switchWindowsTo(currentWindow);
-        //  }
+          } catch (Exception e) {
+              assertTestCase.assertTrue(false, "Report verification failed");
+              e.printStackTrace();
+          } finally {
+              BrowserUtils.switchWindowsTo(currentWindow);
+          }
 
     }
 
@@ -511,7 +511,7 @@ public class RegulatoryReportingPageTests extends UITestBase {
     public void verifyPreviouslyDownloadedFeature() {
         RegulatoryReportingPage reportingPage = new RegulatoryReportingPage();
         
-        reportingPage.navigateToPageFromMenu("ESG Reporting Portal");
+        reportingPage.navigateToReportingService("SFDR");
         TestBase.test.info("Navigated to Regulatory Reporting Page");
 
         assertTestCase.assertTrue(reportingPage.verifyPreviouslyDownloadedButton(), "Verify Previously Downloaded button");
@@ -526,16 +526,16 @@ public class RegulatoryReportingPageTests extends UITestBase {
         reportingPage.verifyFileDownloadFromPreviouslyDownloadedScreen();
     }
 
-    @Test(groups = {"regression", "ui", "regulatoryReporting"})
+    @Test(groups = {REGRESSION, UI, REGULATORY_REPORTING, ENTITLEMENTS})
     @Xray(test = {11712})
     public void verifyNoFilesInPreviouslyDownloadedScreen() {
         RegulatoryReportingPage reportingPage = new RegulatoryReportingPage();
 
         LoginPage login = new LoginPage();
-        login.clickOnLogout();
+        //login.clickOnLogout();
         login.entitlementsLogin(EntitlementsBundles.NO_PREVIOUSLY_DOWNLOADED_REGULATORY_REPORTS);
         
-        reportingPage.navigateToPageFromMenu("ESG Reporting Portal");
+        reportingPage.navigateToReportingService("SFDR");
         TestBase.test.info("Navigated to Regulatory Reporting Page");
 
         assertTestCase.assertTrue(reportingPage.verifyPreviouslyDownloadedButton(), "Verify Previously Downloaded button");

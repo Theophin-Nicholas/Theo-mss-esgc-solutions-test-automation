@@ -41,6 +41,7 @@ public class PreviouslyDownloadedRegulatoryReportsTests extends UITestBase {
     @Test(groups = {REGRESSION, UI, REGULATORY_REPORTING, ENTITLEMENTS}, dataProvider = "Reports")
     @Xray(test = {11712})
     public void verifyNoFilesInPreviouslyDownloadedScreen(String report) {
+        System.out.println("report = " + report);
         RegulatoryReportingPage reportingPage = new RegulatoryReportingPage();
         LoginPage login = new LoginPage();
         login.entitlementsLogin(EntitlementsBundles.NO_PREVIOUSLY_DOWNLOADED_REGULATORY_REPORTS);

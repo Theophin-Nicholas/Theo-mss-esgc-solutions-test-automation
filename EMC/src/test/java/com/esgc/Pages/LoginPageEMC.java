@@ -187,8 +187,14 @@ public class LoginPageEMC extends PageBase {
         Driver.getDriver().manage().window().maximize();
         wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.INTERNAL_USER_USERNAME, Keys.ENTER);
         BrowserUtils.wait(5);
-//        wait.until(ExpectedConditions.visibilityOf(PTusernameBox)).sendKeys(Environment.INTERNAL_USER_USERNAME);
-//        wait.until(ExpectedConditions.visibilityOf(PTpasswordBox)).sendKeys(Environment.INTERNAL_USER_PASSWORD, Keys.ENTER);
+        try{
+            if(PTusernameBox.getAttribute("value").isEmpty())
+                wait.until(ExpectedConditions.visibilityOf(PTusernameBox)).sendKeys(Environment.INTERNAL_USER_USERNAME);
+            wait.until(ExpectedConditions.visibilityOf(PTpasswordBox)).sendKeys(Environment.INTERNAL_USER_PASSWORD, Keys.ENTER);
+        } catch (Exception e){
+            System.out.println("No need to enter username and password");
+        }
+
         Driver.getDriver().manage().window().maximize();
     }
     public void loginWithWrongPass() {
@@ -217,7 +223,9 @@ public class LoginPageEMC extends PageBase {
     public void loginEMCWithParams(String userName, String password) {
         Driver.getDriver().manage().window().maximize();
         wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(userName, Keys.ENTER);
-        BrowserUtils.wait(2);
+        BrowserUtils.waitAndClick(PTusernameBox, 10);
+        if(PTusernameBox.getAttribute("value").isEmpty())
+            wait.until(ExpectedConditions.visibilityOf(PTusernameBox)).sendKeys(userName);
         wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(password);
         wait.until(ExpectedConditions.visibilityOf(loginButton)).click();
         Driver.getDriver().manage().window().maximize();

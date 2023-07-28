@@ -70,7 +70,7 @@ public abstract class PageBase {
     @FindBy(xpath = "//li[text()='Portfolio Selection/Upload']")
     public WebElement portfolioSettings;
 
-    @FindBy(xpath = "//li[text()='Regulatory Reporting']")
+    @FindBy(xpath = "//li[text()='ESG Reporting Portal']")
     public WebElement regulatoryReporting;
 
     @FindBy(xpath = "(//table[@id='table-id'])[1]/tbody/tr/td[1]")
@@ -734,13 +734,19 @@ public abstract class PageBase {
         String URL = Driver.getDriver().getCurrentUrl();
         String pageName = URL.substring(URL.lastIndexOf("/") + 1, URL.length());
 
-        if (!pageName.endsWith(page)) {
+        if (!URL.endsWith(page)) {
             clickMenu();
             // Dynamic xpath - Helps us to pass page names "Dashboard", "Portfolio Analysis", "Regulatory Reporting"
-            String pageXpath = "//li[text()='" + navigateTo + "']";
+            String pageXpath = "//a//li[text()='" + navigateTo + "']";
             WebElement pageElement = Driver.getDriver().findElement(By.xpath(pageXpath));
+            List<WebElement> elements = Driver.getDriver().findElements(By.xpath(pageXpath));
+            if(elements.size() == 0){
+                pageXpath = "//li[text()='" + navigateTo + "']";
+                pageElement = Driver.getDriver().findElement(By.xpath(pageXpath));
+            }
             // wait.until(ExpectedConditions.elementToBeClickable(pageElement)).click();
-            BrowserUtils.waitForVisibility(pageElement, 20).click();
+            BrowserUtils.waitAndClick(pageElement, 10);
+            System.out.println(page + " page is loading...");
         }
     }
 

@@ -387,6 +387,7 @@ public class LoginPage extends ClimatePageBase {
             default:
                 Assert.fail("Bundle not found!");
         }
+        System.out.println("Logged in as " + username + " with password " + password);
         loginWithParams(username, password);
         waitForDataLoadCompletion();
     }

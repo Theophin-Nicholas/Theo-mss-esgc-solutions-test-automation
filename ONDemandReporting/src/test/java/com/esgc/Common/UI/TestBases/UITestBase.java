@@ -13,7 +13,9 @@ import org.testng.ITestListener;
 import org.testng.ITestResult;
 import org.testng.annotations.*;
 
+import java.lang.reflect.Method;
 import java.time.Duration;
+import java.util.Arrays;
 
 import static com.esgc.Utilities.Groups.*;
 
@@ -62,24 +64,46 @@ public abstract class UITestBase extends TestBase implements ITestListener {
     }*/
 
     @BeforeMethod(alwaysRun = true)
-    public synchronized void loginForTestsIfUserLoggedOut() {
-        boolean isEntitlementsTest = this.getClass().getName().contains("Bundle") || this.getClass().getName().contains("Entitlements");
+    public synchronized void loginForTestsIfUserLoggedOut(Method m) {
+//        boolean isEntitlementsTest = this.getClass().getName().contains("Bundle") || this.getClass().getName().contains("Entitlements");
+        String groups = Arrays.toString(m.getAnnotation(Test.class).groups());
+        boolean isEntitlementsTest = groups.contains("Bundle") || groups.contains("Entitlements");
         LoginPage loginPage = new LoginPage();
         if (Driver.getDriver().getCurrentUrl().endsWith("login")) {
             if (!isEntitlementsTest) {
                 loginPage.login();
-                BrowserUtils.wait(20);
+                BrowserUtils.wait(10);
                 setAccessTokenFromUI();
             }
-
+        } else{
+            if (isEntitlementsTest) {
+                loginPage.clickOnLogout();
+                BrowserUtils.wait(5);
+            }
         }
 
     }
 
+//    @BeforeMethod
+//    public void befMet(Method m){
+//        Test t = m.getAnnotation(Test.class);
+//        System.out.println("Groups = "+Arrays.toString(t.groups()));
+//    }
+
 
     public static synchronized void setAccessTokenFromUI() {
         String getAccessTokenScript = "return JSON.parse(localStorage.getItem('okta-token-storage')).accessToken.accessToken";
-        accessToken = ((JavascriptExecutor) Driver.getDriver()).executeScript(getAccessTokenScript).toString();
+        boolean check = true;
+        while(check){
+            try{
+                accessToken = ((JavascriptExecutor) Driver.getDriver()).executeScript(getAccessTokenScript).toString();
+                check = false;
+            }catch (Exception e){
+                System.out.println("Exception in getting access token from UI");
+                BrowserUtils.wait(1);
+            }
+        }
+        //accessToken = ((JavascriptExecutor) Driver.getDriver()).executeScript(getAccessTokenScript).toString();
         System.setProperty("token", accessToken);
     }
 

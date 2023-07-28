@@ -18,10 +18,10 @@ public class Page404 {
     @FindBy(xpath = "//header//li")
     public WebElement pageHeader;
 
-    @FindBy(xpath = "//div[.=' Page not found ']")
+    @FindBy(xpath = "//h2")
     public WebElement pageTitle;
 
-    @FindBy(xpath = "//br/..")
+    @FindBy(xpath = "//h2/../following-sibling::div")
     public WebElement pageStatement;
 
     @FindBy(xpath = "//button")
@@ -34,5 +34,6 @@ public class Page404 {
         assertTestCase.assertTrue(pageStatement.isDisplayed(), "Page statement is displayed");
         assertTestCase.assertTrue(returnToMoodysESG360Button.isDisplayed(), "Return to Moody's ESG 360 button is displayed");
         assertTestCase.assertTrue(Driver.getDriver().getCurrentUrl().endsWith("404"), "Current URL ends with 404");
+        BrowserUtils.waitForClickablility(returnToMoodysESG360Button, 15).click();
     }
 }
