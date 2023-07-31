@@ -67,7 +67,8 @@ public class RegulatoryReportingQueries {
                 "       where sc.portfolio_id = tc.portfolio_id)\n" +
                 "    tt on tt.portfolio_id = sc.portfolio_id\n" +
                 "ORDER BY portfolio_id\n" +
-                ",reporting_year DESC;";
+                ",reporting_year DESC";
+        System.out.println("query = " + query);
         return getQueryResultMap(query);
     }
 
@@ -840,8 +841,8 @@ public class RegulatoryReportingQueries {
         return data;
     }
     public List<Map<String, Object>> getBVD9idForEachPortfolio(String portfolioId){
-        String query = "select PORTFOLIO_ID,SEC_ID ,SEC_ID_TYPE,BVD9_NUMBER from \"QA_MESGC\".\"DF_TARGET\".\"DF_PORTFOLIO\" where portfolio_id = '"+portfolioId;
-
+        String query = "select * from \"DF_TARGET\".\"DF_PORTFOLIO\" where portfolio_id = '"+portfolioId+"'";
+        System.out.println("query = " + query);
         return getQueryResultMap(query);
     }
 
@@ -1207,7 +1208,7 @@ public class RegulatoryReportingQueries {
                     " \n" +
                     "     SELECT * FROM FINAL_OUTPUT";
         }
-        //System.out.println("query = " + query);
+        System.out.println("query = " + query);
         return getQueryResultMap(query);
     }
 }

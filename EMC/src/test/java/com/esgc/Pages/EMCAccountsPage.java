@@ -1,6 +1,7 @@
 package com.esgc.Pages;
 
 import com.esgc.Utilities.BrowserUtils;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
@@ -11,13 +12,13 @@ public class EMCAccountsPage extends EMCBasePage {
     @FindBy(tagName = "h3")
     public WebElement pageTitle;
 
-    @FindBy(xpath = "//button[.='Create account']")
+    @FindBy(xpath = "//a[.='Create account']")
     public WebElement createAccountButton;
 
     @FindBy(xpath = "//input")
     public WebElement searchInput;
 
-    @FindBy(xpath = "//input/../following-sibling::button")
+    @FindBy(xpath = "//button[.='Search']")
     public WebElement searchButton;
 
     @FindBy(xpath = "//th")
@@ -29,33 +30,44 @@ public class EMCAccountsPage extends EMCBasePage {
     @FindBy(xpath = "//td//a")
     public List<WebElement> accountNames;
 
-    @FindBy(xpath = "//td[2]//p")
+    @FindBy(xpath = "//td[2]")
     public List<WebElement> accountStatuses;
 
-    @FindBy(xpath = "//td[3]//p")
+    @FindBy(xpath = "//td[3]")
     public List<WebElement> accountCreatedDates;
 
-    @FindBy(xpath = "//td[4]//p")
+    @FindBy(xpath = "//td[4]")
     public List<WebElement> accountCreatedByEmails;
 
-    @FindBy(xpath = "//td[5]//p")
+    @FindBy(xpath = "//td[5]")
     public List<WebElement> accountModifiedDates;
 
-    @FindBy(xpath = "//td[6]//p")
+    @FindBy(xpath = "//td[6]")
     public List<WebElement> accountModifiedByEmails;
+
+    @FindBy(xpath = "//p[.='Rows per page:']/following-sibling::div//input")
+    public WebElement rowsPerPageButton;
+
+    @FindBy(xpath = "//li[.='50']")
+    public WebElement option50;
+
+    @FindBy(xpath = "//button[@title='Next page']")
+    public WebElement nextPageButton;
+
+    @FindBy(xpath = "//button[@title='Previous page']")
+    public WebElement previousPageButton;
 
     public void search(String accountName) {
         if (!searchInput.isDisplayed()) System.out.println("searchInput is not Displayed!");
         clear(searchInput);
         searchInput.sendKeys(accountName);
         searchButton.click();
+        BrowserUtils.waitForVisibility(accountNames,5);
         if (accountNames.size()==0) System.out.println("No account found!");
     }
 
     public boolean verifyAccount(String accountName) {
-        wait(accountNames,20);
-        clear(searchInput);
-        searchInput.sendKeys(accountName);
+        search(accountName);
         for(WebElement account : accountNames){
             if(account.getText().equalsIgnoreCase(accountName)){
                 return true;
@@ -66,18 +78,31 @@ public class EMCAccountsPage extends EMCBasePage {
     }
     public boolean verifyAccount(String accountName, boolean status) {
         String statusString = status ? "Active" : "Inactive";
-        wait(accountNames,20);
-        clear(searchInput);
-        searchInput.sendKeys(accountName);
-        for (int i = 0; i < accountNames.size(); i++) {
-            if (accountNames.get(i).getText().equalsIgnoreCase(accountName)) {
-                if (accountStatuses.get(i).getText().equals(statusString)) {
-                    return true;
+        search(accountName);
+        boolean check = true;
+        while (check){
+            for (int i = 0; i < accountNames.size(); i++) {
+                if (accountNames.get(i).getText().equalsIgnoreCase(accountName)) {
+                    if (accountStatuses.get(i).getText().equals(statusString)) {
+                        return true;
+                    }
                 }
             }
+            if (nextPageButton.isEnabled()){
+                System.out.println("Account not found. Searching on next page...");
+                nextPageButton.click();
+            }else {
+                check = false;
+            }
         }
+
         System.out.println("Account " + accountName + " not found!");
         return false;
+    }
+
+    public void expandList() {
+        BrowserUtils.waitAndClick(rowsPerPageButton,5);
+        BrowserUtils.waitAndClick(option50,5);
     }
 
 
@@ -97,12 +122,20 @@ public class EMCAccountsPage extends EMCBasePage {
 //    }
   
     public void goToAccount(String accountName){
-        clear(searchInput);
-        searchInput.sendKeys(accountName);
-        for (WebElement account : accountNames) {
-            if (account.getText().equalsIgnoreCase(accountName)) {
-                account.click();
-                break;
+        search(accountName);
+        boolean check = true;
+        while (check){
+            for (int i = 0; i < accountNames.size(); i++) {
+                if (accountNames.get(i).getText().equalsIgnoreCase(accountName)) {
+                    accountNames.get(i).click();
+                    return;
+                }
+            }
+            if (nextPageButton.isEnabled()){
+                System.out.println("Account not found. Searching on next page...");
+                nextPageButton.click();
+            }else {
+                check = false;
             }
         }
     }

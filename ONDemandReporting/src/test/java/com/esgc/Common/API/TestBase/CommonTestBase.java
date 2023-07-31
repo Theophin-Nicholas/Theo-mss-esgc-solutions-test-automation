@@ -33,7 +33,7 @@ public class CommonTestBase extends TestBase {
             Driver.getDriver().get(URL);
             Driver.getDriver().manage().window().maximize();
             Driver.getDriver().manage().timeouts().implicitlyWait(Duration.ofSeconds(30));
-            loginPage.dataValidationLogin();
+            loginPage.login();//dataValidationLogin();
             BrowserUtils.wait(20);
         }
         setAccessTokenFromUI();

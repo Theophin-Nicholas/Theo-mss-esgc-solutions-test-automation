@@ -1,5 +1,6 @@
 package com.esgc.RegulatoryReporting.UI.Pages;
 
+import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.DateTimeUtilities;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -25,7 +26,7 @@ public class EUTaxonomyPage extends RegulatoryReportingPage {
     @FindBy(xpath = "//*[text()='Select Portfolios']/following-sibling::div[.//input]//div[2]//span")
     public List<WebElement> EUTaxonomyTablePortfolioUpdateDates;
 
-    @FindBy(xpath = "//*[text()='Select Portfolios']/following-sibling::div[.//input]//span[contains(text(),'%')]")
+    @FindBy(xpath = "//*[text()='Select Portfolios']/following-sibling::div[.//input]//div[3]//span")
     public List<WebElement> EUTaxonomyTableCoverages;
 
     @FindBy(xpath = "//*[text()='Select Portfolios']/following-sibling::div[.//input]//div[@class='MuiFormControl-root'][1]//input[@type='text']")
@@ -40,17 +41,22 @@ public class EUTaxonomyPage extends RegulatoryReportingPage {
     }
 
     public void verifyEUTaxonomyHeaders() {
+        BrowserUtils.waitForVisibility(tableHeaders, 15);
         List<String> actualHeaders = tableHeaders.stream().map(WebElement::getText).collect(Collectors.toList());
-        List<String> expectedHeaders = Arrays.asList("Portfolio", "Last Uploaded", "Coverage", "Non-Sovereign Derivatives", "Cash and liquidities");
+        System.out.println("actualHeaders = " + actualHeaders);
+        List<String> expectedHeaders = Arrays.asList("Portfolio", "Last Uploaded", "Coverage % Investment", "Non-Sovereign Derivatives", "Cash and liquidities");
+        System.out.println("expectedHeaders = " + expectedHeaders);
         assertTestCase.assertEquals(actualHeaders, expectedHeaders, "EU Taxonomy Header verification", 11534);
     }
 
     public void verifyEUTaxonomyTableContent() {
+        System.out.println("EUTaxonomyTableRows.size() = " + EUTaxonomyTableRows.size());
         for (int i = 0; i < EUTaxonomyTableRows.size(); i++) {
             WebElement checkBox = EUTaxonomyTablePortfolioCheckBoxes.get(i);
             String portfolioName = EUTaxonomyTablePortfolioNames.get(i).getText();
             String portfolioUpdateDate = EUTaxonomyTablePortfolioUpdateDates.get(i).getText();
             String coverage = EUTaxonomyTableCoverages.get(i).getText();
+            if (coverage.equals("NA")) coverage = "0%";
             coverage = coverage.substring(0, coverage.indexOf("%"));
             double coverageValue = Double.parseDouble(coverage);
             double derivativeValue = Double.parseDouble(EUTaxonomyTableDerivatives.get(i).getAttribute("value"));

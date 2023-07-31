@@ -28,8 +28,8 @@ public class BrowserUtils {
     public static String downloadPath (){
 
         return System.getProperty("user.dir") + File.separator + "src" +
-                    File.separator + "test" + File.separator + "resources" + File.separator + "download";
 
+                File.separator + "test" + File.separator + "resources" + File.separator + "download";
     }
 
     /**

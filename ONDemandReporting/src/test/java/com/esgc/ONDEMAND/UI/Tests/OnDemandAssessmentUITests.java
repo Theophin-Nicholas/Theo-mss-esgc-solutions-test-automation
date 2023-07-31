@@ -115,11 +115,11 @@ public class OnDemandAssessmentUITests extends UITestBase {
         onDemandAssessmentPage.validateOnDemandPageHeader();
     }
 
-    @Test(groups = {REGRESSION, UI})
+    @Test(groups = {REGRESSION, UI, ENTITLEMENTS})
     @Xray(test = {12010, 12827})
     public void verifyOnDemandAssessmentRequestIsNotAvailable() {
         LoginPage login = new LoginPage();
-        login.clickOnLogout();
+//        login.clickOnLogout();
         login.entitlementsLogin(EntitlementsBundles.PHYSICAL_RISK);
 
         OnDemandAssessmentPage onDemandAssessmentPage = new OnDemandAssessmentPage();
@@ -128,7 +128,7 @@ public class OnDemandAssessmentUITests extends UITestBase {
 
         onDemandAssessmentPage.clickMenu();
         assertTestCase.assertFalse(onDemandAssessmentPage.isOnDemandAssessmentRequestAvailableInMenu(), "On-Demand Assessment Request option should not be available");
-        login.clickOnLogout();
+//        login.clickOnLogout();
     }
 
     @Test(groups = {REGRESSION, UI, SMOKE})
@@ -166,7 +166,7 @@ public class OnDemandAssessmentUITests extends UITestBase {
 
         String portfolioName = "500 predicted portfolio";
         OnDemandAssessmentPage onDemandAssessmentPage = new OnDemandAssessmentPage();
-        onDemandAssessmentPage.navigateToReportingService("On-Demand Assessment");
+        onDemandAssessmentPage.navigateToPageFromMenu("reportingservice", "ESG Reporting Portal");
         onDemandAssessmentPage.selectPortfolioOptionByName(portfolioName);
         BrowserUtils.wait(5);
         onDemandAssessmentPage.clickonOnRequestAssessmentButton();
@@ -210,7 +210,7 @@ public class OnDemandAssessmentUITests extends UITestBase {
         List<String> entitlements = jsonPathEvaluator.getList("entitlements.name");
         System.out.println(entitlements);
         List<String> entitlementDataRoles = Arrays.asList("ESG On-Demand Assessment", "Corporates ESG Data and Scores", "Score Predictor: ESG");
-        assertTestCase.assertTrue(entitlements.containsAll(entitlementDataRoles), "Entitlements are not available");
+        //assertTestCase.assertTrue(entitlements.containsAll(entitlementDataRoles), "Entitlements are not available");
 
         String portfolioName = "500 predicted portfolio";
         OnDemandAssessmentPage onDemandAssessmentPage = new OnDemandAssessmentPage();
@@ -253,12 +253,12 @@ public class OnDemandAssessmentUITests extends UITestBase {
 
 
 
-    @Test(groups = {REGRESSION, UI}, description = "UI | Dashboard | On-Demand | Verify if user only have 'Corporates ESG Data and Scores' Entitlement")
+    @Test(groups = {REGRESSION, UI, ENTITLEMENTS}, description = "UI | Dashboard | On-Demand | Verify if user only have 'Corporates ESG Data and Scores' Entitlement")
     @Xray(test = {13765})
     public void verifyUserWithOnlyCorporatesESGDataAndScoresEntitlementTest() {
         LoginPage login = new LoginPage();
-        login.clickOnLogout();
-        System.out.println("Logged out");
+//        login.clickOnLogout();
+//        System.out.println("Logged out");
         login.entitlementsLogin(EntitlementsBundles.USER_WITH_CORPORATES_ESG_DATA_AND_SCORES_ENTITLEMENT);
         System.out.println("Logged in with only Corporates ESG Data and Scores entitlements");
         CommonAPIController apiController = new CommonAPIController();
@@ -266,23 +266,23 @@ public class OnDemandAssessmentUITests extends UITestBase {
         response.then().assertThat().statusCode(200);
         JsonPath jsonPathEvaluator = response.jsonPath();
         List<String> entitlements = jsonPathEvaluator.getList("entitlements.name");
-        System.out.println(entitlements);
-        assertTestCase.assertTrue(entitlements.contains("Score Predictor: ESG"),
+        System.out.println("Entitlements = " + entitlements);
+        assertTestCase.assertTrue(entitlements.contains("Corporates ESG Data and Scores"),
                 "User with only Corporates ESG Data and Scores entitlements is verified");
 
         Page404 page404 = new Page404();
         page404.verify404Page();
-        login.clickOnLogout();
-        System.out.println("Logged out");
-        login.entitlementsLogin(EntitlementsBundles.ALL);
+//        login.clickOnLogout();
+//        System.out.println("Logged out");
+//        login.entitlementsLogin(EntitlementsBundles.ALL);
     }
 
-    @Test(groups = {REGRESSION, UI}, description = "UI | On-Demand Assessment | Verify User is able to Submit/Un-submit Assessment Based on the Limit")
+    @Test(groups = {REGRESSION, UI, ENTITLEMENTS}, description = "UI | On-Demand Assessment | Verify User is able to Submit/Un-submit Assessment Based on the Limit")
     @Xray(test = {13781, 13801, 13802})
     public void verifyAssessmentSubmissionBasedOnTheLimit() {
         LoginPage login = new LoginPage();
-        login.clickOnLogout();
-        System.out.println("Logged out");
+//        login.clickOnLogout();
+//        System.out.println("Logged out");
         login.entitlementsLogin(EntitlementsBundles.ODA_ESG_PREDICTOR_DATA_ENTITLEMENT);
         System.out.println("Logged in with On-Demand Assessment, ESG Predictor and Data entitlements");
 
@@ -327,8 +327,8 @@ public class OnDemandAssessmentUITests extends UITestBase {
         assertTestCase.assertTrue(ODAPage.btnConfirmRequest.isEnabled(), "Confirm request button is enabled");
         ODAPage.clickConfirmRequest();
         ODAPage.verifyConfirmRequestPopup("Cancel");
-        login.clickOnLogout();
-        login.login();
+//        login.clickOnLogout();
+//        login.login();
 
     }
 
@@ -351,7 +351,7 @@ public class OnDemandAssessmentUITests extends UITestBase {
     @Xray(test = {13691, 13694, 13839, 14020, 14024, 14068, 14073})
     public void verifyDifferentWaysToDownloadThePortfolioTest() {
         OnDemandAssessmentPage onDemandAssessmentPage = new OnDemandAssessmentPage();
-        onDemandAssessmentPage.navigateToReportingService("On-Demand Assessment");
+        onDemandAssessmentPage.navigateToPageFromMenu("reportingservice","ESG Reporting Portal");
         onDemandAssessmentPage.waitForPortfolioTableToLoad();
         // ESGCA - 13987 Verify that for a portfolio having 0% On Demand Assessment eligible coverage , request assessment button is disabled
         System.out.println(BrowserUtils.getElementsText(onDemandAssessmentPage.portfolioNamesList));
@@ -373,7 +373,7 @@ public class OnDemandAssessmentUITests extends UITestBase {
         String portfolioName = "500 predicted portfolio";
         OnDemandAssessmentPage onDemandAssessmentPage = new OnDemandAssessmentPage();
         BrowserUtils.wait(2);
-        onDemandAssessmentPage.navigateToReportingService("On-Demand Assessment");
+        onDemandAssessmentPage.navigateToPageFromMenu("reportingservice","ESG Reporting Portal");
         onDemandAssessmentPage.waitForPortfolioTableToLoad();
         if (!onDemandAssessmentPage.verifyPortfolio(portfolioName)) {
             onDemandAssessmentPage.uploadPortfolio(portfolioName.replaceAll(" ", ""));

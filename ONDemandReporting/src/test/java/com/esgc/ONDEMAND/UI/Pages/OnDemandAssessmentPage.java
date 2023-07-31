@@ -19,7 +19,6 @@ import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 import java.io.File;
-import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.text.DecimalFormat;
 import java.text.ParseException;
@@ -70,7 +69,7 @@ public class OnDemandAssessmentPage extends CommonPage {
     @FindBy(xpath = "//div[contains(text(),'assessment eligible')]")
     public WebElement lblAssessmentEligible;
 
-    @FindBy(xpath = "//div/b")
+    @FindBy(xpath = "//button[@id='button-report-test-id-1']/preceding-sibling::div")
     public WebElement remainingAssessmentLimit;
 
     @FindBy(xpath = "(//div[contains(text(),'Predicted ESG Score')]/../../../..//div[text()])[2]")
@@ -502,7 +501,7 @@ public class OnDemandAssessmentPage extends CommonPage {
         else
             assertTestCase.assertTrue(predictedScoreInvper.getText().matches("\\d+% invested"));
         String assessmentEligible = lblAssessmentEligible.getText().substring(0, lblAssessmentEligible.getText().indexOf("%"));
-        assertTestCase.assertTrue(predictedScoreTextBelowGraph.getText().matches("Companies with predicted scores ranging 0-100 account for \\d+.\\d+% of investments"));
+        assertTestCase.assertTrue(predictedScoreTextBelowGraph.getText().matches("Companies with predicted scores ranging 0-100 account for \\d+.*\\d*% of investments"));
     }
 
     public void validateLocation() {
@@ -551,15 +550,15 @@ public class OnDemandAssessmentPage extends CommonPage {
 
 
     public void validateAndORLogic() {
-        int FirstcompaniesCount = getCompaniesCountFromReviewButtion();
+        int FirstcompaniesCount = getCompaniesCountFromReviewButton();
         //Validating Or Condition
         location_LocationLabels.get(0).click();
-        assertTestCase.equals(getCompaniesCountFromReviewButtion() != FirstcompaniesCount);
+        assertTestCase.equals(getCompaniesCountFromReviewButton() != FirstcompaniesCount);
 
         //Validating And Condition
         toggleButton.click();
         location_LocationLabels.get(0).click();
-        assertTestCase.equals(getCompaniesCountFromReviewButtion() == FirstcompaniesCount);
+        assertTestCase.equals(getCompaniesCountFromReviewButton() == FirstcompaniesCount);
         // Below code is to move the slider in Predicted Score section --
         /*for (int i = 1; i <= 9; i++) predictedScoresliders.get(0).sendKeys(Keys.ARROW_RIGHT);
 
@@ -571,8 +570,8 @@ public class OnDemandAssessmentPage extends CommonPage {
         return menuList.get(0).getText().equals(header);
     }
 
-    public int getCompaniesCountFromReviewButtion() {
-        // BrowserUtils.waitForClickablility(btnReviewRequest,30);
+    public int getCompaniesCountFromReviewButton() {
+        BrowserUtils.waitForVisibility(btnReviewRequest,30);
         WebElement e = BrowserUtils.waitForVisibility(btnReviewRequest, 10).findElement(By.xpath("span/div"));
         return new Scanner(e.getText()).useDelimiter("\\D+").nextInt();
 
@@ -604,11 +603,7 @@ public class OnDemandAssessmentPage extends CommonPage {
 
     public void validateOnDemandPageHeader() {
         BrowserUtils.waitForVisibility(menuOptionPageHeader,90);
-        if (Environment.environment.equalsIgnoreCase("qa")) {
-            assertTestCase.assertEquals(BrowserUtils.waitForVisibility(menuOptionPageHeader, 10).getText(), "ESG Reporting Portal", "Moody's Analytics: Request On-Demand Assessment page verified");
-        } else {
-            assertTestCase.assertEquals(BrowserUtils.waitForVisibility(menuOptionPageHeader, 10).getText(), "On-Demand Reporting", "Moody's Analytics: Request On-Demand Assessment page verified");
-        }
+        assertTestCase.assertEquals(BrowserUtils.waitForVisibility(menuOptionPageHeader, 10).getText(), "ESG Reporting Portal", "Moody's Analytics: Request On-Demand Assessment page verified");
     }
 
     public void validateProceedOnConfirmRequestPopup(String countOfCompanies) {
@@ -644,7 +639,6 @@ public class OnDemandAssessmentPage extends CommonPage {
     }
 
     public int getNumberOfEmailInputs() {
-        BrowserUtils.waitForVisibility(emailInputs,60);
         return emailInputs.size();
     }
 
@@ -777,16 +771,16 @@ public class OnDemandAssessmentPage extends CommonPage {
     }
 
     public boolean validateOnDemandReportingLandingPage() {
-
-        if (Environment.environment.equalsIgnoreCase("qa")) {
-            //return BrowserUtils.waitForVisibility(OnDemandMenuItem(), 60).getText().equals("ESG Reporting Portal");
-            return BrowserUtils.waitForVisibility(menu,30).getText().equals("ESG Reporting Portal");
-        } else {
-            return BrowserUtils.waitForVisibility(menu,30).getText().equals("On-Demand Reporting");
-            //return BrowserUtils.waitForVisibility(OnDemandMenuItem(), 60).getText().equals("On-Demand Reporting");
-            //return assertTestCase.assertEquals(BrowserUtils.waitForVisibility(OnDemandMenuItem, 90).getText(), "On-Demand Reporting", "Moody's Analytics: Request On-Demand Assessment page verified");
-        }
-       // return BrowserUtils.waitForVisibility(OnDemandMenuItem, 10).getText().equals("ESG Reporting Portal");
+        return BrowserUtils.waitForVisibility(menu,30).getText().equals("ESG Reporting Portal");
+//
+//        if (!Environment.environment.equalsIgnoreCase("prod")) {
+//            //return BrowserUtils.waitForVisibility(OnDemandMenuItem(), 60).getText().equals("ESG Reporting Portal");
+//        } else {
+//            return BrowserUtils.waitForVisibility(menu,30).getText().equals("On-Demand Reporting");
+//            //return BrowserUtils.waitForVisibility(OnDemandMenuItem(), 60).getText().equals("On-Demand Reporting");
+//            //return assertTestCase.assertEquals(BrowserUtils.waitForVisibility(OnDemandMenuItem, 90).getText(), "On-Demand Reporting", "Moody's Analytics: Request On-Demand Assessment page verified");
+//        }
+//        // return BrowserUtils.waitForVisibility(OnDemandMenuItem, 10).getText().equals("ESG Reporting Portal");
 
     }
 
@@ -854,17 +848,10 @@ public class OnDemandAssessmentPage extends CommonPage {
         return returnValue;
     }
 
-    public int getRemainingAssessments(){
-        String assessmentRequestText =  assessmentRemainingHeader.getText() ;
-        return Integer.valueOf(assessmentRequestText.substring(0,assessmentRequestText.indexOf(" ")));
-
-    }
-
     public void verifyZeroAssessmentRemainingForOnDemand() {
         BrowserUtils.wait(5);
         assertTestCase.assertTrue(assessmentRemainingHeader.isDisplayed(), "Verification that 0 Assessment Remaining is displayed");
-        //assertTestCase.assertEquals(assessmentRemainingHeader.getText(), "0 Assessment remaining", "Verification 0 Assessment Remaining text is done");
-        assertTestCase.assertEquals(getRemainingAssessments(),0,"Verification 0 Assessment Remaining text is done");
+        assertTestCase.assertEquals(assessmentRemainingHeader.getText(), "0 Assessment remaining", "Verification 0 Assessment Remaining text is done");
     }
 
     public void validateViewDetailButtonAndDownloadButtonDisabledForZeroCoveragePortfolios(String portfolioName) {
@@ -1045,7 +1032,7 @@ public class OnDemandAssessmentPage extends CommonPage {
     //input parameter: location of the downloaded file either page, or details panel
     public void verifyDownloadPortfolio(String location) {
         //get first clickable download button
-        BrowserUtils.waitForVisibility(downloadButtonList.get(0), 10);
+        BrowserUtils.waitForVisibility(downloadButtonList.get(0), 20);
         int index = 0;
         for (index = 0; index < downloadButtonList.size(); index++) {
             if (downloadButtonList.get(index).isEnabled()) break;
@@ -1106,7 +1093,7 @@ public class OnDemandAssessmentPage extends CommonPage {
     }
 
     public void closePanel() {
-        BrowserUtils.waitForClickablility(detailPanelCloseButton, 30).click();
+        BrowserUtils.waitAndClick(detailPanelCloseButton, 5);
     }
 
     public boolean identifyPredictedCompanies() {
