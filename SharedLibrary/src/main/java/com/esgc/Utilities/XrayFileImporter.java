@@ -38,7 +38,7 @@ public class XrayFileImporter {
         try {
             String current = new java.io.File(".").getCanonicalPath();
             System.out.println("current = " + current);
-            current = current.substring(0,current.lastIndexOf(File.separator));
+            current = current.substring(0, current.lastIndexOf(File.separator));
             System.out.println("current = " + current);
 
             //provides access to the file
@@ -80,11 +80,11 @@ public class XrayFileImporter {
         Set<String> failedTestCases = findFailedTestCases(testCaseList);
 
         //If we run smoke suite then remove test cases which are not marked as smoke
-        if(reportName.contains("Smoke")) {
-            List<String> smokeTestList = getSmokeTestCases();
-            allTestCases = allTestCases.stream().filter(s -> smokeTestList.get(0).contains(s)).collect(Collectors.toSet());
-            failedTestCases = failedTestCases.stream().filter(s -> smokeTestList.get(0).contains(s)).collect(Collectors.toSet());
-        }
+//        if(reportName.contains("Smoke")) {
+//            List<String> smokeTestList = getSmokeTestCases();
+//            allTestCases = allTestCases.stream().filter(s -> smokeTestList.get(0).contains(s)).collect(Collectors.toSet());
+//            failedTestCases = failedTestCases.stream().filter(s -> smokeTestList.get(0).contains(s)).collect(Collectors.toSet());
+//        }
 
         //STEP 2
         //Some executions may cover same test case couple times, so we remove duplicated test cases
@@ -121,16 +121,6 @@ public class XrayFileImporter {
 
         String payload = "{" +
                 "    \"testExecutionKey\": \"" + testExecutionKey + "\",\n" +
-                //"    \"info\" : {\n" +
-                //"     \"project\" : \"ESGT\"" +
-//                "       \"summary\": \"Automated " + reportName + "\",\n" +
-//                "       \"description\": \"Result of Automation Execution " + reportName + "\",\n" +
-//                        "        \"description\" : \"This execution is automatically created by Moody's ESG+C Test Automation Framework\",\n" +
-//                "        \"version\" : \"v2.5\",\n" +
-//                "        \"user\" : \"sys_e2e_esg_qa\",\n" +
-//                "        \"testPlanKey\" : \"DEMO-100\",\n" +
-//                "        \"testEnvironments\": [\"" + ConfigurationReader.getProperty("environment").toUpperCase() + "\"]\n" +
-                //"    }," +
                 " \"tests\" : " + tcs + "\n" +
                 "}";
 
@@ -144,7 +134,7 @@ public class XrayFileImporter {
                 .body(body)
                 .contentType("application/json")
                 .relaxedHTTPSValidation().accept(ContentType.JSON).log().all().when()
-                .post("https://xray.cloud.getxray.app/api/v2/authenticate").prettyPrint().replace("\"","");
+                .post("https://xray.cloud.getxray.app/api/v2/authenticate").prettyPrint().replace("\"", "");
 
 
         //STEP 5 Import tests to test execution ticket and map Test Cases with PASS and/or FAIL status in JIRA
@@ -156,88 +146,75 @@ public class XrayFileImporter {
                 .when()
                 .post("https://xray.cloud.getxray.app/api/v2/import/execution").prettyPeek();
         /*
-
-        If there is any unrelated ticket mapped, remove it from list to complete mapping on Jira test execution ticket
+        STEP 6 - If there is any unrelated ticket mapped, remove it from list to complete mapping on Jira test execution ticket
         (once there is unrelated ticket number in the list, test execution is not mapping test cases)
-       {
+        {
             "error": "Issue with key ESGCA-111 is not of type Test."
         }
-
         */
+        while (response.statusCode() == 400) {
+            String errorMessage = response.jsonPath().getString("error");
+            System.out.println("Error Message:" + errorMessage);
+            List<String> removeTestCaseList = Arrays.stream(errorMessage.split(" "))
+                    .filter(word -> word.contains("ESGCA-")).collect(Collectors.toList());
 
-        Response response3 = null;
-//        if (response.statusCode() == 400) {
-//            String errorMessage = response.jsonPath().getString("error");
-//            System.out.println(errorMessage);
-//            List<String> removeTestCaseList = Arrays.stream(errorMessage.split(" "))
-//                    .filter(word -> word.contains("ESGCA-")).collect(Collectors.toList());
-//
-//            for (int i = 0; i < removeTestCaseList.size(); i++) {
-//                String ticketNum = removeTestCaseList.get(i);
-//                if (ticketNum.contains("\"")) {
-//                    removeTestCaseList.set(i, ticketNum.substring(1, ticketNum.length() - 1));
-//                }
-//            }
-//
-//            System.out.println("###################");
-//            System.out.println("SOME TICKET NUMBERS TYPE IS NOT TEST CASE");
-//            System.out.println("THOSE TICKET NUMBERS ARE REMOVED FROM THE LIST");
-//            System.out.println("REMOVED TICKET NUMBERS WHICH ARE NOT TEST CASES:");
-//            removeTestCaseList.forEach(System.out::println);
-//            System.out.println("###################");
-//
-//            for (String testCaseTicketNumber : removeTestCaseList) {
-//                tclist.removeIf(e -> e.getTestKey().equals(testCaseTicketNumber));
-//            }
-//
-//            // tclist.stream().filter(e -> !removeTestCaseList.contains(e.getTestKey())).collect(Collectors.toList());
-//
-//            String tcs2 = new Gson().toJson(tclist);
-//            String payload2 = "{" +
-//
-//
-//                    "    \"testExecutionKey\": \"" + testExecutionKey + "\",\n" +
-//                    "    \"info\" : {\n" +
-//                    "     \"project\" : \"ESGCA\"," +
-//                    "       \"summary\": \"Automated " + reportName + "\",\n" +
-//                    "       \"description\": \"Result of Automation Execution " + reportName + "\",\n" +
-//                    "        \"description\" : \"This execution is automatically created by Moody's ESG+C Test Automation Framework\",\n" +
-//                    "        \"user\" : \"sys_e2e_esg_qa\",\n" +
-//                    "        \"testEnvironments\": [\"" + ConfigurationReader.getProperty("environment").toUpperCase() + "\"]\n" +
-//                    "    }," +
-//                    " \"tests\" : " + tcs2 + "\n" +
-//                    "}";
-//
-//            //(without unrelated ticket numbers) Create test execution ticket and map Test Cases with PASS and/or FAIL status
-//            response2 = configSpec()
-//                    .contentType("application/json")
-//                    .body(payload2)
-//                    .when()
-//                    .post("raven/1.0/import/execution").prettyPeek();
-//        }
+            for (int i = 0; i < removeTestCaseList.size(); i++) {
+                String ticketNum = removeTestCaseList.get(i);
+                if (ticketNum.contains("\"")) {
+                    removeTestCaseList.set(i, ticketNum.substring(1, ticketNum.length() - 1));
+                }
+            }
 
+            System.out.println("###################");
+            System.out.println("SOME TICKET NUMBERS TYPE IS NOT TEST CASE");
+            System.out.println("THOSE TICKET NUMBERS ARE REMOVED FROM THE LIST");
+            System.out.println("REMOVED TICKET NUMBERS WHICH ARE NOT TEST CASES:");
+            removeTestCaseList.forEach(System.out::println);
+            System.out.println("###################");
 
-        //Update Test Execution Ticket Status from BACKLOG to Accepted
-//        String testExecutionID = response2 == null ?
-//                response.jsonPath().getString("id") :
-//                response2.jsonPath().getString("id");
+            for (String testCaseTicketNumber : removeTestCaseList) {
+                tclist.removeIf(e -> e.getTestKey().equals(testCaseTicketNumber));
+            }
 
-            String payloadToChangeTicketStatus = "{" +
-                    "    \"transition\" : {\n" +
-                    "     \"id\" : \"41\"" +
-                    "    }" +
+            // tclist.stream().filter(e -> !removeTestCaseList.contains(e.getTestKey())).collect(Collectors.toList());
+
+            String tcs2 = new Gson().toJson(tclist);
+            String payload2 = "{" +
+                    "    \"testExecutionKey\": \"" + testExecutionKey + "\",\n" +
+                    " \"tests\" : " + tcs2 + "\n" +
                     "}";
-            configSpec()
-                    .contentType("application/json")
-                    .pathParam("id", testExecutionKey)
-                    .body(payloadToChangeTicketStatus)
+
+            //(without unrelated ticket numbers) Create test execution ticket and map Test Cases with PASS and/or FAIL status
+            response = given()
+                    .header("Authorization", "Bearer " + token)
+                    .relaxedHTTPSValidation().accept(ContentType.JSON)
+                    .contentType("application/json").log().all()
+                    .body(payload2)
                     .when()
-                    .post("rest/api/3/issue/{id}/transitions?expand=expand.fields")
-                    .then()
-                    .log().ifError();
+                    .post("https://xray.cloud.getxray.app/api/v2/import/execution").prettyPeek();
+        }
 
 
-        attachHTMLReportToTestExecutionTicket(testExecutionKey,reportName);
+        //STEP 7 - Update Test Execution Ticket Status from TO-DO to DONE
+        String payloadToChangeTicketStatus = "{" +
+                "    \"transition\" : {\n" +
+                "     \"id\" : \"41\"" +
+                "    }" +
+                "}";
+
+        configSpec()
+                .contentType("application/json")
+                .pathParam("id", testExecutionKey)
+                .body(payloadToChangeTicketStatus)
+                .when()
+                .post("rest/api/3/issue/{id}/transitions?expand=expand.fields")
+                .then()
+                .log()
+                .ifError();
+
+
+        //STEP 8
+        attachHTMLReportToTestExecutionTicket(testExecutionKey, reportName);
 
         int totalTCsCount = allTestCases.size();
         int failedTCsCount = finalFailedTestCases.size();
@@ -256,6 +233,7 @@ public class XrayFileImporter {
             environment = System.getProperty("environment");
         }
 
+        //STEP 9 - Send results to Slack Channel
         String browser = System.getProperty("browser") == null ? ConfigurationReader.getProperty("browser") : System.getProperty("browser");
         String platform = reportName.contains("EMC") ? "EMC " : reportName.contains("Issuer") ? "Issuer " : "Moody's ESG360 Platform ";
         String testType = reportName.contains("Smoke") ? "Smoke " : reportName.contains("Regression") ? "Regression " : "";
@@ -269,7 +247,8 @@ public class XrayFileImporter {
                 "<https://ma-esg-and-data.atlassian.net/browse/" + testExecutionKey + "|View results in Jira Cloud>\n";
         try {
             sendTestExecutionStatusToSlack(message);
-        } catch (Exception e) {
+        } catch (
+                Exception e) {
             e.printStackTrace();
         }
 
@@ -360,31 +339,38 @@ public class XrayFileImporter {
 
     public static void attachHTMLReportToTestExecutionTicket(String tickedNumber, String reportName) {
         System.out.println("File Attachment Started");
-        try {
+   //     try {
             String filepath = TestBase.reportPath + File.separator + reportName + ".html";
-
+            System.out.println("Report Path=" + filepath);
             configSpec()
-                    .header("Content-Type", "multipart/form-data")
-                    .multiPart("file", "Execution Report", FileUtils.readFileToByteArray(new File(filepath)), "text/csv")
+
+                    .header("Accept", "application/json")
+                    .header("X-Atlassian-Token", "no-check")
+                    .multiPart("file", new File(filepath))
+//                    .field("file", new File("myfile.txt"))
+//
+//                    .header("Content-Type", "multipart/form-data")
+//                    .multiPart("file", "Execution Report", FileUtils.readFileToByteArray(new File(filepath)), "text/csv")
                     .when().log().all()
-                    .post("rest/api/3/issue/" + tickedNumber + "/attachments");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+                    .post("rest/api/3/issue/" + tickedNumber + "/attachments").prettyPeek();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
 
     }
-    public static List<String>  getSmokeTestCases(){
+
+    public static List<String> getSmokeTestCases() {
         Response response = configSpec()
                 .contentType("application/json")
                 .when()
                 .log().all()
-                .get("raven/1.0/api/test?jql=project=ESGCA AND 'Smoke/Sanity Test'=Yes").prettyPeek();
+                .get("/rest/api/3/search?jql='Smoke/Sanity Test' = Yes").prettyPeek();
 
-        return Arrays.asList(response.getBody().jsonPath().getString("key"));
+        return response.getBody().jsonPath().getList("issues.key");
 
     }
 
-    public static void savePayloadToFramework(String payload){
+    public static void savePayloadToFramework(String payload) {
         String filePath = System.getProperty("user.dir") + File.separator + "SEND RESULTS TO JIRA PAYLOAD.txt";
         System.out.println("filePath = " + filePath);
         try (FileWriter fileWriter = new FileWriter(filePath)) {
@@ -394,6 +380,10 @@ public class XrayFileImporter {
             e.printStackTrace();
             System.out.println("Error occurred while saving the string to file.");
         }
+    }
+
+    public static void main(String[] args) {
+        attachHTMLReportToTestExecutionTicket("ESGT-2584", "Execution Report");
     }
 
     private static Response createTestExecution(String reportName) {
@@ -411,7 +401,7 @@ public class XrayFileImporter {
                         "    \"assignee\": {\n" +
                         "      \"id\": \"712020:f052e693-11dd-47a1-90e6-666e6bb9c262\"\n" +
                         "    },\n" +
-                        "    \"summary\": \"Automated "+reportName+"\",\n" +
+                        "    \"summary\": \"Automated " + reportName + "\",\n" +
                         "    \"customfield_10310\": {\n" +
                         "      \"id\": \"10875\",\n" +
                         "      \"value\": \"ESGT: RDP-Guardians of the Galaxy\"\n" +
