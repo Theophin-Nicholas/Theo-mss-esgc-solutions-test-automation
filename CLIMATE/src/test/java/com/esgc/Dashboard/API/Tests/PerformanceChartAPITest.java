@@ -24,7 +24,7 @@ public class PerformanceChartAPITest extends APITestBase {
 
         test.info("POST Request sending for Performance Chart");
 
-        APIFilterPayload apiFilterPayload = new APIFilterPayload("all", "all", "03", "2021", "");
+        APIFilterPayload apiFilterPayload = new APIFilterPayload("all", "all", "03", "2023", "");
 
         Response response = apiController
                 .getPerformanceChartList(portfolioID, researchLine, apiFilterPayload, "largest_holdings", "10");

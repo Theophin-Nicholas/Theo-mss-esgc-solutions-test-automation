@@ -742,7 +742,7 @@ public class EntityClimateProfileSummaryTests extends UITestBase {
         //Controversies No Info check
         if (profilePage.controversiesNoInfo.size() != 0) {
             BrowserUtils.scrollTo(profilePage.controversiesNoInfo.get(0));
-            assertTestCase.assertEquals(profilePage.controversiesNoInfo.get(0).getText(), "No controversies to display.");
+            assertTestCase.assertEquals(profilePage.controversiesNoInfo.get(0).getText(), "No ESG Incidents to display.");
             System.out.println("Assertion Successful and message : " + profilePage.controversiesNoInfo.get(0).getText());
         } else {
             System.out.println("There is available data in Controversies");

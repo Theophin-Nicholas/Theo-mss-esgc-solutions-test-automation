@@ -8,6 +8,7 @@ import com.esgc.Utilities.*;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
+import org.testng.SkipException;
 import org.testng.annotations.Test;
 
 import java.util.HashSet;
@@ -110,6 +111,8 @@ public class GlobalHeaderSidePanel extends UITestBase {
     @Xray(test = {12840, 12841, 12916, 12850, 12855, 12852})
     public void ValidateCalculationsOptionsFromGlobalMenu() {
         DashboardPage dashboardPage = new DashboardPage();
+        if(!Environment.environment.equalsIgnoreCase("qa"))
+            new SkipException("Calculations option is only available for QA environment");
         dashboardPage.clickOnMenuButton();
         assertTestCase.assertTrue(dashboardPage.menuItems.stream().filter(e -> e.getText().equals("Calculations")).count() > 0, "Verify \"Calculation\" option is shown under global settings menu", 12840);
         assertTestCase.assertTrue(dashboardPage.menuItems.stream().filter(e -> e.getText().equals("Portfolio Selection/Upload")).count() > 0, "Verify option of \"Portfolio selection\" is shown under global settings menu", 12841);

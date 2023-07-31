@@ -11,3 +11,4 @@ test-output
 /personal-access-auth.properties
 /src/test/resorces/environments/prod.properties
 download
+/CLIMATE/allure-results/

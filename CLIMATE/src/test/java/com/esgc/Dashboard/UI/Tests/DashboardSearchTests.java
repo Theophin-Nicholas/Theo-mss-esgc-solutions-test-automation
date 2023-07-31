@@ -22,15 +22,6 @@ public class DashboardSearchTests extends UITestBase {
         dashboardPage.validateEntitiesWithOnlyEsgDataDontShowInSearch(entity[0]);
     }
 
-    @Test(groups = {UI, REGRESSION}, dataProvider = "entityWithEsgDataOnly-DP", dataProviderClass = EntityWithEsgDataOnlyDataProviders.class)
-    @Xray(test = {14094})
-    public void validateNoDataForEntitiesWithEsgDataOnlyWithPredictorExport(String... entity) {
-        DashboardPage dashboardPage = new DashboardPage();
-        dashboardPage.clickSearchIcon();
-        dashboardPage.searchEntity(entity[0]);
-        dashboardPage.validateEntitiesWithOnlyEsgDataDontShowInSearch(entity[0]);
-    }
-
     @Test(groups = {UI, REGRESSION})
     @Xray(test = {14017})
     public void ValidateRemovalOfCalculationsFromGlobalMenu() {

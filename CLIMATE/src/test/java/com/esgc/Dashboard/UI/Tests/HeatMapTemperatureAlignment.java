@@ -34,7 +34,7 @@ public class HeatMapTemperatureAlignment extends DashboardUITestBase {
 
     }
 
-    @Test(groups = {REGRESSION, UI, SMOKE})
+    @Test(groups = {REGRESSION, UI, SMOKE, ENTITLEMENTS})
     @Xray(test = 7467)
     public void VerifyHeatMapsTemperatureAlignmentIsNotAvailableWithBundle() {
         LoginPage login = new LoginPage();

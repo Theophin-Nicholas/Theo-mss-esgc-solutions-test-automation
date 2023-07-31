@@ -89,7 +89,7 @@ public class PortfolioCompaniesAndInvestments extends DataValidationTestBase {
     @Xray(test = {8321})
     public void verifyDashboardCoverageHyperlink() {
         DashboardPage dashboardPage = new DashboardPage();
-
+        dashboardPage.navigateToDashboardPage();
         // ESGCA-8321: Verify Summary Companies Panel Hyperlink is Changed
         dashboardPage.clickViewCompaniesAndInvestments();
         assertTestCase.assertTrue(dashboardPage.isExportButtonEnabled(), "Verify Export button is available");

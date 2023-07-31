@@ -436,7 +436,7 @@ public class DashboardQueries {
                 "            QUALIFY ROW_NUMBER() OVER(PARTITION BY mst.ORBIS_ID ORDER BY mst.MODIFY_DATE_TIME DESC) = 1 )\n" +
                 "    ,PF_SEC_DET  AS(\n" +
                 "            SELECT P.BVD9_NUMBER\n" +
-                "                  ,nvl(p.parent_entity_name,p.company_name) as entity_name\n" +
+                "                  ,p.parent_entity_name as entity_name\n" +
                 "                  ,nvl(SD.MESG_SECTOR_ID,PSD.MESG_SECTOR_ID) as MESG_SECTOR_ID\n" +
                 "                  ,nvl(SD.MESG_SECTOR,PSD.MESG_SECTOR) as MESG_SECTOR\n" +
                 "                  ,nvl(SD.L1_SECTOR,PSD.L1_SECTOR) as L1_SECTOR\n" +

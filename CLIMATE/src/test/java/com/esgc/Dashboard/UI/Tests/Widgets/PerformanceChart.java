@@ -32,7 +32,7 @@ public class PerformanceChart extends DashboardUITestBase {
         test.info("Check if Performance Charts are Displayed");
 
         BrowserUtils.scrollTo(dashboardPage.performanceChart);
-        List<String> expectedColumnNames = Arrays.asList("Company", "% Investment", "Total Critical Controversies",
+        List<String> expectedColumnNames = Arrays.asList("Company", "% Investment", "Total Critical ESG Incidents",
                 "Highest Risk Hazard", "Facilities Exposed to High Risk/Red Flag",
                 "Physical Risk Management", "Temperature Alignment",
                 "Carbon Footprint (tCO2eq)", "Green Share Assessment", "Brown Share Assessment");
@@ -497,7 +497,7 @@ public class PerformanceChart extends DashboardUITestBase {
 
     }
 
-    @Test(groups = {REGRESSION, UI, SMOKE})
+    @Test(groups = {REGRESSION, UI})
     @Xray(test = {8691})
     public void validateEsgScoreIsNotDisplayedInPerformanceChart(){
         DashboardPage dashboardPage = new DashboardPage();
