@@ -111,7 +111,7 @@ public class GlobalHeaderSidePanel extends UITestBase {
     @Xray(test = {12840, 12841, 12916, 12850, 12855, 12852})
     public void ValidateCalculationsOptionsFromGlobalMenu() {
         DashboardPage dashboardPage = new DashboardPage();
-        if(!Environment.environment.equalsIgnoreCase("qa"))
+        if(!ConfigurationReader.getProperty("environment").equalsIgnoreCase("qa"))
             new SkipException("Calculations option is only available for QA environment");
         dashboardPage.clickOnMenuButton();
         assertTestCase.assertTrue(dashboardPage.menuItems.stream().filter(e -> e.getText().equals("Calculations")).count() > 0, "Verify \"Calculation\" option is shown under global settings menu", 12840);
