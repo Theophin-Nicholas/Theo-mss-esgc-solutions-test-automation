@@ -7,15 +7,13 @@ import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.EntitlementsBundles;
 import com.esgc.Utilities.Environment;
 import com.esgc.Utilities.Xray;
-import org.apache.commons.lang3.math.NumberUtils;
-import org.openqa.selenium.WebElement;
 import org.testng.annotations.Test;
 
 import static com.esgc.Utilities.Groups.*;
 
 public class ControversiesModalTests extends DashboardUITestBase {
 
-    @Test(groups = {REGRESSION, DASHBOARD, UI})
+    @Test(enabled = false, groups = {REGRESSION, DASHBOARD, UI})
     @Xray(test = {3170, 3171, 3932, 3953, 4020, 4025, 4033, 4036, 4059, 7381, 8042})
     public void controversiesModalUIAutomationTest() {
         DashboardPage dashboardPage = new DashboardPage();

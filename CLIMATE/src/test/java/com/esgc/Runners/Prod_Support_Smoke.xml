@@ -7,7 +7,7 @@
     </listeners>
     <test name="ESGC Smoke Test">
 
-        <parameter name="reportName" value=" Test Report"/>
+        <parameter name="reportName" value="Prod Support Smoke Test Report"/>
 
         <groups>
             <run>

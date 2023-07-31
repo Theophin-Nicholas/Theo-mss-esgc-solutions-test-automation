@@ -389,6 +389,7 @@ public class LoginPage extends ClimatePageBase {
         }
         System.out.println("Logged in as " + username + " with password " + password);
         loginWithParams(username, password);
+        waitForDataLoadCompletion();
     }
 
     /*

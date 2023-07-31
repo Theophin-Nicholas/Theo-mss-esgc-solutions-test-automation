@@ -4,10 +4,10 @@ package com.esgc.Base.TestBases;
 import com.esgc.Base.UI.Pages.LoginPage;
 import com.esgc.TestBase.TestBase;
 import com.esgc.Utilities.BrowserUtils;
+import com.esgc.Utilities.ConfigurationReader;
 import com.esgc.Utilities.Database.DatabaseDriver;
 import com.esgc.Utilities.Driver;
 import com.esgc.Utilities.Environment;
-import org.openqa.selenium.JavascriptExecutor;
 import org.testng.ITestResult;
 import org.testng.annotations.*;
 
@@ -24,7 +24,7 @@ public abstract class UITestBase extends TestBase {
     public synchronized void setupUIForTests(@Optional String browser) {
         System.out.println("Before Class Called");
         String URL = Environment.URL;
-        BrowserUtils.wait(1);
+        String OktaURL = ConfigurationReader.getProperty("Oktaurl");
 
         if (browser != null) {
             Driver.getDriver(browser).get(URL);
@@ -46,7 +46,6 @@ public abstract class UITestBase extends TestBase {
     public synchronized void setupEntitlementsForUITesting(@Optional String browser) {
         System.out.println("Before method called");
         String URL = Environment.URL;
-        BrowserUtils.wait(1);
         System.out.println("browser = " + browser);
         if (browser != null) {
             Driver.getDriver(browser).get(URL);
@@ -60,9 +59,10 @@ public abstract class UITestBase extends TestBase {
         Driver.getDriver().manage().timeouts().implicitlyWait(Duration.ofSeconds(30));
         isUITest = true;
 
-        if(!Driver.getDriver().getCurrentUrl().endsWith("login")){
+        if (!Driver.getDriver().getCurrentUrl().endsWith("login")) {
             LoginPage loginPage = new LoginPage();
             loginPage.clickOnLogout();
+            BrowserUtils.waitForVisibility(loginPage.usernameBox);
         }
     }
 
@@ -70,11 +70,11 @@ public abstract class UITestBase extends TestBase {
     public synchronized void loginForTestsIfUserLoggedOut(Method method) {
         boolean isPampaTest = this.getClass().getName().contains("Pampa");
         boolean isEntitlementsTest = this.getClass().getName().toLowerCase().contains("bundle") || this.getClass().getName().toLowerCase().contains("entitlements") || method.getName().toLowerCase().contains("entitlements");
+        boolean isUserOnLoginPage = Driver.getDriver().getCurrentUrl().endsWith("login") || Driver.getDriver().getCurrentUrl().endsWith("signin");
+
         LoginPage loginPage = new LoginPage();
-        if (Driver.getDriver().getCurrentUrl().endsWith("login") || Driver.getDriver().getCurrentUrl().endsWith("signin")) {
-            if (!isPampaTest && !isEntitlementsTest) {
-                loginPage.login();
-            }
+        if (isUserOnLoginPage && (!isPampaTest && !isEntitlementsTest)) {
+            loginPage.login();
         }
     }
 /*
@@ -95,9 +95,12 @@ public abstract class UITestBase extends TestBase {
 
     @AfterMethod(onlyForGroups = {ENTITLEMENTS}, groups = {SMOKE, REGRESSION, ENTITLEMENTS})
     public synchronized void teardownBrowserAfterUITesting() {
-        if (!Driver.getDriver().getCurrentUrl().endsWith("login") && !Driver.getDriver().getCurrentUrl().endsWith("signin")) {
+        boolean isUserOnLoginPage = Driver.getDriver().getCurrentUrl().endsWith("login") || Driver.getDriver().getCurrentUrl().endsWith("signin");
+
+        if (!isUserOnLoginPage) {
             LoginPage loginPage = new LoginPage();
             loginPage.clickOnLogout();
+            BrowserUtils.waitForVisibility(loginPage.usernameBox);
         }
     }
 

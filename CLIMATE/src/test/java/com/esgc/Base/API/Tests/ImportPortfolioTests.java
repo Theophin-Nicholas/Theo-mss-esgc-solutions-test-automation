@@ -112,7 +112,7 @@ public class ImportPortfolioTests extends APITestBase {
         Assert.assertEquals(portfolioName, fileName.substring(0, fileName.indexOf(".csv")));
         test.pass("Portfolio Name:" + portfolioName);
         test.pass("Portfolio imported with today's date successfully");
-
+        apiController.deletePortfolio(portfolioID);
     }
 
     @Test(groups = {API, REGRESSION, SMOKE})
@@ -162,6 +162,7 @@ public class ImportPortfolioTests extends APITestBase {
         Assert.assertEquals(portfolioName, fileName.substring(0, fileName.indexOf(".csv")));
         test.pass("Portfolio Name:" + portfolioName);
         test.pass("Portfolio imported with name as portfolio-yyy-mm-dd format successfully");
+        apiController.deletePortfolio(portfolioID);
     }
 
     @Test(groups = {API, REGRESSION, SMOKE})
@@ -200,7 +201,7 @@ public class ImportPortfolioTests extends APITestBase {
         Assert.assertEquals(portfolioName, fileName.substring(0, fileName.indexOf(".csv")));
         test.pass("Portfolio Name:" + portfolioName);
         test.pass("Portfolio imported with today's date and name as portfolio-yyy-mm-dd format successfully");
-
+        apiController.deletePortfolio(portfolioID);
     }
 
     /**

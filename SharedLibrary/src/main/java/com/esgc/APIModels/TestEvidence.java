@@ -13,6 +13,6 @@ public class TestEvidence {
 
     public TestEvidence(String data) {
         this.data = data;
-        this.filename = "Failure Screenshot";
+        this.filename = "Failure Screenshot.png";
     }
 }

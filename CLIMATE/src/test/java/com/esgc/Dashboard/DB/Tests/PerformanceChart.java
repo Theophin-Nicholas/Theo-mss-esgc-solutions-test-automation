@@ -326,6 +326,8 @@ public class PerformanceChart extends DataValidationTestBase {
 
     public RangeAndScoreCategory getRangeAndScoreCategoryByScore(String researchLine, Number scoreAsNumber) {
         APIController apiController = new APIController();
+        System.out.println("researchLine = " + researchLine);
+        System.out.println("scoreAsNumber = " + scoreAsNumber);
         if (researchLine.equals("Temperature Alignment")) {
             try {
                 Double score = scoreAsNumber.doubleValue();

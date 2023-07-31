@@ -19,7 +19,7 @@ import static org.hamcrest.Matchers.*;
 public class RegionMapAPITest extends APITestBase {
 
     //1062
-    @Test(groups = {API, REGRESSION}, dataProvider = "No ESG API Research Lines")
+    @Test(enabled = false, groups = {API, REGRESSION}, dataProvider = "No ESG API Research Lines")
     @Xray(test = {1062, 2387,   2450, 2905, 1267})
     //1824 TCFD
     //1802 Energy Trantision

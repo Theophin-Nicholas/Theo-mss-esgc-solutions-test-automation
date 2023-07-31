@@ -2,6 +2,7 @@ package com.esgc.EntityProfile.DB.DBQueries;
 
 import com.esgc.Utilities.Database.DatabaseDriver;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -310,12 +311,15 @@ public class EntityClimateProfilePageQueries {
     }
 
     public static Map<String, Object> getEntityHeaderDetails(String orbisId) {
+        LocalDate now = LocalDate.now();
+        int thisYear = now.getYear();
+        int monthValue = now.getMonthValue();
         String query = "with p as (select ENTITY_NAME_BVD,BVD_ID_NUMBER,ORBIS_ID,COUNTRY_CODE,LEI, ISIN, MESG_SECTOR_ID\n" +
                 "from df_target.ESG_ENTITY_MASTER eem  left join DF_DERIVED.ISIN_SORTED di on eem.ORBIS_ID = di.BVD9_NUMBER and PRIMARY_ISIN = 'Y'\n" +
                 "where ORBIS_ID = '" + orbisId + "' ),\n" +
                 "ems as (select eos.RESEARCH_LINE_ID, p.ORBIS_ID  from entity_coverage_tracking ect\n" +
                 "join p  on ect.orbis_id=p.orbis_id \n" +
-                "join ESG_OVERALL_SCORES eos on ect.orbis_id=eos.orbis_id and data_type = 'esg_pillar_score' and sub_category = 'ESG' and eos.year || eos.month <= '202208'\n" +
+                "join ESG_OVERALL_SCORES eos on ect.orbis_id=eos.orbis_id and data_type = 'esg_pillar_score' and sub_category = 'ESG' and eos.year || eos.month <= '" + thisYear + "" + monthValue + "'\n" +
                 "where coverage_status = 'Published' and publish = 'yes')\n" +
                 "select p.ENTITY_NAME_BVD, p.ORBIS_ID,p.COUNTRY_CODE,p.LEI, p.ISIN, ems.RESEARCH_LINE_ID,\n" +
                 "case when ems.RESEARCH_LINE_ID=1008 then  ve.GENERIC_SECTOR\n" +

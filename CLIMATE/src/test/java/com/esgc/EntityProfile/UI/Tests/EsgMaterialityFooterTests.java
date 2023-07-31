@@ -12,7 +12,7 @@ import static com.esgc.Utilities.Groups.*;
 
 public class EsgMaterialityFooterTests extends UITestBase {
 
-    @Test(groups = {"esg_materiality", REGRESSION, UI})
+    @Test(groups = {ESG, REGRESSION, UI})
     @Xray(test = {8368, 8370})
     public void validateEsgMaterialityFooter() {
 
@@ -47,7 +47,7 @@ public class EsgMaterialityFooterTests extends UITestBase {
         entityProfilePage.clickCloseIconInSearchBox();
     }
 
-    @Test(groups = {"esg_materiality", REGRESSION, UI})
+    @Test(groups = {ESG, REGRESSION, UI})
     @Xray(test = {8367})
     public void validateEsgMaterialityFooterLegacyVE() {
 
@@ -72,7 +72,7 @@ public class EsgMaterialityFooterTests extends UITestBase {
         entityProfilePage.clickCloseIconInSearchBox();
     }
 
-    @Test(groups = {"esg_materiality", REGRESSION, UI, ESG})
+    @Test(groups = {ESG, REGRESSION, UI, ESG})
     @Xray(test = {8369})
     public void validateEsgMaterialityMatrixViewByTests() {
 

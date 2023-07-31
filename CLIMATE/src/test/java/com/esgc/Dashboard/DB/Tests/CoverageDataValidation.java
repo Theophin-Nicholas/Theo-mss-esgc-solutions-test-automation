@@ -5,16 +5,18 @@ import com.esgc.Base.TestBases.DataValidationTestBase;
 import com.esgc.Dashboard.API.APIModels.DashboardCoverage;
 import com.esgc.Dashboard.API.APIModels.Entity;
 import com.esgc.Dashboard.API.APIModels.PortfolioSummaryCompanies;
-import com.esgc.Dashboard.API.APIModels.RegionSector;
 import com.esgc.Dashboard.API.Controllers.DashboardAPIController;
 import com.esgc.Dashboard.DB.DBQueries.DashboardQueries;
 import com.esgc.Dashboard.UI.Pages.DashboardPage;
-import com.esgc.Utilities.*;
+import com.esgc.Utilities.APIUtilities;
+import com.esgc.Utilities.ExcelUtil;
+import com.esgc.Utilities.Xray;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import org.testng.annotations.Test;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static com.esgc.Utilities.Groups.*;
 
@@ -204,14 +206,14 @@ public class CoverageDataValidation extends DataValidationTestBase {
 
         List<Map<String, Object>> dbData = queries.getPortfolioSectorDetail(portfolioId);
         System.out.println("DB Keyset = "+dbData.get(0).keySet());
-
+        System.out.println("dbData.stream().map(e -> e.get(\"ENTITY_NAME\")).collect(Collectors.toList()) = " + dbData.stream().map(e -> e.get("ENTITY_NAME")).collect(Collectors.toList()));
         for(Map<String, String> company:companies){
             System.out.println("company = "+company.get("companyName"));
             boolean check = false;
             //get list on ENTITY_NAME_BVD from db
             for(Map<String, Object> data:dbData){
                 if(data.get("ENTITY_NAME")==null) continue;
-                if(data.get("ENTITY_NAME").equals(company.get("companyName"))){
+                if(data.get("ENTITY_NAME").toString().equalsIgnoreCase(company.get("companyName"))){
                     if(data.get("MESG_SECTOR").equals(company.get("sector"))){
                         check = true;
                         break;

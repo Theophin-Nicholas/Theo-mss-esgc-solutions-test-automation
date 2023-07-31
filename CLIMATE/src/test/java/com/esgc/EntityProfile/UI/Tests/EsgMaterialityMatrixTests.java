@@ -35,7 +35,7 @@ public class EsgMaterialityMatrixTests extends UITestBase {
         entityProfilePage.clickCloseIcon();*/
     }
 
-    @Test(groups = {ENTITY_PROFILE, REGRESSION, UI})
+    @Test(groups = {ESG, ENTITY_PROFILE, REGRESSION, UI})
     @Xray(test = {8424})
     public void validateLowMaterialityColumnProperties() {
         String company = "Apple, Inc.";
@@ -49,7 +49,7 @@ public class EsgMaterialityMatrixTests extends UITestBase {
         entityProfilePage.clickCloseIconInSearchBox();
     }
 
-    @Test(groups = {ENTITY_PROFILE, REGRESSION, UI})
+    @Test(groups = {ENTITY_PROFILE, REGRESSION, UI, ESG})
     @Xray(test = {8427})
     public void validateEsgMaterialityMatrixSubCategoriesProperties() {
 
