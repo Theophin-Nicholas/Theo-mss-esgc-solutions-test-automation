@@ -82,7 +82,7 @@ public abstract class TestBase {
 
     @AfterClass(alwaysRun = true)
     public void tearDownClassAfterExecutionsAreDone() {
-        //Driver.closeDriver();
+        Driver.closeDriver();
         requestSpecification = null;
         isUITest = false;
         isAPITest = false;
@@ -92,14 +92,14 @@ public abstract class TestBase {
 
     @AfterTest(alwaysRun = true)
     public void tearDownAndGenerateReport() {
-        //DatabaseDriver.destroy();
+        DatabaseDriver.destroy();
         report.flush();
     }
 
     @AfterSuite(alwaysRun = true)
     @Parameters("reportName")
     public void uploadResultsToJira(@Optional String reportName) {
-        //Driver.closeDriver();
+        Driver.closeDriver();
         System.out.println("#########################################3");
         System.out.println("Test Cases:");
         testCasesList.forEach(System.out::println);
