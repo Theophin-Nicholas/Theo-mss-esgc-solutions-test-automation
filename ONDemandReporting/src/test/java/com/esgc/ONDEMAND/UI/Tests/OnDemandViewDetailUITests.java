@@ -23,18 +23,18 @@ public class OnDemandViewDetailUITests extends UITestBase {
     public void verifyViewDetailPageByScoreType(){
         ViewDetailPage detail = new ViewDetailPage();
         String portfolioName = "500 predicted portfolio";
-        String portfolioName1 = "SamplePortfolioToDelete";
+       // String portfolioName1 = "SamplePortfolioToDelete";
         OnDemandAssessmentPage onDemandAssessmentPage = new OnDemandAssessmentPage();
         onDemandAssessmentPage.navigateToReportingService("On-Demand Assessment");
         onDemandAssessmentPage.waitForPortfolioTableToLoad();
-        if(!onDemandAssessmentPage.verifyPortfolio(portfolioName1)) {
+       /* if(!onDemandAssessmentPage.verifyPortfolio(portfolioName1)) {
             onDemandAssessmentPage.uploadPortfolio(portfolioName1.replaceAll(" ", ""));
-        }
+        }*/
         if(!onDemandAssessmentPage.verifyPortfolio(portfolioName)) {
             onDemandAssessmentPage.uploadPortfolio(portfolioName.replaceAll(" ", ""));
         }
-        onDemandAssessmentPage.selectPortfolioOptionByName(portfolioName1);
-
+        /*onDemandAssessmentPage.selectPortfolioOptionByName(portfolioName1);*/
+        onDemandAssessmentPage.SelectAndGetNonOnDemandEligiblePortfolioName();
         assertTestCase.assertFalse(onDemandAssessmentPage.isRequestAssessmentButtonEnabled(), "Verify that the request assessment button is disabled for a portfolio not on-Demand eligible ");
         System.out.println("the request assessment button is disabled for non on-demand assessment eligible portfolio ");
 
@@ -74,17 +74,19 @@ public class OnDemandViewDetailUITests extends UITestBase {
     public void verifyViewDetailPageBySector(){
         ViewDetailPage detail = new ViewDetailPage();
         String portfolioName = "500 predicted portfolio";
-        String portfolioName1 = "Portfolio Upload updated_good2";
+       // String portfolioName1 = "Portfolio Upload updated_good2";
         OnDemandAssessmentPage onDemandAssessmentPage = new OnDemandAssessmentPage();
         onDemandAssessmentPage.navigateToReportingService("On-Demand Assessment");
         onDemandAssessmentPage.waitForPortfolioTableToLoad();
-        if(!onDemandAssessmentPage.verifyPortfolio(portfolioName1)) {
+       /* if(!onDemandAssessmentPage.verifyPortfolio(portfolioName1)) {
             onDemandAssessmentPage.uploadPortfolio("PortfolioWithValidData2");
-        }
+        }*/
         if(!onDemandAssessmentPage.verifyPortfolio(portfolioName)) {
             onDemandAssessmentPage.uploadPortfolio(portfolioName.replaceAll(" ", ""));
         }
-        onDemandAssessmentPage.selectPortfolioOptionByName(portfolioName1);
+        //onDemandAssessmentPage.selectPortfolioOptionByName(portfolioName1);
+        onDemandAssessmentPage.SelectAndGetNonOnDemandEligiblePortfolioName();
+
         assertTestCase.assertFalse(onDemandAssessmentPage.isRequestAssessmentButtonEnabled(), "Verify that the request assessment button is disabled for a portfolio not on-Demand eligible ");
         System.out.println("the request assessment button is disabled for non on-demand assessment eligible portfolio ");
 
@@ -107,19 +109,19 @@ public class OnDemandViewDetailUITests extends UITestBase {
 
         ViewDetailPage detail = new ViewDetailPage();
         String portfolioName = "500 predicted portfolio";
-        String portfolioName1 = "SamplePortfolioToDelete";
+       // String portfolioName1 = "SamplePortfolioToDelete";
         OnDemandAssessmentPage onDemandAssessmentPage = new OnDemandAssessmentPage();
         onDemandAssessmentPage.navigateToReportingService("On-Demand Assessment");
-
-        if(!onDemandAssessmentPage.verifyPortfolio(portfolioName1)) {
+        onDemandAssessmentPage.waitForPortfolioTableToLoad();
+       /* if(!onDemandAssessmentPage.verifyPortfolio(portfolioName1)) {
             onDemandAssessmentPage.uploadPortfolio(portfolioName1.replaceAll(" ", ""));
-        }
+        }*/
         if(!onDemandAssessmentPage.verifyPortfolio(portfolioName)) {
             onDemandAssessmentPage.uploadPortfolio(portfolioName.replaceAll(" ", ""));
         }
 
-        onDemandAssessmentPage.selectPortfolioOptionByName(portfolioName1);
-
+       // onDemandAssessmentPage.selectPortfolioOptionByName(portfolioName1);
+        onDemandAssessmentPage.SelectAndGetNonOnDemandEligiblePortfolioName();
         assertTestCase.assertFalse(onDemandAssessmentPage.isRequestAssessmentButtonEnabled(), "Verify that the request assessment button is disabled for a portfolio not on-Demand eligible ");
         System.out.println("the request assessment button is disabled for non on-demand assessment eligible portfolio ");
 

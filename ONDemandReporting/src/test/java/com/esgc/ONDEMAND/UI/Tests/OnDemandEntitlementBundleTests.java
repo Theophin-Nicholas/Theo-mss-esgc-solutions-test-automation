@@ -216,86 +216,6 @@ public class OnDemandEntitlementBundleTests extends UITestBase {
                 onDemandAssessmentPage.ValidateReportingOptions(reportingOptions);
                 assertTestCase.assertTrue(!onDemandAssessmentPage.getReportingList().contains("On-Demand Assessment"), "Validate that OnDemand option is not visible");
             }
-
-
-       /* RegulatoryReportingPage reportingPage = new RegulatoryReportingPage();
-
-        //upload 100% SFDR coverage portfolio and verify
-        String portfolioName = "SFDROnlyPortfolioDelete";
-        CommonAPIController.deletePortfolioThroughAPI(portfolioName);
-        String portfolioFilePath = ImportPortfolioUtility.getOnDemandPortfolioFileToUpload(Collections.singletonList("SFDR Only"), "", 10, portfolioName,false);
-        reportingPage.uploadPortfolio(portfolioFilePath, "OnDemand");
-        BrowserUtils.wait(10);
-        Driver.getDriver().navigate().refresh();
-        reportingPage.selectReportingOptionByName("SFDR");
-        reportingPage.verifyPortfolio(portfolioName);
-        reportingPage.verifySFDRPortfolioCoverageForUI(portfolioName);
-        assertTestCase.assertTrue(reportingPage.verifyPortfolioEnabled(portfolioName), "Validating that the portfolio is enabled for SFDR");
-        reportingPage.selectReportingOptionByName("EU Taxonomy");
-        reportingPage.verifyEUTaxonomyPortfolioCoverageForUI(portfolioName);
-        assertTestCase.assertFalse(reportingPage.verifyPortfolioEnabled(portfolioName), "Validating that the portfolio is disabled for EU Taxonomy");
-        CommonAPIController.deletePortfolioThroughAPI(portfolioName);
-
-        *//**
-         * We don't have data for EU Taxonomy Only portfolio So Code below is commented
-         *//*
-
-
-//        //upload 100% EU Taxonomy coverage portfolio and verify
-//        portfolioName = "EUTaxonomyOnlyPortfolioDelete";
-//        portfolioFilePath = ImportPortfolioUtility.getOnDemandPortfolioFileToUpload(Collections.singletonList("EU Taxonomy Only"), "", 10, portfolioName,false);
-//        reportingPage.uploadPortfolio(portfolioFilePath, "OnDemand");
-//        BrowserUtils.wait(10);
-//        Driver.getDriver().navigate().refresh();
-////        try {
-//            reportingPage.selectReportingOptionByName("SFDR");
-//            reportingPage.verifyPortfolio(portfolioName);
-//            reportingPage.verifySFDRPortfolioCoverageForUI(portfolioName);
-//            assertTestCase.assertFalse(reportingPage.verifyPortfolioEnabled(portfolioName), "Validating that the portfolio is disabled for SFDR");
-//            reportingPage.selectReportingOptionByName("EU Taxonomy");
-//            reportingPage.verifyEUTaxonomyPortfolioCoverageForUI(portfolioName);
-//            assertTestCase.assertFalse(reportingPage.verifyPortfolioEnabled(portfolioName), "Validating that the portfolio is disabled for EU Taxonomy");
-//            CommonAPIController.deletePortfolioThroughAPI(portfolioName);
-//        } catch (Exception e) {
-//            CommonAPIController.deletePortfolioThroughAPI(portfolioName);
-//            e.printStackTrace();
-//        }
-
-        //User upload Portfolio A with entities not covered by SFDR nor EU Taxonomy
-        portfolioName = "NotSFDRNotEUTaxonomyPortfolioDelete";
-        CommonAPIController.deletePortfolioThroughAPI(portfolioName);
-        //Below we use EU Taxonomy Only because we don't have data for EU Tax only entities. so it gives use a portfolio wich disabled for both eu tax and sfdr
-        portfolioFilePath = ImportPortfolioUtility.getOnDemandPortfolioFileToUpload(Collections.singletonList("EU Taxonomy Only"), "", 10, portfolioName,false);
-        reportingPage.uploadPortfolio(portfolioFilePath, "OnDemand");
-        BrowserUtils.wait(10);
-        Driver.getDriver().navigate().refresh();
-        reportingPage.selectReportingOptionByName("SFDR");
-        reportingPage.verifyPortfolio(portfolioName);
-        reportingPage.verifySFDRPortfolioCoverageForUI(portfolioName);
-        assertTestCase.assertFalse(reportingPage.verifyPortfolioEnabled(portfolioName), "Validating that the portfolio is disabled for SFDR");
-        reportingPage.selectReportingOptionByName("EU Taxonomy");
-        reportingPage.verifyEUTaxonomyPortfolioCoverageForUI(portfolioName);
-        assertTestCase.assertFalse(reportingPage.verifyPortfolioEnabled(portfolioName), "Validating that the portfolio is disabled for EU Taxonomy");
-        CommonAPIController.deletePortfolioThroughAPI(portfolioName);
-
-
-        //Upload  a Portfolio A with all entities overed by SFDR and EU Taxonomy
-        portfolioName = "BothSFDRAndEXTaxonomyPortfolioDelete";
-        CommonAPIController.deletePortfolioThroughAPI(portfolioName);
-        //Below we use EU Taxonomy Only because we don't have data for EU Tax only entities. so it gives use a portfolio wich disabled for both eu tax and sfdr
-        portfolioFilePath = ImportPortfolioUtility.getOnDemandPortfolioFileToUpload(Collections.singletonList("BothSFDRAndEUTaxonomy"), "", 10, portfolioName,false);
-        reportingPage.uploadPortfolio(portfolioFilePath, "OnDemand");
-        BrowserUtils.wait(10);
-        Driver.getDriver().navigate().refresh();
-        reportingPage.selectReportingOptionByName("SFDR");
-        reportingPage.verifyPortfolio(portfolioName);
-        reportingPage.verifySFDRPortfolioCoverageForUI(portfolioName);
-        assertTestCase.assertTrue(reportingPage.verifyPortfolioEnabled(portfolioName), "Validating that the portfolio is disabled for SFDR");
-        reportingPage.selectReportingOptionByName("EU Taxonomy");
-        reportingPage.verifyEUTaxonomyPortfolioCoverageForUI(portfolioName);
-        assertTestCase.assertTrue(reportingPage.verifyPortfolioEnabled(portfolioName), "Validating that the portfolio is disabled for EU Taxonomy");
-        CommonAPIController.deletePortfolioThroughAPI(portfolioName);*/
-
         } catch (Exception e) {
             e.printStackTrace();
             login.clickOnLogout();
@@ -375,6 +295,7 @@ public class OnDemandEntitlementBundleTests extends UITestBase {
             onDemandAssessmentPage.waitForPortfolioTableToLoad();
             String PortfolioName = onDemandAssessmentPage.SelectAndGetOnDemandEligiblePortfolioName();
             assertTestCase.assertTrue(onDemandAssessmentPage.isReequestAssessmentButtonDisabled(), "Validating that Request Assessment button is disabled");
+           //TODO : Need to add a request in this account
             assertTestCase.assertTrue(onDemandAssessmentPage.isViewAssessmentRequestButtonDisabled(), "Validating that View Assessment Request button is enabled");
         } catch (Exception e) {
             e.printStackTrace();
@@ -492,7 +413,7 @@ public class OnDemandEntitlementBundleTests extends UITestBase {
             //onDemandAssessmentPage.selectPortfolioByNameFromPortfolioSelectionModal(portfolioName);
             //ODAPage.navigateToPageFromMenu("reportingservice","On-Demand Reporting");
             //ODAPage.navigateToReportingService("On-Demand Assessment");
-            BrowserUtils.waitForVisibility(ODAPage.portfolioNamesList, 15);
+            BrowserUtils.waitForVisibility(ODAPage.portfolioNamesList, 30);
 
             String portfolioName = "500 predicted portfolio";
             if (!ODAPage.verifyPortfolio(portfolioName)) {
