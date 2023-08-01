@@ -442,6 +442,7 @@ public class LoginPage extends PageBase {
 
 
     public void clickOnLogout() {
+        System.out.println("Logging out");
         BrowserUtils.wait(10);
         wait.until(ExpectedConditions.visibilityOf(menu));
         BrowserUtils.clickWithJS(menu);

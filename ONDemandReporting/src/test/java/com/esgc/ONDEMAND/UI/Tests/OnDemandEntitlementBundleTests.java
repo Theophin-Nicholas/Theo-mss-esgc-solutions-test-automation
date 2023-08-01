@@ -151,7 +151,7 @@ public class OnDemandEntitlementBundleTests extends UITestBase {
                 assertTestCase.assertTrue(onDemandAssessmentPage.isViewAssessmentRequestButtonDisabled(), "Validating that View Assessment Request button is disabled");
                 assertTestCase.assertTrue(!onDemandAssessmentPage.isbuttonMethodologiesEnabled(), "Validating that the Methodologies button is enabled");
                 String portfolioName = "TempPortfolioFprDelection";
-                String portfolioFilePath = ImportPortfolioUtility.getOnDemandPortfolioFileToUpload(Arrays.asList(new String[]{"Self-Assessed"}), "", 10, portfolioName,false);
+                String portfolioFilePath = ImportPortfolioUtility.getOnDemandPortfolioFileToUpload(Collections.singletonList("Self-Assessed"), "", 10, portfolioName,false);
                 onDemandAssessmentPage.uploadPortfolio(portfolioFilePath, "OnDemand");
                 BrowserUtils.wait(10);
                 Driver.getDriver().navigate().refresh();

@@ -69,6 +69,7 @@ public abstract class UITestBase extends TestBase implements ITestListener {
         String groups = Arrays.toString(m.getAnnotation(Test.class).groups());
         boolean isEntitlementsTest = groups.contains("Bundle") || groups.contains("Entitlements");
         LoginPage loginPage = new LoginPage();
+        //BrowserUtils.wait(5);
         if (Driver.getDriver().getCurrentUrl().endsWith("login")) {
             if (!isEntitlementsTest) {
                 loginPage.login();
@@ -77,7 +78,11 @@ public abstract class UITestBase extends TestBase implements ITestListener {
             }
         } else{
             if (isEntitlementsTest) {
-                loginPage.clickOnLogout();
+                try{
+                    loginPage.clickOnLogout();
+                } catch (Exception e){
+                    System.out.println("Exception in logging out");
+                }
                 BrowserUtils.wait(5);
             }
         }
@@ -118,6 +123,12 @@ public abstract class UITestBase extends TestBase implements ITestListener {
         //Driver.closeDriver();
        LoginPage login = new LoginPage();
        if (!Driver.getDriver().getCurrentUrl().endsWith("login")) login.clickOnLogout();
+       for (int i = 0; i < 5; i++) {
+           if (Driver.getDriver().getCurrentUrl().endsWith("login")) break;
+           else {
+               BrowserUtils.wait(1);
+           }
+       }
     }
 
     /*@BeforeMethod(onlyForGroups = {INCLUDEDAPITEST}, groups = {SMOKE, REGRESSION, UI, ENTITLEMENTS,INCLUDEDAPITEST} )
