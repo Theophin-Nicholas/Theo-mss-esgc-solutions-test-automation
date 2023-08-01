@@ -33,16 +33,22 @@ public class UnzipUtil {
         ZipEntry entry = zipIn.getNextEntry();
         // iterates over entries in the zip file
         while (entry != null) {
-            String filePath = destDirectory + File.separator + entry.getName();
-            if (!entry.isDirectory()) {
-                // if the entry is a file, extracts it
-                extractFile(zipIn, filePath);
-            } else {
-                // if the entry is a directory, make the directory
-                File dir = new File(filePath);
-                dir.mkdirs();
+            try{
+                String filePath = destDirectory + File.separator + entry.getName();
+                //System.out.println("filePath = " + filePath);
+                if (!entry.isDirectory()) {
+                    // if the entry is a file, extracts it
+                    extractFile(zipIn, filePath);
+                } else {
+                    // if the entry is a directory, make the directory
+                    File dir = new File(filePath);
+                    dir.mkdirs();
+                }
+                zipIn.closeEntry();
+            } catch (Exception e) {
+                //e.printStackTrace();
             }
-            zipIn.closeEntry();
+
             entry = zipIn.getNextEntry();
         }
         zipIn.close();

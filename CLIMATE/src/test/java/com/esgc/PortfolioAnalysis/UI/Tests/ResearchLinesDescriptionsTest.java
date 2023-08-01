@@ -62,7 +62,7 @@ public class ResearchLinesDescriptionsTest extends UITestBase {
     public void validateDescriptionsForAdditionalPhysicalRiskHazards() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio Analysis page");
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
 
         test.info("Verify Market Risk -> Country of Sales Description");
         String countryOfSalesDescription = "Country of Sales measures climate risk in the countries in which a company generates its sales. Country of Sales is a percentile score between 0 (low risk) and 100 (high risk).";
@@ -81,18 +81,6 @@ public class ResearchLinesDescriptionsTest extends UITestBase {
 
     }
 
-    @Test(enabled = false, groups = {REGRESSION, UI, SMOKE, ESG},
-            description = "Verify  ESG Summary Section") //TODO De-scoped as of now.
-    @Xray(test = {8283, 8285})
-    public void verifyESGAssessmentBoxAndDescription() {
-        ResearchLinePage researchLinePage = new ResearchLinePage();
 
-        researchLinePage.navigateToResearchLine("ESG Assessments");
-        test.info("Navigated to ESG Assessments Page");
-
-        assertTestCase.assertTrue(researchLinePage.ValidateifEsgPortfolioBoxIsDisplayed(), "Portfolio Box is displayed");
-        assertTestCase.assertTrue(researchLinePage.ValidateifEsgsummaryBoxIsDisplayed(), "ESG summary Box is displayed");
-        researchLinePage.ValidateSummaryBoxText();
-    }
 
 }

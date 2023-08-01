@@ -16,9 +16,9 @@ public class EntityHyperlinksTests extends UITestBase {
 
         test.info("Navigate to Dashboard page");
         DashboardPage dashboardPage = new DashboardPage();
-        dashboardPage.navigateToPageFromMenu("Dashboard");
+        dashboardPage.navigateToPageFromMenu("Climate Dashboard");
 
-        dashboardPage.selectPortfolioByNameFromPortfolioSelectionModal("Sample Portfolio");
+        dashboardPage.selectSamplePortfolioFromPortfolioSelectionModal();
 
         test.info("Verify view companies link");
         dashboardPage.viewAllCompaniesButton.click();
@@ -78,10 +78,11 @@ public class EntityHyperlinksTests extends UITestBase {
 
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio Analysis page");
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
 
         DashboardPage dashboardPage = new DashboardPage();
-        dashboardPage.selectPortfolioByNameFromPortfolioSelectionModal("Sample Portfolio");
+        researchLinePage.selectSamplePortfolioFromPortfolioSelectionModal();
+        researchLinePage.waitForDataLoadCompletion();
 
         assertTestCase.assertTrue(dashboardPage.verifyPortfolioAnalysisHyperlinks("Updates", 1),
                 "Portfolio Analysis - Verify Updates Hyperlink");

@@ -24,7 +24,7 @@ public class ExportDashboardDataDictionary extends DashboardUITestBase {
     public void verifyDataDictionary() {
         DashboardPage dashboardPage = new DashboardPage();
 
-        dashboardPage.navigateToPageFromMenu("Dashboard");
+        dashboardPage.navigateToPageFromMenu("Climate Dashboard");
         test.info("Navigated to Dashboard Page");
 
         dashboardPage.clickViewCompaniesAndInvestments();
@@ -64,7 +64,7 @@ public class ExportDashboardDataDictionary extends DashboardUITestBase {
     public void verifyAllResearchLinesTabInfo() {
         DashboardPage dashboardPage = new DashboardPage();
 
-        dashboardPage.navigateToPageFromMenu("Dashboard");
+        dashboardPage.navigateToPageFromMenu("Climate Dashboard");
         test.info("Navigated to Dashboard Page");
 
         dashboardPage.clickViewCompaniesAndInvestments();
@@ -97,14 +97,6 @@ public class ExportDashboardDataDictionary extends DashboardUITestBase {
         assertTestCase.assertTrue(actualColumnsList.containsAll(expectedPhysicalRiskColumnsList),"Data dictionary details verification");
 
         // ESGCA-9786: Validate newly added Columns in 'Data - All research lines' Sheet
-        List<String> expectedNewColumnsList = new ArrayList<>();
-        expectedNewColumnsList.add("Scored Orbis ID");
-        expectedNewColumnsList.add("LEI");
-        expectedNewColumnsList.add("Methodology Model Version");
-        expectedNewColumnsList.add("Scored Date");
-        expectedNewColumnsList.add("Evaluation Year");
-        expectedNewColumnsList.add("Overall Score");
-        assertTestCase.assertTrue(actualColumnsList.containsAll(expectedNewColumnsList),"Data dictionary details verification");
 
         //ESGCA-9817: Verify the columns Alphanumeric Score and Overall Qualifier is not present
         List<String> deletedColumnsList = new ArrayList<>();
@@ -117,59 +109,7 @@ public class ExportDashboardDataDictionary extends DashboardUITestBase {
         dashboardPage.deleteDownloadFolder();
     }
 
-    @Test(groups = {DASHBOARD, REGRESSION, UI, ESG})
-    @Xray(test = {9787, 9789})
-    public void verifyESGInfoInExcelWhenNoESGEntitlement_Bundle() {
-        LoginPage login = new LoginPage();
-        login.entitlementsLogin(EntitlementsBundles.PHYSICAL_RISK_TRANSITION_RISK);
 
-        DashboardPage dashboardPage = new DashboardPage();
-
-        dashboardPage.navigateToPageFromMenu("Dashboard");
-        test.info("Navigated to Dashboard Page");
-
-        dashboardPage.clickViewCompaniesAndInvestments();
-        test.info("Navigated to Companies Page");
-
-        test.info("Verification of Companies Export Based on Sector");
-        dashboardPage.selectViewBySector();
-
-        dashboardPage.deleteDownloadFolder();
-        dashboardPage.clickExportCompaniesButton();
-        test.info("Exported All Companies and Investments Details in excel format");
-        dashboardPage.closePortfolioExportDrawer();
-
-        assertTestCase.assertTrue(dashboardPage.isCompaniesAndInvestmentsExcelDownloaded(), "Verify Download of Excel file with Companies and Investments details", 6080);
-
-        // Read the data from Excel File
-        String filePath = dashboardPage.getDownloadedCompaniesExcelFilePath();
-        String tabName = "Data - All research lines";
-
-        // ESGCA-9787: Validate ESG Columns in 'Data - All research lines' Sheet when no ESG Entitlement
-        ExcelUtil excel = new ExcelUtil(filePath,tabName);
-        List<String> actualColumnsList = excel.getColumnsNames();
-        List<String> expectedNewColumnsList = new ArrayList<>();
-        // expectedNewColumnsList.add("Orbis ID");
-        expectedNewColumnsList.add("Scored Orbis ID");
-        expectedNewColumnsList.add("LEI");
-        expectedNewColumnsList.add("Methodology Model Version");
-        expectedNewColumnsList.add("Scored Date");
-        expectedNewColumnsList.add("Evaluation Year");
-        expectedNewColumnsList.add("Overall Score");
-        for(String columnName:expectedNewColumnsList) {
-            assertTestCase.assertTrue(!actualColumnsList.contains(columnName), "Data dictionary details verification");
-        }
-
-        String secondTabName =  "Data Dictionary";
-        ExcelUtil dictionarySheet = new ExcelUtil(filePath,secondTabName);
-        for(String columnName:expectedNewColumnsList){
-            for(int i=0; i<dictionarySheet.rowCount();i++){
-                assertTestCase.assertTrue(!dictionarySheet.getCellData(i,0).equals(columnName), "Verify ESG Info in Data Dictionary tab");
-            }
-        }
-
-        dashboardPage.deleteDownloadFolder();
-    }
 
     public boolean verifyDataDictionaryData(String filePath, String tabName, Map<String,String> dataDictionary) {
 

@@ -202,7 +202,7 @@ public class EMCRoleDetailsPage extends EMCBasePage {
         BrowserUtils.scrollTo(assignMembersButton);
         BrowserUtils.waitForClickablility(assignMembersButton,5).click();
         assignMemberSearchInput.sendKeys(userName);
-        BrowserUtils.wait(3);
+        BrowserUtils.wait(5);
         assignMemberCheckBoxes.get(0).click();
         BrowserUtils.waitForClickablility(assignButton,5).click();
         BrowserUtils.wait(3);
@@ -221,5 +221,20 @@ public class EMCRoleDetailsPage extends EMCBasePage {
 //                break;
             }
         }
+    }
+
+    public void clickOnDetailsTab() {
+        System.out.println("Clicking on details tab");
+        BrowserUtils.waitForClickablility(detailsTab, 5).click();
+    }
+
+    public void clickOnUsersTab() {
+        System.out.println("Clicking on users tab");
+        BrowserUtils.waitForClickablility(usersTab, 5).click();
+    }
+
+    public void clickOnPermissionsTab() {
+        System.out.println("Clicking on permissions tab");
+        BrowserUtils.waitForClickablility(permissionsTab, 5).click();
     }
 }

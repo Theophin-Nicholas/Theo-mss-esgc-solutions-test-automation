@@ -162,7 +162,7 @@ public class ConfigurationPageTests extends EMCUITestBase {
         rolesPage.selectRole(roleName);
         EMCRoleDetailsPage detailsPage = new EMCRoleDetailsPage();
         assertTestCase.assertEquals(detailsPage.pageTitle.getText(),roleName, roleName+" page loaded");
-        BrowserUtils.waitForClickablility(detailsPage.usersTab, 5).click();
+        detailsPage.clickOnUsersTab();
         assertTestCase.assertTrue(detailsPage.roleMembersTag.isDisplayed(),"Users Tab - Role members tag is displayed");
 
         if(detailsPage.verifyRoleMember(userName)) {
@@ -176,6 +176,9 @@ public class ConfigurationPageTests extends EMCUITestBase {
 
         detailsPage.removeMemberFromRole(userName);
         assertTestCase.assertTrue(detailsPage.notification.isDisplayed(), "Users removed message is displayed");
+        detailsPage.clickOnDetailsTab();
+        BrowserUtils.wait(2);
+        detailsPage.clickOnUsersTab();
         assertTestCase.assertFalse(detailsPage.verifyRoleMember(userName), "Member is removed from role");
     }
 
@@ -252,7 +255,7 @@ public class ConfigurationPageTests extends EMCUITestBase {
         assertTestCase.assertTrue(rolesPage.verifyRole(roleName),"New role is creation is verified");
     }
 
-    @Test(groups = {EMC, UI,REGRESSION})
+    @Test(groups = {EMC, UI,REGRESSION, PROD, SMOKE})
     @Xray(test = {6670})
     public void verifyAdminUserCreateRoleCancelButtonTest() {
         navigateToConfigPage("permission roles");
@@ -400,7 +403,7 @@ public class ConfigurationPageTests extends EMCUITestBase {
         Driver.getDriver().get(Environment.EMC_URL);
         BrowserUtils.waitForPageToLoad(10);
         LoginPageEMC loginPageEMC = new LoginPageEMC();
-        loginPageEMC.loginEMCWithParams("ferhat.demir-non-empl@moodys.com", "Apple@2023??");
+        loginPageEMC.loginEMCWithParams(Environment.VIEWER_USER_USERNAME, Environment.VIEWER_USER_PASSWORD);
 
         //Go to Accounts page and open account
         EMCMainPage homePage = new EMCMainPage();
@@ -494,7 +497,7 @@ public class ConfigurationPageTests extends EMCUITestBase {
         Driver.getDriver().get(Environment.EMC_URL);
         BrowserUtils.waitForPageToLoad(10);
         LoginPageEMC loginPageEMC = new LoginPageEMC();
-        loginPageEMC.loginEMCWithParams("ferhat.demir-non-empl@moodys.com", "Apple@2023??");
+        loginPageEMC.loginEMCWithParams(Environment.VIEWER_USER_USERNAME, Environment.VIEWER_USER_PASSWORD);
         EMCMainPage homePage = new EMCMainPage();
 
         try {
@@ -504,6 +507,7 @@ public class ConfigurationPageTests extends EMCUITestBase {
             assertTestCase.assertEquals(accountsPage.pageTitle.getText(), "Accounts", "Accounts page is displayed");
             System.out.println("Accounts page is displayed");
             //Search for the account where a New user will be created
+            accountsPage.search("test");
             assertTestCase.assertEquals(accountsPage.accountNames.size() > 0, true, "Account is displayed");
 
             //On Account Details view, select USERS tab
@@ -543,13 +547,14 @@ public class ConfigurationPageTests extends EMCUITestBase {
         Driver.getDriver().get(Environment.EMC_URL);
         BrowserUtils.waitForPageToLoad(10);
         LoginPageEMC loginPageEMC = new LoginPageEMC();
-        loginPageEMC.loginEMCWithParams("ferhat.demir-non-empl@moodys.com", "Apple@2023??");
+        loginPageEMC.loginEMCWithParams(Environment.VIEWER_USER_USERNAME, Environment.VIEWER_USER_PASSWORD);
         EMCMainPage homePage = new EMCMainPage();
         homePage.goToAccountsPage();
         EMCAccountsPage accountsPage = new EMCAccountsPage();
         BrowserUtils.waitForVisibility(accountsPage.pageTitle, 20);
         assertTestCase.assertEquals(accountsPage.pageTitle.getText(), "Accounts", "Accounts page is displayed");
         BrowserUtils.wait(10);
+        accountsPage.search("test");
         assertTestCase.assertEquals(accountsPage.accountNames.size() > 0, true, "Account is displayed");
 
         accountsPage.goToAccount(accountName);
@@ -600,7 +605,7 @@ public class ConfigurationPageTests extends EMCUITestBase {
         }
 
         //Go back to Admin user and reset settings for the test user
-        Driver.closeDriver();
+        Driver.quit();
         Driver.getDriver().get(Environment.EMC_URL);
         BrowserUtils.waitForPageToLoad(10);
         loginPageEMC = new LoginPageEMC();

@@ -139,7 +139,7 @@ public abstract class ClimatePageBase extends PageBase {
     /**
      * Selects sample portfolio (default portfolio for all users) from portfolio selection modal
      */
-    public void selectSamplePortfolioFromPortfolioSelectionModal() {
+    public synchronized void selectSamplePortfolioFromPortfolioSelectionModal() {
         System.out.println("Selecting Sample Portfolio");
         wait.until(ExpectedConditions.visibilityOfAllElements(portfolioSelectionButton));
         if (portfolioSelectionButton.getAttribute("title").equals("Sample Portfolio")) return;
@@ -498,10 +498,10 @@ public abstract class ClimatePageBase extends PageBase {
         assertTestCase.assertTrue(wait.until(ExpectedConditions.visibilityOf(successMessageForNameSaved)).isDisplayed(), "Validate Succee message is displayd after save");
         assertTestCase.assertTrue(getPortfolioDrawerHeader(newPortfolioName).isDisplayed(), "Validate that chnaged portfolio name is displayed in header ");
         closeMenuByClickingOutSide();
-        navigateToPageFromMenu("Dashboard");
+        navigateToPageFromMenu("Climate Dashboard");
         assertTestCase.assertTrue(getPortfolioNames().contains(newPortfolioName + "\n"), "Validate updated Portfolio name has appreared on Dashboard page, Portfolio selection modal");
 
-        navigateToPageFromMenu("Portfolio Analysis");
+        navigateToPageFromMenu("Climate Portfolio Analysis");
         assertTestCase.assertTrue(getPortfolioNames().contains(newPortfolioName + "\n"), "Validate updated Portfolio name has appreared on Dashboard page, Portfolio selection modal");
 
         clickMenu();
@@ -522,7 +522,7 @@ public abstract class ClimatePageBase extends PageBase {
 
     public void goToEntity(String entityName) {
         this.entityName = entityName;
-        navigateToPageFromMenu("Portfolio Analysis");
+        navigateToPageFromMenu("Climate Portfolio Analysis");
         searchIconPortfolioPage.click();
         enterPortfolioNameInSearchBar(entityName);
         String xpath = "//span[.='" + entityName + "']";

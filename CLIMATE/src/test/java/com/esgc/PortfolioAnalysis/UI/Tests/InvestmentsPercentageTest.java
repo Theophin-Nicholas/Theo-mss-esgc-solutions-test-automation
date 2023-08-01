@@ -25,7 +25,7 @@ public class InvestmentsPercentageTest extends UITestBase {
         String benchmark = dataProvider[5];
 
         ResearchLinePage researchLinePage = new ResearchLinePage();
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
 
         researchLinePage.selectPortfolioByNameFromPortfolioSelectionModal(portfolio);
         researchLinePage.selectResearchLineFromDropdown(researchLine);

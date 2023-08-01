@@ -1,6 +1,7 @@
 package com.esgc.Dashboard.API.APIModels;
 
 import com.esgc.Base.API.APIModels.APIFilterPayload;
+import com.esgc.Base.API.Controllers.APIController;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -33,13 +34,14 @@ public class APIPerformanceChartPayload {
     private String research_line;
 
     public APIPerformanceChartPayload(APIFilterPayload apiFilterPayload, String researchLine, String tableType, int limit) {
+        APIController apiController = new APIController();
         this.region = apiFilterPayload.getRegion();
         this.sector = apiFilterPayload.getSector();
         this.month = apiFilterPayload.getMonth();
         this.year = apiFilterPayload.getYear();
         this.table_type = tableType;
         this.limit = limit;
-        this.research_line = researchLine;
+        this.research_line = apiController.apiResourceMapperWithoutphysicalriskinit(researchLine);
     }
 
 }

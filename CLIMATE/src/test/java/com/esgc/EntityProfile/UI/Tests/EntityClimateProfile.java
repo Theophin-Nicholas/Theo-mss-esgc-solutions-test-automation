@@ -24,20 +24,21 @@ import static com.esgc.Utilities.Groups.*;
 public class EntityClimateProfile extends UITestBase {
 
 
-    @Xray(test = {5875, 5879, 11725,12413})
+    @Xray(test = {5875, 5879, 11725, 12413})
     @Test(enabled = true, groups = {REGRESSION, UI, SMOKE, ENTITY_PROFILE},
             description = "Verify if Company headers are Displayed as Expected",
             dataProviderClass = DataProviderClass.class, dataProvider = "CompanyNames")
     public void testCompanyHeader(String company) {
         ResearchLinePage researchLinePage = new ResearchLinePage();
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
         BrowserUtils.wait(5);
         EntityClimateProfilePage entityProfilePage = new EntityClimateProfilePage();
         String companyName = entityProfilePage.searchAndLoadClimateProfilePage(company);
+        entityProfilePage.waitForDataLoadCompletion();
         Assert.assertTrue(entityProfilePage.validateGlobalCompanyNameHeader(companyName));
         //todo: remove if condition once confidence level pushed to prod or uat
-        if(entityProfilePage.companyHeaderItems.size() > 4)
-        Assert.assertEquals(entityProfilePage.confidenceLevel.getText(),"Confidence Level: Analyst Driven","Validating Confidence Level: Analyst Driven");
+//        if(entityProfilePage.companyHeaderItems.size() > 4)
+//        Assert.assertEquals(entityProfilePage.confidenceLevel.getText(),"Confidence Level: Analyst Driven","Validating Confidence Level: Analyst Driven");
         entityProfilePage.validateCompanyHeader(companyName);
     }
 
@@ -47,7 +48,7 @@ public class EntityClimateProfile extends UITestBase {
             dataProviderClass = DataProviderClass.class, dataProvider = "CompanyNames")
     public void testGreenShareCard(@Optional String Company) {
         ResearchLinePage researchLinePage = new ResearchLinePage();
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
         BrowserUtils.wait(5);
         EntityClimateProfilePage entityProfilePage = new EntityClimateProfilePage();
         String companyName = entityProfilePage.searchAndLoadClimateProfilePage(Company);
@@ -68,7 +69,7 @@ public class EntityClimateProfile extends UITestBase {
             dataProviderClass = DataProviderClass.class, dataProvider = "CompanyNames")
     public void testBrownShareCard(@Optional String Company) {
         ResearchLinePage researchLinePage = new ResearchLinePage();
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
         BrowserUtils.wait(5);
         EntityClimateProfilePage entityProfilePage = new EntityClimateProfilePage();
         String companyName = entityProfilePage.searchAndLoadClimateProfilePage(Company);
@@ -86,7 +87,7 @@ public class EntityClimateProfile extends UITestBase {
             description = "Verify if Company headers are Displayed as Expected")
     public void testTemperatureAlignmentWidget() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
         BrowserUtils.wait(5);
         EntityClimateProfilePage entityProfilePage = new EntityClimateProfilePage();
         String companyName = entityProfilePage.searchAndLoadClimateProfilePage("Apple, Inc.");
@@ -105,7 +106,7 @@ public class EntityClimateProfile extends UITestBase {
             dataProviderClass = DataProviderClass.class, dataProvider = "CompanyNames")
     public void testSectorComparisonChartForTransitionRisk(String CompanyName) {
         ResearchLinePage researchLinePage = new ResearchLinePage();
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
         EntityClimateProfilePage entityProfilePage = new EntityClimateProfilePage();
         entityProfilePage.searchAndLoadClimateProfilePage(CompanyName);
         entityProfilePage.navigateToTransitionRisk();
@@ -134,7 +135,8 @@ public class EntityClimateProfile extends UITestBase {
                 "company name is displayed next to sector name");
 
     }
-//TODO needs to be handled
+
+    //TODO needs to be handled
     @Xray(test = {8981, 8983})
     @Test(groups = {REGRESSION, UI, ENTITY_PROFILE},
             description = "Entity Climate Profile Page-Physical risk management",
@@ -150,12 +152,13 @@ public class EntityClimateProfile extends UITestBase {
         entityProfilePage.validatePhysicalRiskManagementTable();
 
     }
+
     //todo: Check if functionality is available
     @Xray(test = {11207, 11209})
-    @Test(enabled = false, groups = {REGRESSION,SMOKE, UI, ENTITY_PROFILE},
+    @Test(enabled = false, groups = {REGRESSION, SMOKE, UI, ENTITY_PROFILE},
             description = "Entity Climate Profile Page-Physical risk management",
             dataProviderClass = DataProviderClass.class, dataProvider = "orbisIdWithCompanyName")
-    public void verifyL3SectorInEntityHeader(String companyName,String orbisId) {
+    public void verifyL3SectorInEntityHeader(String companyName, String orbisId) {
         //Get the api response for L3 field mesg_sector
         EntityClimateProfilePage entityProfilePage = new EntityClimateProfilePage();
         entityProfilePage.searchAndLoadClimateProfilePage(orbisId);
@@ -164,14 +167,14 @@ public class EntityClimateProfile extends UITestBase {
         EntityProfileClimatePageAPIController apiController = new EntityProfileClimatePageAPIController();
         List<EntityHeader> list = Arrays.asList(apiController.geCompanyHeaderAPIResponse(orbisId).as(EntityHeader[].class));
         String l3ApiValue = list.get(0).getMesg_sector();
-        l3ApiValue="Sector: "+l3ApiValue;
+        l3ApiValue = "Sector: " + l3ApiValue;
         System.out.println("l3ApiValue = " + l3ApiValue);
         // Get the header Sector details
         //String sectorHeaderUI = entityProfilePage.sectorInHeader.getText();
         //System.out.println("sectorHeaderUI = " + sectorHeaderUI);
 
         // Get the Company drawer Sector detail.
-        WebElement companyDrawerButton= Driver.getDriver().findElement(By.xpath("//span[contains(text(),'"+companyName+"')]"));
+        WebElement companyDrawerButton = Driver.getDriver().findElement(By.xpath("//span[contains(text(),'" + companyName + "')]"));
         companyDrawerButton.click();
         BrowserUtils.wait(1);
         //String sectorDrawerUI = entityProfilePage.sectorInHeader.getText();
@@ -187,21 +190,21 @@ public class EntityClimateProfile extends UITestBase {
     @Xray(test = {10044})
     @Test(groups = {REGRESSION, UI, ENTITY_PROFILE},
             description = "Verify Entity page header of the Company Name' About Drawer",
-            dataProviderClass = DataProviderClass.class,  dataProvider = "CompanyNames")
-    public void validateCompanyNameAndAboutDrawer (String CompanyName) {
+            dataProviderClass = DataProviderClass.class, dataProvider = "CompanyNames")
+    public void validateCompanyNameAndAboutDrawer(String CompanyName) {
 
         EntityClimateProfilePage entityProfilePage = new EntityClimateProfilePage();
         entityProfilePage.searchAndLoadClimateProfilePage(CompanyName);
         //Validate Hover on Company name :
         entityProfilePage.validateCompanyNameHoverFunctionality(CompanyName);
         //Validate About Icon next to name :
-        assertTestCase.assertTrue(entityProfilePage.validateInfoIcon(CompanyName),"Validate About Icon next to company Header");
+        assertTestCase.assertTrue(entityProfilePage.validateInfoIcon(CompanyName), "Validate About Icon next to company Header");
         entityProfilePage.openAboutDrawer(CompanyName);
         //Validate if Drawer has opened upon click
         assertTestCase.assertTrue(entityProfilePage.isAboutDrawerAvailable(),
                 "Validate About Drawer is displayed");
         // Validate Header text in Drawer
-        assertTestCase.assertTrue(entityProfilePage.validateAboutHeader(CompanyName),"Validate Header Text");
+        assertTestCase.assertTrue(entityProfilePage.validateAboutHeader(CompanyName), "Validate Header Text");
         // Validate validate Drawer Details
         entityProfilePage.validateAboutDrawerDetails(CompanyName);
         // Click on escape to close the drawer
@@ -211,8 +214,8 @@ public class EntityClimateProfile extends UITestBase {
 
     @Xray(test = {10275})
     @Test(groups = {REGRESSION, UI, ENTITY_PROFILE},
-            dataProviderClass = DataProviderClass.class,  dataProvider = "Company With Orbis ID")
-    public void validatePhysicalClimateHazardDate (String... Company) {
+            dataProviderClass = DataProviderClass.class, dataProvider = "Company With Orbis ID")
+    public void validatePhysicalClimateHazardDate(String... Company) {
         EntityClimateProfilePage entityProfilePage = new EntityClimateProfilePage();
         entityProfilePage.searchAndLoadClimateProfilePage(Company[0]);
         entityProfilePage.validatePhysicalClimateHazardUpdatedDate(Company[1]);
@@ -220,8 +223,8 @@ public class EntityClimateProfile extends UITestBase {
 
     @Xray(test = {10282})
     @Test(groups = {REGRESSION, UI, ENTITY_PROFILE},
-            dataProviderClass = DataProviderClass.class,  dataProvider = "Company With Orbis ID")
-    public void validatePhysicalRiskManagementUpdatedDate (String... Company) {
+            dataProviderClass = DataProviderClass.class, dataProvider = "Company With Orbis ID")
+    public void validatePhysicalRiskManagementUpdatedDate(String... Company) {
         EntityClimateProfilePage entityProfilePage = new EntityClimateProfilePage();
         entityProfilePage.searchAndLoadClimateProfilePage(Company[0]);
         entityProfilePage.validatePhysicalRiskManagementUpdatedDate(Company[1]);

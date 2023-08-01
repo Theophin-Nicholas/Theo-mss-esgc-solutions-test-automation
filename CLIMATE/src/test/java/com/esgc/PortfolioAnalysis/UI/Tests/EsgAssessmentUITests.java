@@ -15,50 +15,11 @@ import static com.esgc.Utilities.Groups.*;
 
 public class EsgAssessmentUITests extends UITestBase {
 
-     @Test(enabled = false,groups = {REGRESSION, UI, SMOKE, ESG})
-    @Xray(test = {8704, 9969}) //TODO de-scoped , enable after scoped
-    public void verifyESGGradeDistributionIsDisplayed() {
-        ResearchLinePage researchLinePage = new ResearchLinePage();
-        researchLinePage.navigateToResearchLine("ESG Assessments");
-        test.info("Navigated to ESG Assessments Page");
-        researchLinePage.validateEsgGradeDistribution();
-    }
-
-    @Test(enabled = false,groups = {REGRESSION, UI, SMOKE, ESG})
-    @Xray(test = {9133})
-    public void verifyESGGRegionMapAndCountryTableDrawer() {
-
-        ResearchLinePage researchLinePage = new ResearchLinePage();
-        researchLinePage.navigateToResearchLine("ESG Assessments");
-        test.info("Navigated to ESG Assessments Page");
-        researchLinePage.validateCountry();
-    }
-
-    @Test(groups = {REGRESSION, UI, ESG})
-    @Xray(test = {9967, 9898})
-    public void verifyEsgAssessmentScoreLegend() {
-        ResearchLinePage researchLinePage = new ResearchLinePage();
-        researchLinePage.navigateToResearchLine("ESG Assessments");
-        test.info("Navigated to ESG Assessments Page");
-        researchLinePage.validateEsgAssessmentLegends();
-    }
-
-    @Test(groups = {REGRESSION, UI, ESG})
-    @Xray(test = {8291})
-    public void verifyEsgAssessmentWithBenchmark() {
-        ResearchLinePage researchLinePage = new ResearchLinePage();
-        researchLinePage.navigateToResearchLine("ESG Assessments");
-
-        researchLinePage.clickOnBenchmarkDropdown();
-        researchLinePage.waitForDataLoadCompletion();
-        researchLinePage.SelectAPortfolioFromBenchmark("Sample Portfolio");
-
-
-    }
 
     @Test(groups = {REGRESSION, UI, ESG})
     @Xray(test = {11371})
     public void verifyEsgAssessmentExcelColumnsOrder_PortfolioAnalysis() {
+
         ResearchLinePage researchLinePage = new ResearchLinePage();
         researchLinePage.selectSamplePortfolioFromPortfolioSelectionModal();
         researchLinePage.navigateToResearchLine("ESG Assessments");

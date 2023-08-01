@@ -184,7 +184,7 @@ public class ImpactTableTests extends UITestBase {
 
     }
 
-    @Test(groups = {REGRESSION, UI, SMOKE},
+    @Test(groups = {REGRESSION, UI},
             description = "ESGCA-4940 - Verify Drilldowns If There are More Than 20 Companies in Impact Tables",
             dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
     @Xray(test = {4940, 6775})

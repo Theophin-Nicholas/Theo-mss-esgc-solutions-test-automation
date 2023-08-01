@@ -3,19 +3,17 @@ package com.esgc.EntityProfile.UI.Tests;
 import com.esgc.Base.TestBases.UITestBase;
 import com.esgc.EntityProfile.UI.Pages.EntityClimateProfilePage;
 import com.esgc.Utilities.Xray;
-import org.testng.annotations.Test;
 
-import java.util.Arrays;
-import java.util.List;
+import org.testng.annotations.Test;
 
 import static com.esgc.Utilities.Groups.*;
 
 public class EsgMaterialityMatrixTests extends UITestBase {
-
-    @Test(groups = {ENTITY_PROFILE, REGRESSION, UI})
+//TODO : Disabling this method due to ESG removal
+    @Test( enabled = false ,groups = {ENTITY_PROFILE, REGRESSION, UI})
     @Xray(test = {8424})
     public void validateEsgMaterialityMatrixColumns() {
-        String company = "Apple, Inc.";
+     /*   String company = "Apple, Inc.";
         test.info("Searching and Selecting the company");
         EntityClimateProfilePage entityProfilePage = new EntityClimateProfilePage();
         entityProfilePage.searchAndLoadClimateProfilePage(company);
@@ -34,10 +32,10 @@ public class EsgMaterialityMatrixTests extends UITestBase {
 
         assertTestCase.assertTrue(entityProfilePage.verifyMaterialityMatrixYaxisLabels(), "Verification of Materiality Matrix Y-Axis Labels");
 
-        entityProfilePage.clickCloseIcon();
+        entityProfilePage.clickCloseIcon();*/
     }
 
-    @Test(groups = {ENTITY_PROFILE, REGRESSION, UI})
+    @Test(groups = {ESG, ENTITY_PROFILE, REGRESSION, UI})
     @Xray(test = {8424})
     public void validateLowMaterialityColumnProperties() {
         String company = "Apple, Inc.";
@@ -48,10 +46,10 @@ public class EsgMaterialityMatrixTests extends UITestBase {
         entityProfilePage.selectEsgMaterialityTab();
         entityProfilePage.verifyLowMaterialityMatrixColumnProperties();
 
-        entityProfilePage.clickCloseIcon();
+        entityProfilePage.clickCloseIconInSearchBox();
     }
 
-    @Test(groups = {ENTITY_PROFILE, REGRESSION, UI})
+    @Test(groups = {ENTITY_PROFILE, REGRESSION, UI, ESG})
     @Xray(test = {8427})
     public void validateEsgMaterialityMatrixSubCategoriesProperties() {
 
@@ -64,14 +62,14 @@ public class EsgMaterialityMatrixTests extends UITestBase {
         entityProfilePage.selectEsgMaterialityTab();
         entityProfilePage.validateSubCategoriesButtonProperties();
 
-        entityProfilePage.clickCloseIcon();
+        entityProfilePage.clickCloseIconInSearchBox();
     }
-
-    @Test(groups = {ENTITY_PROFILE, REGRESSION, UI})
+    //TODO : Disabling this method due to ESG removal
+    @Test(enabled = false, groups = {ENTITY_PROFILE, REGRESSION, UI})
     @Xray(test = {8425})
     public void validateEsgMaterialityMatrixOrderAndColors() {
 
-        String company = "Amazon.com, Inc.";
+   /*     String company = "Amazon.com, Inc.";
         test.info("Searching and Selecting the company");
         EntityClimateProfilePage entityProfilePage = new EntityClimateProfilePage();
         String companyName = entityProfilePage.searchAndLoadClimateProfilePage(company);
@@ -80,7 +78,7 @@ public class EsgMaterialityMatrixTests extends UITestBase {
         entityProfilePage.selectEsgMaterialityTab();
         entityProfilePage.validateSubCategories();
 
-        entityProfilePage.clickCloseIcon();
+        entityProfilePage.clickCloseIcon();*/
     }
 
     @Test(groups = {ENTITY_PROFILE, REGRESSION, UI, SMOKE, ESG})
@@ -94,7 +92,7 @@ public class EsgMaterialityMatrixTests extends UITestBase {
 
         entityProfilePage.selectEsgMaterialityTab();
         entityProfilePage.validateNoneForTheSectorButton();
-        entityProfilePage.clickCloseIcon();
+        entityProfilePage.clickCloseIconInSearchBox();
     }
 
     @Test(groups = {ENTITY_PROFILE, REGRESSION, UI})
@@ -110,13 +108,13 @@ public class EsgMaterialityMatrixTests extends UITestBase {
         entityProfilePage.selectPhysicalRiskTab();
         entityProfilePage.selectEsgMaterialityTab();
 
-        entityProfilePage.clickCloseIcon();
+        entityProfilePage.clickCloseIconInSearchBox();
     }
-
-    @Test(groups = {ENTITY_PROFILE, REGRESSION, UI})
+    //TODO : Disabling this method due to ESG removal
+    @Test(enabled = false ,groups = {ENTITY_PROFILE, REGRESSION, UI})
     @Xray(test = {8841, 8842})
     public void validateMaterialityMatrixLegends() {
-
+/*
         String company = "Apple, Inc.";
         test.info("Searching and Selecting the company");
         EntityClimateProfilePage entityProfilePage = new EntityClimateProfilePage();
@@ -124,7 +122,7 @@ public class EsgMaterialityMatrixTests extends UITestBase {
 
         entityProfilePage.validateEsgMaterialityLegends();
 
-        entityProfilePage.clickCloseIcon();
+        entityProfilePage.clickCloseIcon();*/
     }
 
     @Test(groups = {ENTITY_PROFILE, REGRESSION, UI, SMOKE, ESG})
@@ -140,6 +138,6 @@ public class EsgMaterialityMatrixTests extends UITestBase {
 
         assertTestCase.assertTrue(entityProfilePage.validateNoPopupIsDisplayedWhenClickedOnSubCategories(), "Verify popup is not displayed");
 
-        entityProfilePage.clickCloseIcon();
+        entityProfilePage.clickCloseIconInSearchBox();
     }
 }

@@ -243,6 +243,8 @@ public class ExcelUtil {
             Cell cell = workSheet.getRow(i).getCell(columnIndex);
             if (cell == null || cell.getCellType() == CellType.BLANK)
                 data.add(nullValue);
+            else if (cell.getCellType() == CellType.NUMERIC)
+                data.add(String.valueOf(cell.getNumericCellValue()));
             else
                 data.add(cell.getStringCellValue());
         }
@@ -385,5 +387,23 @@ public class ExcelUtil {
 
     public String getSheetName() {
         return workSheet.getSheetName();
+    }
+
+    public Map<String,String> getRowValueMapWithColumnName(int rowIndex) {
+        Row row = workSheet.getRow(rowIndex);
+        Row headingRow = workSheet.getRow(0);
+        Map<String, String> data = new HashMap<>();
+        if (row != null) {
+            for (int i = 0; i < row.getLastCellNum(); i++) {
+
+                if (row.getCell(i).getCellType() == CellType.BLANK)
+                    data.put(headingRow.getCell(i).getStringCellValue(), "");
+                else if (row.getCell(i).getCellType() == CellType.NUMERIC)
+                    data.put(headingRow.getCell(i).getStringCellValue(), String.valueOf(row.getCell(i).getNumericCellValue()));
+                else data.put(headingRow.getCell(i).getStringCellValue(), row.getCell(i).toString());
+            }
+            return data;
+        }
+        return null;
     }
 }

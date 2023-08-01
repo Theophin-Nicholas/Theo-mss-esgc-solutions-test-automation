@@ -132,16 +132,17 @@ public class LoginPageEMC extends PageBase {
         wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(userName, Keys.ENTER);
         try{
             BrowserUtils.wait(5);
-            BrowserUtils.waitAndClick(nextButton, 3);
+            if(nextButton.isDisplayed()){
+                System.out.println("Next button is displayed");
+                BrowserUtils.waitForClickablility(nextButton, 3).click();
+            }
         }catch (Exception e){
             System.out.println("No need to click next button");
         }
         wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(password);
-
         wait.until(ExpectedConditions.visibilityOf(loginButton)).click();
         System.out.println("Login with params");
         Driver.getDriver().manage().window().maximize();
-
     }
 
     /**
@@ -152,28 +153,28 @@ public class LoginPageEMC extends PageBase {
     public void loginWithInternalUser() {
         Driver.getDriver().manage().window().maximize();
         System.out.println("Login with internal user");
-        BrowserUtils.clearCache();
+//        BrowserUtils.clearCache();
         wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.INTERNAL_USER_USERNAME, Keys.ENTER);
         //check if next button is displayed
-        try{
-            BrowserUtils.wait(5);
-            BrowserUtils.waitAndClick(nextButton, 3);
-        }catch (Exception e){
-            System.out.println("No need to click next button");
-        }
+//        try{
+//            BrowserUtils.wait(5);
+//            BrowserUtils.waitAndClick(nextButton, 3);
+//        }catch (Exception e){
+//            System.out.println("No need to click next button");
+//        }
 
         //check if username is displayed and cleared
-        try{
+        try {
             BrowserUtils.wait(5);
             BrowserUtils.clearCache();
-            if(PTusernameBox.getAttribute("value").isEmpty())
+            if (PTusernameBox.getAttribute("value").isEmpty())
                 PTusernameBox.sendKeys(Environment.INTERNAL_USER_USERNAME);
         } catch (Exception e) {
             System.out.println("No need to enter username");
         }
 
         //check if password is displayed
-        try{
+        try {
             //wait.until(ExpectedConditions.visibilityOf(
             passwordBox.sendKeys(Environment.INTERNAL_USER_PASSWORD, Keys.ENTER);
         } catch (Exception e) {
@@ -181,14 +182,19 @@ public class LoginPageEMC extends PageBase {
         }
         BrowserUtils.waitForPageToLoad(30);
     }
-
     public void loginEMCInternal() {
         System.out.println("Log in to Prod with Authorized User");
         Driver.getDriver().manage().window().maximize();
         wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.INTERNAL_USER_USERNAME, Keys.ENTER);
-        BrowserUtils.wait(10);
-//        wait.until(ExpectedConditions.visibilityOf(PTusernameBox)).sendKeys(Environment.INTERNAL_USER_USERNAME);
-//        wait.until(ExpectedConditions.visibilityOf(PTpasswordBox)).sendKeys(Environment.INTERNAL_USER_PASSWORD, Keys.ENTER);
+        BrowserUtils.wait(5);
+        try{
+            if(PTusernameBox.getAttribute("value").isEmpty())
+                wait.until(ExpectedConditions.visibilityOf(PTusernameBox)).sendKeys(Environment.INTERNAL_USER_USERNAME);
+            wait.until(ExpectedConditions.visibilityOf(PTpasswordBox)).sendKeys(Environment.INTERNAL_USER_PASSWORD, Keys.ENTER);
+        } catch (Exception e){
+            System.out.println("No need to enter username and password");
+        }
+
         Driver.getDriver().manage().window().maximize();
     }
     public void loginWithWrongPass() {
@@ -217,7 +223,9 @@ public class LoginPageEMC extends PageBase {
     public void loginEMCWithParams(String userName, String password) {
         Driver.getDriver().manage().window().maximize();
         wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(userName, Keys.ENTER);
-        BrowserUtils.wait(2);
+        BrowserUtils.waitAndClick(PTusernameBox, 10);
+        if(PTusernameBox.getAttribute("value").isEmpty())
+            wait.until(ExpectedConditions.visibilityOf(PTusernameBox)).sendKeys(userName);
         wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(password);
         wait.until(ExpectedConditions.visibilityOf(loginButton)).click();
         Driver.getDriver().manage().window().maximize();

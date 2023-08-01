@@ -8,17 +8,13 @@ import com.esgc.Dashboard.API.APIModels.APIHeatMapResponse;
 import com.esgc.Dashboard.API.APIModels.APIHeatMapSinglePayload;
 import com.esgc.Dashboard.API.Controllers.DashboardAPIController;
 import com.esgc.Dashboard.UI.Pages.DashboardPage;
-import com.esgc.PortfolioAnalysis.UI.Pages.ResearchLinePage;
 import com.esgc.Utilities.*;
-import com.esgc.Utilities.Database.DatabaseDriver;
-import com.esgc.Utilities.Database.PortfolioQueries;
 import io.restassured.response.Response;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.Color;
 import org.testng.annotations.Test;
 
+import java.text.DecimalFormat;
 import java.util.*;
 
 import static com.esgc.Utilities.Groups.*;
@@ -263,13 +259,6 @@ public class DashboardHeatMapEntityListTests extends UITestBase {
             //controller.getResearchLineRangesAndScoreCategories()
             System.out.println("researchLine = " + researchLine);
             switch (researchLine) {
-                case "Overall ESG Score":
-                    assertTestCase.assertEquals(dashboardPage.heatMapYAxisIndicators.get(0).getText(), "Weak", "Overall ESG Score Category Verified");
-                    assertTestCase.assertEquals(dashboardPage.heatMapYAxisIndicators.get(1).getText(), "Limited", "Overall ESG Score Category Verified");
-                    assertTestCase.assertEquals(dashboardPage.heatMapYAxisIndicators.get(2).getText(), "Robust", "Overall ESG Score Category Verified");
-                    assertTestCase.assertEquals(dashboardPage.heatMapYAxisIndicators.get(3).getText(), "Advanced", "Overall ESG Score Category Verified");
-                    assertTestCase.assertEquals(dashboardPage.overallESGDescription.getText(), Descriptions.OVERALL_ESG_SCORE_HEATMAP);
-                    break;
                 case "Physical Risk: Operations Risk":
                 case "Physical Risk: Market Risk":
                 case "Physical Risk: Supply Chain Risk":
@@ -330,24 +319,18 @@ public class DashboardHeatMapEntityListTests extends UITestBase {
     }
 
     //Entitlements
-    @Test(groups = {DASHBOARD, UI, REGRESSION, SMOKE, ENTITLEMENTS})
+    @Test(groups = {DASHBOARD, UI, REGRESSION, ENTITLEMENTS})
     @Xray(test = {8185, 7973})
     public void heatMapAPIUIEntitlementsVerification() {
-        LoginPage loginPage = new LoginPage();
-        //Trying to log in with only Physical Risk Entitlement User
-       //WebElement portfolioSelectionButton = Driver.getDriver().findElement(By.id("button-holdings"));
-        //if (portfolioSelectionButton.getAttribute("title").equals("Sample Portfolio"))
-
-        loginPage.loginWithParams(Environment.PHYSICAL_RISK_USERNAME, Environment.PHYSICAL_RISK_PASSWORD);
-        BrowserUtils.wait(5);
-        Driver.getDriver().findElement(By.id("RegSector-test-id-1")).click();
-        selectOptionFromFiltersDropdown("as_of_date", "June 2022");
-
-
         APIController apiController = new APIController();
-        DashboardAPIController dashboardAPIController = new DashboardAPIController();
         DashboardPage dashboardPage = new DashboardPage();
+        DashboardAPIController dashboardAPIController = new DashboardAPIController();
+        LoginPage loginPage = new LoginPage();
+        loginPage.loginWithParams(Environment.PHYSICAL_RISK_USERNAME, Environment.PHYSICAL_RISK_PASSWORD);
+
         dashboardPage.selectSamplePortfolioFromPortfolioSelectionModal();
+        dashboardPage.clickFiltersDropdown();
+        dashboardPage.selectOptionFromFiltersDropdown("as_of_date", "June 2022");
 
         //Getting access token for API connection and setting as token.
         getExistingUsersAccessTokenFromUI();
@@ -357,7 +340,7 @@ public class DashboardHeatMapEntityListTests extends UITestBase {
             dashboardPage.selectOneResearchLineOnHeatMap(i);
             BrowserUtils.wait(7);
             String researchLine = dashboardPage.heatMapResearchLines.get(i).getText();
-            assertTestCase.assertTrue(dashboardPage.verifySelectedResearchLineForHeatMap(researchLine), researchLine+" is selected alone");
+            assertTestCase.assertTrue(dashboardPage.verifySelectedResearchLineForHeatMap(researchLine), researchLine + " is selected alone");
             researchLine = researchLine.substring(researchLine.indexOf(":") + 1).trim();
             System.out.println("researchLine = " + researchLine);
 
@@ -367,77 +350,38 @@ public class DashboardHeatMapEntityListTests extends UITestBase {
             Response response = dashboardAPIController.getHeatMapResponse(portfolio_id, researchLine, apiHeatMapSinglePayload);
             List<APIHeatMapResponse> list = Arrays.asList(response.getBody().as(APIHeatMapResponse[].class));
             System.out.println("dashboardPage.heatMapYAxisIndicatorsAPI.size() = " + dashboardPage.heatMapYAxisIndicatorsAPI.size());
-            switch (researchLine) {
-                case "Operations Risk":
-                case "Supply Chain Risk":
-                case "Market Risk":
-                case "Physical Risk Management":
-                    List<List<String>> UIValues = new ArrayList<>();
-                    List<List<String>> APIValues = new ArrayList<>();
-                    for (int x = 0; x < dashboardPage.heatMapYAxisIndicatorsAPI.size(); x++) {
-                        String scoreRangeUI = dashboardPage.heatMapYAxisIndicatorsAPI.get(x).getText(); //80-100
-                        String totalInvestmentUI = dashboardPage.heatMapYAxisIndicatorPercentagesAPI.get(x).getText(); //14.59%
-                        UIValues.add(Arrays.asList(scoreRangeUI, totalInvestmentUI));
+            DecimalFormat df = new DecimalFormat("#.00");
 
-                    }
-                    for (int y = 0; y < list.get(0).getY_axis_total_invct_pct().size(); y++) {
-                        String scoreRangeAPI = String.valueOf(list.get(0).getY_axis_total_invct_pct().get(y).getResearch_line_1_score_range());//80-100
-                        String totalInvestmentAPI = String.valueOf(list.get(0).getY_axis_total_invct_pct().get(y).getTotal_investment()) + "%"; //14.59%
-                        APIValues.add(Arrays.asList(scoreRangeAPI, totalInvestmentAPI));
-                    }
-                    //BrowserUtils.wait(3);
-                    System.out.println("UIValues = " + UIValues);
-                    System.out.println("APIValues = " + APIValues);
-                    assertTestCase.assertTrue(UIValues.containsAll(APIValues));
-                    assertTestCase.assertTrue(APIValues.containsAll(UIValues));
-                    break;
+            List<List<String>> UIValues = new ArrayList<>();
+            List<List<String>> APIValues = new ArrayList<>();
+            for (int x = 0; x < dashboardPage.heatMapYAxisIndicatorsAPI.size(); x++) {
+                String scoreRangeUI = dashboardPage.heatMapYAxisIndicatorsAPI.get(x).getText(); //80-100
+                String totalInvestmentUI = dashboardPage.heatMapYAxisIndicatorPercentagesAPI.get(x).getText(); //14.59%
+                UIValues.add(Arrays.asList(scoreRangeUI, totalInvestmentUI));
+
             }
+            for (int y = 0; y < list.get(0).getY_axis_total_invct_pct().size(); y++) {
+                if (list.get(0).getY_axis_total_invct_pct().get(y).getResearch_line_1_score_range().equals("N/A"))
+                    continue;
+                String scoreRangeAPI = String.valueOf(list.get(0).getY_axis_total_invct_pct().get(y).getResearch_line_1_score_range());//80-100
+                String totalInvestmentAPI = df.format(list.get(0).getY_axis_total_invct_pct().get(y).getTotal_investment()) + "%"; //14.59%
+                APIValues.add(Arrays.asList(scoreRangeAPI, totalInvestmentAPI));
+            }
+            //BrowserUtils.wait(3);
+            System.out.println("UIValues = " + UIValues);
+            System.out.println("APIValues = " + APIValues);
+            assertTestCase.assertTrue(UIValues.containsAll(APIValues));
+            assertTestCase.assertTrue(APIValues.containsAll(UIValues));
         }
         loginPage.clickOnLogout();
     }
-
-    public void selectOptionFromFiltersDropdown(String dropdown, String option) {
-
-        WebElement element = null;
-        String elementTitle = null;
-        switch (dropdown) {
-            case "regions":
-                elementTitle = "list-region";
-                break;
-            case "sectors":
-                elementTitle = "list-sector";
-                break;
-            case "as_of_date":
-                elementTitle = "list-asOfDate";
-                break;
-            default:
-                System.out.println("You provided wrong dropdown name for this method: selectOptionFromDropdown()");
-        }
-        List<WebElement> options = Driver.getDriver().findElements(By.xpath("//div[contains(@id,'" + elementTitle + "')]//span[text()]"));
-        Actions actions = new Actions(Driver.getDriver());
-        //select provided option from picked dropdown
-        try {
-            for (WebElement each : options) {
-                if (each.getText().equals(option)) {
-                    each.click();
-                    //actions.moveToElement(each).pause(1000).click(each).sendKeys(Keys.ESCAPE).build().perform();
-
-                    break;
-                }
-            }
-        } catch (Exception e) {
-            System.out.println("Could not click option under dropdown");
-            e.printStackTrace();
-        }
-    }
-
 
     public void verifyHeatMapCells() {
         DashboardPage dashboardPage = new DashboardPage();
         int counter = 0;
         for (int i = 0; i < dashboardPage.heatMapYAxisIndicators.size(); i++) {
             for (int j = 0; j < dashboardPage.heatMapXAxisIndicators.size(); j++) {
-                System.out.println("Checking cell: " + (i+1)+":"+(j+1));
+                System.out.println("Checking cell: " + (i + 1) + ":" + (j + 1));
                 BrowserUtils.scrollTo(dashboardPage.heatMapCells.get(counter));
                 String expPercentage = dashboardPage.heatMapCells.get(counter).getText();
                 BrowserUtils.wait(1);
@@ -488,7 +432,7 @@ public class DashboardHeatMapEntityListTests extends UITestBase {
 
     public boolean verifyResearchLineDistributionCategories(String cat, int num) {
         Map<String, Integer> expCategories = new HashMap<>();
-        expCategories.put("Overall ESG Score", 4);
+
         expCategories.put("Operations Risk", 5);
         expCategories.put("Market Risk", 5);
         expCategories.put("Supply Chain Risk", 5);
@@ -508,76 +452,8 @@ public class DashboardHeatMapEntityListTests extends UITestBase {
     }
 
     @Test(groups = {DASHBOARD, UI, REGRESSION})
-    @Xray(test = {9394, 9400})
-    public void verifyUnderlyingDataForHeatMapCellsTest() {
-        DashboardPage dashboardPage = new DashboardPage();
-        DatabaseDriver.createDBConnection();
-        BrowserUtils.waitForVisibility(dashboardPage.verifyPortfolioName, 20);
-        if (!dashboardPage.verifyPortfolioName.getText().equalsIgnoreCase("Sample Portfolio"))
-            dashboardPage.selectPortfolioByNameFromPortfolioSelectionModal("Sample Portfolio");
-        //Navigate to the heatmap section
-
-        BrowserUtils.scrollTo(dashboardPage.heatMapResearchLines.get(0));
-
-        //Verify the entity list - Entity list should be displaying no records
-        assertTestCase.assertFalse(dashboardPage.isHeatMapEntityListDrawerDisplayed(),
-                "Verified the widget doesn't show anything before a cell is selected.");
-        //verify esg score research line selected by default
-        //if(!dashboardPage.verifySelectedResearchLineForHeatMap("Overall ESG Score"))
-        dashboardPage.selectResearchLineForHeatMap("Overall ESG Score");
-        assertTestCase.assertTrue(dashboardPage.verifySelectedResearchLineForHeatMap("Overall ESG Score"),
-                "Verified ESG Score research line is selected by default");
-
-        System.out.println("heatMapNoEntityWidget displayed..");
-        while (dashboardPage.heatMapCells.size() < 10) {
-            BrowserUtils.wait(1);
-        }
-
-
-        //select random cell. if percentage equals 0% then skip the cell, if not just check for one cell
-        dashboardPage.selectRandomCell();
-        assertTestCase.assertTrue(dashboardPage.heatMapWidgetTitle.isDisplayed(),
-                "Verified the widget shows the title after a cell is selected.");
-        assertTestCase.assertTrue(dashboardPage.heatMapDrawerEntityNames.size() > 0,
-                "Verified the widget shows the entity names after a cell is selected.");
-        String portfolioId = "00000000-0000-0000-0000-000000000000";
-        PortfolioQueries portfolioQueries = new PortfolioQueries();
-        List<String> expEntityNames = portfolioQueries.getPortfolioEntityNames(portfolioId);
-        double getESGCategoryForPortfolio = portfolioQueries.getESGCategoryForPortfolio(portfolioId);
-        System.out.println("getESGCategoryForPortfolio = " + getESGCategoryForPortfolio);
-        int sumOfValues = portfolioQueries.getSumOfValues(portfolioId);
-        System.out.println("sumOfValues = " + sumOfValues);
-        double groupTotal = 0.0;
-        for (int i = 0; i < dashboardPage.heatMapDrawerEntityNames.size(); i++) {
-            //verify Entity names
-            String actEntityName = dashboardPage.heatMapDrawerEntityNames.get(i).getText();
-            assertTestCase.assertTrue(expEntityNames.contains(actEntityName),
-                    "Verified the entity names in the widget matches the entity names in the database.");
-            //verify investment percentages
-            String percentageText = dashboardPage.heatMapDrawerEntityPercentages.get(i).getText();
-            Double actPercentage = Double.parseDouble(percentageText.substring(0, percentageText.indexOf("%")));
-            Double expPercentage = portfolioQueries.getPortfolioEntityValue(portfolioId, actEntityName) * 100 / sumOfValues;
-            groupTotal += expPercentage;
-            //rounding off to 2 decimal places
-            expPercentage = Math.round(expPercentage * 100.0) / 100.0;
-            if (!expPercentage.equals(actPercentage)) {
-                System.out.println("expPercentage = " + expPercentage);
-                System.out.println("actPercentage = " + actPercentage);
-            }
-            assertTestCase.assertTrue(actPercentage.equals(expPercentage) || actPercentage.equals(expPercentage + 0.01),
-                    "Verified the entity percentages in the widget matches the entity percentages in the database.");
-        }
-        groupTotal = Math.round(groupTotal * 100.0) / 100.0;
-        System.out.println("groupTotal = " + groupTotal);
-        String expGroupTotal = dashboardPage.heatMapWidgetTitle.getText();
-        expGroupTotal = expGroupTotal.substring(expGroupTotal.indexOf("\n") + 1, expGroupTotal.indexOf("%"));
-        System.out.println("expGroupTotal = " + expGroupTotal);
-        assertTestCase.assertEquals(groupTotal + "", expGroupTotal, "Verified the group total in the widget matches the group total in the database.");
-    }
-
-    @Test(groups = {DASHBOARD, UI, REGRESSION, ESG})
-    @Xray(test = {9201, 9202, 11218})
-    public void verifyOverallEsgScoreHeatMap() {
+    @Xray(test = {11218})
+    public void verifyHeatMapTitleAndDefaultSelection() {
 
         DashboardPage dashboardPage = new DashboardPage();
         BrowserUtils.waitForVisibility(dashboardPage.verifyPortfolioName, 20);
@@ -596,118 +472,15 @@ public class DashboardHeatMapEntityListTests extends UITestBase {
         assertTestCase.assertFalse(dashboardPage.isHeatMapEntityListDrawerDisplayed(),
                 "Verified the widget doesn't show anything before a cell is selected.");
 
-        //verify esg score research line is the first one in row
-        assertTestCase.assertEquals(dashboardPage.heatMapResearchLines.get(0).getText(),"Overall ESG Score",
-                "Verified ESG Score research line is first in row");
+        //verify Operations Risk research line is the first one in row
+        assertTestCase.assertEquals(dashboardPage.heatMapResearchLines.get(0).getText(), "Physical Risk: Operations Chain Risk",
+                "Verified Operations Risk research line is first in row");
 
-        //verify esg score research line selected by default
-        assertTestCase.assertTrue(dashboardPage.verifySelectedResearchLineForHeatMap("Overall ESG Score"),
-                "Verified ESG Score research line is selected by default");
-
-        //Verify esg score categories when it is on Y-Axis in Heat Map
-        ArrayList<String> categories = new ArrayList<String>();
-        categories.add("Weak");
-        categories.add("Limited");
-        categories.add("Robust");
-        categories.add("Advanced");
-        for(int i=0; i<categories.size();i++){
-            assertTestCase.assertEquals(dashboardPage.heatMapYAxisIndicators.get(i).getText(), categories.get(i), "Y-Axis Categories verification");
-        }
-
-        //Verify esg score categories when it is on X-Axis in Heat Map
-        dashboardPage.selectResearchLineForHeatMap("Physical Risk: Supply Chain Risk");
-        assertTestCase.assertFalse(dashboardPage.verifySelectedResearchLineForHeatMap("Overall ESG Score"),
-                "Verified ESG Score research line is selected by default");
-        BrowserUtils.wait(5);
-        dashboardPage.selectResearchLineForHeatMap("Overall ESG Score");
-        assertTestCase.assertTrue(dashboardPage.verifySelectedResearchLineForHeatMap("Overall ESG Score"),
-                "Verified ESG Score research line is selected");
-
-        //Verify esg score X-Axis categories
-        BrowserUtils.wait(5);
-        for(int i=0; i<categories.size();i++){
-            assertTestCase.assertEquals(dashboardPage.heatMapXAxisIndicators.get(i).getText(), categories.get(categories.size()-i-1), "X-Axis Categories verification");
-        }
+        //verify Operations Risk research line selected by default
+        assertTestCase.assertTrue(dashboardPage.verifySelectedResearchLineForHeatMap("Physical Risk: Operations Chain Risk"),
+                "Verified Operations Risk research line is selected by default");
     }
 
-    @Test(groups = {DASHBOARD, UI, REGRESSION, ESG})
-    @Xray(test = {9204})
-    public void verifyCompareEsgScoreHeatMap() {
-
-        DashboardPage dashboardPage = new DashboardPage();
-        BrowserUtils.waitForVisibility(dashboardPage.verifyPortfolioName, 20);
-
-        dashboardPage.selectSamplePortfolioFromPortfolioSelectionModal();
-
-        String summaryEsgScoreValue = dashboardPage.esgScoreValue.getText();
-
-        BrowserUtils.scrollTo(dashboardPage.heatMapResearchLines.get(0));
-        assertTestCase.assertFalse(dashboardPage.isHeatMapEntityListDrawerDisplayed(),
-                "Verified the widget doesn't show anything before a cell is selected.");
-
-        String heatmapEsgScoreValue = dashboardPage.getHeatMapPortfolioAverage();
-        assertTestCase.assertEquals(summaryEsgScoreValue, heatmapEsgScoreValue,
-                "Verified ESG Score in Dashboard Summary Header and Heatmap");
-
-        dashboardPage.navigateToPageFromMenu("Portfolio Analysis");
-        dashboardPage.selectResearchLineFromDropdown("ESG Assessments");
-
-        ResearchLinePage researchLinePage = new ResearchLinePage();
-        BrowserUtils.wait(5);
-        String esgAssessmentEsgSore = researchLinePage.esgCardInfoBoxScore.getText();
-        assertTestCase.assertEquals(summaryEsgScoreValue, esgAssessmentEsgSore,
-                "Verified ESG Score in Dashboard Summary Header and ESG Assessments");
-
-    }
-
-    @Test(groups = {DASHBOARD, UI, REGRESSION})
-    @Xray(test = {9205})
-    public void verifyOverallEsgScoreNotAvailableInHeatMap() {
-        LoginPage login = new LoginPage();
-        login.clickOnLogout();
-        login.entitlementsLogin(EntitlementsBundles.PHYSICAL_RISK);
-
-        DashboardPage dashboardPage = new DashboardPage();
-        BrowserUtils.waitForVisibility(dashboardPage.verifyPortfolioName, 20);
-
-        if (!dashboardPage.verifyPortfolioName.getText().equalsIgnoreCase("Sample Portfolio"))
-            dashboardPage.selectPortfolioByNameFromPortfolioSelectionModal("Sample Portfolio");
-
-        BrowserUtils.scrollTo(dashboardPage.heatMapResearchLines.get(0));
-        for(int i=0; i<dashboardPage.heatMapResearchLines.size(); i++) {
-            assertTestCase.assertNotEquals(dashboardPage.heatMapResearchLines.get(i).getText(), "Overall ESG Score", "Verified Overall ESG Score is not available in Heatmap");
-        }
-    }
-
-    @Test(groups = {DASHBOARD, UI, REGRESSION, ESG})
-    @Xray(test = {9214})
-    public void verifyOnlyOverallEsgScoreInHeatMap() {
-        DashboardPage dashboardPage = new DashboardPage();
-        BrowserUtils.waitForVisibility(dashboardPage.verifyPortfolioName, 20);
-
-        if (!dashboardPage.verifyPortfolioName.getText().equalsIgnoreCase("Sample Portfolio"))
-            dashboardPage.selectPortfolioByNameFromPortfolioSelectionModal("Sample Portfolio");
-
-        //Verify esg categories when only Overall ESG Scores is selected
-        BrowserUtils.scrollTo(dashboardPage.heatMapResearchLines.get(0));
-        BrowserUtils.wait(5);
-        BrowserUtils.waitForClickablility(dashboardPage.heatMapResearchLines.get(1),30).click();
-        BrowserUtils.wait(3);
-
-        // Verify esg score Y-Axis categories
-        ArrayList<String> categories = new ArrayList<String>();
-        categories.add("Weak");
-        categories.add("Limited");
-        categories.add("Robust");
-        categories.add("Advanced");
-        for(int i=0; i<categories.size();i++){
-            assertTestCase.assertEquals(dashboardPage.heatMapYAxisIndicators.get(i).getText(), categories.get(i), "Y-Axis Categories verification");
-        }
-
-        // Verify esg score X-Axis categories
-        assertTestCase.assertFalse(dashboardPage.heatmapXAxisIsAvailable(), "As only Overall ESG Score is in selected, others should not be available.");
-
-    }
 
     @Test(groups = {DASHBOARD, UI, REGRESSION})
     @Xray(test = {11222})

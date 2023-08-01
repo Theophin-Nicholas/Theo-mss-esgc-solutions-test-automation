@@ -187,7 +187,7 @@ public class PDFTestMethods extends PageBase {
         assertTestCase.assertTrue(documentPageCounts == count, "Validating Footer");
     }
 
-    public void ValidateESGSummaryData() {
+   /* public void ValidateESGSummaryData() {
         EntityClimateProfilePage entityProfilePage = new EntityClimateProfilePage();
         List<String> UIValue = entityProfilePage.getESGSummaryDetails();
         System.out.println("ESG Expected Values: "+UIValue);
@@ -196,7 +196,7 @@ public class PDFTestMethods extends PageBase {
             assertTestCase.assertTrue(v.equals(PDFValue), "Validating ESGSummary Data");
         }
     }
-
+*/
     public void ValidateEsgMaterlity(String orbis_id) {
         EntityClimateProfilePage entityProfilePage = new EntityClimateProfilePage();
         List<String> UIValue = entityProfilePage.readEsgMaterialityCategories();
@@ -353,5 +353,11 @@ public class PDFTestMethods extends PageBase {
         content = PdfUtil.extractPDFText(pdfFileText, UIValue);
         assertTestCase.assertTrue(content.equals("No ParaGraph Found"), "Validating Very High Materiality is not displayed");
 
+    }
+
+    public void verifySectorForEntity(String sector) {
+        EntityClimateProfilePage entityProfilePage = new EntityClimateProfilePage();
+        String content = PdfUtil.extractPDFText(pdfFileText, sector);
+        assertTestCase.assertTrue(!content.equals("No ParaGraph Found"), "Validating Sector is displayed");
     }
 }

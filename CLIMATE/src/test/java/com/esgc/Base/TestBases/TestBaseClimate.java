@@ -21,9 +21,9 @@ public class TestBaseClimate extends TestBase {
         Driver.getDriver().manage().window().maximize();
         Driver.getDriver().manage().timeouts().implicitlyWait(Duration.ofSeconds(30));
         LoginPage loginPage = new LoginPage();
-        //loginPage.userLoginWithNoExportBundle();
+        loginPage.userLoginWithNoExportBundle();
         //loginPage.entitlementsLogin(EntitlementsBundles.USER_WITH_OUT_CONTROVERSIES_ENTITLEMENT);
-        loginPage.userLoginWithNoControversiesBundle();
+        //loginPage.userLoginWithNoControversiesBundle();
         //loginPage.entitlementsLogin(EntitlementsBundles.USER_WITH_OUT_CONTROVERSIES_ENTITLEMENT);
         BrowserUtils.wait(20);
         String getAccessTokenScript = "return JSON.parse(localStorage.getItem('okta-token-storage')).accessToken.accessToken";

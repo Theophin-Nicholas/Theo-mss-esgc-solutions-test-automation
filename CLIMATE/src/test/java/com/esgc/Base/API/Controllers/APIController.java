@@ -542,13 +542,13 @@ public class APIController {
                 return rangesAndCategories;
 
             case "Brown Share Ranges":
-                rangesAndCategories.add(new RangeAndScoreCategory("N/A", 0d, 0d, "positive"));
+//                rangesAndCategories.add(new RangeAndScoreCategory("N/A", 0d, 0d, "positive"));
                 rangesAndCategories.add(new RangeAndScoreCategory(">=50%", 0.00000000000001d, 19.9999999999999999d, "positive"));
                 rangesAndCategories.add(new RangeAndScoreCategory("33-50%", 20d, 100d, "negative"));
                 rangesAndCategories.add(new RangeAndScoreCategory("20-33%", 0d, 0d, "positive"));
                 rangesAndCategories.add(new RangeAndScoreCategory("10-20%", 0.00000000000001d, 19.9999999999999999d, "positive"));
                 rangesAndCategories.add(new RangeAndScoreCategory("0-10%", 20d, 100d, "negative"));
-                rangesAndCategories.add(new RangeAndScoreCategory("0%", 20d, 100d, "negative"));
+                rangesAndCategories.add(new RangeAndScoreCategory("0%", 0d, 00d, "negative"));
                 return rangesAndCategories;
 
             case "Carbon Footprint":
@@ -746,6 +746,7 @@ public class APIController {
     }
 
     public synchronized String apiResourceMapperWithoutphysicalriskinit(String researchLine) {
+        if (researchLine == null) return "";
         switch (researchLine) {
             case "tcfdstrategy":
             case "TCFD":
@@ -759,6 +760,10 @@ public class APIController {
             case "Physical Risk Management":
             case "physicalriskmgmt":
                 return "physicalriskmgmt";
+
+            case "Physical Risk Hazards":
+            case "physicalriskhazard":
+                return "physicalriskhazard";
 
             case "Operations Risk":
             case "operationsrisk":
@@ -794,6 +799,7 @@ public class APIController {
             case "Esg":
             case "ESG Assessment":
                 return "esgasmt";
+
 
         }
         return "";

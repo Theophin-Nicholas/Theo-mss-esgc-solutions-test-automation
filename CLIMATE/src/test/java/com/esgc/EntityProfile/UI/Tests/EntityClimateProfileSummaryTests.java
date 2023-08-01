@@ -31,7 +31,7 @@ public class EntityClimateProfileSummaryTests extends UITestBase {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         EntityClimateProfilePage entityClimateProfilePage = new EntityClimateProfilePage();
         test.info("Navigate to Portfolio Analysis page");
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
         //BrowserUtils.wait(5);
         researchLinePage.navigateToEntity(Entity);
         assertTestCase.assertTrue(entityClimateProfilePage.isPhysicalClimateHazardCardDisplayed(), "Physical Climate Hazards is displayed");
@@ -44,7 +44,7 @@ public class EntityClimateProfileSummaryTests extends UITestBase {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         EntityClimateProfilePage entityClimateProfilePage = new EntityClimateProfilePage();
         test.info("Navigate to Portfolio Analysis page");
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
         //BrowserUtils.wait(5);
         researchLinePage.navigateToEntity(Entity);
         String orbisID = entityClimateProfilePage.getEntityOrbisIdFromUI();
@@ -66,7 +66,7 @@ public class EntityClimateProfileSummaryTests extends UITestBase {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         EntityClimateProfilePage entityClimateProfilePage = new EntityClimateProfilePage();
         test.info("Navigate to Portfolio Analysis page");
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
         //BrowserUtils.wait(5);
         researchLinePage.navigateToEntity(Entity);
         assertTestCase.assertTrue(entityClimateProfilePage.summaryWidget.isDisplayed(),
@@ -81,7 +81,7 @@ public class EntityClimateProfileSummaryTests extends UITestBase {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         EntityClimateProfilePage entityClimateProfilePage = new EntityClimateProfilePage();
         test.info("Navigate to Portfolio Analysis page");
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
         //BrowserUtils.wait(5);
         researchLinePage.navigateToFirstEntity(orbisID);
         assertTestCase.assertTrue(entityClimateProfilePage.noUpdatesSummaryWidget.isDisplayed(),
@@ -104,7 +104,7 @@ public class EntityClimateProfileSummaryTests extends UITestBase {
     public void verifyTemperatureAlignmentGraphTest(String orbisID) {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio Analysis page");
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
         researchLinePage.navigateToFirstEntity(orbisID);
         DatabaseDriver.createDBConnection();
         String query = "select * from TEMPERATURE_ALIGNMENT_PROJECTIONS \n" +
@@ -171,7 +171,7 @@ public class EntityClimateProfileSummaryTests extends UITestBase {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         EntityClimateProfilePage entityClimateProfilePage = new EntityClimateProfilePage();
         test.info("Navigate to Portfolio Analysis page");
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
         //BrowserUtils.wait(5);
         researchLinePage.navigateToEntity(Entity);
         assertTestCase.assertTrue(entityClimateProfilePage.summaryWidget.isDisplayed(),
@@ -215,7 +215,7 @@ public class EntityClimateProfileSummaryTests extends UITestBase {
     public void verifyPhysicalRiskManagementCardTest(String Entity) {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio Analysis page");
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
         //BrowserUtils.wait(5);
         researchLinePage.navigateToEntity(Entity);
 
@@ -240,7 +240,7 @@ public class EntityClimateProfileSummaryTests extends UITestBase {
     public void verifyPhysicalRiskManagementScoreCategory(String Entity) {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio Analysis page");
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
         //BrowserUtils.wait(5);
         researchLinePage.navigateToFirstEntity(Entity);
 
@@ -271,7 +271,7 @@ public class EntityClimateProfileSummaryTests extends UITestBase {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         String Entity = "017721867";
         test.info("Navigate to Portfolio Analysis page");
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
         //BrowserUtils.wait(5);
         researchLinePage.navigateToFirstEntity(Entity);
 
@@ -295,7 +295,7 @@ public class EntityClimateProfileSummaryTests extends UITestBase {
     public void verifyTemperatureAlignmentGraphTitleTest(String Entity) {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio Analysis page");
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
         //BrowserUtils.wait(5);
         researchLinePage.navigateToFirstEntity(Entity);
 
@@ -321,7 +321,7 @@ public class EntityClimateProfileSummaryTests extends UITestBase {
     public void verifyLegendsForTemperatureAlignmentGraphTest(String Entity) {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio Analysis page");
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
         //BrowserUtils.wait(5);
         researchLinePage.navigateToFirstEntity(Entity);
 
@@ -353,7 +353,7 @@ public class EntityClimateProfileSummaryTests extends UITestBase {
     public void verifyNoInfoDisplayedTemperatureAlignmentWidgetTest(String Entity) {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio Analysis page");
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
         BrowserUtils.wait(5);
         researchLinePage.navigateToFirstEntity(Entity);
 
@@ -372,7 +372,7 @@ public class EntityClimateProfileSummaryTests extends UITestBase {
     public void verifyDisplaySectorComparisonChartForMarketRisk(String Entity) {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio Analysis page");
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
         //BrowserUtils.wait(5);
         researchLinePage.navigateToFirstEntity(Entity);
 
@@ -391,7 +391,7 @@ public class EntityClimateProfileSummaryTests extends UITestBase {
     public void verifySectorComparisonChartContentMarketRisk(String Entity) {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio Analysis page");
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
         //BrowserUtils.wait(5);
         researchLinePage.navigateToFirstEntity(Entity);
 
@@ -409,7 +409,7 @@ public class EntityClimateProfileSummaryTests extends UITestBase {
     public void verifySectorComparisonChartUnderlyingDataForMarketRiskTest(String Entity) {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio Analysis page");
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
         //BrowserUtils.wait(5);
         researchLinePage.navigateToFirstEntity(Entity);
 
@@ -436,7 +436,7 @@ public class EntityClimateProfileSummaryTests extends UITestBase {
     public void verifyDisplaySectorComparisonChartForSupplyChainRisk(String Entity) {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio Analysis page");
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
         //BrowserUtils.wait(5);
         researchLinePage.navigateToFirstEntity(Entity);
 
@@ -454,7 +454,7 @@ public class EntityClimateProfileSummaryTests extends UITestBase {
     public void verifySectorComparisonChartContentSupplyChainRisk(String Entity) {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio Analysis page");
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
         //BrowserUtils.wait(5);
         researchLinePage.navigateToFirstEntity(Entity);
 
@@ -472,7 +472,7 @@ public class EntityClimateProfileSummaryTests extends UITestBase {
     public void verifySectorComparisonChartUnderlyingDataForSupplyChainRiskTest(String Entity) {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio Analysis page");
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
         //BrowserUtils.wait(5);
         researchLinePage.navigateToFirstEntity(Entity);
 
@@ -491,7 +491,7 @@ public class EntityClimateProfileSummaryTests extends UITestBase {
     public void verifySectorComparisonChartUnderlyingDataAverageForSupplyChainRiskTest(String Entity) {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio Analysis page");
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
         //BrowserUtils.wait(5);
         researchLinePage.navigateToFirstEntity(Entity);
 
@@ -508,7 +508,7 @@ public class EntityClimateProfileSummaryTests extends UITestBase {
     public void verifyDataForOperationRiskUnderPhysicalRiskTabTest(String Entity) {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio Analysis page");
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
         //BrowserUtils.wait(5);
         researchLinePage.navigateToFirstEntity(Entity);
 
@@ -526,7 +526,7 @@ public class EntityClimateProfileSummaryTests extends UITestBase {
     public void verifyDataForMarketRiskUnderPhysicalRiskTabTest(String Entity) {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio Analysis page");
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
         researchLinePage.navigateToFirstEntity(Entity);
 
         EntityClimateProfilePage profilePage = new EntityClimateProfilePage();
@@ -541,7 +541,7 @@ public class EntityClimateProfileSummaryTests extends UITestBase {
     public void verifyDataForSupplyChainRiskUnderPhysicalRiskTabTest(String Entity) {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio Analysis page");
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
         researchLinePage.navigateToFirstEntity(Entity);
 
         EntityClimateProfilePage profilePage = new EntityClimateProfilePage();
@@ -556,7 +556,7 @@ public class EntityClimateProfileSummaryTests extends UITestBase {
     public void verifyPhysicalClimateRiskSubscriberAbleToSeeThreeResearchLinesTest(String Entity) {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio Analysis page");
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
         //BrowserUtils.wait(5);
         researchLinePage.navigateToFirstEntity(Entity);
 
@@ -572,7 +572,7 @@ public class EntityClimateProfileSummaryTests extends UITestBase {
     public void verifyUIOfOperationsRiskTableTest(String Entity) {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio Analysis page");
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
         //BrowserUtils.wait(5);
         researchLinePage.navigateToFirstEntity(Entity);
 
@@ -591,7 +591,7 @@ public class EntityClimateProfileSummaryTests extends UITestBase {
     public void verifyUIOfMarketRiskTableTest(String Entity) {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio Analysis page");
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
         //BrowserUtils.wait(5);
         researchLinePage.navigateToFirstEntity(Entity);
 
@@ -610,7 +610,7 @@ public class EntityClimateProfileSummaryTests extends UITestBase {
     public void verifyUIOfSupplyChainRiskTableTest(String Entity) {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio Analysis page");
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
         //BrowserUtils.wait(5);
         researchLinePage.navigateToFirstEntity(Entity);
 
@@ -624,39 +624,6 @@ public class EntityClimateProfileSummaryTests extends UITestBase {
                 "Verification of Supply Chain Risk table for UI");
     }
 
-    @Test(groups = {REGRESSION, UI}, dataProviderClass = DataProviderClass.class, dataProvider = "orbisID")
-    @Xray(test = {8227, 8228, 9840,12420})
-    public void verify_ESG_Score_Value(String Entity) {
-        ResearchLinePage researchLinePage = new ResearchLinePage();
-        test.info("Navigate to Portfolio Analysis page");
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
-        //BrowserUtils.wait(5);
-        researchLinePage.navigateToFirstEntity(Entity);
-
-        EntityClimateProfilePage profilePage = new EntityClimateProfilePage();
-        profilePage.navigateToPhysicalRisk();
-        //BrowserUtils.wait(5);
-        assertTestCase.assertTrue(profilePage.esgTitle.isDisplayed(), "ESG Score title is displayed");
-        assertTestCase.assertTrue(profilePage.verifyESGScoreValue(), "ESG Score is verified");
-        profilePage.verifyESGScoreHeaders();
-    }
-
-    @Test(groups = {REGRESSION, UI}, dataProviderClass = DataProviderClass.class, dataProvider = "orbisID")
-    @Xray(test = {8230, 8233})
-    public void verify_ESG_Score_Pillars(String Entity) {
-        ResearchLinePage researchLinePage = new ResearchLinePage();
-        test.info("Navigate to Portfolio Analysis page");
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
-        //BrowserUtils.wait(5);
-        researchLinePage.navigateToFirstEntity(Entity);
-
-        EntityClimateProfilePage profilePage = new EntityClimateProfilePage();
-        //BrowserUtils.wait(5);
-        assertTestCase.assertTrue(profilePage.esgTitle.isDisplayed(), "ESG Score title is displayed");
-        assertTestCase.assertTrue(profilePage.verifyESGScorePillars(Entity), "ESG Score is displayed");
-
-    }
-
     @Test(groups = {REGRESSION, UI})
     @Xray(test = {6261})
     public void verifyBrownShareforNAScores() {
@@ -665,7 +632,7 @@ public class EntityClimateProfileSummaryTests extends UITestBase {
         EntityClimateProfilePage profilePage = new EntityClimateProfilePage();
         Map<String, String> data = profilePage.getBrownShareNAData();
 
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
 
         researchLinePage.navigateToFirstEntity(data.get("BVD9_NUMBER"));
         BrowserUtils.wait(5);
@@ -678,7 +645,7 @@ public class EntityClimateProfileSummaryTests extends UITestBase {
     public void verifyCarbonFootprintTooltip() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio Analysis page");
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
         BrowserUtils.wait(5);
         researchLinePage.navigateToFirstEntity("Apple, Inc.");
         EntityClimateProfilePage profilePage = new EntityClimateProfilePage();
@@ -709,7 +676,7 @@ public class EntityClimateProfileSummaryTests extends UITestBase {
     public void verifyGreenShareUnderTransitionRisk() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio Analysis page");
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
         BrowserUtils.wait(5);
         researchLinePage.navigateToFirstEntity("Exxon Mobil Corp.");
         EntityClimateProfilePage profilePage = new EntityClimateProfilePage();
@@ -724,7 +691,7 @@ public class EntityClimateProfileSummaryTests extends UITestBase {
     public void verifyPhysicalRiskSection() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio Analysis page");
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
         BrowserUtils.wait(5);
         researchLinePage.navigateToFirstEntity("Exxon Mobil Corp.");
 
@@ -775,7 +742,7 @@ public class EntityClimateProfileSummaryTests extends UITestBase {
         //Controversies No Info check
         if (profilePage.controversiesNoInfo.size() != 0) {
             BrowserUtils.scrollTo(profilePage.controversiesNoInfo.get(0));
-            assertTestCase.assertEquals(profilePage.controversiesNoInfo.get(0).getText(), "No controversies to display.");
+            assertTestCase.assertEquals(profilePage.controversiesNoInfo.get(0).getText(), "No ESG Incidents to display.");
             System.out.println("Assertion Successful and message : " + profilePage.controversiesNoInfo.get(0).getText());
         } else {
             System.out.println("There is available data in Controversies");
@@ -799,7 +766,7 @@ public class EntityClimateProfileSummaryTests extends UITestBase {
     public void verifyNoInfoDisplayedCarbonFootPrint(String Entity) {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio Analysis page");
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
         BrowserUtils.wait(3);
         researchLinePage.navigateToFirstEntity(Entity);
 
@@ -846,7 +813,7 @@ public class EntityClimateProfileSummaryTests extends UITestBase {
         }
         ResearchLinePage researchLinePage = new ResearchLinePage();
       /*  test.info("Navigate to Portfolio Analysis page");
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");*/
+        researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");*/
         BrowserUtils.wait(3);
         researchLinePage.navigateToFirstEntity(Entity);
 
@@ -989,10 +956,10 @@ public class EntityClimateProfileSummaryTests extends UITestBase {
 
         } else if (entitlement.equals("Physical Risk, Transition Risk, Corporate ESG and Controversies Entitlements")) {
             /* Verify that User is able to see just Physical Risk, Transition Risk, Corporate ESG and Controversies Entitlements   */
-            assertTestCase.assertTrue(profilePage.esgScore.size() > 0); // ESG Overall score
-            assertTestCase.assertTrue(profilePage.esgSectorComparisonChart.isDisplayed()); // ESG Sector comparison chart
-            assertTestCase.assertTrue(profilePage.esgMateriality.isDisplayed()); //  ESG Materiality tab
-            assertTestCase.assertTrue(profilePage.esgSubCategory.isDisplayed()); // Subcategory modal - under ESG Materiality tab
+            assertTestCase.assertFalse(profilePage.esgScore.size() > 0); // ESG Overall score
+            assertTestCase.assertFalse(profilePage.esgSectorComparisonChart.isDisplayed()); // ESG Sector comparison chart
+            assertTestCase.assertFalse(profilePage.esgMateriality.isDisplayed()); //  ESG Materiality tab
+            assertTestCase.assertFalse(profilePage.esgSubCategory.isDisplayed()); // Subcategory modal - under ESG Materiality tab
             assertTestCase.assertTrue(profilePage.controversies.isDisplayed()); // Controversies
             assertTestCase.assertTrue(profilePage.physicalRiskHazardsCard.isDisplayed()); // Physical Climate Hazards card
             assertTestCase.assertTrue(profilePage.physicalRiskManagementCard.isDisplayed()); // Physical Risk Management card
@@ -1027,7 +994,7 @@ public class EntityClimateProfileSummaryTests extends UITestBase {
     public void verifyPhysicalRiskDropDownMenusTest(String Entity) {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio Analysis page");
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
         //BrowserUtils.wait(5);
         researchLinePage.navigateToFirstEntity(Entity);
 
@@ -1103,7 +1070,7 @@ public class EntityClimateProfileSummaryTests extends UITestBase {
     public void verifyPhysicalRiskDropDownMenusForNoDataTest() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         //    test.info("Navigate to Portfolio Analysis page");
-        //  researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        //  researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
         //BrowserUtils.wait(5);
         researchLinePage.navigateToFirstEntity("The Guardian Life Insurance Company of America");
 
@@ -1127,19 +1094,5 @@ public class EntityClimateProfileSummaryTests extends UITestBase {
             assertTestCase.assertEquals(profilePage.comparisonChartRiskSelectionDropdown.getText(), rl, "Selected RL is verified");
             //assertTestCase.assertTrue(profilePage.noSectorComparisonChartAvailable.isDisplayed(), "No data message is displayed for " + rl);
         }
-    }
-
-//TODO disclosure ratio is not valid until 2.0 companies are visiable
-    @Test(enabled = false, groups = {REGRESSION, UI},
-            dataProviderClass = DataProviderClass.class, dataProvider = "orbisIDWithDisclosureScore")
-    @Xray(test = {8750})
-    public void verifyDisclosureScore(String entity) {
-        ResearchLinePage researchLinePage = new ResearchLinePage();
-        test.info("Navigate to Portfolio Analysis page");
-        researchLinePage.navigateToFirstEntity(entity);
-
-        EntityClimateProfilePage profilePage = new EntityClimateProfilePage();
-        assertTestCase.assertTrue(profilePage.entityDisclosureScore.isDisplayed());
-        researchLinePage.pressESCKey();
     }
 }

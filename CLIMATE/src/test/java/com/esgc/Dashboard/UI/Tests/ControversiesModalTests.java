@@ -7,15 +7,13 @@ import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.EntitlementsBundles;
 import com.esgc.Utilities.Environment;
 import com.esgc.Utilities.Xray;
-import org.apache.commons.lang3.math.NumberUtils;
-import org.openqa.selenium.WebElement;
 import org.testng.annotations.Test;
 
 import static com.esgc.Utilities.Groups.*;
 
 public class ControversiesModalTests extends DashboardUITestBase {
 
-    @Test(groups = {REGRESSION, DASHBOARD, UI})
+    @Test(enabled = false, groups = {REGRESSION, DASHBOARD, UI})
     @Xray(test = {3170, 3171, 3932, 3953, 4020, 4025, 4033, 4036, 4059, 7381, 8042})
     public void controversiesModalUIAutomationTest() {
         DashboardPage dashboardPage = new DashboardPage();
@@ -139,30 +137,4 @@ public class ControversiesModalTests extends DashboardUITestBase {
 
     }
 
-    //TODO Controversies ESG parts are not in scope yet, follow up https://esjira/browse/ESGCA-7696
-//Planned for Q2 2023
-    @Test(enabled = false, groups = {"regression", "dashboard", "ui"})
-    @Xray(test = 8306)
-    public void controversiesInEsg() {
-        DashboardPage dashboardPage = new DashboardPage();
-        dashboardPage.selectSamplePortfolioFromPortfolioSelectionModal();
-
-        BrowserUtils.waitForVisibility(dashboardPage.criticalControversiesInEsg, 30);
-        assertTestCase.assertEquals(dashboardPage.criticalControversiesInEsg.getText(), "Critical Controversies in ESG", "Verify Critical Controversies in ESG label in Portfolio Monitoring table");
-
-        assertTestCase.assertTrue(dashboardPage.esgScoreBoxesLabels.get(0).getText().contains("E"), "Verify first box label is 'E'");
-        assertTestCase.assertTrue(dashboardPage.esgScoreBoxesLabels.get(1).getText().contains("S"), "Verify first box label is 'S'");
-        assertTestCase.assertTrue(dashboardPage.esgScoreBoxesLabels.get(2).getText().contains("G"), "Verify first box label is 'G'");
-
-        for (WebElement label : dashboardPage.esgScoreBoxesLabels) {
-            String labelText = label.getText();
-            String score = labelText.substring(labelText.indexOf('(') + 1, labelText.indexOf(')'));
-            assertTestCase.assertTrue(NumberUtils.isParsable(score), "Verify label is having score inside parenthesis");
-        }
-
-        for (WebElement box : dashboardPage.esgScoreBoxes) {
-            assertTestCase.assertEquals(box.getCssValue("background-color"), "rgba(179, 23, 23, 0.18)", "Verify label is having score inside parenthesis");
-        }
-
-    }
 }

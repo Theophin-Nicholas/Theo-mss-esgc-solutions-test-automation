@@ -1,6 +1,6 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
 <suite name="ESGC Smoke Suite" verbose="2" parallel="classes" thread-count="8">
-<!--<suite name="ESGC Smoke Suite" verbose="2">-->
+
     <listeners>
         <listener class-name="com.esgc.Utilities.XrayListener"/>
         <listener class-name="com.esgc.Reporting.Listeners"/>

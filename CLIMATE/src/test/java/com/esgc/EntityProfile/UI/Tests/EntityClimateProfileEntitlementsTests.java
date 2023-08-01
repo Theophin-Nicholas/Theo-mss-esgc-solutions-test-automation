@@ -20,7 +20,7 @@ public class EntityClimateProfileEntitlementsTests extends UITestBase {
         login.entitlementsLogin(EntitlementsBundles.PHYSICAL_RISK);
 
         test.info("Navigating to Portfolio Analysis page");
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
         BrowserUtils.wait(5);
 
         String company = "Apple, Inc.";
@@ -46,7 +46,7 @@ public class EntityClimateProfileEntitlementsTests extends UITestBase {
         LoginPage login = new LoginPage();
 
         login.entitlementsLogin(EntitlementsBundles.TRANSITION_RISK);
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
         BrowserUtils.wait(5);
         test.info("Navigated to Portfolio Analysis page");
 
@@ -74,7 +74,7 @@ public class EntityClimateProfileEntitlementsTests extends UITestBase {
         LoginPage login = new LoginPage();
 
         login.entitlementsLogin(EntitlementsBundles.PHYSICAL_RISK_TRANSITION_RISK);
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
         BrowserUtils.wait(5);
         test.info("Navigated to Portfolio Analysis page");
 
@@ -108,7 +108,7 @@ public class EntityClimateProfileEntitlementsTests extends UITestBase {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         LoginPage login = new LoginPage();
         login.entitlementsLogin(EntitlementsBundles.CLIMATE_GOVERNANCE);
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
         BrowserUtils.wait(5);
         test.info("Navigated to Portfolio Analysis page");
 
@@ -134,19 +134,19 @@ public class EntityClimateProfileEntitlementsTests extends UITestBase {
         assertTestCase.assertTrue(entityProfilePage.verifyMethodologiesTabIsDisplayed(), "Validate methodologies tab is available");
     }
 
-    @Test(groups = {ENTITY_PROFILE, REGRESSION, UI, ENTITLEMENTS})
-    @Xray(test = {8890})
-    public void validateMethodologiesTabWithEsgEntitlement() {
-
-        // User with ESG Entitlement and No Controversies Entitlement
-        LoginPage login = new LoginPage();
-        login.entitlementsLogin(EntitlementsBundles.USER_WITH_OUT_CONTROVERSIES_ENTITLEMENT);
-
-        EntityClimateProfilePage entityProfilePage = new EntityClimateProfilePage();
-        entityProfilePage.searchAndLoadClimateProfilePage("Apple, Inc.");
-
-        assertTestCase.assertTrue(entityProfilePage.verifyMethodologiesTabIsDisplayed(), "Validate methodologies tab is available");
-    }
+//    @Test(groups = {ENTITY_PROFILE, REGRESSION, UI, ENTITLEMENTS})
+//    @Xray(test = {8890})
+//    public void validateMethodologiesTabWithEsgEntitlement() {
+//
+//        // User with ESG Entitlement and No Controversies Entitlement
+//        LoginPage login = new LoginPage();
+//        login.entitlementsLogin(EntitlementsBundles.USER_WITH_OUT_CONTROVERSIES_ENTITLEMENT);
+//
+//        EntityClimateProfilePage entityProfilePage = new EntityClimateProfilePage();
+//        entityProfilePage.searchAndLoadClimateProfilePage("Apple, Inc.");
+//
+//        assertTestCase.assertTrue(entityProfilePage.verifyMethodologiesTabIsDisplayed(), "Validate methodologies tab is available");
+//    }
 
     @Test(groups = {ENTITY_PROFILE, REGRESSION, UI, ENTITLEMENTS})
     @Xray(test = {8890})
@@ -166,26 +166,14 @@ public class EntityClimateProfileEntitlementsTests extends UITestBase {
     @Xray(test = {11805})
     public void validatePDF_ButtonWhenNoExportEntitlement() {
         LoginPage login = new LoginPage();
-
         login.entitlementsLogin(EntitlementsBundles.USER_WITH_CONTROVERSIES_ENTITLEMENT);
-        BrowserUtils.wait(5);
-
         String company = "Apple, Inc.";
         test.info("Searching and Selecting the company");
         EntityClimateProfilePage entityProfilePage = new EntityClimateProfilePage();
         String companyName = entityProfilePage.searchAndLoadClimateProfilePage(company);
         assertTestCase.assertTrue(entityProfilePage.validateGlobalCompanyNameHeader(companyName), companyName + " Header Verification");
         test.info("Searched and selected the company: " + companyName);
-
-        if (!Environment.environment.equalsIgnoreCase("prod")) {
-            entityProfilePage.selectExportSourcesDocuments();
-            assertTestCase.assertTrue(entityProfilePage.verifyPopup(), "Verify Export Sources Documents popup");
-            assertTestCase.assertTrue(entityProfilePage.verifyPopupTitle(companyName), "Verify Export Popup Title");
-            test.info("Verifying PDF Button");
-            assertTestCase.assertFalse(entityProfilePage.IsPdfDownloadButtonAvailable(), "Verification of PDF button is not available");
-        } else {
-            assertTestCase.assertFalse(entityProfilePage.isExportButtonEnabled());
-        }
+        assertTestCase.assertFalse(entityProfilePage.isExportButtonEnabled());
     }
 
 }

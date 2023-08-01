@@ -36,8 +36,6 @@ public class EntityIssuerP3PageSummaryWidget extends EntityPageTestBase {
             List<String> summarySections = Arrays.asList(new String[]{"ESG Score", "Environment", "Social", "Governance"});
             for (String ss : summarySections) entitypage.validateESGScoresAsNumericalValues(ss);
 
-        /*Removing as the functionality has changed
-        entitypage.validateESGScoreRatingList() ;*/
             entitypage.validateEsgScoredateFormat();
             assertTestCase.assertTrue(entitypage.NoSectorComparisionChart.isDisplayed(), "No Comparision Chart is available");
             entitypage.logout.click();

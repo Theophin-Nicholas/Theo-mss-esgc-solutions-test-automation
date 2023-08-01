@@ -8,7 +8,6 @@ import com.esgc.Dashboard.API.APIModels.APIHeatMapPayload;
 import com.esgc.Dashboard.API.APIModels.APIHeatMapSinglePayload;
 import com.esgc.Dashboard.API.APIModels.APIPerformanceChartPayload;
 import com.esgc.Dashboard.API.DashboardEndPoints;
-import com.esgc.EntityProfile.API.EntityProfilePageEndpoints;
 import com.esgc.PortfolioAnalysis.API.PortfolioAnalysisEndpoints;
 import io.restassured.RestAssured;
 import io.restassured.parsing.Parser;
@@ -46,42 +45,6 @@ public class DashboardAPIController extends APIController {
                     .body("{\"region\":\"" + region + "\",\"sector\":\"" + sector + "\",\"month\":\"" + month + "\",\"year\":\"" + year + "\"}")
                     .when()
                     .post(DashboardEndPoints.POST_CONTROVERSIES);
-
-            System.out.println(response.prettyPrint());
-
-        } catch (Exception e) {
-            System.out.println("Inside exception " + e.getMessage());
-        }
-
-        return response;
-    }
-
-
-    public synchronized Response getEsgCoverageScore(String portfolioId, String benchMark, String region, String sector, String year, String month) {
-        Response response = null;
-        try {
-            response = configSpec()
-                    .pathParam("portfolio_id", portfolioId).log().all()
-                    .body("{\"region\":\"" + region + "\",\"sector\":\"" + sector + "\",\"month\":\"" + month + "\",\"year\":\"" + year + "\",\"benchmark\":\"" + benchMark + "\"}")
-                    .when()
-                    .post(DashboardEndPoints.POST_ESG_SCORES);
-
-            System.out.println(response.prettyPrint());
-
-        } catch (Exception e) {
-            System.out.println("Inside exception " + e.getMessage());
-        }
-
-        return response;
-    }
-
-    public synchronized Response getExportSourceDocuments(String entityId) {
-        Response response = null;
-        try {
-            response = configSpec()
-                    .pathParam("entity_id", entityId).log().all()
-                    .when()
-                    .post(EntityProfilePageEndpoints.POST_EXPORT_SOURCE_DOCUMENTS);
 
             System.out.println(response.prettyPrint());
 
@@ -158,7 +121,7 @@ public class DashboardAPIController extends APIController {
         return response;
     }
 
-    public synchronized Response getPortfolioSummaryCompanies(String portfolioId) {
+    public synchronized Response getPortfolioSummaryCompanies(String portfolioId, String filterBy) {
         Response response = null;
         try {
             LocalDate now = LocalDate.now();
@@ -166,22 +129,26 @@ public class DashboardAPIController extends APIController {
             String month = String.valueOf(earlier.getMonthValue());
             if (month.length() == 1) month = "0" + month;
             String year = String.valueOf(earlier.getYear());
+            System.out.println("Getting portfolio summary companies response for:");
             System.out.println("portfolio_id=" + portfolioId);
             System.out.println("month=" + month);
             System.out.println("year=" + year);
-            month = "07";
             response = configSpec()
                     .pathParam("portfolio_id", portfolioId)
                     .when()
-                    .body("{\"region\":\"all\",\"sector\":\"all\",\"month\":\"" + month + "\",\"year\":\"" + year + "\",\"view_by\":\"sector\",\"limit\":20}")
-                    .post(DashboardEndPoints.POST_PORTFOLIO_SUMMARY_COMPANIES);
+                    .body("{\"region\":\"all\",\"sector\":\"all\",\"month\":\"" + month + "\",\"year\":\"" + year + "\",\"view_by\":\""+filterBy+"\",\"limit\":20}")
+                    .log().all().post(DashboardEndPoints.POST_PORTFOLIO_SUMMARY_COMPANIES).prettyPeek();
 
 
         } catch (Exception e) {
             System.out.println("Inside exception " + e.getMessage());
         }
-        System.out.println(response.prettyPrint());
+        //System.out.println(response.prettyPrint());
         return response;
+    }
+
+    public synchronized Response getPortfolioSummaryCompanies(String portfolioId){
+        return getPortfolioSummaryCompanies(portfolioId,"sector");
     }
 
     /**
@@ -202,7 +169,7 @@ public class DashboardAPIController extends APIController {
                     .pathParam("research_line", apiResourceMapper(research_line))
                     .body(apiEntityListPayload)
                     .when()
-                    .post(DashboardEndPoints.POST_GEO_MAP_ENTITY_LIST);
+                    .post(DashboardEndPoints.POST_GEO_MAP_ENTITY_LIST).prettyPeek();
 
         } catch (Exception e) {
             System.out.println("Inside exception " + e.getMessage());
@@ -218,9 +185,9 @@ public class DashboardAPIController extends APIController {
             response = configSpec()
                     // .header("Authorization", "Bearer " + System.getProperty("token"))
                     .pathParam("portfolio_id", portfolio_id)
-                    .body(apiHeatMapPayload)
+                    .body(apiHeatMapPayload).log().all()
                     .when()
-                    .post(DashboardEndPoints.POST_HEAT_MAP);
+                    .post(DashboardEndPoints.POST_HEAT_MAP).prettyPeek();
 
         } catch (Exception e) {
             System.out.println("Inside exception " + e.getMessage());

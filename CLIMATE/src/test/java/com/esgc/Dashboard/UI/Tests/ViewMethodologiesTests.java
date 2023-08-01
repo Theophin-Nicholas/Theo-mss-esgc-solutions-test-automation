@@ -20,14 +20,12 @@ public class ViewMethodologiesTests extends DashboardUITestBase {
     public void verifyViewMethodologies() {
         // ESGCA-8334: General UI Checks for Methodology Drawer
         DashboardPage dashboardPage = new DashboardPage();
-        dashboardPage.navigateToPageFromMenu("Dashboard");
+        dashboardPage.navigateToPageFromMenu("Climate Dashboard");
         BrowserUtils.wait(4);
         dashboardPage.selectSamplePortfolioFromPortfolioSelectionModal();
         dashboardPage.selectViewMethodologies();
         assertTestCase.assertTrue(dashboardPage.verifyMethodologiesPopup(), "Verify Methodologies popup");
-        dashboardPage.verifyMethodologiesHeader();
-        dashboardPage.verifyMethodologiesLinks();
-        dashboardPage.clickHideLink();
+
     }
 
     @Test(groups = {DASHBOARD, REGRESSION, UI})
@@ -37,7 +35,7 @@ public class ViewMethodologiesTests extends DashboardUITestBase {
         login.entitlementsLogin(EntitlementsBundles.PHYSICAL_RISK);
 
         DashboardPage dashboardPage = new DashboardPage();
-        dashboardPage.navigateToPageFromMenu("Dashboard");
+        dashboardPage.navigateToPageFromMenu("Climate Dashboard");
         BrowserUtils.wait(4);
         dashboardPage.selectViewMethodologies();
         assertTestCase.assertTrue(dashboardPage.verifyMethodologiesPopup(), "Verify Methodologies popup");
@@ -55,7 +53,7 @@ public class ViewMethodologiesTests extends DashboardUITestBase {
         login.entitlementsLogin(EntitlementsBundles.TRANSITION_RISK);
 
         DashboardPage dashboardPage = new DashboardPage();
-        dashboardPage.navigateToPageFromMenu("Dashboard");
+        dashboardPage.navigateToPageFromMenu("Climate Dashboard");
         BrowserUtils.wait(4);
         dashboardPage.selectViewMethodologies();
         assertTestCase.assertTrue(dashboardPage.verifyMethodologiesPopup(), "Verify Methodologies popup");
@@ -66,22 +64,19 @@ public class ViewMethodologiesTests extends DashboardUITestBase {
 
     }
 
-    @Test(groups = {DASHBOARD, REGRESSION, UI, ESG})
+    @Test(groups = {DASHBOARD, REGRESSION, UI})
     @Xray(test = {8304})
-    public void verifyViewMethodologiesEsg_Bundle() {
-        LoginPage login = new LoginPage();
-        login.entitlementsLogin(EntitlementsBundles.USER_WITH_ESG_ENTITLEMENT);
-
+    public void verifyEsgMethodologiesAreRemoved() {
         DashboardPage dashboardPage = new DashboardPage();
-        dashboardPage.navigateToPageFromMenu("Dashboard");
+        dashboardPage.navigateToPageFromMenu("Climate Dashboard");
         BrowserUtils.wait(4);
         dashboardPage.selectViewMethodologies();
         assertTestCase.assertTrue(dashboardPage.verifyMethodologiesPopup(), "Verify Methodologies popup");
 
         List<String> methodologySectionNames = dashboardPage.getMethodologiesSections();
         dashboardPage.clickHideLink();
-        assertTestCase.assertTrue(methodologySectionNames.contains("ESG Assessment Framework"), "Verify Methodologies Sections");
-        assertTestCase.assertTrue(methodologySectionNames.contains("ESG Categories and Subcategories"), "Verify Methodologies Sections");
+        assertTestCase.assertFalse(methodologySectionNames.contains("ESG Assessment Framework"), "Verify Methodologies Sections");
+        assertTestCase.assertFalse(methodologySectionNames.contains("ESG Categories and Subcategories"), "Verify Methodologies Sections");
 
     }
 
@@ -92,7 +87,7 @@ public class ViewMethodologiesTests extends DashboardUITestBase {
         login.entitlementsLogin(EntitlementsBundles.USER_WITH_CONTROVERSIES_ENTITLEMENT);
 
         DashboardPage dashboardPage = new DashboardPage();
-        dashboardPage.navigateToPageFromMenu("Dashboard");
+        dashboardPage.navigateToPageFromMenu("Climate Dashboard");
         BrowserUtils.wait(4);
         dashboardPage.selectViewMethodologies();
         assertTestCase.assertTrue(dashboardPage.verifyMethodologiesPopup(), "Verify Methodologies popup");
@@ -108,7 +103,7 @@ public class ViewMethodologiesTests extends DashboardUITestBase {
         login.entitlementsLogin(EntitlementsBundles.PHYSICAL_RISK_TRANSITION_RISK);
 
         DashboardPage dashboardPage = new DashboardPage();
-        dashboardPage.navigateToPageFromMenu("Dashboard");
+        dashboardPage.navigateToPageFromMenu("Climate Dashboard");
         BrowserUtils.wait(4);
         dashboardPage.selectViewMethodologies();
         assertTestCase.assertTrue(dashboardPage.verifyMethodologiesPopup(), "Verify Methodologies popup");
@@ -125,7 +120,7 @@ public class ViewMethodologiesTests extends DashboardUITestBase {
     public void verifyViewMethodologiesWithAllEntitlements() {
 
         DashboardPage dashboardPage = new DashboardPage();
-        dashboardPage.navigateToPageFromMenu("Dashboard");
+        dashboardPage.navigateToPageFromMenu("Climate Dashboard");
         BrowserUtils.wait(4);
         dashboardPage.selectViewMethodologies();
         assertTestCase.assertTrue(dashboardPage.verifyMethodologiesPopup(), "Verify Methodologies popup");
@@ -134,8 +129,6 @@ public class ViewMethodologiesTests extends DashboardUITestBase {
         dashboardPage.clickHideLink();
         assertTestCase.assertTrue(methodologySectionNames.contains("Physical Risk"), "Verify Methodologies Section - Physical Risk");
         assertTestCase.assertTrue(methodologySectionNames.contains("Transition Risk"), "Verify Methodologies Sections - Transition Risk");
-        assertTestCase.assertTrue(methodologySectionNames.contains("ESG Assessment Framework"), "Verify Methodologies Sections");
-        assertTestCase.assertTrue(methodologySectionNames.contains("ESG Categories and Subcategories"), "Verify Methodologies Sections");
 
     }
 
@@ -147,7 +140,7 @@ public class ViewMethodologiesTests extends DashboardUITestBase {
 
         DashboardPage dashboardPage = new DashboardPage();
         ResearchLinePage researchLinePage = new ResearchLinePage();
-        dashboardPage.navigateToPageFromMenu("Dashboard");
+        dashboardPage.navigateToPageFromMenu("Climate Dashboard");
         BrowserUtils.wait(4);
         dashboardPage.selectViewMethodologies();
         assertTestCase.assertTrue(dashboardPage.verifyMethodologiesPopup(), "Verify Methodologies popup");
@@ -168,7 +161,7 @@ public class ViewMethodologiesTests extends DashboardUITestBase {
 
         DashboardPage dashboardPage = new DashboardPage();
         ResearchLinePage researchLinePage = new ResearchLinePage();
-        dashboardPage.navigateToPageFromMenu("Dashboard");
+        dashboardPage.navigateToPageFromMenu("Climate Dashboard");
         BrowserUtils.wait(4);
         dashboardPage.selectViewMethodologies();
         assertTestCase.assertTrue(dashboardPage.verifyMethodologiesPopup(), "Verify Methodologies popup");

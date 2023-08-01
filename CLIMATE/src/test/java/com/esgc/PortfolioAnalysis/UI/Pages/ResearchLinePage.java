@@ -149,6 +149,12 @@ public class ResearchLinePage extends UploadPage {
     @FindBy(xpath = "//*[text()='Updates']//..//table/tbody/tr")
     public List<WebElement> updatesCompaniesList;
 
+    @FindBy(xpath = "//*[text()='Updates']//..//table/tbody/tr/td[1]")
+    public List<WebElement> updatesCompanyNamesList;
+
+    @FindBy(xpath = "//*[text()='Updates']//..//table/tbody/tr/td[7]")
+    public List<WebElement> updatesCompanySectorsList;
+
     @FindBy(id = "laggardsError")
     public WebElement updatesNoDataMessage;
 
@@ -3046,11 +3052,6 @@ public class ResearchLinePage extends UploadPage {
         return scoreQualityIconsInCoveragePopup.size() > 0;
     }
 
-    public boolean verifyScoreQualityIconWithEntitiesInLeadersAndLaggardsTables_PA() {
-        int recordsCountInTable = recordsInLeadersAndLaggardsTable.size();
-        int scoreQualityIconsCountInTable = scoreQualityIconsInLeadersAndLaggardsTable.size();
-        return scoreQualityIconsCountInTable == recordsCountInTable;
-    }
 
     public boolean verifyScoreQualityIconWithEntitiesInLeadersPopup_PA() {
         return scoreQualityIconsInLeadersPopup.size() > 0;
@@ -3679,6 +3680,9 @@ public class ResearchLinePage extends UploadPage {
             e.printStackTrace();
             return false;
         }
+    }
+    public String getPortfolioNameFromEntityPage(){
+        return BrowserUtils.waitForVisibility(portfolioEntityName,60).getText();
     }
 }
 

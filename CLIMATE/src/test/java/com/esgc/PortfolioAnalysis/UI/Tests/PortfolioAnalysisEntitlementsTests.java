@@ -23,7 +23,7 @@ public class PortfolioAnalysisEntitlementsTests extends UITestBase {
         LoginPage login = new LoginPage();
 
         login.entitlementsLogin(EntitlementsBundles.PHYSICAL_RISK);
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
         BrowserUtils.wait(2);
         List<String> actualAvailableResearchLines = researchLinePage.getAvailableResearchLines();
         test.info("Available research lines" + actualAvailableResearchLines);
@@ -45,7 +45,7 @@ public class PortfolioAnalysisEntitlementsTests extends UITestBase {
         LoginPage login = new LoginPage();
 
         login.entitlementsLogin(EntitlementsBundles.TRANSITION_RISK);
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
 
         List<String> actualAvailableResearchLines = researchLinePage.getAvailableResearchLines();
         test.info("Available research lines" + actualAvailableResearchLines);
@@ -66,7 +66,7 @@ public class PortfolioAnalysisEntitlementsTests extends UITestBase {
         LoginPage login = new LoginPage();
 
         login.entitlementsLogin(EntitlementsBundles.CLIMATE_GOVERNANCE);
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
 
         List<String> actualAvailableResearchLines = researchLinePage.getAvailableResearchLines();
         test.info("Available research lines" + actualAvailableResearchLines);
@@ -88,7 +88,7 @@ public class PortfolioAnalysisEntitlementsTests extends UITestBase {
         LoginPage login = new LoginPage();
 
         login.entitlementsLogin(EntitlementsBundles.PHYSICAL_RISK_TRANSITION_RISK);
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
 
         List<String> actualAvailableResearchLines = researchLinePage.getAvailableResearchLines();
         test.info("Available research lines" + actualAvailableResearchLines);
@@ -109,7 +109,7 @@ public class PortfolioAnalysisEntitlementsTests extends UITestBase {
         LoginPage login = new LoginPage();
 
         login.entitlementsLogin(EntitlementsBundles.TRANSITION_RISK_CLIMATE_GOVERNANCE);
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
 
         List<String> actualAvailableResearchLines = researchLinePage.getAvailableResearchLines();
         test.info("Available research lines" + actualAvailableResearchLines);
@@ -130,7 +130,7 @@ public class PortfolioAnalysisEntitlementsTests extends UITestBase {
         LoginPage login = new LoginPage();
 
         login.entitlementsLogin(EntitlementsBundles.PHYSICAL_RISK_CLIMATE_GOVERNANCE);
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
 
         List<String> actualAvailableResearchLines = researchLinePage.getAvailableResearchLines();
         test.info("Available research lines " + actualAvailableResearchLines);
@@ -150,7 +150,7 @@ public class PortfolioAnalysisEntitlementsTests extends UITestBase {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         LoginPage login = new LoginPage();
         login.login();
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
         List<String> actualAvailableResearchLines = researchLinePage.getAvailableResearchLines();
         test.info("Available research lines " + actualAvailableResearchLines);
         Assert.assertEquals(actualAvailableResearchLines, researchLinePage.getExpectedListOfPortfolioAnalysisResearchLines(EntitlementsBundles.ALL),
@@ -162,20 +162,7 @@ public class PortfolioAnalysisEntitlementsTests extends UITestBase {
     }
 
 
-    @Test(enabled = false, groups = {REGRESSION, UI, SMOKE, ENTITLEMENTS, ESG}, description = "Verify research line navigation")
-    @Xray(test = {8214, 8215})
-    public void verifyESGAssessmentRL() {//TODO De-scopped
-        LoginPage loginPage = new LoginPage();
-        loginPage.loginWithParams("esg-test1+no-controversy@outlook.com", "Moodys123");
-        ResearchLinePage researchLinePage = new ResearchLinePage();
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
-        BrowserUtils.wait(5);
 
-        List<String> actualResearchLines = researchLinePage.getAvailableResearchLines();
-        assertTestCase.assertEquals(actualResearchLines.size(), 7, "Existing Research Lines Validation ");
-        assertTestCase.assertEquals(actualResearchLines.get(6), "ESG Assessments", "ESG Assessments Research Line is available");
-        researchLinePage.validateExportButtonIsNotAvailable();
-    }
 
     @Xray(test = {8219})
     @Test(groups = {REGRESSION, UI, SMOKE, ESG, ENTITLEMENTS},
@@ -186,7 +173,7 @@ public class PortfolioAnalysisEntitlementsTests extends UITestBase {
         LoginPage loginPage = new LoginPage();
         loginPage.loginWithParams("esg-test4@outlook.com ", "Helloworld24");
         ResearchLinePage researchLinePage = new ResearchLinePage();
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
         BrowserUtils.wait(5);
 
         List<String> actualResearchLines = researchLinePage.getAvailableResearchLines();

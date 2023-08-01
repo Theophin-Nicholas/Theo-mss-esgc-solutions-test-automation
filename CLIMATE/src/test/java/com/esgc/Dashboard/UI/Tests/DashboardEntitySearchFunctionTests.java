@@ -21,7 +21,7 @@ public class DashboardEntitySearchFunctionTests extends UITestBase {
     public void verifySearchBoxappearonSearchIConClickOnDashboard() {
         DashboardPage dashboardPage = new DashboardPage();
         test.info("Navigate to Dashboard page");
-        dashboardPage.navigateToPageFromMenu("Dashboard");
+        dashboardPage.navigateToPageFromMenu("Climate Dashboard");
         test.info("Click on Search Icon");
         dashboardPage.waitForDataLoadCompletion();
         dashboardPage.clickSearchIcon();
@@ -34,7 +34,7 @@ public class DashboardEntitySearchFunctionTests extends UITestBase {
     public void verifySearchBoxAppearonSearchIConClickOnPortfolioAnalysisPage() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio Analysis page");
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
         test.info("Click on Search Icon");
         researchLinePage.clickSearchIcon();
         assertTestCase.assertTrue(researchLinePage.isSearchBoxDisplayed(), "Search Box Displayed verification on the Portfolio Analysis page after clicking Search Icon.");
@@ -47,11 +47,11 @@ public class DashboardEntitySearchFunctionTests extends UITestBase {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio Analysis page");
 
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
         researchLinePage.clickSearchIcon();
         assertTestCase.assertTrue(researchLinePage.isSearchBoxDisplayed(), "Search Box is displayed on the Portfolio Analysis page after clicking Search Icon.");
         test.info("Search box was appearing on Portfolio Analysis page after clicking Search Icon");
-        researchLinePage.clickCloseIcon();
+        researchLinePage.clickCloseIconInSearchBox();
         BrowserUtils.wait(2);
         assertTestCase.assertFalse(researchLinePage.isSearchBoxDisplayed(), "Search Box disappeared on the Portfolio Analysis page even after clicking close Icon.");
         test.info("Search box was appearing on Portfolio Analysis page even after clicking Close Icon");
@@ -63,12 +63,12 @@ public class DashboardEntitySearchFunctionTests extends UITestBase {
     public void verifySearchBoxDisappearOnDashboardOnClickCloseICon() {
         DashboardPage dashboardPage = new DashboardPage();
         test.info("Navigate to Portfolio Analysis page");
-        dashboardPage.navigateToPageFromMenu("Dashboard");
+        dashboardPage.navigateToPageFromMenu("Climate Dashboard");
         test.info("Click on Search Icon");
         dashboardPage.clickSearchIcon();
         assertTestCase.assertTrue(dashboardPage.isSearchBoxDisplayed(), "Search Box is displayed on the Dashboard page after clicking Search Icon.");
         test.info("Search box was appearing on Dashboard page after clicking Search Icon");
-        dashboardPage.clickCloseIcon();
+        dashboardPage.clickCloseIconInSearchBox();
         BrowserUtils.wait(2);
         assertTestCase.assertFalse(dashboardPage.isSearchBoxDisplayed(), "Search Box disappeared on the Dashboard page even after clicking close Icon.");
 
@@ -79,7 +79,7 @@ public class DashboardEntitySearchFunctionTests extends UITestBase {
     public void verifySearchBoxOnDashboardDisappearsOnPressingESCKey() {
         DashboardPage dashboardPage = new DashboardPage();
         test.info("Navigate to Portfolio Analysis page");
-        dashboardPage.navigateToPageFromMenu("Dashboard");
+        dashboardPage.navigateToPageFromMenu("Climate Dashboard");
         test.info("Click on Search Icon");
         dashboardPage.clickSearchIcon();
         assertTestCase.assertTrue(dashboardPage.isSearchBoxDisplayed(), "Search Box is displayed on the Dashboard page after clicking Search Icon.");
@@ -97,7 +97,7 @@ public class DashboardEntitySearchFunctionTests extends UITestBase {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio Analysis page");
 
-        researchLinePage.navigateToPageFromMenu("Portfolio Analysis");
+        researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
         researchLinePage.waitForDataLoadCompletion();
         researchLinePage.clickSearchIcon();
         Assert.assertTrue(researchLinePage.isSearchBoxDisplayed(), "Search Box was not appearing on the Portfolio Analysis page after clicking Search Icon.");
@@ -115,7 +115,7 @@ public class DashboardEntitySearchFunctionTests extends UITestBase {
     public void testSearchBox() {
         DashboardPage dashboardPage = new DashboardPage();
         test.info("Navigate to Dashboard page");
-        dashboardPage.navigateToPageFromMenu("Dashboard");
+        dashboardPage.navigateToPageFromMenu("Climate Dashboard");
 
         assertTestCase.assertTrue(dashboardPage.isSearchIconDisplayed());
         dashboardPage.searchIconPortfolioPage.click();
@@ -131,7 +131,7 @@ public class DashboardEntitySearchFunctionTests extends UITestBase {
     public void testSearchFunction() {
         DashboardPage dashboardPage = new DashboardPage();
         test.info("Navigate to Dashboard page");
-        dashboardPage.navigateToPageFromMenu("Dashboard");
+        dashboardPage.navigateToPageFromMenu("Climate Dashboard");
 
         assertTestCase.assertTrue(dashboardPage.isSearchIconDisplayed());
         dashboardPage.searchIconPortfolioPage.click();
@@ -146,7 +146,7 @@ public class DashboardEntitySearchFunctionTests extends UITestBase {
     public void testSearchFunctionForNoMatchEntry() {
         DashboardPage dashboardPage = new DashboardPage();
         test.info("Navigate to Dashboard page");
-        dashboardPage.navigateToPageFromMenu("Dashboard");
+        dashboardPage.navigateToPageFromMenu("Climate Dashboard");
         dashboardPage.searchIconPortfolioPage.click();
         assertTestCase.assertTrue(dashboardPage.checkWarningWhenNoMatchEntry("sss"), "No results found message appeared as warning");
     }
@@ -157,7 +157,7 @@ public class DashboardEntitySearchFunctionTests extends UITestBase {
     public void testClickingOnEntityName() {
         DashboardPage dashboardPage = new DashboardPage();
         test.info("Navigate to Dashboard page");
-        dashboardPage.navigateToPageFromMenu("Dashboard");
+        dashboardPage.navigateToPageFromMenu("Climate Dashboard");
         dashboardPage.searchIconPortfolioPage.click();
         String searchKeyword = "App";
         assertTestCase.assertFalse(dashboardPage.checkClickingOnEntityName(searchKeyword), "Clicking on entity name on search bar worked");
@@ -172,7 +172,7 @@ public class DashboardEntitySearchFunctionTests extends UITestBase {
     public void testESCButtonClosingEntityPage() {
         DashboardPage dashboardPage = new DashboardPage();
         test.info("Navigate to Dashboard page");
-    //    dashboardPage.navigateToPageFromMenu("Dashboard");
+    //    dashboardPage.navigateToPageFromMenu("Climate Dashboard");
         dashboardPage.searchIconPortfolioPage.click();
         assertTestCase.assertFalse(dashboardPage.checkClickingOnEntityName("App"), "Clicking on entity name on search bar worked");
 

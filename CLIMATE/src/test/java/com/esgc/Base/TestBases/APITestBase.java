@@ -38,7 +38,6 @@ public abstract class APITestBase extends TestBaseClimate {
     public Object[][] availableResearchLinesForAPITests() {
 
         return new Object[][]{
-              /*  {"ESG Assessments"},*/ //TODO de-scoped
                 {"operationsrisk"},
                 {"marketrisk"},
                 {"supplychainrisk"},
@@ -68,7 +67,6 @@ public abstract class APITestBase extends TestBaseClimate {
     public Object[][] availableResearchLinesForAPITests2() {
 
         return new Object[][]{
-                {"esgasmt"},
                 {"physicalriskhazard"},
                 {"physicalriskmgmt"},
                 {"temperaturealgmt"},
@@ -77,6 +75,8 @@ public abstract class APITestBase extends TestBaseClimate {
                 {"greenshareasmt"},
         };
     }
+
+
 
 }
 

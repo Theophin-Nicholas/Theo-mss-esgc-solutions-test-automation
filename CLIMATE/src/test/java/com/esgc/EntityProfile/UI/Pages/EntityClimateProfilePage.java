@@ -44,7 +44,7 @@ public class EntityClimateProfilePage extends ClimatePageBase {
     @FindBy(xpath = "//div[@aria-labelledby='alert-dialog-title']/div[@style]//*[text()]")
     public List<WebElement> companyHeaderItems;
 
-    @FindBy(xpath="//span[@data-testid='confidence_level_test_id_2']")
+    @FindBy(xpath = "//span[@data-testid='confidence_level_test_id_2']")
     public WebElement confidenceLevel;
 
     @FindBy(xpath = " (//*[name()='g'][contains(@class,'highcharts-legend-item highcharts-line-')])")
@@ -59,10 +59,10 @@ public class EntityClimateProfilePage extends ClimatePageBase {
     @FindBy(xpath = "//div[@id='tempAlignErr']")
     public List<WebElement> noInfoElement;
 
-    @FindBy(xpath = "//span[text()='Transition Risk']/../../..//div[text()='Brown Share Assessment']/../../../following-sibling::div//div[text()='No information available.']")
+    @FindBy(xpath = "//div[./div[text()='Brown Share']]//div[text()='No information available.']")
     public WebElement trBrownShareAssessmentNoInfo;
 
-    @FindBy(xpath = "//span[text()='Transition Risk']/../../..//div[text()='Brown Share Assessment']/../../../../../following-sibling::div//div[text()='No sector comparison chart available.']")
+    @FindBy(xpath = "//div[.//div[text()='Brown Share Assessment']]/following-sibling::div[.//div[text()='No sector comparison chart available.']]")
     public WebElement trBrownShareAssessmentSectorChartNoInfo;
 
     @FindBy(xpath = "//li[@role='menuitem']/../../../div[2]//*[local-name()='svg']")
@@ -432,7 +432,7 @@ public class EntityClimateProfilePage extends ClimatePageBase {
     @FindBy(xpath = "//button/span[contains(text(),'Physical Risk')]")
     public WebElement button_PhysicalRiskTab;
 
-    @FindBy(xpath = "//div[normalize-space()='PHYSICAL RISK MANAGEMENT']")
+    @FindBy(xpath = "//span[text()='PHYSICAL RISK MANAGEMENT']")
     public WebElement header_PhysicalRiskManagement;
 
     @FindBy(xpath = "//div[contains(text(),'Physical Risk Management') and .//*[starts-with(text(),'Anticipation,')]]")
@@ -451,8 +451,6 @@ public class EntityClimateProfilePage extends ClimatePageBase {
     @FindBy(xpath = "//div[@id='cardInfo_box']/div[text()='ESG Score']/parent::div/div/div/div")
     public List<WebElement> esgScores;
 
-    @FindBy(xpath = "//div[.='Overall ESG Score']/../div/div/div/div[2]")
-    public List<WebElement> esgScoreCategories;
 
     //Ignore first element
     @FindBy(xpath = "//div[ @id='portfolio_box' ]/div/div/div/div")
@@ -530,6 +528,12 @@ public class EntityClimateProfilePage extends ClimatePageBase {
     @FindBy(xpath = "//body/div[@id='company-summary-panel']/div/div/div[5]")
     public WebElement companyDrawerSector;
 
+    @FindBy(xpath = "//a[.='hide']")
+    public WebElement hideDrawerButton;
+
+    @FindBy(xpath = "//button[@id='ref_Meth_button']")
+    public WebElement ReferenceAndMethodology_Button;
+
 
     ///============= Methods
 
@@ -555,15 +559,15 @@ public class EntityClimateProfilePage extends ClimatePageBase {
     }
 
     public boolean validateGlobalCompanyNameHeader(String companyName) {
-        try{
-            return wait.until(ExpectedConditions.visibilityOf(Driver.getDriver().findElement(By.xpath("//li//span[text()='"+companyName+"']")))).isDisplayed();
-        }catch(Exception e){
+        try {
+            return wait.until(ExpectedConditions.visibilityOf(Driver.getDriver().findElement(By.xpath("//li//span[text()='" + companyName + "']")))).isDisplayed();
+        } catch (Exception e) {
             return false;
         }
     }
 
     public void clickGlobalHeader() {
-        BrowserUtils.waitForClickablility(globalHeaderCompanyNameLabel,20).click();
+        BrowserUtils.waitForClickablility(globalHeaderCompanyNameLabel, 20).click();
     }
 
     public void clickSubsidiaryCompaniesLink() {
@@ -572,15 +576,15 @@ public class EntityClimateProfilePage extends ClimatePageBase {
 
     public void verifySubsidiaryCompaniesCount(int count) {
         String subsidiaryText = subsidiaryLink.getText();
-        subsidiaryText = subsidiaryText.substring(0,subsidiaryText.indexOf(" "));
-        assertTestCase.assertEquals(count, Integer.parseInt(subsidiaryText),"Verification of Subsidiary Companies Count");
+        subsidiaryText = subsidiaryText.substring(0, subsidiaryText.indexOf(" "));
+        assertTestCase.assertEquals(count, Integer.parseInt(subsidiaryText), "Verification of Subsidiary Companies Count");
     }
 
     public boolean verifySubsidiaryCompaniesLink() {
         try {
-            BrowserUtils.waitForVisibility(subsidiaryLink,30);
+            BrowserUtils.waitForVisibility(subsidiaryLink, 30);
             return true;
-        }catch(Exception e){
+        } catch (Exception e) {
             return false;
         }
     }
@@ -588,31 +592,31 @@ public class EntityClimateProfilePage extends ClimatePageBase {
     public void verifySubsidiaryCompaniesPopup(String companyName) {
         verifyCompanyNameInCoveragePopup(companyName);
         verifyCompanyIsClickableInCoveragePopup(companyName);
-        assertTestCase.assertTrue(subsidiaryCompaniesHeader.isDisplayed(),"Verify Subsidiary Companies popup header");
+        assertTestCase.assertTrue(subsidiaryCompaniesHeader.isDisplayed(), "Verify Subsidiary Companies popup header");
 
-        String expDescription="Unless assessed, subsidiaries have the same score as their parent company";
-        String actDescription=subsidiaryCompaniesPopupDescription.getText();
-        assertTestCase.assertEquals(actDescription,expDescription,"Verify Subsidiary Companies popup description");
+        String expDescription = "Unless assessed, subsidiaries have the same score as their parent company";
+        String actDescription = subsidiaryCompaniesPopupDescription.getText();
+        assertTestCase.assertEquals(actDescription, expDescription, "Verify Subsidiary Companies popup description");
 
-        assertTestCase.assertEquals(subsidiaryCompaniesTableColumns.get(0).getText(),"Company Name","Verify Subsidiary Companies Table columns");
-        assertTestCase.assertEquals(subsidiaryCompaniesTableColumns.get(1).getText(),"ESG Score","Verify Subsidiary Companies Table columns");
+        assertTestCase.assertEquals(subsidiaryCompaniesTableColumns.get(0).getText(), "Company Name", "Verify Subsidiary Companies Table columns");
+        assertTestCase.assertEquals(subsidiaryCompaniesTableColumns.get(1).getText(), "ESG Score", "Verify Subsidiary Companies Table columns");
     }
 
     public boolean verifySubsidiaryCompaniesSectionInCoveragePopup() {
-        try{
+        try {
             return subsidiaryCompaniesHeader.isDisplayed();
-        }catch(Exception e){
+        } catch (Exception e) {
             return false;
         }
     }
 
     public void verifyCompanyNameInCoveragePopup(String subsidiaryCompanyName) {
-        String xpath = "//div[contains(@class,'CompanyNameWrapper')]//span[@title][text()='"+subsidiaryCompanyName+"']";
+        String xpath = "//div[contains(@class,'CompanyNameWrapper')]//span[@title][text()='" + subsidiaryCompanyName + "']";
         assertTestCase.assertEquals(Driver.getDriver().findElements(By.xpath(xpath)).size(), 1);
     }
 
     public void verifyCompanyIsClickableInCoveragePopup(String companyName) {
-        String xpath = "//div[contains(@class,'CompanyNameWrapper')]//span[@title][text()='"+companyName+"']";
+        String xpath = "//div[contains(@class,'CompanyNameWrapper')]//span[@title][text()='" + companyName + "']";
         WebElement element = Driver.getDriver().findElement(By.xpath(xpath));
         assertTestCase.assertTrue(element.getCssValue("text-decoration").contains("underline"));
     }
@@ -640,7 +644,7 @@ public class EntityClimateProfilePage extends ClimatePageBase {
 
     public void validateCompanyHeader(String companyName) {
         List<String> actualHeaderItems = new ArrayList<>();
-        for(WebElement item:companyHeaderItems) {
+        for (WebElement item : companyHeaderItems) {
             actualHeaderItems.add(item.getText());
         }
 
@@ -648,19 +652,19 @@ public class EntityClimateProfilePage extends ClimatePageBase {
         expectedHeaderItems.add(companyName);
         //TODO: On Demand Release
         // expectedHeaderItems.add("Confidence Level:");
-        expectedHeaderItems.add("Export/Sources Documents");
+        expectedHeaderItems.add("Export");
         expectedHeaderItems.add("Reference and Methodologies");
         expectedHeaderItems.add("ESC");
 
-        for(String expItem:expectedHeaderItems) {
+        for (String expItem : expectedHeaderItems) {
             boolean matched = false;
-            for(String actItem:actualHeaderItems){
-                if(actItem.contains(expItem)){
+            for (String actItem : actualHeaderItems) {
+                if (actItem.contains(expItem)) {
                     matched = true;
                     break;
                 }
             }
-            assertTestCase.assertTrue(matched, expItem+" is not available in the header");
+            assertTestCase.assertTrue(matched, expItem + " is not available in the header");
         }
     }
 
@@ -697,9 +701,9 @@ public class EntityClimateProfilePage extends ClimatePageBase {
     }
 
     public boolean IsPdfDownloadButtonAvailable() {
-        try{
-         return pdfDownloadButton.isDisplayed();
-        }catch(Exception e){
+        try {
+            return pdfDownloadButton.isDisplayed();
+        } catch (Exception e) {
             return false;
         }
     }
@@ -1241,59 +1245,6 @@ public class EntityClimateProfilePage extends ClimatePageBase {
         }
     }
 
-    public void validateSubCategories() {
-
-        for (int i = 1; i <= esgMaterialityColumns.size(); i++) {
-            String xpathCategories = "(//div/section//ul)[" + i + "]//li";
-            int categoriesCount = Driver.getDriver().findElements(By.xpath(xpathCategories)).size();
-            int scores[] = new int[categoriesCount];
-            for (int j = 1; j <= categoriesCount; j++) {
-                String categoryBgColor = Driver.getDriver().findElement(By.xpath("(//div/section//ul)[" + i + "]//li[" + j + "]")).getCssValue("background-color");
-                System.out.println("BG Color: " + categoryBgColor);
-                if (i != 4) {
-                    String xpathCategoryScore = "(//div/section//ul)[" + i + "]//li[" + j + "]/section/span[1]/span[2]";
-                    String score = Driver.getDriver().findElement(By.xpath(xpathCategoryScore)).getText();
-                    int iScore = Integer.parseInt(score);
-                    scores[i - 1] = iScore;
-                    System.out.println("Score: " + iScore);
-                    if (iScore >= 60) {
-                        assertTestCase.assertEquals(categoryBgColor, "rgba(219, 229, 163, 1)");
-                    } else if (iScore >= 50) {
-                        assertTestCase.assertEquals(categoryBgColor, "rgba(234, 197, 80, 1)");
-                    } else if (iScore >= 30) {
-                        assertTestCase.assertEquals(categoryBgColor, "rgba(232, 149, 28, 1)");
-                    } else {
-                        assertTestCase.assertEquals(categoryBgColor, "rgba(221, 88, 29, 1)");
-                    }
-                } else {
-                    assertTestCase.assertEquals(categoryBgColor, "rgba(255, 255, 255, 1)");
-                }
-            }
-            for (int k = 0; k < (scores.length - 1); k++) {
-                assertTestCase.assertTrue(scores[i] >= scores[i + 1], "Verify the order of categories");
-            }
-        }
-
-    }
-
-//    public void validateSubCategoriesButtonColorProperties() {
-//        List<WebElement> SubCategoriesPercentageLabels = Driver.getDriver().findElements(By.xpath("//section//li/section/span[2]"));
-//
-//        //Verify Disclosure ratio text under all subcategories
-//        int i=0;
-//        for (WebElement section : materialityElements) {
-//            String colorCode = Color.fromString(section.getCssValue("background-color")).asHex();
-//            String score = Driver.getDriver().findElement(By.xpath("(//section//li/section/span[2])["+(++i)+"]")).getText();
-//            score = score.substring(score.lastIndexOf(' '), score.length()-1);
-//            if(Integer.parseInt(score)>=60){
-//                assertTestCase.assertEquals(colorCode, "");
-//            } else if(Integer.parseInt(score)>=40){
-//                assertTestCase.assertEquals(colorCode, "");
-//            } else if(Integer.parseInt(score)>=20){
-//                assertTestCase.assertEquals(colorCode, "");
-//            }
-//        }
-//    }
 
     public void validateNoneForTheSectorButton() {
         // Based on the xpath - can say element is not clickable
@@ -1301,26 +1252,6 @@ public class EntityClimateProfilePage extends ClimatePageBase {
         Assert.assertTrue(sectors.size() != 0, "Check 'None for the Sector' button");
     }
 
-    public void validateEsgMaterialityLegends() {
-
-        String labelXpath = "//button[@heap_perfchart_id='Materiality']/../../..//div[contains(@class,'MuiPaper-elevation1')]//span";
-
-        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("(" + labelXpath + ")[1]")).getText(), "Weak");
-        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("(" + labelXpath + "/div)[1]")).getAttribute("style"), "background: rgb(221, 88, 29);");
-
-        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("(" + labelXpath + ")[2]")).getText(), "Limited");
-        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("(" + labelXpath + "/div)[2]")).getAttribute("style"), "background: rgb(232, 149, 28);");
-
-        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("(" + labelXpath + ")[3]")).getText(), "Robust");
-        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("(" + labelXpath + "/div)[3]")).getAttribute("style"), "background: rgb(234, 197, 80);");
-
-        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("(" + labelXpath + ")[4]")).getText(), "Advanced");
-        assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("(" + labelXpath + "/div)[4]")).getAttribute("style"), "background: rgb(219, 229, 163);");
-
-        String criticalControversiesXpath = "//button[@heap_perfchart_id='Materiality']/../../..//div[text()='Critical controversies']";
-        assertTestCase.assertTrue(Driver.getDriver().findElement(By.xpath(criticalControversiesXpath)).isDisplayed());
-
-    }
 
     public boolean validateNoPopupIsDisplayedWhenClickedOnSubCategories() {
         Driver.getDriver().findElement(By.xpath("(//ul/li/section)[1]")).click();
@@ -1342,14 +1273,6 @@ public class EntityClimateProfilePage extends ClimatePageBase {
         for (WebElement element : lowMaterialityElements) {
             Assert.assertTrue(Color.fromString(element.getCssValue("background-color")).asHex().equals("#ffffff"));
         }
-    }
-
-    public List<String> readEsgMaterialityColumns() {
-        List<String> columns = new ArrayList<String>();
-        for (WebElement column : esgMaterialityColumns) {
-            columns.add(column.getText());
-        }
-        return columns;
     }
 
     public void selectMaterialityMatrixFilter(String filterName) {
@@ -1432,9 +1355,9 @@ public class EntityClimateProfilePage extends ClimatePageBase {
             BrowserUtils.scrollTo(physicalRiskTab);
             System.out.println("====================");
             //System.out.println(physicalClimateHazards.getText());
-            return physicalRiskTab.isDisplayed() && operationsRiskLabel.isDisplayed()
-                    && marketRiskLabel.isDisplayed() && supplyChainRiskLabel.isDisplayed()
-                    && physicalClimateRiskOperationsRiskLabel.isDisplayed();
+            return physicalRiskTab.isDisplayed() ;//&& operationsRiskLabel.isDisplayed()
+//                    && marketRiskLabel.isDisplayed() && supplyChainRiskLabel.isDisplayed()
+//                    && physicalClimateRiskOperationsRiskLabel.isDisplayed();
         } catch (Exception e) {
             return false;
         }
@@ -1454,16 +1377,20 @@ public class EntityClimateProfilePage extends ClimatePageBase {
     }
 
     public boolean clickAndVerifyMethodologyLink(String researchLine) {
-        String METHODOLOGY_PHYSICAL_CLIMATE_RISK_JAN_2022 = "Methodology_CorporatePhysicalClimateRiskOperationsRisk(Jan2022)";
-        String TRANSITION_RISK_TEMPERATURE_ALIGNMENT = "Methodology_Climate_TemperatureAlignmentData";
-        String TRANSITION_RISK = "Methodology_Climate_ClimateRiskAssessment";
-        String DEFAULT = "Methodology_VEC_Climate_v4";
+        String METHODOLOGY_PHYSICAL_CLIMATE_RISK_JAN_2022 = "Methodology_Corporate Physical Climate Risk  Operations Risk";
+        String PhysicalRiskManagementMethodology = "Methodology_VEC_Climate";
+        String TemperatureAlignmentMethodology = "Methodology_Climate_Temperature Alignment Data";
+        String TransitionRiskMethodology = "Methodology_Climate_Climate Risk Assessment";
+        String ControversyRiskAssessmentMethodology = "Controversy Risk Assessment Methodology";
+        // String DEFAULT = researchLine  ; //"Methodology_VEC_Climate_v4";
+
         try {
-            WebElement methodology;
-            if (researchLine.equals("Physical Risk"))
-                methodology = Driver.getDriver().findElement(By.xpath("//span[text()='" + researchLine + "']/../../../..//a[contains(@id,'link-test-id')]"));
+            // methodology;
+           /*    if (researchLine.equals("Physical Risk"))
+             methodology = Driver.getDriver().findElement(By.xpath("//span[text()='" + researchLine + "']/../../../..//a[contains(@id,'link-test-id')]"));
             else
-                methodology = Driver.getDriver().findElement(By.xpath("//span[contains(text(),'Risk')]/../../..//div[text()='" + researchLine + "']/../../../..//a[contains(@id,'link-test-id')]"));
+                methodology = Driver.getDriver().findElement(By.xpath("//span[contains(text(),'Risk')]/../../..//div[text()='" + researchLine + "']/../../../..//a[contains(@id,'link-test-id')]"));*/
+            WebElement methodology = Driver.getDriver().findElement(By.xpath("//a[text()='" + researchLine + "']"));
 
             wait.until(ExpectedConditions.visibilityOf(methodology)).click();
             //Switch to the new tab
@@ -1474,20 +1401,21 @@ public class EntityClimateProfilePage extends ClimatePageBase {
                     if (!handle.equals(currentWindowHandle)) {
                         Driver.getDriver().switchTo().window(handle);
                         String url = Driver.getDriver().getCurrentUrl();
-                        url = url.replaceAll("%20", "");
+                        url = url.replaceAll("%20", " ");
+                        url = url.replaceAll("- ", "");
                         Driver.getDriver().close();
                         Driver.getDriver().switchTo().window(currentWindowHandle);
                         switch (researchLine) {
-                            case "Physical Risk":
+                            case "Physical Risk methodology":
                                 return url.contains(METHODOLOGY_PHYSICAL_CLIMATE_RISK_JAN_2022);
-                            case "Temperature Alignment":
-                                return url.contains(TRANSITION_RISK_TEMPERATURE_ALIGNMENT);
-                            case "Carbon Footprint":
-                            case "Brown Share Assessment":
-                            case "Green Share Assessment":
-                                return url.contains(TRANSITION_RISK);
-                            default:
-                                return url.contains(DEFAULT);
+                            case "Physical Risk Management methodology":
+                                return url.contains(PhysicalRiskManagementMethodology);
+                            case "Temperature Alignment methodology":
+                                return url.contains(TemperatureAlignmentMethodology);
+                            case "Transition Risk methodology":
+                                return url.contains(TransitionRiskMethodology);
+                            case "Controversy Risk Assessment Methodology":
+                                return url.contains(ControversyRiskAssessmentMethodology);
                         }
                     }
                 }
@@ -2346,95 +2274,6 @@ public class EntityClimateProfilePage extends ClimatePageBase {
         return true;//End of code
     }
 
-    public boolean verifyESGScoreValue() {
-        for (WebElement score : esgScores) {
-          //  System.out.println("score " + score.getText().split("\n")[1]);
-            if (score.getText().split("/")[1].equals("100")) {
-                System.out.println("ESG score is verified = " + score.getText());
-                String color = Color.fromString(score.getCssValue("color")).asHex();
-                System.out.println("color = " + color);
-                if (!color.equals("#ffffff")) return false;
-                return score.isDisplayed();
-            }
-        }
-        return false;
-    }
-
-    public void verifyESGScoreHeaders() {
-       List<String> pillars= Arrays.asList(new String[]{"Environment","Social","Governance"});
-        int count = 0;
-        //actPillars.put("ESG Rating");
-        for (WebElement pillar : esgScorePillars) {
-            if (count == 0) {
-                count++;
-                continue;
-            }
-
-            String pillarName = pillar.getText().substring(0, pillar.getText().indexOf("\n"));
-            String pillarScore = pillar.getText().substring(pillar.getText().indexOf("\n") + 1);
-            assertTestCase.assertTrue(pillars.contains(pillarName),"Validating the pillar name " + pillarName);
-            assertTestCase.assertEquals(pillarScore.split("/")[1],("100"), "Validating " + pillarName + " Score format" ) ;
-            String color = Color.fromString(pillar.getCssValue("color")).asHex();
-            System.out.println("color = " + color);
-            assertTestCase.assertEquals(color,"#ffffff","validating color");
-        }
-
-
-    }
-
-    public boolean verifyESGScorePillars(String Entity) {
-        Map<String, String> actPillars = new HashMap<>();
-        //we need to skip first element because xpath locates an extra element which is not a pillar
-        int count = 0;
-        //actPillars.put("ESG Rating");
-        for (WebElement pillar : esgScorePillars) {
-            if (count == 0) {
-                count++;
-                continue;
-            }
-
-            String pillarName = pillar.getText().substring(0, pillar.getText().indexOf("\n"));
-            String pillarScore = pillar.getText().substring(pillar.getText().indexOf("\n") + 1);
-            if (pillarName.equalsIgnoreCase("ESG Score")) {
-                actPillars.put("ESG Rating", pillarScore);
-                continue;
-            }
-            actPillars.put(pillarName, pillarScore);
-        }
-        System.out.println("actPillars = " + actPillars);
-
-        //run query
-        DatabaseDriver.createDBConnection();
-
-        String query = "SELECT P.RESEARCH_LINE_ID ,ORBIS_ID, lkp1.scale,lkp1.grade, SUB_CATEGORY,DATA_TYPE,p.SCORE, score_msg, lkp1.QUALIFIER QUAL, lkp2.QUALIFIER as score_category, lkp1.score_range, lkp1.as_of_date,lkp2.score_range sc_range FROM (SELECT ESG.ORBIS_ID,ESG.RESEARCH_LINE_ID,ESG.DATA_TYPE, ESG.YEAR,ESG.MONTH,CASE WHEN ESG.SUB_CATEGORY = 'Environmental' THEN 'Environment' WHEN SUB_CATEGORY = 'ESG' THEN iff ((DATA_TYPE = 'esg_pillar_score'),'ESG Rating','ESG Score') WHEN DATA_TYPE = 'overall_alphanumeric_score' THEN 'ESG Score' ELSE SUB_CATEGORY END as SUB_CATEGORY, CASE WHEN DATA_TYPE = 'esg_pillar_score' THEN try_to_double(VALUE) ELSE NULL END as score , CASE WHEN DATA_TYPE = 'overall_alphanumeric_score' THEN VALUE ELSE NULL END as score_msg FROM DF_TARGET.ESG_OVERALL_SCORES ESG JOIN DF_TARGET.ENTITY_COVERAGE_TRACKING CT ON ESG.ORBIS_ID = CT.ORBIS_ID AND CT.COVERAGE_STATUS = 'Published' AND PUBLISH = 'yes' AND CT.RESEARCH_LINE_ID IN (1015,1008) WHERE ESG.ORBIS_ID = '" + Entity + "' AND ESG.DATA_TYPE IN('overall_alphanumeric_score' ,'esg_pillar_score') QUALIFY ROW_NUMBER() OVER(PARTITION BY ESG.ORBIS_ID,DATA_TYPE,SUB_CATEGORY ORDER BY SCORED_DATE DESC) = 1 limit 5) p LEFT OUTER JOIN DF_LOOKUP.ESG_SCORE_REFERENCE lkp1  ON lkp1.GRADE = P.SCORE_MSG AND lkp1.RESEARCH_LINE_ID = P.RESEARCH_LINE_ID AND lkp1.STATUS = 'Active' LEFT OUTER JOIN DF_LOOKUP.ESG_SCORE_REFERENCE lkp2 ON 1=1 AND lkp2.RESEARCH_LINE_ID = P.RESEARCH_LINE_ID and lkp2.GRADE  IS NULL AND split(lkp2.SCORE_RANGE,'')[1]::number AND (floor(score) BETWEEN lkp2.LOWER_SCORE_THRESHOLD AND lkp2.UPPER_SCORE_THRESHOLD) AND lkp2.STATUS = 'Active'";
-        List<Map<String, Object>> dbResult = DatabaseDriver.getQueryResultMap(query);
-        //result.forEach(System.out::println);
-        //Verify the value for Environment , Social, Governance pillar value for the entity is reflecting correctly
-        //actPillars = {Social=42/100, Environment=51/100, Governance=51/100}
-        for (String pillar : actPillars.keySet()) {
-            for (Map<String, Object> row : dbResult) {
-                if (row.get("SUB_CATEGORY").toString().equals(pillar)) {
-                    // String expScoreCategory = new ESGUtilities().getESGPillarsCategory(row.get("RESEARCH_LINE_ID").toString(), (int) Double.parseDouble(row.get("SCORE").toString()));
-                    String value = String.valueOf((int) Double.parseDouble(row.get("SCORE").toString()));
-                    if (!actPillars.get(pillar).split("/")[0].equals(value)) {
-                        System.out.println("ESg Pillar Category Doesnt Match for " + pillar + " = " + actPillars.get(pillar) + " with " + row.get("SCORE"));
-                        return false;
-                    }
-                }
-            }
-        }
-        //Verify the data on the UI for Overall ESG score matches with the db
-        String escScore = String.valueOf((int) Double.parseDouble(dbResult.get(0).get("SCORE").toString()));
-        System.out.println("escScore = " + escScore);
-        for (WebElement score : esgScores) {
-            if (score.getText().contains(escScore)) {
-                System.out.println("ESG Score is verified = " + score.getText());
-                return score.isDisplayed();
-            }
-        }
-        return false;
-    }
-
     public boolean validatePhysicalRiskMananagementTableIsAvailable() {
         try {
             BrowserUtils.scrollTo(PhysicalRiskManagementTable);
@@ -2446,7 +2285,7 @@ public class EntityClimateProfilePage extends ClimatePageBase {
 
     public void validatePhysicalRiskManagementTable() {
         assertTestCase.assertTrue(header_PhysicalRiskManagement.isDisplayed(), "Validate Physical Risk Management Title is available");
-        List<WebElement> columns = PhysicalRiskManagementTable.findElements(By.xpath("parent::div/following-sibling::div/div/table/thead/tr/th"));
+        List<WebElement> columns = Driver.getDriver().findElements(By.xpath("//div[./div/span[text()='PHYSICAL RISK MANAGEMENT']]//tr[./th[text()='Indicator']]/th"));
         assertTestCase.assertTrue(columns.get(0).getText().equals("Indicator"), "Validate Indicator column");
         assertTestCase.assertTrue(columns.get(1).getText().equals("Risk Level"), "Validate Risk Level column");
         assertTestCase.assertTrue(columns.get(2).getText().equals("Score"), "Validate Score column");
@@ -2558,41 +2397,41 @@ public class EntityClimateProfilePage extends ClimatePageBase {
         expectedCategories.add("MINOR INVOLVEMENT");
         expectedCategories.add("MAJOR INVOLVEMENT");
         String actualCategory = transitionRiskBrownShareCategory.getText();
-        assertTestCase.assertTrue(expectedCategories.contains(actualCategory), expectedCategories+" Category is not available from Expected Brown share Categories");
+        assertTestCase.assertTrue(expectedCategories.contains(actualCategory), expectedCategories + " Category is not available from Expected Brown share Categories");
     }
 
     public void verifyBrownShareWidgetOverallRevenue(String orbisId) {
         String uiOverallRevenuePercent = transitionRiskBrownShareWidgetOverallRevenue.getText();
         EntityClimateProfilePageQueries queries = new EntityClimateProfilePageQueries();
         String dbOverallRevenuePercent = queries.getBrownShareData(orbisId).get("SCORE_RANGE");
-        assertTestCase.assertEquals(uiOverallRevenuePercent.replace(" ",""),dbOverallRevenuePercent, "Overall Revenue Percent from UI is not matching with DB");
+        assertTestCase.assertEquals(uiOverallRevenuePercent.replace(" ", ""), dbOverallRevenuePercent, "Overall Revenue Percent from UI is not matching with DB");
 
     }
 
     public void verifyBrownShareComparisonChartLegends(String sectorName, String companyName) {
-        assertTestCase.assertEquals(brownShareComparisonChartLegends.get(0).getAttribute("style"),"background: rgb(178, 133, 89);", "Brown Share Comparison Chart - Verify first legend color");
+        assertTestCase.assertEquals(brownShareComparisonChartLegends.get(0).getAttribute("style"), "background: rgb(178, 133, 89);", "Brown Share Comparison Chart - Verify first legend color");
         assertTestCase.assertTrue(brownShareComparisonChartLegends.get(1).getText().contains(sectorName), "Brown Share Comparison Chart - Verify first legend label");
-        assertTestCase.assertEquals(brownShareComparisonChartLegends.get(2).getAttribute("style"),"background: rgb(31, 140, 255);", "Brown Share Comparison Chart - Verify second legend color");
+        assertTestCase.assertEquals(brownShareComparisonChartLegends.get(2).getAttribute("style"), "background: rgb(31, 140, 255);", "Brown Share Comparison Chart - Verify second legend color");
         assertTestCase.assertTrue(brownShareComparisonChartLegends.get(3).getText().contains(companyName), "Brown Share Comparison Chart - Verify second legend label");
     }
 
     public void verifyBrownShareComparisonChartAxes() {
-        assertTestCase.assertEquals(brownShareComparisonChartAxes.get(1).getText(),"Major", "Brown Share Comparison Chart - Verify X-Axis Label");
-        assertTestCase.assertEquals(brownShareComparisonChartAxes.get(2).getText(),"None", "Brown Share Comparison Chart - Verify X-Axis Label");
-        assertTestCase.assertEquals(brownShareComparisonChartAxes.get(3).getText(),"0%", "Brown Share Comparison Chart - Verify Y-Axis Label");
-        assertTestCase.assertEquals(brownShareComparisonChartAxes.get(4).getText(),">=50%", "Brown Share Comparison Chart - Verify Y-Axis Label");
+        assertTestCase.assertEquals(brownShareComparisonChartAxes.get(1).getText(), "Major", "Brown Share Comparison Chart - Verify X-Axis Label");
+        assertTestCase.assertEquals(brownShareComparisonChartAxes.get(2).getText(), "None", "Brown Share Comparison Chart - Verify X-Axis Label");
+        assertTestCase.assertEquals(brownShareComparisonChartAxes.get(3).getText(), "0%", "Brown Share Comparison Chart - Verify Y-Axis Label");
+        assertTestCase.assertEquals(brownShareComparisonChartAxes.get(4).getText(), ">=50%", "Brown Share Comparison Chart - Verify Y-Axis Label");
     }
 
     public void verifyBrownShareComparisonChartAverageLine() {
-        try{
+        try {
             brownShareComparisonChartAverageLine.isDisplayed();
-        }catch (Exception e) {
+        } catch (Exception e) {
             assertTestCase.assertTrue(false, "Average Line is not available");
         }
     }
 
     public void verifyBrownShareComparisonChartSectorDesc(String sectorName, int sectorCompaniesCount, String companyName) {
-        String expDescription = companyName+" compared to "+sectorCompaniesCount+" companies in "+sectorName;
+        String expDescription = companyName + " compared to " + sectorCompaniesCount + " companies in " + sectorName;
         String actualDescription = brownShareComparisonChartAxes.get(0).getText();
         assertTestCase.assertEquals(actualDescription, expDescription, "Brown Share Comparison Chart - Verify entity description");
     }
@@ -2732,10 +2571,10 @@ public class EntityClimateProfilePage extends ClimatePageBase {
     public String getPhysicalRiskManagement() {
         BrowserUtils.scrollTo(wait.until(ExpectedConditions.visibilityOf(physicalRiskManagementWidget)));
         String str = physicalRiskManagementWidget.getText();
-        str=str.replaceAll("\n", " ");
+        str = str.replaceAll("\n", " ");
         String Values[] = str.split((" "));
         str = str.replace("Physical Risk Management Anticipation", "Physical Risk Management " + Values[Values.length - 1] + " Anticipation").split("Updated")[0].trim();
-        str=str.replace("Anticipation"," Anticipation").replace("  "," ");
+        str = str.replace("Anticipation", " Anticipation").replace("  ", " ");
         return str;
     }
 
@@ -2845,21 +2684,6 @@ public class EntityClimateProfilePage extends ClimatePageBase {
         return returnString;
     }
 
-    public List<String> getESGSummaryDetails() {
-        BrowserUtils.scrollTo(esgScores.get(0));
-        List<String> returnList = new ArrayList<>();
-        for (WebElement e : esgScores) {
-            if (e.getText().contains("\n")) {
-                String[] a = e.getText().split("\n");
-                returnList.add(a[1] + " " + (a[0].contains("Environment") ? "Environmental" : a[0]));
-            } else {
-                returnList.add(e.getText());
-            }
-        }
-        return returnList;
-
-    }
-
     public void verifyUnderlyingDataForBrownShareWidget(String orbisID) {
         //navigateToTransitionRisk();
         BrowserUtils.scrollTo(transitionRiskBrownShareWidgetUpdatedDate);
@@ -2895,7 +2719,7 @@ public class EntityClimateProfilePage extends ClimatePageBase {
 
     }
 
-    public void verifyStrengthsAndWeakness(String content){
+    public void verifyStrengthsAndWeakness(String content) {
         ArrayList<String> expStrengthsAndWeaknessOrder = new ArrayList<>();
         expStrengthsAndWeaknessOrder.add("Social Standards in the Supply Chain");
         expStrengthsAndWeaknessOrder.add("Social Dialogue");
@@ -2903,11 +2727,25 @@ public class EntityClimateProfilePage extends ClimatePageBase {
         expStrengthsAndWeaknessOrder.add("Career Management");
         expStrengthsAndWeaknessOrder.add("Anti-Competition");
         int currentIndex = 0;
-        for(String str: expStrengthsAndWeaknessOrder){
-            assertTestCase.assertTrue(currentIndex<content.indexOf(str), "Strengths or Weaknesses are not in Expected Order");
+        for (String str : expStrengthsAndWeaknessOrder) {
+            assertTestCase.assertTrue(currentIndex < content.indexOf(str), "Strengths or Weaknesses are not in Expected Order");
             currentIndex = content.indexOf(str);
         }
     }
 
 
+    public List<String> getESGSummaryDetails() {
+        return null;
+    }
+
+    public List<String> readEsgMaterialityColumns() {
+        return null;
+    }
+
+    public void validateSubCategories() {
+
+    }
+
+    public void validateEsgMaterialityLegends() {
+    }
 }

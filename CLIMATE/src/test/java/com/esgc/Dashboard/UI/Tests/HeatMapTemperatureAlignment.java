@@ -27,14 +27,14 @@ public class HeatMapTemperatureAlignment extends DashboardUITestBase {
         DashboardPage dashboardPage = new DashboardPage();
 
         test.info("Navigating to Dashboard page");
-        dashboardPage.navigateToPageFromMenu("Dashboard");
+        dashboardPage.navigateToPageFromMenu("Climate Dashboard");
 
         BrowserUtils.wait(5);
         assertTestCase.assertTrue(dashboardPage.isHeatMapTempratureAlignmentAvailable(), "Verify Heat Map's Temperature Alignment is available");
 
     }
 
-    @Test(groups = {REGRESSION, UI, SMOKE})
+    @Test(groups = {REGRESSION, UI, SMOKE, ENTITLEMENTS})
     @Xray(test = 7467)
     public void VerifyHeatMapsTemperatureAlignmentIsNotAvailableWithBundle() {
         LoginPage login = new LoginPage();
@@ -43,7 +43,7 @@ public class HeatMapTemperatureAlignment extends DashboardUITestBase {
         DashboardPage dashboardPage = new DashboardPage();
 
         test.info("Navigating to Dashboard page");
-        dashboardPage.navigateToPageFromMenu("Dashboard");
+        dashboardPage.navigateToPageFromMenu("Climate Dashboard");
 
         assertTestCase.assertTrue(!dashboardPage.isHeatMapTempratureAlignmentAvailable(), "Verify Heat Map's Temperature Alignment not is available");
     }
@@ -62,7 +62,7 @@ public class HeatMapTemperatureAlignment extends DashboardUITestBase {
     public void VerifyTemperatureAlignmentRLPresentationAndInteraction () {
         DashboardPage dashboardPage = new DashboardPage();
         ArrayList<String> researchLines = new ArrayList<String>();
-        researchLines.add("Overall ESG Score");
+
         researchLines.add("Physical Risk: Operations Risk");
         researchLines.add("Physical Risk: Market Risk");
         researchLines.add("Physical Risk: Supply Chain Risk");

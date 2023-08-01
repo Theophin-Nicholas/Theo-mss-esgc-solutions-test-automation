@@ -62,6 +62,10 @@ public class DateTimeUtilities {
         return formatter.format(date1);
 
     }
+    public static Date convertStringToDate(String date, String currentDateformat) throws ParseException {
+        SimpleDateFormat formatter = new SimpleDateFormat(currentDateformat);
+        return formatter.parse(date);
+    }
     public static String getFormattedDate(String date, String inputFormat, String outputFormat) {
         Date date1 = null;
         try {
@@ -137,6 +141,10 @@ public class DateTimeUtilities {
         return LocalDate.now().format(DateTimeFormatter.ofPattern("MM"));
     }
 
+    public static String getPreviousMonthNumeric() {
+        return LocalDate.now().minusMonths(1).format(DateTimeFormatter.ofPattern("MM"));
+    }
+
     /**
      * get a date of a given date plus/minus days
      */
@@ -156,6 +164,37 @@ public class DateTimeUtilities {
         LocalDate localDate = LocalDate.parse(date, DateTimeFormatter.ofPattern(outputFormat));
         localDate = localDate.plusDays(days);
         return localDate.format(DateTimeFormatter.ofPattern(outputFormat));
+    }
+
+    public static String getMonthNumber(String month){
+        switch (month){
+            case "January":
+                return "01";
+            case "February":
+                return "02";
+            case "March":
+                return "03";
+            case "April":
+                return "04";
+            case "May":
+                return "05";
+            case "June":
+                return "06";
+            case "July":
+                return "07";
+            case "August":
+                return "08";
+            case "September":
+                return "09";
+            case "October":
+                return "10";
+            case "November":
+                return "11";
+            case "December":
+                return "12";
+            default:
+                return "Invalid month";
+        }
     }
 }
 

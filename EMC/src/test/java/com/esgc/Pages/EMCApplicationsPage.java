@@ -21,7 +21,7 @@ public class EMCApplicationsPage extends EMCBasePage{
     @FindBy (xpath = "//tbody//td[1]//input")
     public List<WebElement> checkBoxes;
 
-    @FindBy (xpath = "//tbody//th/a")////tbody//td[1]/p
+    @FindBy (xpath = "//tbody//th/a")
     public List<WebElement> applications;
 
     @FindBy (xpath = "//tbody//td[2]")
@@ -51,8 +51,6 @@ public class EMCApplicationsPage extends EMCBasePage{
     @FindBy (tagName = "input")
     public WebElement searchInput;
 
-    @FindBy (xpath = "//button[@type='submit']")
-    public WebElement searchButton;
     //Create Application Page Objects
 
     @FindBy (name = "key")
@@ -70,6 +68,20 @@ public class EMCApplicationsPage extends EMCBasePage{
     @FindBy (xpath = "//button[.='Cancel']")
     public WebElement cancelButton;
 
+    @FindBy (xpath = "//main//hr/..//button")
+    public WebElement deleteButton;
+
+    @FindBy (xpath = "//div[@role='dialog']//button[.='Delete']")
+    public WebElement deletePopupDeleteButton;
+
+    @FindBy (xpath = "//div[@role='dialog']//button[.='Cancel']")
+    public WebElement deletePopupCancelButton;
+
+    @FindBy(xpath = "//button[@title='Next page']")
+    public WebElement nextPageButton;
+
+    @FindBy(xpath = "//button[@title='Previous page']")
+    public WebElement previousPageButton;
 
 
     public List<String> getApplicationNames() {
@@ -80,16 +92,26 @@ public class EMCApplicationsPage extends EMCBasePage{
         return names;
     }
 
-    public void selectApplication(String applicationName ) {
+    public void goToApplication(String applicationName) {
         searchApplication(applicationName);
-        for (WebElement element : applications) {
-            if (element.getText().equals(applicationName)) {
-                System.out.println("Application found: " + applicationName);
-                System.out.println("Application name: " + element.getText());
-                element.click();
-                return;
+        boolean check = true;
+        while (check){
+            for (WebElement element : applications) {
+                if (element.getText().equals(applicationName)) {
+                    System.out.println("Application found: " + applicationName);
+                    System.out.println("Application name: " + element.getText());
+                    element.click();
+                    return;
+                }
+            }
+            if (nextPageButton.isEnabled()) {
+                System.out.println("Application not found in current page, going to next page");
+                nextPageButton.click();
+            } else {
+                check = false;
             }
         }
+
         System.out.println("Application not found: " + applicationName);
     }
     public void clearSearchInput() {
@@ -107,7 +129,7 @@ public class EMCApplicationsPage extends EMCBasePage{
             counter++;
         }
     }
-    public void selectApplication(int applicationIndex) {
+    public void goToApplication(int applicationIndex) {
         BrowserUtils.waitForClickablility(applications.get(applicationIndex), 5);
         applications.get(applicationIndex).click();
     }
@@ -126,27 +148,27 @@ public class EMCApplicationsPage extends EMCBasePage{
     }
 
     public boolean verifyApplication(String applicationName) {
-        clearSearchInput();
-        List<WebElement> applications = searchApplication(applicationName);
-        for (WebElement element : applications) {
-            if (element.getText().equals(applicationName)) {
-                System.out.println("Application found: " + applicationName);
-                System.out.println("Application name: " + element.getText());
-                return true;
-            }
-        }
-        return false;
+        return verifyApplication(applicationName, true);
     }
 
     public boolean verifyApplication(String applicationName, boolean isSearch) {
         if (isSearch) {
             searchApplication(applicationName);
         }
-        for (WebElement element : applications) {
-            if (element.getText().equals(applicationName)) {
-                System.out.println("Application found: " + applicationName);
-                System.out.println("Application name: " + element.getText());
-                return true;
+        boolean check = true;
+        while (check){
+            for (WebElement element : applications) {
+                if (element.getText().equals(applicationName)) {
+                    System.out.println("Application found: " + applicationName);
+                    System.out.println("Application name: " + element.getText());
+                    return true;
+                }
+            }
+            if (nextPageButton.isEnabled()) {
+                System.out.println("Application not found in current page, going to next page");
+                nextPageButton.click();
+            } else {
+                check = false;
             }
         }
         return false;
@@ -187,12 +209,45 @@ public class EMCApplicationsPage extends EMCBasePage{
         createPage.applicationUrlInput.sendKeys(applicationUrl+Keys.TAB);
         assertTestCase.assertTrue(createPage.saveButton.isEnabled(), "Save Button is enabled");
         BrowserUtils.waitForClickablility(createPage.saveButton, 10).click();
-        wait(notification, 10);
+        BrowserUtils.waitForVisibility(createPage.notification, 5);
+        assertTestCase.assertTrue(createPage.notification.isDisplayed(), "Notification is displayed");
+        System.out.println("Notification text: " + createPage.notification.getText());
+        if(notification.getText().contains("success")){
+            System.out.println("Application created successfully");
+            EMCApplicationDetailsPage detailsPage = new EMCApplicationDetailsPage();
+            detailsPage.verifyApplicationDetails();
+            detailsPage.backToApplicationsButton.click();
+        }else{
+            System.out.println("Application creation failed");
+        }
     }
 
     public void clickOnCancelButton() {
         BrowserUtils.waitForClickablility(cancelButton, 5).click();
         System.out.println("Clicked on cancel button");
+    }
+
+    public void clickOnDeleteButton() {
+        System.out.println("Clicking on delete button");
+        BrowserUtils.scrollTo(deleteButton).click();
+        BrowserUtils.waitForVisibility(deletePopupDeleteButton, 5);
+    }
+
+    public void deleteApplication(String applicationName) {
+        selectApplication(applicationName);
+        clickOnDeleteButton();
+        BrowserUtils.waitForClickablility(deletePopupDeleteButton, 5).click();
+        wait(notification, 10);
+    }
+
+    private void selectApplication(String applicationName) {
+        searchApplication(applicationName);
+        for (WebElement element : applications) {
+            if (element.getText().equals(applicationName)) {
+                checkBoxes.get(applications.indexOf(element)).click();
+                return;
+            }
+        }
     }
 }
 

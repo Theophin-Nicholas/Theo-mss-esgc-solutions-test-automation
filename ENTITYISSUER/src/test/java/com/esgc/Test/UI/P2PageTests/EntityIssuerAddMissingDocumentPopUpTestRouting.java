@@ -300,6 +300,7 @@ public class EntityIssuerAddMissingDocumentPopUpTestRouting extends EntityPageTe
         }
     }
 
+
     @Xray(test = {8087, 8088, 10250})
     @Test(groups = {REGRESSION, UI, SMOKE, ISSUER},
             dataProvider = "loginP2", dataProviderClass = IssuerDataProviderClass.class,
@@ -309,7 +310,7 @@ public class EntityIssuerAddMissingDocumentPopUpTestRouting extends EntityPageTe
         try {
             LoginPageIssuer LoginPageIssuer = new LoginPageIssuer();
             if(Driver.getDriver().getCurrentUrl().contains("login"))
-            LoginPageIssuer.loginWithParams(UserID, Password);
+                LoginPageIssuer.loginWithParams(UserID, Password);
 
             entitypage.validateLinksOpenedInNewTab(entitypage.linkSeeMethodologyGuide, "Methodology%202.0%20ESG%20Assessment");
             entitypage.validateLinksOpenedInNewTab(entitypage.linkSeeSeeControversyMethodology, "Controversy%20Risk%20Assessment%20-%20Methodology");
@@ -317,13 +318,12 @@ public class EntityIssuerAddMissingDocumentPopUpTestRouting extends EntityPageTe
             entitypage.validateLinksOpenedInNewTab(entitypage.linkSeeSeeESGMetricDefinitions, "ESGAssessmentMetrics_DefinitionsHandbook");
             entitypage.validateLinksOpenedInNewTab(entitypage.linkSeeFAQ, "FAQ_Moodys%20ESG%20Assessment");
             BrowserUtils.wait(2);
-           // entitypage.logout.click();
+            // entitypage.logout.click();
         } catch (Exception e) {
             e.printStackTrace();
             entitypage.logout.click();
         }
     }
-
     @Xray(test = {11714})
     @Test(groups = {REGRESSION, UI, SMOKE, ISSUER},
             dataProvider = "loginP2", dataProviderClass = IssuerDataProviderClass.class,

@@ -16,6 +16,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
 import org.testng.SkipException;
 
+import java.io.File;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -31,13 +32,7 @@ public class DashboardPage extends UploadPage {
     @FindBy(xpath = "//header[.//*[starts-with(text(),'View')]]")
     public WebElement stickyHeader;
 
-    @FindBy(xpath = "//div[text()='ESG score']")
-    public WebElement averageEsgScoreLabel;
-
-    @FindBy(xpath = "//div[text()='ESG score']/following-sibling::div/div")
-    public WebElement esgScoreValue;
-
-    @FindBy(xpath = "//*[@heap_menu='Dashboard']")
+    @FindBy(xpath = "//*[@heap_menu='Climate Dashboard']")
     public WebElement dashboardButton;
 
     @FindBy(xpath = "//*[@id='topbar-appbar-test-id']/div/li")
@@ -139,7 +134,7 @@ public class DashboardPage extends UploadPage {
     public List<WebElement> summaryHeaderTitles;
 
     //=========== Portfolio - View All Companies (Summary Companies) Panel Elements
-    @FindBy(xpath = "//span[starts-with(text(),'Coverage: Across')]")
+    @FindBy(xpath = "//span[starts-with(text(),'Climate Coverage: Across')]")
     public WebElement viewAllCompaniesButton;
 
     @FindBy(xpath = "//div[@id='button-button-test-id-1']/../div[starts-with(.,'Companies')]")
@@ -235,9 +230,6 @@ public class DashboardPage extends UploadPage {
     @FindBy(xpath = "//table/thead//th[text()='Overall ESG Score']")
     public WebElement OverallESGScoreColoumn;
 
-    @FindBy(xpath = "//table[./thead//th[text()='Overall ESG Score']]/tbody/tr/td[3]")
-    public List<WebElement> OverallESGScoreTabledata;
-
     @FindBy(xpath = "//table/thead//th[text()='Total Critical Controversies']")
     public WebElement TotalCriticalControversiesColoumn;
 
@@ -313,11 +305,8 @@ public class DashboardPage extends UploadPage {
     @FindBy(xpath = "//div[@class='entityList']//br/../following-sibling::div/div[2]")
     public WebElement heatMapWidgetXIndicator;
 
-    @FindBy(xpath = "(//div[@id='div-mainlayout']//table)[3]//tbody//td")
+    @FindBy(xpath = "//table//td[.//span[contains(text(),'%')]]")
     public List<WebElement> heatMapCells;
-
-    @FindBy(xpath = "//td//div[@heap_id='heatmap']/span[2]")
-    public List<WebElement> heatMapEsgScoreCells;
 
     @FindBy(xpath = "(//table[.//thead//div[text()]])[1]//*[@heap_id='heatmap']//span")
     public List<WebElement> heatMapYAxisIndicators;
@@ -364,12 +353,6 @@ public class DashboardPage extends UploadPage {
     @FindBy(xpath = " //button[@id='button-holdings']/span/div")
     public WebElement verifyPortfolioName;
 
-    @FindBy(xpath = "(//div[@heap_heatmap_id='gridcell']/span[2])[2]")
-    public WebElement overallESGCell;
-
-    @FindBy(xpath = "//p[contains(text(),'ESG performance. They measure the degree to which ')]")
-    public WebElement overallESGDescription;
-
     @FindBy(xpath = "//p[contains(text(),'We score companies for Operations Risk by aggregat')]")
     public WebElement operationRiskDescription;
 
@@ -408,6 +391,7 @@ public class DashboardPage extends UploadPage {
         }
     }
 
+
     public void navigateToDashboardPage() {
 
         Driver.getDriver().navigate().to(Environment.URL);
@@ -423,8 +407,7 @@ public class DashboardPage extends UploadPage {
     }
 
     public void clickOnMenuButton() {
-        BrowserUtils.waitForVisibility(menuButton, 25).click();
-        //BrowserUtils.waitForStaleElement(menuButton);
+        BrowserUtils.waitForVisibility(menuButton, 10).click();
     }
 
     public void clickOnPortfolioSelectionUploadButton() {
@@ -525,27 +508,6 @@ public class DashboardPage extends UploadPage {
         }
     }
 
-    public boolean verifyAverageEsgScoreWidget() {
-        try {
-            BrowserUtils.waitForVisibility(averageEsgScoreLabel, 50);
-            return averageEsgScoreLabel.isDisplayed();
-        } catch (Exception e) {
-            return false;
-        }
-    }
-
-    public boolean verifyEsgScoreValue() {
-        ArrayList<String> expectedValues = new ArrayList<>();
-        expectedValues.add("Advanced");
-        expectedValues.add("Robust");
-        expectedValues.add("Limited");
-        expectedValues.add("Weak");
-
-        String actualEsgScore = esgScoreValue.getText();
-        System.out.println("ESG Score on UI: " + actualEsgScore);
-        return expectedValues.contains(actualEsgScore);
-    }
-
     public boolean verifyPhysicalRiskWidget() {
         try {
             WebElement highestRiskValue = Driver.getDriver().findElement(By.xpath("//div[@id='Highest_Risk_Hazard_id']//span[2]"));
@@ -557,68 +519,10 @@ public class DashboardPage extends UploadPage {
         }
     }
 
-    public boolean isScoreQualityButtonAvailable() {
-        try {
-            return scoreQualityButton.isDisplayed();
-        } catch (Exception e) {
-            return false;
-        }
-    }
 
-    public boolean verifyScoreQualityToggleIsOff() {
-        String scoreQualityStyle = scoreQualityStatus.getAttribute("style");
-        return scoreQualityStyle.equals("transform: translate(0px, 9px) scale(1.2);");
-    }
 
-    public boolean verifyScoreQualityToggleIsOn() {
-        String scoreQualityStyle = scoreQualityStatus.getAttribute("style");
-        return scoreQualityStyle.equals("transform: translate(0px, 3px) scale(1.2);");
-    }
 
-    public boolean verifyScoreQualityIconWithEntitiesInPerformanceTable() {
-        int performanceTableRecordsCount = performanceTableRecords.size();
-        int recordsWithScoreQualityIcons = scoreQualityIconsPerformanceTable.size();
-        return performanceTableRecordsCount == recordsWithScoreQualityIcons;
-    }
 
-    public boolean verifyScoreQualityIconWithEntitiesInCoveragePopup() {
-        return scoreQualityIconsCoveragePopup.size() > 0;
-    }
-
-    public void verifyScoreQualityLevelsInIconInCoveragePopup() {
-        int companiesCount = rowsInCoveragePopup.size();
-
-        for (int i = 1; i <= companiesCount; i++) {
-            System.out.println("Record: " + i);
-            String xpath = "(//tr//td[contains(@id,'viewcomapnies')][1])[" + i + "]//*[local-name()='svg']/*[local-name()='rect'][@fill='#26415E']";
-            int levels = Driver.getDriver().findElements(By.xpath(xpath)).size();
-            String levelName = "";
-            String level = "";
-            if (levels == 4) {
-                level = "Score Level 1";
-                levelName = "Analyst Verified";
-            } else if (levels == 3) {
-                level = "Score Level 2";
-                levelName = "Subsidiary";
-            } else if (levels == 2) {
-                level = "Score Level 3";
-                levelName = "On-Demand";
-            } else if (levels == 1) {
-                level = "Score Level 4";
-                levelName = "Predicted Score";
-            }
-            BrowserUtils.scrollTo(Driver.getDriver().findElement(By.xpath("(//tr//td[contains(@id,'viewcomapnies')][1])[" + i + "]//*[local-name()='svg']/*[local-name()='rect']")));
-            BrowserUtils.hover(Driver.getDriver().findElement(By.xpath("(//tr//td[contains(@id,'viewcomapnies')][1])[" + i + "]//*[local-name()='svg']/*[local-name()='rect']")));
-            assertTestCase.assertTrue(Driver.getDriver().findElement(By.xpath("//p/strong[text()='" + level + "']")).isDisplayed());
-            assertTestCase.assertTrue(Driver.getDriver().findElement(By.xpath("//p[text()='" + levelName + "']")).isDisplayed());
-
-        }
-
-    }
-
-    public boolean verifyScoreQualityIconWithEntitiesUnderCompareResearchLines() {
-        return scoreQualityIconsInCompareRLs.size() > 0;
-    }
 
     public boolean verifyFacilitiesExposedWidget() {
         try {
@@ -632,40 +536,6 @@ public class DashboardPage extends UploadPage {
         }
     }
 
-    public boolean verifyEsgInfo() {
-        String portfolioId = "00000000-0000-0000-0000-000000000000";
-        DashboardQueries dashboardQueries = new DashboardQueries();
-        String latestMonthAndYearWithData = dashboardQueries.getLatestMonthAndYearWithData(portfolioId);
-        String month = latestMonthAndYearWithData.split(":")[0];
-        String year = latestMonthAndYearWithData.split(":")[1];
-        System.out.println(month + year);
-        List<Map<String, Object>> dbEsgInfo = dashboardQueries.getEsgInfo(portfolioId, year, month);
-        List<WebElement> uiRecords = Driver.getDriver().findElements(By.xpath("//table[contains(@id, 'viewcomapnies')]/tbody/tr"));
-
-        for (int i = 1; i <= uiRecords.size(); i++) {
-            String companyName = Driver.getDriver().findElement(By.xpath("(//table[contains(@id, 'viewcomapnies')]/tbody/tr)[" + i + "]/td[1]/span")).getText();
-            String esgScore = Driver.getDriver().findElement(By.xpath("(//table[contains(@id, 'viewcomapnies')]/tbody/tr)[" + i + "]/td[2]/span")).getText();
-            System.out.println("companyName = " + companyName);
-            System.out.println("esgScore = " + esgScore);
-            if (!esgScore.equals("-")) {
-                boolean match = false;
-                System.out.print("UI Info:" + companyName + "--" + esgScore);
-                for (Map<String, Object> dbRecord : dbEsgInfo) {
-                    if (dbRecord.get("COMPANY_NAME").toString().equals(companyName)) {
-                        System.out.println("-- Company Found");
-                        if (dbRecord.get("VALUE_ESG").toString().equals(esgScore)) {
-                            match = true;
-                        } else {
-                            System.out.print("DB ESG - " + dbRecord.get("VALUE_ESG").toString() + " is not matched");
-                        }
-                        break;
-                    }
-                }
-                Assert.assertTrue(match, companyName + " esg info is not found/matched in Database");
-            }
-        }
-        return true;
-    }
 
     public void selectViewMethodologies() {
         //  BrowserUtils.waitForInvisibility(btnViewMethodologies, 50);
@@ -683,7 +553,7 @@ public class DashboardPage extends UploadPage {
     }
 
     public void downloadDashboardExportFile() {
-        navigateToPageFromMenu("Dashboard");
+        navigateToPageFromMenu("Climate Dashboard");
         clickViewCompaniesAndInvestments();
         selectViewBySector();
         deleteDownloadFolder();
@@ -863,10 +733,9 @@ public class DashboardPage extends UploadPage {
     public List<String> getAvailableResearchLinesFromHeatMapResearchLineSelection() {
         return heatMapResearchLines.stream().map(WebElement::getText).collect(Collectors.toList());
     }
-
     public boolean verifyResearchLines() {
         List<String> availableResearchLines = getAvailableResearchLinesFromHeatMapResearchLineSelection();
-        List<String> expResearchLines = Arrays.asList("Overall ESG Score", "Physical Risk: Operations Risk", "Physical Risk: Market Risk", "Physical Risk: Supply Chain Risk", "Physical Risk Management", "Temperature Alignment", "Carbon Footprint", "Green Share Assessment", "Brown Share Assessment");
+        List<String> expResearchLines = Arrays.asList("Physical Risk: Operations Risk", "Physical Risk: Market Risk", "Physical Risk: Supply Chain Risk", "Physical Risk Management", "Temperature Alignment", "Carbon Footprint", "Green Share Assessment", "Brown Share Assessment");
         for (String line : availableResearchLines) {
             if (!expResearchLines.contains(line)) {
                 System.out.println("Unverified Research Line = " + line);
@@ -970,41 +839,35 @@ public class DashboardPage extends UploadPage {
                 index = 2;
                 break;
 
-            case "ESG":
-            case "ESG Assessment":
-            case "Overall ESG Score":
-                index = 3;
-                break;
-
             case "Total Critical Controversies":
-                index = 4;
+                index = 3;
                 break;
 
             case "Physical Risk Hazards":
             case "Highest Risk Hazard":
-                index = 5;
+                index = 4;
                 break;
 
             case "Facilities Exposed to High Risk/Red Flag":
-                index = 6;
+                index = 5;
                 break;
 
             case "Physical Risk Management":
-                index = 7;
+                index = 6;
                 break;
 
             case "Temperature Alignment":
-                index = 8;
+                index = 7;
                 break;
 
             case "Carbon Footprint":
             case "Carbon Footprint (tCO2eq)":
-                index = 9;
+                index = 8;
                 break;
 
             case "Brown Share":
             case "Brown Share Assessment":
-                index = 11;
+                index = 9;
                 break;
 
             case "Green Share":
@@ -1255,7 +1118,11 @@ public class DashboardPage extends UploadPage {
             element.click();
 //TODO better approach needed
             BrowserUtils.waitForVisibility(Driver.getDriver().findElement(By.xpath("//*[contains(text(),\"" + colText + "\")]")), 30);
-            Driver.getDriver().findElement(By.xpath("//*[text()='ESC']/following-sibling::* | //span[text()='X'] | //span[@class='close'] | //div[@role='dialog']/div/div[2]")).click();
+            WebElement closeButton =
+                    Driver.getDriver().findElement(
+                            By.xpath("//*[text()='ESC']/following-sibling::* | //span[text()='X'] | //span[@class='close'] | //div[@role='dialog']/div/div[2]"))
+                    ;
+            BrowserUtils.waitForClickablility(closeButton, 10);
             //""//"//span[text()='X'] | //span[@class='close'] | //div[@role='dialog']/div/div[2]")).click();
             return true;
         } catch (Exception e) {
@@ -1581,14 +1448,7 @@ public class DashboardPage extends UploadPage {
         }
     }
 
-    public boolean verifyMethodologiesHeader() {
-        try {
-            assertTestCase.assertTrue(methodologyPopup_Header.getText().equals("ESG Assessment Framework"), "Validate header text as 'ESG Assessment Framework'");
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
-    }
+
 
     public List<String> getMethodologiesSections() {
         List<String> methodologySections = new ArrayList<>();
@@ -1598,18 +1458,6 @@ public class DashboardPage extends UploadPage {
         return methodologySections;
     }
 
-    public boolean verifyMethodologiesLinks() {
-
-
-        try {
-            assertTestCase.assertTrue(methodologyPopup_Link_Methodology10.getText().equals("Read more about ESG Assessment Methodology 1.0"), "Validate link as 'Read more about ESG Assessment Methodology 1.0'");
-            assertTestCase.assertTrue(methodologyPopup_Link_Methodology20.getText().equals("Read more about ESG Assessment Methodology 2.0"), "Validate link as 'Read more about ESG Assessment Methodology 2.0'");
-            assertTestCase.assertTrue(methodologyPopup_Link_RiskAssessmentts.getText().equals("Read more about Controversy Risk Assessment Methodology"), "Validate link as 'Read more about Controversy Risk Assessment Methodology'");
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
-    }
 
     public boolean verifySelectedResearchLineForHeatMap(String researchLine) {
         for (WebElement line : heatMapResearchLines) {
@@ -1687,15 +1535,9 @@ public class DashboardPage extends UploadPage {
         BrowserUtils.scrollTo(heatMapCells.get(randomCell)).click();
     }
 
-    public void verifyOverallESGScoreCatgories() {
-        List<String> categories = Arrays.asList("Weak", "Limited", "Robust", "Advanced");
-        for (WebElement e : OverallESGScoreTabledata) {
-            if(e.getText().equals("")) continue;
-            assertTestCase.assertTrue(categories.contains(e.getText()), "Validate OverAll ESG Scores");
-        }
-    }
 
-    public void verifyOverallESGTotalControversies() {
+
+    public void verifyTotalControversies() {
         if (PerformanceChartError.size() < 1) {
             for (WebElement e : TotalCriticalControversiesTabledata) {
                 if (e.getText().equals("")) {
@@ -1728,5 +1570,191 @@ public class DashboardPage extends UploadPage {
             return false;
         }
     }
+
+    public void openCoverageDrawer(){
+        BrowserUtils.waitForVisibility(viewAllCompaniesButton, 30);
+        assertTestCase.assertTrue(viewAllCompaniesButton.isDisplayed(),
+                "User can see and click on View Companies and Investments in Portfolio link on dashboard.");
+        BrowserUtils.waitForClickablility(viewAllCompaniesButton,10).click();
+    }
+
+//    public String getSelectedFilterValue(String filterOption){
+//        String[] options = coverageLink.getText().split(", ");
+//        System.out.println("Arrays.toString() = " + Arrays.toString(options));
+//        switch (filterOption.toLowerCase()){
+//            case "regions":
+//                return options[0].replaceAll("Viewing data in ","");
+//            case "sectors":
+//                return options[1].trim();
+//            case "date":
+//                return options[2].replaceAll("at the end of ","");
+//        }
+//        System.out.println("Filter option not found");
+//        return "";
+//    }
+
+    public ExcelUtil getExcelData(String excelName, String sheetName) {
+            File dir = new File(BrowserUtils.downloadPath());
+            File[] dir_contents = dir.listFiles();
+            assert dir_contents != null;
+            File excelFile = Arrays.stream(dir_contents).filter(e -> (e.getName().contains(excelName))).findAny().get();
+            //System.out.println("excelFile = " + excelFile.getAbsolutePath());
+            if (!excelFile.exists()) {
+                System.out.println(excelName + " file does not exist");
+                return null;
+            }
+            //System.out.println(excelName + " file found");
+            //System.out.println("excelFile = " + excelFile.getAbsolutePath());
+            ExcelUtil excelUtil = new ExcelUtil(excelFile.getAbsolutePath(), sheetName);
+            return excelUtil;
+    }
+    @FindBy(xpath = "//*[@id=\"mini-0\"]/div[2]/span")
+    public WebElement searchResultLineOne;
+    public void validateEntitiesWithOnlyEsgDataDontShowInSearch(String entity) {
+
+        String expectedSearchResult = BrowserUtils.waitForVisibility(searchResultLineOne, 20).getText();
+        assertTestCase.assertTrue(!entity.equals(searchResultLineOne.getText()), "Validating that " + entity + " which is an Entity with ESG data only is not returned or suggested in search option : Status Done");
+
+    }
+
+    @FindBy(xpath = "//li[contains(@class,'MuiButtonBase')]")
+    public List<WebElement> menuItems;
+    public void validateCalculationsFromGlobalMenuIsHidden() {
+        System.out.println("------------Verifying that Calculations is removed from global menu-------------------");
+        for (WebElement e : menuItems) {
+            String menuItemText = e.getText();
+            System.out.println("verify that " + menuItemText + " is not equal to Calculations");
+            assertTestCase.assertTrue(!menuItemText.equals("Calculations"), "Verify the removal of 'Calculations' link or tab from the global menu : Status Done");
+        }
+    }
+
+
+    @FindBy(xpath = "//*[@heap_menu='Climate Portfolio Analysis']")
+    public WebElement portfolioAnalysisTab;
+
+    @FindBy(xpath = "//*[@heap_menu='ESG Reporting Portal']")
+    public WebElement reportingPortalTab;
+
+    @FindBy(xpath = "//*[@id='topbar-appbar-test-id']/div/li")
+    public WebElement pageHeader;
+
+    public void clickOnClimateDashboardMenuOption() {
+
+        BrowserUtils.waitForClickablility(dashboardButton, 15);
+        dashboardButton.click();
+    }
+
+    public void clickOnPortfolioAnalysisMenuOption() {
+        BrowserUtils.waitForClickablility(portfolioAnalysisTab, 15);
+        portfolioAnalysisTab.click();
+    }
+
+    public void clickOnReportingPortalMenuOption() {
+        BrowserUtils.waitForClickablility(reportingPortalTab, 15);
+        reportingPortalTab.click();
+    }
+
+    public void validateNewReportingMenuName() {
+        System.out.println("--------------Verifying the new naming for reporting menu option----------------");
+        String reportingPortalTitle = reportingPortalTab.getText();
+        System.out.println("the actual reporting portal title is : " + reportingPortalTitle);
+        assertTestCase.assertEquals(reportingPortalTitle, "ESG Reporting Portal", "Status Done : Verifying that reporting portal is ESG Reporting Portal");
+
+    }
+    public void validateNewDashboardMenuName(){
+        System.out.println("--------------Verifying the new naming for Dashboard menu option----------------");
+
+        String dashboardTitle = BrowserUtils.waitForClickablility(dashboardButton, 15).getText();
+        System.out.println("the actual dashboard title is : " + dashboardTitle);
+        assertTestCase.assertEquals(dashboardTitle, "Climate Dashboard", "Status Done : Verifying that Dashboard name is Climate Dashboard ");
+
+
+    }
+    public void validateNewPortfolioAnalysisMenuName(){
+        System.out.println("--------------Verifying the new naming for Portfolio Analysis menu option ----------------");
+
+        String portfolioAnalysisTitle = portfolioAnalysisTab.getText();
+        System.out.println("the actual portfolio analysis title is : " + portfolioAnalysisTitle);
+        assertTestCase.assertEquals(portfolioAnalysisTitle, "Climate Portfolio Analysis", "Status Done : Verifying that portfolio analysis is Climate Portfolio Analysis");
+
+    }
+
+    public void validateClimateDashboardPageHeaders() {
+        System.out.println("--------------Verifying the Climate Dashboard page headers----------------");
+        BrowserUtils.waitForClickablility(dashboardButton, 10);
+
+        dashboardButton.click();
+        String actualDashboardHeader = pageHeader.getText();
+        String expectedDashboardHeader = "Climate Dashboard";
+        assertTestCase.assertEquals(actualDashboardHeader, expectedDashboardHeader, "Verifying dashboard header is equal to Climate Dashboard : Status Done");
+    }
+
+    public void validateClimatePortfolioAnalysisPageHeaders() {
+        System.out.println("--------------Validating the climate portfolio analysis page headers----------------");
+        String actualPortfolioTabHeader = pageHeader.getText();
+        String expectedPortfolioTabHeader = "Climate Portfolio Analysis";
+        assertTestCase.assertEquals(actualPortfolioTabHeader, expectedPortfolioTabHeader, "Verifying portfolio Analysis header is equal to Climate Portfolio Analysis : Status Done");
+
+    }
+
+    public void validateReportingPortalPageHeaders() {
+        System.out.println("--------------Validating Reporting portal page headers----------------");
+        BrowserUtils.waitForClickablility(pageHeader, 20).click();
+        String actualReportingTabHeader = pageHeader.getText();
+        String expectedReportingTabHeader = "ESG Reporting Portal";
+        assertTestCase.assertEquals(actualReportingTabHeader, expectedReportingTabHeader, "Verifying ESG Reporting Portal header is equal to ESG Reporting Portal : Status Done");
+
+    }
+
+    @FindBy(xpath = "//span[text()='Portfolio Calculations']")
+    public  WebElement PortfolioCalculationHeader;
+    @FindBy(xpath = "//span[text()='Weighted Average Calculations']")
+    public  WebElement weightedAverageCalculations;
+
+    @FindBy(xpath = "//li/span[text()='Carbon Footprint']/../following-sibling::li/span")
+    public  WebElement CarbonFootPrintSection;
+
+    @FindBy(xpath = "//li/span[text()='Carbon Footprint']/../../following-sibling::li")
+    public  List<WebElement> portfilioCalculationsOptions;
+
+    @FindBy(xpath = "//div[@class='MuiAlert-message']")
+    public WebElement alertMessage ;
+
+    public void verifyCalculationDrawer(){
+        assertTestCase.assertTrue(BrowserUtils.waitForVisibility(PortfolioCalculationHeader,60).isDisplayed(),"Validate PortfolioCalculationHeader is displayed");
+        assertTestCase.assertTrue(weightedAverageCalculations.isDisplayed(),"Validate weightedAverageCalculations is displayed");
+        assertTestCase.assertTrue(CarbonFootPrintSection.getText().equals("In alignment with the Partnership for Carbon " +
+                "Accounting Financials (PCAF) recommends we offer the below options to calculation portfolio aggregations " +
+                "for Carbon Footprint."), "Validating Carbon Footprint Section");
+
+        List<String> expectedOptions= Arrays.asList(new String[]{"Investment Value","Enterprise Value Including Cash","Market Capitalization","Total Assets"}) ;
+        for(int i =0;i<portfilioCalculationsOptions.size();i++){
+            assertTestCase.assertEquals(expectedOptions.get(i),(portfilioCalculationsOptions.get(i).getText()),"Validating " + portfilioCalculationsOptions.get(i).getText() + " menu Options");
+        }
+
+
+    }
+    public String getSelectedOption (){
+        String returnValue = "";
+        BrowserUtils.wait(5);
+        for(int i =0;i<portfilioCalculationsOptions.size();i++){
+            if(portfilioCalculationsOptions.get(i).findElement(By.xpath("div/fieldset/label/span/span/input")).getAttribute("checked")!=null){
+                returnValue = portfilioCalculationsOptions.get(i).getText();
+                break;
+            }
+        }
+        return returnValue;
+    }
+
+    public void selectOtherOptionAndValidateSaveMessage(String currentSelectedValue){
+        for(int i =0;i<portfilioCalculationsOptions.size();i++){
+            if (!portfilioCalculationsOptions.get(i).getText().equals(currentSelectedValue)){
+                portfilioCalculationsOptions.get(i).findElement(By.xpath("div/fieldset/label/span/span/input")).click();
+                assertTestCase.assertTrue(BrowserUtils.waitForVisibility(alertMessage,20).getText().equals("Changes Saved"),"Validate success message");
+                break;
+            }
+        }
+    }
+
 
 }
