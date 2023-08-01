@@ -243,6 +243,8 @@ public class ExcelUtil {
             Cell cell = workSheet.getRow(i).getCell(columnIndex);
             if (cell == null || cell.getCellType() == CellType.BLANK)
                 data.add(nullValue);
+            else if (cell.getCellType() == CellType.NUMERIC)
+                data.add(String.valueOf(cell.getNumericCellValue()));
             else
                 data.add(cell.getStringCellValue());
         }

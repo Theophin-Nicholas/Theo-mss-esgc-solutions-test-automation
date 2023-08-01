@@ -22,13 +22,12 @@ public class EUTaxonomyTests extends UITestBase {
     @Xray(test = {11532})
     public void verifyEUTaxonomyPageTest() {
         EUTaxonomyPage euTaxonomyPage = new EUTaxonomyPage();
-        euTaxonomyPage.navigateToPageFromMenu("ESG Reporting Portal");
-        TestBase.test.info("Navigated to Regulatory Reporting Page");
+        euTaxonomyPage.navigateToReportingService("EU");
 
         assertTestCase.assertTrue(euTaxonomyPage.isEUTaxonomyOptionIsAvailable(),
                 "EU Taxonomy option verification", 11532, 11533);
 
-        euTaxonomyPage.clickOnEUTaxonomyOption();
+        //euTaxonomyPage.clickOnEUTaxonomyOption();
         euTaxonomyPage.verifyEUTaxonomyHeaders();
         euTaxonomyPage.verifyEUTaxonomyTableContent();
         euTaxonomyPage.verifyDefaultReportingOptionsForEUTaxonomy();
@@ -54,21 +53,25 @@ public class EUTaxonomyTests extends UITestBase {
         TestBase.test.info("Navigated to Regulatory Reporting Page");
 
         euTaxonomyPage.clickOnEUTaxonomyOption();
-
+        euTaxonomyPage.waitForPortfolioTableToLoad();
         boolean isSamplePortfolioInPortfolioNames = euTaxonomyPage.getPortfolioList().contains("Sample Portfolio");
 
         assertTestCase.assertFalse(isSamplePortfolioInPortfolioNames, "Sample Portfolio should not be in the list", 11562);
 
-        euTaxonomyPage.selectPortfolioOptionByIndex(1);
-        assertTestCase.assertEquals(euTaxonomyPage.getCreateReportsButtonText(), "Create 1 Report", "Create Reports button is verified for 1 portfolio selected", 11561);
-        euTaxonomyPage.selectPortfolioOptionByIndex(2);
-        assertTestCase.assertEquals(euTaxonomyPage.getCreateReportsButtonText(), "Create 2 Reports", "Create Reports button is verified for 2 portfolio selected", 11561);
-        euTaxonomyPage.selectPortfolioOptionByIndex(3);
-        assertTestCase.assertEquals(euTaxonomyPage.getCreateReportsButtonText(), "Create 3 Reports", "Create Reports button is verified for 3 portfolio selected", 11561);
-        euTaxonomyPage.selectPortfolioOptionByIndex(4);
-        assertTestCase.assertEquals(euTaxonomyPage.getCreateReportsButtonText(), "Create 4 Reports", "Create Reports button is verified for 4 portfolio selected", 11561);
-
+        euTaxonomyPage.selectAllPortfolioOptions();
         List<String> selectedPortfoliosNames = euTaxonomyPage.getSelectedPortfolioOptions();
+        euTaxonomyPage.deselectAllPortfolioOptions();
+        int index = 1;
+        for (String portfolioName : selectedPortfoliosNames) {
+            euTaxonomyPage.selectPortfolio( portfolioName);
+            if(index == 1)
+                assertTestCase.assertEquals(euTaxonomyPage.getCreateReportsButtonText(), "Create "+index+" Report", "Create Reports button is verified for 1 portfolio selected", 11561);
+            else
+                assertTestCase.assertEquals(euTaxonomyPage.getCreateReportsButtonText(), "Create "+index+" Reports", "Create Reports button is verified for 2 portfolio selected", 11561);
+            index++;
+        }
+
+        //List<String> selectedPortfoliosNames = euTaxonomyPage.getSelectedPortfolioOptions();
 
         double random1 = randomBetween(100, 1000) / 10d;
         double random2 = randomBetween(100, 1000) / 10d;
@@ -86,7 +89,7 @@ public class EUTaxonomyTests extends UITestBase {
         Driver.closeBrowserTab();
         BrowserUtils.switchWindow(currentWindow);
 
-        euTaxonomyPage.navigateToPageFromMenu("Dashboard");
+        euTaxonomyPage.navigateToPageFromMenu("Climate Dashboard");
         euTaxonomyPage.navigateToPageFromMenu("ESG Reporting Portal");
         TestBase.test.info("User goes back to EU taxonomy");
 

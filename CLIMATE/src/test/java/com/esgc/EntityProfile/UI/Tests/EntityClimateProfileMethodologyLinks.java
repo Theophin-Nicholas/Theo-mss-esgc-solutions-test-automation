@@ -52,7 +52,7 @@ public class EntityClimateProfileMethodologyLinks extends UITestBase {
 
         LoginPage login = new LoginPage();
 
-        login.entitlementsLogin(EntitlementsBundles.USER_WITH_EXPORT_ENTITLEMENT);
+        login.entitlementsLogin(EntitlementsBundles.USER_WITH_CONTROVERSIES_ENTITLEMENT);
         researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
         BrowserUtils.wait(5);
         test.info("Navigated to Portfolio Analysis page");

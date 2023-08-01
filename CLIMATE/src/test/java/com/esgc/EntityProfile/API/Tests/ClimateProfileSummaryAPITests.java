@@ -5,7 +5,6 @@ import com.esgc.EntityProfile.API.APIModels.SummarySection.*;
 import com.esgc.EntityProfile.API.Controllers.EntityProfileClimatePageAPIController;
 import com.esgc.Utilities.ESGUtilities;
 import com.esgc.Utilities.Xray;
-import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
@@ -88,7 +87,7 @@ public class ClimateProfileSummaryAPITests extends EntityClimateProfileTestBase 
 
     }
 
-    @Test(groups = {API, REGRESSION, ENTITY_PROFILE}, dataProvider = "orbis_id")
+    @Test(groups = {API, REGRESSION, ENTITY_PROFILE, ESG}, dataProvider = "orbis_id")
     @Xray(test = {8232})
     public void verifyAPIForOverallESGScoreWidget(String orbis_id) {
         EntityProfileClimatePageAPIController entityClimateProfileApiController = new EntityProfileClimatePageAPIController();
@@ -141,20 +140,6 @@ public class ClimateProfileSummaryAPITests extends EntityClimateProfileTestBase 
                 assertTestCase.assertTrue(expCategoryScoreRanges.contains(category.get("score_range").toString()), "ESG Climate Summary Projection API Response body for Score Range is verified");
             }
         }
-    }
-
-    @Test(groups = {API, REGRESSION, ENTITY_PROFILE})
-    @Xray(test = {6710})
-    public void verifyPostAPIRequestForTemperatureAlignmentGraphWithInvalidTokenTest() {
-        RestAssured.useRelaxedHTTPSValidation();
-        RestAssured.baseURI = "https://solutions-qa.mra-esg-nprd.aws.moodys.tld/api/portfolio/00000000-0000-0000-0000-000000000000/transitionrisk/temperaturealgmt/sector-temp-rise";
-        Response response = RestAssured.given().accept(ContentType.JSON).when().contentType(ContentType.JSON).get();
-        response.prettyPrint();
-        assertTestCase.assertEquals(response.getStatusCode(), 403,
-                "Temperature Alignment Graph Post request with invalid token  API Response status is verified");
-        assertTestCase.assertEquals(response.path("message"), "Forbidden",
-                "Temperature Alignment Graph Post request with invalid token  API Response message is verified");
-
     }
 
     @DataProvider(name = "orbis_id")

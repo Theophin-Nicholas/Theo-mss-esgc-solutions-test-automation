@@ -45,7 +45,7 @@ public class OnDemandFilterAPITest extends CommonTestBase {
         OnDemandFilterAPIController onDemandcontroller = new OnDemandFilterAPIController();
         System.clearProperty("token");
         String portfolioId = onDemandcontroller.getPortfolioId("500 predicted portfolio");
-        Response response = onDemandcontroller.getOnDemandsStatus(portfolioId);
+        Response response = onDemandcontroller.getOnDemandsStatus(portfolioId).prettyPeek();
         response.then().log().all();
         response.then().assertThat()
                 .statusCode(200)

@@ -32,7 +32,7 @@ public class PerformanceChart extends DashboardUITestBase {
         test.info("Check if Performance Charts are Displayed");
 
         BrowserUtils.scrollTo(dashboardPage.performanceChart);
-        List<String> expectedColumnNames = Arrays.asList("Company", "% Investment", "Total Critical Controversies",
+        List<String> expectedColumnNames = Arrays.asList("Company", "% Investment", "Total Critical ESG Incidents",
                 "Highest Risk Hazard", "Facilities Exposed to High Risk/Red Flag",
                 "Physical Risk Management", "Temperature Alignment",
                 "Carbon Footprint (tCO2eq)", "Green Share Assessment", "Brown Share Assessment");
@@ -40,7 +40,7 @@ public class PerformanceChart extends DashboardUITestBase {
         if (Environment.environment.equalsIgnoreCase("uat"))
 
         dashboardPage.clickAndSelectAPerformanceChart("Leaders");
-
+        dashboardPage.waitForDataLoadCompletion();
         List<String> actualColumnNames = dashboardPage.getPerformanceChartColumnNames();
         int sizeOfTable = dashboardPage.getPerformanceChartRowCount();
         double actualTotalInvestment = PortfolioUtilities.round(dashboardPage.calculateTotalInvestmentFromPerformanceChart(), 1);
@@ -55,7 +55,7 @@ public class PerformanceChart extends DashboardUITestBase {
         assertTestCase.assertEquals(actualTotalInvestment, expectedTotalInvestment, "Total Investments are matching", 2066);
 
         dashboardPage.clickAndSelectAPerformanceChart("Laggards");
-
+        dashboardPage.waitForDataLoadCompletion();
         actualColumnNames = dashboardPage.getPerformanceChartColumnNames();
         sizeOfTable = dashboardPage.getPerformanceChartRowCount();
         actualTotalInvestment = PortfolioUtilities.round(dashboardPage.calculateTotalInvestmentFromPerformanceChart(), 1);
@@ -67,7 +67,7 @@ public class PerformanceChart extends DashboardUITestBase {
         assertTestCase.assertEquals(actualTotalInvestment, expectedTotalInvestment, "Total Investments are matching", 2066);
 
         dashboardPage.clickAndSelectAPerformanceChart("Largest Holdings");
-
+        dashboardPage.waitForDataLoadCompletion();
         actualColumnNames = dashboardPage.getPerformanceChartColumnNames();
         sizeOfTable = dashboardPage.getPerformanceChartRowCount();
         actualTotalInvestment = PortfolioUtilities.round(dashboardPage.calculateTotalInvestmentFromPerformanceChart(), 1);
@@ -497,7 +497,7 @@ public class PerformanceChart extends DashboardUITestBase {
 
     }
 
-    @Test(groups = {REGRESSION, UI, SMOKE})
+    @Test(groups = {REGRESSION, UI})
     @Xray(test = {8691})
     public void validateEsgScoreIsNotDisplayedInPerformanceChart(){
         DashboardPage dashboardPage = new DashboardPage();

@@ -141,6 +141,10 @@ public class DateTimeUtilities {
         return LocalDate.now().format(DateTimeFormatter.ofPattern("MM"));
     }
 
+    public static String getPreviousMonthNumeric() {
+        return LocalDate.now().minusMonths(1).format(DateTimeFormatter.ofPattern("MM"));
+    }
+
     /**
      * get a date of a given date plus/minus days
      */

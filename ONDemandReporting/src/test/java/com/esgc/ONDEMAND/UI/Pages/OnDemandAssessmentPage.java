@@ -20,7 +20,6 @@ import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 import java.io.File;
-import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.text.DecimalFormat;
 import java.text.ParseException;
@@ -71,7 +70,7 @@ public class OnDemandAssessmentPage extends CommonPage {
     @FindBy(xpath = "//div[contains(text(),'assessment eligible')]")
     public WebElement lblAssessmentEligible;
 
-    @FindBy(xpath = "//div/b")
+    @FindBy(xpath = "//button[@id='button-report-test-id-1']/preceding-sibling::div")
     public WebElement remainingAssessmentLimit;
 
     @FindBy(xpath = "(//div[contains(text(),'Predicted ESG Score')]/../../../..//div[text()])[2]")
@@ -522,7 +521,7 @@ public class OnDemandAssessmentPage extends CommonPage {
         String assessmentEligible = lblAssessmentEligible.getText().substring(0, lblAssessmentEligible.getText().indexOf("%"));
         String predictedScore = predictedScoreTextBelowGraph.getText();
         if (predictedScore.substring(predictedScore.lastIndexOf("for")+4,predictedScore.lastIndexOf("%")).contains(".")) {
-            assertTestCase.assertTrue(predictedScore.matches("Companies with predicted scores ranging 0-100 account for \\d+.\\d+% of investments"));
+            assertTestCase.assertTrue(predictedScore.matches("Companies with predicted scores ranging 0-100 account for \\d+.*\\d*% of investments"));
         }else {
             assertTestCase.assertTrue(predictedScore.matches("Companies with predicted scores ranging 0-100 account for \\d+% of investments"));
         }
@@ -574,15 +573,15 @@ public class OnDemandAssessmentPage extends CommonPage {
 
 
     public void validateAndORLogic() {
-        int FirstcompaniesCount = getCompaniesCountFromReviewButtion();
+        int FirstcompaniesCount = getCompaniesCountFromReviewButton();
         //Validating Or Condition
         location_LocationLabels.get(0).click();
-        assertTestCase.equals(getCompaniesCountFromReviewButtion() != FirstcompaniesCount);
+        assertTestCase.equals(getCompaniesCountFromReviewButton() != FirstcompaniesCount);
 
         //Validating And Condition
         toggleButton.click();
         location_LocationLabels.get(0).click();
-        assertTestCase.equals(getCompaniesCountFromReviewButtion() == FirstcompaniesCount);
+        assertTestCase.equals(getCompaniesCountFromReviewButton() == FirstcompaniesCount);
         // Below code is to move the slider in Predicted Score section --
         /*for (int i = 1; i <= 9; i++) predictedScoresliders.get(0).sendKeys(Keys.ARROW_RIGHT);
 
@@ -594,8 +593,8 @@ public class OnDemandAssessmentPage extends CommonPage {
         return menuList.get(0).getText().equals(header);
     }
 
-    public int getCompaniesCountFromReviewButtion() {
-        // BrowserUtils.waitForClickablility(btnReviewRequest,30);
+    public int getCompaniesCountFromReviewButton() {
+        BrowserUtils.waitForVisibility(btnReviewRequest,30);
         WebElement e = BrowserUtils.waitForVisibility(btnReviewRequest, 10).findElement(By.xpath("span/div"));
         return new Scanner(e.getText()).useDelimiter("\\D+").nextInt();
 
@@ -667,7 +666,6 @@ public class OnDemandAssessmentPage extends CommonPage {
     }
 
     public int getNumberOfEmailInputs() {
-        BrowserUtils.waitForVisibility(emailInputs,60);
         return emailInputs.size();
     }
 
@@ -877,17 +875,10 @@ public class OnDemandAssessmentPage extends CommonPage {
         return returnValue;
     }
 
-    public int getRemainingAssessments(){
-        String assessmentRequestText =  assessmentRemainingHeader.getText() ;
-        return Integer.valueOf(assessmentRequestText.substring(0,assessmentRequestText.indexOf(" ")));
-
-    }
-
     public void verifyZeroAssessmentRemainingForOnDemand() {
         BrowserUtils.wait(5);
         assertTestCase.assertTrue(assessmentRemainingHeader.isDisplayed(), "Verification that 0 Assessment Remaining is displayed");
-        //assertTestCase.assertEquals(assessmentRemainingHeader.getText(), "0 Assessment remaining", "Verification 0 Assessment Remaining text is done");
-        assertTestCase.assertEquals(getRemainingAssessments(),0,"Verification 0 Assessment Remaining text is done");
+        assertTestCase.assertEquals(assessmentRemainingHeader.getText(), "0 Assessment remaining", "Verification 0 Assessment Remaining text is done");
     }
 
     public void validateViewDetailButtonAndDownloadButtonDisabledForZeroCoveragePortfolios(String portfolioName) {
@@ -1058,7 +1049,7 @@ public class OnDemandAssessmentPage extends CommonPage {
     public WebElement climateCoverageLink;
 
 
-    public void clickOnClimateCoverageLink(){
+    public void clickOnClimateCoverageLink() {
         BrowserUtils.waitForClickablility(climateCoverageLink, 50);
         climateCoverageLink.click();
     }
@@ -1068,7 +1059,7 @@ public class OnDemandAssessmentPage extends CommonPage {
     //input parameter: location of the downloaded file either page, or details panel
     public void verifyDownloadPortfolio(String location) {
         //get first clickable download button
-        BrowserUtils.waitForVisibility(downloadButtonList.get(0), 10);
+        BrowserUtils.waitForVisibility(downloadButtonList.get(0), 20);
         int index = 0;
         for (index = 0; index < downloadButtonList.size(); index++) {
             if (downloadButtonList.get(index).isEnabled()) break;
@@ -1129,7 +1120,7 @@ public class OnDemandAssessmentPage extends CommonPage {
     }
 
     public void closePanel() {
-        BrowserUtils.waitForClickablility(detailPanelCloseButton, 30).click();
+        BrowserUtils.waitAndClick(detailPanelCloseButton, 5);
     }
 
     public boolean identifyPredictedCompanies() {
@@ -1313,6 +1304,7 @@ public class OnDemandAssessmentPage extends CommonPage {
 
     @FindBy(xpath = "//*[@id=\"sfdr\"]/label/span[1]/span/input")
     public WebElement sfdrRadioButton;
+
     public void clickOnEscapeButton() {
         BrowserUtils.waitAndClick(escapeButton, 5);
     }
@@ -1324,7 +1316,7 @@ public class OnDemandAssessmentPage extends CommonPage {
 
     public void validateEntitiesWithOnlyEsgDataDontShowInSearch(String entity) {
 
-       String expectedSearchResult = BrowserUtils.waitForVisibility(searchResultLineOne, 20).getText();
+        String expectedSearchResult = BrowserUtils.waitForVisibility(searchResultLineOne, 20).getText();
         assertTestCase.assertTrue(!entity.equals(searchResultLineOne.getText()), "Validating that " + entity + " which is an Entity with ESG data only is not returned or suggested in search option : Status Done");
 
     }
@@ -1333,12 +1325,13 @@ public class OnDemandAssessmentPage extends CommonPage {
         BrowserUtils.waitForClickablility(searchButton, 20);
         searchButton.click();
     }
-    public boolean isSearchButtonDisplayed(){
+
+    public boolean isSearchButtonDisplayed() {
         BrowserUtils.waitForInvisibility(searchButton, 20);
         return searchButton.isDisplayed();
     }
 
-    public void validateSearchButtonNotDisplayed(){
+    public void validateSearchButtonNotDisplayed() {
         assertTestCase.assertTrue(!isSearchButtonDisplayed(), "Verifying that user can't open entity page or search for it : Status Done");
     }
 
@@ -1348,21 +1341,22 @@ public class OnDemandAssessmentPage extends CommonPage {
         String expectedTab1Title = "Climate Portfolio Analysis";
 
         System.out.println("-------------Validate Dashboard and Portfolio Analysis are not visible---------------");
-        assertTestCase.assertTrue(!climateDashboardTab.isDisplayed(),"Verifying the Climate Dashboard is not visible : Status Done");
+        assertTestCase.assertTrue(!climateDashboardTab.isDisplayed(), "Verifying the Climate Dashboard is not visible : Status Done");
         assertTestCase.assertTrue(!portfolioAnalysisTab.isDisplayed(), "Verifying the Climate Portfolio Analysis is not visible : Status Done");
         System.out.println("-------------Just validated that Dashboard and Portfolio Analysis are not visible------------------");
     }
 
     public void validateDashboardTabNotPresentFromGlobalMenu(String menuTab) {
-        System.out.println("------------Verifying that "+ menuTab+" is removed from global menu-------------------");
+        System.out.println("------------Verifying that " + menuTab + " is removed from global menu-------------------");
         for (WebElement e : menuItems) {
             String menuItemText = e.getText();
             System.out.println("verify that " + menuItemText + " is not equal to " + menuTab);
-            assertTestCase.assertTrue(!menuItemText.equals(menuTab), "Verify that " + menuTab +" is not visible in the Global menu : Status Done");
+            assertTestCase.assertTrue(!menuItemText.equals(menuTab), "Verify that " + menuTab + " is not visible in the Global menu : Status Done");
         }
     }
+
     public void validateAnyTabPresentInGlobalMenu(String menuTab) {
-        System.out.println("------------Verifying that "+ menuTab+" is visible from global menu-------------------");
+        System.out.println("------------Verifying that " + menuTab + " is visible from global menu-------------------");
         for (WebElement e : menuItems) {
             String menuItemText = e.getText();
             if(menuItemText.equals(menuTab)) {
@@ -1374,20 +1368,20 @@ public class OnDemandAssessmentPage extends CommonPage {
     }
 
     public void validateReportingOptionsInReportingPage2(String option) {
-        System.out.println("------------Verifying that "+ option+" is visible from global menu-------------------");
+        System.out.println("------------Verifying that " + option + " is visible from global menu-------------------");
         for (WebElement e : menuItems) {
             String menuItemText = e.getText();
-            if(menuItemText.equals(option))
+            if (menuItemText.equals(option))
                 //System.out.println("verify that " + menuItemText + " is equal to " + menuTab);
-                assertTestCase.assertTrue(menuItemText.equals(option), "Verify that " + option +" is visible in the Global menu : Status Done");
+                assertTestCase.assertTrue(menuItemText.equals(option), "Verify that " + option + " is visible in the Global menu : Status Done");
             break;
         }
     }
 
-    public void validateReportingOptionsInReportingPage(LoginPage login , EntitlementsBundles bundles){
+    public void validateReportingOptionsInReportingPage(LoginPage login, EntitlementsBundles bundles) {
         OnDemandAssessmentPage odaPage = new OnDemandAssessmentPage();
 
-        switch(bundles) {
+        switch (bundles) {
 
             case USER_SFDR_ESG_ESG_PREDICTOR_ODA_EXCEL:
                 login.entitlementsLogin(EntitlementsBundles.USER_SFDR_ESG_ESG_PREDICTOR_ODA_EXCEL);

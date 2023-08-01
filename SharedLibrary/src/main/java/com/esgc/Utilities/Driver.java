@@ -188,7 +188,7 @@ public class Driver {
 
                     prefsEdge.put("download.default_directory", BrowserUtils.downloadPath()); //path to dir
                     edgeOptions.setExperimentalOption("prefs", prefsEdge);
-
+                    edgeOptions.addArguments("--remote-allow-origins=*");
                     edgeOptions.addArguments("--start-maximized");
                     edgeOptions.addArguments("--disable-notifications");
                     driverPool.set(new EdgeDriver(edgeOptions));

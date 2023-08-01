@@ -126,6 +126,8 @@ public class CustomAssertion extends SoftAssert {
      */
     public void assertEquals(String actual, String expected, String comment, Integer... ticketNumbers) {
         System.out.println(comment);
+        System.out.printf("Expected:%5s%n", expected);
+        System.out.printf("Actual:%7s%n", actual);
         testCaseNumber = Arrays.asList(ticketNumbers);
         message = comment;
         super.assertEquals(actual, expected, message);
@@ -139,6 +141,8 @@ public class CustomAssertion extends SoftAssert {
      */
     public void assertEquals(String actual, String expected, String comment) {
         System.out.println(comment);
+        System.out.printf("Expected:%5s%n", expected);
+        System.out.printf("Actual:%7s%n", actual);
         message = comment;
         super.assertEquals(actual, expected, message);
     }
@@ -152,6 +156,8 @@ public class CustomAssertion extends SoftAssert {
      */
     public void assertEquals(Integer actual, Integer expected, String comment, Integer... ticketNumbers) {
         System.out.println(comment);
+        System.out.printf("Expected:%5s%n", expected);
+        System.out.printf("Actual:%7s%n", actual);
         testCaseNumber = Arrays.asList(ticketNumbers);
         message = comment;
         super.assertEquals(actual, expected, message);
@@ -165,18 +171,24 @@ public class CustomAssertion extends SoftAssert {
      */
     public void assertEquals(Integer actual, Integer expected, String comment) {
         System.out.println(comment);
+        System.out.printf("Expected:%5s%n", expected);
+        System.out.printf("Actual:%7s%n", actual);
         message = comment;
         super.assertEquals(actual, expected, message);
     }
 
     public void assertEquals(Double actual, Double expected, String comment) {
         System.out.println(comment);
+        System.out.printf("Expected:%5s%n", expected);
+        System.out.printf("Actual:%7s%n", actual);
         message = comment;
         super.assertEquals(actual, expected, message);
     }
 
     public void assertEquals(Double actual, Double expected, String comment, Integer... ticketNumbers) {
         System.out.println(comment);
+        System.out.printf("Expected:%5s%n", expected);
+        System.out.printf("Actual:%7s%n", actual);
         testCaseNumber = Arrays.asList(ticketNumbers);
         message = comment;
         super.assertEquals(actual, expected, message);
@@ -192,6 +204,8 @@ public class CustomAssertion extends SoftAssert {
      */
     public void assertEquals(List<String> actual, List<String> expected, String comment, Integer... ticketNumbers) {
         System.out.println(comment);
+        System.out.printf("Expected:%5s%n", expected);
+        System.out.printf("Actual:%7s%n", actual);
         testCaseNumber = Arrays.asList(ticketNumbers);
         message = comment;
         super.assertEquals(actual, expected, message);
@@ -205,6 +219,8 @@ public class CustomAssertion extends SoftAssert {
      */
     public void assertEquals(List<String> actual, List<String> expected, String comment) {
         System.out.println(comment);
+        System.out.printf("Expected:%5s%n", expected);
+        System.out.printf("Actual:%7s%n", actual);
         message = comment;
         super.assertEquals(actual, expected, message);
     }

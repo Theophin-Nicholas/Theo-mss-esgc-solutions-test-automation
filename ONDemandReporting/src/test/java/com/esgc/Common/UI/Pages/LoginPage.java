@@ -211,7 +211,6 @@ public class LoginPage extends PageBase {
         } catch (Exception e) {
             System.out.println("No need to enter username");
         }
-
     }
 
     public void clickOnNextButton() {
@@ -249,6 +248,7 @@ public class LoginPage extends PageBase {
 
     public void entitlementsLogin(EntitlementsBundles bundles) {
         switch (bundles) {
+            case ALL:
             case PHYSICAL_RISK:
                 wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.PHYSICAL_RISK_USERNAME, Keys.ENTER);
                 wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.PHYSICAL_RISK_PASSWORD);
@@ -437,12 +437,13 @@ public class LoginPage extends PageBase {
      /*   if (!termsAndConditionsCheckBox.isSelected())
             wait.until(ExpectedConditions.visibilityOf(termsAndConditionsLabel)).click();*/
         wait.until(ExpectedConditions.visibilityOf(loginButton)).click();
-
+        setAccessTokenFromUI();
 
     }
 
 
     public void clickOnLogout() {
+        System.out.println("Logging out");
         BrowserUtils.wait(10);
         wait.until(ExpectedConditions.visibilityOf(menu));
         BrowserUtils.clickWithJS(menu);

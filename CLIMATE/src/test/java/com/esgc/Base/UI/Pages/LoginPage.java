@@ -232,11 +232,11 @@ public class LoginPage extends ClimatePageBase {
     public void login() {
         System.out.println("Login with default user");
         wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.UI_USERNAME, Keys.ENTER);
-        BrowserUtils.wait(5);
-        boolean isUserOnNewLoginPage = Driver.getDriver().getCurrentUrl().contains("auth.moodys.com");
-        if (isUserOnNewLoginPage) {
-            clickOnNextButton();
-        }
+//        BrowserUtils.wait(5);
+//        boolean isUserOnNewLoginPage = Driver.getDriver().getCurrentUrl().contains("auth.moodys.com");
+//        if (isUserOnNewLoginPage) {
+//            clickOnNextButton();
+//        }
         wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.UI_PASSWORD);
 
 //        wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.UI_USERNAME, Keys.ENTER);
@@ -387,7 +387,9 @@ public class LoginPage extends ClimatePageBase {
             default:
                 Assert.fail("Bundle not found!");
         }
+        System.out.println("Logged in as " + username + " with password " + password);
         loginWithParams(username, password);
+        waitForDataLoadCompletion();
     }
 
     /*

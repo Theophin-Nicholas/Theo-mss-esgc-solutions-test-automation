@@ -11,11 +11,10 @@ import com.esgc.Dashboard.UI.Pages.DashboardPage;
 import com.esgc.Utilities.*;
 import io.restassured.response.Response;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.Color;
 import org.testng.annotations.Test;
 
+import java.text.DecimalFormat;
 import java.util.*;
 
 import static com.esgc.Utilities.Groups.*;
@@ -320,24 +319,18 @@ public class DashboardHeatMapEntityListTests extends UITestBase {
     }
 
     //Entitlements
-    @Test(groups = {DASHBOARD, UI, REGRESSION, SMOKE, ENTITLEMENTS})
+    @Test(groups = {DASHBOARD, UI, REGRESSION, ENTITLEMENTS})
     @Xray(test = {8185, 7973})
     public void heatMapAPIUIEntitlementsVerification() {
-        LoginPage loginPage = new LoginPage();
-        //Trying to log in with only Physical Risk Entitlement User
-       //WebElement portfolioSelectionButton = Driver.getDriver().findElement(By.id("button-holdings"));
-        //if (portfolioSelectionButton.getAttribute("title").equals("Sample Portfolio"))
-
-        loginPage.loginWithParams(Environment.PHYSICAL_RISK_USERNAME, Environment.PHYSICAL_RISK_PASSWORD);
-        BrowserUtils.wait(5);
-        Driver.getDriver().findElement(By.id("RegSector-test-id-1")).click();
-        selectOptionFromFiltersDropdown("as_of_date", "June 2022");
-
-
         APIController apiController = new APIController();
-        DashboardAPIController dashboardAPIController = new DashboardAPIController();
         DashboardPage dashboardPage = new DashboardPage();
+        DashboardAPIController dashboardAPIController = new DashboardAPIController();
+        LoginPage loginPage = new LoginPage();
+        loginPage.loginWithParams(Environment.PHYSICAL_RISK_USERNAME, Environment.PHYSICAL_RISK_PASSWORD);
+
         dashboardPage.selectSamplePortfolioFromPortfolioSelectionModal();
+        dashboardPage.clickFiltersDropdown();
+        dashboardPage.selectOptionFromFiltersDropdown("as_of_date", "June 2022");
 
         //Getting access token for API connection and setting as token.
         getExistingUsersAccessTokenFromUI();
@@ -347,7 +340,7 @@ public class DashboardHeatMapEntityListTests extends UITestBase {
             dashboardPage.selectOneResearchLineOnHeatMap(i);
             BrowserUtils.wait(7);
             String researchLine = dashboardPage.heatMapResearchLines.get(i).getText();
-            assertTestCase.assertTrue(dashboardPage.verifySelectedResearchLineForHeatMap(researchLine), researchLine+" is selected alone");
+            assertTestCase.assertTrue(dashboardPage.verifySelectedResearchLineForHeatMap(researchLine), researchLine + " is selected alone");
             researchLine = researchLine.substring(researchLine.indexOf(":") + 1).trim();
             System.out.println("researchLine = " + researchLine);
 
@@ -357,77 +350,38 @@ public class DashboardHeatMapEntityListTests extends UITestBase {
             Response response = dashboardAPIController.getHeatMapResponse(portfolio_id, researchLine, apiHeatMapSinglePayload);
             List<APIHeatMapResponse> list = Arrays.asList(response.getBody().as(APIHeatMapResponse[].class));
             System.out.println("dashboardPage.heatMapYAxisIndicatorsAPI.size() = " + dashboardPage.heatMapYAxisIndicatorsAPI.size());
-            switch (researchLine) {
-                case "Operations Risk":
-                case "Supply Chain Risk":
-                case "Market Risk":
-                case "Physical Risk Management":
-                    List<List<String>> UIValues = new ArrayList<>();
-                    List<List<String>> APIValues = new ArrayList<>();
-                    for (int x = 0; x < dashboardPage.heatMapYAxisIndicatorsAPI.size(); x++) {
-                        String scoreRangeUI = dashboardPage.heatMapYAxisIndicatorsAPI.get(x).getText(); //80-100
-                        String totalInvestmentUI = dashboardPage.heatMapYAxisIndicatorPercentagesAPI.get(x).getText(); //14.59%
-                        UIValues.add(Arrays.asList(scoreRangeUI, totalInvestmentUI));
+            DecimalFormat df = new DecimalFormat("#.00");
 
-                    }
-                    for (int y = 0; y < list.get(0).getY_axis_total_invct_pct().size(); y++) {
-                        String scoreRangeAPI = String.valueOf(list.get(0).getY_axis_total_invct_pct().get(y).getResearch_line_1_score_range());//80-100
-                        String totalInvestmentAPI = String.valueOf(list.get(0).getY_axis_total_invct_pct().get(y).getTotal_investment()) + "%"; //14.59%
-                        APIValues.add(Arrays.asList(scoreRangeAPI, totalInvestmentAPI));
-                    }
-                    //BrowserUtils.wait(3);
-                    System.out.println("UIValues = " + UIValues);
-                    System.out.println("APIValues = " + APIValues);
-                    assertTestCase.assertTrue(UIValues.containsAll(APIValues));
-                    assertTestCase.assertTrue(APIValues.containsAll(UIValues));
-                    break;
+            List<List<String>> UIValues = new ArrayList<>();
+            List<List<String>> APIValues = new ArrayList<>();
+            for (int x = 0; x < dashboardPage.heatMapYAxisIndicatorsAPI.size(); x++) {
+                String scoreRangeUI = dashboardPage.heatMapYAxisIndicatorsAPI.get(x).getText(); //80-100
+                String totalInvestmentUI = dashboardPage.heatMapYAxisIndicatorPercentagesAPI.get(x).getText(); //14.59%
+                UIValues.add(Arrays.asList(scoreRangeUI, totalInvestmentUI));
+
             }
+            for (int y = 0; y < list.get(0).getY_axis_total_invct_pct().size(); y++) {
+                if (list.get(0).getY_axis_total_invct_pct().get(y).getResearch_line_1_score_range().equals("N/A"))
+                    continue;
+                String scoreRangeAPI = String.valueOf(list.get(0).getY_axis_total_invct_pct().get(y).getResearch_line_1_score_range());//80-100
+                String totalInvestmentAPI = df.format(list.get(0).getY_axis_total_invct_pct().get(y).getTotal_investment()) + "%"; //14.59%
+                APIValues.add(Arrays.asList(scoreRangeAPI, totalInvestmentAPI));
+            }
+            //BrowserUtils.wait(3);
+            System.out.println("UIValues = " + UIValues);
+            System.out.println("APIValues = " + APIValues);
+            assertTestCase.assertTrue(UIValues.containsAll(APIValues));
+            assertTestCase.assertTrue(APIValues.containsAll(UIValues));
         }
         loginPage.clickOnLogout();
     }
-
-    public void selectOptionFromFiltersDropdown(String dropdown, String option) {
-
-        WebElement element = null;
-        String elementTitle = null;
-        switch (dropdown) {
-            case "regions":
-                elementTitle = "list-region";
-                break;
-            case "sectors":
-                elementTitle = "list-sector";
-                break;
-            case "as_of_date":
-                elementTitle = "list-asOfDate";
-                break;
-            default:
-                System.out.println("You provided wrong dropdown name for this method: selectOptionFromDropdown()");
-        }
-        List<WebElement> options = Driver.getDriver().findElements(By.xpath("//div[contains(@id,'" + elementTitle + "')]//span[text()]"));
-        Actions actions = new Actions(Driver.getDriver());
-        //select provided option from picked dropdown
-        try {
-            for (WebElement each : options) {
-                if (each.getText().equals(option)) {
-                    each.click();
-                    //actions.moveToElement(each).pause(1000).click(each).sendKeys(Keys.ESCAPE).build().perform();
-
-                    break;
-                }
-            }
-        } catch (Exception e) {
-            System.out.println("Could not click option under dropdown");
-            e.printStackTrace();
-        }
-    }
-
 
     public void verifyHeatMapCells() {
         DashboardPage dashboardPage = new DashboardPage();
         int counter = 0;
         for (int i = 0; i < dashboardPage.heatMapYAxisIndicators.size(); i++) {
             for (int j = 0; j < dashboardPage.heatMapXAxisIndicators.size(); j++) {
-                System.out.println("Checking cell: " + (i+1)+":"+(j+1));
+                System.out.println("Checking cell: " + (i + 1) + ":" + (j + 1));
                 BrowserUtils.scrollTo(dashboardPage.heatMapCells.get(counter));
                 String expPercentage = dashboardPage.heatMapCells.get(counter).getText();
                 BrowserUtils.wait(1);
@@ -475,6 +429,7 @@ public class DashboardHeatMapEntityListTests extends UITestBase {
             }
         }
     }
+
     public boolean verifyResearchLineDistributionCategories(String cat, int num) {
         Map<String, Integer> expCategories = new HashMap<>();
 
@@ -518,15 +473,13 @@ public class DashboardHeatMapEntityListTests extends UITestBase {
                 "Verified the widget doesn't show anything before a cell is selected.");
 
         //verify Operations Risk research line is the first one in row
-        assertTestCase.assertEquals(dashboardPage.heatMapResearchLines.get(0).getText(),"Physical Risk: Operations Chain Risk",
+        assertTestCase.assertEquals(dashboardPage.heatMapResearchLines.get(0).getText(), "Physical Risk: Operations Chain Risk",
                 "Verified Operations Risk research line is first in row");
 
         //verify Operations Risk research line selected by default
         assertTestCase.assertTrue(dashboardPage.verifySelectedResearchLineForHeatMap("Physical Risk: Operations Chain Risk"),
                 "Verified Operations Risk research line is selected by default");
     }
-
-
 
 
     @Test(groups = {DASHBOARD, UI, REGRESSION})

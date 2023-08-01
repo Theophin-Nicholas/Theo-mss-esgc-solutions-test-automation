@@ -75,7 +75,7 @@ public abstract class TestBase {
     }
 
     @BeforeMethod(alwaysRun = true)
-    public void beforeMethodCreateReport(Method method) {
+    public synchronized void beforeMethodCreateReport(Method method) {
         test = report.createTest(method.getName());
         assertTestCase = new CustomAssertion();
     }
@@ -112,7 +112,9 @@ public abstract class TestBase {
     }
 
     public void getScreenshot(ITestResult result) {
-        if (result.getStatus() == ITestResult.FAILURE || result.getThrowable() != null) {
+        if (result.getStatus() == ITestResult.SKIP) {
+            test.log(Status.SKIP, "TestCaseSKIPPED is " + result.getName());
+        } else if (result.getStatus() == ITestResult.FAILURE || result.getThrowable() != null) {
             test.assignCategory(result.getInstanceName());
             test.log(Status.FAIL, "Classname: " + result.getTestClass());
             test.log(Status.FAIL, MarkupHelper.createLabel("FAILED test case name is: " + result.getName(), ExtentColor.RED));
@@ -125,8 +127,6 @@ public abstract class TestBase {
             test.fail(result.getThrowable());
         } else if (result.getStatus() == ITestResult.SUCCESS) {
             test.log(Status.PASS, "TestClass: " + result.getTestClass().getName());
-        } else if (result.getStatus() == ITestResult.SKIP) {
-            test.log(Status.SKIP, "TestCaseSKIPPED is " + result.getName());
         }
     }
 

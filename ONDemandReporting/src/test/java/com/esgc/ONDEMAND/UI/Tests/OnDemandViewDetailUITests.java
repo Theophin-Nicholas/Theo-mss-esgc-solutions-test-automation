@@ -23,7 +23,7 @@ public class OnDemandViewDetailUITests extends UITestBase {
     public void verifyViewDetailPageByScoreType(){
         ViewDetailPage detail = new ViewDetailPage();
         String portfolioName = "500 predicted portfolio";
-       // String portfolioName1 = "SFDRPortfolio";
+       // String portfolioName1 = "SamplePortfolioToDelete";
         OnDemandAssessmentPage onDemandAssessmentPage = new OnDemandAssessmentPage();
         onDemandAssessmentPage.navigateToReportingService("On-Demand Assessment");
         onDemandAssessmentPage.waitForPortfolioTableToLoad();
@@ -35,7 +35,7 @@ public class OnDemandViewDetailUITests extends UITestBase {
         }
         /*onDemandAssessmentPage.selectPortfolioOptionByName(portfolioName1);*/
         onDemandAssessmentPage.SelectAndGetNonOnDemandEligiblePortfolioName();
-        assertTestCase.assertTrue(!onDemandAssessmentPage.isRequestAssessmentButtonEnabled(), "Verify that the request assessment button is disabled for a portfolio not on-Demand eligible ");
+        assertTestCase.assertFalse(onDemandAssessmentPage.isRequestAssessmentButtonEnabled(), "Verify that the request assessment button is disabled for a portfolio not on-Demand eligible ");
         System.out.println("the request assessment button is disabled for non on-demand assessment eligible portfolio ");
 
         onDemandAssessmentPage.selectPortfolioOptionByName(portfolioName);
@@ -61,6 +61,7 @@ public class OnDemandViewDetailUITests extends UITestBase {
         // detail.verifyTheColorOfPredictedScoreEntities();
         //detail.verifyDifferentWayToCloseViewDetailPage(detail, portfolioName);
         detail.verifyInvestmentCellsAreSortedFrom();
+        //todo: Sorting verification logic is wrong. Compares all entities with each other. Should compare for each category table. Not all.
         detail.isEntitiesListSorted();
         detail.verifyEntitiesAreNotClickable();
         detail.verifyEntitiesNotClickableInViewDetailPage(detail);
@@ -73,12 +74,12 @@ public class OnDemandViewDetailUITests extends UITestBase {
     public void verifyViewDetailPageBySector(){
         ViewDetailPage detail = new ViewDetailPage();
         String portfolioName = "500 predicted portfolio";
-       // String portfolioName1 = "SFDRPortfolio";
+       // String portfolioName1 = "Portfolio Upload updated_good2";
         OnDemandAssessmentPage onDemandAssessmentPage = new OnDemandAssessmentPage();
         onDemandAssessmentPage.navigateToReportingService("On-Demand Assessment");
         onDemandAssessmentPage.waitForPortfolioTableToLoad();
        /* if(!onDemandAssessmentPage.verifyPortfolio(portfolioName1)) {
-            onDemandAssessmentPage.uploadPortfolio(portfolioName1.replaceAll(" ", ""));
+            onDemandAssessmentPage.uploadPortfolio("PortfolioWithValidData2");
         }*/
         if(!onDemandAssessmentPage.verifyPortfolio(portfolioName)) {
             onDemandAssessmentPage.uploadPortfolio(portfolioName.replaceAll(" ", ""));
@@ -86,7 +87,7 @@ public class OnDemandViewDetailUITests extends UITestBase {
         //onDemandAssessmentPage.selectPortfolioOptionByName(portfolioName1);
         onDemandAssessmentPage.SelectAndGetNonOnDemandEligiblePortfolioName();
 
-        assertTestCase.assertTrue(!onDemandAssessmentPage.isRequestAssessmentButtonEnabled(), "Verify that the request assessment button is disabled for a portfolio not on-Demand eligible ");
+        assertTestCase.assertFalse(onDemandAssessmentPage.isRequestAssessmentButtonEnabled(), "Verify that the request assessment button is disabled for a portfolio not on-Demand eligible ");
         System.out.println("the request assessment button is disabled for non on-demand assessment eligible portfolio ");
 
         onDemandAssessmentPage.selectPortfolioOptionByName(portfolioName);
@@ -99,16 +100,16 @@ public class OnDemandViewDetailUITests extends UITestBase {
         detail.clickOnGroupByOption(detail, "Sector");
         detail.verifyTablesInSectorTab();
 
-        detail.verifyDifferentWayToCloseViewDetailPage(detail, portfolioName);
-
+        detail.closeViewDetailPanel(detail);
     }
+
     @Test(groups = {UI, REGRESSION, SMOKE})
     @Xray(test = {14145,14146,14150,14154,14158})
     public void verifyViewDetailPageByRegion(){
 
         ViewDetailPage detail = new ViewDetailPage();
         String portfolioName = "500 predicted portfolio";
-       // String portfolioName1 = "SFDRPortfolio";
+       // String portfolioName1 = "SamplePortfolioToDelete";
         OnDemandAssessmentPage onDemandAssessmentPage = new OnDemandAssessmentPage();
         onDemandAssessmentPage.navigateToReportingService("On-Demand Assessment");
         onDemandAssessmentPage.waitForPortfolioTableToLoad();
@@ -121,7 +122,7 @@ public class OnDemandViewDetailUITests extends UITestBase {
 
        // onDemandAssessmentPage.selectPortfolioOptionByName(portfolioName1);
         onDemandAssessmentPage.SelectAndGetNonOnDemandEligiblePortfolioName();
-        assertTestCase.assertTrue(!onDemandAssessmentPage.isRequestAssessmentButtonEnabled(), "Verify that the request assessment button is disabled for a portfolio not on-Demand eligible ");
+        assertTestCase.assertFalse(onDemandAssessmentPage.isRequestAssessmentButtonEnabled(), "Verify that the request assessment button is disabled for a portfolio not on-Demand eligible ");
         System.out.println("the request assessment button is disabled for non on-demand assessment eligible portfolio ");
 
         onDemandAssessmentPage.selectPortfolioOptionByName(portfolioName);

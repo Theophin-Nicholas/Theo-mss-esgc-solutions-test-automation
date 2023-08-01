@@ -90,19 +90,6 @@ public class EntityProfileClimatePageAPIController {
         return response;
     }
 
-    public Response getClimateSummaryAPIResponseWithInvalidToken() {
-        Response response = null;
-        String fullURI = "https://solutions-dev-us-east-1.mra-esg-nprd.aws.moodys.tld/api/portfolios/00000000-0000-0000-0000-000000000000/transitionrisk/temperaturealgmt/sector-temp-rise";
-        try {
-            response = given().accept(ContentType.JSON)
-                    //.header("Authorization", System.getProperty("token"))//wrong token
-                    .when().get(fullURI);
-        } catch (Exception e) {
-            System.out.println("Inside exception " + e.getMessage());
-        }
-        return response;
-    }
-
     public Response getSectorComparisonChartContentResponseWithTemperedToken(String orbis_id, String research_line) {
         Response response = null;
         try {

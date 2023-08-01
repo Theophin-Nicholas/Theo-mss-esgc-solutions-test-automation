@@ -8,6 +8,7 @@ import com.esgc.Utilities.*;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
+import org.testng.SkipException;
 import org.testng.annotations.Test;
 
 import java.util.HashSet;
@@ -21,12 +22,10 @@ public class GlobalHeaderSidePanel extends UITestBase {
     @Test(groups = {REGRESSION, UI, SMOKE})
     @Xray(test = {1899, 5939, 8967})
     public void validateGlobalHeader() {
-
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Check Global Header Side Panel");
         researchLinePage.ValidateGlobalSidePanel();
         test.pass("Global Header Side Panel Verified");
-
     }
 
     //TODO orders are different and this method should be moved to a separate class for Portfolio Settings
@@ -93,7 +92,7 @@ public class GlobalHeaderSidePanel extends UITestBase {
 
         currentURL = Driver.getDriver().getCurrentUrl();
 
-        assertTestCase.assertEquals(currentURL, Environment.URL + "terms", "Terms & Conditions page verified");
+        assertTestCase.assertEquals(currentURL, Environment.URL + "terms", "Terms & Conditions page verified", 11833);
         assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("(//header)[3]//../following-sibling::div")).getText(),
                 TermsConditionsUtilities.termsAndConditionText());
 
@@ -112,6 +111,8 @@ public class GlobalHeaderSidePanel extends UITestBase {
     @Xray(test = {12840, 12841, 12916, 12850, 12855, 12852})
     public void ValidateCalculationsOptionsFromGlobalMenu() {
         DashboardPage dashboardPage = new DashboardPage();
+        if(!ConfigurationReader.getProperty("environment").equalsIgnoreCase("qa"))
+            new SkipException("Calculations option is only available for QA environment");
         dashboardPage.clickOnMenuButton();
         assertTestCase.assertTrue(dashboardPage.menuItems.stream().filter(e -> e.getText().equals("Calculations")).count() > 0, "Verify \"Calculation\" option is shown under global settings menu", 12840);
         assertTestCase.assertTrue(dashboardPage.menuItems.stream().filter(e -> e.getText().equals("Portfolio Selection/Upload")).count() > 0, "Verify option of \"Portfolio selection\" is shown under global settings menu", 12841);
