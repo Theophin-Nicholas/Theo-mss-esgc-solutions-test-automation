@@ -10,7 +10,7 @@ import org.testng.annotations.Test;
 import static com.esgc.Utilities.Groups.*;
 
 public class UsersPageTests extends EMCUITestBase {
-    String userName = "efrain December 2022";
+    String userName = "Efrain June2022";
     String activeUser = "Active User";
     Faker faker = new Faker();
     EMCUsersPage usersPage = new EMCUsersPage();

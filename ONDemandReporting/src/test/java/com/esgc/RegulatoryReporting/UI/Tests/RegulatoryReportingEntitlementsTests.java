@@ -7,6 +7,9 @@ import com.esgc.Common.UI.TestBases.UITestBase;
 import com.esgc.ONDEMAND.UI.Pages.OnDemandAssessmentPage;
 import com.esgc.RegulatoryReporting.UI.Pages.RegulatoryReportingPage;
 import com.esgc.Utilities.*;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
@@ -65,16 +68,16 @@ public class RegulatoryReportingEntitlementsTests extends UITestBase {
         LoginPage login = new LoginPage();
         RegulatoryReportingPage regulatoryReportingPage = new RegulatoryReportingPage();
 //        if (Environment.environment.equalsIgnoreCase("prod")) {
-            login.loginWithParams(username, password);
-            regulatoryReportingPage.waitForPortfolioTableToLoad();
-            if (entitlements.contains("SFDR") && entitlements.contains("EU")) {
-                regulatoryReportingPage.clickOnEUTaxonomy();
-                regulatoryReportingPage.clickOnSFDRPAIsOption();
-            } else if (entitlements.contains("SFDR")) {
-                assertTestCase.assertTrue(regulatoryReportingPage.isEUTaxonomyOptionNotClickable(), "Validating that EU Taxonomy option is not clickable to unentitled person ");
-            } else if (entitlements.contains("EU")) {
-                assertTestCase.assertTrue(regulatoryReportingPage.isSFDROptionNotClickable(), "Validating that SFDR option is not clickable to unentitled person ");
-            }
+        login.loginWithParams(username, password);
+        regulatoryReportingPage.waitForPortfolioTableToLoad();
+        if (entitlements.contains("SFDR") && entitlements.contains("EU")) {
+            regulatoryReportingPage.clickOnEUTaxonomy();
+            regulatoryReportingPage.clickOnSFDRPAIsOption();
+        } else if (entitlements.contains("SFDR")) {
+            assertTestCase.assertTrue(regulatoryReportingPage.isEUTaxonomyOptionNotClickable(), "Validating that EU Taxonomy option is not clickable to unentitled person ");
+        } else if (entitlements.contains("EU")) {
+            assertTestCase.assertTrue(regulatoryReportingPage.isSFDROptionNotClickable(), "Validating that SFDR option is not clickable to unentitled person ");
+        }
 //        }
         //todo: add validation for lower environments
     }
@@ -112,7 +115,7 @@ public class RegulatoryReportingEntitlementsTests extends UITestBase {
         //upload 100% SFDR coverage portfolio and verify
         String portfolioName = "SFDROnlyPortfolioDelete";
         CommonAPIController.deletePortfolioThroughAPI(portfolioName);
-        String portfolioFilePath = ImportPortfolioUtility.getOnDemandPortfolioFileToUpload(Collections.singletonList("SFDR Only"), "", 10, portfolioName,false);
+        String portfolioFilePath = ImportPortfolioUtility.getOnDemandPortfolioFileToUpload(Collections.singletonList("SFDR Only"), "", 10, portfolioName, false);
         reportingPage.uploadPortfolio(portfolioFilePath, "OnDemand");
         BrowserUtils.wait(10);
         Driver.getDriver().navigate().refresh();
@@ -172,7 +175,7 @@ public class RegulatoryReportingEntitlementsTests extends UITestBase {
         portfolioName = "BothSFDRAndEXTaxonomyPortfolioDelete";
         CommonAPIController.deletePortfolioThroughAPI(portfolioName);
         //Below we use EU Taxonomy Only because we don't have data for EU Tax only entities. so it gives use a portfolio wich disabled for both eu tax and sfdr
-        portfolioFilePath = ImportPortfolioUtility.getOnDemandPortfolioFileToUpload(Collections.singletonList("BothSFDRAndEUTaxonomy"), "", 10, portfolioName,false);
+        portfolioFilePath = ImportPortfolioUtility.getOnDemandPortfolioFileToUpload(Collections.singletonList("BothSFDRAndEUTaxonomy"), "", 10, portfolioName, false);
         reportingPage.uploadPortfolio(portfolioFilePath, "OnDemand");
         BrowserUtils.wait(10);
         Driver.getDriver().navigate().refresh();
@@ -190,4 +193,47 @@ public class RegulatoryReportingEntitlementsTests extends UITestBase {
         //Because it's bitter, just like their code.
     }
 
+    @Test(groups = {REGRESSION, UI, ENTITLEMENTS, REGULATORY_REPORTING})
+    @Xray(test = {14114})
+    public void VerifyVSFDREUTaxonomyEntitledUserCantAccessEntityPageTest() {
+        try {
+            LoginPage login = new LoginPage();
+            login.entitlementsLogin(EntitlementsBundles.USER_WITH_EUTAXONOMY_SFDR_ENTITLEMENT);
+//            login.login();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        RegulatoryReportingPage reportingPage = new RegulatoryReportingPage();
+//        reportingPage.navigateToReportingService("SFDR");
+        reportingPage.waitForPortfolioTableToLoad();
+        //get first enabled portfolios name
+        String portfolioName = reportingPage.getFirstEnabledPortfolioName();
+        System.out.println("portfolioName = " + portfolioName);
+        reportingPage.selectPortfolioFromPortfolioSelectionModel(portfolioName);
+        //reportingPage.portfolioManagementExpandCompanyList();
+        BrowserUtils.waitForVisibility(reportingPage.portfolioEntityList, 20);
+        assertTestCase.assertTrue(reportingPage.portfolioEntityList.size() > 0, "Entity list is displayed");
+        for (WebElement entity : reportingPage.portfolioEntityList) {
+            System.out.println("entity = " + entity.getText());
+            boolean isClickable = false;
+            try {
+                // Try clicking the <span> element
+                entity.click();
+                // If click succeeds, the element is clickable
+                String xpath = "//span[starts-with(text(),'ESC')]";
+                try {
+                    WebElement escButton = Driver.getDriver().findElement(By.xpath(xpath));
+                    isClickable = escButton.isDisplayed();
+                } catch (org.openqa.selenium.NoSuchElementException e) {
+                    // If the element cannot be found, it is not clickable
+                    isClickable = false;
+                }
+            } catch (org.openqa.selenium.ElementNotInteractableException e) {
+                // If the element cannot be clicked, it is not clickable
+                isClickable = false;
+            }
+            assertTestCase.assertFalse(isClickable, "Validating that the user with SFDR and EU Taxonomy entitlements can't access entity page");
+        }
+    }
 }

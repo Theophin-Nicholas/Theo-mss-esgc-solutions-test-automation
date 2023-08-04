@@ -118,20 +118,28 @@ public class CommonPage extends UploadPortfolio {
     // Select portfolio under portfolio selection upload model
     public void selectPortfolioFromPortfolioSelectionModel(String portfolioName) {
         System.out.println("Selecting portfolio: " + portfolioName);
-        try {
-            if (!menu.isDisplayed()) {
+//        try {
+            if (menuList.size()<2) {
                 clickMenu();
                 BrowserUtils.wait(2);
                 portfolioSettings.click();
+                System.out.println("Portfolio settings clicked");
             }
-            WebElement targetPortfolio = Driver.getDriver().findElement(By.xpath("//div[@id='portfolio-drawer-test-id']//span[@title='" + portfolioName + "']"));
-            System.out.println("Portfolio Located");
-            BrowserUtils.scrollTo(targetPortfolio);
-            BrowserUtils.waitForClickablility(targetPortfolio, 10).click();
+            BrowserUtils.waitForVisibility(portfolioManagementPortfolioNames, 10);
+            if(portfolioManagementPortfolioNames.size()==0){
+                System.out.println("No portfolio available");
+                return;
+            }
+            for (WebElement portfolio : portfolioManagementPortfolioNames) {
+                if (portfolio.getText().equalsIgnoreCase(portfolioName)) {
+                    BrowserUtils.waitForClickablility(portfolio, 10).click();
+                    break;
+                }
+            }
             System.out.println("Portfolio selected");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
     }
 
 
@@ -436,5 +444,13 @@ public class CommonPage extends UploadPortfolio {
     public boolean verifyPortfolioUploadLink() {
         BrowserUtils.waitForVisibility(uploadAnotherPortfolioLink, 10);
         return uploadAnotherPortfolioLink.isDisplayed();
+    }
+
+    public String getFirstEnabledPortfolioName() {
+        for (int i = 0; i < portfolioRadioButtonList.size(); i++) {
+            if (portfolioRadioButtonList.get(i).isEnabled())
+                return getPortfolioList().get(i);
+        }
+        return null;
     }
 }

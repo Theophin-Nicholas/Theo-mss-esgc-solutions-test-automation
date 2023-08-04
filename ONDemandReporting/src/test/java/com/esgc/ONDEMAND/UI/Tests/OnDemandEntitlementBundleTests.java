@@ -702,7 +702,7 @@ public class OnDemandEntitlementBundleTests extends UITestBase {
         }
     }
 
-    @Test(groups = {REGRESSION, UI, COMMON}, description = "UI | On-Demand Reporting | On-Demand Assessment | Verify Download button is not displayed if Export entitlement is disabled")
+    @Test(groups = {REGRESSION, UI, COMMON, ENTITLEMENTS}, description = "UI | On-Demand Reporting | On-Demand Assessment | Verify Download button is not displayed if Export entitlement is disabled")
     @Xray(test = {13898})
     public void verifyDownloadButtonNotDisplayedTest() {
         LoginPage login = new LoginPage();

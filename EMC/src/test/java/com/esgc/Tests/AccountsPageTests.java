@@ -415,7 +415,7 @@ public class AccountsPageTests extends EMCUITestBase {
     }
 
     @Test(groups = {EMC, UI, SMOKE, REGRESSION})
-    @Xray(test = {5736, 6167, 6169, 6170})
+    @Xray(test = {6167, 6169, 6170})
     public void verifyActivateUserTest() {
         navigateToAccountsPage(accountName, "users");
         EMCAccountDetailsPage detailsPage = new EMCAccountDetailsPage();
@@ -1511,7 +1511,7 @@ public class AccountsPageTests extends EMCUITestBase {
 
     @Test(groups = {EMC, UI, REGRESSION},
             description = "UI | EMC | SME Assessment | Verify if user has no ESG On-Demand Assessment product, new SME Assessment Limit field is Not present")
-    @Xray(test = {12713, 11790, 11791, 11792, 11797, 11917})
+    @Xray(test = {11790, 11791, 11792, 11797, 11917})
     public void verifyNoSMEAssessmentLimitDisplayedTest() {
         navigateToAccountsPage(accountName, "products");
         String mesgApp = Environment.MESG_APPLICATION_NAME;
@@ -1534,7 +1534,7 @@ public class AccountsPageTests extends EMCUITestBase {
 
     @Test(groups = {EMC, UI, REGRESSION},
             description = "UI | EMC | SME Assessment | Verify if user has ESG On-Demand Assessment product, SME Assessment Limit field is present")
-    @Xray(test = {12713})
+    @Xray(test = {12791})
     public void verifyProductForSMEAssessmentLimitTest() {
         navigateToAccountsPage(accountName, "products");
         String mesgApp = Environment.MESG_APPLICATION_NAME;
@@ -1689,6 +1689,7 @@ public class AccountsPageTests extends EMCUITestBase {
     @Xray(test = {13863, 13864, 13865, 13893})
     public void verifyTextAlignmentsTest() {
         navigateToAccountsPage("", "");
+        accountsPage.search("test");
         for(WebElement header : accountsPage.tableHeaders){
             assertTestCase.assertTrue(header.getCssValue("text-align").equals("left"), "Table headers are left aligned");
         }

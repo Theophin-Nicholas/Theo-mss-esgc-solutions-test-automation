@@ -750,7 +750,7 @@ public class EMCAPITests extends APITestBase {
     }
 
     @Test(groups = {"EMC", "api", "regression"}, description = "API | EMC | Applications | Roles | Verify that a role for an application can be assigned to a user")
-    @Xray(test = {5175, 5187})
+    @Xray(test = {5187})
     public void assignRoleToUserTest() {
         //get email of user with name Active User
         String email = apiController.getUserId(accountId, "Active User");

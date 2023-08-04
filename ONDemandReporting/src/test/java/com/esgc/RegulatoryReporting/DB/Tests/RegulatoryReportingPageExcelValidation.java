@@ -73,7 +73,7 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
 
     @Test(groups = {REGRESSION, DATA_VALIDATION, REGULATORY_REPORTING, UI},
             description = "Check the Data available on the Report with SF when Use latest data is selected (Company Level Output Tab)")
-    @Xray(test = {11111, 11231})
+    @Xray(test = {11111, 11231, 11339})
     public void downloadAndVerifyExcelReportsTest() {
         RegulatoryReportingPage reportingPage = new RegulatoryReportingPage();
         
@@ -139,7 +139,7 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, DATA_VALIDATION, REGULATORY_REPORTING, UI}, description = "Data Validation | SFDR | Regulatory Reporting | Verify the portfolio coverage for the portfolio when SFDR reporting is selected")
-    @Xray(test = {11730})
+    @Xray(test = {11719, 11730})
     public void verifyPortfolioCoverageForSFDRReportingTest() {
         RegulatoryReportingPage reportingPage = new RegulatoryReportingPage();
         
@@ -303,7 +303,7 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
 
     @Test(groups = {REGRESSION, DATA_VALIDATION, REGULATORY_REPORTING, UI},
             description = "Data Validation | Regulatory Reporting | Verify the data downloaded in the generated annual report excel is for the latest data available for the portfolios irrespective of reporting year when use latest data filter is selected")
-    @Xray(test = {10852,10853, 11200,11388})
+    @Xray(test = {10852,10853, 11200})
     public void verifyAnnualReportWithoutLatestDataTest() {
         RegulatoryReportingPage reportingPage = new RegulatoryReportingPage();
         
@@ -363,7 +363,7 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
 
     @Test(groups = {REGRESSION, DATA_VALIDATION, REGULATORY_REPORTING, UI},
             description = "Data Validation | Regulatory Reporting | Verify the data downloaded in the generated Interim report excel when the portfolios has data for the selected year")
-    @Xray(test = {11352, 11367,11200,11388})
+    @Xray(test = {11352, 11367,11388})
     public void verifyInterimReportForSelectedYearTest() {
         RegulatoryReportingPage reportingPage = new RegulatoryReportingPage();
         
@@ -633,6 +633,50 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
     public void verifyBVD9IDForInterimPortfolioLevelOutputWithoutLatestDataTest() {
         RegulatoryReportingPage reportingPage = new RegulatoryReportingPage();
         
+        reportingPage.navigateToReportingService("SFDR");
+        TestBase.test.info("Navigated to Regulatory Reporting Page");
+        //verify portfolio upload modal
+        assertTestCase.assertTrue(reportingPage.verifyPortfolioUploadLink(), "Portfolio Upload button is displayed");
+        //reportingPage.selectReportingOptionByName("SFDR PAIs");
+        String currentWindow = BrowserUtils.getCurrentWindowHandle();
+        reportingPage.selectInterimReports();//reportingPage.selectAnnualReports();
+        reportingPage.selectAllPortfolioOptions();
+        //reportingPage.selectUseLatestData();
+        List<String> selectedPortfolios = reportingPage.getSelectedPortfolioOptions();
+        //verify create reports button before clicking
+        assertTestCase.assertTrue(reportingPage.createReportsButton.isEnabled(), "Create report button is enabled");
+        Set<String> currentWindows = BrowserUtils.getWindowHandles();
+        reportingPage.clickOnCreateReportsButton();
+        try {
+            //New tab should be opened and empty state message should be displayed as in the screenshot
+            assertTestCase.assertTrue(reportingPage.verifyNewTabOpened(currentWindows), "New tab is opened");
+            System.out.println("New tab is opened");
+            assertTestCase.assertTrue(reportingPage.verifyReportsReadyToDownload(selectedPortfolios), "Reports are ready to download");
+            System.out.println("Reports are ready to download");
+            reportingPage.deleteFilesInDownloadsFolder();
+            assertTestCase.assertTrue(reportingPage.verifyIfReportsDownloaded(), "Reports are downloaded");
+            System.out.println("Reports are downloaded");
+            assertTestCase.assertTrue(reportingPage.unzipReports(), "Reports are extracted");
+            System.out.println("Reports are extracted");
+            assertTestCase.assertTrue(reportingPage.verifyBVD9IDInCompanyLevelOutput(selectedPortfolios,"Interim", "2022"),
+                    "BVD9 ID for Portfolio Level output is verified for Excel vs DB");
+            System.out.println("BVD9 ID for Portfolio Level output is verified for Excel vs DB");
+        } catch (Exception e) {
+            e.printStackTrace();
+            assertTestCase.assertTrue(false, "Report verification failed");
+        } finally {
+            Driver.closeBrowserTab();
+            BrowserUtils.switchWindowsTo(currentWindow);
+            System.out.println("=============================");
+        }
+    }
+
+    @Test(groups = {REGRESSION, DATA_VALIDATION, REGULATORY_REPORTING, UI},
+            description = "Data Validation | Regulatory Reporting | Verify only covered entities are present in the report")
+    @Xray(test = {13566})
+    public void verifyOnlyCoveredEntitiesPresentTest() {
+        RegulatoryReportingPage reportingPage = new RegulatoryReportingPage();
+
         reportingPage.navigateToReportingService("SFDR");
         TestBase.test.info("Navigated to Regulatory Reporting Page");
         //verify portfolio upload modal
