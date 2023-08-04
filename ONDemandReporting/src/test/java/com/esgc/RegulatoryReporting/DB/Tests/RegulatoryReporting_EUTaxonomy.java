@@ -22,7 +22,7 @@ import static com.esgc.Utilities.Groups.*;
 public class RegulatoryReporting_EUTaxonomy extends UITestBase {
 
     @Test(groups = {REGRESSION, DATA_VALIDATION, REGULATORY_REPORTING, UI, ROBOT_DEPENDENCY}, description = "Data Validation | EU Taxonomy Regulatory Reporting")
-    @Xray(test = {11993, 11994, 11995})
+    @Xray(test = {3420, 3682, 3426})
     public void verifyEUTaxonomyReport() {
         RegulatoryReportingPage reportingPage = new RegulatoryReportingPage();
 

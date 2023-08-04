@@ -19,7 +19,7 @@ import static com.esgc.Utilities.CommonUtility.randomBetween;
 public class EUTaxonomyTests extends UITestBase {
 
     @Test(groups = {REGRESSION, UI, REGULATORY_REPORTING, SMOKE}, description = "Verify that user can navigate to Eu Taxonomy Reporting page")
-    @Xray(test = {11532})
+    @Xray(test = {4271})
     public void verifyEUTaxonomyPageTest() {
         EUTaxonomyPage euTaxonomyPage = new EUTaxonomyPage();
         euTaxonomyPage.navigateToReportingService("EU");
@@ -46,7 +46,7 @@ public class EUTaxonomyTests extends UITestBase {
 
     @Test(groups = {REGRESSION, UI, REGULATORY_REPORTING, SMOKE},
             description = "Verify  \"Non-Sovereign Derivatives\" and \"Cash and liquidities\" values remain when user navigated back to EU Taxonomy page")
-    @Xray(test = {11548})
+    @Xray(test = {4270})
     public void verifyValuesAreRemainingForEUTaxonomy() {
         EUTaxonomyPage euTaxonomyPage = new EUTaxonomyPage();
         euTaxonomyPage.navigateToPageFromMenu("ESG Reporting Portal");
@@ -104,5 +104,4 @@ public class EUTaxonomyTests extends UITestBase {
 
         }
     }
-
 }

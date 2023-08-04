@@ -17,7 +17,7 @@ import static com.esgc.Utilities.Groups.*;
 
 public class OnDemandAssessmentDBTests extends DataValidationTestBase {
 
-    @Xray(test = {12066})
+    @Xray(test = {4131})
     @Test(groups = {REGRESSION, DATA_VALIDATION})
     public void verifyPredictedEsgInfo() {
 
@@ -46,8 +46,7 @@ public class OnDemandAssessmentDBTests extends DataValidationTestBase {
 
     }
 
-    // TODO : There is an error in UI values and bug has been created
-    @Xray(test = {12068})
+    @Xray(test = {4291})
     @Test(enabled = false, groups = {REGRESSION, DATA_VALIDATION})
     public void verifyCompaniesInvestmentInfo() {
         String portfolioName = "500 predicted portfolio";
@@ -78,7 +77,7 @@ public class OnDemandAssessmentDBTests extends DataValidationTestBase {
 
     }
 
-    @Xray(test = {12457})
+    @Xray(test = {4224})
     @Test(groups = {REGRESSION, DATA_VALIDATION})
     public void verifyRegionsSectorsInvestmentInfo() {
         String portfolioName = "500 predicted portfolio";
@@ -114,7 +113,7 @@ public class OnDemandAssessmentDBTests extends DataValidationTestBase {
     }
 
     @Test(groups = {REGRESSION, UI, COMMON})
-    @Xray(test = {13989})
+    @Xray(test = {2750})
     public void OnDemandAssessmentPortfolioTableDataValidations() {
         String portfolioName = "OnDemandEntities";
         OnDemandAssessmentPage onDemandAssessmentPage = new OnDemandAssessmentPage();
@@ -147,7 +146,7 @@ public class OnDemandAssessmentDBTests extends DataValidationTestBase {
     }
 
     @Test(groups = {REGRESSION, UI, COMMON})
-    @Xray(test = {13991})
+    @Xray(test = {2736})
     public void OnDemandAssessmentPortfolioTableDataValidationsWithUnmatchedEntities() throws ParseException {
         String portfolioName = "OnDemandEntities";
         OnDemandAssessmentPage onDemandAssessmentPage = new OnDemandAssessmentPage();
@@ -179,7 +178,7 @@ public class OnDemandAssessmentDBTests extends DataValidationTestBase {
     }
 
     @Test(groups = {REGRESSION, UI, COMMON})
-    @Xray(test = {13988,13766,13767,13768})
+    @Xray(test = {3324,3071,2732,2965})
     public void OnDemandAssessmentPortfolioTableDataValidationsWithOnyPredictedAndAnalyticalEntities() {
         String portfolioName = "OnDemandEntities";
         OnDemandAssessmentPage onDemandAssessmentPage = new OnDemandAssessmentPage();

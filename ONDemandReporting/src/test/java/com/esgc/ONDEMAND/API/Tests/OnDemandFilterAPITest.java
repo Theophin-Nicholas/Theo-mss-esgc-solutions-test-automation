@@ -26,7 +26,7 @@ import static com.esgc.Utilities.Groups.*;
 public class OnDemandFilterAPITest extends CommonTestBase {
 
     @Test(groups = {API, REGRESSION})
-    @Xray(test = {12065,12444})
+    @Xray(test = {4187,4143})
     public void validateOnDemandFilterApiResponse() {
         OnDemandFilterAPIController onDemandcontroller = new OnDemandFilterAPIController();
         String portfolioId = onDemandcontroller.getPortfolioId("500 predicted portfolio");
@@ -40,7 +40,7 @@ public class OnDemandFilterAPITest extends CommonTestBase {
     }
 
     @Test(groups = {API, REGRESSION})
-    @Xray(test = {12065,15061})
+    @Xray(test = {3276})
     public void validateOnDemandStatusApiResponse() {
         OnDemandFilterAPIController onDemandcontroller = new OnDemandFilterAPIController();
         System.clearProperty("token");
@@ -54,8 +54,5 @@ public class OnDemandFilterAPITest extends CommonTestBase {
         OnDemandRequests statusAPI = response.as(OnDemandRequests.class);
         List<String> createDateTime = statusAPI.getRequests().stream().map(e-> e.getCreate_datetime()).collect(Collectors.toList());
         assertTestCase.assertTrue(Ordering.<String> natural().reverse().isOrdered(createDateTime),"Validate if Created date is in chronological order");
-
-
-
     }
 }
