@@ -41,7 +41,7 @@ public class OnDemandAssessmentDBTests extends DataValidationTestBase {
         DecimalFormat df = new DecimalFormat("0.00");
         uiHighestInvestment = df.format(Double.parseDouble(uiHighestInvestment));
 
-        assertTestCase.assertEquals(uiEligibleAssessment, dbEligibleAssessment, "Eligible Assessments Percentage is not matching");
+        assertTestCase.assertEquals(String.format("%.2f", uiEligibleAssessment), dbEligibleAssessment, "Eligible Assessments Percentage is not matching");
         assertTestCase.assertEquals(uiHighestInvestment,dbHighestInvestment,"Eligible Assessments Percentage is not matching");
 
     }
