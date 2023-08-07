@@ -33,7 +33,7 @@ public class CustomAssertion extends SoftAssert {
             if (testCaseNumber != null) {
                 TestCase testCase = new TestCase();
                 testCase.setPassOrFail(false);
-                List<String> testCases = testCaseNumber.stream().map(tcNumber -> "ESGCA-" + tcNumber.toString()).collect(Collectors.toList());
+                List<String> testCases = testCaseNumber.stream().map(tcNumber -> "ESGT-" + tcNumber.toString()).collect(Collectors.toList());
                 testCase.setTestCaseNumber(testCases);
                 if (TestBase.isUITest) {
                     String screenShot = getScreenshot(RandomStringUtils.randomAlphanumeric(8));
@@ -62,7 +62,7 @@ public class CustomAssertion extends SoftAssert {
             if (testCaseNumber != null) {
                 TestCase testCase = new TestCase();
                 testCase.setPassOrFail(true);
-                List<String> testCases = testCaseNumber.stream().map(tcNumber -> "ESGCA-" + tcNumber.toString()).collect(Collectors.toList());
+                List<String> testCases = testCaseNumber.stream().map(tcNumber -> "ESGT-" + tcNumber.toString()).collect(Collectors.toList());
                 testCase.setTestCaseNumber(testCases);
                 TestBase.testCasesList.add(testCase);
 

@@ -340,9 +340,9 @@ public class DataProviderClass {
     public Object[][] dpMethod1() {
 
         return new Object[][]{
-                {EntitlementsBundles.PHYSICAL_RISK, 4479},
-                {EntitlementsBundles.TRANSITION_RISK, 4480},
-                {EntitlementsBundles.PHYSICAL_RISK_TRANSITION_RISK, 4506},
+                {EntitlementsBundles.PHYSICAL_RISK, 4773},
+                {EntitlementsBundles.TRANSITION_RISK, 4779},
+                {EntitlementsBundles.PHYSICAL_RISK_TRANSITION_RISK, 4338},
         };
     }
 
