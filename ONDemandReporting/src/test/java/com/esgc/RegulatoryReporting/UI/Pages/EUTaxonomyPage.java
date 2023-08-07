@@ -46,7 +46,7 @@ public class EUTaxonomyPage extends RegulatoryReportingPage {
         System.out.println("actualHeaders = " + actualHeaders);
         List<String> expectedHeaders = Arrays.asList("Portfolio", "Last Uploaded", "Coverage % Investment", "Non-Sovereign Derivatives", "Cash and liquidities");
         System.out.println("expectedHeaders = " + expectedHeaders);
-        assertTestCase.assertEquals(actualHeaders, expectedHeaders, "EU Taxonomy Header verification", 11534);
+        assertTestCase.assertEquals(actualHeaders, expectedHeaders, "EU Taxonomy Header verification", 3835);
     }
 
     public void verifyEUTaxonomyTableContent() {
@@ -66,27 +66,27 @@ public class EUTaxonomyPage extends RegulatoryReportingPage {
             assertTestCase.assertTrue(DateTimeUtilities.isValidDate(portfolioUpdateDate), "Portfolio Update Date validation");
             assertTestCase.assertTrue(coverageValue >= 0d && coverageValue <= 100d, "Coverage Validation");
             if (coverageValue == 0d) {
-                assertTestCase.assertTrue(!checkBox.isEnabled(), "If coverage is 0, check box should be disabled", 11945);
+                assertTestCase.assertTrue(!checkBox.isEnabled(), "If coverage is 0, check box should be disabled", 3846);
             }
-            assertTestCase.assertTrue(derivativeValue >= 0, "Non-Sovereign Derivatives value validation", 11547);
-            assertTestCase.assertTrue(cashValue >= 0, "Cash and liquidities value validation", 11547);
+            assertTestCase.assertTrue(derivativeValue >= 0, "Non-Sovereign Derivatives value validation", 3814);
+            assertTestCase.assertTrue(cashValue >= 0, "Cash and liquidities value validation", 3814);
         }
     }
 
     public void verifyDefaultReportingOptionsForEUTaxonomy() {
-        assertTestCase.assertTrue(isInterimReportsOptionDisplayed(), "Interim reports toggle is displayed", 11535);
-        assertTestCase.assertFalse(isInterimReportsSelected(), "Interim reports toggle disabled", 11535);
+        assertTestCase.assertTrue(isInterimReportsOptionDisplayed(), "Interim reports toggle is displayed", 3849);
+        assertTestCase.assertFalse(isInterimReportsSelected(), "Interim reports toggle disabled", 3849);
 
-        assertTestCase.assertTrue(isAnnualReportsOptionDisplayed(), "Annual reports toggle is displayed", 11535);
-        assertTestCase.assertFalse(isAnnualReportsSelected(), "Annual reports toggle is disabled", 11535);
+        assertTestCase.assertTrue(isAnnualReportsOptionDisplayed(), "Annual reports toggle is displayed", 3849);
+        assertTestCase.assertFalse(isAnnualReportsSelected(), "Annual reports toggle is disabled", 3849);
 
-        assertTestCase.assertTrue(isUseLatestDataOptionDisplayed(), "Use latest data toggle is displayed", 11535);
-        assertTestCase.assertTrue(isUseLatestDataSelected(), "Use latest data toggle is enabled", 11535);
+        assertTestCase.assertTrue(isUseLatestDataOptionDisplayed(), "Use latest data toggle is displayed", 3849);
+        assertTestCase.assertTrue(isUseLatestDataSelected(), "Use latest data toggle is enabled", 3849);
     }
 
     public void verifyLatestDataOptionCannotTurnedOffForEUTaxonomy() {
         clickOnUseLatestData();
-        assertTestCase.assertTrue(isUseLatestDataSelected(), "Use latest data toggle should not be disabled", 11546);
+        assertTestCase.assertTrue(isUseLatestDataSelected(), "Use latest data toggle should not be disabled", 3816);
     }
 
     public double getNonSovereignDerivativesValueByPortfolioName(String name) {

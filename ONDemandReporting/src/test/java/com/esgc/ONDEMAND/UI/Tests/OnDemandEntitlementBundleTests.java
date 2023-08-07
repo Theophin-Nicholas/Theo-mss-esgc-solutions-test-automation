@@ -3,17 +3,9 @@ package com.esgc.ONDEMAND.UI.Tests;
 import com.esgc.Common.API.Controllers.CommonAPIController;
 import com.esgc.Common.UI.Pages.LoginPage;
 import com.esgc.Common.UI.TestBases.UITestBase;
-import com.esgc.ONDEMAND.API.Controllers.OnDemandFilterAPIController;
-import com.esgc.ONDEMAND.API.Controllers.OnDemandFilterAPIController;
-import com.esgc.ONDEMAND.DB.DBQueries.OnDemandAssessmentQueries;
-import com.esgc.ONDEMAND.API.Controllers.OnDemandFilterAPIController;
 import com.esgc.ONDEMAND.TestDataProviders.EntityWithEsgDataOnlyDataProviders;
 import com.esgc.ONDEMAND.UI.Pages.OnDemandAssessmentPage;
 import com.esgc.ONDEMAND.UI.Pages.PopUpPage;
-import com.esgc.Pages.Page404;
-import com.esgc.RegulatoryReporting.DB.DBQueries.RegulatoryReportingQueries;
-import com.esgc.RegulatoryReporting.UI.Pages.RegulatoryReportingPage;
-import com.esgc.Pages.Page404;
 import com.esgc.Utilities.*;
 import com.github.javafaker.Faker;
 import io.restassured.path.json.JsonPath;
@@ -22,9 +14,7 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 import static com.esgc.Utilities.Groups.*;
 
@@ -33,7 +23,7 @@ public class OnDemandEntitlementBundleTests extends UITestBase {
    // Faker faker = new Faker();
 
     @Test(groups = {REGRESSION, UI, ENTITLEMENTS})
-    @Xray(test = {12010, 12827, 13741})
+    @Xray(test = {4243, 3180})
     public void verifyOnDemandAssessmentRequestIsNotAvailable() {
         LoginPage login = new LoginPage();
         try {
@@ -51,7 +41,7 @@ public class OnDemandEntitlementBundleTests extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI, ENTITLEMENTS})
-    @Xray(test = {12080, 13986})
+    @Xray(test = {4023, 2768})
     public void validateOnDemandEntitilementForPortfolioUpload() {
         LoginPage login = new LoginPage();
         try {
@@ -80,7 +70,7 @@ public class OnDemandEntitlementBundleTests extends UITestBase {
 
 
     @Test(groups = {REGRESSION, UI, ENTITLEMENTS})
-    @Xray(test = {12393})
+    @Xray(test = {4261})
     public void validatePortfolioUploadWithOnlyPredictedEntitlement() {
         LoginPage login = new LoginPage();
         try {
@@ -101,7 +91,7 @@ public class OnDemandEntitlementBundleTests extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI, ENTITLEMENTS})
-    @Xray(test = {12394, 13983, 14104})
+    @Xray(test = {4197, 2753, 2745})
     public void validatePortfolioUploadWithOnDemandEntitlement() {
         LoginPage login = new LoginPage();
         try {
@@ -134,13 +124,13 @@ public class OnDemandEntitlementBundleTests extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, SMOKE, UI, ENTITLEMENTS})
-    @Xray(test = {13742, 13744, 13976, 13778, 14057, 14060, 14061, 14062})
+    @Xray(test = {3076, 3065, 2868, 2791, 2734, 3034, 3036, 2763})
     public void validateOnDemandEntitlementForNewUser() {
         LoginPage login = new LoginPage();
         try {
             login.entitlementsLogin(EntitlementsBundles.USER_WITH_ONLYONDEMAND_ENTITLEMENT_FIRSTTIMEUSER);
             OnDemandAssessmentPage onDemandAssessmentPage = new OnDemandAssessmentPage();
-           // assertTestCase.assertTrue(onDemandAssessmentPage.validateOnDemandReportingLandingPage(), "Validating if landing page is On-Demand Repoting Page", 14529);
+           // assertTestCase.assertTrue(onDemandAssessmentPage.validateOnDemandReportingLandingPage(), "Validating if landing page is On-Demand Repoting Page", 2920);
             if (onDemandAssessmentPage.IsPortfolioTableLoaded()) {
                 assertTestCase.assertTrue(onDemandAssessmentPage.isSelectActionHeadingAvailable(), "Validate Select Action heading available");
                 assertTestCase.assertTrue(onDemandAssessmentPage.isServiceSubHeadingAvailable(), "Validate Service subheading available");
@@ -179,14 +169,14 @@ public class OnDemandEntitlementBundleTests extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI, ENTITLEMENTS})
-    @Xray(test = {13743, 13791, 13832})
+    @Xray(test = {3082, 2742, 3317})
     public void validateLandingPageForUserWith_EUTaxonomy_SFDR_ONDEMAND_Entitlements() {
         LoginPage login = new LoginPage();
         try {
 
             login.entitlementsLogin(EntitlementsBundles.USER_WITH_EUTAXONOMY_SFDR_ESG_ESGPREDICTOR_ONDEMAND_EXPORT);
             OnDemandAssessmentPage onDemandAssessmentPage = new OnDemandAssessmentPage();
-            assertTestCase.assertTrue(onDemandAssessmentPage.validateOnDemandReportingLandingPage(), "Validating if landing page is On-Demand Repoting Page",14529);
+            assertTestCase.assertTrue(onDemandAssessmentPage.validateOnDemandReportingLandingPage(), "Validating if landing page is On-Demand Repoting Page",2920);
             if (onDemandAssessmentPage.IsPortfolioTableLoaded()) {
                 List<String> reportingOptions = Arrays.asList(new String[]{"EU Taxonomy", "SFDR PAIs", "On-Demand Assessment"});
                 onDemandAssessmentPage.ValidateReportingOptions(reportingOptions);
@@ -203,14 +193,14 @@ public class OnDemandEntitlementBundleTests extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI, ENTITLEMENTS})
-    @Xray(test = {13803, 14059, 14347, 14348 })//, 14364, 14365, 14366, 14473, 14474, 14475, 14476})
+    @Xray(test = {3079, 3191, 2859, 2776 })//, 2789, 2790, 3022, 3254, 3256, 2877, 2945})
     public void validateLandingPageForUserWith_EUTaxonomy_SFDR_Entitlements() {
         LoginPage login = new LoginPage();
         try {
 
             login.entitlementsLogin(EntitlementsBundles.USER_WITH_EUTAXONOMY_SFDR_ENTITLEMENT);
             OnDemandAssessmentPage onDemandAssessmentPage = new OnDemandAssessmentPage();
-            assertTestCase.assertTrue(onDemandAssessmentPage.validateOnDemandReportingLandingPage(), "Validating if landing page is On-Demand Reporting Page", 14529);
+            assertTestCase.assertTrue(onDemandAssessmentPage.validateOnDemandReportingLandingPage(), "Validating if landing page is On-Demand Reporting Page", 2920);
             if (onDemandAssessmentPage.IsPortfolioTableLoaded()) {
                 List<String> reportingOptions = Arrays.asList("EU Taxonomy", "SFDR PAIs");
                 onDemandAssessmentPage.ValidateReportingOptions(reportingOptions);
@@ -304,14 +294,14 @@ public class OnDemandEntitlementBundleTests extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI, ENTITLEMENTS})
-    @Xray(test = {13985})
+    @Xray(test = {2681})
     public void validateExportButtonDisabledForOnDemandUserWithoutExportEntitlements() {
         LoginPage login = new LoginPage();
         try {
 
             login.entitlementsLogin(EntitlementsBundles.ONDEMAND_USER_WITHOUT_EXPORT_ENTITLEMENT);
             OnDemandAssessmentPage onDemandAssessmentPage = new OnDemandAssessmentPage();
-            assertTestCase.assertTrue(onDemandAssessmentPage.validateOnDemandReportingLandingPage(), "Validating if landing page is On-Demand Repoting Page",14529);
+            assertTestCase.assertTrue(onDemandAssessmentPage.validateOnDemandReportingLandingPage(), "Validating if landing page is On-Demand Repoting Page",2920);
             if (onDemandAssessmentPage.IsPortfolioTableLoaded() && onDemandAssessmentPage.getAvailablePortfolioCountt() > 0) {
                 assertTestCase.assertTrue(onDemandAssessmentPage.isExportbuttonDisabled(), "validating that export button is disabled");
             }
@@ -324,7 +314,7 @@ public class OnDemandEntitlementBundleTests extends UITestBase {
     }
 
     @Test(groups = {UI, REGRESSION, ENTITLEMENTS})
-    @Xray(test = {14467, 14468})
+    @Xray(test = {3019, 3128})
     public void validateThePopUpModelForUserWithInvalidEntitlementsCombinations() {
         LoginPage login = new LoginPage();
         try {
@@ -348,14 +338,14 @@ public class OnDemandEntitlementBundleTests extends UITestBase {
     }
 
     @Test(groups = {UI, SMOKE, REGRESSION, ENTITLEMENTS})
-    @Xray(test = {14466})
+    @Xray(test = {3190})
     public void validateTheLandingPageForOnDemandEntitlements() {
         LoginPage login = new LoginPage();
         try {
 
             login.entitlementsLogin(EntitlementsBundles.USER_WITH_EUTAXONOMY_SFDR_ESG_ESGPREDICTOR_ONDEMAND_EXPORT);
             OnDemandAssessmentPage onDemandAssessmentPage = new OnDemandAssessmentPage();
-            assertTestCase.assertTrue(onDemandAssessmentPage.validateOnDemandReportingLandingPage(), "Validating that landing page is On-Demand Reporting Page", 14529);
+            assertTestCase.assertTrue(onDemandAssessmentPage.validateOnDemandReportingLandingPage(), "Validating that landing page is On-Demand Reporting Page", 2920);
         } catch (Exception e) {
             e.printStackTrace();
             login.clickOnLogout();
@@ -365,13 +355,13 @@ public class OnDemandEntitlementBundleTests extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI, ENTITLEMENTS})
-    @Xray(test = {14107})
+    @Xray(test = {2923})
     public void validateViewAssessmentButtonIsEnabledForUSERWithExaustedAssessmentLimit() {
         LoginPage login = new LoginPage();
         try {
             login.entitlementsLogin(EntitlementsBundles.ODA_USER_WITH_EXHAUSTED_ASSESSMENT_LIMIT);
             OnDemandAssessmentPage onDemandAssessmentPage = new OnDemandAssessmentPage();
-            assertTestCase.assertTrue(onDemandAssessmentPage.validateOnDemandReportingLandingPage(), "Validating if landing page is On-Demand Repoting Page", 14529);
+            assertTestCase.assertTrue(onDemandAssessmentPage.validateOnDemandReportingLandingPage(), "Validating if landing page is On-Demand Repoting Page", 2920);
             onDemandAssessmentPage.waitForPortfolioTableToLoad();
             String PortfolioName = onDemandAssessmentPage.SelectAndGetOnDemandEligiblePortfolioName();
             assertTestCase.assertTrue(onDemandAssessmentPage.isReequestAssessmentButtonDisabled(), "Validating that Request Assessment button is disabled");
@@ -384,7 +374,7 @@ public class OnDemandEntitlementBundleTests extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI, ENTITLEMENTS, INCLUDEDAPITEST}, description = "UI | Dashboard | On-Demand | Verify if only have On-demand Entitlements")
-    @Xray(test = {13726})
+    @Xray(test = {2694})
     public void verifyUserWithOnlyOnDemandEntitlementsTest() {
         LoginPage login = new LoginPage();
         try {
@@ -420,7 +410,7 @@ public class OnDemandEntitlementBundleTests extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI, ENTITLEMENTS, INCLUDEDAPITEST}, description = "UI | Dashboard | On-Demand | Verify if user only have Predicted Entitlement")
-    @Xray(test = {13764})
+    @Xray(test = {3004})
     public void verifyUserWithOnlyPredictedEntitlementTest() {
         LoginPage login = new LoginPage();
         try {
@@ -449,7 +439,7 @@ public class OnDemandEntitlementBundleTests extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI, ENTITLEMENTS, INCLUDEDAPITEST}, description = "UI | Dashboard | On-Demand | Verify if user only have 'Corporates ESG Data and Scores' Entitlement")
-    @Xray(test = {13765})
+    @Xray(test = {3116})
     public void verifyUserWithOnlyCorporatesESGDataAndScoresEntitlementTest() {
         LoginPage login = new LoginPage();
         try {
@@ -479,7 +469,7 @@ public class OnDemandEntitlementBundleTests extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI, ENTITLEMENTS}, description = "UI | On-Demand Assessment | Verify User is able to Submit/Un-submit Assessment Based on the Limit")
-    @Xray(test = {13781, 13801, 13802})
+    @Xray(test = {3073, 2944, 2662})
     public void verifyAssessmentSubmissionBasedOnTheLimit() {
         LoginPage login = new LoginPage();
         try {
@@ -536,7 +526,7 @@ public class OnDemandEntitlementBundleTests extends UITestBase {
     }
 
     @Test(groups = {UI, REGRESSION,ENTITLEMENTS})
-    @Xray(test = {13971, 13993,14290})
+    @Xray(test = {2819, 2766,2879})
     public void verifyZeroAssessmentRemaining() {
         LoginPage login = new LoginPage();
         try {
@@ -578,7 +568,7 @@ public class OnDemandEntitlementBundleTests extends UITestBase {
     }
 
     @Test(groups ={REGRESSION, UI, SMOKE, ENTITLEMENTS})
-    @Xray(test = {14095, 14096})
+    @Xray(test = {2918, 2930})
     public void validateDashboardAndPortfolioAnalysisNotPresentInGlobalMenu() {
         LoginPage login = new LoginPage();
         try {
@@ -600,7 +590,7 @@ public class OnDemandEntitlementBundleTests extends UITestBase {
     }
 
     @Test(groups ={REGRESSION, UI,ENTITLEMENTS})
-    @Xray(test = {14100})
+    @Xray(test = {2677})
     public void validateCalculationsIsVisibleForEntitlements() {
         LoginPage login = new LoginPage();
         try {
@@ -624,7 +614,7 @@ public class OnDemandEntitlementBundleTests extends UITestBase {
     }
 
     @Test(groups ={REGRESSION, UI, SMOKE,ENTITLEMENTS})
-    @Xray(test = {14295})
+    @Xray(test = {3133})
     public void validateOnDemandSfdrEuTaxonomyForEntitlements() {
         LoginPage login = new LoginPage();
         try {
@@ -657,7 +647,7 @@ public class OnDemandEntitlementBundleTests extends UITestBase {
     }
 
     @Test(groups = {UI, REGRESSION,ENTITLEMENTS}, dataProvider = "entityWithEsgDataOnly-DP", dataProviderClass = EntityWithEsgDataOnlyDataProviders.class)
-    @Xray(test = {14094})
+    @Xray(test = {2796})
     public void ValidateNoDataForEntitiesWithEsgDataOnly(String... entity) {
         LoginPage login = new LoginPage();
         try{
@@ -679,7 +669,7 @@ public class OnDemandEntitlementBundleTests extends UITestBase {
         }
 
     @Test(groups = {UI, REGRESSION,ENTITLEMENTS}, dataProvider = "entityWithEsgDataOnly-DP", dataProviderClass = EntityWithEsgDataOnlyDataProviders.class)
-    @Xray(test = {14094})
+    @Xray(test = {2796})
     public void validateOnlyESGEntitiesAreNotPopulatingUnderSearch(String data) {
         LoginPage login = new LoginPage();
         try {
@@ -703,7 +693,7 @@ public class OnDemandEntitlementBundleTests extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI, COMMON}, description = "UI | On-Demand Reporting | On-Demand Assessment | Verify Download button is not displayed if Export entitlement is disabled")
-    @Xray(test = {13898})
+    @Xray(test = {2917})
     public void verifyDownloadButtonNotDisplayedTest() {
         LoginPage login = new LoginPage();
         try {

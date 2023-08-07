@@ -4,21 +4,18 @@ package com.esgc.RegulatoryReporting.UI.Tests;
 import com.esgc.Common.API.Controllers.CommonAPIController;
 import com.esgc.Common.UI.Pages.LoginPage;
 import com.esgc.Common.UI.TestBases.UITestBase;
-import com.esgc.ONDEMAND.UI.Pages.OnDemandAssessmentPage;
 import com.esgc.RegulatoryReporting.UI.Pages.RegulatoryReportingPage;
 import com.esgc.Utilities.*;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
 
 import static com.esgc.Utilities.Groups.*;
 
 public class RegulatoryReportingEntitlementsTests extends UITestBase {
     @Test(groups = {REGRESSION, UI, REGULATORY_REPORTING, ENTITLEMENTS})
-    @Xray(test = {10858, 11563})
+    @Xray(test = {3987, 3893})
     public void verifyEntitlementForNonSFDRusers() {
         LoginPage login = new LoginPage();
         login.entitlementsLogin(EntitlementsBundles.PHYSICAL_RISK);
@@ -29,7 +26,7 @@ public class RegulatoryReportingEntitlementsTests extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI, REGULATORY_REPORTING, ENTITLEMENTS})
-    @Xray(test = {11563})
+    @Xray(test = {3893})
     public void verifyEntitlementForNonEUTaxonomyUsers() {
         LoginPage login = new LoginPage();
         RegulatoryReportingPage regulatoryReportingPage = new RegulatoryReportingPage();
@@ -45,7 +42,7 @@ public class RegulatoryReportingEntitlementsTests extends UITestBase {
 
     @Test(groups = {REGRESSION, UI, REGULATORY_REPORTING, SMOKE, ENTITLEMENTS}, description = "Verify user can't see reporting page if is not entitled to SFDR")
 //, "smoke"
-    @Xray(test = {10867})
+    @Xray(test = {3944})
     public void verifyReportingPageWithoutSFDRUserTest() {
         LoginPage loginPage = new LoginPage();
         loginPage.dataValidationLogin();
@@ -60,7 +57,7 @@ public class RegulatoryReportingEntitlementsTests extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI, REGULATORY_REPORTING, ENTITLEMENTS, SMOKE}, dataProvider = "Regulatory Reporting Entitlements")
-    @Xray(test = {10867, 11563, 10858})
+    @Xray(test = {3944, 3893, 3987})
     public void verifyProdEntitlementForRegulatoryReporting(String username, String password, String entitlements) {
         LoginPage login = new LoginPage();
         RegulatoryReportingPage regulatoryReportingPage = new RegulatoryReportingPage();
@@ -98,7 +95,7 @@ public class RegulatoryReportingEntitlementsTests extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI, ENTITLEMENTS, REGULATORY_REPORTING})
-    @Xray(test = {14364, 14365, 14366, 14473, 14474, 14475, 14476})
+    @Xray(test = {2789, 2790, 3022, 3254, 3256, 2877, 2945})
     public void validateLandingPageForUserWith_EUTaxonomy_SFDR_Entitlements() {
         try {
             LoginPage login = new LoginPage();

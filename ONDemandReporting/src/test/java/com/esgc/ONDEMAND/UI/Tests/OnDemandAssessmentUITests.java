@@ -3,11 +3,12 @@ package com.esgc.ONDEMAND.UI.Tests;
 import com.esgc.Common.API.Controllers.CommonAPIController;
 import com.esgc.Common.UI.Pages.LoginPage;
 import com.esgc.Common.UI.TestBases.UITestBase;
-import com.esgc.ONDEMAND.API.Controllers.OnDemandFilterAPIController;
-import com.esgc.ONDEMAND.DB.DBQueries.OnDemandAssessmentQueries;
 import com.esgc.ONDEMAND.UI.Pages.OnDemandAssessmentPage;
 import com.esgc.Pages.Page404;
-import com.esgc.Utilities.*;
+import com.esgc.Utilities.BrowserUtils;
+import com.esgc.Utilities.EntitlementsBundles;
+import com.esgc.Utilities.Environment;
+import com.esgc.Utilities.Xray;
 import com.github.javafaker.Faker;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
@@ -18,7 +19,6 @@ import org.testng.annotations.Test;
 import java.text.ParseException;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 import static com.esgc.Utilities.Groups.*;
 
@@ -26,7 +26,7 @@ public class OnDemandAssessmentUITests extends UITestBase {
     Faker faker = new Faker();
 
     @Test(groups = {REGRESSION, UI, COMMON})
-    @Xray(test = {11985, 12001, 12002, 12011, 12054, 12092, 12822, 12824, 14103, 14105})
+    @Xray(test = {4110, 3807, 4035, 4232, 4134, 2777, 2830})
     public void validateOnDemandAssessmentRequest() {
 
         String portfolioName = "500 predicted portfolio";
@@ -61,7 +61,7 @@ public class OnDemandAssessmentUITests extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI})
-    @Xray(test = {12808})
+    @Xray(test = {3258})
     public void validateExitFromRequestOnDemandAssessmentPage() {
 
         String portfolioName = "500 predicted portfolio";
@@ -86,7 +86,7 @@ public class OnDemandAssessmentUITests extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI})
-    @Xray(test = {12054, 12810, 12811, 12812, 12455})
+    @Xray(test = {4232, 3234, 2922, 2937, 3977})
     public void validateErrorMessageOfEmailFieldAndExit() {
 
         String portfolioName = "500 predicted portfolio";
@@ -116,7 +116,7 @@ public class OnDemandAssessmentUITests extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI, ENTITLEMENTS})
-    @Xray(test = {12010, 12827})
+    @Xray(test = {4243})
     public void verifyOnDemandAssessmentRequestIsNotAvailable() {
         LoginPage login = new LoginPage();
 //        login.clickOnLogout();
@@ -132,7 +132,7 @@ public class OnDemandAssessmentUITests extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI, SMOKE})
-    @Xray(test = {12440, 12456})
+    @Xray(test = {4118, 4047})
     public void verifyHeaderAndFilterFunctionality() {
 
         String portfolioName = "500 predicted portfolio";
@@ -161,7 +161,7 @@ public class OnDemandAssessmentUITests extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI, SMOKE})
-    @Xray(test = {12455})
+    @Xray(test = {3977})
     public void verifyPageNavigation() {
 
         String portfolioName = "500 predicted portfolio";
@@ -180,7 +180,7 @@ public class OnDemandAssessmentUITests extends UITestBase {
 
 
     @Test(groups = {REGRESSION, UI, SMOKE})
-    @Xray(test = {12703,14791})
+    @Xray(test = {2686,2961})
     public void verifyFilterCriteriaWithAndORLogic() {
         String portfolioName = "500 predicted portfolio";
         OnDemandAssessmentPage onDemandAssessmentPage = new OnDemandAssessmentPage();
@@ -199,7 +199,7 @@ public class OnDemandAssessmentUITests extends UITestBase {
 
 
     @Test(groups = {REGRESSION, UI, SMOKE})
-    @Xray(test = {13727, 13763, 13787, 13788, 14201, 14202})
+    @Xray(test = {3049, 3117, 2792, 2989, 2816, 3150})
     public void verifyGeneratingOnDemandAssessmentReportWithUniqueEmailAddress() {
 
         CommonAPIController apiController = new CommonAPIController();
@@ -254,7 +254,7 @@ public class OnDemandAssessmentUITests extends UITestBase {
 
 
     @Test(groups = {REGRESSION, UI, ENTITLEMENTS}, description = "UI | Dashboard | On-Demand | Verify if user only have 'Corporates ESG Data and Scores' Entitlement")
-    @Xray(test = {13765})
+    @Xray(test = {3116})
     public void verifyUserWithOnlyCorporatesESGDataAndScoresEntitlementTest() {
         LoginPage login = new LoginPage();
 //        login.clickOnLogout();
@@ -278,7 +278,7 @@ public class OnDemandAssessmentUITests extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI, ENTITLEMENTS}, description = "UI | On-Demand Assessment | Verify User is able to Submit/Un-submit Assessment Based on the Limit")
-    @Xray(test = {13781, 13801, 13802})
+    @Xray(test = {3073, 2944, 2662})
     public void verifyAssessmentSubmissionBasedOnTheLimit() {
         LoginPage login = new LoginPage();
 //        login.clickOnLogout();
@@ -333,27 +333,27 @@ public class OnDemandAssessmentUITests extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI, COMMON})
-    @Xray(test = {13987, 14002})
+    @Xray(test = {2824, 3009})
     public void OnDemandAssessmentPortfolioTableValidations() throws ParseException {
         OnDemandAssessmentPage onDemandAssessmentPage = new OnDemandAssessmentPage();
         onDemandAssessmentPage.navigateToReportingService("On-Demand Assessment");
         onDemandAssessmentPage.waitForPortfolioTableToLoad();
-        // ESGCA - 13987 Verify that for a portfolio having 0% On Demand Assessment eligible coverage , request assessment button is disabled
+        // ESGT - 2824 Verify that for a portfolio having 0% On Demand Assessment eligible coverage , request assessment button is disabled
         onDemandAssessmentPage.SelectPortfolioWithZeroOnDemandAssessmentEligibility();
         assertTestCase.assertTrue(onDemandAssessmentPage.isViewAssessmentRequestButtonDisabled(), "Validating that View Assessment Request button is disabled");
-        // ESGCA - 14002 - Verify the sorting of the Portfolios in the portfolio table
+        // ESGT - 3009 - Verify the sorting of the Portfolios in the portfolio table
         onDemandAssessmentPage.ValidateSortingOnLastUpdateColumn();
 
     }
 
 
     @Test(groups = {REGRESSION, UI, COMMON, SMOKE}, description = "UI | On-Demand Reporting | On-Demand Assessments | Verify Different ways to download the portfolio/export file")
-    @Xray(test = {13691, 13694, 13839, 14020, 14024, 14068, 14073})
+    @Xray(test = {2916, 2806, 2939, 2863, 2915, 2725, 2903})
     public void verifyDifferentWaysToDownloadThePortfolioTest() {
         OnDemandAssessmentPage onDemandAssessmentPage = new OnDemandAssessmentPage();
         onDemandAssessmentPage.navigateToPageFromMenu("reportingservice","ESG Reporting Portal");
         onDemandAssessmentPage.waitForPortfolioTableToLoad();
-        // ESGCA - 13987 Verify that for a portfolio having 0% On Demand Assessment eligible coverage , request assessment button is disabled
+        // ESGT - 2824 Verify that for a portfolio having 0% On Demand Assessment eligible coverage , request assessment button is disabled
         System.out.println(BrowserUtils.getElementsText(onDemandAssessmentPage.portfolioNamesList));
         if(!onDemandAssessmentPage.verifyPortfolio("500 predicted portfolio")){
             onDemandAssessmentPage.uploadPortfolio("500predictedportfolio");
@@ -367,7 +367,7 @@ public class OnDemandAssessmentUITests extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI})
-    @Xray(test = {14309,14336})
+    @Xray(test = {3277,3139})
     public void verifyRequestFailedWithPreviouslyUsedEmailIds() {
 
         String portfolioName = "500 predicted portfolio";

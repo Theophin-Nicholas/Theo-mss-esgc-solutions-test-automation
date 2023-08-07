@@ -21,7 +21,7 @@ public class OnDemandAPIEntitlementBundleTest extends CommonTestBase {
 
     // api test for on demand
     @Test(groups= {API, REGRESSION})
-    @Xray(test = {14196})
+    @Xray(test = {2846})
     public void validateOnDemandRemainingAssessmentsApiResponse(){
         OnDemandAssessmentPage oDPage = new OnDemandAssessmentPage();
         oDPage.navigateToReportingService("On-Demand Assessment");

@@ -1,27 +1,21 @@
 package com.esgc.ONDEMAND.API.Tests;
 
 import com.esgc.Common.API.TestBase.CommonTestBase;
-import com.esgc.Common.UI.Pages.LoginPage;
-import com.esgc.ONDEMAND.UI.Pages.OnDemandAssessmentPage;
-import com.esgc.RegulatoryReporting.API.APIModels.FilteredCompanies;
 import com.esgc.ONDEMAND.API.APIModels.OnDemandRequests;
 import com.esgc.ONDEMAND.API.Controllers.OnDemandFilterAPIController;
-
-import com.esgc.Utilities.BrowserUtils;
-import com.esgc.Utilities.Driver;
-import com.esgc.Utilities.EntitlementsBundles;
+import com.esgc.RegulatoryReporting.API.APIModels.FilteredCompanies;
 import com.esgc.Utilities.Xray;
 import io.restassured.http.ContentType;
-import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import org.testng.annotations.Test;
 
-import static com.esgc.Utilities.Groups.*;
+import static com.esgc.Utilities.Groups.API;
+import static com.esgc.Utilities.Groups.REGRESSION;
 
 public class OnDemandFilterAPITest extends CommonTestBase {
 
     @Test(groups = {API, REGRESSION})
-    @Xray(test = {12065,12444})
+    @Xray(test = {4187,4143})
     public void validateOnDemandFilterApiResponse() {
         OnDemandFilterAPIController onDemandcontroller = new OnDemandFilterAPIController();
         String portfolioId = onDemandcontroller.getPortfolioId("500 predicted portfolio");
@@ -35,7 +29,7 @@ public class OnDemandFilterAPITest extends CommonTestBase {
     }
 
     @Test(groups = {API, REGRESSION})
-    @Xray(test = {12065})
+    @Xray(test = {4187})
     public void validateOnDemandStatusApiResponse() {
         OnDemandFilterAPIController onDemandcontroller = new OnDemandFilterAPIController();
         System.clearProperty("token");
