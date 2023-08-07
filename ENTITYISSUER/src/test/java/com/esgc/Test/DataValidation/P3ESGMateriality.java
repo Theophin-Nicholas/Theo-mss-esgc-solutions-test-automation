@@ -24,7 +24,7 @@ import static com.esgc.Utilities.Groups.REGRESSION;
 public class P3ESGMateriality extends EntityIssuerPageDataValidationTestBase {
 
     @Test(groups = {REGRESSION, ISSUER})
-    @Xray(test = {9953,12446})
+    @Xray(test = {4203,3371})
     public void validateESGMaterialitySummaryData() {
 
         // DB Data

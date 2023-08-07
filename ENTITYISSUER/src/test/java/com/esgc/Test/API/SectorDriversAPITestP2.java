@@ -17,8 +17,8 @@ public class SectorDriversAPITestP2 extends EntityIssuerPageTestBase {
 
     @Test (groups ={REGRESSION, API},
             dataProvider = "credentialsP2",dataProviderClass = IssuerDataProviderClass.class,
-            description = "ESGCA-5867-API | ESG Issuer - Entity Page | Verify API Response")
-    @Xray(test = {5867})
+            description = "ESGT-1242-API | ESG Issuer - Entity Page | Verify API Response")
+    @Xray(test = {1242})
     public void validateSectorDriversAPIResponse(String userId, String password,String orbisId){
         getEntityPageAccessTokenLoginWithParameter(userId,password);
         EntityIssuerPageAPIController controller = new EntityIssuerPageAPIController();

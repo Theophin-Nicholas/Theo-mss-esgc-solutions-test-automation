@@ -17,7 +17,7 @@ import static com.esgc.Utilities.Groups.REGRESSION;
 public class ControversiesTestsP3 extends EntityIssuerPageDataValidationTestBase {
 
     @Test(enabled = false, groups = {ISSUER, REGRESSION})
-    @Xray(test = {4354, 4355})
+    @Xray(test = {3574, 3526})
     public void verifyControversies() {
         List<EntityControversy> dbResults = entityIssuerQueries.getControversies("000002959", null);
 

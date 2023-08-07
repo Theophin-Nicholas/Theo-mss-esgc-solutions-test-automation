@@ -23,7 +23,7 @@ import static com.esgc.Utilities.Groups.REGRESSION;
 public class DriverDetailsTest extends EntityIssuerPageDataValidationTestBase {
     List<String> criteria = new ArrayList<>();
 
-    @Xray(test = {6290,7074,8896})
+    @Xray(test = {4194,3871,3356})
     @Test(groups = {ISSUER,REGRESSION})
     public void driverDetailsTestForNonTrendMetrcs() {
          String orbisID = OrbisID;

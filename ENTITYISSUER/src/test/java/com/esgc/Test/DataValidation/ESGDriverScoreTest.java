@@ -23,7 +23,7 @@ import static com.esgc.Utilities.Groups.REGRESSION;
 public class ESGDriverScoreTest extends EntityIssuerPageDataValidationTestBase {
 
    /* @Test(enabled = false, dataProvider = "orbisID", groups = {ISSUER})
-    @Xray(test = {4049, 4065})
+    @Xray(test = {4049, 3449})
     public void validateScoreRange(@Optional String orbisID) {
         SoftAssert softAssert = new SoftAssert();
         List<DriverScoreDBModel> driverDBDbModel = EntityPageQueries.getDriverScore(orbisID);
@@ -79,7 +79,7 @@ public class ESGDriverScoreTest extends EntityIssuerPageDataValidationTestBase {
 
   //  @Test(dataProvider = "orbisID", groups = {REGRESSION, ISSUER})
   @Test( groups = {REGRESSION, ISSUER})
-    @Xray(test = {4049,5868, 5869})
+    @Xray(test = {4049,1715, 1707})
     //public void validateSubSectorDrivers(@Optional String orbisID) {
   public void validateSubSectorDrivers() {
 
