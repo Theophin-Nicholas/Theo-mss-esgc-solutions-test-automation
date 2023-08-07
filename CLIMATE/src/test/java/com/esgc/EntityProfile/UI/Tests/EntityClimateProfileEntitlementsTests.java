@@ -12,7 +12,7 @@ import static com.esgc.Utilities.Groups.*;
 public class EntityClimateProfileEntitlementsTests extends UITestBase {
 
     @Test(groups = {ENTITY_PROFILE, REGRESSION, UI, SMOKE, ENTITLEMENTS})
-    @Xray(test = {6110})
+    @Xray(test = {4491})
     public void validatePhysicalRiskEntitlements() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         LoginPage login = new LoginPage();
@@ -39,7 +39,7 @@ public class EntityClimateProfileEntitlementsTests extends UITestBase {
     }
 
     @Test(groups = {ENTITY_PROFILE, REGRESSION, UI, SMOKE, ENTITLEMENTS})
-    @Xray(test = {6110})
+    @Xray(test = {4491})
     public void validateTransitionRiskEntitlements() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
 
@@ -67,7 +67,7 @@ public class EntityClimateProfileEntitlementsTests extends UITestBase {
     }
 
     @Test(groups = {ENTITY_PROFILE, REGRESSION, UI, SMOKE, ENTITLEMENTS})
-    @Xray(test = {6110})
+    @Xray(test = {4491})
     public void validatePhysicalAndTransitionRiskEntitlements() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
 
@@ -101,7 +101,7 @@ public class EntityClimateProfileEntitlementsTests extends UITestBase {
     }
 
     @Test(enabled = false, groups = {ENTITY_PROFILE, REGRESSION, UI, SMOKE, ENTITLEMENTS})
-    @Xray(test = {8982})
+    @Xray(test = {4468})
 //TODO #access only Climate Governance bundle cg_bundle_username=esg-test33@outlook.com not working
     // Portfolio Analysis link is not available in UI
     public void validatePhysicalRiskManagementIsUnavailable() {
@@ -121,7 +121,7 @@ public class EntityClimateProfileEntitlementsTests extends UITestBase {
     }
 
     @Test(groups = {ENTITY_PROFILE, REGRESSION, UI, ENTITLEMENTS})
-    @Xray(test = {8890})
+    @Xray(test = {4824})
     public void validateMethodologiesTabWithControversiesEntitlement() {
 
         // User with Controversies Entitlement and No Esg Entitlement
@@ -135,7 +135,7 @@ public class EntityClimateProfileEntitlementsTests extends UITestBase {
     }
 
 //    @Test(groups = {ENTITY_PROFILE, REGRESSION, UI, ENTITLEMENTS})
-//    @Xray(test = {8890})
+//    @Xray(test = {4824})
 //    public void validateMethodologiesTabWithEsgEntitlement() {
 //
 //        // User with ESG Entitlement and No Controversies Entitlement
@@ -149,7 +149,7 @@ public class EntityClimateProfileEntitlementsTests extends UITestBase {
 //    }
 
     @Test(groups = {ENTITY_PROFILE, REGRESSION, UI, ENTITLEMENTS})
-    @Xray(test = {8890})
+    @Xray(test = {4824})
     public void validateMethodologiesTabWithOutControversiesAndEsgEntitlements() {
 
         // User without ESG & Controversies Entitlements
@@ -163,7 +163,7 @@ public class EntityClimateProfileEntitlementsTests extends UITestBase {
     }
 
     @Test(groups = {ENTITY_PROFILE, REGRESSION, UI, SMOKE, ENTITLEMENTS})
-    @Xray(test = {11805})
+    @Xray(test = {4854})
     public void validatePDF_ButtonWhenNoExportEntitlement() {
         LoginPage login = new LoginPage();
         login.entitlementsLogin(EntitlementsBundles.USER_WITH_CONTROVERSIES_ENTITLEMENT);

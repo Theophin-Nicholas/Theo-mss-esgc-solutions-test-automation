@@ -25,9 +25,9 @@ public class RegionMapTests extends DataValidationTestBase {
 
     //TODO Region map is descoped for a while
     @Test(enabled = false, groups = {REGRESSION, DATA_VALIDATION}, dataProvider = "researchLines", threadPoolSize = 10)
-    @Xray(test = {4758, 4755, 4752, 4751, 4759, 4756, 4754, 4753})
-    //Energy Transition 4757
-    //TCFD 4758
+    @Xray(test = {3632, 3573, 3647, 3650, 3702, 3696, 3570, 3698})
+    //Energy Transition 3617
+    //TCFD 3632
     public void verifyRegionMap(@Optional String sector, @Optional String region, @Optional String researchLine, @Optional String month, @Optional String year) {
 
         List<ResearchLineIdentifier> portfolioToUpload = dataValidationUtilities.getPortfolioToUpload(researchLine, month, year);

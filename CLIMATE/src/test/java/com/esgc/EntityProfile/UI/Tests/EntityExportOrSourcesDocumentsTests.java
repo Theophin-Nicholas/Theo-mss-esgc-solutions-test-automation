@@ -16,7 +16,7 @@ import static com.esgc.Utilities.Groups.*;
 public class EntityExportOrSourcesDocumentsTests extends UITestBase {
 
     @Test(groups = {ENTITY_PROFILE, REGRESSION, UI, ROBOT_DEPENDENCY})
-    @Xray(test = {9206, 9208, 9209, 9212, 10175, 11726})
+    @Xray(test = {4868, 4830, 4828, 4509, 4048, 4660})
     public void validateExportSourceDocumentsPopup(){
 
         String company = "Rogers Corp.";
@@ -34,7 +34,7 @@ public class EntityExportOrSourcesDocumentsTests extends UITestBase {
     }
 
     @Test(groups = {ENTITY_PROFILE, REGRESSION, UI, ROBOT_DEPENDENCY})
-    @Xray(test = {9211})
+    @Xray(test = {4763})
     public void validateExportSourceDocumentsPopupClosure(){
 
         String company = "UFP Technologies, Inc.";
@@ -62,7 +62,7 @@ public class EntityExportOrSourcesDocumentsTests extends UITestBase {
     }
 
     @Test(groups = {ENTITY_PROFILE, REGRESSION, UI, ESG})
-    @Xray(test = {9381, 10175})
+    @Xray(test = {4803, 4048})
     public void validateExportSourceDocumentsPopupWithNoDocsMessage(){
 
         String company = "Apple, Inc.";
@@ -103,7 +103,7 @@ public class EntityExportOrSourcesDocumentsTests extends UITestBase {
     }
 
     @Test(groups = {ENTITY_PROFILE, REGRESSION, UI})
-    @Xray(test = {10085})
+    @Xray(test = {4501})
     public void validateExportPdfButtonDisabledAfterClick(){
 
         String company = "Rogers Corp.";
@@ -123,7 +123,7 @@ public class EntityExportOrSourcesDocumentsTests extends UITestBase {
     }
 
     @Test(groups = {ENTITY_PROFILE, REGRESSION, UI})
-    @Xray(test = {10086})
+    @Xray(test = {4413})
     public void validateExportPdfProgressBarClose(){
 
         String company = "Rogers Corp.";
@@ -190,7 +190,7 @@ public class EntityExportOrSourcesDocumentsTests extends UITestBase {
     }
 
     @Test(groups = {ENTITY_PROFILE, REGRESSION, UI}, dataProviderClass = DataProviderClass.class, dataProvider = "exportEntitlements")
-    @Xray(test = {10178, 11041,11153, 12015,12016,12018,12271,12272,12438})
+    @Xray(test = {3876, 4804,4882, 5036,4456,4966,4364,5091,4525})
     public void validatePdfContentBasedOnEntitlement(String username, String password, String entitlement, String company){
         LoginPage loginPage = new LoginPage();
         EntityClimateProfilePage entityProfilePage = new EntityClimateProfilePage();
@@ -228,7 +228,7 @@ public class EntityExportOrSourcesDocumentsTests extends UITestBase {
             assertTestCase.assertTrue(content.contains("MARKET RISK"));
             assertTestCase.assertTrue(content.contains("SUPPLY CHAIN RISK"));
             assertTestCase.assertTrue(!content.contains("Transition Risk "));
-            assertTestCase.assertTrue(!content.contains("Five-year history of ESG score")); //12479
+            assertTestCase.assertTrue(!content.contains("Five-year history of ESG score")); //4650
         } else if (entitlement.equals("Transition Risk")) {
             assertTestCase.assertTrue(content.contains("Transition Risk"));
             assertTestCase.assertTrue(content.contains("Temperature Alignment"));
@@ -247,30 +247,30 @@ public class EntityExportOrSourcesDocumentsTests extends UITestBase {
             assertTestCase.assertTrue(content.contains("Carbon Footprint"));
             assertTestCase.assertTrue(content.contains("Green Share"));
             assertTestCase.assertTrue(content.contains("Brown Share"));
-            assertTestCase.assertTrue(!content.contains("Materiality: High")); //12016
-            assertTestCase.assertTrue(content.contains("Controversies as of ")); //12439
+            assertTestCase.assertTrue(!content.contains("Materiality: High")); //4456
+            assertTestCase.assertTrue(content.contains("Controversies as of ")); //4463
         } else if (entitlement.equals("ESG")) {
             /* Verify that User is able to see just ESG   */
             assertTestCase.assertTrue(!content.contains("Physical Risk "));
             assertTestCase.assertTrue(!content.contains("Transition Risk "));
             assertTestCase.assertTrue(!content.contains("Metrics"));
-            assertTestCase.assertTrue(!content.contains("Metrics Materiality: Very High")); //12018
-            assertTestCase.assertTrue(!content.contains("Metrics Materiality: High")); //12015
+            assertTestCase.assertTrue(!content.contains("Metrics Materiality: Very High")); //4966
+            assertTestCase.assertTrue(!content.contains("Metrics Materiality: High")); //5036
             assertTestCase.assertTrue(!content.contains("Metrics Materiality: Moderate"));
             assertTestCase.assertTrue(!content.contains("Metrics Materiality: Low"));
-            assertTestCase.assertTrue(content.contains("Key Drivers")); //12271
-            assertTestCase.assertTrue(content.contains("Very high and high materiality criteria that score advanced or weak")); //12271
-            assertTestCase.assertTrue(content.contains("STRENGTHS WEAKNESSES")); //12271
-            assertTestCase.assertTrue(content.contains("more criteria receive a")); //12272,12277,12283
-            assertTestCase.assertTrue(content.contains("Controversies as of ")); //12438
-            entityProfilePage.verifyStrengthsAndWeakness(content); //12273,12276
-            assertTestCase.assertTrue(content.contains("Five-year history of ESG score")); //12478
+            assertTestCase.assertTrue(content.contains("Key Drivers")); //4364
+            assertTestCase.assertTrue(content.contains("Very high and high materiality criteria that score advanced or weak")); //4364
+            assertTestCase.assertTrue(content.contains("STRENGTHS WEAKNESSES")); //4364
+            assertTestCase.assertTrue(content.contains("more criteria receive a")); //5091,45858,4523
+            assertTestCase.assertTrue(content.contains("Controversies as of ")); //4525
+            entityProfilePage.verifyStrengthsAndWeakness(content); //5010,12276
+            assertTestCase.assertTrue(content.contains("Five-year history of ESG score")); //4589
         } else if (entitlement.equals("EsgWithMethodology1Entity")) {
-            assertTestCase.assertTrue(!content.contains("Key Drivers")); //12274
-            assertTestCase.assertTrue(!content.contains("Very high and high materiality criteria that score advanced or weak")); //12274
-            assertTestCase.assertTrue(!content.contains("STRENGTHS WEAKNESSES")); //12274
+            assertTestCase.assertTrue(!content.contains("Key Drivers")); //4929
+            assertTestCase.assertTrue(!content.contains("Very high and high materiality criteria that score advanced or weak")); //4929
+            assertTestCase.assertTrue(!content.contains("STRENGTHS WEAKNESSES")); //4929
         }else if (entitlement.equals("Controversy entitlement")) {
-            assertTestCase.assertTrue(content.contains("Controversies as of ")); //12439
+            assertTestCase.assertTrue(content.contains("Controversies as of ")); //4463
             assertTestCase.assertTrue(content.contains("CRITICAL AND HIGH SEVERITY CONTROVERSIES SEVERITY"));
         } else if (entitlement.equals("No Controversy")) {
             assertTestCase.assertTrue(!content.contains("Controversies as of "));

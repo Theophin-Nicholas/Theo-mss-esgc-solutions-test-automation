@@ -13,7 +13,7 @@ import static com.esgc.Utilities.Groups.*;
 public class EsgMaterialityFooterTests extends UITestBase {
 
     @Test(groups = {ESG, REGRESSION, UI})
-    @Xray(test = {8368, 8370})
+    @Xray(test = {5093, 4541})
     public void validateEsgMaterialityFooter() {
 
         String company = "Sculptor Capital Management, Inc.";
@@ -48,7 +48,7 @@ public class EsgMaterialityFooterTests extends UITestBase {
     }
 
     @Test(groups = {ESG, REGRESSION, UI})
-    @Xray(test = {8367})
+    @Xray(test = {4436})
     public void validateEsgMaterialityFooterLegacyVE() {
 
         String company = "Apple, Inc.";
@@ -73,7 +73,7 @@ public class EsgMaterialityFooterTests extends UITestBase {
     }
 
     @Test(groups = {ESG, REGRESSION, UI, ESG})
-    @Xray(test = {8369})
+    @Xray(test = {5084})
     public void validateEsgMaterialityMatrixViewByTests() {
 
         String company = "Sculptor Capital Management, Inc.";

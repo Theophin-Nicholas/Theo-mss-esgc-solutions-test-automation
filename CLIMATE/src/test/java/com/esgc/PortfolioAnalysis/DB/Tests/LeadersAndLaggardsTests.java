@@ -4,7 +4,6 @@ import com.esgc.Base.API.APIModels.APIFilterPayload;
 import com.esgc.Base.DB.DBModels.ResearchLineIdentifier;
 import com.esgc.Base.TestBases.DataValidationTestBase;
 import com.esgc.Dashboard.DB.DBQueries.DashboardQueries;
-import com.esgc.Dashboard.UI.Pages.DashboardPage;
 import com.esgc.PortfolioAnalysis.API.APIModels.LeadersAndLaggards;
 import com.esgc.PortfolioAnalysis.API.APIModels.LeadersAndLaggardsWrapper;
 import com.esgc.PortfolioAnalysis.DB.DBModels.ESGLeaderANDLaggers;
@@ -32,13 +31,12 @@ public class LeadersAndLaggardsTests extends DataValidationTestBase {
 
 
     @Test(groups = {REGRESSION, DATA_VALIDATION}, dataProvider = "researchLines")
-    @Xray(test = {2126, 2125, 2892, 2891, 2476, 2130, 2129, 2127,
-            2893, 2497, 2480, 1287, 2132, 2131, 2896, 2897, 2128,
-            2894, 2483, 2482, 3836, 3885, 2481, 2890, 3889, 3882,
-            3886, 2895, 2123, 2496, 2479, 4156, 4155, 4162, 4165, 4160, 4161, 4164,
-            4163, 4166, 1174, 3032, 2121, 1188, 828, 1286, 1179, 2884, 2498, 3098, 2081, 1285,
-            11246,//Subs
-            11073//Predicted
+    @Xray(test = {5094, 5071, 4490, 4512, 4586, 5013, 4665, 5018,
+            4514, 4449, 5062, 4281, 5061, 4462, 4293, 4599, 5072,
+            4305, 4542, 4949, 3419, 3501, 5002, 4583, 3438, 3505,
+            3485, 4712, 4535, 4906, 4556, 3544, 3634, 3713, 3479, 3649, 3477, 3495,
+            3709, 3656, 4673, 3541, 4405, 4311, 4647, 5022, 1546, 4710, 4341, 4562, 5043, 4626,
+            4447//Predicted
     })
     public void validateResearchLineLeadersAndLaggardsData(@Optional String sector, @Optional String region,
                                                            @Optional String researchLine, @Optional String month, @Optional String year) {
@@ -306,7 +304,7 @@ public class LeadersAndLaggardsTests extends DataValidationTestBase {
     }
 
     @Test(groups = {REGRESSION, DATA_VALIDATION, ESG})
-    @Xray(test = {8452, 9873})
+    @Xray(test = {5045, 5032})
     public void validateESGLeadersAndLaggardsData() {
 
         String sector = "all";
@@ -444,7 +442,7 @@ public class LeadersAndLaggardsTests extends DataValidationTestBase {
 
     @Test(groups = {REGRESSION, DATA_VALIDATION},
             description = "Data Validation | Analysis Page | Impact, and Current Leaders/Laggards Widget | Verify the Sector for entities in widget")
-    @Xray(test = {14318, 14320})
+    @Xray(test = {2772, 2912})
     public void verifySectorForEntitiesInLeadersAndLaggardsWidget() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio Analysis page");

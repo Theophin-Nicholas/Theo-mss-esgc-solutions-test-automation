@@ -6,10 +6,12 @@ import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.Xray;
 import org.testng.annotations.Test;
 
+import static com.esgc.Utilities.Groups.*;
+
 public class PerfomanceWidget extends DashboardUITestBase {
 
-    @Test(groups = {"dashboard", "regression", "ui", "smoke"})
-    @Xray(test = {8686})
+    @Test(groups = {DASHBOARD, REGRESSION, UI, SMOKE})
+    @Xray(test = {3521})
     public void verifyPerformanceChartTotalControversies() {
 
         DashboardPage dashboardPage = new DashboardPage();

@@ -13,7 +13,7 @@ import static com.esgc.Utilities.Groups.*;
 public class ViewAllCompaniesPanel extends UITestBase {
 
     @Test(groups = {REGRESSION, DASHBOARD, UI})
-    @Xray(test = {5084, 5090, 6078, 6079, 7506, 7507, 7508})
+    @Xray(test = {1542, 1553, 1884, 1879, 4755, 4322, 4075})
     public void verifyPanelTests() {
         DashboardPage dashboardPage = new DashboardPage();
         dashboardPage.selectPortfolioByNameFromPortfolioSelectionModal("Sample Portfolio");
@@ -31,7 +31,7 @@ public class ViewAllCompaniesPanel extends UITestBase {
         assertTestCase.assertEquals(actPanelTitle,expPanelTitle,
                 "Panel title is verified as Companies in <portfolio name>");
 
-        // ESGCA-6079: Verify regions & sectors
+        // ESGT-1879: Verify regions & sectors
         assertTestCase.assertTrue(dashboardPage.verifyPanel("sector"),
                 "Panel elements verified with View By Sector filter");
         assertTestCase.assertTrue(dashboardPage.verifyPanel("region"),
@@ -43,7 +43,7 @@ public class ViewAllCompaniesPanel extends UITestBase {
 
         dashboardPage.selectViewByRegion();
 
-        // ESGCA-7506: Verify regions
+        // ESGT-4755: Verify regions
         assertTestCase.assertTrue(dashboardPage.verifyRegion("Americas"),
                 "Verify Americas region is available");
         assertTestCase.assertTrue(dashboardPage.verifyRegion("Asia Pacific"),
@@ -51,7 +51,7 @@ public class ViewAllCompaniesPanel extends UITestBase {
         assertTestCase.assertTrue(dashboardPage.verifyRegion("Europe, Middle East & Africa"),
                 "Verify Europe, Middle East & Africa region is available");
 
-        // ESGCA-7507: Verify table columns
+        // ESGT-7507: Verify table columns
         assertTestCase.assertTrue(dashboardPage.verifyViewByRegionTableColumns("Company"),
                 "Verify table column 'Company' is available");
         assertTestCase.assertTrue(dashboardPage.verifyViewByRegionTableColumns("Controversies"),

@@ -10,7 +10,7 @@ public class GreenShareInfoTests extends DataValidationTestBase {
     ExportUtils utils = new ExportUtils();
 
 //    @Test(groups = {DASHBOARD, REGRESSION, UI})
-//    @Xray(test = {7222, 7223, 7239})
+//    @Xray(test = {4472, 4385, 3690})
 //    public void compareGreenShareInfoFromExcelToDB() {
 //        DashboardPage dashboardPage = new DashboardPage();
 //        dashboardPage.downloadDashboardExportFile();

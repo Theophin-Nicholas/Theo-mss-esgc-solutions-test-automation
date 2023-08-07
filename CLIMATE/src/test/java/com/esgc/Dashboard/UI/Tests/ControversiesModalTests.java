@@ -14,7 +14,7 @@ import static com.esgc.Utilities.Groups.*;
 public class ControversiesModalTests extends DashboardUITestBase {
 
     @Test(enabled = false, groups = {REGRESSION, DASHBOARD, UI})
-    @Xray(test = {3170, 3171, 3932, 3953, 4020, 4025, 4033, 4036, 4059, 7381, 8042})
+    @Xray(test = {1472, 4290, 1352, 1679, 4844, 4787, 4807, 4354, 1817, 4548, 3894})
     public void controversiesModalUIAutomationTest() {
         DashboardPage dashboardPage = new DashboardPage();
         dashboardPage.selectSamplePortfolioFromPortfolioSelectionModal();
@@ -36,7 +36,7 @@ public class ControversiesModalTests extends DashboardUITestBase {
     }
 
     @Test(groups = {REGRESSION, DASHBOARD, UI})
-    @Xray(test = 6954)
+    @Xray(test = 4890)
     public void controversiesFilterTest() {
         DashboardPage dashboardPage = new DashboardPage();
         dashboardPage.selectSamplePortfolioFromPortfolioSelectionModal();
@@ -50,7 +50,7 @@ public class ControversiesModalTests extends DashboardUITestBase {
     }
 
     @Test(groups = {REGRESSION, DASHBOARD, UI, SMOKE, ENTITLEMENTS})
-    @Xray(test = 7931)
+    @Xray(test = 3408)
     public void verifyControversiesAreVisible_Bundle() {
 
         LoginPage login = new LoginPage();
@@ -74,7 +74,7 @@ public class ControversiesModalTests extends DashboardUITestBase {
     }
 
     @Test(groups = {REGRESSION, DASHBOARD, UI, SMOKE, ENTITLEMENTS})
-    @Xray(test = 7933)
+    @Xray(test = 3710)
     public void verifyControversiesAreNotVisible_Bundle() {
 
         LoginPage login = new LoginPage();
@@ -101,7 +101,7 @@ public class ControversiesModalTests extends DashboardUITestBase {
     }
 
     @Test(groups = {REGRESSION, DASHBOARD, UI})
-    @Xray(test = {3191, 3953, 7764, 7765, 7766, 7769, 7770})
+    @Xray(test = {1591, 1679, 3515, 3581, 3429, 3459, 3620})
     public void verifyCriticalAndNonCriticalControversies() {
         DashboardPage dashboardPage = new DashboardPage();
         dashboardPage.selectSamplePortfolioFromPortfolioSelectionModal();

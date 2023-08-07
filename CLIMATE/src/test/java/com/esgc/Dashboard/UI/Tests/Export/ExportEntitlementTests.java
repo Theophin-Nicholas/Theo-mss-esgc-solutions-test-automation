@@ -13,7 +13,7 @@ public class ExportEntitlementTests extends DashboardUITestBase {
 
 
     @Test(groups = {REGRESSION, UI, ENTITLEMENTS})
-    @Xray(test = {7815})
+    @Xray(test = {4533})
     public void verifyExportIsAvailableInDashboard_Bundle() {
 
         LoginPage login = new LoginPage();
@@ -29,13 +29,13 @@ public class ExportEntitlementTests extends DashboardUITestBase {
         dashboardPage.clickExportCompaniesButton();
         test.info("Exported All Companies and Investments Details in excel format");
 
-        assertTestCase.assertTrue(dashboardPage.isCompaniesAndInvestmentsExcelDownloaded(), "Verify Download of Excel file with Companies and Investments details", 248);
+        assertTestCase.assertTrue(dashboardPage.isCompaniesAndInvestmentsExcelDownloaded(), "Verify Download of Excel file with Companies and Investments details", 4631);
 
         dashboardPage.deleteDownloadFolder();
     }
 
     @Test(groups = {REGRESSION, UI, ENTITLEMENTS})
-    @Xray(test = {7816})
+    @Xray(test = {4522})
     public void verifyExportIsNotAvailableInDashboard_Bundle() {
 
         LoginPage login = new LoginPage();

@@ -14,7 +14,7 @@ import static com.esgc.Utilities.Groups.UI;
 public class DashboardSearchTests extends UITestBase {
 
     @Test(groups = {UI, REGRESSION}, dataProvider = "entityWithEsgDataOnly-DP", dataProviderClass = EntityWithEsgDataOnlyDataProviders.class)
-    @Xray(test = {14094})
+    @Xray(test = {2796})
     public void validateNoDataForEntitiesWithEsgDataOnly(String... entity) {
         DashboardPage dashboardPage = new DashboardPage();
         dashboardPage.clickSearchIcon();
@@ -23,7 +23,7 @@ public class DashboardSearchTests extends UITestBase {
     }
 
     @Test(groups = {UI, REGRESSION})
-    @Xray(test = {14017})
+    @Xray(test = {2841})
     public void ValidateRemovalOfCalculationsFromGlobalMenu() {
         if(Environment.environment.equalsIgnoreCase("qa"))
             throw new SkipException("Calculations option check is ignored for QA environment");
@@ -33,7 +33,7 @@ public class DashboardSearchTests extends UITestBase {
     }
 
     @Test(groups = {UI, REGRESSION})
-    @Xray(test = {14015})
+    @Xray(test = {2813})
     public void ValidateNewNameInGlobalMenu() {
         DashboardPage dashboardPage = new DashboardPage();
         dashboardPage.clickOnMenuButton();

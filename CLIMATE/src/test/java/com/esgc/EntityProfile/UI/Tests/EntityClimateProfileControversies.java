@@ -22,7 +22,7 @@ public class EntityClimateProfileControversies extends UITestBase {
 
 
     @Test(groups = {ENTITY_PROFILE, REGRESSION, UI, SMOKE})
-    @Xray(test = {8402, 8403, 8404, 8405, 8406, 8407, 8408, 8409, 8411})
+    @Xray(test = {4543, 4529, 4786, 4793, 4554, 4652, 4837, 4545, 4759})
     public void validateEntityControversiesWidget() {
         EntityClimateProfilePage entityProfilePage = new EntityClimateProfilePage();
         ResearchLinePage researchLinePage = new ResearchLinePage();
@@ -76,7 +76,7 @@ public class EntityClimateProfileControversies extends UITestBase {
                     assertTestCase.assertEquals(entityProfilePage.controversiesTableRow.size(), numberOfSubCategoryControversies);
                 }
 
-                //Verify the sorting for the Controversy list in the widget. 8407
+                //Verify the sorting for the Controversy list in the widget. 4652
                 // Controversy list should be sorted by the most recent one on top followed by less recent
                 for (WebElement controversiesDetails : entityProfilePage.controversiesTableRow) {
                     // Verify that clicking on a controversy row in the widget ,is opening up a Controversy modal popup
@@ -121,5 +121,5 @@ public class EntityClimateProfileControversies extends UITestBase {
 }
 
 
-//   8419
+//   4314
 // DB VALIDATION : Verify the Controversies data for an entity is correct for an entity

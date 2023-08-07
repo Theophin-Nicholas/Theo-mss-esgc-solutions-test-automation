@@ -13,8 +13,8 @@ import static com.esgc.Utilities.Groups.UI;
 public class EntitySearchFunctionTests extends UITestBase {
 
     @Test(groups = {REGRESSION, UI},
-            description = "ESGCA-5209 - UI | Portfolio Analysis Page | Search Function | Verify that 10 most words/phrases user typed appear")
-    @Xray(test = {5209})
+            description = "ESGT-4752 - UI | Portfolio Analysis Page | Search Function | Verify that 10 most words/phrases user typed appear")
+    @Xray(test = {4752})
     public void testSearchFunction() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio Analysis page");
@@ -29,8 +29,8 @@ public class EntitySearchFunctionTests extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI},
-            description = "ESGCA-5701 - UI | Portfolio Name Search | Verify the search functionality with wildcard characters")
-    @Xray(test = {5701})
+            description = "ESGT-4340 - UI | Portfolio Name Search | Verify the search functionality with wildcard characters")
+    @Xray(test = {4340})
     public void testSearchFunctionWildCharacter1() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio Analysis page");
@@ -41,8 +41,8 @@ public class EntitySearchFunctionTests extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI},
-            description = "ESGCA-5701 - UI | Portfolio Name Search | Verify the search functionality with wildcard characters")
-    @Xray(test = {5701})
+            description = "ESGT-4340 - UI | Portfolio Name Search | Verify the search functionality with wildcard characters")
+    @Xray(test = {4340})
     public void testSearchFunctionWildCharacter2() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio Analysis page");
@@ -53,8 +53,8 @@ public class EntitySearchFunctionTests extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI},
-            description = "ESGCA-5312 - UI | Portfolio Name Search | Verify the search for portfolio is giving correct result as per the given words")
-    @Xray(test = {5312})
+            description = "ESGT-4285 - UI | Portfolio Name Search | Verify the search for portfolio is giving correct result as per the given words")
+    @Xray(test = {4285})
     public void testSearchBoxIsGivingCorrectResult() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio Analysis page");
@@ -69,8 +69,8 @@ public class EntitySearchFunctionTests extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI},
-            description = "ESGCA-5314 - UI | Portfolio Name Search bar | Verify the message in case of No Result is found for given Portfolio name")
-    @Xray(test = {5314})
+            description = "ESGT-4289 - UI | Portfolio Name Search bar | Verify the message in case of No Result is found for given Portfolio name")
+    @Xray(test = {4289})
     public void testSearchFunctionForNoMatchEntry() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio Analysis page");
@@ -83,8 +83,8 @@ public class EntitySearchFunctionTests extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI},
-            description = "ESGCA-5206 - UI | Portfolio Analysis Page | Search Function | Verify that user should be able to search an entity by typing in the search box")
-    @Xray(test = {5206})
+            description = "ESGT-5077 - UI | Portfolio Analysis Page | Search Function | Verify that user should be able to search an entity by typing in the search box")
+    @Xray(test = {5077})
     public void testSearchBox() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio Analysis page");
@@ -99,8 +99,8 @@ public class EntitySearchFunctionTests extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI},
-            description = "ESGCA-5708 - UI | Portfolio Analysis Page | Search Function | Verify that a scroll bar is displayed for the search result dropdown on the page")
-    @Xray(test = {5708})
+            description = "ESGT-4442 - UI | Portfolio Analysis Page | Search Function | Verify that a scroll bar is displayed for the search result dropdown on the page")
+    @Xray(test = {4442})
     public void testSearchBoxInPortfolioPage() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio Analysis page");
@@ -115,8 +115,8 @@ public class EntitySearchFunctionTests extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI},
-            description = "ESGCA-5844 - UI | Portfolio Analysis Page | Search Function | Verify that clicking on Entity name redirects to Entity page")
-    @Xray(test = {5844})
+            description = "ESGT-5065 - UI | Portfolio Analysis Page | Search Function | Verify that clicking on Entity name redirects to Entity page")
+    @Xray(test = {5065})
     public void testClickingOnEntityNameOnPortfolioPage() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio Analysis page");
@@ -131,8 +131,8 @@ public class EntitySearchFunctionTests extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI},
-            description = "ESGCA-5845 - UI | Portfolio Analysis Page | Search Function | Verify that clicking ESC button is closing the Entity page")
-    @Xray(test = {5845})
+            description = "ESGT-4684 - UI | Portfolio Analysis Page | Search Function | Verify that clicking ESC button is closing the Entity page")
+    @Xray(test = {4684})
     public void testESCbuttonClosingEntityPage() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio Analysis page");

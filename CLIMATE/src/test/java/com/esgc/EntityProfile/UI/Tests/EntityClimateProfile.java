@@ -24,7 +24,7 @@ import static com.esgc.Utilities.Groups.*;
 public class EntityClimateProfile extends UITestBase {
 
 
-    @Xray(test = {5875, 5879, 11725, 12413})
+    @Xray(test = {3347, 3352, 4274})
     @Test(enabled = true, groups = {REGRESSION, UI, SMOKE, ENTITY_PROFILE},
             description = "Verify if Company headers are Displayed as Expected",
             dataProviderClass = DataProviderClass.class, dataProvider = "CompanyNames")
@@ -42,7 +42,7 @@ public class EntityClimateProfile extends UITestBase {
         entityProfilePage.validateCompanyHeader(companyName);
     }
 
-    @Xray(test = 6019)
+    @Xray(test = 3366)
     @Test(groups = {REGRESSION, UI, SMOKE, ENTITY_PROFILE},
             description = "Verify if Company headers are Displayed as Expected",
             dataProviderClass = DataProviderClass.class, dataProvider = "CompanyNames")
@@ -63,7 +63,7 @@ public class EntityClimateProfile extends UITestBase {
         //entityProfilePage.validateColorOfValueBoxAndPieChart("Green Share", greenShareValue);
     }
 
-    @Xray(test = 6019)
+    @Xray(test = 3366)
     @Test(groups = {REGRESSION, UI, SMOKE, ENTITY_PROFILE},
             description = "Verify if Company headers are Displayed as Expected",
             dataProviderClass = DataProviderClass.class, dataProvider = "CompanyNames")
@@ -82,7 +82,7 @@ public class EntityClimateProfile extends UITestBase {
         //entityProfilePage.validateColorOfValueBoxAndPieChart("Brown Share", brownShareValue);
     }
 
-    @Xray(test = 6066)
+    @Xray(test = 4366)
     @Test(groups = {REGRESSION, UI, SMOKE, ENTITY_PROFILE},
             description = "Verify if Company headers are Displayed as Expected")
     public void testTemperatureAlignmentWidget() {
@@ -100,7 +100,7 @@ public class EntityClimateProfile extends UITestBase {
         entityProfilePage.validateTemperatureAlignmentUpdatedOn();
     }
 
-    @Xray(test = {6111, 6113})
+    @Xray(test = {4885, 4365})
     @Test(groups = {REGRESSION, UI, ENTITY_PROFILE},
             description = "Entity Climate Profile Page Carbon Footprint Sector Comparison Chart  for Transition Risk",
             dataProviderClass = DataProviderClass.class, dataProvider = "CompanyNames")
@@ -119,7 +119,7 @@ public class EntityClimateProfile extends UITestBase {
 
     }
 
-    @Xray(test = {6189, 6190})
+    @Xray(test = {4952, 4816})
     @Test(groups = {REGRESSION, UI, ENTITY_PROFILE},
             description = "Entity Climate Profile Page-Sector Comparison Chart for Physical risk",
             dataProviderClass = DataProviderClass.class, dataProvider = "CompanyNames")
@@ -137,7 +137,7 @@ public class EntityClimateProfile extends UITestBase {
     }
 
     //TODO needs to be handled
-    @Xray(test = {8981, 8983})
+    @Xray(test = {4483, 4795})
     @Test(groups = {REGRESSION, UI, ENTITY_PROFILE},
             description = "Entity Climate Profile Page-Physical risk management",
             dataProviderClass = DataProviderClass.class, dataProvider = "CompanyNames")
@@ -187,7 +187,7 @@ public class EntityClimateProfile extends UITestBase {
 
     }
 
-    @Xray(test = {10044})
+    @Xray(test = {3970})
     @Test(groups = {REGRESSION, UI, ENTITY_PROFILE},
             description = "Verify Entity page header of the Company Name' About Drawer",
             dataProviderClass = DataProviderClass.class, dataProvider = "CompanyNames")
@@ -212,7 +212,7 @@ public class EntityClimateProfile extends UITestBase {
 
     }
 
-    @Xray(test = {10275})
+    @Xray(test = {4841})
     @Test(groups = {REGRESSION, UI, ENTITY_PROFILE},
             dataProviderClass = DataProviderClass.class, dataProvider = "Company With Orbis ID")
     public void validatePhysicalClimateHazardDate(String... Company) {
@@ -221,7 +221,7 @@ public class EntityClimateProfile extends UITestBase {
         entityProfilePage.validatePhysicalClimateHazardUpdatedDate(Company[1]);
     }
 
-    @Xray(test = {10282})
+    @Xray(test = {4858})
     @Test(groups = {REGRESSION, UI, ENTITY_PROFILE},
             dataProviderClass = DataProviderClass.class, dataProvider = "Company With Orbis ID")
     public void validatePhysicalRiskManagementUpdatedDate(String... Company) {

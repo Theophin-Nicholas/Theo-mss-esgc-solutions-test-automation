@@ -1,9 +1,7 @@
 package com.esgc.Dashboard.UI.Tests.Export;
 
 import com.esgc.Base.TestBases.DashboardUITestBase;
-import com.esgc.Base.UI.Pages.LoginPage;
 import com.esgc.Dashboard.UI.Pages.DashboardPage;
-import com.esgc.Utilities.EntitlementsBundles;
 import com.esgc.Utilities.ExcelUtil;
 import com.esgc.Utilities.Xray;
 import org.apache.poi.ss.usermodel.Row;
@@ -20,7 +18,7 @@ import static com.esgc.Utilities.Groups.*;
 public class ExportDashboardDataDictionary extends DashboardUITestBase {
 
     @Test(groups = {DASHBOARD, REGRESSION, UI})
-    @Xray(test = {9185})
+    @Xray(test = {4420})
     public void verifyDataDictionary() {
         DashboardPage dashboardPage = new DashboardPage();
 
@@ -38,13 +36,13 @@ public class ExportDashboardDataDictionary extends DashboardUITestBase {
         test.info("Exported All Companies and Investments Details in excel format");
         dashboardPage.closePortfolioExportDrawer();
 
-        assertTestCase.assertTrue(dashboardPage.isCompaniesAndInvestmentsExcelDownloaded(), "Verify Download of Excel file with Companies and Investments details", 6080);
+        assertTestCase.assertTrue(dashboardPage.isCompaniesAndInvestmentsExcelDownloaded(), "Verify Download of Excel file with Companies and Investments details", 1867);
 
         // Read the data from Excel File
         String filePath = dashboardPage.getDownloadedCompaniesExcelFilePath();
         String tabName = "Data Dictionary";
 
-        // ESGCA-9185: Validate Export Excel has Physical Risk Management Rows in 'Data Mappings' Sheet
+        // ESGT-4420: Validate Export Excel has Physical Risk Management Rows in 'Data Mappings' Sheet
         Map<String,String> dataDictionary = new HashMap<>();
         dataDictionary.put("Score Type","Type of score produced - Analyst-verified or Predicted Score ");
         dataDictionary.put("Physical Risk Management Produced Date","Year, month, day at which Physical Risk Management research was published in the dataset");
@@ -60,7 +58,7 @@ public class ExportDashboardDataDictionary extends DashboardUITestBase {
     }
 
     @Test(groups = {DASHBOARD, REGRESSION, UI})
-    @Xray(test = {9188, 9786, 9817})
+    @Xray(test = {4459, 4441})
     public void verifyAllResearchLinesTabInfo() {
         DashboardPage dashboardPage = new DashboardPage();
 
@@ -78,13 +76,13 @@ public class ExportDashboardDataDictionary extends DashboardUITestBase {
         test.info("Exported All Companies and Investments Details in excel format");
         dashboardPage.closePortfolioExportDrawer();
 
-        assertTestCase.assertTrue(dashboardPage.isCompaniesAndInvestmentsExcelDownloaded(), "Verify Download of Excel file with Companies and Investments details", 6080);
+        assertTestCase.assertTrue(dashboardPage.isCompaniesAndInvestmentsExcelDownloaded(), "Verify Download of Excel file with Companies and Investments details", 1867);
 
         // Read the data from Excel File
         String filePath = dashboardPage.getDownloadedCompaniesExcelFilePath();
         String tabName = "Data - All research lines";
 
-        // ESGCA-9188: Validate Physical Risk Management Columns in 'Data - All research lines' Sheet
+        // ESGCA-4459: Validate Physical Risk Management Columns in 'Data - All research lines' Sheet
         ExcelUtil excel = new ExcelUtil(filePath,tabName);
         List<String> actualColumnsList = excel.getColumnsNames();
         List<String> expectedPhysicalRiskColumnsList = new ArrayList<>();
@@ -96,7 +94,7 @@ public class ExportDashboardDataDictionary extends DashboardUITestBase {
         expectedPhysicalRiskColumnsList.add("Physical Risk Management - Results Score");
         assertTestCase.assertTrue(actualColumnsList.containsAll(expectedPhysicalRiskColumnsList),"Data dictionary details verification");
 
-        // ESGCA-9786: Validate newly added Columns in 'Data - All research lines' Sheet
+        // ESGCA-4441: Validate newly added Columns in 'Data - All research lines' Sheet
 
         //ESGCA-9817: Verify the columns Alphanumeric Score and Overall Qualifier is not present
         List<String> deletedColumnsList = new ArrayList<>();

@@ -18,7 +18,7 @@ import static org.hamcrest.Matchers.*;
 
 public class PerformanceChartAPITest extends APITestBase {
     @Test(groups = {API, REGRESSION}, dataProvider = "API Research Lines2")
-    @Xray(test = {8044})
+    @Xray(test = {4160})
     public void PerformanceChartAPI_Success(@Optional String researchLine) {
         DashboardAPIController apiController = new DashboardAPIController();
 
@@ -60,7 +60,7 @@ public class PerformanceChartAPITest extends APITestBase {
     }
 
     @Test(groups = {API, REGRESSION}, dataProvider = "API Research Lines2")
-    @Xray(test = {8045})
+    @Xray(test = {4071})
     public void PerformanceChartAPI_InvalidPayload(@Optional String researchLine) {
         DashboardAPIController apiController = new DashboardAPIController();
 
@@ -88,7 +88,7 @@ public class PerformanceChartAPITest extends APITestBase {
     }
 
     @Test(groups = {API, REGRESSION}, dataProvider = "API Research Lines2")
-    @Xray(test = {8045})
+    @Xray(test = {4071})
     public void PerformanceChart_UnauthorisedAccess(@Optional String researchLine) {
 
         DashboardAPIController apiController = new DashboardAPIController();

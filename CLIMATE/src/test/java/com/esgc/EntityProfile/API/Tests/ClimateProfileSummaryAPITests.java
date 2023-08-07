@@ -21,7 +21,7 @@ import static org.hamcrest.Matchers.*;
 public class ClimateProfileSummaryAPITests extends EntityClimateProfileTestBase {
 
     @Test(groups = {API, REGRESSION, ENTITY_PROFILE}, dataProvider = "API Research Lines")
-    @Xray(test = {5995, 6030, 6036, 6042, 7812})
+    @Xray(test = {1266, 1814, 1900, 1937, 3892})
     public void ValidateClimateSummaryAPIResponse(String researchLine, String orbis_id) {
         System.out.println("researchLine = " + researchLine);
         System.out.println("orbis_id = " + orbis_id);
@@ -59,7 +59,7 @@ public class ClimateProfileSummaryAPITests extends EntityClimateProfileTestBase 
 
 
     @Test(groups = {API, REGRESSION, ENTITY_PROFILE}, dataProvider = "API Research Lines")
-    @Xray(test = {5996, 6037, 6043, 7813})
+    @Xray(test = {1837, 1850, 1871, 4207})
     public void ValidateClimateSummaryAPIWithInvalidToken(String researchLine, String orbis_id) {
         System.out.println("researchLine = " + researchLine);
         System.out.println("orbis_id = " + orbis_id);
@@ -75,7 +75,7 @@ public class ClimateProfileSummaryAPITests extends EntityClimateProfileTestBase 
     }
 
     @Test(groups = {API, REGRESSION, ENTITY_PROFILE}, dataProvider = "orbis_id")
-    @Xray(test = {6710})
+    @Xray(test = {3914})
     public void verifyDynamicDataScoresAPITest(String orbis_id) {
         EntityProfileClimatePageAPIController entityClimateProfileApiController = new EntityProfileClimatePageAPIController();
         test.info("Climate Profile Summary " + orbis_id + " widget API validation");
@@ -88,7 +88,7 @@ public class ClimateProfileSummaryAPITests extends EntityClimateProfileTestBase 
     }
 
     @Test(groups = {API, REGRESSION, ENTITY_PROFILE, ESG}, dataProvider = "orbis_id")
-    @Xray(test = {8232})
+    @Xray(test = {4209})
     public void verifyAPIForOverallESGScoreWidget(String orbis_id) {
         EntityProfileClimatePageAPIController entityClimateProfileApiController = new EntityProfileClimatePageAPIController();
         test.info("ESG Score widget API validation for " + orbis_id);

@@ -20,11 +20,11 @@ import static com.esgc.Utilities.Groups.*;
 public class ImpactTableTests extends UITestBase {
 
     @Test(groups = {REGRESSION, UI},
-            description = "ESGCA-4932 - Verify Impact Filter dropdown",
+            description = "ESGT-3556 - Verify Impact Filter dropdown",
             dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
-    @Xray(test = {4932, 6772})
+    @Xray(test = {3556, 3668})
     public void checkImpactFilterDropdownOptions(String page) {
-        test.info("Test Cases: ESGCA-4932 ");
+        test.info("Test Cases: ESGT-3556");
         ResearchLinePage researchLinePage = new ResearchLinePage();
         researchLinePage.navigateToResearchLine(page);
         List<String> expected = Arrays.asList("Top 5", "Top 10", "Bottom 5", "Bottom 10");
@@ -35,11 +35,11 @@ public class ImpactTableTests extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI, SMOKE},
-            description = "ESGCA-4913, ESGCA-4997,  ESGCA-5007 - Verify Impact Table and graph is present",
+            description = "ESGT-3643, ESGT-3353,  ESGT-3338 - Verify Impact Table and graph is present",
             dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
-    @Xray(test = {4913, 4997, 5007, 6772})
+    @Xray(test = {3643, 3353, 3338, 3668})
     public void verifyImpactTableAndGraphPresent(String page) {
-        test.info("Test Cases: ESGCA-4913, ESGCA-4997,  ESGCA-5007 ");
+        test.info("Test Cases: ESGT-4913, ESGT-3353,  ESGT-3338 ");
         ResearchLinePage researchLinePage = new ResearchLinePage();
         researchLinePage.navigateToResearchLine(page);
         assertTestCase.assertTrue(researchLinePage.isImpactTablePresent(), "Impact Table Verification");
@@ -47,11 +47,11 @@ public class ImpactTableTests extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI},
-            description = "ESGCA-4962  - Verify Impact Table columns",
+            description = "ESGT-2219  - Verify Impact Table columns",
             dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
-    @Xray(test = {4962, 6931})
+    @Xray(test = {2219, 4745})
     public void verifyImpactTableColumns(String page) {
-        test.info("Test Cases: ESGCA-4962 ");
+        test.info("Test Cases: ESGT-2219 ");
         ResearchLinePage researchLinePage = new ResearchLinePage();
         researchLinePage.navigateToResearchLine(page);
         List<String> expected = Arrays.asList("Company", "% Investment", "Score", "Risk Category");
@@ -91,11 +91,11 @@ public class ImpactTableTests extends UITestBase {
     }
 
     @Test(enabled = true, groups = {REGRESSION, UI},
-            description = "ESGCA-4998 - Verify Score Category colors",
+            description = "ESGT-1620 - Verify Score Category colors",
             dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
-    @Xray(test = {4998, 6772})
+    @Xray(test = {1620, 3668})
     public void verifyScoreCategoryColors(String page) {
-        test.info("Test Cases: ESGCA-4998 ");
+        test.info("Test Cases: ESGT-1620 ");
         ResearchLinePage researchLinePage = new ResearchLinePage();
         researchLinePage.navigateToResearchLine(page);
         assertTestCase.assertTrue(researchLinePage.verifyImpactTableScoreCategoryColors(page), "Verify Impact Table Colors");
@@ -104,9 +104,9 @@ public class ImpactTableTests extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI}, dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
-    @Xray(test = {6931})
+    @Xray(test = {4745})
     public void verifyPercentageSymbolWithInvestmentColumn(String page) {
-        test.info("Test Cases: ESGCA-6931 ");
+        test.info("Test Cases: ESGT-6931 ");
         ResearchLinePage researchLinePage = new ResearchLinePage();
         researchLinePage.navigateToResearchLine(page);
         assertTestCase.assertTrue(researchLinePage.verifyPercentageSymbolWithInvestmentColumn(), "Verify % with Investment Columns in all tables");
@@ -116,11 +116,11 @@ public class ImpactTableTests extends UITestBase {
 
 
     @Test(groups = {REGRESSION, UI, SMOKE},
-            description = "ESGCA-5543 - Verify labels for positive ane negative impact table",
+            description = "ESGT-5543 - Verify labels for positive ane negative impact table",
             dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
-    @Xray(test = {5543, 6772})
+    @Xray(test = {4256, 3668})
     public void verifyWidgetTitles(String page) {
-        test.info("Test Cases: ESGCA-5543");
+        test.info("Test Cases: ESGT-5543");
         ResearchLinePage researchLinePage = new ResearchLinePage();
         researchLinePage.selectSamplePortfolioFromPortfolioSelectionModal();
         if ( page.equals("ESG Assessments")) {
@@ -135,11 +135,11 @@ public class ImpactTableTests extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI},
-            description = "ESGCA-5002 - UI | Impact Graph | Verify Impact graph data for all filters",
+            description = "ESGT-3344 - UI | Impact Graph | Verify Impact graph data for all filters",
             dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
-    @Xray(test = {5002})
+    @Xray(test = {3344})
     public void checkImpactFilterFuncionality(String page) {
-        test.info("Test Cases: ESGCA-5002 ");
+        test.info("Test Cases: ESGT-3344 ");
         ResearchLinePage researchLinePage = new ResearchLinePage();
         researchLinePage.navigateToResearchLine(page);
         List<String> filterOptions = Arrays.asList("Top 5", "Top 10", "Bottom 5", "Bottom 10");
@@ -151,11 +151,11 @@ public class ImpactTableTests extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI},
-            description = "ESGCA-5006 - UI | Impact Graph | Verify when Investment % and Impact % are same",
+            description = "ESGT-3342 - UI | Impact Graph | Verify when Investment % and Impact % are same",
             dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
-    @Xray(test = {5006})
+    @Xray(test = {3342})
     public void checkImpactGraphBars(String page) {
-        test.info("Test Cases: ESGCA-5006 ");
+        test.info("Test Cases: ESGT-3342 ");
         ResearchLinePage researchLinePage = new ResearchLinePage();
         researchLinePage.navigateToResearchLine(page);
         researchLinePage.selectPortfolioByNameFromPortfolioSelectionModal("Sample Portfolio");
@@ -185,11 +185,11 @@ public class ImpactTableTests extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI},
-            description = "ESGCA-4940 - Verify Drilldowns If There are More Than 20 Companies in Impact Tables",
+            description = "ESGT-3657 - Verify Drilldowns If There are More Than 20 Companies in Impact Tables",
             dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
-    @Xray(test = {4940, 6775})
+    @Xray(test = {3657, 3500})
     public void verifyImpactTableDrillDown(String page) {
-        test.info("Test Cases: ESGCA-4940");
+        test.info("Test Cases: ESGT-3657");
         ResearchLinePage researchLinePage = new ResearchLinePage();
         researchLinePage.navigateToResearchLine(page);
         researchLinePage.selectSamplePortfolioFromPortfolioSelectionModal();
@@ -199,11 +199,11 @@ public class ImpactTableTests extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI},
-            description = "ESGCA-9809 - UI | Portfolio Analysis | Impact Table | Verify Sorting Orders by Impact Filter",
+            description = "ESGT-9809 - UI | Portfolio Analysis | Impact Table | Verify Sorting Orders by Impact Filter",
             dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
-    @Xray(test = {4933, 6774})
+    @Xray(test = {3601, 3667})
     public void verifySortingOrderByImpactFilter(String researchLine) {
-        test.info("Test Cases: ESGCA-4933");
+        test.info("Test Cases: ESGT-3601");
         if (researchLine.equals("Physical Risk Hazards") ||
                 //researchLine.equals("Temperature Alignment") ||
                 researchLine.equals("Physical Risk Management") ||
@@ -224,8 +224,8 @@ public class ImpactTableTests extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI},
-            description = "ESGCA-6777 - UI | Temperature Alignment | Impact Table | Verify Impact Tables Presentation without Data")
-    @Xray(test = {6777})
+            description = "ESGT-3607 - UI | Temperature Alignment | Impact Table | Verify Impact Tables Presentation without Data")
+    @Xray(test = {3607})
     public void checkImpactTablesWithoutData() {
 
         ResearchLinePage researchLinePage = new ResearchLinePage();

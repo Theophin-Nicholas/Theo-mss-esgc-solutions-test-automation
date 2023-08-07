@@ -18,7 +18,7 @@ import static org.hamcrest.Matchers.*;
 public class HistoryTableTest extends APITestBase{
 
         @Test(groups = {API, REGRESSION}, dataProvider = "API Research Lines")
-        @Xray(test = {5107})
+        @Xray(test = {1807})
         public void getHistoryTableSuccessAPIResponse(String researchLine) {
             APIController apiController = new APIController();
 
@@ -37,7 +37,7 @@ public class HistoryTableTest extends APITestBase{
         }
 
         @Test(groups = {API, REGRESSION}, dataProvider = "No ESG API Research Lines")
-        @Xray(test = {5097})
+        @Xray(test = {1772})
         public void getHistoryTableInvalidPayload(String researchLine) {
             APIController apiController = new APIController();
 
@@ -51,7 +51,7 @@ public class HistoryTableTest extends APITestBase{
         }
 
         @Test(groups = {API, REGRESSION}, dataProvider = "API Research Lines")
-        @Xray(test = {5097})
+        @Xray(test = {1772})
         public void getHistoryTableInvalidToken(String researchLine) {
             APIController apiController = new APIController();
 

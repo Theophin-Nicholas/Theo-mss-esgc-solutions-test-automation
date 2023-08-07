@@ -20,7 +20,7 @@ public class ResearchLinesDescriptionsTest extends UITestBase {
  */
 
     @Test(groups = {REGRESSION, UI, SMOKE, ESG}, dataProvider = "Descriptions")
-    @Xray(test = {3918,6934,6502})
+    @Xray(test = {4425,5058,4686})
     public void verifyDescriptions(String page, String description, Integer... testCases) {
 
         ResearchLinePage researchLinePage = new ResearchLinePage();
@@ -42,23 +42,23 @@ public class ResearchLinesDescriptionsTest extends UITestBase {
     public Object[][] dpMethod() {
 
         return new Object[][]{
-                {"Physical Risk Management", PHYSICAL_RISK_MANAGEMENT_DESCRIPTION, 717,7994},
-                //{"Operations Risk", OPERATIONS_RISK_DESCRIPTION, 724},
+                {"Physical Risk Management", PHYSICAL_RISK_MANAGEMENT_DESCRIPTION, 5082},
+                //{"Operations Risk", OPERATIONS_RISK_DESCRIPTION, 5073},
                 //{"Market Risk", MARKET_RISK_DESCRIPTION, 725},
                 //{"Supply Chain Risk", SUPPLY_CHAIN_RISK_DESCRIPTION, 727},
-                {"Physical Risk Hazards", PHYSICAL_RISK_HAZARDS_DESCRIPTION, 724},
-                {"Temperature Alignment", TEMPERATURE_ALIGNMENTS_DESCRIPTION, 6934},
-                {"Carbon Footprint", CARBON_FOOTPRINT_DESCRIPTION, 549, 726},
-                {"Brown Share Assessment", BROWN_SHARE_ASSESSMENT_DESCRIPTION, 2266},
+                {"Physical Risk Hazards", PHYSICAL_RISK_HAZARDS_DESCRIPTION, 5073},
+                {"Temperature Alignment", TEMPERATURE_ALIGNMENTS_DESCRIPTION, 5058},
+                {"Carbon Footprint", CARBON_FOOTPRINT_DESCRIPTION, 4853, 4613},
+                {"Brown Share Assessment", BROWN_SHARE_ASSESSMENT_DESCRIPTION, 5034},
                 // {"Energy Transition Management",ENERGY_TRANSITION_MANAGEMENT_DESCRIPTION},
                 // {"TCFD Strategy",TCFD_CLIMATE_STRATEGY_DESCRIPTION},
-                {"Green Share Assessment", GREEN_SHARE_ASSESSMENT_DESCRIPTION, 2262},
+                {"Green Share Assessment", GREEN_SHARE_ASSESSMENT_DESCRIPTION, 5078},
 
         };
     }
 
     @Test(groups = {REGRESSION, UI, ESG})
-    @Xray(test = {6517, 6522, 6519, 6516, 6517, 6477, 6520, 6521, 6523, 6561})
+    @Xray(test = {4401, 4377, 4407, 4702, 4401, 4292, 4917, 4896, 4788, 3916})
     public void validateDescriptionsForAdditionalPhysicalRiskHazards() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio Analysis page");

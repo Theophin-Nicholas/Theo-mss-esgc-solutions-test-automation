@@ -32,7 +32,7 @@ public class RegionMapTests extends UITestBase {
 
         researchLinePage.hoverOverRandomCountryOnMapAndCheckIfTooltipDisplayed();
 
-        assertTestCase.assertTrue(researchLinePage.checkIfRegionMapLabelIsCorrect(), "Validating map label", 1897);
+        assertTestCase.assertTrue(researchLinePage.checkIfRegionMapLabelIsCorrect(), "Validating map label", 4832);
         test.pass("World Map label is displayed correctly");
     }
 

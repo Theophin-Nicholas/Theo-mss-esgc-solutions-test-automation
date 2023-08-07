@@ -20,9 +20,9 @@ import static com.esgc.Utilities.Groups.*;
 public class BenchmarkSelectionTest extends UITestBase {
 
     @Test(groups = {REGRESSION, UI, SMOKE},
-            description = "ESGCA-1433 - Verify User is Able to Select the Benchmark",
+            description = "ESGT-4698 - Verify User is Able to Select the Benchmark",
             dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
-    @Xray(test = 1433)
+    @Xray(test = 4698)
     public void verifyUserIsAbleToSelectBenchmarkPortfolio(String researchLine) {
         BrowserUtils.wait(2);
         ResearchLinePage researchLinePage = new ResearchLinePage();
@@ -30,33 +30,33 @@ public class BenchmarkSelectionTest extends UITestBase {
         researchLinePage.navigateToResearchLine(researchLine);
         BrowserUtils.wait(5);
 
-        assertTestCase.assertEquals(researchLinePage.benchmarkDropdown.getText(), "Select Benchmark", "Benchmark dropdown verified", 671, 1331);
+        assertTestCase.assertEquals(researchLinePage.benchmarkDropdown.getText(), "Select Benchmark", "Benchmark dropdown verified", 5027, 5006);
         test.info("Select Benchmark is in dropdown");
 
         researchLinePage.clickOnBenchmarkDropdown();
         researchLinePage.waitForDataLoadCompletion();
         researchLinePage.SelectAPortfolioFromBenchmark("Sample Portfolio");
 
-        assertTestCase.assertTrue(researchLinePage.IsBenchmarkListBoxDisplayed(), "Portfolio Analysis page was loaded successfully after Benchmark selection.", 1433, 2254);
+        assertTestCase.assertTrue(researchLinePage.IsBenchmarkListBoxDisplayed(), "Portfolio Analysis page was loaded successfully after Benchmark selection.", 4698, 4598);
         BrowserUtils.wait(3);
-        assertTestCase.assertTrue(researchLinePage.isBenchmarkPortfolioScoreWidgetDisplayed(), "Benchmark Score validation", 425, 1437);
-        assertTestCase.assertTrue(researchLinePage.isBenchmarkPortfolioCoverageWidgetDisplayed(), "Benchmark Coverage validation", 2429);
-        assertTestCase.assertTrue(researchLinePage.isBenchmarkColumnsAreDisplayedOnRegionAndSectorWidgets(), "Benchmark Columns validation", 2564, 2718);
-        assertTestCase.assertTrue(researchLinePage.isBenchmarkMarksAreDisplayedOnRegionAndSectorWidgets(), "Benchmark Marks validation", 1512, 2146);
+        assertTestCase.assertTrue(researchLinePage.isBenchmarkPortfolioScoreWidgetDisplayed(), "Benchmark Score validation", 4811, 1437);
+        assertTestCase.assertTrue(researchLinePage.isBenchmarkPortfolioCoverageWidgetDisplayed(), "Benchmark Coverage validation", 4339);
+        assertTestCase.assertTrue(researchLinePage.isBenchmarkColumnsAreDisplayedOnRegionAndSectorWidgets(), "Benchmark Columns validation", 3520, 4547);
+        assertTestCase.assertTrue(researchLinePage.isBenchmarkMarksAreDisplayedOnRegionAndSectorWidgets(), "Benchmark Marks validation", 4988, 5044);
 
         researchLinePage.clickOnBenchmarkDropdown()
                 .SelectAPortfolioFromBenchmark("No Benchmark");
         //researchLinePage.waitForDataLoadCompletion();
 
-        assertTestCase.assertTrue(researchLinePage.isNoBenchmarkMessageDisplayed(), " No Benchmark message is displayed", 1329, 1434);
-        assertTestCase.assertEquals(researchLinePage.benchmarkDropdown.getText(), "Select Benchmark", "Benchmark dropdown verified", 671);
+        assertTestCase.assertTrue(researchLinePage.isNoBenchmarkMessageDisplayed(), " No Benchmark message is displayed", 4659, 1434);
+        assertTestCase.assertEquals(researchLinePage.benchmarkDropdown.getText(), "Select Benchmark", "Benchmark dropdown verified", 5027);
         test.info("Select Benchmark is in dropdown");
 
     }
 
     @Test(groups = {REGRESSION, UI, SMOKE},
-            description = "ESGCA-2594 - Verify the Benchmark coverage section is displayed when a Benchmark portfolio selected")
-    @Xray(test = {671, 2594, 4084, 6734})
+            description = "ESGT-1768 - Verify the Benchmark coverage section is displayed when a Benchmark portfolio selected")
+    @Xray(test = {5027, 1768, 4315, 4845})
     public void verifyBenchmarkCoverageSectionIsDisplayedAfterBenchmarkPortfolio() {
 
         ResearchLinePage researchLinePage = new ResearchLinePage();
@@ -75,8 +75,8 @@ public class BenchmarkSelectionTest extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI},
-            description = "ESGCA-3879 - Validate Score Title's for Portfolio and Benchmark Score")
-    @Xray(test = 3879)
+            description = "ESGT-1360 - Validate Score Title's for Portfolio and Benchmark Score")
+    @Xray(test = 1360)
     public void verifyBenchmarkAndPortfolioScoreTitleAfterBenchmarkPortfolio() {
 
         ResearchLinePage researchLinePage = new ResearchLinePage();
@@ -94,8 +94,8 @@ public class BenchmarkSelectionTest extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI},
-            description = "ESGCA-1329 - Validate No Benchmark option is present")
-    @Xray(test = 1329)
+            description = "ESGT-4659 - Validate No Benchmark option is present")
+    @Xray(test = 4659)
     public void verifyNoBenchMark() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
@@ -108,11 +108,11 @@ public class BenchmarkSelectionTest extends UITestBase {
 
         test.info("No Benchmark option is present in the dropdown as expected");
 
-        assertTestCase.assertTrue(researchLinePage.isNoBenchmarkMessageDisplayed(), " No Benchmark message is not displayed", 1329);
+        assertTestCase.assertTrue(researchLinePage.isNoBenchmarkMessageDisplayed(), " No Benchmark message is not displayed", 4659);
     }
 
     @Test(groups = {REGRESSION, UI},
-            description = "ESGCA-1436 - Verify changes persist after benchmark is selected")
+            description = "ESGT-1436 - Verify changes persist after benchmark is selected")
     @Xray(test = 1436)
     public void verifyBenchmarkChangesPersistence() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
@@ -136,8 +136,8 @@ public class BenchmarkSelectionTest extends UITestBase {
 
 
     @Test(groups = {REGRESSION, UI},
-            description = "ESGCA-2254 - Verify carbon footprint benchmark score")
-    @Xray(test = 2254)
+            description = "ESGT-4598 - Verify carbon footprint benchmark score")
+    @Xray(test = 4598)
     public void verifyCarbonFootprint() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
@@ -159,8 +159,8 @@ public class BenchmarkSelectionTest extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI},
-            description = "ESGCA-2254 - Verify carbon footprint benchmark score")
-    @Xray(test = 2254)
+            description = "ESGCA-4598 - Verify carbon footprint benchmark score")
+    @Xray(test = 4598)
     public void verifyShadowedSelectBenchmark() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
@@ -174,7 +174,7 @@ public class BenchmarkSelectionTest extends UITestBase {
 
     @Test(enabled = false, groups = {REGRESSION, UI, ESG}, //TODO disabled till ESG assessment scoped back.
             description = "Verify that Benchmark can be selected and displayed on Summary Section")
-    @Xray(test = {8387})
+    @Xray(test = {4213})
     public void verifyESGAssessmentsBenchmarkSection() {
 
         ResearchLinePage researchLinePage = new ResearchLinePage();

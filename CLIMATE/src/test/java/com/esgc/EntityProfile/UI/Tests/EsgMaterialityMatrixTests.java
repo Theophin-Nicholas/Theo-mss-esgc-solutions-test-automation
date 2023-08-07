@@ -11,7 +11,7 @@ import static com.esgc.Utilities.Groups.*;
 public class EsgMaterialityMatrixTests extends UITestBase {
 //TODO : Disabling this method due to ESG removal
     @Test( enabled = false ,groups = {ENTITY_PROFILE, REGRESSION, UI})
-    @Xray(test = {8424})
+    @Xray(test = {4661})
     public void validateEsgMaterialityMatrixColumns() {
      /*   String company = "Apple, Inc.";
         test.info("Searching and Selecting the company");
@@ -36,7 +36,7 @@ public class EsgMaterialityMatrixTests extends UITestBase {
     }
 
     @Test(groups = {ESG, ENTITY_PROFILE, REGRESSION, UI})
-    @Xray(test = {8424})
+    @Xray(test = {4661})
     public void validateLowMaterialityColumnProperties() {
         String company = "Apple, Inc.";
         test.info("Searching and Selecting the company");
@@ -50,7 +50,7 @@ public class EsgMaterialityMatrixTests extends UITestBase {
     }
 
     @Test(groups = {ENTITY_PROFILE, REGRESSION, UI, ESG})
-    @Xray(test = {8427})
+    @Xray(test = {4454})
     public void validateEsgMaterialityMatrixSubCategoriesProperties() {
 
         String company = "Pegasystems, Inc.";
@@ -66,7 +66,7 @@ public class EsgMaterialityMatrixTests extends UITestBase {
     }
     //TODO : Disabling this method due to ESG removal
     @Test(enabled = false, groups = {ENTITY_PROFILE, REGRESSION, UI})
-    @Xray(test = {8425})
+    @Xray(test = {4453})
     public void validateEsgMaterialityMatrixOrderAndColors() {
 
    /*     String company = "Amazon.com, Inc.";
@@ -82,7 +82,7 @@ public class EsgMaterialityMatrixTests extends UITestBase {
     }
 
     @Test(groups = {ENTITY_PROFILE, REGRESSION, UI, SMOKE, ESG})
-    @Xray(test = {8442})
+    @Xray(test = {4806})
     public void validateNoneForTheSector() {
 
         String company = "Sculptor Capital Management, Inc.";
@@ -96,7 +96,7 @@ public class EsgMaterialityMatrixTests extends UITestBase {
     }
 
     @Test(groups = {ENTITY_PROFILE, REGRESSION, UI})
-    @Xray(test = {8835})
+    @Xray(test = {4384})
     public void validateAllButtons() {
 
         String company = "Apple, Inc.";
@@ -112,7 +112,7 @@ public class EsgMaterialityMatrixTests extends UITestBase {
     }
     //TODO : Disabling this method due to ESG removal
     @Test(enabled = false ,groups = {ENTITY_PROFILE, REGRESSION, UI})
-    @Xray(test = {8841, 8842})
+    @Xray(test = {4373, 4389})
     public void validateMaterialityMatrixLegends() {
 /*
         String company = "Apple, Inc.";
@@ -126,7 +126,7 @@ public class EsgMaterialityMatrixTests extends UITestBase {
     }
 
     @Test(groups = {ENTITY_PROFILE, REGRESSION, UI, SMOKE, ESG})
-    @Xray(test = {8868})
+    @Xray(test = {3349})
     public void validateEsgMaterialityPopup() {
 
         String company = "Apple, Inc.";

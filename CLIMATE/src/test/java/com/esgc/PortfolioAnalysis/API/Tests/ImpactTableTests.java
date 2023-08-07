@@ -18,9 +18,9 @@ import static com.esgc.Utilities.Groups.REGRESSION;
 public class ImpactTableTests extends APITestBase {
 
     @Test(groups = {API, REGRESSION}, dataProvider = "No ESG API Research Lines")
-    @Xray(test = {4957})
+    @Xray(test = {2174})
     public void getImpactDistributionSuccess(String researchLine) {
-        test.info("Tests ESGCA-4957");
+        test.info("Tests ESGT-2174");
         APIController apiController = new APIController();
         APIFilterPayloadWithImpactFilter apiFilterPayload = new APIFilterPayloadWithImpactFilter("all", "all", "03", "2021", "top5");
         Response response = apiController.getImpactDistributionResponse(portfolioID,researchLine,apiFilterPayload);
@@ -30,10 +30,10 @@ public class ImpactTableTests extends APITestBase {
     }
 
     @Test(groups = {API, REGRESSION}, dataProvider = "API Research Lines")
-    @Xray(test = {5011})
+    @Xray(test = {1271})
     public void getImpactDistributionInvalidPayload(String researchLine) {
         // API Returns 200 instead of 500
-        test.info("Tests ESGCA-5011");
+        test.info("Tests ESGCA-1271");
         APIController apiController = new APIController();
         APIFilterPayloadWithImpactFilter apiFilterPayload = new APIFilterPayloadWithImpactFilter("", "", "", "", "xxx");
         Response response = apiController.getImpactDistributionResponse(portfolioID,researchLine,apiFilterPayload);
@@ -41,9 +41,9 @@ public class ImpactTableTests extends APITestBase {
     }
 
     @Test(groups = {API, REGRESSION}, dataProvider = "No ESG API Research Lines")
-    @Xray(test = {5010})
+    @Xray(test = {1256})
     public void getImpactDistributionInvalidToken(String researchLine) {
-        test.info("Tests ESGCA-5010");
+        test.info("Tests ESGCA-1256");
         APIFilterPayloadWithImpactFilter apiFilterPayload = new APIFilterPayloadWithImpactFilter("all", "all", "03", "2021", "top5");
         APIController apiController = new APIController();
         apiController.setInvalid();

@@ -18,7 +18,7 @@ import static org.hamcrest.Matchers.*;
 public class LeadersAndLaggards extends APITestBase {
 
     @Test(groups = {API, REGRESSION}, dataProvider = "API Research Lines")
-    @Xray(test = {645, 646,9875})
+    @Xray(test = {1329, 1529,4182})
     public void leadersAndLaggards_Success(@Optional String researchLine) {
         APIController apiController = new APIController();
 
@@ -40,7 +40,7 @@ public class LeadersAndLaggards extends APITestBase {
     }
 
     @Test(groups = {API, REGRESSION}, dataProvider = "API Research Lines")
-    @Xray(test = {1168, 734, 1169, 2440,  2877})
+    @Xray(test = {1560, 1731, 1995,  1688})
     //3093 Energy Transition
     public void leadersAndLaggards_InvalidPayload(@Optional String researchLine) {
         APIController apiController = new APIController();

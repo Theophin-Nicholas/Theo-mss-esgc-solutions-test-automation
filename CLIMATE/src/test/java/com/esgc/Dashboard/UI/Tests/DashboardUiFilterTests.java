@@ -13,7 +13,7 @@ import static com.esgc.Utilities.Groups.*;
 
 public class DashboardUiFilterTests extends UITestBase {
     @Test(groups = {REGRESSION, UI, SMOKE, DASHBOARD})
-    @Xray(test = {1301, 1305, 3286})
+    @Xray(test = {5068, 1634, 2017})
     public void verifySectorsSorting() {
 
         DashboardPage dashboardPage = new DashboardPage();
@@ -29,7 +29,7 @@ public class DashboardUiFilterTests extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI, SMOKE, DASHBOARD})
-    @Xray(test = {1302, 1304, 3285})
+    @Xray(test = {4696, 2176, 1809})
     public void verifyRegions() {
 
         DashboardPage dashboardPage = new DashboardPage();
@@ -52,7 +52,7 @@ public class DashboardUiFilterTests extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI, SMOKE, DASHBOARD})
-    @Xray(test = {1306, 3284})
+    @Xray(test = {1674, 1923})
     public void verifyAsOfDates() {
 
         DashboardPage dashboardPage = new DashboardPage();
@@ -68,7 +68,7 @@ public class DashboardUiFilterTests extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI, SMOKE, DASHBOARD})
-    @Xray(test = {7727})
+    @Xray(test = {5017})
     public void verifyDataAfterFilter() {
 
         DashboardPage dashboardPage = new DashboardPage();

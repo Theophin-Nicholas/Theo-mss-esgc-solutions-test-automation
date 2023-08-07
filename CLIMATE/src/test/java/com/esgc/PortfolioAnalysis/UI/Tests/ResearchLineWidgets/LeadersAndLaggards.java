@@ -19,7 +19,7 @@ public class LeadersAndLaggards extends UITestBase {
     @Test(groups = {REGRESSION, UI, SMOKE},
             description = "Verify if Leaders and Laggards Table is Displayed as Expected",
             dataProviderClass = DataProviderClass.class,dataProvider = "Research Lines")
-    @Xray(test = {389, 8433,9868})
+    @Xray(test = {389, 4323,4746})
     public void verifyLeadersAndLaggardsTableUI(String page) {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         if ( page.equals("Temperature Alignment")) {
@@ -37,12 +37,12 @@ public class LeadersAndLaggards extends UITestBase {
         if (!page.equals("ESG Assessments"))
             assertTestCase.assertTrue(researchLinePage.checkifWidgetTitleIsDisplayedWithID(title, commonWidgetsID));
 
-        assertTestCase.assertTrue(researchLinePage.checkIfLeadersAndLaggardsTableDisplayed(commonWidgetsID), "Leaders & Laggards verified", 381, 550, 1256);
+        assertTestCase.assertTrue(researchLinePage.checkIfLeadersAndLaggardsTableDisplayed(commonWidgetsID), "Leaders & Laggards verified", 4943, 4889, 4246);
 
         test.pass(title + " Table/Chart displayed");
 
-        assertTestCase.assertTrue(researchLinePage.verifyLeadersHasMax10Companies(), "Leaders has max 10 companies", 383);
-        assertTestCase.assertTrue(researchLinePage.verifyLaggardsHasMax10Companies(), "Laggards has max 10 companies", 383);
+        assertTestCase.assertTrue(researchLinePage.verifyLeadersHasMax10Companies(), "Leaders has max 10 companies", 4549);
+        assertTestCase.assertTrue(researchLinePage.verifyLaggardsHasMax10Companies(), "Laggards has max 10 companies", 4549);
 
 //        Assert.assertTrue(researchLinePage.checkIfPortfolioCoverageChartTitlesAreDisplayed());
         Assert.assertTrue(researchLinePage.checkifLeadersAndLaggardsTableUIIsperDesign(page));
@@ -52,7 +52,7 @@ public class LeadersAndLaggards extends UITestBase {
     @Test(groups = {REGRESSION, UI},
             description = "Verify if More companies ranked in link present",
             dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
-    @Xray(test = {442, 543, 537, 1275, 2133, 2444, 2880, 3096, 3846, 1263, 1264, 1275, 6654, 8435 })
+    @Xray(test = {4953, 4928, 4926, 5074, 2133, 2444, 2880, 3096, 3846, 5031, 5076, 4362, 4324 })
     public void verifyMoreRankedCompaniesLink(String page) {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         if ( page.equals("Temperature Alignment")) {
@@ -77,7 +77,7 @@ public class LeadersAndLaggards extends UITestBase {
     @Test(groups = {REGRESSION, UI},
             description = "Verify the ScoreLogic for Leaders And Laggards Section",
             dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
-    @Xray(test = {2124, 3034, 3159, 2080, 3848, 3849, 11077})
+    @Xray(test = {4540, 4310, 4510, 4668, 4333, 4993, 4045})
     public void verifyScoreLogicForLeaderAndLaggards(String page){
         ResearchLinePage researchLinePage = new ResearchLinePage();
         if ( page.equals("Temperature Alignment")) {
@@ -100,7 +100,7 @@ public class LeadersAndLaggards extends UITestBase {
     @Test(groups = {REGRESSION, UI, SMOKE},
             description = "Verify if More companies ranked in link present",
             dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
-    @Xray(test = {8434})
+    @Xray(test = {4482})
     public void verifyClickOnEntitesandVerifyEntityPage(String page) {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         if ( page.equals("Temperature Alignment")) {

@@ -16,9 +16,9 @@ import static com.esgc.Utilities.Groups.*;
 public class ViewMethodologiesTests extends DashboardUITestBase {
 
     @Test(groups = {DASHBOARD, REGRESSION, UI, SMOKE, ESG})
-    @Xray(test = {8325, 8328, 8334,9729})
+    @Xray(test = {4758, 4749, 4880,4791})
     public void verifyViewMethodologies() {
-        // ESGCA-8334: General UI Checks for Methodology Drawer
+        // ESGT-4880: General UI Checks for Methodology Drawer
         DashboardPage dashboardPage = new DashboardPage();
         dashboardPage.navigateToPageFromMenu("Climate Dashboard");
         BrowserUtils.wait(4);
@@ -29,7 +29,7 @@ public class ViewMethodologiesTests extends DashboardUITestBase {
     }
 
     @Test(groups = {DASHBOARD, REGRESSION, UI})
-    @Xray(test = {8304})
+    @Xray(test = {4959})
     public void verifyViewMethodologiesPhysicalRisk_Bundle() {
         LoginPage login = new LoginPage();
         login.entitlementsLogin(EntitlementsBundles.PHYSICAL_RISK);
@@ -47,7 +47,7 @@ public class ViewMethodologiesTests extends DashboardUITestBase {
     }
 
     @Test(groups = {DASHBOARD, REGRESSION, UI})
-    @Xray(test = {8304})
+    @Xray(test = {4959})
     public void verifyViewMethodologiesTransitionRisk_Bundle() {
         LoginPage login = new LoginPage();
         login.entitlementsLogin(EntitlementsBundles.TRANSITION_RISK);
@@ -65,7 +65,7 @@ public class ViewMethodologiesTests extends DashboardUITestBase {
     }
 
     @Test(groups = {DASHBOARD, REGRESSION, UI})
-    @Xray(test = {8304})
+    @Xray(test = {4959})
     public void verifyEsgMethodologiesAreRemoved() {
         DashboardPage dashboardPage = new DashboardPage();
         dashboardPage.navigateToPageFromMenu("Climate Dashboard");
@@ -81,7 +81,7 @@ public class ViewMethodologiesTests extends DashboardUITestBase {
     }
 
     @Test(groups = {DASHBOARD, REGRESSION, UI})
-    @Xray(test = {8304})
+    @Xray(test = {4959})
     public void verifyViewMethodologiesControversies_Bundle() {
         LoginPage login = new LoginPage();
         login.entitlementsLogin(EntitlementsBundles.USER_WITH_CONTROVERSIES_ENTITLEMENT);
@@ -97,7 +97,7 @@ public class ViewMethodologiesTests extends DashboardUITestBase {
     }
 
     @Test(groups = {DASHBOARD, REGRESSION, UI})
-    @Xray(test = {8304})
+    @Xray(test = {4959})
     public void verifyViewMethodologiesWithPRandTR_Bundle() {
         LoginPage login = new LoginPage();
         login.entitlementsLogin(EntitlementsBundles.PHYSICAL_RISK_TRANSITION_RISK);
@@ -116,7 +116,7 @@ public class ViewMethodologiesTests extends DashboardUITestBase {
     }
 
     @Test(groups = {DASHBOARD, REGRESSION, UI})
-    @Xray(test = {8304})
+    @Xray(test = {4959})
     public void verifyViewMethodologiesWithAllEntitlements() {
 
         DashboardPage dashboardPage = new DashboardPage();
@@ -133,7 +133,7 @@ public class ViewMethodologiesTests extends DashboardUITestBase {
     }
 
     @Test(groups = {DASHBOARD, REGRESSION, UI})
-    @Xray(test = {8326})
+    @Xray(test = {4756})
     public void verifyViewMethodologiesLinksPhysicalRisk_Bundle() {
         LoginPage login = new LoginPage();
         login.entitlementsLogin(EntitlementsBundles.PHYSICAL_RISK);
@@ -154,7 +154,7 @@ public class ViewMethodologiesTests extends DashboardUITestBase {
     }
 
     @Test(groups = {DASHBOARD, REGRESSION, UI})
-    @Xray(test = {8327})
+    @Xray(test = {4757})
     public void verifyViewMethodologiesLinksTransitionRisk_Bundle() {
         LoginPage login = new LoginPage();
         login.entitlementsLogin(EntitlementsBundles.TRANSITION_RISK);

@@ -20,7 +20,7 @@ import static com.esgc.Utilities.Groups.*;
 public class PerformanceChart extends DashboardUITestBase {
     //TODO portfolio selection should be updated since some portfolios do not have enough data
     @Test(groups = {UI, DASHBOARD, SMOKE, REGRESSION})
-    @Xray(test = {2051, 4273, 4448, 2064, 7838, 8683, 8684, 8690})
+    @Xray(test = {4995, 4372, 1440, 1462, 4234, 3407})
     public void verifyPerformanceChartsAreDisplayed() {
         DashboardPage dashboardPage = new DashboardPage();
 
@@ -51,8 +51,8 @@ public class PerformanceChart extends DashboardUITestBase {
         assertTestCase.assertTrue(sizeOfTable <= 10, "10 companies are listed");
         System.out.println("expectedTotalInvestment = " + expectedTotalInvestment);
         System.out.println("actualColumnNames = " + actualColumnNames);
-        assertTestCase.assertEquals(actualColumnNames, expectedColumnNames, "Performance Chart Verified", 6233, 6232);
-        assertTestCase.assertEquals(actualTotalInvestment, expectedTotalInvestment, "Total Investments are matching", 2066);
+        assertTestCase.assertEquals(actualColumnNames, expectedColumnNames, "Performance Chart Verified", 4141, 3833);
+        assertTestCase.assertEquals(actualTotalInvestment, expectedTotalInvestment, "Total Investments are matching", 4531);
 
         dashboardPage.clickAndSelectAPerformanceChart("Laggards");
         dashboardPage.waitForDataLoadCompletion();
@@ -64,7 +64,7 @@ public class PerformanceChart extends DashboardUITestBase {
         test.info("Switched to Laggards");
         assertTestCase.assertTrue(sizeOfTable <= 10, "max 10 companies are listed");
         assertTestCase.assertEquals(actualColumnNames, expectedColumnNames, "Laggards Performance Chart Verified");
-        assertTestCase.assertEquals(actualTotalInvestment, expectedTotalInvestment, "Total Investments are matching", 2066);
+        assertTestCase.assertEquals(actualTotalInvestment, expectedTotalInvestment, "Total Investments are matching", 4531);
 
         dashboardPage.clickAndSelectAPerformanceChart("Largest Holdings");
         dashboardPage.waitForDataLoadCompletion();
@@ -76,12 +76,12 @@ public class PerformanceChart extends DashboardUITestBase {
         test.info("Switched to Largest Holdings");
         assertTestCase.assertTrue(sizeOfTable <= 10, "max 10 companies are listed");
         assertTestCase.assertEquals(actualColumnNames, expectedColumnNames, "Largest Holdings Performance Chart Verified");
-        assertTestCase.assertEquals(expectedTotalInvestment, actualTotalInvestment, "Total Investments are matching", 2066);
+        assertTestCase.assertEquals(expectedTotalInvestment, actualTotalInvestment, "Total Investments are matching", 4531);
     }
 
     @Test(groups = {UI, DASHBOARD, REGRESSION},
             dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
-    @Xray(test = {2041, 2043, 2048, 2052, 2067, 3131, 3132, 3152, 3153, 4375, 4376, 4380, 6235, 7111, 7112, 7114, 12268, 12264})
+    @Xray(test = {2002, 1477, 4402, 1453, 1972, 1468, 1633, 2115, 1361, 1296, 1308, 4815, 3832, 4716, 4740, 4719, 4941, 4607})
     public void verifyPerformanceChartScoreCategoriesUnderColumns(String researchLine) {
         DashboardPage dashboardPage = new DashboardPage();
         dashboardPage.navigateToPageFromMenu("Climate Dashboard");
@@ -339,7 +339,7 @@ public class PerformanceChart extends DashboardUITestBase {
 
 
     @Test(groups = {UI, DASHBOARD, REGRESSION})
-    @Xray(test = {4459})
+    @Xray(test = {5012})
     public void verifyPerformanceChartSizes() {
         DashboardPage dashboardPage = new DashboardPage();
 
@@ -421,7 +421,7 @@ public class PerformanceChart extends DashboardUITestBase {
 
 
     @Test(groups = {UI, DASHBOARD, REGRESSION})
-    @Xray(test = {7115})
+    @Xray(test = {4718})
     public void verifyPerformanceChartSelectedColumnRemainsSameForOtherTables() {
         DashboardPage dashboardPage = new DashboardPage();
 
@@ -498,7 +498,7 @@ public class PerformanceChart extends DashboardUITestBase {
     }
 
     @Test(groups = {REGRESSION, UI})
-    @Xray(test = {8691})
+    @Xray(test = {3517})
     public void validateEsgScoreIsNotDisplayedInPerformanceChart(){
         DashboardPage dashboardPage = new DashboardPage();
 
@@ -511,7 +511,7 @@ public class PerformanceChart extends DashboardUITestBase {
     }
 
     @Test(groups = {REGRESSION, UI, SMOKE, ENTITLEMENTS})
-    @Xray(test = {8692})
+    @Xray(test = {3719})
     public void validateTotalControversiesNotAvailableBundle(){
         DashboardPage dashboardPage = new DashboardPage();
         LoginPage login = new LoginPage();

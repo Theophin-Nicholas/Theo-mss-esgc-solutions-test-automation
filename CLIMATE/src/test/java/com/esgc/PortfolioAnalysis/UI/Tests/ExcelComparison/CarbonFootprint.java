@@ -940,7 +940,7 @@ public class CarbonFootprint extends UITestBase {
         Cell carbonFootPrintScopeCell = exportedDocument.searchCellData("Carbon Footprint Scope");
         int i = carbonFootPrintScopeCell.getRowIndex();
         assertTestCase.assertEquals(researchLinePage.carbonFootprintScopeHeader.getText(), exportedDocument.getCellData(i, 0),
-                "Verify Carbon Footprint Scope Header", 532);
+                "Verify Carbon Footprint Scope Header", 4820);
 
         assertTestCase.assertEquals(researchLinePage.carbonFootprintScopeHeaders.get(0).getText(), exportedDocument.getCellData(i + 1, 0),
                 "Verify Scope1 title in UI vs Excel");

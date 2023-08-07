@@ -5,16 +5,12 @@ import com.esgc.EntityProfile.UI.Pages.EntityClimateProfilePage;
 import com.esgc.Utilities.Xray;
 import org.testng.annotations.Test;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 import static com.esgc.Utilities.Groups.*;
 
 public class EntityReferenceAndMethodologiesTest extends UITestBase {
 
     @Test(groups = {ENTITY_PROFILE, REGRESSION, UI, ROBOT_DEPENDENCY})
-    @Xray(test = {8348, 11726})
+    @Xray(test = {4705, 4660})
     public void validateReferenceAndMethodologyPopup(){
 
         String company = "Rogers Corp.";
@@ -33,7 +29,7 @@ public class EntityReferenceAndMethodologiesTest extends UITestBase {
     }
 
     @Test(groups = {ENTITY_PROFILE, REGRESSION, UI, ROBOT_DEPENDENCY})
-    @Xray(test = {8349})
+    @Xray(test = {4699})
     public void validateReferenceAndMethodologyPopupClose(){
 
         String company = "Rogers Corp.";
@@ -65,7 +61,7 @@ public class EntityReferenceAndMethodologiesTest extends UITestBase {
     }
 
     @Test(groups = {ENTITY_PROFILE, REGRESSION, UI})
-    @Xray(test = {8350, 8891,})
+    @Xray(test = {4708, 4836,})
     public void validateReferenceAndMethodologyLinks(){
 
         String company = "Rogers Corp.";

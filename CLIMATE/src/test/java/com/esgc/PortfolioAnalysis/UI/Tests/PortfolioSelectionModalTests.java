@@ -24,8 +24,8 @@ import static com.esgc.Utilities.Groups.*;
 public class PortfolioSelectionModalTests extends UITestBase {
 
     @Test(groups = {REGRESSION, UI, SMOKE},
-            description = "ESGCA -3179/3250/3274/3253 : Verify the search Funtion on Portfolio Selection Modal PopUP/Sample Portfolio is present in Portfolio list.")
-    @Xray(test = {3179, 3250, 3274, 3253})
+            description = "ESGT -1713/4997/1696/4706 : Verify the search Funtion on Portfolio Selection Modal PopUP/Sample Portfolio is present in Portfolio list.")
+    @Xray(test = {1713, 4997, 1696, 4706})
     public void verifySearchFunctionOnSelectionModalPopup() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio Analysis page");
@@ -43,8 +43,8 @@ public class PortfolioSelectionModalTests extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI, SMOKE},
-            description = "ESGCA -3252 : Verify user cannot select multiple portfolios at a time")
-    @Xray(test = 3252)
+            description = "ESGT -4731 : Verify user cannot select multiple portfolios at a time")
+    @Xray(test = 4731)
     public void verifyUserCanSelectSinglePortfolioOnSelectionModalPopup() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio analysis page");
@@ -64,8 +64,8 @@ public class PortfolioSelectionModalTests extends UITestBase {
 
 
     @Test(groups = {REGRESSION, UI, SMOKE},
-            description = "ESGCA -3259/3260 : Verify Click on Portfolio Selection Opens Portfolio Selection Modal and closes on clicking away from the popup")
-    @Xray(test = {3259, 3260})
+            description = "ESGT -1766/1279 : Verify Click on Portfolio Selection Opens Portfolio Selection Modal and closes on clicking away from the popup")
+    @Xray(test = {1766, 1279})
     public void verifySelectionModalPopupBehaviour() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio Analysis page");
@@ -82,8 +82,8 @@ public class PortfolioSelectionModalTests extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI, SMOKE},
-            description = "ESGCA -3432 : Verify Upload Portfolio Link is Placed Right Above the List in Portfolio Selection Modal as per Design")
-    @Xray(test = {3432})
+            description = "ESGT -1945 : Verify Upload Portfolio Link is Placed Right Above the List in Portfolio Selection Modal as per Design")
+    @Xray(test = {1945})
     public void verifyUploadPortfolioLinkOnSelectionModalPopup() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio Analysis page");
@@ -97,8 +97,8 @@ public class PortfolioSelectionModalTests extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI, SMOKE},
-            description = "ESGCA -3435/3436 : Verify Selected Portfolio is Displayed on Top of the List")
-    @Xray(test = {3254, 3435, 3436})
+            description = "ESGT -1392/3463 : Verify Selected Portfolio is Displayed on Top of the List")
+    @Xray(test = {5038, 1392, 3463})
     public void verifyPortfolioSelectionOnSelectionModalPopup() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio analysis page");
@@ -131,8 +131,8 @@ public class PortfolioSelectionModalTests extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI, SMOKE, ROBOT_DEPENDENCY},
-            description = "ESGCA -3269 : Verify that Region and Sector updated after Portfolio change")
-    @Xray(test = {3269})
+            description = "ESGT -2051 : Verify that Region and Sector updated after Portfolio change")
+    @Xray(test = {2051})
     public void verifyRegionAndSectorSetAsperSelectedPortfolio() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio analysis page");
@@ -187,8 +187,8 @@ public class PortfolioSelectionModalTests extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI, SMOKE},
-            description = "ESGCA -3430 : Verify the Sorting logic for Portfolios on Selection modal popup.")
-    @Xray(test = {1299, 3430})
+            description = "ESGT -2054 : Verify the Sorting logic for Portfolios on Selection modal popup.")
+    @Xray(test = {1556, 2054})
     public void verifyPortfolioSortingOnSelectionModalPopup() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio Analysis page");
@@ -216,13 +216,13 @@ public class PortfolioSelectionModalTests extends UITestBase {
             }
         });
 
-        assertTestCase.assertEquals(portfolioUploadDates, portfolioUploadDatesSorted, "Portfolios sorted by date", 3430);
+        assertTestCase.assertEquals(portfolioUploadDates, portfolioUploadDatesSorted, "Portfolios sorted by date", 2054);
     }
 
 
     @Test(groups = {REGRESSION, UI},
-            description = "ESGCA -5313 : UI | Portfolio Name Search bar | Verify the default text in the search bar on selection Modal popup")
-    @Xray(test = {5313})
+            description = "ESGT -4287 : UI | Portfolio Name Search bar | Verify the default text in the search bar on selection Modal popup")
+    @Xray(test = {4287})
     public void verifySearchDefaultMessages() {
 
         ResearchLinePage researchLinePage = new ResearchLinePage();
@@ -238,8 +238,8 @@ public class PortfolioSelectionModalTests extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI, ROBOT_DEPENDENCY},
-            description = "ESGCA-5315 - UI | Portfolio Name Search bar | Verify that ellipsis are displayed for a company having too long name")
-    @Xray(test = {5315})
+            description = "ESGCA-4296 - UI | Portfolio Name Search bar | Verify that ellipsis are displayed for a company having too long name")
+    @Xray(test = {4296})
     public void verifyEllipsesForPortfolioWithLongName() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio analysis page");

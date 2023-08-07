@@ -18,7 +18,7 @@ import static com.esgc.Utilities.Groups.REGRESSION;
 public class PortfolioCoverage extends APITestBase {
 
     @Test(groups = {API, REGRESSION}, dataProvider = "API Research Lines")
-    @Xray(test = {  621, 1221, 652, 2100, 2587, 2422})
+    @Xray(test = {3531, 2165, 1943, 1610, 1692, 1754})
     //1723 TCFD
     //1691 Energy transition
     public void portfolioCoverage(@Optional String researchLine) {
