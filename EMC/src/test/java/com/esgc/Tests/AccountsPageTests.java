@@ -31,7 +31,7 @@ public class AccountsPageTests extends EMCUITestBase {
     String email = "testuser@mail.com";
 
     @Test(groups = {EMC, UI, REGRESSION, SMOKE, PROD})
-    @Xray(test = {3377, 3476, 3477, 3478, 3479, 2526, 2527, 2528, 2583, 10720})
+    @Xray(test = {1723, 1913, 1969, 1976, 1846, 1427, 1436, 1702, 2092, 3999})
     public void accountDetailsVerificationTest() {
         EMCMainPage homePage = new EMCMainPage();
 
@@ -83,7 +83,7 @@ public class AccountsPageTests extends EMCUITestBase {
     }
 
     @Test(groups = {EMC, UI, REGRESSION, SMOKE})
-    @Xray(test = {3374, 4172, 4174, 4175, 4213, 4222, 3979, 3980, 3981, 3992, 7316, 12712})
+    @Xray(test = {1740, 1787, 2048, 3644, 1903, 1315, 2069, 1887, 1806, 1839, 4133, 3231})
     public void accountCreationTests() {
         EMCMainPage homePage = new EMCMainPage();
 
@@ -174,7 +174,7 @@ public class AccountsPageTests extends EMCUITestBase {
     }
 
     @Test(groups = {EMC, UI, REGRESSION, SMOKE, PROD})
-    @Xray(test = {4812, 4813, 4814, 4815, 2350})
+    @Xray(test = {1422, 1795, 1608, 1794, 2020})
     public void accountDetailsPageTest() {
         navigateToAccountsPage(accountName, "users");
         EMCAccountDetailsPage detailsPage = new EMCAccountDetailsPage();
@@ -217,7 +217,7 @@ public class AccountsPageTests extends EMCUITestBase {
     }
 
     @Test(groups = {EMC, UI, REGRESSION, PROD, SMOKE})
-    @Xray(test = {4806, 6737, 7294, 7296, 7300, 8342})
+    @Xray(test = {1833, 3820, 3996, 4104, 4208, 3978})
     public void createNewUserTest() {
         navigateToAccountsPage(accountName, "users");
         EMCAccountDetailsPage detailsPage = new EMCAccountDetailsPage();
@@ -255,7 +255,7 @@ public class AccountsPageTests extends EMCUITestBase {
     }
 
     @Test(enabled = true, groups = {EMC, UI, REGRESSION, SMOKE})
-    @Xray(test = {4818})
+    @Xray(test = {1959})
     public void createAndEditNewUserTest() {
         navigateToAccountsPage(accountName, "users");
         EMCAccountDetailsPage detailsPage = new EMCAccountDetailsPage();
@@ -288,7 +288,7 @@ public class AccountsPageTests extends EMCUITestBase {
     }
 
     @Test(groups = {EMC, UI, REGRESSION})
-    @Xray(test = {4839})
+    @Xray(test = {1656})
     public void verifyOktaUserDetailsTest() {
         navigateToAccountsPage("All entitlements", "users");
         EMCAccountDetailsPage detailsPage = new EMCAccountDetailsPage();
@@ -306,7 +306,7 @@ public class AccountsPageTests extends EMCUITestBase {
     }
 
     @Test(groups = {EMC, UI, SMOKE, REGRESSION, PROD})
-    @Xray(test = {4849})
+    @Xray(test = {2042})
     public void verifyEMCUserDetailsTest() {
         navigateToAccountsPage(accountName, "users");
         EMCAccountDetailsPage detailsPage = new EMCAccountDetailsPage();
@@ -325,7 +325,7 @@ public class AccountsPageTests extends EMCUITestBase {
     }
 
     @Test(groups = {EMC, UI, SMOKE, REGRESSION, PROD})
-    @Xray(test = {5044, 4809})
+    @Xray(test = {1662, 1971})
     public void verifyAllUsersSortedByNameTest() {
         navigateToAccountsPage(accountName, "users");
         EMCAccountDetailsPage detailsPage = new EMCAccountDetailsPage();
@@ -338,7 +338,7 @@ public class AccountsPageTests extends EMCUITestBase {
     }
 
     @Test(groups = {EMC, UI, REGRESSION, SMOKE})
-    @Xray(test = {2351, 5043})
+    @Xray(test = {2235, 1875})
     public void verifyAllAccountsSortedByNameTest() {
         navigateToAccountsPage("", "users");
         accountsPage.search("test");
@@ -350,7 +350,7 @@ public class AccountsPageTests extends EMCUITestBase {
     }
 
     @Test(groups = {EMC, UI, SMOKE, REGRESSION, PROD})
-    @Xray(test = {5492})
+    @Xray(test = {1507})
     public void verifySearchBoxOnUsersPageTest() {
         navigateToAccountsPage(accountName, "users");
         EMCAccountDetailsPage detailsPage = new EMCAccountDetailsPage();
@@ -361,7 +361,7 @@ public class AccountsPageTests extends EMCUITestBase {
     }
 
     @Test(groups = {EMC, UI, REGRESSION, SMOKE})
-    @Xray(test = {5517, 5756})
+    @Xray(test = {2143, 1261})
     public void verifySuspendUserTest() {
         navigateToAccountsPage("AutomationAccount", "users");
         EMCAccountDetailsPage detailsPage = new EMCAccountDetailsPage();
@@ -415,7 +415,7 @@ public class AccountsPageTests extends EMCUITestBase {
     }
 
     @Test(groups = {EMC, UI, SMOKE, REGRESSION})
-    @Xray(test = {5736, 6167, 6169, 6170})
+    @Xray(test = {1673, 3866, 3872, 3868})
     public void verifyActivateUserTest() {
         navigateToAccountsPage(accountName, "users");
         EMCAccountDetailsPage detailsPage = new EMCAccountDetailsPage();
@@ -450,7 +450,7 @@ public class AccountsPageTests extends EMCUITestBase {
     }
 
     @Test(groups = {EMC, UI, SMOKE, REGRESSION})
-    @Xray(test = {5736, 5746, 5764, 5765, 6185})
+    @Xray(test = {1673, 1356, 1239, 1730, 3831})
     public void resetPasswordButtonTest() {
         navigateToAccountsPage(accountName, "users");
         EMCAccountDetailsPage detailsPage = new EMCAccountDetailsPage();
@@ -476,7 +476,7 @@ public class AccountsPageTests extends EMCUITestBase {
     }
 
     @Test(groups = {EMC, UI, REGRESSION})
-    @Xray(test = {6792, 6794, 6795, 6797})
+    @Xray(test = {3855, 4190, 3870, 3863})
     public void deleteMultipleUsersTest() {
         navigateToAccountsPage(accountName, "users");
         EMCAccountDetailsPage detailsPage = new EMCAccountDetailsPage();
@@ -526,7 +526,7 @@ public class AccountsPageTests extends EMCUITestBase {
     }
 
     @Test(groups = {EMC, UI, REGRESSION})
-    @Xray(test = {6801, 6793, 6796})
+    @Xray(test = {3830, 4080, 3875})
     public void removeOnlyEMCUsersTest() {
         navigateToAccountsPage(accountName, "users");
         EMCAccountDetailsPage detailsPage = new EMCAccountDetailsPage();
@@ -572,7 +572,7 @@ public class AccountsPageTests extends EMCUITestBase {
     }
 
     @Test(groups = {EMC, UI, SMOKE, REGRESSION, PROD})
-    @Xray(test = {5179, 3994, 7390, 7394, 7396})
+    @Xray(test = {1640, 1353, 4086, 4090, 3907})
     public void verifyUserAssignApplicationRolesTest() {
         navigateToAccountsPage(accountName, "applications");
         EMCAccountDetailsPage detailsPage = new EMCAccountDetailsPage();
@@ -599,7 +599,7 @@ public class AccountsPageTests extends EMCUITestBase {
     }
 
     @Test(groups = {EMC, UI, REGRESSION})
-    @Xray(test = {5185, 5769, 5768})
+    @Xray(test = {1642, 1737, 3543})
     public void verifyUserRemoveApplicationRolesTest() {
         navigateToAccountsPage(accountName, "applications");
         EMCAccountDetailsPage detailsPage = new EMCAccountDetailsPage();
@@ -665,7 +665,7 @@ public class AccountsPageTests extends EMCUITestBase {
     }
 
     @Test(groups = {EMC, UI, SMOKE})
-    @Xray(test = {3993})
+    @Xray(test = {1844})
     public void verifyUserRemovesApplicationTest() {
         navigateToAccountsPage(accountName, "applications");
 
@@ -683,7 +683,7 @@ public class AccountsPageTests extends EMCUITestBase {
     }
 
     @Test(groups = {EMC, UI, REGRESSION, SMOKE})
-    @Xray(test = {3991})
+    @Xray(test = {1851})
     public void verifyUserAssignOneApplicationToMultipleAccounts() {
         navigateToAccountsPage(accountName, "applications");
 
@@ -715,7 +715,7 @@ public class AccountsPageTests extends EMCUITestBase {
     }
 
     @Test(groups = {EMC, UI, REGRESSION})
-    @Xray(test = {5547})
+    @Xray(test = {1611})
     public void verifyCreatingExternalAccountWithoutBeingActivatedTest() {
         navigateToAccountsPage(accountName, "users");
         EMCAccountDetailsPage detailsPage = new EMCAccountDetailsPage();
@@ -763,7 +763,7 @@ public class AccountsPageTests extends EMCUITestBase {
     }
 
     @Test(groups = {EMC, UI, REGRESSION})
-    @Xray(test = {2352, 2582})
+    @Xray(test = {1827, 1977})
     public void VerifyAccountPageDisplaysListOfAccountsInformation() {
         navigateToAccountsPage("", "users");
 
@@ -788,7 +788,7 @@ public class AccountsPageTests extends EMCUITestBase {
     }
 
     @Test(groups = {EMC, UI, REGRESSION})
-    @Xray(test = {6537})
+    @Xray(test = {3874})
     public void verifyProductsCanRemovedFromAccountTest() {
         navigateToAccountsPage(accountName, "applications");
 
@@ -821,7 +821,7 @@ public class AccountsPageTests extends EMCUITestBase {
     }
 
     @Test(groups = {EMC, UI, REGRESSION})
-    @Xray(test = {7603, 7604})
+    @Xray(test = {4026, 3953})
     public void verifyRemoveApplicationRoleUnderUserAccountsTest() {
         navigateToAccountsPage(accountName, "applications");
 
@@ -860,7 +860,7 @@ public class AccountsPageTests extends EMCUITestBase {
     }
 
     @Test(groups = {EMC, UI, REGRESSION})
-    @Xray(test = {8222, 8259})
+    @Xray(test = {4130, 4253})
     public void verifyAssignApplicationRoleForMAUserAccountsTest() {
         navigateToAccountsPage(accountName, "applications");
         //Application name for MA User
@@ -901,7 +901,7 @@ public class AccountsPageTests extends EMCUITestBase {
     }
 
     @Test(groups = {EMC, UI, REGRESSION})
-    @Xray(test = {8473})
+    @Xray(test = {4259})
     public void verifyCantAssignMSSApplicationRoleForMAUserAccountsTest() {
         navigateToAccountsPage(accountName, "applications");
         //Application name for MA User
@@ -935,7 +935,7 @@ public class AccountsPageTests extends EMCUITestBase {
     }
 
     @Test(groups = {EMC, UI, REGRESSION}, description = "UI | EMC | Users | Verify User can Cancel/Save the Update User Information")
-    @Xray(test = {4973, 4974, 4976})
+    @Xray(test = {2163, 1395, 2109})
     public void verifyUserCanCancelUpdateTest() {
         navigateToAccountsPage(accountName, "users");
         EMCAccountDetailsPage detailsPage = new EMCAccountDetailsPage();
@@ -1030,7 +1030,7 @@ public class AccountsPageTests extends EMCUITestBase {
     }
 
     @Test(groups = {EMC, UI, REGRESSION}, description = "UI | EMC | Accounts Applications | Validate that User is Able to Assign More than one Application to the Account")
-    @Xray(test = {3983, 3997})
+    @Xray(test = {2134, 1858})
     public void verifyAssignMultipleApplicationsToAccountTest() {
         navigateToAccountsPage(accountName, "applications");
         EMCAccountDetailsPage detailsPage = new EMCAccountDetailsPage();
@@ -1074,7 +1074,7 @@ public class AccountsPageTests extends EMCUITestBase {
     }
 
     @Test(groups = {EMC, UI, REGRESSION}, description = "UI | EMC | Accounts | Verify that User Can't Create a New Account if Required Fields are Missing ")
-    @Xray(test = {3378})
+    @Xray(test = {2132})
     public void verifyRequiredFieldsForAccountCreationTest() {
         EMCMainPage homePage = new EMCMainPage();
         homePage.goToAccountsPage();
@@ -1186,7 +1186,7 @@ public class AccountsPageTests extends EMCUITestBase {
     }
 
     @Test(groups = {EMC, UI, REGRESSION}, description = "UI | EMC | Accounts | Verify the \"Subscriber Type\" options inside Dropbox for new account")
-    @Xray(test = {9591, 9592, 9606})
+    @Xray(test = {4214, 4152, 4101})
     public void verifySubscriberTypeInputForAccountCreationTests() {
         EMCMainPage homePage = new EMCMainPage();
 
@@ -1245,7 +1245,7 @@ public class AccountsPageTests extends EMCUITestBase {
     }
 
     @Test(groups = {EMC, UI, REGRESSION}, description = "UI | EMC | Accounts | Verify the \"Subscriber Type\" options inside Dropbox for existing account")
-    @Xray(test = {9593, 9595})
+    @Xray(test = {3922, 4062})
     public void verifySubscriberTypeInputForOldAccountTests() {
         String testAccountName = "QA Test Account";
         navigateToAccountsPage(testAccountName, "details");
@@ -1282,7 +1282,7 @@ public class AccountsPageTests extends EMCUITestBase {
     }
 
     @Test(groups = {EMC, UI, REGRESSION, PROD}, description = "UI | EMC | Roles | Verify User with Admin Role can view Accounts list and Create Account button available")
-    @Xray(test = {7315})
+    @Xray(test = {4056})
     public void verifyUserWithAdminRoleViewAccountsTest() {
         navigateToAccountsPage("", "details");
         assertTestCase.assertTrue(accountsPage.createAccountButton.isDisplayed(), "Create Account button is displayed");
@@ -1329,7 +1329,7 @@ public class AccountsPageTests extends EMCUITestBase {
 //    }
 
     @Test(groups = {EMC, UI, REGRESSION}, description = "UI | EMC | Products | Verify that after remove Application Role, User can't get Access to the Products")
-    @Xray(test = {5678})
+    @Xray(test = {1641})
     public void verifyRemoveApplicationRoleProductUserLoginTest() {
         navigateToAccountsPage(accountName, "applications");
         EMCAccountDetailsPage detailsPage = new EMCAccountDetailsPage();
@@ -1349,7 +1349,7 @@ public class AccountsPageTests extends EMCUITestBase {
     }
 
     @Test(groups = {EMC, UI, REGRESSION}, description = "UI | EMC | Products | Verify that after assign Application Role, User get Access to the Products")
-    @Xray(test = {5646})
+    @Xray(test = {2086})
     public void verifyAssignApplicationRoleProductUserLoginTest() {
         navigateToAccountsPage(accountName, "applications");
         EMCAccountDetailsPage detailsPage = new EMCAccountDetailsPage();
@@ -1398,7 +1398,7 @@ public class AccountsPageTests extends EMCUITestBase {
     }
 
     @Test(groups = {EMC, UI, REGRESSION}, description = "UI | EMC | Roles | Verify User with Admin Role is able to Edit and Save Account Details")
-    @Xray(test = {7322, 7323})
+    @Xray(test = {4003, 4189})
     public void editAccountTest() {
         String testAccountName = "QA Test Account";
         navigateToAccountsPage(testAccountName, "details");
@@ -1434,7 +1434,7 @@ public class AccountsPageTests extends EMCUITestBase {
     }
 
     @Test(groups = {EMC, UI, REGRESSION}, description = "UI | EMC | MA | create and Verify MA User")
-    @Xray(test = {8179, 8204, 12602, 12603})
+    @Xray(test = {4228, 3951, 3826, 4162})
     public void createAndEditNewMAUserTest() {
         navigateToAccountsPage(accountName, "users");
         EMCAccountDetailsPage detailsPage = new EMCAccountDetailsPage();
@@ -1471,7 +1471,7 @@ public class AccountsPageTests extends EMCUITestBase {
     }
 
     @Test(groups = {EMC, UI, REGRESSION, SMOKE, PROD}, description = "UI | EMC | Accounts | Verify once Account creation is canceled, is redirected to Account List page")
-    @Xray(test = {12713})
+    @Xray(test = {3233})
     public void verifyAccountCreationCancelTest() {
         EMCMainPage homePage = new EMCMainPage();
 
@@ -1511,7 +1511,7 @@ public class AccountsPageTests extends EMCUITestBase {
 
     @Test(groups = {EMC, UI, REGRESSION},
             description = "UI | EMC | SME Assessment | Verify if user has no ESG On-Demand Assessment product, new SME Assessment Limit field is Not present")
-    @Xray(test = {12713, 11790, 11791, 11792, 11797, 11917})
+    @Xray(test = {3233, 3818, 3840, 4269, 3842, 3819})
     public void verifyNoSMEAssessmentLimitDisplayedTest() {
         navigateToAccountsPage(accountName, "products");
         String mesgApp = Environment.MESG_APPLICATION_NAME;
@@ -1534,7 +1534,7 @@ public class AccountsPageTests extends EMCUITestBase {
 
     @Test(groups = {EMC, UI, REGRESSION},
             description = "UI | EMC | SME Assessment | Verify if user has ESG On-Demand Assessment product, SME Assessment Limit field is present")
-    @Xray(test = {12713})
+    @Xray(test = {3233})
     public void verifyProductForSMEAssessmentLimitTest() {
         navigateToAccountsPage(accountName, "products");
         String mesgApp = Environment.MESG_APPLICATION_NAME;
@@ -1557,7 +1557,7 @@ public class AccountsPageTests extends EMCUITestBase {
 
     @Test(groups = {EMC, UI, REGRESSION, SMOKE},
             description = "UI | EMC | ImportUsers | Import Users modal should display the link to Download Template")
-    @Xray(test = {13258, 13259, 13260, 13299, 13303, 13305, 13391})
+    @Xray(test = {2729, 2684, 2698, 2758, 2810, 3081, 2714})
     public void ImportUsersModalDownloadTemplateTest() {
         navigateToAccountsPage(accountName, "users");
         EMCAccountDetailsPage detailsPage = new EMCAccountDetailsPage();
@@ -1600,7 +1600,7 @@ public class AccountsPageTests extends EMCUITestBase {
 
     @Test(groups = {EMC, UI, REGRESSION, SMOKE},
             description = "UI | EMC | ImportUsers | Verify the Mass Import process validate If file is empty")
-    @Xray(test = {13306, 13307, 13308, 13399})
+    @Xray(test = {2668, 2798, 2695, 3085})
     public void verifyMassImportWithEmptyTemplate() {
         navigateToAccountsPage(accountName, "users");
         EMCAccountDetailsPage detailsPage = new EMCAccountDetailsPage();
@@ -1620,7 +1620,7 @@ public class AccountsPageTests extends EMCUITestBase {
 
     @Test(groups = {EMC, UI, REGRESSION, SMOKE},
             description = "UI | EMC | ImportUsers | Verify Mass Import User is only available on User tab inside the Account")
-    @Xray(test = {13304})
+    @Xray(test = {2703})
     public void verifyMassImportUserOnlyAvailableOnUsersTabTest() {
         navigateToAccountsPage(accountName, "users");
         EMCAccountDetailsPage detailsPage = new EMCAccountDetailsPage();
@@ -1640,7 +1640,7 @@ public class AccountsPageTests extends EMCUITestBase {
 
     @Test(groups = {EMC, UI, REGRESSION, SMOKE, PROD},
             description = "UI | EMC | Users | Verify the Users page search box behavior")
-    @Xray(test = {5494})
+    @Xray(test = {1647})
     public void verifyUsersPageSearchBoxBehaviorTest() {
         navigateToAccountsPage(accountName, "users");
         EMCAccountDetailsPage detailsPage = new EMCAccountDetailsPage();
@@ -1666,7 +1666,7 @@ public class AccountsPageTests extends EMCUITestBase {
     }
 
     @Test(groups = {EMC, UI, REGRESSION}, description = "EMC | UI | Users | Verify that the user and its role are successfully created and assigned")
-    @Xray(test = {6168})
+    @Xray(test = {4123})
     public void verifyApplicationRoleForNewUserTest() {
         navigateToAccountsPage(accountName, "applications");
         EMCAccountDetailsPage detailsPage = new EMCAccountDetailsPage();
@@ -1686,7 +1686,7 @@ public class AccountsPageTests extends EMCUITestBase {
     }
 
     @Test(groups = {EMC, UI, REGRESSION, SMOKE}, description = "EMC | UI | Text Alignments")
-    @Xray(test = {13863, 13864, 13865, 13893})
+    @Xray(test = {2697, 2738, 3131, 3048})
     public void verifyTextAlignmentsTest() {
         navigateToAccountsPage("", "");
         for(WebElement header : accountsPage.tableHeaders){
@@ -1733,7 +1733,7 @@ public class AccountsPageTests extends EMCUITestBase {
     }
 
     @Test(groups = {EMC, UI, REGRESSION}, description = "EMC | UI | Delete Assigned Application Test")
-    @Xray(test = {6542, 13935, 13936, 13938})
+    @Xray(test = {4215, 2843, 3093, 3032})
     public void verifyDeleteAssignedApplicationsTest() {
         EMCAPIController apiController = new EMCAPIController();
         //create new application

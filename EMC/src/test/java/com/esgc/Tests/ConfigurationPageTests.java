@@ -44,7 +44,7 @@ public class ConfigurationPageTests extends EMCUITestBase {
     }
 
     @Test(groups = {EMC, UI, SMOKE,REGRESSION,PROD})
-    @Xray(test = {6627,7820, 6944})
+    @Xray(test = {3915,4102, 4145})
     public void configurationPageAdminTests() {
         EMCMainPage mainPage = new EMCMainPage();
         System.out.println("Navigating to Accounts page");
@@ -85,7 +85,7 @@ public class ConfigurationPageTests extends EMCUITestBase {
     }
 
     @Test(groups = {EMC, UI,REGRESSION})//no smoke
-    @Xray(test = {6667,6669})
+    @Xray(test = {4150,3859})
     public void configurationPageAdminCreateRoleTest() {
         navigateToConfigPage("permission roles");
         EMCRolesPage rolesPage = new EMCRolesPage();
@@ -139,7 +139,7 @@ public class ConfigurationPageTests extends EMCUITestBase {
     }
 
     @Test(groups = {EMC, UI,REGRESSION,SMOKE,PROD})
-    @Xray(test = {7818})
+    @Xray(test = {3792})
     public void verifyAdminUserManagesConfigPageTest() {
         EMCMainPage mainPage = new EMCMainPage();
         mainPage.openSidePanel();
@@ -154,7 +154,7 @@ public class ConfigurationPageTests extends EMCUITestBase {
     }
 
     @Test(groups = {EMC, UI,REGRESSION})
-    @Xray(test = {7827,7828})
+    @Xray(test = {3790,3948})
     public void verifyAdminUserAddMemberToRoleTest() {
         navigateToConfigPage("permission roles");
         EMCRolesPage rolesPage = new EMCRolesPage();
@@ -183,7 +183,7 @@ public class ConfigurationPageTests extends EMCUITestBase {
     }
 
     @Test(groups = {EMC, UI,REGRESSION})
-    @Xray(test = {8137,8140,8143})
+    @Xray(test = {4247,3801,3796})
     public void verifyAdminUserViewRoleDetailsTest() {
         navigateToConfigPage("permission roles");
         EMCRolesPage rolesPage = new EMCRolesPage();
@@ -220,7 +220,7 @@ public class ConfigurationPageTests extends EMCUITestBase {
     }
 
     @Test(groups = {EMC, UI,REGRESSION})
-    @Xray(test = {6668, 6635})
+    @Xray(test = {4059, 4100})
     public void verifyAdminUserCreateRoleWithoutOptionalFieldsTest() {
         navigateToConfigPage("permission roles");
         EMCRolesPage rolesPage = new EMCRolesPage();
@@ -256,7 +256,7 @@ public class ConfigurationPageTests extends EMCUITestBase {
     }
 
     @Test(groups = {EMC, UI,REGRESSION, PROD, SMOKE})
-    @Xray(test = {6670})
+    @Xray(test = {3822})
     public void verifyAdminUserCreateRoleCancelButtonTest() {
         navigateToConfigPage("permission roles");
         EMCRolesPage rolesPage = new EMCRolesPage();
@@ -287,7 +287,7 @@ public class ConfigurationPageTests extends EMCUITestBase {
     }
 
     @Test(groups = {EMC, UI,REGRESSION,SMOKE, PROD})
-    @Xray(test = {6671})
+    @Xray(test = {3858})
     public void verifyAdminUserCreateRoleKeyInputMustBeAValidCharTest() {
         navigateToConfigPage("permission roles");
         EMCRolesPage rolesPage = new EMCRolesPage();
@@ -328,7 +328,7 @@ public class ConfigurationPageTests extends EMCUITestBase {
     }
 
     @Test(groups = {EMC, UI,REGRESSION,SMOKE})
-    @Xray(test = {6672})
+    @Xray(test = {3968})
     public void verifyAdminUserCreateRoleDuplicateKeyNotAllowedTest() {
         navigateToConfigPage("permission roles");
         EMCRolesPage rolesPage = new EMCRolesPage();
@@ -363,7 +363,7 @@ public class ConfigurationPageTests extends EMCUITestBase {
     }
 
     @Test(groups = {EMC, UI,REGRESSION,SMOKE})
-    @Xray(test = {6949, 6950})
+    @Xray(test = {3896, 3862})
     public void verifyAdminUserAssignPermissionsTest() {
         navigateToConfigPage("permission roles");
         EMCRolesPage rolesPage = new EMCRolesPage();
@@ -383,7 +383,7 @@ public class ConfigurationPageTests extends EMCUITestBase {
     }
 
     @Test(groups = {EMC, UI,REGRESSION}, description = "UI | EMC | Roles | Verify User with Admin Role can view Accounts menu on EMC")
-    @Xray(test = {7314, 7435, 7554, 7555, 7597, 7598})
+    @Xray(test = {4092, 3963, 3918, 3910, 4128, 4098})
     public void verifyUserWithAdminRoleCanViewAccountsMenuTest() {
         navigateToConfigPage("permission roles");
         EMCRolesPage rolesPage = new EMCRolesPage();
@@ -477,7 +477,7 @@ public class ConfigurationPageTests extends EMCUITestBase {
     }
 
     @Test(groups = {EMC, UI,REGRESSION}, description = "UI | EMC | Roles | Verify non-Admin User and can't view Accounts menu")
-    @Xray(test = {7335})
+    @Xray(test = {3920})
     public void verifyUserWithNonAdminRoleCantViewAccountsMenuTest() {
         navigateToConfigPage("permission roles");
         EMCRolesPage rolesPage = new EMCRolesPage();
@@ -529,7 +529,7 @@ public class ConfigurationPageTests extends EMCUITestBase {
     }
 
     @Test(groups = {EMC, UI,REGRESSION}, description = "UI | EMC | Roles | Verify User with View Role can view Accounts menu on EMC")
-    @Xray(test = {7434, 7336, 7338, 7552, 7599, 7389})
+    @Xray(test = {4051, 4185, 4235, 4225, 4113, 3828})
     public void verifyUserWithViewerRoleCanViewAccountsMenuTest() {
         navigateToConfigPage("permission roles");
         EMCRolesPage rolesPage = new EMCRolesPage();
