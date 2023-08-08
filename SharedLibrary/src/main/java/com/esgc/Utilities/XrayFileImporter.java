@@ -157,7 +157,7 @@ public class XrayFileImporter {
             String errorMessage = response.jsonPath().getString("error");
             System.out.println("Error Message:" + errorMessage);
             List<String> removeTestCaseList = Arrays.stream(errorMessage.split(" "))
-                    .filter(word -> word.contains("ESGCA-")).collect(Collectors.toList());
+                    .filter(word -> word.contains("ESGT-")).collect(Collectors.toList());
 
             for (int i = 0; i < removeTestCaseList.size(); i++) {
                 String ticketNum = removeTestCaseList.get(i);
@@ -263,7 +263,7 @@ public class XrayFileImporter {
                         "    \"fields\": {\n" +
                         "       \"project\":\n" +
                         "       {\n" +
-                        "          \"key\": \"ESGCA\"\n" +
+                        "          \"key\": \"ESGT\"\n" +
                         "       },\n" +
                         "       \"summary\": \"Automated " + reportName + "\",\n" +
                         "       \"description\": \"Result of Automation Execution " + reportName + "\",\n" +

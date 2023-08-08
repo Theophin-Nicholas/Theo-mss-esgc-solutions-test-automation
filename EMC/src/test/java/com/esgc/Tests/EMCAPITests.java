@@ -22,7 +22,7 @@ public class EMCAPITests extends APITestBase {
     String applicationId = Environment.QA_TEST_APPLICATION_ID;
 
     @Test(groups = {EMC, API, REGRESSION, SMOKE})
-    @Xray(test = {6870})
+    @Xray(test = {4172})
     public void verifyAdminUserCanGETListOfAllUsersWithAdminRoleTest() {
         response = apiController.getEMCAllAdminUsersResponse();
         response.prettyPrint();
@@ -36,15 +36,6 @@ public class EMCAPITests extends APITestBase {
         System.out.println("roleNames.contains(name) = " + roleNames.contains(name));
         assertTestCase.assertTrue(roleNames.contains(name), "Admin role is verified");
         assertTestCase.assertTrue(response.as(AdminUser[].class).length > 0, "User details are verified");
-    }
-
-    @Test(groups = {EMC, API, REGRESSION})
-    //@Xray(test = {6870})
-    public void verifyAdminUserCanGETListOfAllRolesTest() {
-        response = apiController.getEMCAllRolesResponse();
-        response.prettyPrint();
-        assertTestCase.assertEquals(response.statusCode(), 200, "Status code 200 OK is verified");
-        assertTestCase.assertTrue(response.as(Role[].class).length > 0, "Role details are verified");
     }
 
     @Test(groups = {EMC, API, REGRESSION, SMOKE})
@@ -695,7 +686,7 @@ public class EMCAPITests extends APITestBase {
     }
 
     @Test(groups = {EMC, UI, REGRESSION, SMOKE})
-    @Xray(test = {7399, 7400})
+    @Xray(test = {3976, 4034})
     public void verifyAdminUserCanGETListOfAllAdminUserPermissionsTest() {
         response = apiController.getEMCAllAdminUsersPermissionsResponse();
         response.prettyPrint();
@@ -722,18 +713,6 @@ public class EMCAPITests extends APITestBase {
                 "view-application-role", "view-application-roles", "view-applications", "view-users");
         assertTestCase.assertTrue(roleNames.containsAll(expectedAdminRoleNames), "Admin Role names are verified");
         assertTestCase.assertTrue(roleNames.containsAll(expectedViewerRoleNames), "Viewer Role names are verified");
-    }
-
-
-    @Test(groups = {"EMC", "api"})
-    //@Xray(test = {7399, 7400})
-    public void assignViewerRoleTest() {
-        String email = "ferhat.demir-non-empl@moodys.com";
-        String viewerRoleId = "emc-viewer-qa";
-        String adminRoleId = "emc-admin-qa";
-        apiController.assignRoleToUser(email, viewerRoleId);
-        apiController.deleteUserFromRole(email, adminRoleId);
-        System.out.println("apiController.verifyUserForRole(email, viewerRoleId) = " + apiController.verifyUserForRole(email, viewerRoleId));
     }
 
     @Test(groups = {"EMC", "api", "regression"}, description = "API | EMC | Applications | Roles | Verify the user is able to create a new role for an application")

@@ -100,9 +100,9 @@ public abstract class TestBase {
     @Parameters("reportName")
     public void uploadResultsToJira(@Optional String reportName) {
         Driver.closeDriver();
-        System.out.println("#########################################3");
-        System.out.println("Test Cases:");
-        testCasesList.forEach(System.out::println);
+//        System.out.println("#########################################3");
+//        System.out.println("Test Cases:");
+//        testCasesList.forEach(System.out::println);
         System.out.println("reportName = " + reportName);
         if (reportName == null) return;
         if (reportName.contains("Smoke") || reportName.contains("Regression")) {

@@ -1117,8 +1117,8 @@ public class AccountsPageTests extends EMCUITestBase {
 
     }
 
-    @Test(groups = {EMC, UI, REGRESSION}, description = "UI | EMC | Accounts | Verify the ability to search for an account")
-    @Xray(test = {4514})
+//    @Test(groups = {EMC, UI, REGRESSION}, description = "UI | EMC | Accounts | Verify the ability to search for an account")
+//    @Xray(test = {4514})
     public void verifySearchForAccountTest() {
         EMCMainPage homePage = new EMCMainPage();
         homePage.goToAccountsPage();

@@ -159,9 +159,9 @@ public class RegulatoryReportingPageTests extends UITestBase {
         for (String portfolioName : selectedPortfoliosNames) {
             reportingPage.selectPortfolio( portfolioName);
             if(index == 1)
-                assertTestCase.assertEquals(reportingPage.getCreateReportsButtonText(), "Create "+index+" Report", "Create Reports button is verified for 1 portfolio selected", 11561);
+                assertTestCase.assertEquals(reportingPage.getCreateReportsButtonText(), "Create "+index+" Report", "Create Reports button is verified for 1 portfolio selected", 3895);
             else
-                assertTestCase.assertEquals(reportingPage.getCreateReportsButtonText(), "Create "+index+" Reports", "Create Reports button is verified for 2 portfolio selected", 11561);
+                assertTestCase.assertEquals(reportingPage.getCreateReportsButtonText(), "Create "+index+" Reports", "Create Reports button is verified for 2 portfolio selected", 3895);
             index++;
         }
     }
