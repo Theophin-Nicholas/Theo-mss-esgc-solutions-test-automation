@@ -4,11 +4,9 @@ import com.esgc.Common.API.Controllers.CommonAPIController;
 import com.esgc.Common.UI.Pages.LoginPage;
 import com.esgc.Common.UI.TestBases.UITestBase;
 import com.esgc.ONDEMAND.UI.Pages.OnDemandAssessmentPage;
+import com.esgc.ONDEMAND.UI.Pages.PopUpPage;
 import com.esgc.Pages.Page404;
-import com.esgc.Utilities.BrowserUtils;
-import com.esgc.Utilities.EntitlementsBundles;
-import com.esgc.Utilities.Environment;
-import com.esgc.Utilities.Xray;
+import com.esgc.Utilities.*;
 import com.github.javafaker.Faker;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
@@ -91,10 +89,10 @@ public class OnDemandAssessmentUITests extends UITestBase {
 
         String portfolioName = "500 predicted portfolio";
         OnDemandAssessmentPage onDemandAssessmentPage = new OnDemandAssessmentPage();
-        if (Environment.environment.equalsIgnoreCase("qa"))
+      //  if (Environment.environment.equalsIgnoreCase("qa"))
             onDemandAssessmentPage.navigateToPageFromMenu("reportingservice", "ESG Reporting Portal");
-        else
-            onDemandAssessmentPage.navigateToReportingService("On-Demand Assessment");
+       // else
+       //     onDemandAssessmentPage.navigateToReportingService("On-Demand Assessment");
         onDemandAssessmentPage.waitForPortfolioTableToLoad();
         if (!onDemandAssessmentPage.verifyPortfolio(portfolioName)) {
             onDemandAssessmentPage.uploadPortfolio(portfolioName.replaceAll(" ", ""));
@@ -269,12 +267,14 @@ public class OnDemandAssessmentUITests extends UITestBase {
         System.out.println("Entitlements = " + entitlements);
         assertTestCase.assertTrue(entitlements.contains("Corporates ESG Data and Scores"),
                 "User with only Corporates ESG Data and Scores entitlements is verified");
-
-        Page404 page404 = new Page404();
+        PopUpPage popUpPage = new PopUpPage();
+        popUpPage.validateTheContentOfPopUp();
+        /*Page404 page404 = new Page404();
         page404.verify404Page();
-//        login.clickOnLogout();
-//        System.out.println("Logged out");
-//        login.entitlementsLogin(EntitlementsBundles.ALL);
+        login.clickOnLogout();
+
+        login.entitlementsLogin(EntitlementsBundles.ALL);*/
+        login.login();
     }
 
     @Test(groups = {REGRESSION, UI, ENTITLEMENTS}, description = "UI | On-Demand Assessment | Verify User is able to Submit/Un-submit Assessment Based on the Limit")
@@ -288,6 +288,7 @@ public class OnDemandAssessmentUITests extends UITestBase {
 
         OnDemandAssessmentPage ODAPage = new OnDemandAssessmentPage();
         //onDemandAssessmentPage.selectPortfolioByNameFromPortfolioSelectionModal(portfolioName);
+        BrowserUtils.wait(5);
         ODAPage.navigateToPageFromMenu("reportingservice","ESG Reporting Portal");
         BrowserUtils.waitForVisibility(ODAPage.portfolioNamesList, 15);
 
@@ -367,7 +368,7 @@ public class OnDemandAssessmentUITests extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI})
-    @Xray(test = {3277,3139})
+    @Xray(test = {3277,3139,2962, 3044})
     public void verifyRequestFailedWithPreviouslyUsedEmailIds() {
 
         String portfolioName = "500 predicted portfolio";
@@ -388,23 +389,24 @@ public class OnDemandAssessmentUITests extends UITestBase {
 
         onDemandAssessmentPage.RemoveRequests(1);
         String email = "qatest_" + faker.number().digits(4) + "@moodystest.com";
+
         onDemandAssessmentPage.enterEmail(email, 0);
         assertTestCase.assertTrue(onDemandAssessmentPage.btnConfirmRequest.isEnabled(), "Confirm request button is enabled");
         onDemandAssessmentPage.clickConfirmRequest();
         onDemandAssessmentPage.verifyConfirmRequestPopup("Proceed");
         onDemandAssessmentPage.waitForOpenAssessmentPageToLoad();
+        onDemandAssessmentPage.ValidateCreatedDatesSortingOrder();
+
         BrowserUtils.ActionKeyPress(Keys.ESCAPE);
 
         onDemandAssessmentPage.waitForPortfolioTableToLoad();
         onDemandAssessmentPage.selectPortfolio(portfolioName);
         onDemandAssessmentPage.clickonOnRequestAssessmentButton();
         onDemandAssessmentPage.validateOnDemandPageHeader();
-
         onDemandAssessmentPage.clickReviewAndSendRequestButton();
-
-
         onDemandAssessmentPage.RemoveRequests(1);
-
+        List<String> entityNameList = onDemandAssessmentPage.getEntityNames();
+        System.out.println(entityNameList);
         onDemandAssessmentPage.enterEmail(email, 0);
         onDemandAssessmentPage.clickConfirmRequest();
         onDemandAssessmentPage.verifyConfirmRequestPopup("Proceed");
@@ -413,12 +415,14 @@ public class OnDemandAssessmentUITests extends UITestBase {
 
         onDemandAssessmentPage.validateOnDemandPageHeader();
         onDemandAssessmentPage.clickReviewAndSendRequestButton();
+        onDemandAssessmentPage.KeepOnlySelectedCompanies(entityNameList);
+        onDemandAssessmentPage.valdateRequestStatus();
+        BrowserUtils.ActionKeyPress(Keys.ESCAPE);
 
-
+        onDemandAssessmentPage.validateOnDemandPageHeader();
+        onDemandAssessmentPage.clickReviewAndSendRequestButton();
         onDemandAssessmentPage.RemoveRequests(2);
-
         onDemandAssessmentPage.enterEmail(email, 0);
-
         String email1 = "qatest_" + faker.number().digits(4) + "@moodystest.com";
         onDemandAssessmentPage.enterEmail(email1, 1);
         assertTestCase.assertTrue(onDemandAssessmentPage.btnConfirmRequest.isEnabled(), "Confirm request button is enabled");

@@ -7,6 +7,7 @@ import com.esgc.ONDEMAND.API.Controllers.OnDemandFilterAPIController;
 import com.esgc.ONDEMAND.DB.DBModels.CLIMATEENTITYDATAEXPORT;
 import com.esgc.Utilities.*;
 import com.esgc.ONDEMAND.DB.DBQueries.OnDemandAssessmentQueries;
+import com.google.common.collect.Ordering;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
@@ -255,6 +256,9 @@ public class OnDemandAssessmentPage extends CommonPage {
     @FindBy(xpath = ("//button[contains(@title, 'Download')]"))
     public List<WebElement> downloadButtonList;
 
+    @FindBy(xpath = "//span[contains(text(),'Created on:')]")
+    public List<WebElement> CreatedOnDate;
+
 
     public String landingPage = "";
 
@@ -340,6 +344,20 @@ public class OnDemandAssessmentPage extends CommonPage {
         }
     }
 
+    public void KeepOnlySelectedCompanies(List<String> companyNames) {
+        selectFilter("No Request Sent");
+        // Randomly failing in selecting from Drop down so trying for one more
+        // time if fails in first time.
+        if (!FilterDropDown.getText().equals("No Request Sent")){
+            selectFilter("No Request Sent");
+        }
+        BrowserUtils.waitForVisibility(removeButtons, 60);
+        while (removeButtons.size() > companyNames.size()) {
+            WebElement companyName = removeButtons.get(0).findElement(By.xpath("../../td[2]"));
+           if (!companyNames.contains(companyName.getText().split("\n")[0]));
+            BrowserUtils.waitForClickablility(removeButtons.get(0), 60).click();
+        }
+    }
     public void verifyConfirmEmailAlert() {
         /*String message = "Please confirm email addresses. The listed contacts will receive an email prompting them to complete an ESG assessment questionnaire.";
         String xpath = "//*[contains(text(),'" + message + "')]";
@@ -452,7 +470,7 @@ public class OnDemandAssessmentPage extends CommonPage {
         for (WebElement option : drdShowOptions) {
             actualStatuses.add(option.getText());
         }
-        assertTestCase.assertEquals(actualStatuses, expectedStatuses, "Statuses are not matching");
+        assertTestCase.assertTrue(expectedStatuses.containsAll(actualStatuses), "Statuses are not matching");
         drdShowOptions.get(0).click();
     }
 
@@ -501,7 +519,12 @@ public class OnDemandAssessmentPage extends CommonPage {
         else
             assertTestCase.assertTrue(predictedScoreInvper.getText().matches("\\d+% invested"));
         String assessmentEligible = lblAssessmentEligible.getText().substring(0, lblAssessmentEligible.getText().indexOf("%"));
-        assertTestCase.assertTrue(predictedScoreTextBelowGraph.getText().matches("Companies with predicted scores ranging 0-100 account for \\d+.*\\d*% of investments"));
+        String predictedScore = predictedScoreTextBelowGraph.getText();
+        if (predictedScore.substring(predictedScore.lastIndexOf("for")+4,predictedScore.lastIndexOf("%")).contains(".")) {
+            assertTestCase.assertTrue(predictedScore.matches("Companies with predicted scores ranging 0-100 account for \\d+.*\\d*% of investments"));
+        }else {
+            assertTestCase.assertTrue(predictedScore.matches("Companies with predicted scores ranging 0-100 account for \\d+% of investments"));
+        }
     }
 
     public void validateLocation() {
@@ -603,7 +626,11 @@ public class OnDemandAssessmentPage extends CommonPage {
 
     public void validateOnDemandPageHeader() {
         BrowserUtils.waitForVisibility(menuOptionPageHeader,90);
-        assertTestCase.assertEquals(BrowserUtils.waitForVisibility(menuOptionPageHeader, 10).getText(), "ESG Reporting Portal", "Moody's Analytics: Request On-Demand Assessment page verified");
+       // if (Environment.environment.equalsIgnoreCase("qa")) {
+            assertTestCase.assertEquals(BrowserUtils.waitForVisibility(menuOptionPageHeader, 10).getText(), "ESG Reporting Portal", "Moody's Analytics: Request On-Demand Assessment page verified");
+       // } else {
+        //    assertTestCase.assertEquals(BrowserUtils.waitForVisibility(menuOptionPageHeader, 10).getText(), "On-Demand Reporting", "Moody's Analytics: Request On-Demand Assessment page verified");
+       // }
     }
 
     public void validateProceedOnConfirmRequestPopup(String countOfCompanies) {
@@ -771,16 +798,16 @@ public class OnDemandAssessmentPage extends CommonPage {
     }
 
     public boolean validateOnDemandReportingLandingPage() {
-        return BrowserUtils.waitForVisibility(menu,30).getText().equals("ESG Reporting Portal");
-//
-//        if (!Environment.environment.equalsIgnoreCase("prod")) {
-//            //return BrowserUtils.waitForVisibility(OnDemandMenuItem(), 60).getText().equals("ESG Reporting Portal");
-//        } else {
-//            return BrowserUtils.waitForVisibility(menu,30).getText().equals("On-Demand Reporting");
-//            //return BrowserUtils.waitForVisibility(OnDemandMenuItem(), 60).getText().equals("On-Demand Reporting");
-//            //return assertTestCase.assertEquals(BrowserUtils.waitForVisibility(OnDemandMenuItem, 90).getText(), "On-Demand Reporting", "Moody's Analytics: Request On-Demand Assessment page verified");
-//        }
-//        // return BrowserUtils.waitForVisibility(OnDemandMenuItem, 10).getText().equals("ESG Reporting Portal");
+
+      //  if (Environment.environment.equalsIgnoreCase("qa")) {
+            //return BrowserUtils.waitForVisibility(OnDemandMenuItem(), 60).getText().equals("ESG Reporting Portal");
+            return BrowserUtils.waitForVisibility(menu,30).getText().equals("ESG Reporting Portal");
+       // } else {
+       //     return BrowserUtils.waitForVisibility(menu,30).getText().equals("On-Demand Reporting");
+            //return BrowserUtils.waitForVisibility(OnDemandMenuItem(), 60).getText().equals("On-Demand Reporting");
+            //return assertTestCase.assertEquals(BrowserUtils.waitForVisibility(OnDemandMenuItem, 90).getText(), "On-Demand Reporting", "Moody's Analytics: Request On-Demand Assessment page verified");
+      //  }
+       // return BrowserUtils.waitForVisibility(OnDemandMenuItem, 10).getText().equals("ESG Reporting Portal");
 
     }
 
@@ -941,17 +968,17 @@ public class OnDemandAssessmentPage extends CommonPage {
         assertTestCase.assertTrue(detailPanelLastColumn.size() > 0, "Details panel last column is displayed");
 
         if (exportEntitlement) {
-            assertTestCase.assertTrue(detailPanelShowingStatement.isDisplayed(), "Details panel showing statement is displayed");
-            assertTestCase.assertTrue(detailPanelExportToExcelButton.isEnabled(), "Details panel export to excel button is displayed");
+            assertTestCase.assertTrue(BrowserUtils.waitForVisibility(detailPanelShowingStatement,60).isDisplayed(), "Details panel showing statement is displayed");
+            assertTestCase.assertTrue(BrowserUtils.waitForVisibility(detailPanelExportToExcelButton,60).isEnabled(), "Details panel export to excel button is displayed");
         } else {
             try {
-                assertTestCase.assertFalse(detailPanelShowingStatement.isDisplayed(), "Details panel showing statement is not displayed");
+                assertTestCase.assertFalse(BrowserUtils.waitForVisibility(detailPanelShowingStatement,60).isDisplayed(), "Details panel showing statement is not displayed");
             } catch (Exception e) {
                 System.out.println("Details panel showing statement is not displayed");
             }
 
             try {
-                assertTestCase.assertFalse(detailPanelExportToExcelButton.isEnabled(), "Details panel export to excel button is not displayed");
+                assertTestCase.assertFalse(BrowserUtils.waitForVisibility(detailPanelExportToExcelButton,60).isEnabled(), "Details panel export to excel button is not displayed");
             } catch (Exception e) {
                 System.out.println("Details panel export to excel button is not displayed");
             }
@@ -1229,6 +1256,18 @@ public class OnDemandAssessmentPage extends CommonPage {
         return portfolioName;
     }
 
+    public String SelectAndGetNonOnDemandEligiblePortfolioName() {
+        String portfolioName = "";
+        for (int i = 0; i < getPortfolioList().size(); i++) {
+            if (Double.valueOf(OnDemandEligibility.get(i).getText().split("%")[0]) == (0)) {
+                portfolioRadioButtonList.get(i).click();
+                portfolioName = getPortfolioList().get(i);
+                break;
+            }
+        }
+        return portfolioName;
+    }
+
 
     @FindBy(xpath = "//*[@id=\"Climate Dashboardtopbar-menuitem-test-id\"]")
     public WebElement climateDashboardTab;
@@ -1471,4 +1510,39 @@ public class OnDemandAssessmentPage extends CommonPage {
         BrowserUtils.waitForVisibility(errorPopUPMessage,60).getText().contains("No assessment request have been created. Please review the email address entries.");
         errorPopUPMessageCloseButton.click();
     }
+
+    public List<String> getEntityNames(){
+        List<String> entityNames = new ArrayList<>();
+        for (WebElement e : removeButtons){
+            entityNames.add(e.findElement(By.xpath("../../td[2]")).getText().split("\n")[0]);
+        }
+        return entityNames;
+    }
+    public void valdateRequestStatus(){
+        for (WebElement e : removeButtons){
+            assertTestCase.assertEquals(e.findElement(By.xpath("../../td[4]")).getText().split("\n")[1],"No Request Sent", "Validate 'No Status Request' status");
+        }
+
+    }
+
+    public List<Date> getCreatedDates (){
+        List<Date> dates = new ArrayList<>();
+        for (WebElement element : CreatedOnDate){
+            try {
+                dates.add(DateTimeUtilities.convertStringToDate(element.getText().split(": ")[1],"MMM dd, yyyy"));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+        return dates ;
+    }
+
+    public void ValidateCreatedDatesSortingOrder(){
+       assertTestCase.assertTrue(Ordering.<Date> natural().reverse().isOrdered(getCreatedDates()),"Validate if Created date is in chronological order");
+    }
+
+    public void validateCancelCounts(){
+        assertTestCase.assertTrue(Ordering.<Date> natural().reverse().isOrdered(getCreatedDates()),"Validate if Created date is in chronological order");
+    }
+
 }

@@ -205,12 +205,12 @@ public class LoginPage extends PageBase {
             BrowserUtils.clearCache();
             if (PTusernameBox.getAttribute("value").isEmpty())
                 PTusernameBox.sendKeys(Environment.INTERNAL_USER_USERNAME);
-            wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.INTERNAL_USER_PASSWORD);
+            wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.INTERNAL_USER_PASSWORD
+            );
             wait.until(ExpectedConditions.visibilityOf(loginButton)).click();
         } catch (Exception e) {
             System.out.println("No need to enter username");
         }
-
     }
 
     public void clickOnNextButton() {
@@ -329,6 +329,7 @@ public class LoginPage extends PageBase {
                 wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.USER_WITH_CORPORATES_ESG_DATA_AND_SCORES_ENTITLEMENT_USERNAME, Keys.ENTER);
                 wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.USER_WITH_CORPORATES_ESG_DATA_AND_SCORES_ENTITLEMENT_PASSWORD);
                 break;
+
                 case ODA_ESG_PREDICTOR_DATA_ENTITLEMENT:
                 wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.ODA_ESG_PREDICTOR_DATA_ENTITLEMENT_USERNAME, Keys.ENTER);
                 wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.ODA_ESG_PREDICTOR_DATA_ENTITLEMENT_PASSWORD);
@@ -442,6 +443,7 @@ public class LoginPage extends PageBase {
 
 
     public void clickOnLogout() {
+        System.out.println("Logging out");
         BrowserUtils.wait(10);
         wait.until(ExpectedConditions.visibilityOf(menu));
         BrowserUtils.clickWithJS(menu);

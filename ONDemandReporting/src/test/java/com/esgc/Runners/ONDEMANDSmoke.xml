@@ -5,7 +5,7 @@
         <listener class-name="com.esgc.Reporting.Listeners"/>
     </listeners>
     <test name="ESGC Smoke Test via Module">
-        <parameter name="reportName" value="Smoke OnDemand Test Automation Report"/>
+        <parameter name="reportName" value="OnDemand Test Automation Report"/>
         <groups>
             <run>
                 <include name="smoke"/>
