@@ -77,6 +77,7 @@ public class XrayFileImporter {
 
         //STEP 1 get all test cases and failed test cases
         Set<String> allTestCases = findTestCases(testCaseList);
+        System.out.println("allTestCases = " + allTestCases);
         Set<String> failedTestCases = findFailedTestCases(testCaseList);
 
         //If we run smoke suite then remove test cases which are not marked as smoke
@@ -144,7 +145,7 @@ public class XrayFileImporter {
                 .contentType("application/json")
                 .body(payload)
                 .when()
-                .post("https://xray.cloud.getxray.app/api/v2/import/execution").prettyPeek();
+                .post("https://xray.cloud.getxray.app/api/v2/import/execution");
         /*
         STEP 6 - If there is any unrelated ticket mapped, remove it from list to complete mapping on Jira test execution ticket
         (once there is unrelated ticket number in the list, test execution is not mapping test cases)
@@ -165,12 +166,12 @@ public class XrayFileImporter {
                 }
             }
 
-            System.out.println("###################");
-            System.out.println("SOME TICKET NUMBERS TYPE IS NOT TEST CASE");
-            System.out.println("THOSE TICKET NUMBERS ARE REMOVED FROM THE LIST");
-            System.out.println("REMOVED TICKET NUMBERS WHICH ARE NOT TEST CASES:");
+//            System.out.println("###################");
+//            System.out.println("SOME TICKET NUMBERS TYPE IS NOT TEST CASE");
+//            System.out.println("THOSE TICKET NUMBERS ARE REMOVED FROM THE LIST");
+//            System.out.println("REMOVED TICKET NUMBERS WHICH ARE NOT TEST CASES:");
             removeTestCaseList.forEach(System.out::println);
-            System.out.println("###################");
+//            System.out.println("###################");
 
             for (String testCaseTicketNumber : removeTestCaseList) {
                 tclist.removeIf(e -> e.getTestKey().equals(testCaseTicketNumber));
@@ -191,7 +192,7 @@ public class XrayFileImporter {
                     .contentType("application/json")
                     .body(payload2)
                     .when()
-                    .post("https://xray.cloud.getxray.app/api/v2/import/execution").prettyPeek();
+                    .post("https://xray.cloud.getxray.app/api/v2/import/execution");
         }
 
 

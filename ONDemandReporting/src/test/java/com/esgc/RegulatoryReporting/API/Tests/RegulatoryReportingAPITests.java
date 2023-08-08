@@ -23,7 +23,6 @@ import static org.hamcrest.Matchers.equalTo;
 
 public class RegulatoryReportingAPITests extends CommonTestBase {
 
-
     @Test(groups = {REGRESSION, REGULATORY_REPORTING, API}, description = "Data Validation| MT | Regulatory Reporting | Validate Portfolio list and portfolio-details")
     @Xray(test = {4028})
     public void verifyPortfolioPortfolioDetailsListTest() {
@@ -138,6 +137,7 @@ public class RegulatoryReportingAPITests extends CommonTestBase {
             }
         }
     }
+
     @Test
     public void verifyBenchmarkFieldDashboard(){
         RegulatoryReportingPage reportingPage = new RegulatoryReportingPage();
@@ -288,6 +288,4 @@ public class RegulatoryReportingAPITests extends CommonTestBase {
         //.body("message", equalTo("Forbidden"));
 
     }
-
-
 }

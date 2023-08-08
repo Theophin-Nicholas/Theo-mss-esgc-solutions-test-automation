@@ -69,7 +69,6 @@ public class OnDemandEntitlementBundleTests extends UITestBase {
         }
     }
 
-
     @Test(groups = {REGRESSION, UI, ENTITLEMENTS})
     @Xray(test = {4261})
     public void validatePortfolioUploadWithOnlyPredictedEntitlement() {
@@ -360,36 +359,6 @@ public class OnDemandEntitlementBundleTests extends UITestBase {
 
     }
 
-    @Test(groups = {REGRESSION, UI, ENTITLEMENTS, INCLUDEDAPITEST}, description = "UI | Dashboard | On-Demand | Verify if user only have 'Corporates ESG Data and Scores' Entitlement")
-    @Xray(test = {3116})
-    public void verifyUserWithOnlyCorporatesESGDataAndScoresEntitlementTest() {
-        LoginPage login = new LoginPage();
-        try {
-
-            login.entitlementsLogin(EntitlementsBundles.USER_WITH_CORPORATES_ESG_DATA_AND_SCORES_ENTITLEMENT);
-            System.out.println("Logged in with only Corporates ESG Data and Scores entitlements");
-            System.clearProperty("token");
-            PopUpPage popUpPage = new PopUpPage();
-            BrowserUtils.waitForVisibility(popUpPage.popUpHeader).isDisplayed();
-            CommonAPIController apiController = new CommonAPIController();
-            Response response = apiController.getEntitlementHandlerResponse();
-            BrowserUtils.wait(5);
-            response.then().assertThat().statusCode(200);
-            JsonPath jsonPathEvaluator = response.jsonPath();
-            List<String> entitlements = jsonPathEvaluator.getList("entitlements.name");
-            System.out.println(entitlements);
-            assertTestCase.assertTrue(entitlements.contains("Corporates ESG Data and Scores"),
-                    "User with only Corporates ESG Data and Scores entitlements is verified");
-            // PopUpPage popUpPage = new PopUpPage();
-            popUpPage.validateTheContentOfPopUp();
-        } catch (Exception e) {
-            e.printStackTrace();
-            login.clickOnLogout();
-            assertTestCase.assertTrue(false, "TestCase Failed - Please see stack trace for details");
-        }
-
-    }
-
     @Test(groups = {REGRESSION, UI, ENTITLEMENTS}, description = "UI | On-Demand Assessment | Verify User is able to Submit/Un-submit Assessment Based on the Limit")
     @Xray(test = {3073, 2944, 2662})
     public void verifyAssessmentSubmissionBasedOnTheLimit() {
@@ -447,8 +416,38 @@ public class OnDemandEntitlementBundleTests extends UITestBase {
         }
     }
 
+    @Test(groups = {REGRESSION, UI, ENTITLEMENTS, INCLUDEDAPITEST}, description = "UI | Dashboard | On-Demand | Verify if user only have 'Corporates ESG Data and Scores' Entitlement")
+    @Xray(test = {3116})
+    public void verifyUserWithOnlyCorporatesESGDataAndScoresEntitlementTest() {
+        LoginPage login = new LoginPage();
+        try {
+
+            login.entitlementsLogin(EntitlementsBundles.USER_WITH_CORPORATES_ESG_DATA_AND_SCORES_ENTITLEMENT);
+            System.out.println("Logged in with only Corporates ESG Data and Scores entitlements");
+            System.clearProperty("token");
+            PopUpPage popUpPage = new PopUpPage();
+            BrowserUtils.waitForVisibility(popUpPage.popUpHeader).isDisplayed();
+            CommonAPIController apiController = new CommonAPIController();
+            Response response = apiController.getEntitlementHandlerResponse();
+            BrowserUtils.wait(5);
+            response.then().assertThat().statusCode(200);
+            JsonPath jsonPathEvaluator = response.jsonPath();
+            List<String> entitlements = jsonPathEvaluator.getList("entitlements.name");
+            System.out.println(entitlements);
+            assertTestCase.assertTrue(entitlements.contains("Corporates ESG Data and Scores"),
+                    "User with only Corporates ESG Data and Scores entitlements is verified");
+            // PopUpPage popUpPage = new PopUpPage();
+            popUpPage.validateTheContentOfPopUp();
+        } catch (Exception e) {
+            e.printStackTrace();
+            login.clickOnLogout();
+            assertTestCase.assertTrue(false, "TestCase Failed - Please see stack trace for details");
+        }
+
+    }
+
     @Test(groups = {UI, REGRESSION,ENTITLEMENTS})
-    @Xray(test = {2819, 2766,2879})
+    @Xray(test = {2819, 2766,2879, 2870})
     public void verifyZeroAssessmentRemaining() {
         LoginPage login = new LoginPage();
         try {
@@ -614,7 +613,7 @@ public class OnDemandEntitlementBundleTests extends UITestBase {
         }
     }
 
-    @Test(groups = {REGRESSION, UI, COMMON}, description = "UI | On-Demand Reporting | On-Demand Assessment | Verify Download button is not displayed if Export entitlement is disabled")
+    @Test(groups = {REGRESSION, UI, COMMON, ENTITLEMENTS}, description = "UI | On-Demand Reporting | On-Demand Assessment | Verify Download button is not displayed if Export entitlement is disabled")
     @Xray(test = {2917})
     public void verifyDownloadButtonNotDisplayedTest() {
         LoginPage login = new LoginPage();
@@ -641,5 +640,4 @@ public class OnDemandEntitlementBundleTests extends UITestBase {
         }
 
     }
-
 }

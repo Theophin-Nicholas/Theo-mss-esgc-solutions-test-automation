@@ -176,7 +176,6 @@ public class OnDemandAssessmentUITests extends UITestBase {
 
     }
 
-
     @Test(groups = {REGRESSION, UI, SMOKE})
     @Xray(test = {2686,2961})
     public void verifyFilterCriteriaWithAndORLogic() {
@@ -193,8 +192,6 @@ public class OnDemandAssessmentUITests extends UITestBase {
         onDemandAssessmentPage.validateOnDemandPageHeader();
         onDemandAssessmentPage.validateAndORLogic();
     }
-
-
 
     @Test(groups = {REGRESSION, UI, SMOKE})
     @Xray(test = {3049, 3117, 2792, 2989, 2816, 3150})
@@ -246,10 +243,6 @@ public class OnDemandAssessmentUITests extends UITestBase {
         onDemandAssessmentPage.clickConfirmRequest();
         onDemandAssessmentPage.verifyConfirmRequestPopup("Cancel");
     }
-
-
-
-
 
     @Test(groups = {REGRESSION, UI, ENTITLEMENTS}, description = "UI | Dashboard | On-Demand | Verify if user only have 'Corporates ESG Data and Scores' Entitlement")
     @Xray(test = {3116})
@@ -346,7 +339,6 @@ public class OnDemandAssessmentUITests extends UITestBase {
         onDemandAssessmentPage.ValidateSortingOnLastUpdateColumn();
 
     }
-
 
     @Test(groups = {REGRESSION, UI, COMMON, SMOKE}, description = "UI | On-Demand Reporting | On-Demand Assessments | Verify Different ways to download the portfolio/export file")
     @Xray(test = {2916, 2806, 2939, 2863, 2915, 2725, 2903})

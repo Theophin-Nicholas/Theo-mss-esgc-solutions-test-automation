@@ -50,8 +50,5 @@ public class OnDemandFilterAPITest extends CommonTestBase {
         OnDemandRequests statusAPI = response.as(OnDemandRequests.class);
         List<String> createDateTime = statusAPI.getRequests().stream().map(e-> e.getCreate_datetime()).collect(Collectors.toList());
         assertTestCase.assertTrue(Ordering.<String> natural().reverse().isOrdered(createDateTime),"Validate if Created date is in chronological order");
-
-
-
     }
 }

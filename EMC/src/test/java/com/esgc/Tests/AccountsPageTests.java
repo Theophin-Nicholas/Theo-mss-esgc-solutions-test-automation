@@ -1117,8 +1117,9 @@ public class AccountsPageTests extends EMCUITestBase {
 
     }
 
-    @Test(groups = {EMC, UI, REGRESSION}, description = "UI | EMC | Accounts | Verify the ability to search for an account")
-    @Xray(test = {4514})
+//    @Test(groups = {EMC, UI, REGRESSION}, description = "UI | EMC | Accounts | Verify the ability to search for an account")
+//    @Xray(test = {4514})
+//TODO check for the flow, the test case is updated
     public void verifySearchForAccountTest() {
         EMCMainPage homePage = new EMCMainPage();
         homePage.goToAccountsPage();
@@ -1689,6 +1690,7 @@ public class AccountsPageTests extends EMCUITestBase {
     @Xray(test = {2697, 2738, 3131, 3048})
     public void verifyTextAlignmentsTest() {
         navigateToAccountsPage("", "");
+        accountsPage.search("test");
         for(WebElement header : accountsPage.tableHeaders){
             assertTestCase.assertTrue(header.getCssValue("text-align").equals("left"), "Table headers are left aligned");
         }

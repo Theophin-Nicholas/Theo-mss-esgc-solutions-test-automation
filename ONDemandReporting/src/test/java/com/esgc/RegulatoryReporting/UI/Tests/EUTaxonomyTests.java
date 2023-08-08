@@ -49,10 +49,7 @@ public class EUTaxonomyTests extends UITestBase {
     @Xray(test = {4270})
     public void verifyValuesAreRemainingForEUTaxonomy() {
         EUTaxonomyPage euTaxonomyPage = new EUTaxonomyPage();
-        euTaxonomyPage.navigateToPageFromMenu("ESG Reporting Portal");
-        TestBase.test.info("Navigated to Regulatory Reporting Page");
-
-        euTaxonomyPage.clickOnEUTaxonomyOption();
+        euTaxonomyPage.navigateToReportingService("EU");
         euTaxonomyPage.waitForPortfolioTableToLoad();
         boolean isSamplePortfolioInPortfolioNames = euTaxonomyPage.getPortfolioList().contains("Sample Portfolio");
 
@@ -104,5 +101,4 @@ public class EUTaxonomyTests extends UITestBase {
 
         }
     }
-
 }

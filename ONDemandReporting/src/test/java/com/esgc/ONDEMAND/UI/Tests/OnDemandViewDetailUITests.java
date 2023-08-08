@@ -12,8 +12,6 @@ import static com.esgc.Utilities.Groups.*;
 
 public class OnDemandViewDetailUITests extends UITestBase {
 
-    // test methods for on demand view detail pages
-
     @Test(groups = {UI, REGRESSION, SMOKE})
     @Xray(test = {2994, 2739, 2969, 2848, 2869, 2871, 2954})
     public void verifyViewDetailPageByScoreType(){
@@ -65,6 +63,7 @@ public class OnDemandViewDetailUITests extends UITestBase {
 
 
     }
+
     @Test(groups = {UI, REGRESSION, SMOKE})
     @Xray(test = { 3033, 3113, 3124, 2865, 2845, 2837})
     public void verifyViewDetailPageBySector(){
