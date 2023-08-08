@@ -1111,7 +1111,7 @@ public class OnDemandAssessmentPage extends CommonPage {
         int lastRow = excelData.getLastRowNum();
         String actualDisclaimerText = excelData.getCellData(lastRow, 0);
         String expectedDisclaimerText = "Disclaimer: ESG self-assessment report is calculated based on data the company has provided, which Moody's does not validate. Moody's ESG on Demand Assessments measure the extent to which a company effectively integrates industry-relevant ESG factors into its management and operational practices based on their self-reported data through a tailored questionnaire. An ESG self-assessment is distinct from a credit rating, which rates an entity's creditworthiness";
-        assertTestCase.assertEquals(actualDisclaimerText, expectedDisclaimerText, "Disclaimer Text Validation", 14499, 14523);
+        assertTestCase.assertEquals(actualDisclaimerText, expectedDisclaimerText, "Disclaimer Text Validation", 2731, 1348);
 
         excelData = getExcelData(exportedDocumentName, 1);
         expColumnNames = Arrays.asList("Data Type", "Definition");

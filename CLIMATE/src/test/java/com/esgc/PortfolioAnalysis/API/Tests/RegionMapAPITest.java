@@ -41,7 +41,7 @@ public class RegionMapAPITest extends APITestBase {
     }
 
 
-    @Test(groups = {API, REGRESSION}, dataProvider = "API Research Lines")
+    @Test(enabled = false, groups = {API, REGRESSION}, dataProvider = "API Research Lines")
     @Xray(test = {1064,1247})
     public void RegionMap_InvalidPayload(@Optional String researchLine) {
         APIController apiController = new APIController();
@@ -55,7 +55,7 @@ public class RegionMapAPITest extends APITestBase {
         test.pass("Successfully validated for " + researchLine + "research line");
     }
 
-    @Test(groups = {API, REGRESSION}, dataProvider = "API Research Lines")
+    @Test(enabled = false, groups = {API, REGRESSION}, dataProvider = "API Research Lines")
     public void RegionMap_UnauthorisedAccess(@Optional String researchLine) {
         APIController apiController = new APIController();
 

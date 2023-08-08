@@ -27,11 +27,9 @@ import static com.esgc.Utilities.Groups.REGRESSION;
 public class RegionTests extends DataValidationTestBase {
 
     @Test(groups = {REGRESSION, DATA_VALIDATION}, dataProvider = "researchLines")
-    @Xray(test = {1750, 2140, 2490, 2723, 3688, 3689, 2724, 2726, 2725, 2634, 2633, 2959, 2948, 3690,
-            4991, 3685, 5142, 5143, 1383, 1384,
-            6785, 6787,
-            11248,//Subs
-
+    @Xray(test = {4534, 5059, 2145, 1960, 4416, 4744, 1984, 1895, 1442, 1950, 1931, 2090, 1739, 4766,
+             4713, 3597, 3492,
+            4301, 4343,
             })
             public void verifyRegionSummaryAndDetails(@Optional String sector, @Optional String region, @Optional String researchLine, @Optional String month, @Optional String year) {
 
@@ -221,7 +219,7 @@ public class RegionTests extends DataValidationTestBase {
 
     //Descoped in story https://esjira/browse/ESGCA-9398
     @Test(enabled = false, groups = {REGRESSION, DATA_VALIDATION}, dataProvider = "researchLines")
-    @Xray(test = {4233, 4237})
+    @Xray(test = {2066, 1797})
     public void verifyRegionMonthlyorQuarterlyChanges(@Optional String sector, @Optional String region, @Optional String researchLine, @Optional String month, @Optional String year) throws ParseException {
 
 

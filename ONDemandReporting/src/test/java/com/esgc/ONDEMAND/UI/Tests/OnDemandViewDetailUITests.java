@@ -1,12 +1,8 @@
 package com.esgc.ONDEMAND.UI.Tests;
 
-import com.esgc.Common.UI.Pages.LoginPage;
 import com.esgc.Common.UI.TestBases.UITestBase;
-import com.esgc.ONDEMAND.API.Controllers.OnDemandFilterAPIController;
 import com.esgc.ONDEMAND.UI.Pages.OnDemandAssessmentPage;
 import com.esgc.ONDEMAND.UI.Pages.ViewDetailPage;
-import com.esgc.Utilities.BrowserUtils;
-import com.esgc.Utilities.EntitlementsBundles;
 import com.esgc.Utilities.Xray;
 import org.testng.annotations.Test;
 
@@ -16,10 +12,8 @@ import static com.esgc.Utilities.Groups.*;
 
 public class OnDemandViewDetailUITests extends UITestBase {
 
-    // test methods for on demand view detail pages
-
     @Test(groups = {UI, REGRESSION, SMOKE})
-    @Xray(test = {13786, 14139, 13972, 14164, 14168, 14169, 14174})
+    @Xray(test = {2994, 2739, 2969, 2848, 2869, 2871, 2954})
     public void verifyViewDetailPageByScoreType(){
         ViewDetailPage detail = new ViewDetailPage();
         String portfolioName = "500 predicted portfolio";
@@ -69,8 +63,9 @@ public class OnDemandViewDetailUITests extends UITestBase {
 
 
     }
+
     @Test(groups = {UI, REGRESSION, SMOKE})
-    @Xray(test = { 14212, 13795, 13796, 13797, 13800, 14138 })
+    @Xray(test = { 3033, 3113, 3124, 2865, 2845, 2837})
     public void verifyViewDetailPageBySector(){
         ViewDetailPage detail = new ViewDetailPage();
         String portfolioName = "500 predicted portfolio";
@@ -104,7 +99,7 @@ public class OnDemandViewDetailUITests extends UITestBase {
     }
 
     @Test(groups = {UI, REGRESSION, SMOKE})
-    @Xray(test = {14145,14146,14150,14154,14158})
+    @Xray(test = {2855,2823,2829,2933,2814})
     public void verifyViewDetailPageByRegion(){
 
         ViewDetailPage detail = new ViewDetailPage();

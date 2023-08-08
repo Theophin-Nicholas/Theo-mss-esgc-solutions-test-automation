@@ -22,7 +22,7 @@ import static com.esgc.Utilities.Groups.*;
 //TODO synchronization issues
 public class DashboardHeatMapEntityListTests extends UITestBase {
     @Test(groups = {DASHBOARD, UI, SMOKE})
-    @Xray(test = {4843, 4844, 4829, 6221, 7475, 7943, 9268, 9269, 9270})
+    @Xray(test = {1705, 1873, 1668, 3793, 4760, 4346, 3947, 4450, 5015})
     public void verifyEntityListTest() {
         DashboardPage dashboardPage = new DashboardPage();
         dashboardPage.selectSamplePortfolioFromPortfolioSelectionModal();
@@ -51,7 +51,7 @@ public class DashboardHeatMapEntityListTests extends UITestBase {
     }
 
     @Test(groups = {DASHBOARD, UI, SMOKE})
-    @Xray(test = {9271})
+    @Xray(test = {4931})
     public void verifyHeatMapDrawer() {
         //Verify that user is able to close drawer by clicking outside of drawer
         DashboardPage dashboardPage = new DashboardPage();
@@ -63,7 +63,7 @@ public class DashboardHeatMapEntityListTests extends UITestBase {
     }
 
     @Test(groups = {DASHBOARD, UI, REGRESSION})
-    @Xray(test = {4784, 4785, 4786, 4787, 4788, 4789, 4798, 4799, 6208, 7899, 7900, 9266})
+    @Xray(test = {1344, 1598, 1396, 1815, 1600, 1623, 1632, 1370, 4191, 4461, 4884, 4452})
     public void DashboardUIHeatMapTest() {
         DashboardPage dashboardPage = new DashboardPage();
         BrowserUtils.wait(3);
@@ -167,7 +167,7 @@ public class DashboardHeatMapEntityListTests extends UITestBase {
     }
 
     @Test(groups = {DASHBOARD, UI, REGRESSION})
-    @Xray(test = {4880, 4885, 4825, 4824})
+    @Xray(test = {3492, 1250, 1957, 1672})
     public void verifyHeatMapPercentages() {
         //Verify the percentage displayed in the axes
         DashboardPage dashboardPage = new DashboardPage();
@@ -211,7 +211,7 @@ public class DashboardHeatMapEntityListTests extends UITestBase {
     }
 
     @Test(groups = {DASHBOARD, UI, REGRESSION})
-    @Xray(test = {4800, 4801, 4802})
+    @Xray(test = {1861, 1677, 1897})
     public void verifyHeatMapCellMatrix() {
         //Verify the percentage displayed in the axes
         DashboardPage dashboardPage = new DashboardPage();
@@ -234,7 +234,7 @@ public class DashboardHeatMapEntityListTests extends UITestBase {
     }
 
     @Test(groups = {DASHBOARD, UI, REGRESSION, SMOKE})
-    @Xray(test = {7942, 7944, 5115})
+    @Xray(test = {4801, 4564, 1708})
     public void getSelectedResearchLineNameFromHeatMap() {
         DashboardPage dashboardPage = new DashboardPage();
         dashboardPage.selectSamplePortfolioFromPortfolioSelectionModal();
@@ -320,7 +320,7 @@ public class DashboardHeatMapEntityListTests extends UITestBase {
 
     //Entitlements
     @Test(groups = {DASHBOARD, UI, REGRESSION, ENTITLEMENTS})
-    @Xray(test = {8185, 7973})
+    @Xray(test = {3955, 5020})
     public void heatMapAPIUIEntitlementsVerification() {
         APIController apiController = new APIController();
         DashboardPage dashboardPage = new DashboardPage();
@@ -452,7 +452,7 @@ public class DashboardHeatMapEntityListTests extends UITestBase {
     }
 
     @Test(groups = {DASHBOARD, UI, REGRESSION})
-    @Xray(test = {11218})
+    @Xray(test = {3360})
     public void verifyHeatMapTitleAndDefaultSelection() {
 
         DashboardPage dashboardPage = new DashboardPage();
@@ -483,7 +483,7 @@ public class DashboardHeatMapEntityListTests extends UITestBase {
 
 
     @Test(groups = {DASHBOARD, UI, REGRESSION})
-    @Xray(test = {11222})
+    @Xray(test = {3337})
     public void verifySelectTwoStaticTextInHeatMap() {
         DashboardPage dashboardPage = new DashboardPage();
         BrowserUtils.waitForVisibility(dashboardPage.verifyPortfolioName, 20);

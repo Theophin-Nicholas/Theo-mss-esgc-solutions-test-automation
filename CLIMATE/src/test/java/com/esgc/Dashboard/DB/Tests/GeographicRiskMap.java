@@ -25,9 +25,9 @@ import static com.esgc.Utilities.Groups.*;
 
 public class GeographicRiskMap extends DataValidationTestBase {
 
-    //Test cases ESGCA-1933 ESGCA-4606 ESGCA-4607 ESGCA-4616 ESGCA-4617  ESGCA-4622
+    //Test cases ESGT-3562 ESGT-3471 ESGT-3593 ESGT-3589 ESGT-3470  ESGT-3516
     @Test(enabled = false, groups = {REGRESSION, DATA_VALIDATION, DASHBOARD}, dataProvider = "researchLines", threadPoolSize = 1)
-    @Xray(test = {1933, 4606, 4607, 4616, 4617, 4622})
+    @Xray(test = {3562, 3471, 3593, 3589, 3470, 3516})
     public void verifyGeographicRiskMap(@Optional String sector, @Optional String region, @Optional String researchLine, @Optional String month, @Optional String year) {
 
 

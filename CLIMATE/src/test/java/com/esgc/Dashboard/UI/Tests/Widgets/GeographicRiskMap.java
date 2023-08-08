@@ -17,7 +17,7 @@ public class GeographicRiskMap extends DashboardUITestBase {
    //Todo there is random fails due to clicking on the country."Holdings Title Verification"
     @Test(enabled = false, groups = {UI, DASHBOARD, SMOKE, REGRESSION},
             dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
-    @Xray(test = {1932, 4548, 7565, })
+    @Xray(test = {2030, 1863, 7565, 3675})
     public void verifyGeographicRiskMapIsDisplayed(String researchLine) {
         DashboardPage dashboardPage = new DashboardPage();
 
@@ -32,17 +32,17 @@ public class GeographicRiskMap extends DashboardUITestBase {
                     dashboardPage.getAvailableResearchLinesFromGeographicRiskDistribution();
             List<String> expectedGeoMapResearchLines = dashboardPage.getExpectedListOfGeoMapResearchLines(EntitlementsBundles.ALL);
             assertTestCase.assertEquals(getAvailableResearchLinesFromMap,
-                    expectedGeoMapResearchLines, "Validating Geographic Map Research Lines", 4533, 4548);
+                    expectedGeoMapResearchLines, "Validating Geographic Map Research Lines", 1694, 1863);
 
         dashboardPage.selectResearchLineFromGeographicRiskMapDropDown(researchLine);
         test.info("Check if Country List displayed");
-        dashboardPage.clickRandomCountryOnGeographicRiskMap();//4613
+        dashboardPage.clickRandomCountryOnGeographicRiskMap();//3675
 
-        assertTestCase.assertTrue(dashboardPage.isCountryDistributionListDisplayed(),"Country List is Displayed", 4602, 4609);//4602, 4609
+        assertTestCase.assertTrue(dashboardPage.isCountryDistributionListDisplayed(),"Country List is Displayed", 3450, 1288);//3450, 1288
 
         dashboardPage.clickRandomCountryInCountryDistributionList();
         test.info("Check if Entity List displayed");
-        assertTestCase.assertTrue(dashboardPage.isHoldingsTitleDisplayedOnEntityList(), "Holdings Title Verification", 4612);
+        assertTestCase.assertTrue(dashboardPage.isHoldingsTitleDisplayedOnEntityList(), "Holdings Title Verification", 1357);
 
         assertTestCase.assertTrue(dashboardPage.isGeographicRiskMapDisplayed(),"Geographic Risk Map is Displayed");
 
@@ -51,7 +51,7 @@ public class GeographicRiskMap extends DashboardUITestBase {
     //TODO Geomap is de-scoped until get an update from business
     @Test(enabled = false, groups = {UI, DASHBOARD, SMOKE, REGRESSION},
             dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
-    @Xray(test = {4559, 6309, 6310, 6311})
+    @Xray(test = {1836, 4356, 4725, 4591})
     public void verifyGeographicRiskMapRedirectLink(String researchLine) {
         DashboardPage dashboardPage = new DashboardPage();
 

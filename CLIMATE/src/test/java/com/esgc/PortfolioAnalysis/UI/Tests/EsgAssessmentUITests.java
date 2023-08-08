@@ -55,7 +55,7 @@ public class EsgAssessmentUITests extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI, ESG})
-    @Xray(test = {11372})
+    @Xray(test = {5085})
     public void verifyEsgAssessmentExcelColumnsOrder_Dashboard() {
         DashboardPage dashboardPage = new DashboardPage();
         dashboardPage.downloadDashboardExportFile();
@@ -87,7 +87,7 @@ public class EsgAssessmentUITests extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI, ESG, EXPORT})
-    @Xray(test = {9791})
+    @Xray(test = {4899})
     public void VerifyFileUploadSubsidiaryCompany() {
         DashboardPage dashboardPage = new DashboardPage();
 
@@ -107,7 +107,7 @@ public class EsgAssessmentUITests extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI, ESG, EXPORT})
-    @Xray(test = {11142})
+    @Xray(test = {4912})
     public void VerifyRLScoresFromExcelToEntityProfilePage() {
         DashboardPage dashboardPage = new DashboardPage();
         if (!dashboardPage.verifyPortfolioName.getText().equalsIgnoreCase("Sample Portfolio"))

@@ -17,7 +17,7 @@ public class TemperatureAlignInfoTests extends DataValidationTestBase {
     ExportUtils utils = new ExportUtils();
 
     @Test(groups = {DASHBOARD, REGRESSION, UI})
-    @Xray(test = {7166})
+    @Xray(test = {3964})
     public void compareTempAlignInfoFromExcelToDB() {
         DashboardPage dashboardPage = new DashboardPage();
         dashboardPage.downloadDashboardExportFile();

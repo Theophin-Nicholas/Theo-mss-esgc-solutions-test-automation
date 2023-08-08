@@ -25,7 +25,7 @@ public class PortfolioSettings extends UITestBase {
 
 
     @Test(groups = {REGRESSION, UI, SMOKE})
-    @Xray(test = {9391, 9665, 9666, 9667, 9668, 9669, 9670, 9673, 9674})
+    @Xray(test = {5009, 4477, 4487, 4894, 4484, 4479, 4990, 4601, 4526})
     public void validatePortfolioSetting_EditPortfolioName() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         researchLinePage.clickMenu();
@@ -49,7 +49,7 @@ public class PortfolioSettings extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI, SMOKE})
-    @Xray(test = {9664})
+    @Xray(test = {4451})
     public void validatePortfolioSetting_SamplePortfolioNotEditable() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         researchLinePage.clickMenu();
@@ -61,7 +61,7 @@ public class PortfolioSettings extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI, SMOKE, ROBOT_DEPENDENCY})
-    @Xray(test = {9077, 9627, 9628, 9629})
+    @Xray(test = {4822, 4776, 4400, 4957})
     public void
     validatePortfolioDeletionViaPortfolioSettings() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
@@ -115,7 +115,7 @@ public class PortfolioSettings extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI, SMOKE, ROBOT_DEPENDENCY})
-    @Xray(test = {9627, 9628, 9629})
+    @Xray(test = {4776, 4400, 4957})
     public void validatePortfolioManagementDrawer() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         researchLinePage.clickPortfolioSelectionButton();
@@ -136,7 +136,7 @@ public class PortfolioSettings extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI, SMOKE})
-    @Xray(test = {9537, 9563})
+    @Xray(test = {4428, 4464})
     public void validatePortfolioUnderPortfolioSettings() {
         DashboardPage dashboardPage = new DashboardPage();
         ResearchLinePage researchLinePage = new ResearchLinePage();
@@ -190,7 +190,7 @@ public class PortfolioSettings extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI, SMOKE})
-    @Xray(test = {9566, 9573, 9572})
+    @Xray(test = {3901, 4126, 4937})
     public void validateSelectedPortfolioDrawer() {
         DashboardPage dashboardPage = new DashboardPage();
         ResearchLinePage researchLinePage = new ResearchLinePage();
@@ -299,7 +299,7 @@ public class PortfolioSettings extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI, SMOKE})
-    @Xray(test = {9637})
+    @Xray(test = {4417})
     public void validateReUploadInPortfolioSettings() {
         //Upload a portfolio
         ResearchLinePage researchLinePage = new ResearchLinePage();

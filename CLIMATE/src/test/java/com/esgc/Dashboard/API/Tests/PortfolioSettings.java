@@ -11,7 +11,7 @@ import static com.esgc.Utilities.Groups.REGRESSION;
 public class PortfolioSettings {
 
     @Test(groups = {API, REGRESSION})
-    @Xray(test = {9630,9638})
+    @Xray(test = {4177,4216})
     public void verifyPortfolioDeletion() {
         APIController apiController = new APIController();
         //First uploading a portfolio to delete

@@ -22,7 +22,7 @@ public class EntityBrownShareTests extends UITestBase {
 
     @Test(groups = {REGRESSION, UI},
             dataProviderClass = DataProviderClass.class, dataProvider = "orbisIDWithBrownShareScore")
-    @Xray(test = {7890})
+    @Xray(test = {4981})
     public void verifyTooltipOverBrownShareSectorComparisonChart(String orbisID) {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         researchLinePage.navigateToFirstEntity(orbisID);
@@ -44,7 +44,7 @@ public class EntityBrownShareTests extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI})
-    @Xray(test = {7955})
+    @Xray(test = {4829})
     public void verifyNoDataMessageInBrownShareSection() {
         EntityClimateProfilePageQueries entityClimateProfilepagequeries = new EntityClimateProfilePageQueries();
         String orbisID = entityClimateProfilepagequeries.getEntityWithNoBrownShareInfo().get(0).get("ORBIS_ID").toString();
@@ -60,7 +60,7 @@ public class EntityBrownShareTests extends UITestBase {
 
     @Test(groups = {REGRESSION, UI},
             dataProviderClass = DataProviderClass.class, dataProvider = "orbisIDWithBrownShareScore")
-    @Xray(test = {7889, 7917, 12341, 12342})
+    @Xray(test = {4847, 4632, 5051, 4669})
     //TODO check queries
     public void verifyBrownShareSectionInformation(String orbisID) {
         EntityClimateProfilePageQueries entityClimateProfilepagequeries = new EntityClimateProfilePageQueries();

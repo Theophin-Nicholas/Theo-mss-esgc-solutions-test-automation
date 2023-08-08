@@ -23,7 +23,7 @@ public class HistoryTableTests extends DataValidationTestBase {
 
     //TODO count of companies validation and N/A category validation should be added
     @Test(groups = {REGRESSION, DATA_VALIDATION}, dataProvider = "researchLines")
-    @Xray(test = {5060, 5063, 5934, 5917})
+    @Xray(test = {4794, 4434, 4602, 4683})
     public void verifyHistoryTableWithMixedIdentifiers(@Optional String sector, @Optional String region,
                                                        @Optional String researchLine, @Optional String month, @Optional String year) {
 

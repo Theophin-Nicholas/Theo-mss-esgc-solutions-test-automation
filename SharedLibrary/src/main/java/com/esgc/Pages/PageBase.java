@@ -79,8 +79,9 @@ public abstract class PageBase {
     @FindBy(xpath = "(//table[@id='table-id'])[1]/tbody/tr/td[2]")
     public List<WebElement> portfolioSettingsInvestmentPercentage;
 
-    @FindBy(xpath = "//div[@id='entity-filter'] ")
+    @FindBy(xpath = "//div[@id='entity-filter']")
     public WebElement portfolioSettingsDropDown;
+
     @FindBy(xpath = "//li[@id='entity-filter_Show_20_largest_investments_id']")
     public WebElement portfolioSettingsLargest20Investment;
 
@@ -117,6 +118,9 @@ public abstract class PageBase {
 
     @FindBy(xpath = "//span[@title='Sample Portfolio']")
     public WebElement samplePortfolioTitle;
+
+    @FindBy(xpath = "//div[@heap_id='portfolio-selection']/div[1]//span")
+    public List<WebElement> portfolioManagementPortfolioNames;
 
     @FindBy(xpath = "//a[@id='link-upload']")
     public WebElement portfolioReUpload;
@@ -615,7 +619,7 @@ public abstract class PageBase {
      * Click method for Menu Tab on top left corner
      */
     public void clickMenu() {
-        //WebDriverWait wait = new WebDriverWait(Driver.getDriver(), Duration.ofSeconds(60));
+        WebDriverWait wait = new WebDriverWait(Driver.getDriver(), Duration.ofSeconds(60));
         //wait.until(ExpectedConditions.elementToBeClickable(menu));
         BrowserUtils.waitForClickablility(menu, 10);
         BrowserUtils.clickWithJS(menu);
@@ -1003,7 +1007,7 @@ public abstract class PageBase {
      *
      * @param rowNum
      * @param columnNum
-     * @return data from csv file - String -e.g. ESGCA-2092
+     * @return data from csv file - String -e.g. ESGT-4638
      */
     public String getDataFromExportedFile(int rowNum, int columnNum, String researchLine) {
         String excelData = "";
@@ -2361,5 +2365,26 @@ public abstract class PageBase {
             }
         }
 
+    }
+
+    public void portfolioManagementExpandCompanyList() {
+        BrowserUtils.waitAndClick(portfolioSettingsDropDown, 3);
+        BrowserUtils.wait(1);
+        for (int i = 0; i < 5; i++) {
+            try {
+                if(portfolioSettingsLargest20Investment.isDisplayed()) {
+                    portfolioSettingsLargest20Investment.click();
+                    break;
+                }
+                else {
+                    BrowserUtils.waitAndClick(portfolioSettingsDropDown, 3);
+                    BrowserUtils.wait(1);
+
+                }
+            } catch (Exception e) {
+                System.out.println("Portfolio Settings Drop Down options are not displayed");
+            }
+        }
+        System.out.println("Largest 20 Investment is selected");
     }
 }

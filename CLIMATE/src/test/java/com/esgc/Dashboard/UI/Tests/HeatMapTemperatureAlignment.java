@@ -19,7 +19,7 @@ import static com.esgc.Utilities.Groups.*;
 public class HeatMapTemperatureAlignment extends DashboardUITestBase {
 
     @Test(groups = {ENTITY_PROFILE, REGRESSION, UI, SMOKE, ENTITLEMENTS})
-    @Xray(test = {7466})
+    @Xray(test = {4527})
     public void VerifyHeatMapsTemperatureAlignmentIsAvailableWithBundle(){
         LoginPage login = new LoginPage();
         login.entitlementsLogin(EntitlementsBundles.TRANSITION_RISK);
@@ -35,7 +35,7 @@ public class HeatMapTemperatureAlignment extends DashboardUITestBase {
     }
 
     @Test(groups = {REGRESSION, UI, SMOKE, ENTITLEMENTS})
-    @Xray(test = 7467)
+    @Xray(test = 4761)
     public void VerifyHeatMapsTemperatureAlignmentIsNotAvailableWithBundle() {
         LoginPage login = new LoginPage();
         login.entitlementsLogin(EntitlementsBundles.PHYSICAL_RISK);
@@ -49,7 +49,7 @@ public class HeatMapTemperatureAlignment extends DashboardUITestBase {
     }
 
     @Test(groups = {REGRESSION, UI, SMOKE})
-    @Xray(test = 7480)
+    @Xray(test = 4569)
     public void VerifyHeatmapTemperatureAlignmentOnGrid() {
         DashboardPage dashboardPage = new DashboardPage();
         dashboardPage.selectOrDeselectHeatMapSection("Temperature Alignment");
@@ -58,7 +58,7 @@ public class HeatMapTemperatureAlignment extends DashboardUITestBase {
     }
 
     @Test(enabled = false,groups = {REGRESSION, UI, SMOKE})
-    @Xray(test = 7468)
+    @Xray(test = 4319)
     public void VerifyTemperatureAlignmentRLPresentationAndInteraction () {
         DashboardPage dashboardPage = new DashboardPage();
         ArrayList<String> researchLines = new ArrayList<String>();

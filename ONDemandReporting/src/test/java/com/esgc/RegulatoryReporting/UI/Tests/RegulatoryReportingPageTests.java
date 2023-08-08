@@ -22,7 +22,7 @@ import static com.esgc.Utilities.Groups.*;
 public class RegulatoryReportingPageTests extends UITestBase {
 
     @Test(groups = {REGRESSION, UI, REGULATORY_REPORTING, SMOKE}, description = "Verify that user can navigate to Regulatory Reporting page")
-    @Xray(test = {10693, 10694, 10709, 10710, 10743, 10744, 10745, 10851, 10865})
+    @Xray(test = {3909, 3925, 4082, 4019, 4027})
     public void verifyReportingListTest() {
         RegulatoryReportingPage reportingPage = new RegulatoryReportingPage();
         BrowserUtils.wait(5);
@@ -62,7 +62,7 @@ public class RegulatoryReportingPageTests extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI, REGULATORY_REPORTING}, description = "Verify user portfolio list on regulatory reporting page")
-    @Xray(test = {11063, 11064, 11093, 11332})
+    @Xray(test = {4155, 4153, 4057, 3488})
     public void verifyPortfolioListForUserTest() {
         RegulatoryReportingPage reportingPage = new RegulatoryReportingPage();
         
@@ -159,15 +159,15 @@ public class RegulatoryReportingPageTests extends UITestBase {
         for (String portfolioName : selectedPortfoliosNames) {
             reportingPage.selectPortfolio( portfolioName);
             if(index == 1)
-                assertTestCase.assertEquals(reportingPage.getCreateReportsButtonText(), "Create "+index+" Report", "Create Reports button is verified for 1 portfolio selected", 11561);
+                assertTestCase.assertEquals(reportingPage.getCreateReportsButtonText(), "Create "+index+" Report", "Create Reports button is verified for 1 portfolio selected", 3895);
             else
-                assertTestCase.assertEquals(reportingPage.getCreateReportsButtonText(), "Create "+index+" Reports", "Create Reports button is verified for 2 portfolio selected", 11561);
+                assertTestCase.assertEquals(reportingPage.getCreateReportsButtonText(), "Create "+index+" Reports", "Create Reports button is verified for 2 portfolio selected", 3895);
             index++;
         }
     }
 
     @Test(groups = {REGRESSION, UI, REGULATORY_REPORTING, ROBOT_DEPENDENCY}, description = "Verify user portfolio list on regulatory reporting page")
-    @Xray(test = {11091, 11092})
+    @Xray(test = {4079, 3921})
     public void verifyPortfolioUploadTest() {
         RegulatoryReportingPage reportingPage = new RegulatoryReportingPage();
         RegulatoryReportingAPIController regulatoryReportingAPIController = new RegulatoryReportingAPIController();
@@ -218,7 +218,7 @@ public class RegulatoryReportingPageTests extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI, REGULATORY_REPORTING}, description = "Validate 'Select Reporting' and 'Select Portfolios' columns")
-    @Xray(test = {11137, 11138, 11139})
+    @Xray(test = {4089, 4025, 4030})
     public void verifySelectReportingAndPortfoliosColumnsTest() {
         RegulatoryReportingPage reportingPage = new RegulatoryReportingPage();
         
@@ -298,7 +298,7 @@ public class RegulatoryReportingPageTests extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI, REGULATORY_REPORTING, SMOKE}, description = "UI | Regulatory Reporting | Download | Verify Create Reports Button is Clickable")
-    @Xray(test = {10849, 11333, 11334, 11350, 11370, 11402})
+    @Xray(test = {3890, 3456, 3507, 3815, 3424, 3827})
     public void verifyCreateReportsButtonWorksTest() {
         RegulatoryReportingPage reportingPage = new RegulatoryReportingPage();
         
@@ -349,7 +349,7 @@ public class RegulatoryReportingPageTests extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI, REGULATORY_REPORTING}, description = "Verify user cant get report for predicted scores portfolio")
-    @Xray(test = {11403})
+    @Xray(test = {4258})
     public void verifyPredictedScorePortfolioTest() {
         RegulatoryReportingPage reportingPage = new RegulatoryReportingPage();
         reportingPage.navigateToReportingService("SFDR");
@@ -366,7 +366,7 @@ public class RegulatoryReportingPageTests extends UITestBase {
 
     @Test(groups = {REGRESSION, UI, REGULATORY_REPORTING}, description = "UI | Regulatory Reporting | Download | Verify Create Reports Button is Clickable")
 //"smoke",
-    @Xray(test = {10854})
+    @Xray(test = {4157})
     public void verifyAnnualReportingDisabledTest() {
         RegulatoryReportingPage reportingPage = new RegulatoryReportingPage();
         
@@ -405,7 +405,7 @@ public class RegulatoryReportingPageTests extends UITestBase {
      */
 
     @Test(groups = {REGRESSION, UI, REGULATORY_REPORTING}, description = "UI | Regulatory Reporting | UI Checks for Reporting service Options")
-    @Xray(test = {11066, 11067})
+    @Xray(test = {3979, 3885})
     public void verifyReportingServiceOptionsTest() {
         RegulatoryReportingPage reportingPage = new RegulatoryReportingPage();
         
@@ -452,7 +452,7 @@ public class RegulatoryReportingPageTests extends UITestBase {
 
     @Test(groups = {REGRESSION, UI, REGULATORY_REPORTING, SMOKE},
             description = "UI | Regulatory Reporting | EU Taxonomy | Verify EU Taxonomy Report Sheets")
-    @Xray(test = {11987, 11988, 11989, 11990, 11991, 11992})
+    @Xray(test = {3484, 3422, 3423, 3514, 3519, 3411})
     public void verifyEUTaxonomyReportSheetsTest() {
         RegulatoryReportingPage reportingPage = new RegulatoryReportingPage();
         
@@ -507,7 +507,7 @@ public class RegulatoryReportingPageTests extends UITestBase {
     }
 
     @Test(groups = {"regression", "ui", "regulatoryReporting"})
-    @Xray(test = {11654, 11657})
+    @Xray(test = {3857, 3854})
     public void verifyPreviouslyDownloadedFeature() {
         RegulatoryReportingPage reportingPage = new RegulatoryReportingPage();
         
@@ -527,7 +527,7 @@ public class RegulatoryReportingPageTests extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI, REGULATORY_REPORTING, ENTITLEMENTS})
-    @Xray(test = {11712})
+    @Xray(test = {4255})
     public void verifyNoFilesInPreviouslyDownloadedScreen() {
         RegulatoryReportingPage reportingPage = new RegulatoryReportingPage();
 

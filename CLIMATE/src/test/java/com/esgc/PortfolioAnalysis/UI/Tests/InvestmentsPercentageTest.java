@@ -14,7 +14,7 @@ public class InvestmentsPercentageTest extends UITestBase {
 //TODO this test case failing in UAT, needs attention
     @Test(groups = {REGRESSION, UI},
     dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines Investments")
-    @Xray(test = 5719)
+    @Xray(test = 3666)
     public void verifyInvestmentPercentageLessThanOne(String... dataProvider) {
 
         String portfolio = dataProvider[0];

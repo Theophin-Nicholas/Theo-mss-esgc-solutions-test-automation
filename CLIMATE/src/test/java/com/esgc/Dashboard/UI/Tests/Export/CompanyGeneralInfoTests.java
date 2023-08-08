@@ -17,7 +17,7 @@ public class CompanyGeneralInfoTests extends DataValidationTestBase {
     ExportUtils utils = new ExportUtils();
 
     @Test(groups = {DASHBOARD, REGRESSION, UI})
-    @Xray(test = {6417, 6418})
+    @Xray(test = {3836, 4076})
     public void compareCompanyInfoFromExcelToDB() {
         DashboardPage dashboardPage = new DashboardPage();
         dashboardPage.downloadDashboardExportFile();

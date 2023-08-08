@@ -15,7 +15,7 @@ import static com.esgc.Utilities.Groups.REGRESSION;
 public class ControversiesEntitlementTests extends DataValidationTestBase {
 
     @Test(groups = {API, REGRESSION})
-    @Xray(test=7958)
+    @Xray(test=3440)
     public void VerifyControversiesAvailable() {
         Response portfoliosResponse = APIUtilities.getAvailablePortfoliosForUser();
         JsonPath jsonPathEvaluator = portfoliosResponse.jsonPath();
@@ -25,7 +25,7 @@ public class ControversiesEntitlementTests extends DataValidationTestBase {
     }
 
     @Test(groups = {API, REGRESSION})
-    @Xray(test=7958)
+    @Xray(test=3440)
     public void VerifyControversiesNotAvailableBundle() {
         getNoControversiesBundleAccessTokenDataValidation();
         Response portfoliosResponse = APIUtilities.getAvailablePortfoliosForUser();

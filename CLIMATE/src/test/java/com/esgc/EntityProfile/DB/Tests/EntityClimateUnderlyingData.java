@@ -23,7 +23,7 @@ import static io.restassured.RestAssured.given;
 
 public class EntityClimateUnderlyingData extends EntityClimateProfileDataValidationTestBase {
 
-    @Xray(test = {8005, 8006})
+    @Xray(test = {4588, 4317})
     @Test(groups = {REGRESSION, UI, ENTITY_PROFILE})
     public void verifyUnderlyingDataMetricsCorrectGreenShare() {
         String orbisId = "039634868";//"000411117";
@@ -62,7 +62,7 @@ public class EntityClimateUnderlyingData extends EntityClimateProfileDataValidat
         }
     }
 
-    @Xray(test = {8218, 8262, 8805})
+    @Xray(test = {5007, 4524, 4852})
     @Test(groups = {REGRESSION, UI, SMOKE, ENTITY_PROFILE})
     public void verifyUnderlyingDataMetricsCorrectBrownShare() {
         String orbisId = "143622191";//"000411117";
@@ -95,7 +95,7 @@ public class EntityClimateUnderlyingData extends EntityClimateProfileDataValidat
 
     }
 
-    @Xray(test = {10231})
+    @Xray(test = {3934})
     @Test(groups = {REGRESSION, UI, SMOKE, ENTITY_PROFILE})
     public void verifyUpdatedDateInAllWidgets() {
         //TODO use data provider instead research line lists

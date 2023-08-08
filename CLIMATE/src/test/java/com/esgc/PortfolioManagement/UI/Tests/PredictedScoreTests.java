@@ -18,7 +18,7 @@ public class PredictedScoreTests extends UITestBase {
 
 
     @Test(groups = {REGRESSION, UI, ESG})
-    @Xray(test = {11892, 11909, 11910})
+    @Xray(test = {4666, 4670, 4278})
     public static void validatePredictedScoredCompanies() {
 
         String portfolioName = "EsgWithPredictedScores";

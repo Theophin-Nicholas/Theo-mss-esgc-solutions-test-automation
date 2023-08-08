@@ -3611,7 +3611,7 @@ public class ResearchLinePage extends UploadPage {
             default:
                 whatToValidate = "Updates in " + monthDate + ", Impact, and Current Leaders/Laggards";
         }
-        assertionTestCase.assertTrue(whatToValidate.contains(updatesAndLeadersAndLaggardsHeader.getText()), "Header message validation", 477, 592);
+        assertionTestCase.assertTrue(whatToValidate.contains(updatesAndLeadersAndLaggardsHeader.getText()), "Header message validation", 4851, 4855);
     }
 
     //Portfolio Selection Side Panel

@@ -23,8 +23,8 @@ public class DriversSummaryAPITestP2 extends EntityIssuerPageTestBase {
 
     @Test(groups = {REGRESSION, API},
             dataProvider = "credentialsP2", dataProviderClass = IssuerDataProviderClass.class,
-            description = "ESGCA-5867-API | ESG Issuer - Entity Page | Verify API Response")
-    @Xray(test = {3965, 3973})
+            description = "ESGT-1242-API | ESG Issuer - Entity Page | Verify API Response")
+    @Xray(test = {3627, 3973})
     public void validateDriverSummaryAPIResponse(String... dataProvider) {
         String userId = dataProvider[0];
         String password = dataProvider[1];
@@ -61,7 +61,7 @@ public class DriversSummaryAPITestP2 extends EntityIssuerPageTestBase {
 
     @Test(groups = {REGRESSION, API},
             dataProvider = "credentialsP2", dataProviderClass = IssuerDataProviderClass.class,
-            description = "ESGCA-5867-API | ESG Issuer - Entity Page | Verify API Response")
+            description = "ESGT-1242-API | ESG Issuer - Entity Page | Verify API Response")
     @Xray(test = {3974})
     public void validateDriverSummaryInvalidTokenAPIResponse(String... dataProvider) {
         String userId = dataProvider[0];

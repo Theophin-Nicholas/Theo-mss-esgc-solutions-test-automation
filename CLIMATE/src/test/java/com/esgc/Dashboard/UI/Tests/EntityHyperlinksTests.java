@@ -11,7 +11,7 @@ import static com.esgc.Utilities.Groups.*;
 
 public class EntityHyperlinksTests extends UITestBase {
     @Test(groups = {REGRESSION, DASHBOARD, UI})
-    @Xray(test = {4040, 6814, 6865})
+    @Xray(test = {4329, 4922, 3829})
     public void verifyDashboardHyperlinks() {
 
         test.info("Navigate to Dashboard page");
@@ -73,7 +73,7 @@ public class EntityHyperlinksTests extends UITestBase {
 
     //TODO all researchline data provider
     @Test(groups = {REGRESSION, DASHBOARD, UI})
-    @Xray(test = {6566, 6865})
+    @Xray(test = {4494, 3829})
     public void verifyPortfolioAnalysisHyperlinks() {
 
         ResearchLinePage researchLinePage = new ResearchLinePage();

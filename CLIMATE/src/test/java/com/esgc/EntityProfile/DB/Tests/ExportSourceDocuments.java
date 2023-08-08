@@ -13,7 +13,7 @@ import static com.esgc.Utilities.Groups.*;
 
 public class ExportSourceDocuments extends EntityClimateProfileDataValidationTestBase {
 
-    @Xray(test = {9222})
+    @Xray(test = {5019})
     @Test(groups = {REGRESSION, UI, ENTITY_PROFILE})
     public void validateExportSourceDocuments() {
 

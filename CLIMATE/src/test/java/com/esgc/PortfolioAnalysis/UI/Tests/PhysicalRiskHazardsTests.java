@@ -14,7 +14,7 @@ import static com.esgc.Utilities.Groups.UI;
 public class PhysicalRiskHazardsTests extends UITestBase {
 
     @Test(groups = {REGRESSION, UI})
-    @Xray(test = {6068, 6069,6070,6071,6072})
+    @Xray(test = {3577, 3432,3536,3685,3545})
     public void validatePhysicalRiskPage() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio Analysis page");
@@ -28,7 +28,7 @@ public class PhysicalRiskHazardsTests extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI})
-    @Xray(test = {6362,6364,6365,6366,7102})
+    @Xray(test = {3636,3688,3615,3465,4376})
     public void verifyPortfolioScoreSectionTest() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio Analysis page");
@@ -87,7 +87,7 @@ public class PhysicalRiskHazardsTests extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI})
-    @Xray(test = {8063, 8064})
+    @Xray(test = {4398, 4784})
     public void verifyDrawersAreDisplayed() {
 
         ResearchLinePage researchLinePage = new ResearchLinePage();
@@ -105,7 +105,7 @@ public class PhysicalRiskHazardsTests extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI})
-    @Xray(test = {7103})
+    @Xray(test = {4374})
     public void verifyScoreRangeColors() {
 
         ResearchLinePage researchLinePage = new ResearchLinePage();
@@ -119,7 +119,7 @@ public class PhysicalRiskHazardsTests extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI})
-    @Xray(test = {8155, 8157})
+    @Xray(test = {3552, 3437})
     public void verifyInvestmentSectioninSummarySection() {
 
         ResearchLinePage researchLinePage = new ResearchLinePage();

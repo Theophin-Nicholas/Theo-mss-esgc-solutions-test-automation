@@ -23,9 +23,8 @@ import static org.hamcrest.Matchers.equalTo;
 
 public class RegulatoryReportingAPITests extends CommonTestBase {
 
-
     @Test(groups = {REGRESSION, REGULATORY_REPORTING, API}, description = "Data Validation| MT | Regulatory Reporting | Validate Portfolio list and portfolio-details")
-    @Xray(test = {11140})
+    @Xray(test = {4028})
     public void verifyPortfolioPortfolioDetailsListTest() {
         RegulatoryReportingPage reportingPage = new RegulatoryReportingPage();
         
@@ -67,7 +66,7 @@ public class RegulatoryReportingAPITests extends CommonTestBase {
     }
 
     @Test(groups = {REGRESSION, REGULATORY_REPORTING, API})
-    @Xray(test = {11681})
+    @Xray(test = {3900})
     public void verifyDownloadHistory() {
         RegulatoryReportingAPIController apiController = new RegulatoryReportingAPIController();
         List<String> apiReportsList = apiController.getDownloadHistory().jsonPath().getList("report_name");
@@ -76,7 +75,7 @@ public class RegulatoryReportingAPITests extends CommonTestBase {
     }
 
     @Test(groups = {REGRESSION, REGULATORY_REPORTING, API, ENTITLEMENTS})
-    @Xray(test = {11681})
+    @Xray(test = {3900})
     public void verifyDownloadHistoryWhenNoDownloadReports() {
         LoginPage login = new LoginPage();
         login.clickOnLogout();
@@ -90,7 +89,7 @@ public class RegulatoryReportingAPITests extends CommonTestBase {
     }
 
     @Test(groups = {REGRESSION, REGULATORY_REPORTING, API}, description = "Data Validation| MT | Regulatory Reporting | Validate Portfolio list and portfolio-details")
-    @Xray(test = {11300})
+    @Xray(test = {3794})
     public void ValidatePortfolioListAndPortfolioDetails() {
         RegulatoryReportingPage reportingPage = new RegulatoryReportingPage();
         
@@ -138,6 +137,7 @@ public class RegulatoryReportingAPITests extends CommonTestBase {
             }
         }
     }
+
     @Test
     public void verifyBenchmarkFieldDashboard(){
         RegulatoryReportingPage reportingPage = new RegulatoryReportingPage();
@@ -164,7 +164,7 @@ public class RegulatoryReportingAPITests extends CommonTestBase {
     }
 
     @Test(groups = {REGRESSION, REGULATORY_REPORTING, API}, description = "Data Validation| MT | Regulatory Reporting | Verify API Response with Valid Parameters")
-    @Xray(test = {11408})
+    @Xray(test = {3716})
     public void VerifyAPIsResponseWithValidParameters() {
 
         RegulatoryReportingAPIController apiController = new RegulatoryReportingAPIController();
@@ -202,7 +202,7 @@ public class RegulatoryReportingAPITests extends CommonTestBase {
     }
 
     @Test(groups = {REGRESSION, REGULATORY_REPORTING, API}, description = "Data Validation| MT | Regulatory Reporting | Verify API Response with InValid Parameters")
-    @Xray(test = {11411})
+    @Xray(test = {3413})
     public void VerifyAPIsResponseWithInvalidParameters() {
         RegulatoryReportingAPIController apiController = new RegulatoryReportingAPIController();
         Response response = apiController.getAysncGenerationAPIReposnse("", DateTimeUtilities.getCurrentYear(), "Invalid");
@@ -231,7 +231,7 @@ public class RegulatoryReportingAPITests extends CommonTestBase {
     }
 
     @Test(groups = {REGRESSION, REGULATORY_REPORTING, API}, description = "Data Validation| MT | Regulatory Reporting | Verify API Response with InValid Token")
-    @Xray(test = {11412})
+    @Xray(test = {3700})
     public void VerifyAPIsResponseWithinvalidToken() {
         RegulatoryReportingAPIController apiController = new RegulatoryReportingAPIController();
         apiController.setInvalid();
@@ -259,7 +259,7 @@ public class RegulatoryReportingAPITests extends CommonTestBase {
 
     //TODO : Need to check with dev team to revise Status code and error messange in this method
     @Test(groups = {REGRESSION, REGULATORY_REPORTING, API}, description = "Data Validation| MT | Regulatory Reporting | Verify API Response in case of Different User's Portfolios and Request Ids")
-    @Xray(test = {11424})
+    @Xray(test = {3396})
     public void VerifyAPIsResponseWithDifferentUserPortfolioAndRequestID() {
 
         RegulatoryReportingAPIController apiController = new RegulatoryReportingAPIController();
@@ -288,6 +288,4 @@ public class RegulatoryReportingAPITests extends CommonTestBase {
         //.body("message", equalTo("Forbidden"));
 
     }
-
-
 }

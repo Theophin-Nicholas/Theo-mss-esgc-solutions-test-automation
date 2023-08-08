@@ -17,7 +17,7 @@ import static io.restassured.RestAssured.requestSpecification;
 
 public class PortfolioDistributionTest extends APITestBase {
     @Test(groups = {API, REGRESSION}, dataProvider = "API Research Lines")
-    @Xray(test = { 2539, 2697, 2303, 570})
+    @Xray(test = { 1523, 2161, 2045, 1484})
     //3106 Energy Transition
     public void APIPortfolioDistributionTest(@Optional String researchLine) {
         String user_id = APIUtilities.userID();
@@ -38,7 +38,7 @@ public class PortfolioDistributionTest extends APITestBase {
     }
 
     @Test(groups = {API, REGRESSION}, dataProvider = "API Research Lines")
-    @Xray(test = {2698,  2540, 2304, 572})
+    @Xray(test = {2060,  2014, 1565, 1402})
     //3108 Energy Transition
     public void APIPortfolioDistributionNegativeTest(@Optional String researchLine) {
         String user_id = APIUtilities.userID();

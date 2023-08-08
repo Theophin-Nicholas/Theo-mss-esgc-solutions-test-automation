@@ -18,7 +18,7 @@ public class CarbonFootprintInfoTests extends DataValidationTestBase {
     ExportUtils utils = new ExportUtils();
 
     @Test(groups = {DASHBOARD, REGRESSION, UI})
-    @Xray(test = {7220, 7221})
+    @Xray(test = {4375, 4423})
     public void compareCarbonFootPrintFromExcelToDB() {
         DashboardPage dashboardPage = new DashboardPage();
         dashboardPage.downloadDashboardExportFile();

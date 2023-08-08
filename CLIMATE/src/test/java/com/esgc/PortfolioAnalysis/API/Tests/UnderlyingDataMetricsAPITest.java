@@ -22,9 +22,9 @@ import static org.hamcrest.Matchers.*;
  * Created by ChaudhS2 on 11/12/2021.
  */
 public class UnderlyingDataMetricsAPITest extends APITestBase {
-    //1178
+    //1278
     @Test(groups = {API, REGRESSION}, dataProvider = "No ESG API Research Lines")
-    @Xray(test = {1178, 2378})
+    @Xray(test = {1278, 2091})
     // 3852 TCFD
     // 3117 Energy Transition
     public void UnderlyingDataMetricsAPI_Success(@Optional String researchLine) {
@@ -64,7 +64,7 @@ public class UnderlyingDataMetricsAPITest extends APITestBase {
 
     //3118 Energy Transition
     @Test(groups = {API, REGRESSION}, dataProvider = "API Research Lines")
-    @Xray(test = { 2379, 1248, 2763, 2945})
+    @Xray(test = { 2077, 1671, 1439, 2141})
     public void UnderlyingDataMetricsAPI_InvalidPayload(@Optional String researchLine) {
         APIController apiController = new APIController();
 
@@ -96,7 +96,7 @@ public class UnderlyingDataMetricsAPITest extends APITestBase {
     }
 
     @Test(groups = {API, REGRESSION})
-    @Xray(test = {8072})
+    @Xray(test = {3882})
     public void PhysicalRiskUnderlyingDataMetricsAPI() {
 
         APIController apiController = new APIController();

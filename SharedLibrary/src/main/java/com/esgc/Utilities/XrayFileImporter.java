@@ -77,6 +77,7 @@ public class XrayFileImporter {
 
         //STEP 1 get all test cases and failed test cases
         Set<String> allTestCases = findTestCases(testCaseList);
+        System.out.println("allTestCases = " + allTestCases);
         Set<String> failedTestCases = findFailedTestCases(testCaseList);
 
         //If we run smoke suite then remove test cases which are not marked as smoke
@@ -133,7 +134,7 @@ public class XrayFileImporter {
         String token = given()
                 .body(body)
                 .contentType("application/json")
-                .relaxedHTTPSValidation().accept(ContentType.JSON).log().all().when()
+                .relaxedHTTPSValidation().accept(ContentType.JSON).when()
                 .post("https://xray.cloud.getxray.app/api/v2/authenticate").prettyPrint().replace("\"", "");
 
 
@@ -141,10 +142,10 @@ public class XrayFileImporter {
         Response response = given()
                 .header("Authorization", "Bearer " + token)
                 .relaxedHTTPSValidation().accept(ContentType.JSON)
-                .contentType("application/json").log().all()
+                .contentType("application/json")
                 .body(payload)
                 .when()
-                .post("https://xray.cloud.getxray.app/api/v2/import/execution").prettyPeek();
+                .post("https://xray.cloud.getxray.app/api/v2/import/execution");
         /*
         STEP 6 - If there is any unrelated ticket mapped, remove it from list to complete mapping on Jira test execution ticket
         (once there is unrelated ticket number in the list, test execution is not mapping test cases)
@@ -156,7 +157,7 @@ public class XrayFileImporter {
             String errorMessage = response.jsonPath().getString("error");
             System.out.println("Error Message:" + errorMessage);
             List<String> removeTestCaseList = Arrays.stream(errorMessage.split(" "))
-                    .filter(word -> word.contains("ESGCA-")).collect(Collectors.toList());
+                    .filter(word -> word.contains("ESGT-")).collect(Collectors.toList());
 
             for (int i = 0; i < removeTestCaseList.size(); i++) {
                 String ticketNum = removeTestCaseList.get(i);
@@ -165,12 +166,12 @@ public class XrayFileImporter {
                 }
             }
 
-            System.out.println("###################");
-            System.out.println("SOME TICKET NUMBERS TYPE IS NOT TEST CASE");
-            System.out.println("THOSE TICKET NUMBERS ARE REMOVED FROM THE LIST");
-            System.out.println("REMOVED TICKET NUMBERS WHICH ARE NOT TEST CASES:");
+//            System.out.println("###################");
+//            System.out.println("SOME TICKET NUMBERS TYPE IS NOT TEST CASE");
+//            System.out.println("THOSE TICKET NUMBERS ARE REMOVED FROM THE LIST");
+//            System.out.println("REMOVED TICKET NUMBERS WHICH ARE NOT TEST CASES:");
             removeTestCaseList.forEach(System.out::println);
-            System.out.println("###################");
+//            System.out.println("###################");
 
             for (String testCaseTicketNumber : removeTestCaseList) {
                 tclist.removeIf(e -> e.getTestKey().equals(testCaseTicketNumber));
@@ -188,10 +189,10 @@ public class XrayFileImporter {
             response = given()
                     .header("Authorization", "Bearer " + token)
                     .relaxedHTTPSValidation().accept(ContentType.JSON)
-                    .contentType("application/json").log().all()
+                    .contentType("application/json")
                     .body(payload2)
                     .when()
-                    .post("https://xray.cloud.getxray.app/api/v2/import/execution").prettyPeek();
+                    .post("https://xray.cloud.getxray.app/api/v2/import/execution");
         }
 
 
@@ -262,7 +263,7 @@ public class XrayFileImporter {
                         "    \"fields\": {\n" +
                         "       \"project\":\n" +
                         "       {\n" +
-                        "          \"key\": \"ESGCA\"\n" +
+                        "          \"key\": \"ESGT\"\n" +
                         "       },\n" +
                         "       \"summary\": \"Automated " + reportName + "\",\n" +
                         "       \"description\": \"Result of Automation Execution " + reportName + "\",\n" +
@@ -351,7 +352,7 @@ public class XrayFileImporter {
 //
 //                    .header("Content-Type", "multipart/form-data")
 //                    .multiPart("file", "Execution Report", FileUtils.readFileToByteArray(new File(filepath)), "text/csv")
-                    .when().log().all()
+                    .when()
                     .post("rest/api/3/issue/" + tickedNumber + "/attachments").prettyPeek();
 //        } catch (IOException e) {
 //            e.printStackTrace();
@@ -389,7 +390,7 @@ public class XrayFileImporter {
     private static Response createTestExecution(String reportName) {
         System.out.println("creating test execution");
         return configSpec()
-                .contentType(ContentType.JSON).log().all()
+                .contentType(ContentType.JSON)
                 .body("{\n" +
                         "  \"fields\": {\n" +
                         "    \"project\": {\n" +

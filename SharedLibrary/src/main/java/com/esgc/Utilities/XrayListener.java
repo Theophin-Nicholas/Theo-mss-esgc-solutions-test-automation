@@ -65,7 +65,7 @@ public class XrayListener implements IInvokedMethodListener, ITestListener {
         if (testCaseList != null) {
             TestCase testCase = new TestCase();
             testCase.setPassOrFail(false);
-            List<String> testCases = testCaseList.stream().map(tcNumber -> "ESGCA-" + tcNumber.toString()).collect(Collectors.toList());
+            List<String> testCases = testCaseList.stream().map(tcNumber -> "ESGT-" + tcNumber.toString()).collect(Collectors.toList());
             testCase.setTestCaseNumber(testCases);
             if (isUITest) {
                 try {
@@ -99,7 +99,7 @@ public class XrayListener implements IInvokedMethodListener, ITestListener {
         if (testCaseList != null) {
             TestCase testCase = new TestCase();
             testCase.setPassOrFail(true);
-            List<String> testCases = testCaseList.stream().map(tcNumber -> "ESGCA-" + tcNumber.toString()).collect(Collectors.toList());
+            List<String> testCases = testCaseList.stream().map(tcNumber -> "ESGT-" + tcNumber.toString()).collect(Collectors.toList());
             testCase.setTestCaseNumber(testCases);
             TestBase.testCasesList.add(testCase);
 

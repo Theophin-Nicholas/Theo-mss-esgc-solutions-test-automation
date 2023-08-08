@@ -63,7 +63,7 @@ public class EntityIssuerP3PageTest extends EntityPageTestBase {
     }
 
 
-    @Xray(test = {7306, 7307, 7308, 7310})
+    @Xray(test = {3333, 3358, 3357, 3339})
     @Test(groups = {REGRESSION, UI, SMOKE, ISSUER},
             dataProvider = "credentialsP3", dataProviderClass = IssuerDataProviderClass.class,
             description = "Verify Source Documents")
@@ -87,7 +87,7 @@ public class EntityIssuerP3PageTest extends EntityPageTestBase {
         }
     }
 
-    @Xray(test = {7370, 7371, 7405, 7408, 7409, 7410, 9576})
+    @Xray(test = {3330, 3343, 3341, 3345, 3335, 3331, 4905})
     @Test(groups = {REGRESSION, UI, SMOKE, ISSUER},
             dataProvider = "credentialsP3", dataProviderClass = IssuerDataProviderClass.class,
             description = "Verify Controversies")
@@ -113,7 +113,7 @@ public class EntityIssuerP3PageTest extends EntityPageTestBase {
         }
     }
 
-    @Xray(test = {7903, 9071})
+    @Xray(test = {3367, 4139})
     @Test(groups = {REGRESSION, UI, SMOKE, ISSUER},
             dataProvider = "credentialsP3", dataProviderClass = IssuerDataProviderClass.class,
             description = "Verify save without adding categories")
@@ -135,7 +135,7 @@ public class EntityIssuerP3PageTest extends EntityPageTestBase {
             entitypage.logout.click();
         }
     }
-    @Xray(test = {7355})
+    @Xray(test = {4001})
     @Test(priority = 5, groups = {REGRESSION, UI, SMOKE, ISSUER},
             dataProvider = "credentialsP3", dataProviderClass = IssuerDataProviderClass.class,
             description = "Verify Add Missing Document Functionality ")
@@ -157,7 +157,7 @@ public class EntityIssuerP3PageTest extends EntityPageTestBase {
         }
     }
 
-    @Xray(test = {9722}) //TODO this feature is not available in UI. Test Case failing.
+    @Xray(test = {3899}) //TODO this feature is not available in UI. Test Case failing.
     @Test(enabled = false ,groups = {REGRESSION, UI, ISSUER},
             dataProvider = "CompaniesWithMESGScore", dataProviderClass = IssuerDataProviderClass.class,
             description = "Verify save without adding categories")

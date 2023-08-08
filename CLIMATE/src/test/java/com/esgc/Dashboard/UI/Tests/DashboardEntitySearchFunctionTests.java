@@ -17,7 +17,7 @@ import static com.esgc.Utilities.Groups.*;
 public class DashboardEntitySearchFunctionTests extends UITestBase {
 
     @Test(groups = {DASHBOARD, REGRESSION, UI, SMOKE, SEARCH_ENTITY})
-    @Xray(test = 5196)
+    @Xray(test = 5075)
     public void verifySearchBoxappearonSearchIConClickOnDashboard() {
         DashboardPage dashboardPage = new DashboardPage();
         test.info("Navigate to Dashboard page");
@@ -30,7 +30,7 @@ public class DashboardEntitySearchFunctionTests extends UITestBase {
     }
 
     @Test(groups = {DASHBOARD, REGRESSION, UI, SMOKE, SEARCH_ENTITY})
-    @Xray(test = 5195)
+    @Xray(test = 4312)
     public void verifySearchBoxAppearonSearchIConClickOnPortfolioAnalysisPage() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio Analysis page");
@@ -42,7 +42,7 @@ public class DashboardEntitySearchFunctionTests extends UITestBase {
     }
 
     @Test(groups = {DASHBOARD, REGRESSION, UI, SMOKE, SEARCH_ENTITY})
-    @Xray(test = 5200)
+    @Xray(test = 4355)
     public void verifySearchBoxDisappearOnPortfolioAnalysisPageOnClickCloseICon() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio Analysis page");
@@ -59,7 +59,7 @@ public class DashboardEntitySearchFunctionTests extends UITestBase {
     }
 
     @Test(groups = {DASHBOARD, REGRESSION, UI, SMOKE, SEARCH_ENTITY})
-    @Xray(test = 5199)
+    @Xray(test = 4299)
     public void verifySearchBoxDisappearOnDashboardOnClickCloseICon() {
         DashboardPage dashboardPage = new DashboardPage();
         test.info("Navigate to Portfolio Analysis page");
@@ -75,7 +75,7 @@ public class DashboardEntitySearchFunctionTests extends UITestBase {
     }
 
     @Test(groups = {DASHBOARD, REGRESSION, UI, SMOKE, SEARCH_ENTITY})
-    @Xray(test = 5201)
+    @Xray(test = 4778)
     public void verifySearchBoxOnDashboardDisappearsOnPressingESCKey() {
         DashboardPage dashboardPage = new DashboardPage();
         test.info("Navigate to Portfolio Analysis page");
@@ -92,7 +92,7 @@ public class DashboardEntitySearchFunctionTests extends UITestBase {
     }
 
     @Test(groups = {DASHBOARD, REGRESSION, UI, SMOKE, SEARCH_ENTITY})
-    @Xray(test = 5202)
+    @Xray(test = 4862)
     public void verifySearchBoxOnPortfolioAnalysisPageDisappearsOnPressingESCKey() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio Analysis page");
@@ -110,8 +110,8 @@ public class DashboardEntitySearchFunctionTests extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI, SEARCH_ENTITY},
-            description = "ESGCA-5205 - UI | Dashboard Page | Search Function | Verify that user should be able to search an entity by typing in the search box")
-    @Xray(test = 5205)
+            description = "ESGT-4295 - UI | Dashboard Page | Search Function | Verify that user should be able to search an entity by typing in the search box")
+    @Xray(test = 4295)
     public void testSearchBox() {
         DashboardPage dashboardPage = new DashboardPage();
         test.info("Navigate to Dashboard page");
@@ -126,8 +126,8 @@ public class DashboardEntitySearchFunctionTests extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI, SEARCH_ENTITY},
-            description = "ESGCA-5208 - UI | Dashboard Page | Search Function | Verify that 10 most words/phrases user typed appear")
-    @Xray(test = 5208)
+            description = "ESGT-4750 - UI | Dashboard Page | Search Function | Verify that 10 most words/phrases user typed appear")
+    @Xray(test = 4750)
     public void testSearchFunction() {
         DashboardPage dashboardPage = new DashboardPage();
         test.info("Navigate to Dashboard page");
@@ -141,8 +141,8 @@ public class DashboardEntitySearchFunctionTests extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI, SEARCH_ENTITY},
-            description = "ESGCA-5710 - UI | Dashboard Page | Search Function | Verify the message in case No match found for the searched entity")
-    @Xray(test = 5710)
+            description = "ESGT-4987 - UI | Dashboard Page | Search Function | Verify the message in case No match found for the searched entity")
+    @Xray(test = 4987)
     public void testSearchFunctionForNoMatchEntry() {
         DashboardPage dashboardPage = new DashboardPage();
         test.info("Navigate to Dashboard page");
@@ -153,7 +153,7 @@ public class DashboardEntitySearchFunctionTests extends UITestBase {
 
     @Test(groups = {REGRESSION, UI, SEARCH_ENTITY},
             description = "Verify that clicking on Entity name redirects to Entity page and ESC button is closing the Entity page")
-    @Xray(test = {5843,5846})
+    @Xray(test = {4422,4688})
     public void testClickingOnEntityName() {
         DashboardPage dashboardPage = new DashboardPage();
         test.info("Navigate to Dashboard page");
@@ -167,8 +167,8 @@ public class DashboardEntitySearchFunctionTests extends UITestBase {
     }
 
   /*  @Test(groups = {REGRESSION, UI, SEARCH_ENTITY},
-            description = "ESGCA-5846 - UI | Dashboard Page | Search Function | Verify that clicking ESC button is closing the Entity page")
-    @Xray(test = 5846)
+            description = "ESGT-4688 - UI | Dashboard Page | Search Function | Verify that clicking ESC button is closing the Entity page")
+    @Xray(test = 4688)
     public void testESCButtonClosingEntityPage() {
         DashboardPage dashboardPage = new DashboardPage();
         test.info("Navigate to Dashboard page");

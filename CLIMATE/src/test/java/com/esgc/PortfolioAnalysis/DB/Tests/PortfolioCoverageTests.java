@@ -23,9 +23,8 @@ import static com.esgc.Utilities.Groups.REGRESSION;
 public class PortfolioCoverageTests extends DataValidationTestBase {
 
     @Test(groups = {REGRESSION, DATA_VALIDATION}, dataProvider = "researchLines")
-    @Xray(test = {6372, 6726, 7242,
-            11244,//subs
-            10899//ESG predicted
+    @Xray(test = {3622, 4437, 5080,
+            4848//ESG predicted
     })
     public void verifyPortfolioCoverageWithMixedIdentifiers(@Optional String sector, @Optional String region,
                                                             @Optional String researchLine, String month, String year) {

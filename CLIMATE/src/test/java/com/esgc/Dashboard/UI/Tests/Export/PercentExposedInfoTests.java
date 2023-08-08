@@ -17,7 +17,7 @@ public class PercentExposedInfoTests extends DataValidationTestBase {
     ExportUtils utils = new ExportUtils();
 
     @Test(groups = {DASHBOARD, REGRESSION, UI})
-    @Xray(test = {6417})
+    @Xray(test = {3836})
     public void comparePercentExposedInfoFromExcelToDB() {
         DashboardPage dashboardPage = new DashboardPage();
         dashboardPage.downloadDashboardExportFile();

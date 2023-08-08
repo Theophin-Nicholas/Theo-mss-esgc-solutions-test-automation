@@ -16,7 +16,7 @@ import static com.esgc.Utilities.Groups.*;
 
 public class EntityIssuerP3PageSummaryWidget extends EntityPageTestBase {
 
-    @Xray(test = {7438,7442,7443,8993,9721})
+    @Xray(test = {3973,3817,4016,4011,4839})
     @Test(groups = {REGRESSION, UI, SMOKE,ISSUER},
             dataProvider = "credentialsP3",dataProviderClass = IssuerDataProviderClass.class,
             description = "Verify Summary Widget")

@@ -16,7 +16,7 @@ import static com.esgc.Utilities.Groups.REGRESSION;
 public class UpdatesAPITests extends APITestBase {
 
     @Test(groups = {API, REGRESSION}, dataProvider = "API Research Lines")
-    @Xray(test = {1033, 2602, 2609})
+    @Xray(test = {1382, 1956})
     public void updates_Invalid_Payload(@Optional String researchLine) {
 
         APIController con = new APIController();
@@ -32,7 +32,7 @@ public class UpdatesAPITests extends APITestBase {
     }
 
     @Test(groups = {API, REGRESSION}, dataProvider = "No ESG API Research Lines")
-    @Xray(test = {2283})
+    @Xray(test = {2125})
     //2024 TCFD
     //2021 Energy Transition
     public void updates_Success(@Optional String researchLine) {

@@ -16,7 +16,7 @@ import static com.esgc.Utilities.Groups.*;
 public class ExportExcelColumnOrderTests extends APITestBase {
 
     @Test(groups = {DASHBOARD, REGRESSION, UI})
-    @Xray(test = {9794})
+    @Xray(test = {4754})
     public void checkColumnsOrderIsBasedOnEntitlementsOrder() {
         DashboardPage dashboardPage = new DashboardPage();
         dashboardPage.downloadDashboardExportFile();

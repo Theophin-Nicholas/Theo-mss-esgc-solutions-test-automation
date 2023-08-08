@@ -1,18 +1,12 @@
 package com.esgc.RegulatoryReporting.DB.Tests;
 
 
-import com.esgc.Common.API.Controllers.CommonAPIController;
-import com.esgc.Common.UI.Pages.LoginPage;
 import com.esgc.Common.UI.TestBases.UITestBase;
-import com.esgc.ONDEMAND.DB.DBQueries.OnDemandAssessmentQueries;
-import com.esgc.ONDEMAND.UI.Pages.OnDemandAssessmentPage;
 import com.esgc.RegulatoryReporting.API.Controllers.RegulatoryReportingAPIController;
-import com.esgc.RegulatoryReporting.DB.DBQueries.RegulatoryReportingQueries;
 import com.esgc.RegulatoryReporting.UI.Pages.RegulatoryReportingPage;
 import com.esgc.TestBase.TestBase;
 import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.Driver;
-import com.esgc.Utilities.EntitlementsBundles;
 import com.esgc.Utilities.Xray;
 import org.openqa.selenium.Keys;
 import org.testng.annotations.Test;
@@ -22,7 +16,7 @@ import static com.esgc.Utilities.Groups.*;
 public class RegulatoryReporting_EUTaxonomy extends UITestBase {
 
     @Test(groups = {REGRESSION, DATA_VALIDATION, REGULATORY_REPORTING, UI, ROBOT_DEPENDENCY}, description = "Data Validation | EU Taxonomy Regulatory Reporting")
-    @Xray(test = {11993, 11994, 11995})
+    @Xray(test = {3420, 3682, 3426})
     public void verifyEUTaxonomyReport() {
         RegulatoryReportingPage reportingPage = new RegulatoryReportingPage();
 

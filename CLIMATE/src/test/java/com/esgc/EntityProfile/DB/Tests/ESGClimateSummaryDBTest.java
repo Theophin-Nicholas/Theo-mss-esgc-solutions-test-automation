@@ -3,7 +3,6 @@ package com.esgc.EntityProfile.DB.Tests;
 
 import com.esgc.Base.TestBases.EntityClimateProfileDataValidationTestBase;
 import com.esgc.EntityProfile.API.APIModels.EntityHeader;
-import com.esgc.EntityProfile.API.APIModels.EntityScoreCategory.ESGScores;
 import com.esgc.EntityProfile.API.APIModels.SummarySection.BrownShareAndGreenShareClimateSummary;
 import com.esgc.EntityProfile.API.APIModels.SummarySection.CarbonFootprintSummary;
 import com.esgc.EntityProfile.API.APIModels.SummarySection.PhysicalRiskHazardsSummary;
@@ -19,16 +18,17 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Test;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
-import static com.esgc.EntityProfile.DB.DBQueries.EntityClimateProfilePageQueries.getESGDbScores;
 import static com.esgc.EntityProfile.DB.DBQueries.EntityClimateProfilePageQueries.getHeaderDB;
 import static com.esgc.Utilities.Groups.*;
 
 public class ESGClimateSummaryDBTest extends EntityClimateProfileDataValidationTestBase {
 //TODO check https://esjira/browse/ESGCA-8761 and update date validations
     @Test(groups = {REGRESSION, DATA_VALIDATION}, dataProvider = "orbisID")
-    @Xray(test = {6020, 8151})
+    @Xray(test = {3355, 4994})
     public void validateGreenShare(@Optional String orbisID) {
         Map<String, String> data = entityClimateProfilepagequeries.getGreenShareData(orbisID);
         List<BrownShareAndGreenShareClimateSummary> climateSummaryGreenShareAPIResponse = Arrays.asList(
@@ -42,7 +42,7 @@ public class ESGClimateSummaryDBTest extends EntityClimateProfileDataValidationT
     }
 
     @Test(groups = {DATA_VALIDATION, REGRESSION}, dataProvider = "orbisID")
-    @Xray(test = {6041, 8151})
+    @Xray(test = {3365, 4994})
     public void validateBrownShare(@Optional String orbisID) {
         Map<String, String> data = entityClimateProfilepagequeries.getBrownShareData(orbisID);
         List<BrownShareAndGreenShareClimateSummary> climateSummaryBrownShareAPIResponse = Arrays.asList(
@@ -57,7 +57,7 @@ public class ESGClimateSummaryDBTest extends EntityClimateProfileDataValidationT
     }
 
     @Test(groups = {DATA_VALIDATION, REGRESSION}, dataProvider = "orbisID")
-    @Xray(test = {6052, 6344})
+    @Xray(test = {4765, 4397})
     public void validateTemperatureAlignmentData(@Optional String orbisID) {
 
         Map<String, String> data = entityClimateProfilepagequeries.getTempratureAlignmentData(orbisID);
@@ -85,7 +85,7 @@ public class ESGClimateSummaryDBTest extends EntityClimateProfileDataValidationT
     }
 
     @Test(groups = {DATA_VALIDATION, REGRESSION}, dataProvider = "orbisID")
-    @Xray(test = {5999, 6000})
+    @Xray(test = {3576, 3584})
     public void validateHighestRiskHazardCategory(@Optional String orbisID) {
 
         Map<String, Object> data = entityClimateProfilepagequeries.getHighestRiskHazardData(orbisID).get(0);
@@ -116,7 +116,7 @@ public class ESGClimateSummaryDBTest extends EntityClimateProfileDataValidationT
     }
 
     @Test(groups = {DATA_VALIDATION, REGRESSION}, dataProvider = "orbisID")
-    @Xray(test = {6029, 7097})
+    @Xray(test = {4439, 4303})
     public void validateCarbonFootprintData(@Optional String orbisID) {
 
         Map<String, String> data = entityClimateProfilepagequeries.getCarbonFootprintSummary(orbisID);
@@ -145,7 +145,7 @@ public class ESGClimateSummaryDBTest extends EntityClimateProfileDataValidationT
     }
 
     @Test(groups = {DATA_VALIDATION, REGRESSION}, dataProvider = "orbisID")
-    @Xray(test = {6192})
+    @Xray(test = {4427})
     public void validateSectorComparisonChartPhysicalRiskData(@Optional String orbisID) {
 
         double expectedScore = Double.parseDouble(entityClimateProfilepagequeries.getSectorComparisonChartPhysicalRiskData(orbisID).get(0).get("SCORE").toString());
@@ -168,7 +168,7 @@ public class ESGClimateSummaryDBTest extends EntityClimateProfileDataValidationT
     }
 
     @Test(groups = {DATA_VALIDATION, REGRESSION}, dataProvider = "orbisID")
-    @Xray(test = {6222, 6225})
+    @Xray(test = {4714, 4709})
     public void validateSectorComparisonChartTransitionRiskCarbonFootprintData(@Optional String orbisID) {
 
         //double expectedScore = Double.parseDouble(entityClimateProfilepagequeries.getSectorComparisonChartPhysicalRiskData(orbisID).get(0).get("SCORE").toString());
@@ -191,7 +191,7 @@ public class ESGClimateSummaryDBTest extends EntityClimateProfileDataValidationT
     }
 
     @Test(groups = {REGRESSION, DATA_VALIDATION}, dataProvider = "orbisID")
-    @Xray(test = {8988, 8989})
+    @Xray(test = {4840, 4566})
     public void validatePhysicalRiskManagement(@Optional String orbisID) {
         Map<String, String> data = entityClimateProfilepagequeries.getPhysicalRiskData(orbisID);
         if (data.size() > 0) {
@@ -233,7 +233,7 @@ public class ESGClimateSummaryDBTest extends EntityClimateProfileDataValidationT
 
     @Test(enabled = false,groups = {REGRESSION,SMOKE, DATA_VALIDATION},
             dataProviderClass = DataProviderClass.class, dataProvider = "orbisIDWithDisclosureScore")
-    @Xray(test = {8750}) //TODO disabled de-scoped. Entities dont have Disclosure rate
+    @Xray(test = {4409}) //TODO disabled de-scoped. Entities dont have Disclosure rate
     public void validateDisclosureRatio(@Optional String orbisID) {
         //Get the header details via API
         EntityProfileClimatePageAPIController apiController = new EntityProfileClimatePageAPIController();

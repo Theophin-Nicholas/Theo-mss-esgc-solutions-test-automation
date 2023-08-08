@@ -24,7 +24,7 @@ import static com.esgc.Utilities.Groups.REGRESSION;
 public class CarbonFootprintEmmisionTest extends DataValidationTestBase {
 
     @Test(groups = {REGRESSION, DATA_VALIDATION}, dataProvider = "CarbonFootprint")
-    @Xray(test = {3018, 3021, 3022, 3023, 3025, 3026, 3201})
+    @Xray(test = {3678, 3662, 3533, 3680, 3415, 3483, 1481})
     public void verifyCarbonFootprintEmmisionTest(@Optional String sector, @Optional String region,
                                                                @Optional String researchLine, @Optional String month, @Optional String year) {
 

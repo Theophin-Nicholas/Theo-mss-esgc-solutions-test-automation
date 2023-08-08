@@ -20,7 +20,7 @@ import static com.esgc.Utilities.Groups.*;
 public class EntityIssuerAddMissingDocumentPopUpTestRouting extends EntityPageTestBase {
 
 
-    @Xray(test = {6430, 6471, 6468, 8795, 9821,11713})
+    @Xray(test = {3856, 3889, 3844, 4192, 3993,42828})
     @Test(groups = {REGRESSION, UI, SMOKE, ISSUER},
             dataProvider = "loginP2", dataProviderClass = IssuerDataProviderClass.class,
             description = "Verify Add missing document functionlity")
@@ -208,7 +208,7 @@ public class EntityIssuerAddMissingDocumentPopUpTestRouting extends EntityPageTe
     }
 
 
-    @Xray(test = {7902})
+    @Xray(test = {3368})
     @Test(groups = {REGRESSION, UI, SMOKE, ISSUER},
             dataProvider = "loginP2", dataProviderClass = IssuerDataProviderClass.class,
             description = "Verify Scoring Methodology")
@@ -280,7 +280,7 @@ public class EntityIssuerAddMissingDocumentPopUpTestRouting extends EntityPageTe
         }
     }
 
-    @Xray(test = {7298, 7902})
+    @Xray(test = {3361, 3368})
     @Test(groups = {REGRESSION, UI, SMOKE, ISSUER},
             dataProvider = "loginP2", dataProviderClass = IssuerDataProviderClass.class,
             description = "Verify Grade and Scores")
@@ -324,7 +324,7 @@ public class EntityIssuerAddMissingDocumentPopUpTestRouting extends EntityPageTe
             entitypage.logout.click();
         }
     }
-    @Xray(test = {11714})
+    @Xray(test = {4697})
     @Test(groups = {REGRESSION, UI, SMOKE, ISSUER},
             dataProvider = "loginP2", dataProviderClass = IssuerDataProviderClass.class,
             description = "Verify Add missing document functionlity with wrong URL")

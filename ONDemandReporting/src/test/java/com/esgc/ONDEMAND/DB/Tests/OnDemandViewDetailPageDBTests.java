@@ -12,7 +12,6 @@ import com.esgc.Utilities.ImportPortfolioUtility;
 import com.esgc.Utilities.Xray;
 import org.testng.annotations.Test;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -25,7 +24,7 @@ import static com.esgc.Utilities.Groups.REGRESSION;
 public class OnDemandViewDetailPageDBTests extends DataValidationTestBase {
 
     @Test(groups = {REGRESSION, DATA_VALIDATION})
-    @Xray(test = {14153, 14170, 14187, 13798, 14157, 13799, 14156})
+    @Xray(test = {2936, 3002, 2704, 2864, 2700, 3017, 2943})
     public void verifyNoESGEntitiesInOnDemandViewDetailPageTestDbValidation(){
 
         String portfolioName = "500 predicted portfolio";
@@ -51,7 +50,7 @@ public class OnDemandViewDetailPageDBTests extends DataValidationTestBase {
 
 
     @Test(groups = {REGRESSION, DATA_VALIDATION}, description = "Verify Exported Document from 'View Details'")
-    @Xray(test = {14025, 14026, 14067, 14069, 14070, 14071, 14072, 14074})
+    @Xray(test = {2948, 2955, 2728, 2935, 2974, 2992, 2740, 2897})
     public void verifyExportedDocumentFromViewDetailsTest(){
 
         String portfolioName = "500 predicted portfolio";
@@ -69,7 +68,7 @@ public class OnDemandViewDetailPageDBTests extends DataValidationTestBase {
     }
 
     @Test(groups = {REGRESSION, DATA_VALIDATION}, description = "Verify that for Data Alliance flag equal to 'Yes'/'No' scores are displayed in exported excel")
-    @Xray(test = {14333, 14334})
+    @Xray(test = {3006, 3011})
     public void verifyDataAllianceFlagForExportedExcelTest(){
         OnDemandAssessmentPage reportingPage = new OnDemandAssessmentPage();
         reportingPage.navigateToReportingService("On-Demand Assessment");
@@ -91,7 +90,7 @@ public class OnDemandViewDetailPageDBTests extends DataValidationTestBase {
 
     @Test(groups = {REGRESSION, DATA_VALIDATION},
             description = "Data Validation | On-Demand Reporting | On-Demand Assessment | View Details Button | Drawer | Verify the Sector for entities in Group by Sector & Group by Region")
-    @Xray(test = {14323})
+    @Xray(test = {2941})
     public void verifySectorForEntitiesForRegionAndSectorTest(){
 
         ViewDetailPage detail = new ViewDetailPage();
@@ -168,7 +167,7 @@ public class OnDemandViewDetailPageDBTests extends DataValidationTestBase {
 
     @Test(groups = {REGRESSION, DATA_VALIDATION},
             description = "Data Validation | On-Demand Reporting Page | On-Demand Assessment Checkbox | Portfolio Wise View Details Button | Drawer | Export To Excel | Verify the Sector for entities in Exported file")
-    @Xray(test = {14324, 14326})
+    @Xray(test = {2966, 3101})
     public void verifySectorForEntitiesInExportedFileTest(){
 
         String portfolioName = "500 predicted portfolio";

@@ -20,7 +20,7 @@ import static com.esgc.Utilities.Groups.REGRESSION;
 public class PortfolioScoreTests extends APITestBase {
 
     @Test(groups = {API, REGRESSION},dataProvider = "API Research Lines")
-    @Xray(test = {2245,  2653,  2501, 1204})
+    @Xray(test = {1515,  1421,  1260, 1452})
     //1978 TCFD
     //Energy Transition 3009
     public void portfolioScoreSuccess(@Optional String researchLines) {
@@ -100,7 +100,7 @@ public class PortfolioScoreTests extends APITestBase {
 
 
     @Test(groups = {API, REGRESSION},expectedExceptions = NullPointerException.class)
-    @Xray(test = {2247,2652,2502,2440,2877,2304,})
+    @Xray(test = {1518,1508,1513,1995,1688,1565})
     //3008, 3093 Energy Transition
     public void portfolioScoreNullPayload() {
 

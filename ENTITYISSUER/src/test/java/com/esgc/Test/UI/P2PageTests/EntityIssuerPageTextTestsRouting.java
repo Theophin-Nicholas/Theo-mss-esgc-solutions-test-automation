@@ -14,7 +14,7 @@ import static com.esgc.Utilities.Groups.*;
 public class EntityIssuerPageTextTestsRouting extends EntityPageTestBase {
 
 
-    @Xray(test = {6270})
+    @Xray(test = {3959})
     @Test(groups = {REGRESSION, UI, SMOKE, ISSUER},
             dataProvider = "credentialsP2", dataProviderClass = IssuerDataProviderClass.class,
             description = "Verify Assessment Framework")
@@ -42,7 +42,7 @@ public class EntityIssuerPageTextTestsRouting extends EntityPageTestBase {
     }
 
 
-    @Xray(test = {7902})
+    @Xray(test = {3368})
     @Test(groups = {REGRESSION, UI, SMOKE, ISSUER},
             dataProvider = "credentialsP2", dataProviderClass = IssuerDataProviderClass.class,
             description = "Verify Scoring Methodology")
@@ -88,7 +88,7 @@ public class EntityIssuerPageTextTestsRouting extends EntityPageTestBase {
         }
     }
 
-    @Xray(test = {7298, 7902, 9070})
+    @Xray(test = {3361, 3368, 4087})
     @Test(groups = {REGRESSION, UI, SMOKE, ISSUER},
             dataProvider = "credentialsP2", dataProviderClass = IssuerDataProviderClass.class,
             description = "Verify Grade and Scores")

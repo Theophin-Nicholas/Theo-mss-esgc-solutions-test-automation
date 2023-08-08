@@ -17,7 +17,7 @@ public class LoginPageTest extends DashboardUITestBase {
 
 
     @Test(groups = {REGRESSION, UI})
-    @Xray(test = {182})
+    @Xray(test = {4388, 1547})
     public void verifyValidCredentialsLoginPampa() {
         LoginPage login = new LoginPage();
 
@@ -27,8 +27,8 @@ public class LoginPageTest extends DashboardUITestBase {
     }
 
     @Test(groups = {REGRESSION, UI},
-            description = "ESGCA -1778 : Verify User is able to Click Forgot Password on Pampa Login page")
-    @Xray(test = 1778)
+            description = "ESGT -2070 : Verify User is able to Click Forgot Password on Pampa Login page")
+    @Xray(test = 2070)
     public void verifyForgotPasswordLinkIsClickablePampa() {
         test.info("Clicking on the need help sigining in link.");
         LoginPage login = new LoginPage();
@@ -44,8 +44,8 @@ public class LoginPageTest extends DashboardUITestBase {
     }
 
     @Test(groups = {REGRESSION, UI},
-            description = "ESGCA-2240 : Verify that MESG Users able to Click On Help Page From the MESG Log in Screen")
-    @Xray(test = {2239, 2240})
+            description = "ESGT-4938 : Verify that MESG Users able to Click On Help Page From the MESG Log in Screen")
+    @Xray(test = {4415, 4938})
     public void verifyHelpLinkIsClickablePampa() {
         test.info("Clicking on the need help sigining in link.");
         LoginPage login = new LoginPage();
@@ -61,8 +61,8 @@ public class LoginPageTest extends DashboardUITestBase {
     }
 
     @Test(groups = {REGRESSION, UI},
-            description = "ESGCA -1427 : Verify Remember Me checkbox is Unselected by Default")
-    @Xray(test = 1427)
+            description = "ESGT -4932 : Verify Remember Me checkbox is Unselected by Default")
+    @Xray(test = 4932)
     public void verifyRememberMeCheckboxDefaultStatusPampa() {
         test = report.createTest("Verify Remember Me checkbox is unchecked by default on Pampa Login Page.");
         LoginPage login = new LoginPage();
@@ -75,8 +75,8 @@ public class LoginPageTest extends DashboardUITestBase {
     }
 
     @Test(groups = {REGRESSION, UI},
-            description = "ESGCA -1606/1508 : Verify Unauthorised user gets 'Unable to Sign in' Message.")
-    @Xray(test = {1508, 1603})
+            description = "ESGT -1528/1486 : Verify Unauthorised user gets 'Unable to Sign in' Message.")
+    @Xray(test = {1486, 1528})
     public void verifyTheValidationForInvalidUserPampa() {
         test = report.createTest("Verify the validation for the unauthorised User.");
         LoginPage login = new LoginPage();
@@ -87,8 +87,8 @@ public class LoginPageTest extends DashboardUITestBase {
     }
 
     @Test(groups = {REGRESSION, UI},
-            description = "ESGCA -1506 : Verify the Next button functionality.")
-    @Xray(test = {1506})
+            description = "ESGT -1646 : Verify the Next button functionality.")
+    @Xray(test = {1646})
     public void verifyTheNextButtonFunctionalityPampa() {
 
         test.info("Verify Next button is present and clickable on Login page.");
@@ -109,7 +109,8 @@ public class LoginPageTest extends DashboardUITestBase {
     }
 
     @Test(groups = {REGRESSION, UI},
-            description = "ESGCA -1428 : Verify all the fields on Login page has Placeholder.")
+            description = "ESGT -1786 : Verify all the fields on Login page has Placeholder.")
+    @Xray(test = {1786})
     public void verifyThePlaceholderForLoginPageFieldsPampa() {
 
         test.info("Verify the Place folder for different fields on Login page.");
@@ -135,8 +136,8 @@ public class LoginPageTest extends DashboardUITestBase {
     }
 
     @Test(groups = {REGRESSION, UI},
-            description = "ESGCA -1483 : User is not Able to Login with a Blank Username and Password")
-    @Xray(test = 1483)
+            description = "ESGT -4642 : User is not Able to Login with a Blank Username and Password")
+    @Xray(test = 4642)
     public void verifyUserIsNotableToLoginWithBlankUserNamePampa() {
 
         test = report.createTest("Verify Next button is present and clickable on Login page.");
@@ -165,8 +166,8 @@ public class LoginPageTest extends DashboardUITestBase {
     }
 
     @Test(enabled = false, groups = {REGRESSION, UI, SMOKE},
-            description = "ESGCA -1648 : User is able to access the MESGC application without providing credentials if already logged in other moodys application.")
-    @Xray(test = 1648)
+            description = "ESGT -1658 : User is able to access the MESGC application without providing credentials if already logged in other moodys application.")
+    @Xray(test = 1658)
     public void verifyUserCanUseLoginCredentialsFromOtherMoodysToMESGCPampa() {
 
         test.info("Verify Next button is present and clickable on Login page.");

@@ -13,7 +13,7 @@ public class MethodologyLinksTest extends UITestBase {
     @Test(groups = {REGRESSION, UI, SMOKE},
             description = "Verify Methodology link works as Expected",
             dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
-    @Xray(test = {1929, 1939, 1940, 1943, 2296, 1944, 1945, 5504, 7867, 7995})
+    @Xray(test = {4617, 4869, 5033, 1347, 4476, 4622, 4813, 4485})
     public void verifyMethodologyLink(String page){
         ResearchLinePage researchLinePage = new ResearchLinePage();
         researchLinePage.navigateToResearchLine(page);

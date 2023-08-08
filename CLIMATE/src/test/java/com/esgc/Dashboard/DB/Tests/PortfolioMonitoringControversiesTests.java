@@ -20,7 +20,7 @@ import static com.esgc.Utilities.Groups.*;
 public class PortfolioMonitoringControversiesTests extends DataValidationTestBase {
 //TODO check queries
     @Test(groups = {REGRESSION, DATA_VALIDATION, DASHBOARD})
-    @Xray(test = 4060)
+    @Xray(test = 1414)
     public void verifyControversiesOrder() throws ParseException {
         Response portfoliosResponse = APIUtilities.getAvailablePortfoliosForUser();
         JsonPath jsonPathEvaluator = portfoliosResponse.jsonPath();
@@ -40,7 +40,7 @@ public class PortfolioMonitoringControversiesTests extends DataValidationTestBas
     }
 
     @Test(groups = {REGRESSION, DATA_VALIDATION, DASHBOARD})
-    @Xray(test = 4062)
+    @Xray(test = 1777)
     public void verifyControversiesOfSameCompany() {
 
         Response portfoliosResponse = APIUtilities.getAvailablePortfoliosForUser();
@@ -68,7 +68,7 @@ public class PortfolioMonitoringControversiesTests extends DataValidationTestBas
     }
 
     @Test(groups = {REGRESSION, DATA_VALIDATION, DASHBOARD})
-    @Xray(test = {6816, 6955, 4058, 7823})
+    @Xray(test = {4466, 4748, 1316, 3595})
     public void verifyControversiesFromLast60Days() {
 
         Response portfoliosResponse = APIUtilities.getAvailablePortfoliosForUser();
@@ -97,7 +97,7 @@ public class PortfolioMonitoringControversiesTests extends DataValidationTestBas
     }
 
     @Test(groups = {REGRESSION, DATA_VALIDATION, DASHBOARD})
-    @Xray(test = {4058, 7823})
+    @Xray(test = {1316, 3595})
     public void verifyControversiesFromLastOneMonth() {
 
         Response portfoliosResponse = APIUtilities.getAvailablePortfoliosForUser();

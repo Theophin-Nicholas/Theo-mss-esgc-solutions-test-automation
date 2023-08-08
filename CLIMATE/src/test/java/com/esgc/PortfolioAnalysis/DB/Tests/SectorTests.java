@@ -27,7 +27,7 @@ import static com.esgc.Utilities.Groups.REGRESSION;
 public class SectorTests extends DataValidationTestBase {
 
     @Test(groups = {REGRESSION, DATA_VALIDATION}, dataProvider = "researchLines")
-    @Xray(test = {1750, 2140, 2213, 2218, 2575, 3687, 3686, 4991, 3691, 1383, 1384, 5143, 11247})
+    @Xray(test = {4534, 5059, 2136, 4471, 4818, 4733, 4349, 3597, 3492})
     public void verifySectorSummaryAndDetails(@Optional String sector, @Optional String region,
                                               @Optional String researchLine, @Optional String month, @Optional String year) {
 
@@ -230,7 +230,7 @@ public class SectorTests extends DataValidationTestBase {
     }
 
     @Test(groups = {REGRESSION, DATA_VALIDATION}, dataProvider = "researchLines")
-    @Xray(test = {4234, 4236})
+    @Xray(test = {3646, 3600})
     public void verifySectorMonthlyOrQuarterlyChanges(@Optional String sector, @Optional String region, @Optional String researchLine, @Optional String month, @Optional String year) throws ParseException {
 
 

@@ -73,7 +73,7 @@ public class PortfolioScore extends UITestBase {
     @Test(groups = {REGRESSION, UI, SMOKE},
             description = "Verify Score Widget for risk research lines",
             dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
-    @Xray(test = {551, 2506, 2657, 2253, 6712, 2504, 2655, 12604})
+    @Xray(test = {4084, 4129, 4636, 4892, 3967, 4275, 4672, 3535})
     public void verifyPortfolioScore(String page) {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigated to " + page + " Page");
@@ -150,7 +150,7 @@ public class PortfolioScore extends UITestBase {
     without updating the portfolio filter there should be no api call to load data
  */
 
-    @Xray(test = {640, 728})
+    @Xray(test = {4593, 4678})
     @Test(groups = {REGRESSION, UI},
             description = "Verify Portfolio Score is not changed when User navigates another page and come back to Physical Management Page without any changes")
     public void verifyPortfolioScoreNotUpdated() {
@@ -160,7 +160,7 @@ public class PortfolioScore extends UITestBase {
         test.info("Navigated to Portfolio Analysis Page");
         researchLinePage.navigateToResearchLine("Carbon Footprint");
         assertTestCase.assertTrue(researchLinePage.checkIfPortfolioLoadMaskIsDisplayed(title), "Widget is loading");
-        assertTestCase.assertTrue(researchLinePage.checkIfWidgetsAreLoading(), "Widgets should be loaded", 731);
+        assertTestCase.assertTrue(researchLinePage.checkIfWidgetsAreLoading(), "Widgets should be loaded", 5030);
 
         assertTestCase.assertTrue(researchLinePage.checkIfResearchLineTitleIsDisplayed("Carbon Footprint"), "Page Subtitle Verification");
         test.pass("User is on Carbon Footprint Page");
@@ -196,7 +196,7 @@ public class PortfolioScore extends UITestBase {
 
     @Test(groups = {REGRESSION, UI},
             description = "Verify Portfolio Score Table is changed if User change page and select another portfolio")
-    @Xray(test = {1257})
+    @Xray(test = {4286})
     public void verifyPortfolioScoreUpdatedWhenPageIsRefreshed() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
 

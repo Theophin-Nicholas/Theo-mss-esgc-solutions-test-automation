@@ -29,7 +29,7 @@ public class ExportTests extends UITestBase {
     //TODO Needs attention. Tests are failing.
     @Test(groups = {REGRESSION, SMOKE, EXPORT, UI},
             dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
-    @Xray(test = {2092, 2093, 2108, 2110, 2112, 2113, 2625, 3004, 3396, 3403, 3405, 3406, 4648, 5169, 3621, 8953, 9656, 9657, 9658, 9818, 9819, 10679})
+    @Xray(test = {4638, 4537, 4616, 4473, 4972, 4967, 5057, 4920, 4923, 4711, 4558, 4732, 4747, 5075, 4823, 4877, 4964, 4814, 4550, 4448})
     public void verifyExportFunctionalityAndExcelFieldsWithUI(String researchLine) {
 
         ResearchLinePage researchLinePage = new ResearchLinePage();
@@ -48,7 +48,7 @@ public class ExportTests extends UITestBase {
         researchLinePage.selectExportData("Data", researchLine);
 
         assertTestCase.assertTrue(researchLinePage.checkIfExportingLoadingMaskIsDisplayed(),
-                "Exporting... Load Mask is displayed", 2620);
+                "Exporting... Load Mask is displayed", 4694);
 
         researchLine = researchLine.replaceAll("Management", "Mgmt");
         String expectedTitle = String.format("Portfolio Analysis - %s", researchLine);
@@ -101,7 +101,7 @@ public class ExportTests extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, EXPORT, UI}, dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
-    @Xray(test = {7254})
+    @Xray(test = {4347})
     public void verifyUserIsAbleToDownloadPDFTest(String researchLine) {
         System.out.println("PDF Download test for " + researchLine);
         ResearchLinePage researchLinePage = new ResearchLinePage();
@@ -138,7 +138,7 @@ public class ExportTests extends UITestBase {
                 System.out.println("File found");
                 System.out.println("file.getName() = " + file.getName());
                 assertTestCase.assertTrue(file.getName().startsWith(researchLine),
-                        "PDF file is downloaded", 7254);
+                        "PDF file is downloaded", 4347);
                 //file.delete();//Already deleted automatically by after-method
             }
         }
@@ -146,7 +146,7 @@ public class ExportTests extends UITestBase {
 
     @Test(groups = {REGRESSION, EXPORT, UI},
             dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
-    @Xray(test = {2883, 2962})
+    @Xray(test = {2039, 3430})
     public void verifyBenchMarkExportFunctionalityExcelFieldsWithUI(String researchLine) {
 
         ResearchLinePage researchLinePage = new ResearchLinePage();
@@ -167,7 +167,7 @@ public class ExportTests extends UITestBase {
         researchLinePage.selectExportData("Data", researchLine);
 
         assertTestCase.assertTrue(researchLinePage.checkIfExportingLoadingMaskIsDisplayed(),
-                "Exporting... Load Mask is displayed", 2620);
+                "Exporting... Load Mask is displayed", 4694);
 
         researchLine = researchLine.replaceAll("Management", "Mgmt");
         String expectedTitle = String.format("Portfolio Analysis - %s", researchLine);
@@ -233,7 +233,7 @@ public class ExportTests extends UITestBase {
 
     @Test(groups = {REGRESSION, EXPORT},
             dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
-    @Xray(test = {7253})
+    @Xray(test = {4614})
     public void verifyResearchLinesExportOptions(String researchLine) {
 
         ResearchLinePage researchLinePage = new ResearchLinePage();
@@ -252,7 +252,7 @@ public class ExportTests extends UITestBase {
     }
 
     @Test(enabled = false, groups = {REGRESSION, EXPORT}, dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
-    @Xray(test = {2846})
+    @Xray(test = {3664})
     public void verifyCompaniesOrderInRegionsAndSectors(String researchLine) {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         researchLinePage.navigateToResearchLine(researchLine);
@@ -265,7 +265,7 @@ public class ExportTests extends UITestBase {
         researchLinePage.clickExportDropdown();
         researchLinePage.selectExportData("Data", researchLine);
         assertTestCase.assertTrue(researchLinePage.checkIfExportingLoadingMaskIsDisplayed(),
-                "Exporting... Load Mask is displayed", 2620);
+                "Exporting... Load Mask is displayed", 4694);
 
         researchLine = researchLine.replaceAll("Management", "Mgmt");
         String expectedTitle = String.format("Portfolio Analysis - %s", researchLine);

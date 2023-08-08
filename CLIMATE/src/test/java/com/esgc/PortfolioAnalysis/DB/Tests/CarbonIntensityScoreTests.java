@@ -22,7 +22,7 @@ public class CarbonIntensityScoreTests extends DataValidationTestBase {
 
     //TODO update flow instead of getting results from DB with query
     @Test(groups = {REGRESSION, DATA_VALIDATION}, dataProvider = "researchLines")
-    @Xray(test = {2988, 2991, 2992, 2993, 2994, 2996, 2997, 3203})
+    @Xray(test = {3566, 3446, 3434, 3579, 3652, 3623, 3416, 3489})
     public void verifyCarbonIntensityScoreWithMixedIdentifiers(@Optional String sector, @Optional String region,
                                                                @Optional String researchLine, @Optional String month, @Optional String year) {
 

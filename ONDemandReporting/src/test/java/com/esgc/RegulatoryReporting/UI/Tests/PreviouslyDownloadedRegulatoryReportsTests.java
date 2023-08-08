@@ -17,7 +17,7 @@ import static com.esgc.Utilities.Groups.*;
 public class PreviouslyDownloadedRegulatoryReportsTests extends UITestBase {
 
     @Test(groups = {REGRESSION, UI, REGULATORY_REPORTING}, dataProvider = "Reports")
-    @Xray(test = {11654, 11657, 11550})
+    @Xray(test = {3857, 3854, 4252})
     public void verifyPreviouslyDownloadedFeature(String report) {
         RegulatoryReportingPage reportingPage = new RegulatoryReportingPage();
         reportingPage.navigateToReportingService(report);
@@ -39,7 +39,7 @@ public class PreviouslyDownloadedRegulatoryReportsTests extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI, REGULATORY_REPORTING, ENTITLEMENTS}, dataProvider = "Reports")
-    @Xray(test = {11712})
+    @Xray(test = {4255})
     public void verifyNoFilesInPreviouslyDownloadedScreen(String report) {
         System.out.println("report = " + report);
         RegulatoryReportingPage reportingPage = new RegulatoryReportingPage();

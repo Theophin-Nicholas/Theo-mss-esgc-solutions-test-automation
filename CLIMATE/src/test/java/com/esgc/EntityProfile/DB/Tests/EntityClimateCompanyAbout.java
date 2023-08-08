@@ -5,11 +5,9 @@ import com.esgc.Dashboard.DB.DBQueries.DashboardQueries;
 import com.esgc.EntityProfile.API.APIModels.EntityHeader;
 import com.esgc.EntityProfile.API.Controllers.EntityProfileClimatePageAPIController;
 import com.esgc.EntityProfile.UI.Pages.EntityClimateProfilePage;
-import com.esgc.PortfolioAnalysis.UI.Pages.ResearchLinePage;
 import com.esgc.TestBase.DataProviderClass;
 import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.Xray;
-import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import java.util.Arrays;
@@ -22,7 +20,7 @@ import static com.esgc.Utilities.Groups.*;
 public class EntityClimateCompanyAbout extends DataValidationTestBase {
 
 
-    @Xray(test = {10045,10046})
+    @Xray(test = {4091,4728})
     @Test(groups = {REGRESSION, UI, SMOKE, ENTITY_PROFILE},dataProvider = "Company With Orbis ID",
             dataProviderClass = DataProviderClass.class)
     public void entityClimateCompanyAbout(String... dataprovider) {
@@ -53,7 +51,7 @@ public class EntityClimateCompanyAbout extends DataValidationTestBase {
             assertTestCase.assertTrue(dbResults.get("ISIN").toString().equals(companyHeaderAPIResponse.get(0).getPrimary_isin()));
     }
 
-    @Xray(test = {14321})
+    @Xray(test = {3198})
     @Test(groups = {REGRESSION, ENTITY_PROFILE, DATA_VALIDATION},
             description = "Data Validation | Entity Page | Entity Drawer | Verify the Sector, L1&L2 for entity")
     public void verifySectorL1L2ForEntityTest() {

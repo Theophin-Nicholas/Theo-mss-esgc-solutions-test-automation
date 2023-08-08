@@ -16,9 +16,9 @@ import static com.esgc.Utilities.Groups.*;
 public class HistoryTableTests extends UITestBase {
 
     @Test(groups = {REGRESSION, UI, SMOKE},
-            description = "ESGCA-5122 - Verify History Table",
+            description = "ESGT-5189 - Verify History Table",
             dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
-    @Xray(test = {5051})
+    @Xray(test = {5189})
     public void verifyHistoryTable(String page) {
         ResearchLinePage researchLinePage = new ResearchLinePage();
 
@@ -35,7 +35,7 @@ public class HistoryTableTests extends UITestBase {
 
     @Test(groups = {REGRESSION, UI},
             description = "Verify History Table not available", dataProvider = "History Table Not Available Research Lines")
-    @Xray(test = {5815, 5816, 5817, 5820})
+    @Xray(test = {4663, 4655, 4680, 4283})
     public void verifyHistoryTablbeNotAvailable(String page) {
         ResearchLinePage researchLinePage = new ResearchLinePage();
 
@@ -53,7 +53,7 @@ public class HistoryTableTests extends UITestBase {
 
     @Test(groups = {REGRESSION, UI},
             description = "Verify History Chart include unmatched companies/NULL/Negative values", dataProvider = "History Table Research Lines")
-    @Xray(test = {5935})
+    @Xray(test = {4976})
     public void verifyHistoryChartIncludeUnmatchedCompanies(String page) {
         if (!page.equals("Temperature Alignment")) {
             ResearchLinePage researchLinePage = new ResearchLinePage();
@@ -72,7 +72,7 @@ public class HistoryTableTests extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI}, dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
-    @Xray(test = {9822, 10034, 12601, 12615})
+    @Xray(test = {4114, 4165, 3549, 3598})
     public void verifyCategoriesAndColorsOfHistoryTable(String page) {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         researchLinePage.navigateToResearchLine(page);
