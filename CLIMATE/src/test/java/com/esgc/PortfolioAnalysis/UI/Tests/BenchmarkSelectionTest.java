@@ -112,8 +112,8 @@ public class BenchmarkSelectionTest extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI},
-            description = "ESGT-1436 - Verify changes persist after benchmark is selected")
-    @Xray(test = 1436)
+            description = "ESGT-5185 - Verify changes persist after benchmark is selected")
+    @Xray(test = 5185)
     public void verifyBenchmarkChangesPersistence() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
@@ -159,7 +159,7 @@ public class BenchmarkSelectionTest extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI},
-            description = "ESGCA-4598 - Verify carbon footprint benchmark score")
+            description = "ESGT-4598 - Verify carbon footprint benchmark score")
     @Xray(test = 4598)
     public void verifyShadowedSelectBenchmark() {
         ResearchLinePage researchLinePage = new ResearchLinePage();

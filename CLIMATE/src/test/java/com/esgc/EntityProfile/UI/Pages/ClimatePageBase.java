@@ -398,7 +398,7 @@ public abstract class ClimatePageBase extends PageBase {
     in the directory and will return 'True' if the document is
     available in the folder else 'false'. When we are sure of the file name, we can
     make use of this method to verify.
-    --- Used for download template verification ESGCA-4313
+    --- Used for download template verification ESGT-4313
      */
     public String getDownloadedFileName() {
 

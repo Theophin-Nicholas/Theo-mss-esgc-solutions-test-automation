@@ -805,7 +805,7 @@ public class EntityClimateProfileSummaryTests extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI, SMOKE}, dataProviderClass = DataProviderClass.class, dataProvider = "noInfoCarbonFootprintOrbisID")
-    @Xray(test = {6345, 4729})
+    @Xray(test = {5187, 4729})
     public void verifyNoInfoDisplayedCarbonFootPrint1(String Entity) {
         LoginPage loginPage = new LoginPage();
         if(loginPage.loginButtons.size()>0) {

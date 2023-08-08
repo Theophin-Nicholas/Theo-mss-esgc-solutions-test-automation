@@ -238,7 +238,7 @@ public class PortfolioSelectionModalTests extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI, ROBOT_DEPENDENCY},
-            description = "ESGCA-4296 - UI | Portfolio Name Search bar | Verify that ellipsis are displayed for a company having too long name")
+            description = "ESGT-4296 - UI | Portfolio Name Search bar | Verify that ellipsis are displayed for a company having too long name")
     @Xray(test = {4296})
     public void verifyEllipsesForPortfolioWithLongName() {
         ResearchLinePage researchLinePage = new ResearchLinePage();

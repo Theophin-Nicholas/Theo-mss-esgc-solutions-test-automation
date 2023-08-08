@@ -33,7 +33,7 @@ public class ImpactTableTests extends APITestBase {
     @Xray(test = {1271})
     public void getImpactDistributionInvalidPayload(String researchLine) {
         // API Returns 200 instead of 500
-        test.info("Tests ESGCA-1271");
+        test.info("Tests ESGT-1271");
         APIController apiController = new APIController();
         APIFilterPayloadWithImpactFilter apiFilterPayload = new APIFilterPayloadWithImpactFilter("", "", "", "", "xxx");
         Response response = apiController.getImpactDistributionResponse(portfolioID,researchLine,apiFilterPayload);
@@ -43,7 +43,7 @@ public class ImpactTableTests extends APITestBase {
     @Test(groups = {API, REGRESSION}, dataProvider = "No ESG API Research Lines")
     @Xray(test = {1256})
     public void getImpactDistributionInvalidToken(String researchLine) {
-        test.info("Tests ESGCA-1256");
+        test.info("Tests ESGT-1256");
         APIFilterPayloadWithImpactFilter apiFilterPayload = new APIFilterPayloadWithImpactFilter("all", "all", "03", "2021", "top5");
         APIController apiController = new APIController();
         apiController.setInvalid();

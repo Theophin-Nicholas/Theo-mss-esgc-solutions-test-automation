@@ -133,7 +133,7 @@ public class GlobalHeaderSidePanel extends UITestBase {
         login.login();
         dashboardPage.clickOnMenuButton();
         dashboardPage.navigateToPageFromMenu("Calculations");
-        assertTestCase.assertEquals(before_SelectedOption, dashboardPage.getSelectedOption(), "Verify changed made on \"Calculation\" drawer are retained on switching portfolios", 12852);
+        assertTestCase.assertEquals(before_SelectedOption, dashboardPage.getSelectedOption(), "Verify changed made on \"Calculation\" drawer are retained on switching portfolios", 3235);
 
 
     }

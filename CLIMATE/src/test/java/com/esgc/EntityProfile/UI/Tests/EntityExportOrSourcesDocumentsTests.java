@@ -78,7 +78,7 @@ public class EntityExportOrSourcesDocumentsTests extends UITestBase {
     }
 
     @Test(groups = {ENTITY_PROFILE, REGRESSION, UI})
-    @Xray(test = {10084, 10154, 10176})
+    @Xray(test = {4041, 3975, 4040})
     public void validateExportSourceDocumentsDownload(){
 
         String company = "Rogers Corp.";
@@ -156,7 +156,7 @@ public class EntityExportOrSourcesDocumentsTests extends UITestBase {
     }
 
     @Test(groups = {ENTITY_PROFILE, REGRESSION, UI})
-    @Xray(test = {10177})
+    @Xray(test = {4065})
     public void validatePdfContent(){
 
         String company = "Rogers Corp.";

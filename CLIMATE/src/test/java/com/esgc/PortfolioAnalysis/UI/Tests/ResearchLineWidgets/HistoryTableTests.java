@@ -16,9 +16,9 @@ import static com.esgc.Utilities.Groups.*;
 public class HistoryTableTests extends UITestBase {
 
     @Test(groups = {REGRESSION, UI, SMOKE},
-            description = "ESGCA-5122 - Verify History Table",
+            description = "ESGT-5189 - Verify History Table",
             dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
-    @Xray(test = {5051})
+    @Xray(test = {5189})
     public void verifyHistoryTable(String page) {
         ResearchLinePage researchLinePage = new ResearchLinePage();
 

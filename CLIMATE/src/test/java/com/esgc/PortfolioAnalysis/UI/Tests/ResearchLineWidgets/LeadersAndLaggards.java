@@ -19,7 +19,7 @@ public class LeadersAndLaggards extends UITestBase {
     @Test(groups = {REGRESSION, UI, SMOKE},
             description = "Verify if Leaders and Laggards Table is Displayed as Expected",
             dataProviderClass = DataProviderClass.class,dataProvider = "Research Lines")
-    @Xray(test = {389, 4323,4746})
+    @Xray(test = {5188, 4323,4746})
     public void verifyLeadersAndLaggardsTableUI(String page) {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         if ( page.equals("Temperature Alignment")) {
@@ -52,7 +52,7 @@ public class LeadersAndLaggards extends UITestBase {
     @Test(groups = {REGRESSION, UI},
             description = "Verify if More companies ranked in link present",
             dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
-    @Xray(test = {4953, 4928, 4926, 5074, 2133, 2444, 2880, 3096, 3846, 5031, 5076, 4362, 4324 })
+    @Xray(test = {4953, 4928, 4926, 5074, 5191, 5190, 5186, 5031, 5076, 4362, 4324 })
     public void verifyMoreRankedCompaniesLink(String page) {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         if ( page.equals("Temperature Alignment")) {

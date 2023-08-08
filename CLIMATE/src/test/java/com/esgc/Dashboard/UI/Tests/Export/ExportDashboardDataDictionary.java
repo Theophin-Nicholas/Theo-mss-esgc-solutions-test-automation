@@ -82,7 +82,7 @@ public class ExportDashboardDataDictionary extends DashboardUITestBase {
         String filePath = dashboardPage.getDownloadedCompaniesExcelFilePath();
         String tabName = "Data - All research lines";
 
-        // ESGCA-4459: Validate Physical Risk Management Columns in 'Data - All research lines' Sheet
+        // ESGT-4459: Validate Physical Risk Management Columns in 'Data - All research lines' Sheet
         ExcelUtil excel = new ExcelUtil(filePath,tabName);
         List<String> actualColumnsList = excel.getColumnsNames();
         List<String> expectedPhysicalRiskColumnsList = new ArrayList<>();
@@ -94,7 +94,7 @@ public class ExportDashboardDataDictionary extends DashboardUITestBase {
         expectedPhysicalRiskColumnsList.add("Physical Risk Management - Results Score");
         assertTestCase.assertTrue(actualColumnsList.containsAll(expectedPhysicalRiskColumnsList),"Data dictionary details verification");
 
-        // ESGCA-4441: Validate newly added Columns in 'Data - All research lines' Sheet
+        // ESGT-4441: Validate newly added Columns in 'Data - All research lines' Sheet
 
         //ESGCA-9817: Verify the columns Alphanumeric Score and Overall Qualifier is not present
         List<String> deletedColumnsList = new ArrayList<>();

@@ -111,7 +111,7 @@ public class EntityPageTestRouting extends EntityPageTestBase {
 
     @Test(groups = {UI, SMOKE, REGRESSION, ISSUER},
             dataProvider = "credentialsP2", dataProviderClass = IssuerDataProviderClass.class,
-            description = "ESGCA-1741-UI | ESG Issuer - Entity Page | Verify Footer is Displayed")
+            description = "ESGT-1741-UI | ESG Issuer - Entity Page | Verify Footer is Displayed")
     @Xray(test = {1741})
     public void testFooter(String... data) {
         EntityIssuerPage entitypage = new EntityIssuerPage();
@@ -131,7 +131,7 @@ public class EntityPageTestRouting extends EntityPageTestBase {
 
     @Test(groups = {UI, SMOKE, REGRESSION, ISSUER},
             dataProvider = "credentialsP2", dataProviderClass = IssuerDataProviderClass.class,
-            description = "ESGCA-2167-UI | ESG Issuer - Entity Page | Verify Methodology Details (Titles, Text)")
+            description = "ESGT-2167-UI | ESG Issuer - Entity Page | Verify Methodology Details (Titles, Text)")
     @Xray(test = {2167,9694})
     public void testMethodologyDetails(String... data) {
         EntityIssuerPage entitypage = new EntityIssuerPage();

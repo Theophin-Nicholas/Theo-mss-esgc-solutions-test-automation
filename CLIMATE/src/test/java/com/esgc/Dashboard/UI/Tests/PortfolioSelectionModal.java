@@ -206,7 +206,7 @@ public class PortfolioSelectionModal extends DashboardUITestBase {
     }
 
     @Test(groups = {REGRESSION, UI, SMOKE, DASHBOARD},
-            description = "ESGCA -2054 : Verify the Sorting logic for Portfolios on Selection modal popup.")
+            description = "ESGT -2054 : Verify the Sorting logic for Portfolios on Selection modal popup.")
     @Xray(test = {5003, 2054})
     public void verifyPortfolioSortingOnSelectionModalPopup() {
         try {

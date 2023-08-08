@@ -133,7 +133,7 @@ public class XrayFileImporter {
         String token = given()
                 .body(body)
                 .contentType("application/json")
-                .relaxedHTTPSValidation().accept(ContentType.JSON).log().all().when()
+                .relaxedHTTPSValidation().accept(ContentType.JSON).when()
                 .post("https://xray.cloud.getxray.app/api/v2/authenticate").prettyPrint().replace("\"", "");
 
 
@@ -141,7 +141,7 @@ public class XrayFileImporter {
         Response response = given()
                 .header("Authorization", "Bearer " + token)
                 .relaxedHTTPSValidation().accept(ContentType.JSON)
-                .contentType("application/json").log().all()
+                .contentType("application/json")
                 .body(payload)
                 .when()
                 .post("https://xray.cloud.getxray.app/api/v2/import/execution").prettyPeek();
@@ -188,7 +188,7 @@ public class XrayFileImporter {
             response = given()
                     .header("Authorization", "Bearer " + token)
                     .relaxedHTTPSValidation().accept(ContentType.JSON)
-                    .contentType("application/json").log().all()
+                    .contentType("application/json")
                     .body(payload2)
                     .when()
                     .post("https://xray.cloud.getxray.app/api/v2/import/execution").prettyPeek();
@@ -351,7 +351,7 @@ public class XrayFileImporter {
 //
 //                    .header("Content-Type", "multipart/form-data")
 //                    .multiPart("file", "Execution Report", FileUtils.readFileToByteArray(new File(filepath)), "text/csv")
-                    .when().log().all()
+                    .when()
                     .post("rest/api/3/issue/" + tickedNumber + "/attachments").prettyPeek();
 //        } catch (IOException e) {
 //            e.printStackTrace();
@@ -389,7 +389,7 @@ public class XrayFileImporter {
     private static Response createTestExecution(String reportName) {
         System.out.println("creating test execution");
         return configSpec()
-                .contentType(ContentType.JSON).log().all()
+                .contentType(ContentType.JSON)
                 .body("{\n" +
                         "  \"fields\": {\n" +
                         "    \"project\": {\n" +
