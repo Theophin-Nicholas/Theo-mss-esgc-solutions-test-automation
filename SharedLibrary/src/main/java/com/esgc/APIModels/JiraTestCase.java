@@ -3,6 +3,7 @@ package com.esgc.APIModels;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -15,6 +16,7 @@ public class JiraTestCase {
     public JiraTestCase(String e, String status) {
         this.testKey = e;
         this.status = status;
+        this.evidences = new ArrayList<>();
     }
 
 }
