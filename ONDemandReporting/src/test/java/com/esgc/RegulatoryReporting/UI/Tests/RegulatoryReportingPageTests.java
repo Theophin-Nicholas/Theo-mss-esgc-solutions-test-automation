@@ -22,7 +22,7 @@ import static com.esgc.Utilities.Groups.*;
 public class RegulatoryReportingPageTests extends UITestBase {
 
     @Test(groups = {REGRESSION, UI, REGULATORY_REPORTING, SMOKE}, description = "Verify that user can navigate to Regulatory Reporting page")
-    @Xray(test = {3909, 3925, 4082, 4019, 4027})
+    @Xray(test = {3909, 3925, 4082, 4019, 4027, 5088})
     public void verifyReportingListTest() {
         RegulatoryReportingPage reportingPage = new RegulatoryReportingPage();
         BrowserUtils.wait(5);
