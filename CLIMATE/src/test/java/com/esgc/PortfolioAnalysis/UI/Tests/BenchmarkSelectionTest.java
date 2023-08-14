@@ -170,26 +170,4 @@ public class BenchmarkSelectionTest extends UITestBase {
         Assert.assertEquals(researchLinePage.benchmarkDropdown.getText(), "Select Benchmark");
         test.info("Select Benchmark is shadowed as expected");
     }
-
-
-    @Test(enabled = false, groups = {REGRESSION, UI, ESG}, //TODO disabled till ESG assessment scoped back.
-            description = "Verify that Benchmark can be selected and displayed on Summary Section")
-    @Xray(test = {4213})
-    public void verifyESGAssessmentsBenchmarkSection() {
-
-        ResearchLinePage researchLinePage = new ResearchLinePage();
-        test.info("Navigate to Portfolio Analysis page");
-        researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
-        BrowserUtils.wait(3);
-        researchLinePage.navigateToResearchLine("ESG Assessments");
-        BrowserUtils.wait(3);
-        researchLinePage.clickOnBenchmarkDropdown()
-                .SelectAPortfolioFromBenchmark("Sample Portfolio");
-
-        assertTestCase.assertTrue(researchLinePage.ValidateifEsgBenchmarkPortfolioBoxIsDisplayed(), "The Benchmark Box is displayed");
-        assertTestCase.assertTrue(researchLinePage.IsBenchmarkLableAvailable(), "Benchmark Label for the Benchmark coverage section is displayed when a Benchmark portfolio selected");
-        assertTestCase.assertTrue(researchLinePage.IsBenchmarkScoreCategoryAvailable(), "Benchmark Score category is available");
-        assertTestCase.assertTrue(researchLinePage.IsBenchmarkCoverageSectionAvailableAndMatchesWithPattern(), "Validate that Bechnmark Coverage section is diplayed");
-        researchLinePage.validateBenchMarkDistributionSection();
-    }
 }

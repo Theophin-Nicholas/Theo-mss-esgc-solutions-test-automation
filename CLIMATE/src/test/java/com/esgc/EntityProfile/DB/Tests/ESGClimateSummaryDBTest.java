@@ -230,26 +230,4 @@ public class ESGClimateSummaryDBTest extends EntityClimateProfileDataValidationT
             System.out.println("Entity does not have data to test");
         }
     }
-
-    @Test(enabled = false,groups = {REGRESSION,SMOKE, DATA_VALIDATION},
-            dataProviderClass = DataProviderClass.class, dataProvider = "orbisIDWithDisclosureScore")
-    @Xray(test = {4409}) //TODO disabled de-scoped. Entities dont have Disclosure rate
-    public void validateDisclosureRatio(@Optional String orbisID) {
-        //Get the header details via API
-        EntityProfileClimatePageAPIController apiController = new EntityProfileClimatePageAPIController();
-        List<EntityHeader> entityHeader =
-                Arrays.asList(controller.getHeaderDetailsWithPayload(orbisID).getBody().as(EntityHeader[].class));
-        int disclosureRate = Integer.parseInt(entityHeader.get(0).getOverall_disclosure_score());
-        System.out.println("list = " + entityHeader.get(0).getOverall_disclosure_score());
-
-        //Get the entity details which has Overall Disclosure rate from DB
-        List<String> dbResults = getHeaderDB(orbisID);
-
-        //Verify API and DB values
-        int disclosureDBRRate = (int) (Double.parseDouble(dbResults.get(0)) * 100);
-        assertTestCase.assertEquals(disclosureRate, disclosureDBRRate);
-
-    }
-
-
 }

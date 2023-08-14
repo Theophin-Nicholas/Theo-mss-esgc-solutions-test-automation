@@ -5,7 +5,6 @@ import com.esgc.Base.DB.DBModels.ResearchLineIdentifier;
 import com.esgc.Base.TestBases.DataValidationTestBase;
 import com.esgc.PortfolioAnalysis.API.APIModels.*;
 import com.esgc.Utilities.APIUtilities;
-import com.esgc.Utilities.DateTimeUtilities;
 import com.esgc.Utilities.Xray;
 import io.restassured.response.Response;
 import org.hamcrest.Matchers;
@@ -13,7 +12,6 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Test;
 
-import java.text.ParseException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -215,148 +213,6 @@ public class RegionTests extends DataValidationTestBase {
 
         }
 
-    }
-
-    //Descoped in story https://esjira/browse/ESGCA-9398
-    @Test(enabled = false, groups = {REGRESSION, DATA_VALIDATION}, dataProvider = "researchLines")
-    @Xray(test = {2066, 1797})
-    public void verifyRegionMonthlyorQuarterlyChanges(@Optional String sector, @Optional String region, @Optional String researchLine, @Optional String month, @Optional String year) throws ParseException {
-
-
-        List<ResearchLineIdentifier> portfolioToUpload = dataValidationUtilities.getPortfolioToUpload(researchLine, month, year);
-        double totalValuesInPortfolio = portfolioUtilities.calculateTotalSumOfInvestment(portfolioToUpload);
-        String fileName = String.format("Region Summary Details %s - %s - %s - %s - %s", researchLine, sector, region, month, year);
-        String path = portfolioUtilities.createPortfolio(fileName, portfolioToUpload);
-        test.info("Portfolio saved to:");
-        test.info(path);
-        Response response = controller.importPortfolio(APIUtilities.userID(), fileName + ".csv", path);
-        response.then().assertThat().body("portfolio_name", Matchers.notNullValue());
-
-
-        portfolioToUpload = dataValidationUtilities.preparePortfolioForTesting(portfolioToUpload);
-
-        //filter for a given region
-        if (!region.equals("all")) {
-            portfolioToUpload = portfolioToUpload.stream().filter(r -> r.getWORLD_REGION()
-                    .equals(region)).collect(Collectors.toList());
-        }
-
-        //filter for a given region
-        if (!sector.equals("all")) {
-            portfolioToUpload = portfolioToUpload.stream().filter(r -> r.getPLATFORM_SECTOR()
-                    .equals(sector)).collect(Collectors.toList());
-        }
-
-        String portfolioId = response.getBody().jsonPath().get("portfolio_id");
-        test.info("portfolio_id=" + portfolioId);
-        test.info(String.format("Research Line=%s Filter= %s %s %s %s", researchLine, region, sector, month, year));
-        int countOfDistinctCompaniesInPortfolio = dataValidationUtilities.getCoverageOfPortfolio(portfolioToUpload);
-        System.out.println("portfolio_id:" + portfolioId);
-        test.info("Count of distinct companies after filters: " + countOfDistinctCompaniesInPortfolio);
-
-        APIFilterPayload apiFilterPayload = new APIFilterPayload();
-        apiFilterPayload.setSector(sector);
-        apiFilterPayload.setRegion(region);
-        apiFilterPayload.setBenchmark("");
-        apiFilterPayload.setYear(year);
-        apiFilterPayload.setMonth(month);
-
-        String coverage = controller.getPortfolioCoverageResponse(portfolioId, researchLine, apiFilterPayload).jsonPath().getString("[0].portfolio_coverage.companies");
-        System.out.println("Count of distinct companies after filters: " + countOfDistinctCompaniesInPortfolio);
-        System.out.println("coverage: " + coverage);
-
-        //Get all regions
-        List<RegionSummary> regionSummaryList = Arrays.asList(
-                controller.getPortfolioRegionSummaryResponse(portfolioId, researchLine, apiFilterPayload)
-                        .as(RegionSummary[].class));
-
-        //Get Score ranges and categories for research line
-        List<RangeAndScoreCategory> rangeAndCategoryList = controller.getResearchLineRangesAndScoreCategories(researchLine);
-
-        //Get all Region Details
-        List<RegionSectorDetail> regionSectorDetailsforCurrentMonth = Arrays.asList(
-                controller.getPortfolioRegionDetailsResponse(portfolioId, researchLine, apiFilterPayload)
-                        .as(RegionSectorDetail[].class));
-
-//        if (researchLine.equals("operationsrisk") && apiFilterPayload.getYear().equals("2021")) {
-//            apiFilterPayload.setYear("2020");
-//        } else {
-        System.out.println("Current Month Year =" + month + "-" + year);
-        String previousMonthAndYear = DateTimeUtilities.getPreviousMonthAndYear(month, year);
-        apiFilterPayload.setYear(previousMonthAndYear.split("-")[1]);
-        apiFilterPayload.setMonth(previousMonthAndYear.split("-")[0]);
-        System.out.println("Previous Month Year =" + previousMonthAndYear);
-//        }
-
-
-        List<RegionSectorDetail> regionSectorDetailsforPreviousMonth = Arrays.asList(
-                controller.getPortfolioRegionDetailsResponse(portfolioId, researchLine, apiFilterPayload)
-                        .as(RegionSectorDetail[].class));
-
-        //loop through Sectors
-        for (int j = 0; j < regionSummaryList.size(); j++) {
-            RegionSummary regionSummary = regionSummaryList.get(j);
-            test.info(String.format("Check %s Region", regionSummary.getRegionName()));
-
-            RegionSectorDetail regionSectorDetail = regionSectorDetailsforCurrentMonth.stream()
-                    .filter(e -> regionSummary.getRegionName().contains(e.getName())).findFirst().get();
-            System.out.println(String.format("Check %s Region", regionSummary.getRegionName()));
-            System.out.println("====== Region:" + regionSectorDetail.getName());
-
-
-            int chnageCount = 0;
-            List<Company> currentMonth = Stream.of(regionSectorDetail.getCategory1(),
-                            regionSectorDetail.getCategory2(),
-                            regionSectorDetail.getCategory3(),
-                            regionSectorDetail.getCategory4(),
-                            regionSectorDetail.getCategory5())
-                    .filter(Objects::nonNull)
-                    .flatMap(Collection::stream).collect(Collectors.toList());
-
-            RegionSectorDetail regionSectorDetailPreviousMonth = regionSectorDetailsforPreviousMonth.stream()
-                    .filter(e -> regionSummary.getRegionName().contains(e.getName())).findFirst().orElse(null);
-
-            if (regionSectorDetailsforPreviousMonth.size() != 0 && regionSectorDetailPreviousMonth != null) {
-
-                List<Company> previousMonth = Stream.of(
-                                regionSectorDetailPreviousMonth.getCategory1(),
-                                regionSectorDetailPreviousMonth.getCategory2(),
-                                regionSectorDetailPreviousMonth.getCategory3(),
-                                regionSectorDetailPreviousMonth.getCategory4(),
-                                regionSectorDetailPreviousMonth.getCategory5())
-                        .filter(Objects::nonNull)
-                        .flatMap(Collection::stream).collect(Collectors.toList());
-
-                for (int i = 0; i < currentMonth.size(); i++) {
-                    Double score = currentMonth.get(i).getScore();
-                    String CompanyName = currentMonth.get(i).getCompany_name();
-                    String ScoreCategory = rangeAndCategoryList.stream().filter(e -> e.getMin() <= score && e.getMax() >= score).findAny().get().getCategory();
-
-                    System.out.println("Company Name:" + CompanyName);
-                    System.out.println("Score:" + score);
-                    System.out.println("Score Category:" + ScoreCategory);
-
-                    Company prevoiusMonthMatchedCompany = previousMonth.stream().filter(p -> p.getCompany_name().equals(CompanyName)).findAny().orElse(null);
-                    if (prevoiusMonthMatchedCompany != null) {
-                        Double previousScore = prevoiusMonthMatchedCompany.getScore();
-                        String previousCompany = prevoiusMonthMatchedCompany.getCompany_name();
-                        String previousCompanyScoreCategory = rangeAndCategoryList.stream().filter(e -> e.getMin() <= prevoiusMonthMatchedCompany.getScore() && e.getMax() >= prevoiusMonthMatchedCompany.getScore()).findFirst().get().getCategory();
-                        System.out.println("Previous Company:" + previousCompany);
-                        System.out.println("Previous Score:" + previousScore);
-                        System.out.println("Previous Score Category:" + previousCompanyScoreCategory);
-                        if (!previousCompanyScoreCategory.equals(ScoreCategory)) {
-                            System.out.println("Change!");
-                            chnageCount++;
-                        }
-                    } else {
-                        System.out.println("NULL");
-
-                        chnageCount++;
-                    }
-                }
-            } else chnageCount = currentMonth.size();
-            assertTestCase.assertEquals(regionSummary.getChange_companies(), Integer.valueOf(chnageCount), "Monthly/Quarterly change validation");
-        }
     }
 
     @DataProvider(name = "researchLines")
