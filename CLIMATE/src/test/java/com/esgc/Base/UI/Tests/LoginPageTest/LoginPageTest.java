@@ -3,12 +3,11 @@ package com.esgc.Base.UI.Tests.LoginPageTest;
 import com.esgc.Base.TestBases.DashboardUITestBase;
 import com.esgc.Base.UI.Pages.LoginPage;
 import com.esgc.Utilities.BrowserUtils;
-import com.esgc.Utilities.Driver;
-import com.esgc.Utilities.Environment;
 import com.esgc.Utilities.Xray;
 import org.testng.annotations.Test;
 
-import static com.esgc.Utilities.Groups.*;
+import static com.esgc.Utilities.Groups.REGRESSION;
+import static com.esgc.Utilities.Groups.UI;
 
 /**
  * Created by ChaudhS2 on 10/14/2021.
@@ -163,46 +162,6 @@ public class LoginPageTest extends DashboardUITestBase {
 
         //  test.info("Checking Next button click redirects user to Okta Login page");
         //  assertTestCase.assertTrue(login.passwordBox.isDisplayed(), "Next button is not working as expected.");
-    }
-
-    @Test(enabled = false, groups = {REGRESSION, UI, SMOKE},
-            description = "ESGT -1658 : User is able to access the MESGC application without providing credentials if already logged in other moodys application.")
-    @Xray(test = 1658)
-    public void verifyUserCanUseLoginCredentialsFromOtherMoodysToMESGCPampa() {
-
-        test.info("Verify Next button is present and clickable on Login page.");
-        test.info("Checking if Next button is present on Login page.");
-        LoginPage login = new LoginPage();
-
-        String OKTAURL = Driver.getDriver().getCurrentUrl();
-
-        assertTestCase.assertTrue(login.checkIfNextButtonIsPresent(), "Next Button was not present.");
-
-        test.info("Checking if Next button is clickable.");
-        assertTestCase.assertTrue(login.checkIfNextButtonIsClickable(), "User was not able to click on the Next button.");
-
-        test.info("Providing valid username at Login page and then click Next button.");
-        login.loginWithParamsToOktaPage(Environment.DATA_USERNAME, Environment.DATA_PASSWORD);
-
-        assertTestCase.assertTrue(login.checkIfUserLoggedInOKTASuccessfully(), "User is on Okta Page");
-
-        login.navigateToESGPlatform();
-        BrowserUtils.wait(5);
-
-        assertTestCase.assertFalse(login.checkIfUserLoggedInSuccessfully(), "User was able to access the MESGC application with already provided credentials.");
-
-        //Since Terms & Conditions checkbox is not marked, user should be re-login
-        test.info("Providing valid username at Login page and then click Next button.");
-        login.loginWithParams(Environment.DATA_USERNAME, Environment.DATA_PASSWORD);
-        BrowserUtils.wait(5);
-        assertTestCase.assertTrue(login.checkIfUserLoggedInSuccessfully(), "User was able to access the MESGC application with already provided credentials.");
-        BrowserUtils.wait(5);
-        Driver.getDriver().navigate().to(OKTAURL);
-        BrowserUtils.wait(5);
-        login.navigateToESGPlatform();
-        BrowserUtils.wait(5);
-
-        assertTestCase.assertTrue(login.checkIfUserLoggedInSuccessfully(), "User was able to access the MESGC application with already provided credentials.");
     }
 
 }

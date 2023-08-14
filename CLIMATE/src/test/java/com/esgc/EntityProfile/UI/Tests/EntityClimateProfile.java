@@ -1,23 +1,15 @@
 package com.esgc.EntityProfile.UI.Tests;
 
 import com.esgc.Base.TestBases.UITestBase;
-import com.esgc.EntityProfile.API.APIModels.EntityHeader;
-import com.esgc.EntityProfile.API.Controllers.EntityProfileClimatePageAPIController;
 import com.esgc.EntityProfile.UI.Pages.EntityClimateProfilePage;
 import com.esgc.PortfolioAnalysis.UI.Pages.ResearchLinePage;
 import com.esgc.TestBase.DataProviderClass;
 import com.esgc.Utilities.BrowserUtils;
-import com.esgc.Utilities.Driver;
 import com.esgc.Utilities.Xray;
-import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
-import org.openqa.selenium.WebElement;
 import org.testng.Assert;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Test;
-
-import java.util.Arrays;
-import java.util.List;
 
 import static com.esgc.Utilities.Groups.*;
 
@@ -150,40 +142,6 @@ public class EntityClimateProfile extends UITestBase {
                 "Validate Physical Risk Management table is displayed");
         System.out.println("Assertion Successful");
         entityProfilePage.validatePhysicalRiskManagementTable();
-
-    }
-
-    //todo: Check if functionality is available
-    @Xray(test = {11207, 11209})
-    @Test(enabled = false, groups = {REGRESSION, SMOKE, UI, ENTITY_PROFILE},
-            description = "Entity Climate Profile Page-Physical risk management",
-            dataProviderClass = DataProviderClass.class, dataProvider = "orbisIdWithCompanyName")
-    public void verifyL3SectorInEntityHeader(String companyName, String orbisId) {
-        //Get the api response for L3 field mesg_sector
-        EntityClimateProfilePage entityProfilePage = new EntityClimateProfilePage();
-        entityProfilePage.searchAndLoadClimateProfilePage(orbisId);
-        getExistingUsersAccessTokenFromUI();
-        BrowserUtils.wait(2);
-        EntityProfileClimatePageAPIController apiController = new EntityProfileClimatePageAPIController();
-        List<EntityHeader> list = Arrays.asList(apiController.geCompanyHeaderAPIResponse(orbisId).as(EntityHeader[].class));
-        String l3ApiValue = list.get(0).getMesg_sector();
-        l3ApiValue = "Sector: " + l3ApiValue;
-        System.out.println("l3ApiValue = " + l3ApiValue);
-        // Get the header Sector details
-        //String sectorHeaderUI = entityProfilePage.sectorInHeader.getText();
-        //System.out.println("sectorHeaderUI = " + sectorHeaderUI);
-
-        // Get the Company drawer Sector detail.
-        WebElement companyDrawerButton = Driver.getDriver().findElement(By.xpath("//span[contains(text(),'" + companyName + "')]"));
-        companyDrawerButton.click();
-        BrowserUtils.wait(1);
-        //String sectorDrawerUI = entityProfilePage.sectorInHeader.getText();
-        //System.out.println("sectorDrawerUI = " + sectorDrawerUI);
-
-        //Compare all 3 fields against each other
-        //assertTestCase.assertEquals(sectorHeaderUI,l3ApiValue);
-        //assertTestCase.assertEquals(sectorDrawerUI,l3ApiValue);
-        //assertTestCase.assertEquals(sectorDrawerUI,sectorHeaderUI);
 
     }
 

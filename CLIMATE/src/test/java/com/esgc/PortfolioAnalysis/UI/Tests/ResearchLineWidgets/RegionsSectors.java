@@ -107,20 +107,6 @@ public class RegionsSectors extends UITestBase {
         test.pass("Regions & Sectors Charts highlighted with hover action");
     }
 
-
-    //Descoped in story https://esjira/browse/ESGCA-9398
-    @Test(enabled = false, groups = {REGRESSION, UI, SMOKE},
-            dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
-    @Xray(test = {4768, 4979, 4767, 4762, 3599})
-    public void verify_MoM_QoQ_TextIsAvailable(String page) {
-        ResearchLinePage researchLinePage = new ResearchLinePage();
-
-        researchLinePage.navigateToResearchLine(page);
-        researchLinePage.selectSamplePortfolioFromPortfolioSelectionModal();
-        researchLinePage.Is_MoM_QoQ_TextAvailable(page);
-
-    }
-
     @Test(groups = {REGRESSION, UI},
             dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
     @Xray(test = {4643, 5083, 3504})
