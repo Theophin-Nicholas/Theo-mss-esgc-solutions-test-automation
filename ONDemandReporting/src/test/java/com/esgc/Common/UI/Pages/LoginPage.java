@@ -351,6 +351,7 @@ public class LoginPage extends PageBase {
                 wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.EUTAXONOMY_SFDR_ESG_ESGPREDICTOR_ONDEMAND_EXPORT_USERNAME, Keys.ENTER);
                 wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.EUTAXONOMY_SFDR_ESG_ESGPREDICTOR_ONDEMAND_EXPORT_PASSWORD);
                 break;
+
             case USER_WITH_EUTAXONOMY_SFDR_ENTITLEMENT:
                 wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.EUTAXONOMY_SFDR_USERNAME, Keys.ENTER);
                 wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.EUTAXONOMY_SFDR_PASSWORD);
@@ -360,75 +361,95 @@ public class LoginPage extends PageBase {
                 wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.ONDEMAND_USER_WITHOUT_EXPORT_ENTITLEMENT_USERNAME, Keys.ENTER);
                 wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.ONDEMAND_USER_WITHOUT_EXPORT_ENTITLEMENT_PASSWORD);
                 break;
+
             case USER_WITH_ZERO_ASSESSMENT_AVAILABLE:
                 wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.ZERO_ASSESSMENT_USERNAME, Keys.ENTER);
                 wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.ZERO_ASSESSMENT_PASSWORD);
                 break;
+
             case USER_ESG_PREDICTOR:
                 wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.USER_ESG_PREDICTOR_USERNAME, Keys.ENTER);
                 wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.USER_ESG_PREDICTOR_PASSWORD);
                 break;
+
             case USER_ESG_ESG_PREDICTOR_EXPORT:
                 wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.USER_ESG_ESG_PREDICTOR_EXPORT_USERNAME, Keys.ENTER);
                 wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.USER_ESG_ESG_PREDICTOR_EXPORT_PASSWORD);
                 break;
+
             case USER_ESG_PREDICTOR_EXPORT:
                 wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.USER_ESG_PREDICTOR_EXPORT_USERNAME, Keys.ENTER);
                 wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.USER_ESG_PREDICTOR_EXPORT_PASSWORD);
                 break;
+
             case USER_ESG_PREDICTOR_ODA:
                 wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.USER_ESG_PREDICTOR_ODA_USERNAME, Keys.ENTER);
                 wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.USER_ESG_PREDICTOR_ODA_PASSWORD);
                 break;
+
             case USER_EXPORT:
                 wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.USER_EXPORT_USERNAME, Keys.ENTER);
                 wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.USER_EXPORT_PASSWORD);
                 break;
+
             case ODA_USER_WITH_EXHAUSTED_ASSESSMENT_LIMIT:
                 wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.ODAWITHEXHAUTEDASSEMENTLIMIT_USERNAME, Keys.ENTER);
                 wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.ODAWITHEXHAUTEDASSEMENTLIMIT_PASSWORD);
                 break;
-            case USER_CLIMATE_ESG:
 
+            case USER_CLIMATE_ESG:
                 wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.USER_CLIMATE_ESG_USERNAME, Keys.ENTER);
                 wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.USER_CLIMATE_ESG_PASSWORD);
-
                 break;
-            case USER_CLIMATE_ESG_ESG_PREDICTOR_EXPORT:
 
+            case USER_CLIMATE_ESG_ESG_PREDICTOR_EXPORT:
                 wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.USER_CLIMATE_ESG_ESG_PREDICTOR_EXPORT_USERNAME, Keys.ENTER);
                 wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.USER_CLIMATE_ESG_ESG_PREDICTOR_EXPORT_PASSWORD);
-
                 break;
-
 
             case USER_ESG_ESG_PREDICTOR_ODA:
                 wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.USER_ESG_ESG_PREDICTOR_ODA_USERNAME, Keys.ENTER);
                 wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.USER_ESG_ESG_PREDICTOR_ODA_PASSWORD);
                 break;
+
             case USER_ESG_ESG_PREDICTOR_ODA_EXCEL:
                 wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.USER_ESG_ESG_PREDICTOR_ODA_EXCEL_USERNAME, Keys.ENTER);
                 wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.USER_ESG_ESG_PREDICTOR_ODA_EXCEL_PASSWORD);
                 break;
+
             case USER_SFDR_ESG_ESG_PREDICTOR_ODA_EXCEL:
                 wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.USER_SFDR_ESG_ESG_PREDICTOR_ODA_EXCEL_USERNAME, Keys.ENTER);
                 wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.USER_SFDR_ESG_ESG_PREDICTOR_ODA_EXCEL_PASSWORD);
                 break;
+
             case USER_EUTAXONOMY_ESG_ESG_PREDICTOR_ODA_EXCEL:
                 wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.USER_EUTAXONOMY_ESG_ESG_PREDICTOR_ODA_EXCEL_USERNAME, Keys.ENTER);
                 wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.USER_EUTAXONOMY_ESG_ESG_PREDICTOR_ODA_EXCEL_PASSWORD);
                 break;
+
             case USER_EUTAXONOMY_ESG_ESG_PREDICTOR_ODA:
                 wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.USER_EUTAXONOMY_ESG_ESG_PREDICTOR_ODA_USERNAME, Keys.ENTER);
                 wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.USER_EUTAXONOMY_ESG_ESG_PREDICTOR_ODA_PASSWORD);
                 break;
+
             case USER_SFDR_ESG_ESG_PREDICTOR_ODA:
                 wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.USER_SFDR_ESG_ESG_PREDICTOR_ODA_USERNAME, Keys.ENTER);
                 wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.USER_SFDR_ESG_ESG_PREDICTOR_ODA_PASSWORD);
                 break;
+
             case USER_EUTAXONOMY_SFDR_ESG_ESG_PREDICTOR_ODA_EXCEL:
                 wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.USER_EUTAXONOMY_SFDR_ESG_ESG_PREDICTOR_ODA_EXCEL_USERNAME, Keys.ENTER);
                 wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.USER_EUTAXONOMY_SFDR_ESG_ESG_PREDICTOR_ODA_EXCEL_PASSWORD);
+                break;
+
+            case USER_ESG_ODA_EXPORT:
+                wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.USER_ESG_ODA_EXPORT_USERNAME, Keys.ENTER);
+                wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.USER_ESG_ODA_EXPORT_PASSWORD);
+                break;
+            case USER_PR_TR_EXPORT:
+                System.out.println(Environment.USER_PR_TR_EXPORT_USERNAME +"|"+Environment.USER_PR_TR_EXPORT_PASSWORD);
+                wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(Environment.USER_PR_TR_EXPORT_USERNAME, Keys.ENTER);
+                wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(Environment.USER_PR_TR_EXPORT_PASSWORD);
                 break;
 
                 default:
@@ -445,10 +466,18 @@ public class LoginPage extends PageBase {
     public void clickOnLogout() {
         System.out.println("Logging out");
         BrowserUtils.wait(10);
-        wait.until(ExpectedConditions.visibilityOf(menu));
-        BrowserUtils.clickWithJS(menu);
-
-        BrowserUtils.clickWithJS(BrowserUtils.waitForVisibility(logout,10));
+        try {
+            wait.until(ExpectedConditions.visibilityOf(menu));
+            BrowserUtils.clickWithJS(menu);
+            BrowserUtils.clickWithJS(BrowserUtils.waitForVisibility(logout, 10));
+        } catch (Exception e) {
+            System.out.println("Logout failed");
+            BrowserUtils.wait(10);
+            if (Driver.getDriver().getCurrentUrl().endsWith("404")){
+                Driver.getDriver().navigate().back();
+                clickOnLogout();
+            }
+        }
     }
 
     public void checkTermsAndConditions(){

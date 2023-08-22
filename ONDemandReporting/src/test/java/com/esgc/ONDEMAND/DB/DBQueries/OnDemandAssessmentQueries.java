@@ -150,6 +150,10 @@ public class OnDemandAssessmentQueries {
                     "where orbis_id in (select orbis_ID from EU_TAXONOMY_OVERVIEW)\n" +
                     "and orbis_id in (select BVD9_NUMBER from \"DF_TARGET\".\"REGULATORY_REPORT_SFDR\")\n" +
                     "limit " + dataCount;
+        if(ScoreQuality.equals("Subsidiary"))
+            query = "select distinct ORBIS_ID from entity_score_type\n" +
+                    "where score_quality = 'Subsidiary'\n" +
+                    "limit " + dataCount;
         List<String> dataList = new ArrayList<>();
         System.out.println("query = " + query);
         for (Map<String, Object> result : DatabaseDriver.getQueryResultMap(query)) {

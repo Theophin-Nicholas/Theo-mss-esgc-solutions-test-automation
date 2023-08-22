@@ -191,6 +191,9 @@ public class Driver {
                     edgeOptions.addArguments("--remote-allow-origins=*");
                     edgeOptions.addArguments("--start-maximized");
                     edgeOptions.addArguments("--disable-notifications");
+//                    edgeOptions.addArguments("--profile-directory=Default");
+//                    edgeOptions.addArguments("--inprivate");
+                    edgeOptions.addArguments("--no-first-run");
                     driverPool.set(new EdgeDriver(edgeOptions));
                     break;
 

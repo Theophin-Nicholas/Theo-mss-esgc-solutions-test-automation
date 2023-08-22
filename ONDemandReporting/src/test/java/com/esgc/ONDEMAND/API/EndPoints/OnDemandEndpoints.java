@@ -10,4 +10,6 @@ public class OnDemandEndpoints {
     public static String POST_ON_DEMAND_FILTER = "/api/portfolio/{portfolioId}/on-demand/filter";
     public static String GET_ON_DEMAND_STATUS = "/api/portfolio/{portfolioId}/on-demand/status";
     public static String GET_ON_DEMAND_INFO = "/api/on-demand/info";
-  }
+    public static String GET_COVERAGE_DETAILS = "/api/portfolio/{portfolioId}/coverage-details";
+
+}

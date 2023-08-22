@@ -3,17 +3,10 @@ package com.esgc.ONDEMAND.UI.Tests;
 import com.esgc.Common.API.Controllers.CommonAPIController;
 import com.esgc.Common.UI.Pages.LoginPage;
 import com.esgc.Common.UI.TestBases.UITestBase;
-import com.esgc.ONDEMAND.API.Controllers.OnDemandFilterAPIController;
-import com.esgc.ONDEMAND.API.Controllers.OnDemandFilterAPIController;
-import com.esgc.ONDEMAND.DB.DBQueries.OnDemandAssessmentQueries;
-import com.esgc.ONDEMAND.API.Controllers.OnDemandFilterAPIController;
 import com.esgc.ONDEMAND.TestDataProviders.EntityWithEsgDataOnlyDataProviders;
 import com.esgc.ONDEMAND.UI.Pages.OnDemandAssessmentPage;
 import com.esgc.ONDEMAND.UI.Pages.PopUpPage;
-import com.esgc.Pages.Page404;
-import com.esgc.RegulatoryReporting.DB.DBQueries.RegulatoryReportingQueries;
-import com.esgc.RegulatoryReporting.UI.Pages.RegulatoryReportingPage;
-import com.esgc.Pages.Page404;
+import com.esgc.ONDEMAND.UI.Pages.ViewDetailPage;
 import com.esgc.Utilities.*;
 import com.github.javafaker.Faker;
 import io.restassured.path.json.JsonPath;
@@ -24,13 +17,12 @@ import org.testng.annotations.Test;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 import static com.esgc.Utilities.Groups.*;
 
 public class OnDemandEntitlementBundleTests extends UITestBase {
-   // LoginPage login = new LoginPage();
-   // Faker faker = new Faker();
+    // LoginPage login = new LoginPage();
+    // Faker faker = new Faker();
 
     @Test(groups = {REGRESSION, UI, ENTITLEMENTS})
     @Xray(test = {4243, 3180})
@@ -139,7 +131,7 @@ public class OnDemandEntitlementBundleTests extends UITestBase {
         try {
             login.entitlementsLogin(EntitlementsBundles.USER_WITH_ONLYONDEMAND_ENTITLEMENT_FIRSTTIMEUSER);
             OnDemandAssessmentPage onDemandAssessmentPage = new OnDemandAssessmentPage();
-           // assertTestCase.assertTrue(onDemandAssessmentPage.validateOnDemandReportingLandingPage(), "Validating if landing page is On-Demand Repoting Page", 2920);
+            // assertTestCase.assertTrue(onDemandAssessmentPage.validateOnDemandReportingLandingPage(), "Validating if landing page is On-Demand Repoting Page", 2920);
             if (onDemandAssessmentPage.IsPortfolioTableLoaded()) {
                 assertTestCase.assertTrue(onDemandAssessmentPage.isSelectActionHeadingAvailable(), "Validate Select Action heading available");
                 assertTestCase.assertTrue(onDemandAssessmentPage.isServiceSubHeadingAvailable(), "Validate Service subheading available");
@@ -150,7 +142,7 @@ public class OnDemandEntitlementBundleTests extends UITestBase {
                 assertTestCase.assertTrue(onDemandAssessmentPage.isViewAssessmentRequestButtonDisabled(), "Validating that View Assessment Request button is disabled");
                 assertTestCase.assertTrue(!onDemandAssessmentPage.isbuttonMethodologiesEnabled(), "Validating that the Methodologies button is enabled");
                 String portfolioName = "TempPortfolioFprDelection";
-                String portfolioFilePath = ImportPortfolioUtility.getOnDemandPortfolioFileToUpload(Collections.singletonList("Self-Assessed"), "", 10, portfolioName,false);
+                String portfolioFilePath = ImportPortfolioUtility.getOnDemandPortfolioFileToUpload(Collections.singletonList("Self-Assessed"), "", 10, portfolioName, false);
                 onDemandAssessmentPage.uploadPortfolio(portfolioFilePath, "OnDemand");
                 BrowserUtils.wait(10);
                 Driver.getDriver().navigate().refresh();
@@ -162,7 +154,7 @@ public class OnDemandEntitlementBundleTests extends UITestBase {
                     assertTestCase.assertTrue(!onDemandAssessmentPage.isReequestAssessmentButtonDisabled(), "Validating that Request Assessment button is disabled");
                     assertTestCase.assertTrue(onDemandAssessmentPage.isViewAssessmentRequestButtonDisabled(), "Validating that View Assessment Request button is disabled");
                     onDemandAssessmentPage.clickonOnRequestAssessmentButton();
-                    assertTestCase.assertTrue(onDemandAssessmentPage.isUserOnFilterCritriaScreen(portfolioName),"Validate that user landed on Filter Criteria Screen");
+                    assertTestCase.assertTrue(onDemandAssessmentPage.isUserOnFilterCritriaScreen(portfolioName), "Validate that user landed on Filter Criteria Screen");
                     CommonAPIController.deletePortfolioThroughAPI(portfolioName);
                 } catch (Exception e) {
                     CommonAPIController.deletePortfolioThroughAPI(portfolioName);
@@ -185,7 +177,7 @@ public class OnDemandEntitlementBundleTests extends UITestBase {
 
             login.entitlementsLogin(EntitlementsBundles.USER_WITH_EUTAXONOMY_SFDR_ESG_ESGPREDICTOR_ONDEMAND_EXPORT);
             OnDemandAssessmentPage onDemandAssessmentPage = new OnDemandAssessmentPage();
-            assertTestCase.assertTrue(onDemandAssessmentPage.validateOnDemandReportingLandingPage(), "Validating if landing page is On-Demand Repoting Page",2920);
+            assertTestCase.assertTrue(onDemandAssessmentPage.validateOnDemandReportingLandingPage(), "Validating if landing page is On-Demand Repoting Page", 2920);
             if (onDemandAssessmentPage.IsPortfolioTableLoaded()) {
                 List<String> reportingOptions = Arrays.asList(new String[]{"EU Taxonomy", "SFDR PAIs", "On-Demand Assessment"});
                 onDemandAssessmentPage.ValidateReportingOptions(reportingOptions);
@@ -202,7 +194,7 @@ public class OnDemandEntitlementBundleTests extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI, ENTITLEMENTS})
-    @Xray(test = {3079, 3191, 2859, 2776 })//, 2789, 2790, 3022, 3254, 3256, 2877, 2945})
+    @Xray(test = {3079, 3191, 2859, 2776})//, 2789, 2790, 3022, 3254, 3256, 2877, 2945})
     public void validateLandingPageForUserWith_EUTaxonomy_SFDR_Entitlements() {
         LoginPage login = new LoginPage();
         try {
@@ -230,7 +222,7 @@ public class OnDemandEntitlementBundleTests extends UITestBase {
 
             login.entitlementsLogin(EntitlementsBundles.ONDEMAND_USER_WITHOUT_EXPORT_ENTITLEMENT);
             OnDemandAssessmentPage onDemandAssessmentPage = new OnDemandAssessmentPage();
-            assertTestCase.assertTrue(onDemandAssessmentPage.validateOnDemandReportingLandingPage(), "Validating if landing page is On-Demand Repoting Page",2920);
+            assertTestCase.assertTrue(onDemandAssessmentPage.validateOnDemandReportingLandingPage(), "Validating if landing page is On-Demand Repoting Page", 2920);
             if (onDemandAssessmentPage.IsPortfolioTableLoaded() && onDemandAssessmentPage.getAvailablePortfolioCountt() > 0) {
                 assertTestCase.assertTrue(onDemandAssessmentPage.isExportbuttonDisabled(), "validating that export button is disabled");
             }
@@ -294,7 +286,7 @@ public class OnDemandEntitlementBundleTests extends UITestBase {
             onDemandAssessmentPage.waitForPortfolioTableToLoad();
             String PortfolioName = onDemandAssessmentPage.SelectAndGetOnDemandEligiblePortfolioName();
             assertTestCase.assertTrue(onDemandAssessmentPage.isReequestAssessmentButtonDisabled(), "Validating that Request Assessment button is disabled");
-           //TODO : Need to add a request in this account
+            //TODO : Need to add a request in this account
             assertTestCase.assertTrue(onDemandAssessmentPage.isViewAssessmentRequestButtonDisabled(), "Validating that View Assessment Request button is enabled");
         } catch (Exception e) {
             e.printStackTrace();
@@ -455,7 +447,7 @@ public class OnDemandEntitlementBundleTests extends UITestBase {
 
     }
 
-    @Test(groups = {UI, REGRESSION,ENTITLEMENTS})
+    @Test(groups = {UI, REGRESSION, ENTITLEMENTS})
     @Xray(test = {2819, 2766, 2870})
     public void verifyZeroAssessmentRemaining() {
         LoginPage login = new LoginPage();
@@ -468,7 +460,7 @@ public class OnDemandEntitlementBundleTests extends UITestBase {
                 onDemandAssessmentPage.uploadPortfolio(portfolioName.replaceAll(" ", ""));
             }
             int remainingAssessmentLimit = onDemandAssessmentPage.getRemainingAssessmentLimit();
-            if (remainingAssessmentLimit>0){
+            if (remainingAssessmentLimit > 0) {
                 onDemandAssessmentPage.selectPortfolio(portfolioName);
                 onDemandAssessmentPage.clickonOnRequestAssessmentButton();
                 onDemandAssessmentPage.clickReviewAndSendRequestButton();
@@ -487,8 +479,8 @@ public class OnDemandEntitlementBundleTests extends UITestBase {
             System.out.println("Logged in to Check 0 Remaining Assessment....");
             assertTestCase.assertTrue(!onDemandAssessmentPage.isRequestAssessmentButtonEnabled(), "The request assessment button is disabled for accounts with 0 remaining requests.");
             onDemandAssessmentPage.verifyZeroAssessmentRemainingForOnDemand();
-           onDemandAssessmentPage.selectPortfolio(portfolioName);
-           onDemandAssessmentPage.clickonViewAssessmentRequestButton();
+            onDemandAssessmentPage.selectPortfolio(portfolioName);
+            onDemandAssessmentPage.clickonViewAssessmentRequestButton();
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -497,7 +489,7 @@ public class OnDemandEntitlementBundleTests extends UITestBase {
         }
     }
 
-    @Test(groups ={REGRESSION, UI, SMOKE, ENTITLEMENTS})
+    @Test(groups = {REGRESSION, UI, SMOKE, ENTITLEMENTS})
     @Xray(test = {2918, 2930})
     public void validateDashboardAndPortfolioAnalysisNotPresentInGlobalMenu() {
         LoginPage login = new LoginPage();
@@ -519,7 +511,7 @@ public class OnDemandEntitlementBundleTests extends UITestBase {
         }
     }
 
-    @Test(groups ={REGRESSION, UI,ENTITLEMENTS})
+    @Test(groups = {REGRESSION, UI, ENTITLEMENTS})
     @Xray(test = {2677})
     public void validateCalculationsIsVisibleForEntitlements() {
         LoginPage login = new LoginPage();
@@ -543,18 +535,17 @@ public class OnDemandEntitlementBundleTests extends UITestBase {
         }
     }
 
-    @Test(groups ={REGRESSION, UI, SMOKE,ENTITLEMENTS})
+    @Test(groups = {REGRESSION, UI, SMOKE, ENTITLEMENTS})
     @Xray(test = {3133})
     public void validateOnDemandSfdrEuTaxonomyForEntitlements() {
         LoginPage login = new LoginPage();
         try {
 
             OnDemandAssessmentPage odaPage = new OnDemandAssessmentPage();
-            EntitlementsBundles[] entitlements ;
-            if (Environment.environment.equalsIgnoreCase("prod")){
+            EntitlementsBundles[] entitlements;
+            if (Environment.environment.equalsIgnoreCase("prod")) {
                 entitlements = new EntitlementsBundles[]{EntitlementsBundles.USER_SFDR_ESG_ESG_PREDICTOR_ODA};
-            }
-            else {
+            } else {
                 entitlements = new EntitlementsBundles[]{EntitlementsBundles.USER_SFDR_ESG_ESG_PREDICTOR_ODA,
                         EntitlementsBundles.USER_EUTAXONOMY_SFDR_ESG_ESG_PREDICTOR_ODA_EXCEL,
                         EntitlementsBundles.USER_SFDR_ESG_ESG_PREDICTOR_ODA_EXCEL,
@@ -576,29 +567,29 @@ public class OnDemandEntitlementBundleTests extends UITestBase {
         }
     }
 
-    @Test(groups = {UI, REGRESSION,ENTITLEMENTS}, dataProvider = "entityWithEsgDataOnly-DP", dataProviderClass = EntityWithEsgDataOnlyDataProviders.class)
+    @Test(groups = {UI, REGRESSION, ENTITLEMENTS}, dataProvider = "entityWithEsgDataOnly-DP", dataProviderClass = EntityWithEsgDataOnlyDataProviders.class)
     @Xray(test = {2796})
     public void ValidateNoDataForEntitiesWithEsgDataOnly(String... entity) {
         LoginPage login = new LoginPage();
-        try{
+        try {
 
-        login.entitlementsLogin(EntitlementsBundles.USER_CLIMATE_ESG);
-        System.out.println("---------------Logged back in using climate and esg entitlements--------------------");
-        OnDemandAssessmentPage odaPage = new OnDemandAssessmentPage();
-        odaPage.clickOnSearchButton();
-        odaPage.searchForEntitities(entity[0]);
-        //assertTestCase.assertTrue(!entity.equals(odaPage.searchResultLineOne.getText()), "Validating that " + entity + " which is an Entity with ESG data only is not returned or suggested in search option : Status Done");
+            login.entitlementsLogin(EntitlementsBundles.USER_CLIMATE_ESG);
+            System.out.println("---------------Logged back in using climate and esg entitlements--------------------");
+            OnDemandAssessmentPage odaPage = new OnDemandAssessmentPage();
+            odaPage.clickOnSearchButton();
+            odaPage.searchForEntitities(entity[0]);
+            //assertTestCase.assertTrue(!entity.equals(odaPage.searchResultLineOne.getText()), "Validating that " + entity + " which is an Entity with ESG data only is not returned or suggested in search option : Status Done");
 
-        odaPage.validateEntitiesWithOnlyEsgDataDontShowInSearch(entity[0]);
+            odaPage.validateEntitiesWithOnlyEsgDataDontShowInSearch(entity[0]);
         } catch (Exception e) {
             e.printStackTrace();
             login.clickOnLogout();
             assertTestCase.assertTrue(false, "TestCase Failed - Please see stack trace for details");
         }
 
-        }
+    }
 
-    @Test(groups = {UI, REGRESSION,ENTITLEMENTS}, dataProvider = "entityWithEsgDataOnly-DP", dataProviderClass = EntityWithEsgDataOnlyDataProviders.class)
+    @Test(groups = {UI, REGRESSION, ENTITLEMENTS}, dataProvider = "entityWithEsgDataOnly-DP", dataProviderClass = EntityWithEsgDataOnlyDataProviders.class)
     @Xray(test = {2796})
     public void validateOnlyESGEntitiesAreNotPopulatingUnderSearch(String data) {
         LoginPage login = new LoginPage();
@@ -623,7 +614,7 @@ public class OnDemandEntitlementBundleTests extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI, COMMON, ENTITLEMENTS}, description = "UI | On-Demand Reporting | On-Demand Assessment | Verify Download button is not displayed if Export entitlement is disabled")
-    @Xray(test = {2917})
+    @Xray(test = {2917, 2983})
     public void verifyDownloadButtonNotDisplayedTest() {
         LoginPage login = new LoginPage();
         try {
@@ -634,8 +625,8 @@ public class OnDemandEntitlementBundleTests extends UITestBase {
             //onDemandAssessmentPage.navigateToReportingService("On-Demand Assessment");
             onDemandAssessmentPage.waitForPortfolioTableToLoad();
             String portfolioName = "500 predicted portfolio";
-            if(!onDemandAssessmentPage.verifyPortfolio(portfolioName)){
-                onDemandAssessmentPage.uploadPortfolio(portfolioName.replaceAll(" ",""));
+            if (!onDemandAssessmentPage.verifyPortfolio(portfolioName)) {
+                onDemandAssessmentPage.uploadPortfolio(portfolioName.replaceAll(" ", ""));
             }
             //onDemandAssessmentPage.viewDetailForPortfolio(portfolioName);
 
@@ -648,5 +639,103 @@ public class OnDemandEntitlementBundleTests extends UITestBase {
 
         }
 
+    }
+
+    @Test(groups = {REGRESSION, DATA_VALIDATION}, description = "UI | ON-Demand | Verify On demand functionality with ESG Predicted Entitlement + ESG  On Demand Assessment entitlement")
+    @Xray(test = {2887})
+    public void verifyOnDemandFunctionalityWithESGPredictedEntitlementESGOnDemandAssessmentEntitlementTest() {
+        OnDemandAssessmentPage reportingPage = new OnDemandAssessmentPage();
+        reportingPage.navigateToReportingService("On-Demand Assessment");
+        reportingPage.waitForPortfolioTableToLoad();
+
+        String portfolioName = "SubsidiaryPortfolio";
+        if (!reportingPage.verifyPortfolio(portfolioName)) {
+            String portfolioFilePath = ImportPortfolioUtility.getOnDemandPortfolioFileToUpload(Collections.singletonList("Subsidiary"), "", 10, portfolioName, false);
+            reportingPage.uploadPortfolio(portfolioFilePath, "OnDemand");
+            reportingPage.waitForPortfolioTableToLoad();
+            Driver.getDriver().navigate().refresh();
+            reportingPage.waitForPortfolioTableToLoad();
+        }
+        reportingPage.viewDetailForPortfolio(portfolioName);
+        BrowserUtils.waitForVisibility(reportingPage.detailPanelCompanyNames, 30);
+        List<String> companies = BrowserUtils.getElementsText(reportingPage.detailPanelCompanyNames);
+        companies.sort(String::compareToIgnoreCase);
+        System.out.println("companies = " + companies);
+        reportingPage.clickAwayinBlankArea();
+        reportingPage.clickAwayinBlankArea();
+        reportingPage.selectPortfolioOptionByName(portfolioName);
+        reportingPage.clickonOnRequestAssessmentButton();
+        reportingPage.clickReviewAndSendRequestButton();
+        BrowserUtils.waitForVisibility(reportingPage.onDemandRequestCompanyNames, 30);
+        List<String> reviewCompanies = BrowserUtils.getElementsText(reportingPage.onDemandRequestCompanyNames);
+        reviewCompanies.sort(String::compareToIgnoreCase);
+        System.out.println("reviewCompanies = " + reviewCompanies);
+        assertTestCase.assertTrue(companies.containsAll(reviewCompanies), "Validating that companies in review page are same as companies in detail panel");
+        CommonAPIController.deletePortfolioThroughAPI(portfolioName);
+    }
+
+    @Test(groups = {REGRESSION, UI}, description = "UI | ON-Demand | Verify that users with only the ESG On-Demand Assessment entitlement do not see predicted ESG scores")
+    @Xray(test = {2963, 5678})
+    public void verifyUsersWithOnlyESGOnDemandAssessmentEntitlementDoNotSeePredictedESGScoresTest() {
+        OnDemandAssessmentPage reportingPage = new OnDemandAssessmentPage();
+        reportingPage.navigateToReportingService("On-Demand Assessment");
+        reportingPage.waitForPortfolioTableToLoad();
+
+        String portfolioName = "500 predicted portfolio";
+        if (!reportingPage.verifyPortfolio(portfolioName)) {
+            reportingPage.uploadPortfolio(portfolioName, "OnDemand");
+            reportingPage.waitForPortfolioTableToLoad();
+            Driver.getDriver().navigate().refresh();
+            reportingPage.waitForPortfolioTableToLoad();
+        }
+        reportingPage.viewDetailForPortfolio(portfolioName);
+        reportingPage.viewDetailsPanelSelectGroupFilter("Sector");
+        BrowserUtils.wait(10);
+        BrowserUtils.waitForVisibility(reportingPage.detailPanelTableTitles, 30);
+        List<String> categories = BrowserUtils.getElementsText(reportingPage.detailPanelTableTitles);
+        System.out.println("categories = " + categories);
+        assertTestCase.assertTrue(categories.contains("No Sector"), "Validating that No Sector is displayed in the detail panel");
+        List<String> companies = reportingPage.viewDetailsPanelGetCompaniesForCategory("No Sector");
+        System.out.println("companies = " + companies);
+        assertTestCase.assertTrue(companies.size() > 0, "Validating that companies are displayed in the detail panel for No Sector");
+    }
+
+    @Test(groups = {REGRESSION, UI, ENTITLEMENTS}, description = "Database | ON-Demand | Validate accuracy of ODAe coverage list as per entitlements")
+    @Xray(test = {2970})
+    public void VerifyAccuracyODACoverageListForEntitlements() {
+        LoginPage login = new LoginPage();
+        login.entitlementsLogin(EntitlementsBundles.USER_ESG_ODA_EXPORT);
+        System.out.println("---------------Logged back in using ESG_ODA_EXPORT entitlements--------------------");
+        OnDemandAssessmentPage onDemandAssessmentPage = new OnDemandAssessmentPage();
+        //onDemandAssessmentPage.navigateToReportingService("On-Demand Assessment");
+        onDemandAssessmentPage.waitForPortfolioTableToLoad();
+        String portfolioName = "500 predicted portfolio";
+        if (!onDemandAssessmentPage.verifyPortfolio(portfolioName)) {
+            onDemandAssessmentPage.uploadPortfolio(portfolioName.replaceAll(" ", ""));
+        }
+        onDemandAssessmentPage.viewDetailForPortfolio(portfolioName);
+        BrowserUtils.waitForVisibility(onDemandAssessmentPage.detailPanelTableTitles, 30);
+        List<String> tableHeaders = BrowserUtils.getElementsText(onDemandAssessmentPage.detailPanelTableTitles);
+        System.out.println("tableHeaders = " + tableHeaders);
+        assertTestCase.assertFalse(tableHeaders.contains("Predicted"),
+                "Validating that Predicted Entities are not displayed in the detail panel for user with no ESG Predictor entitlements");
+        onDemandAssessmentPage.closePanel();
+        login.clickOnLogout();
+
+        login.entitlementsLogin(EntitlementsBundles.USER_ESG_ESG_PREDICTOR_ODA);
+        System.out.println("---------------Logged back in using ESG_ESG_PREDICTOR_ODA entitlements--------------------");
+        onDemandAssessmentPage = new OnDemandAssessmentPage();
+        //onDemandAssessmentPage.navigateToReportingService("On-Demand Assessment");
+        onDemandAssessmentPage.waitForPortfolioTableToLoad();
+        if (!onDemandAssessmentPage.verifyPortfolio(portfolioName)) {
+            onDemandAssessmentPage.uploadPortfolio(portfolioName.replaceAll(" ", ""));
+        }
+        onDemandAssessmentPage.viewDetailForPortfolio(portfolioName);
+        BrowserUtils.waitForVisibility(onDemandAssessmentPage.detailPanelTableTitles, 30);
+        tableHeaders = BrowserUtils.getElementsText(onDemandAssessmentPage.detailPanelTableTitles);
+        System.out.println("tableHeaders = " + tableHeaders);
+        assertTestCase.assertTrue(tableHeaders.contains("Predicted"),
+                "Validating that Predicted Entities are displayed in the detail panel for user with ESG Predictor entitlements");
+        onDemandAssessmentPage.closePanel();
     }
 }

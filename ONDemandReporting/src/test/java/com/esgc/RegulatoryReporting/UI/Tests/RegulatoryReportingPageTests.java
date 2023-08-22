@@ -49,7 +49,7 @@ public class RegulatoryReportingPageTests extends UITestBase {
         assertTestCase.assertTrue(reportingPage.getReportingList().contains("SFDR PAIs"),
                 "Regulatory Reporting Page - Reporting list is verified");
         assertTestCase.assertFalse(reportingPage.isSelectedReportingOptionByName("SFDR PAIs"),
-                "SFDR PAIs is selected by default");
+                "SFDR PAIs is not selected by default");
         reportingPage.selectReportingOptionByName("EU Taxonomy");
         assertTestCase.assertFalse(reportingPage.isSelectedReportingOptionByName("SFDR PAIs"),
                 "SFDR PAIs is not selected");

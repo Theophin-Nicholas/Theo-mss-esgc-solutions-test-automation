@@ -174,16 +174,13 @@ public class LoginPage extends ClimatePageBase {
      */
     public void loginWithParams(String userName, String password) {
         wait.until(ExpectedConditions.visibilityOf(usernameBox)).sendKeys(userName, Keys.ENTER);
-        BrowserUtils.wait(5);
         boolean isUserOnNewLoginPage = Driver.getDriver().getCurrentUrl().contains("auth.moodys.com");
         if (isUserOnNewLoginPage) {
             clickOnNextButton();
         }
         wait.until(ExpectedConditions.visibilityOf(passwordBox)).sendKeys(password);
-      /*  if (!termsAndConditionsCheckBox.isSelected())
-            wait.until(ExpectedConditions.visibilityOf(termsAndConditionsLabel)).click();*/
+        BrowserUtils.wait(5);
         wait.until(ExpectedConditions.visibilityOf(loginButton)).click();
-
     }
 
     public void loginWithParamsToOktaPage(String userName, String password) {
@@ -382,7 +379,10 @@ public class LoginPage extends ClimatePageBase {
                 password = Environment.USER_WITH_PREDICTEDSCORE_AND_CLIMATE_PASSWORD;
                 break;
 
-
+            case USER_PR_TR_EXPORT:
+                username = Environment.USER_PR_TR_EXPORT_USERNAME;
+                password = Environment.USER_PR_TR_EXPORT_PASSWORD;
+                break;
 
             default:
                 Assert.fail("Bundle not found!");

@@ -97,6 +97,7 @@ public class RegulatoryReportingAPITests extends CommonTestBase {
         test.info("Navigated to Regulatory Reporting Page");
         getExistingUsersAccessTokenFromUI();
         Response response = CommonAPIController.getPortfolioDetails();
+        response.prettyPrint();
         List<PortfolioDetails> portfolios = Collections.singletonList(response.as(Portfolio.class)).get(0).getPortfolios();
 
         for (PortfolioDetails portfolio : portfolios) {

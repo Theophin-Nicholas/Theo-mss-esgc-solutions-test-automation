@@ -2,6 +2,7 @@ package com.esgc.ONDEMAND.DB.Tests;
 
 import com.esgc.Common.API.Controllers.CommonAPIController;
 import com.esgc.Common.DB.TestBases.DataValidationTestBase;
+import com.esgc.Common.UI.Pages.LoginPage;
 import com.esgc.ONDEMAND.API.Controllers.OnDemandFilterAPIController;
 import com.esgc.ONDEMAND.DB.DBQueries.OnDemandAssessmentQueries;
 import com.esgc.ONDEMAND.UI.Pages.OnDemandAssessmentPage;
@@ -17,8 +18,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import static com.esgc.Utilities.Groups.DATA_VALIDATION;
-import static com.esgc.Utilities.Groups.REGRESSION;
+import static com.esgc.Utilities.Groups.*;
 
 // DB test class
 

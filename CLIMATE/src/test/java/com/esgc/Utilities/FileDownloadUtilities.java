@@ -42,7 +42,7 @@ public class FileDownloadUtilities {
     public static boolean waitUntilFileIsDownloaded() {
         File dir = new File(BrowserUtils.downloadPath());
         boolean isDownloaded = false;
-        for(int i=1; i<30; i++) {
+        for(int i=1; i<60; i++) {
             try{
                 File[] dir_contents = dir.listFiles();
                 if(dir_contents.length==1){

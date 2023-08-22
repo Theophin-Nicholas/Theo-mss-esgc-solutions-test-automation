@@ -5,10 +5,12 @@ import com.esgc.Base.UI.Pages.LoginPage;
 import com.esgc.EntityProfile.UI.Pages.EntityClimateProfilePage;
 import com.esgc.TestBase.DataProviderClass;
 import com.esgc.Utilities.*;
+import net.snowflake.client.jdbc.internal.apache.tika.metadata.PDF;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.testng.annotations.Test;
 
+import java.io.File;
 import java.util.List;
 
 import static com.esgc.Utilities.Groups.*;
@@ -280,6 +282,55 @@ public class EntityExportOrSourcesDocumentsTests extends UITestBase {
 
     }
 
+    @Test(groups = {ENTITY_PROFILE, REGRESSION, UI, PDF})
+    @Xray(test = {3207, 3138})
+    public void verifyControversiesChangedToESGIncidentsEntityPDFTest(){
 
+        String company = "Apple, Inc.";
+        EntityClimateProfilePage entityProfilePage = new EntityClimateProfilePage();
+        String companyName = entityProfilePage.searchAndLoadClimateProfilePage(company);
+        assertTestCase.assertTrue(entityProfilePage.validateGlobalCompanyNameHeader(companyName),companyName+" Header Verification");
+        System.out.println("companyName = " + companyName);
+        entityProfilePage.selectExportSourcesDocuments();
+        assertTestCase.assertTrue(entityProfilePage.verifyPopup(), "Verify Export Sources Documents popup");
+        assertTestCase.assertTrue(entityProfilePage.verifyPopupTitle(companyName), "Verify Export Popup Title");
+
+        FileDownloadUtilities.deleteDownloadFolder();
+        entityProfilePage.selectPdfDownload();
+        assertTestCase.assertTrue(entityProfilePage.verifyDownloadProgressMessage(), "Verify download progress message");
+        assertTestCase.assertTrue(FileDownloadUtilities.waitUntilFileIsDownloaded(),"Verify download of export file");
+
+        String actualFileName = FileDownloadUtilities.getDownloadedFileName();
+
+        String filePath = BrowserUtils.downloadPath() + File.separator + actualFileName;
+        assertTestCase.assertFalse(PdfUtil.getPdfContent(filePath).contains("Controvers"),"Verify PDF file does not contain Controversies/Controversy");
+        assertTestCase.assertTrue(PdfUtil.getPdfContent(filePath).contains("ESG Incident"),"Verify PDF file contains ESG Incident/ESG Incidents");
+    }
+
+    @Test(groups = {ENTITY_PROFILE, REGRESSION, UI, PDF, ENTITLEMENTS})
+    @Xray(test = {3066})
+    public void verifyUserWithoutControversiesEntitlementTest(){
+        LoginPage loginPage = new LoginPage();
+        loginPage.entitlementsLogin(EntitlementsBundles.USER_PR_TR_EXPORT);
+        String company = "Apple, Inc.";
+        EntityClimateProfilePage entityProfilePage = new EntityClimateProfilePage();
+        String companyName = entityProfilePage.searchAndLoadClimateProfilePage(company);
+        assertTestCase.assertTrue(entityProfilePage.validateGlobalCompanyNameHeader(companyName),companyName+" Header Verification");
+        System.out.println("companyName = " + companyName);
+        entityProfilePage.selectExportSourcesDocuments();
+        assertTestCase.assertTrue(entityProfilePage.verifyPopup(), "Verify Export Sources Documents popup");
+        assertTestCase.assertTrue(entityProfilePage.verifyPopupTitle(companyName), "Verify Export Popup Title");
+
+        FileDownloadUtilities.deleteDownloadFolder();
+        entityProfilePage.selectPdfDownload();
+        assertTestCase.assertTrue(entityProfilePage.verifyDownloadProgressMessage(), "Verify download progress message");
+        assertTestCase.assertTrue(FileDownloadUtilities.waitUntilFileIsDownloaded(),"Verify download of export file");
+
+        String actualFileName = FileDownloadUtilities.getDownloadedFileName();
+
+        String filePath = BrowserUtils.downloadPath() + File.separator + actualFileName;
+        assertTestCase.assertFalse(PdfUtil.getPdfContent(filePath).contains("Controvers"),"Verify PDF file does not contain Controversies/Controversy");
+//        assertTestCase.assertTrue(PdfUtil.getPdfContent(filePath).contains("ESG Incident"),"Verify PDF file contains ESG Incident/ESG Incidents");
+    }
 
 }

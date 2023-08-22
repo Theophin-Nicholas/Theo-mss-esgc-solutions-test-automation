@@ -1,6 +1,7 @@
 package com.esgc.RegulatoryReporting.DB.Tests;
 
 
+import com.esgc.Common.API.Controllers.CommonAPIController;
 import com.esgc.Common.UI.TestBases.UITestBase;
 import com.esgc.RegulatoryReporting.API.Controllers.RegulatoryReportingAPIController;
 import com.esgc.RegulatoryReporting.UI.Pages.RegulatoryReportingPage;
@@ -23,20 +24,25 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
     @Xray(test = {3883})
     public void verifyDataAvailableForUserInputHistoryTabForAnnualReportTest() {
         RegulatoryReportingPage reportingPage = new RegulatoryReportingPage();
-        
         reportingPage.navigateToReportingService("SFDR");
-        TestBase.test.info("Navigated to Regulatory Reporting Page");
-        //verify portfolio upload modal
-        assertTestCase.assertTrue(reportingPage.uploadAnotherPortfolioLink.isDisplayed(), "Portfolio Upload button is displayed");
+        assertTestCase.assertTrue(reportingPage.verifyPortfolioUploadLink(), "Portfolio Upload button is displayed");
 
         //upload a portfolio
-        String newPortfolioName = "PortfolioWithValidData2";
-        assertTestCase.assertTrue(reportingPage.uploadPortfolio(newPortfolioName), "New Portfolio is added to the list");
-        System.out.println(newPortfolioName + " uploaded");
-
+        String newPortfolioName1 = "PortfolioWithValidData2";
+        String newPortfolioName2 = "Portfolio Upload updated_good2";
+        RegulatoryReportingAPIController apiController = new RegulatoryReportingAPIController();
+        while (reportingPage.verifyPortfolio(newPortfolioName2)) {
+            CommonAPIController.deletePortfolio(apiController.getPortfolioId(newPortfolioName2));
+            BrowserUtils.refresh();
+            reportingPage.waitForPortfolioTableToLoad();
+            reportingPage.navigateToReportingService("SFDR");
+        }
+        assertTestCase.assertTrue(reportingPage.uploadPortfolio(newPortfolioName1), "New Portfolio is uploaded");
+        System.out.println(newPortfolioName2 + " uploaded");
+        assertTestCase.assertTrue(reportingPage.verifyPortfolio(newPortfolioName2), "New Portfolio verified in the list");
         String currentWindow = BrowserUtils.getCurrentWindowHandle();
-        newPortfolioName = "Portfolio Upload updated_good2";
-        reportingPage.selectPortfolioOptionByName(newPortfolioName);
+
+        reportingPage.selectPortfolioOptionByName(newPortfolioName2);
         reportingPage.selectAllPortfolioOptions();
         reportingPage.selectAnnualReports();
         List<String> selectedPortfolios = reportingPage.getSelectedPortfolioOptions();
@@ -67,8 +73,7 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
             BrowserUtils.switchWindowsTo(currentWindow);
             System.out.println("=============================");
         }
-        RegulatoryReportingAPIController apiController = new RegulatoryReportingAPIController();
-        apiController.deletePortfolio(apiController.getPortfolioId(newPortfolioName));
+        apiController.deletePortfolio(apiController.getPortfolioId(newPortfolioName2));
     }
 
     @Test(groups = {REGRESSION, DATA_VALIDATION, REGULATORY_REPORTING, UI},
@@ -76,10 +81,8 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
     @Xray(test = {4119, 3898, 3427})
     public void downloadAndVerifyExcelReportsTest() {
         RegulatoryReportingPage reportingPage = new RegulatoryReportingPage();
-        
-        reportingPage.navigateToPageFromMenu("ESG Reporting Portal");
-        TestBase.test.info("Navigated to Regulatory Reporting Page");
-        reportingPage.selectReportingOptionByName("SFDR PAIs");
+        reportingPage.navigateToReportingService("SFDR");
+        assertTestCase.assertTrue(reportingPage.verifyPortfolioUploadLink(), "Portfolio Upload button is displayed");
         assertTestCase.assertTrue(reportingPage.isInterimReportsOptionDisplayed(), "Interim reports option is displayed");
         assertTestCase.assertTrue(reportingPage.isUseLatestDataOptionDisplayed(), "Use latest data option is displayed");
         reportingPage.selectUseLatestData();
@@ -142,13 +145,8 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
     @Xray(test = {3804, 4251})
     public void verifyPortfolioCoverageForSFDRReportingTest() {
         RegulatoryReportingPage reportingPage = new RegulatoryReportingPage();
-        
-        reportingPage.navigateToPageFromMenu("ESG Reporting Portal");
-        reportingPage.waitForPortfolioTableToLoad();
-        TestBase.test.info("Navigated to Regulatory Reporting Page");
-        //verify portfolio upload modal
-        assertTestCase.assertTrue(reportingPage.uploadAnotherPortfolioLink.isDisplayed(), "Portfolio Upload button is displayed");
-        reportingPage.selectReportingOptionByName("SFDR PAIs");
+        reportingPage.navigateToReportingService("SFDR");
+        assertTestCase.assertTrue(reportingPage.verifyPortfolioUploadLink(), "Portfolio Upload button is displayed");
 
         //upload a portfolio
         String portfolioName = "SFDRPortfolio";
@@ -247,15 +245,9 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
     @Xray(test = {4014})
     public void verifyLatestDataAvailableForPortfoliosWithLatestDataTest() {
         RegulatoryReportingPage reportingPage = new RegulatoryReportingPage();
-        
-        reportingPage.navigateToPageFromMenu("ESG Reporting Portal");
-        reportingPage.waitForPortfolioTableToLoad();
+        reportingPage.navigateToReportingService("SFDR");
+        assertTestCase.assertTrue(reportingPage.verifyPortfolioUploadLink(), "Portfolio Upload button is displayed");
         String year = "2021";
-        TestBase.test.info("Navigated to Regulatory Reporting Page");
-        //verify portfolio upload modal
-        assertTestCase.assertTrue(reportingPage.uploadAnotherPortfolioLink.isDisplayed(), "Portfolio Upload button is displayed");
-        reportingPage.selectReportingOptionByName("SFDR PAIs");
-
         //upload a portfolio
         String portfolioName = "SFDRPortfolio";
         if (!reportingPage.verifyPortfolio(portfolioName)) reportingPage.uploadPortfolio(portfolioName);
@@ -306,8 +298,7 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
     @Xray(test = {4156, 3961, 4237})
     public void verifyAnnualReportWithoutLatestDataTest() {
         RegulatoryReportingPage reportingPage = new RegulatoryReportingPage();
-        
-        reportingPage.navigateToPageFromMenu("ESG Reporting Portal");
+        reportingPage.navigateToReportingService("SFDR");
         String year = "2021";
         TestBase.test.info("Navigated to Regulatory Reporting Page");
         //verify portfolio upload modal
@@ -365,13 +356,9 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
     @Xray(test = {4073, 4218, 3791})
     public void verifyInterimReportForSelectedYearTest() {
         RegulatoryReportingPage reportingPage = new RegulatoryReportingPage();
-        
-        reportingPage.navigateToPageFromMenu("ESG Reporting Portal");
+        reportingPage.navigateToReportingService("SFDR");
+        assertTestCase.assertTrue(reportingPage.verifyPortfolioUploadLink(), "Portfolio Upload button is displayed");
         String year = "2020";
-        TestBase.test.info("Navigated to Regulatory Reporting Page");
-        //verify portfolio upload modal
-        assertTestCase.assertTrue(reportingPage.uploadAnotherPortfolioLink.isDisplayed(), "Portfolio Upload button is displayed");
-        reportingPage.selectReportingOptionByName("SFDR PAIs");
 
         //upload a portfolio
         String portfolioName = "SFDRPortfolio";
@@ -420,13 +407,10 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
     @Xray(test = {3813, 3805})
     public void verifyInterimReportForLatestDataTest() {
         RegulatoryReportingPage reportingPage = new RegulatoryReportingPage();
-        
         reportingPage.navigateToReportingService("SFDR");
-        String year = "2021";
-        TestBase.test.info("Navigated to Regulatory Reporting Page");
-        //verify portfolio upload modal
-        assertTestCase.assertTrue(reportingPage.uploadAnotherPortfolioLink.isDisplayed(), "Portfolio Upload button is displayed");
+        assertTestCase.assertTrue(reportingPage.verifyPortfolioUploadLink(), "Portfolio Upload button is displayed");
 
+        String year = "2021";
         //upload a portfolio
         String portfolioName = "SFDRPortfolio";
         if (!reportingPage.verifyPortfolio(portfolioName)) reportingPage.uploadPortfolio(portfolioName);
@@ -474,10 +458,7 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
     @Xray(test = {3810})
     public void verifyCompanyLevelOutputTest() {
         RegulatoryReportingPage reportingPage = new RegulatoryReportingPage();
-        
         reportingPage.navigateToReportingService("SFDR");
-        TestBase.test.info("Navigated to Regulatory Reporting Page");
-        //verify portfolio upload modal
         assertTestCase.assertTrue(reportingPage.verifyPortfolioUploadLink(), "Portfolio Upload button is displayed");
 
         //upload a portfolio
@@ -544,12 +525,7 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
     @Xray(test = {3202, 3244, 3146, 3808})
     public void verifyScope3GHGEmissionsColumnTest() {
         RegulatoryReportingPage reportingPage = new RegulatoryReportingPage();
-        
-        reportingPage.navigateToPageFromMenu("ESG Reporting Portal");
-        TestBase.test.info("Navigated to Regulatory Reporting Page");
-        //verify portfolio upload modal
-        assertTestCase.assertTrue(reportingPage.uploadAnotherPortfolioLink.isDisplayed(), "Portfolio Upload button is displayed");
-        reportingPage.selectReportingOptionByName("SFDR PAIs");
+        reportingPage.navigateToReportingService("SFDR");
         String currentWindow = BrowserUtils.getCurrentWindowHandle();
         reportingPage.selectInterimReports();
         reportingPage.selectAllPortfolioOptions();
@@ -631,10 +607,7 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
     @Xray(test = {2794})
     public void verifyBVD9IDForInterimPortfolioLevelOutputWithoutLatestDataTest() {
         RegulatoryReportingPage reportingPage = new RegulatoryReportingPage();
-        
         reportingPage.navigateToReportingService("SFDR");
-        TestBase.test.info("Navigated to Regulatory Reporting Page");
-        //verify portfolio upload modal
         assertTestCase.assertTrue(reportingPage.verifyPortfolioUploadLink(), "Portfolio Upload button is displayed");
         //reportingPage.selectReportingOptionByName("SFDR PAIs");
         String currentWindow = BrowserUtils.getCurrentWindowHandle();
@@ -675,12 +648,8 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
     @Xray(test = {2794})
     public void verifyOnlyCoveredEntitiesPresentTest() {
         RegulatoryReportingPage reportingPage = new RegulatoryReportingPage();
-
         reportingPage.navigateToReportingService("SFDR");
-        TestBase.test.info("Navigated to Regulatory Reporting Page");
-        //verify portfolio upload modal
         assertTestCase.assertTrue(reportingPage.verifyPortfolioUploadLink(), "Portfolio Upload button is displayed");
-        //reportingPage.selectReportingOptionByName("SFDR PAIs");
         String currentWindow = BrowserUtils.getCurrentWindowHandle();
         reportingPage.selectInterimReports();//reportingPage.selectAnnualReports();
         reportingPage.selectAllPortfolioOptions();

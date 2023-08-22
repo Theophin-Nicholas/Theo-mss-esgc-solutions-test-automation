@@ -167,6 +167,10 @@ public class OnDemandAssessmentPage extends CommonPage {
 
     @FindBy(xpath = "//div[contains(text(),'Select Portfolio')]/../div[2]/following-sibling::div/div[3]")
     public List<WebElement> portfolioCoverage;
+
+    @FindBy(xpath = "//tr/td[2]/div/div[1]")
+    public List<WebElement> onDemandRequestCompanyNames;
+
     @FindBy(xpath = "//div[@data-testid='input-email']//input")
     public List<WebElement> emailInputs;
 
@@ -932,7 +936,6 @@ public class OnDemandAssessmentPage extends CommonPage {
         return viewDetailForPortfolio(index);
     }
 
-
     public boolean viewDetailForPortfolio(int index) {
         if (index == -1) {
             System.out.println("Portfolio not found");
@@ -948,7 +951,7 @@ public class OnDemandAssessmentPage extends CommonPage {
         }
         clickOnViewDetailButton(index);
         System.out.println("View detail button clicked");
-        BrowserUtils.waitForVisibility(detailPanelHeader, 10);
+        BrowserUtils.waitForVisibility(detailPanelTableTitles, 10);
         return true;
     }
 
@@ -960,6 +963,7 @@ public class OnDemandAssessmentPage extends CommonPage {
         BrowserUtils.waitForVisibility(detailPanelCompanyNames, 60);
         assertTestCase.assertTrue(detailPanelHeader.isDisplayed(), "Details panel header is displayed");
         assertTestCase.assertTrue(detailPanelFilterButtons.size() > 0, "Details panel filter buttons are displayed");
+        BrowserUtils.waitForVisibility(detailPanelTableTitles, 60);
         assertTestCase.assertTrue(detailPanelTableTitles.size() > 0, "Details panel table titles are displayed");
         assertTestCase.assertTrue(detailPanelTableHeaders.size() > 0, "Details panel table headers are displayed");
         assertTestCase.assertTrue(detailPanelCompanyNames.size() > 0, "Details panel company names are displayed");
@@ -1120,6 +1124,7 @@ public class OnDemandAssessmentPage extends CommonPage {
     }
 
     public void closePanel() {
+        System.out.println("Closing the panel");
         BrowserUtils.waitAndClick(detailPanelCloseButton, 5);
     }
 
@@ -1545,4 +1550,19 @@ public class OnDemandAssessmentPage extends CommonPage {
         assertTestCase.assertTrue(Ordering.<Date> natural().reverse().isOrdered(getCreatedDates()),"Validate if Created date is in chronological order");
     }
 
+    public List<String> viewDetailsPanelGetCompaniesForCategory(String category) {
+        String locator = "//div[.='"+category+"']/..//td[1]";
+        List<WebElement> companies = Driver.getDriver().findElements(By.xpath(locator));
+        return BrowserUtils.getElementsText(companies);
+    }
+
+    public void viewDetailsPanelSelectGroupFilter(String groupName) {
+        for (int i = 0; i < detailPanelFilterButtons.size(); i++) {
+            if (detailPanelFilterButtons.get(i).getText().equalsIgnoreCase(groupName)) {
+                detailPanelFilterButtons.get(i).click();
+                return;
+            }
+        }
+        System.out.println("Group name not found");
+    }
 }

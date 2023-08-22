@@ -18,17 +18,17 @@ public class OnDemandViewDetailUITests extends UITestBase {
 
     @Test(groups = {UI, REGRESSION, SMOKE})
     @Xray(test = {2994, 2739, 2969, 2848, 2869, 2871, 2954})
-    public void verifyViewDetailPageByScoreType(){
+    public void verifyViewDetailPageByScoreType() {
         ViewDetailPage detail = new ViewDetailPage();
         String portfolioName = "500 predicted portfolio";
-       // String portfolioName1 = "SamplePortfolioToDelete";
+        // String portfolioName1 = "SamplePortfolioToDelete";
         OnDemandAssessmentPage onDemandAssessmentPage = new OnDemandAssessmentPage();
         onDemandAssessmentPage.navigateToReportingService("On-Demand Assessment");
         onDemandAssessmentPage.waitForPortfolioTableToLoad();
        /* if(!onDemandAssessmentPage.verifyPortfolio(portfolioName1)) {
             onDemandAssessmentPage.uploadPortfolio(portfolioName1.replaceAll(" ", ""));
         }*/
-        if(!onDemandAssessmentPage.verifyPortfolio(portfolioName)) {
+        if (!onDemandAssessmentPage.verifyPortfolio(portfolioName)) {
             onDemandAssessmentPage.uploadPortfolio(portfolioName.replaceAll(" ", ""));
         }
         /*onDemandAssessmentPage.selectPortfolioOptionByName(portfolioName1);*/
@@ -46,9 +46,9 @@ public class OnDemandViewDetailUITests extends UITestBase {
 
         detail.clickOnGroupByOption(detail, "Score Type");
 
-        detail.verifyHeaderDetailsInViewDetailPage(detail,portfolioName);
-        detail.verifyViewDetailPageFooter(detail, portfolioName );
-        System.out.println("linkedhashMap of entities + investment"+ detail.getEntityInvestmentMap());
+        detail.verifyHeaderDetailsInViewDetailPage(detail, portfolioName);
+        detail.verifyViewDetailPageFooter(detail, portfolioName);
+        System.out.println("linkedhashMap of entities + investment" + detail.getEntityInvestmentMap());
         detail.sortByValue(detail.getEntityInvestmentMap());
         detail.convertListOfInvestmentCellsTextToDouble(detail.getListOfInvestmentCellsText());
         detail.verifyViewDetailTables(detail);
@@ -65,22 +65,21 @@ public class OnDemandViewDetailUITests extends UITestBase {
         detail.verifyEntitiesNotClickableInViewDetailPage(detail);
 
 
-
     }
 
     @Test(groups = {UI, REGRESSION, SMOKE})
     @Xray(test = {3033, 3113, 3124, 2865, 2845, 2837})
-    public void verifyViewDetailPageBySector(){
+    public void verifyViewDetailPageBySector() {
         ViewDetailPage detail = new ViewDetailPage();
         String portfolioName = "500 predicted portfolio";
-       // String portfolioName1 = "Portfolio Upload updated_good2";
+        // String portfolioName1 = "Portfolio Upload updated_good2";
         OnDemandAssessmentPage onDemandAssessmentPage = new OnDemandAssessmentPage();
         onDemandAssessmentPage.navigateToReportingService("On-Demand Assessment");
         onDemandAssessmentPage.waitForPortfolioTableToLoad();
        /* if(!onDemandAssessmentPage.verifyPortfolio(portfolioName1)) {
             onDemandAssessmentPage.uploadPortfolio("PortfolioWithValidData2");
         }*/
-        if(!onDemandAssessmentPage.verifyPortfolio(portfolioName)) {
+        if (!onDemandAssessmentPage.verifyPortfolio(portfolioName)) {
             onDemandAssessmentPage.uploadPortfolio(portfolioName.replaceAll(" ", ""));
         }
         //onDemandAssessmentPage.selectPortfolioOptionByName(portfolioName1);
@@ -104,22 +103,22 @@ public class OnDemandViewDetailUITests extends UITestBase {
 
     @Test(groups = {UI, REGRESSION, SMOKE})
     @Xray(test = {2855, 2823, 2829, 2933, 2814})
-    public void verifyViewDetailPageByRegion(){
+    public void verifyViewDetailPageByRegion() {
 
         ViewDetailPage detail = new ViewDetailPage();
         String portfolioName = "500 predicted portfolio";
-       // String portfolioName1 = "SamplePortfolioToDelete";
+        // String portfolioName1 = "SamplePortfolioToDelete";
         OnDemandAssessmentPage onDemandAssessmentPage = new OnDemandAssessmentPage();
         onDemandAssessmentPage.navigateToReportingService("On-Demand Assessment");
         onDemandAssessmentPage.waitForPortfolioTableToLoad();
        /* if(!onDemandAssessmentPage.verifyPortfolio(portfolioName1)) {
             onDemandAssessmentPage.uploadPortfolio(portfolioName1.replaceAll(" ", ""));
         }*/
-        if(!onDemandAssessmentPage.verifyPortfolio(portfolioName)) {
+        if (!onDemandAssessmentPage.verifyPortfolio(portfolioName)) {
             onDemandAssessmentPage.uploadPortfolio(portfolioName.replaceAll(" ", ""));
         }
 
-       // onDemandAssessmentPage.selectPortfolioOptionByName(portfolioName1);
+        // onDemandAssessmentPage.selectPortfolioOptionByName(portfolioName1);
         onDemandAssessmentPage.SelectAndGetNonOnDemandEligiblePortfolioName();
         assertTestCase.assertFalse(onDemandAssessmentPage.isRequestAssessmentButtonEnabled(), "Verify that the request assessment button is disabled for a portfolio not on-Demand eligible ");
         System.out.println("the request assessment button is disabled for non on-demand assessment eligible portfolio ");

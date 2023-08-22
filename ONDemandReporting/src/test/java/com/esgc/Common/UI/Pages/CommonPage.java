@@ -159,7 +159,7 @@ public class CommonPage extends UploadPortfolio {
         if (reportingService.contains("On-Demand")) {
             clickOnDemandOption();
         }
-        BrowserUtils.waitForVisibility(portfolioNamesList,10);
+        waitForPortfolioTableToLoad();
     }
 
     public void clickOnSFDRPAIsOption() {

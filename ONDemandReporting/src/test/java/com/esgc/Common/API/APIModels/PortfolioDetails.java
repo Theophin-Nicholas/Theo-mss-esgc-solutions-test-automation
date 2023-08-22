@@ -19,5 +19,6 @@ public class PortfolioDetails {
     private Object non_sovereign_derivatives;
     private Object cash_and_liquidities;
     private String update_date;
+    private String sort_date;
 
 }

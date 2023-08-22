@@ -1,7 +1,6 @@
 package com.esgc.RegulatoryReporting.UI.Pages;
 
 
-
 import com.esgc.Common.UI.Pages.CommonPage;
 import com.esgc.RegulatoryReporting.API.Controllers.RegulatoryReportingAPIController;
 import com.esgc.RegulatoryReporting.DB.DBQueries.RegulatoryReportingQueries;
@@ -35,9 +34,6 @@ public class RegulatoryReportingPage extends CommonPage {
     public WebElement reportingSubtitle;
 
 
-
-
-
     @FindBy(xpath = "//div[.='Select Portfolios']/../div[2]/following-sibling::div/div[1]//input[not(@disabled)]")
     public List<WebElement> activePortfolioRadioButtonList;
 
@@ -55,7 +51,6 @@ public class RegulatoryReportingPage extends CommonPage {
 
     @FindBy(xpath = "//ul[@role='listbox']//li")
     public List<WebElement> reportingForDropdownOptionsList;
-
 
 
     @FindBy(id = "button-download-test-id-1")
@@ -115,7 +110,6 @@ public class RegulatoryReportingPage extends CommonPage {
     public WebElement previouslyDownloadedErrorMessage;
 
 
-
     @FindBy(xpath = "//*[text()='Select Portfolios']/following-sibling::div[1]//*[text()]")
     public List<WebElement> tableHeaders;
 
@@ -140,12 +134,10 @@ public class RegulatoryReportingPage extends CommonPage {
     // this methods returns is the create report button is enabled or not
     //
 
-    public boolean isCreateReportsButtonEnabled(){
+    public boolean isCreateReportsButtonEnabled() {
 
         return createReportsButton.isEnabled();
     }
-
-
 
 
     //
@@ -310,8 +302,6 @@ public class RegulatoryReportingPage extends CommonPage {
     }
 
 
-
-
     public String isCreateReportsButtonText() {
         return createReportsButton.getText();
     }
@@ -360,13 +350,12 @@ public class RegulatoryReportingPage extends CommonPage {
     }
 
 
-
     //return number of selected reporting options
     public int numberOfSelectedReportingOptions() {
         return (int) reportingRadioButtonList.stream().filter(WebElement::isSelected).count();
     }
 
-    public int returnNumberOfEnabledReportingOptions(){
+    public int returnNumberOfEnabledReportingOptions() {
         return (int) portfolioRadioButtonList.stream().filter(WebElement::isEnabled).count();
     }
 
@@ -382,22 +371,22 @@ public class RegulatoryReportingPage extends CommonPage {
     //select reporting option by name
 
 
+    public void clickOnFirstEnabledPortfolioOption() {
 
-    public void clickOnFirstEnabledPortfolioOption(){
+        for (int i = 0; i < portfolioRadioButtonList.size(); i++) {
 
-        for (int i=0; i<portfolioRadioButtonList.size(); i++) {
-
-            if (portfolioRadioButtonList.get(i).isDisplayed() && portfolioRadioButtonList.get(i).isEnabled()){
+            if (portfolioRadioButtonList.get(i).isDisplayed() && portfolioRadioButtonList.get(i).isEnabled()) {
                 portfolioRadioButtonList.get(i).click();
                 break;
             }
         }
         portfolioRadioButtonList.get(0).click();
     }
-    public boolean firstEnabledPortfolioOptionSelected(){
-        for (int i=0; i<portfolioRadioButtonList.size(); i++) {
 
-            if (portfolioRadioButtonList.get(i).isDisplayed() && portfolioRadioButtonList.get(i).isEnabled()){
+    public boolean firstEnabledPortfolioOptionSelected() {
+        for (int i = 0; i < portfolioRadioButtonList.size(); i++) {
+
+            if (portfolioRadioButtonList.get(i).isDisplayed() && portfolioRadioButtonList.get(i).isEnabled()) {
                 portfolioRadioButtonList.get(i).isSelected();
                 break;
             }
@@ -416,6 +405,7 @@ public class RegulatoryReportingPage extends CommonPage {
             portfolioRadioButtonList.get(index - 1).click();
         }
     }
+
     public void selectPortfolioOptionByIndex2(int index) {
 
         if (portfolioRadioButtonList.get(index).isSelected()) {
@@ -438,13 +428,15 @@ public class RegulatoryReportingPage extends CommonPage {
             activePortfolioRadioButtonList.get(index - 1).click();
         }
     }
-    public void selectAllEnabledPortfolios(){
-        int count =0;
+
+    public void selectAllEnabledPortfolios() {
+        int count = 0;
         while (selectEnabledPortfolioOption().size() < 4) {
             portfolioRadioButtonList.get(count).click();
             count++;
         }
     }
+
     //verify selcted reporting option by name
     public boolean isSelectedReportingOptionByName(String name) {
         return reportingRadioButtonList.get(getReportingList().indexOf(name)).isSelected();
@@ -453,6 +445,7 @@ public class RegulatoryReportingPage extends CommonPage {
     public int numberOfSelectedPortfolioOptions() {
         return (int) portfolioRadioButtonList.stream().filter(WebElement::isSelected).count();
     }
+
     public int numberOfSelectedPortfolioOptions2() {
         return (int) portfolioRadioButtonList.stream().filter(WebElement::isSelected).count();
     }
@@ -527,7 +520,8 @@ public class RegulatoryReportingPage extends CommonPage {
     public boolean verifyNewTabOpened(String currentWindowHandle) {
         BrowserUtils.wait(2);
         BrowserUtils.switchWindowsTo(currentWindowHandle);
-        BrowserUtils.waitForVisibility(rrStatusPage_ReportGeneratingMessage, 5);
+        BrowserUtils.waitForVisibility(rrStatusPage_ReportGeneratingMessage, 25);
+        System.out.println("Report generating message: " + rrStatusPage_ReportGeneratingMessage.getText());
         return rrStatusPage_ReportGeneratingMessage.isDisplayed();
     }
 
@@ -542,7 +536,6 @@ public class RegulatoryReportingPage extends CommonPage {
         System.out.println("No new tab opened");
         return false;
     }
-
 
 
     public boolean verifyReportsReadyToDownload(List<String> selectedPortfolios) {
@@ -592,16 +585,23 @@ public class RegulatoryReportingPage extends CommonPage {
             BrowserUtils.waitForVisibility(rrStatusPage_DownloadButton, 50);
             rrStatusPage_DownloadButton.click();
         }
-        BrowserUtils.wait(10);
-        File dir = new File(BrowserUtils.downloadPath());
-        File[] dir_contents = dir.listFiles();
-        if (dir_contents == null) {
-            System.out.println("No files in the directory");
-            return false;
+        //wait for download to complete for 20 seconds
+        int seconds = 0;
+        while(seconds < 20) {
+            File dir = new File(BrowserUtils.downloadPath());
+            File[] dir_contents = dir.listFiles();
+            if (dir_contents == null) {
+                seconds++;
+                BrowserUtils.wait(1);
+                System.out.println("seconds = " + seconds);
+            } else {
+                return Arrays.stream(dir_contents).anyMatch(e -> ((e.getName().startsWith("SFDR") || e.getName().startsWith("EUT")) &&
+                        e.getName().contains(DateTimeUtilities.getCurrentDate("MM_dd_yyyy")) &&
+                        e.getName().endsWith(".zip")));
+            }
         }
-        return Arrays.stream(dir_contents).anyMatch(e -> ((e.getName().startsWith("SFDR") || e.getName().startsWith("EUT")) &&
-                e.getName().contains(DateTimeUtilities.getCurrentDate("MM_dd_yyyy")) &&
-                e.getName().endsWith(".zip")));
+        System.out.println("Reports are not downloaded");
+        return false;
     }
 
     public void selectReportingFor(String portfolioName, String reportingYear) {
@@ -686,7 +686,6 @@ public class RegulatoryReportingPage extends CommonPage {
         }
         return true;
     }
-
 
 
     public List<String> getExcelDataList(String excelName, String sheetName, int columnIndex) {
@@ -788,7 +787,7 @@ public class RegulatoryReportingPage extends CommonPage {
         //open Excel file
         String excelName = rrStatusPage_PortfoliosList.get(0).getText().replaceAll("ready", "").trim();
         System.out.println("Verifying reports content for sheet 1");
-        ExcelUtil excelData = getExcelData(excelName, 1);
+        ExcelUtil excelData = getExcelData(excelName, 2);
         int countOfEntitiesInExcel = 0;
         System.out.println(excelData.getSheetName());
         if (excelData.getSheetName().equals("Underlying Data - Overview"))
@@ -929,8 +928,8 @@ public class RegulatoryReportingPage extends CommonPage {
             }
         }
 
-       // templateData.set(0, templateData.get(0).replace("© 2022 Moody’s", "© " + Year.now() + " Moody’s"));
-       // templateData.set(0, templateData.get(0).replace("© 2022 Moody's", "© " + Year.now() + " Moody's"));
+        // templateData.set(0, templateData.get(0).replace("© 2022 Moody’s", "© " + Year.now() + " Moody’s"));
+        // templateData.set(0, templateData.get(0).replace("© 2022 Moody's", "© " + Year.now() + " Moody's"));
 //        System.out.println("\n===================================\n");
 //        templateData.forEach(System.out::println);
         for (String sentence : templateData) {
@@ -945,7 +944,7 @@ public class RegulatoryReportingPage extends CommonPage {
 
     public boolean verifyPreviouslyDownloadedButton() {
 
-            return previouslyDownloadedButton.isDisplayed();
+        return previouslyDownloadedButton.isDisplayed();
 
     }
 
@@ -998,37 +997,37 @@ public class RegulatoryReportingPage extends CommonPage {
             // if annual report selected, then one Excel file will be downloaded and sheet index will be index of selected portfolios
             if (rrStatusPage_PortfoliosList.size() > 1) {
                 excelName = rrStatusPage_PortfoliosList.get(selectedPortfolios.indexOf(portfolioName)).getText().replaceAll("ready", "").trim();
-                excelData = getExcelData(excelName, 1);
+                excelData = getExcelData(excelName, 2);
             } else {
                 excelName = rrStatusPage_PortfoliosList.get(0).getText().replaceAll("ready", "").trim();
-                excelData = getExcelData(excelName, selectedPortfolios.indexOf(portfolioName) + 1);//we skip index 0 because it is for Portfolio Level Output
+                excelData = getExcelData(excelName, selectedPortfolios.indexOf(portfolioName) + 2);//we skip index 0 because it is for Portfolio Level Output
             }
             System.out.println("Sheet Name = " + excelData.getSheetName());
             //get column names and verify it has BVD9 ID but nor Factset ID
             List<String> columnNames = excelData.getColumnsNames();
             System.out.println("columnNames = " + columnNames);
-            if (columnNames.contains("BVD9 ID")) {
-                System.out.println("BVD9 ID column is found in the excel");
-                //return false;
+            if (!columnNames.contains("BVD9 ID")) {
+                System.out.println("BVD9 ID column is not found in the excel");
+                return false;
             }
-            if (!columnNames.contains("Factset ID")) {
-                System.out.println("Factset ID column is not found in the excel");
-                //return false;
+            if (columnNames.contains("Factset ID")) {
+                System.out.println("Factset ID column is found in the excel");
+                return false;
             }
             //Data Validation
             RegulatoryReportingQueries queries = new RegulatoryReportingQueries();
             List<Map<String, Object>> dbData = queries.getBVD9idForEachPortfolio(portfolioId);
             System.out.println("dbData.get() = " + dbData.get(0));
-            for(Map<String, Object> dbRow: dbData){
+            for (Map<String, Object> dbRow : dbData) {
                 String bvd9Id = dbRow.get("BVD9_NUMBER").toString();
                 String companyName = dbRow.get("COMPANY_NAME").toString();
                 List<String> excelRow = excelData.getRowData(companyName);
                 System.out.println("excelRow = " + excelRow);
-                if(!excelRow.contains(bvd9Id)){
+                if (!excelRow.contains(bvd9Id)) {
                     System.out.println("BVD9 ID is not found in the excel for company = " + companyName);
                     return false;
                 }
-                if(!excelRow.contains(companyName)){
+                if (!excelRow.contains(companyName)) {
                     System.out.println("Company name is not found in the excel for company = " + companyName);
                     return false;
                 }
@@ -1053,10 +1052,10 @@ public class RegulatoryReportingPage extends CommonPage {
             // if annual report selected, then one Excel file will be downloaded and sheet index will be index of selected portfolios
             if (rrStatusPage_PortfoliosList.size() > 1) {
                 excelName = rrStatusPage_PortfoliosList.get(selectedPortfolios.indexOf(portfolioName)).getText().replaceAll("ready", "").trim();
-                excelData = getExcelData(excelName, 1);
+                excelData = getExcelData(excelName, 3);
             } else {
                 excelName = rrStatusPage_PortfoliosList.get(0).getText().replaceAll("ready", "").trim();
-                excelData = getExcelData(excelName, selectedPortfolios.indexOf(portfolioName) + 1);//we skip index 0 because it is for Portfolio Level Output
+                excelData = getExcelData(excelName, selectedPortfolios.indexOf(portfolioName) + 3);//we skip index 0 because it is for Portfolio Level Output
             }
             System.out.println("Sheet Name = " + excelData.getSheetName());
             for (Map<String, Object> dbRow : dbData) {
@@ -1226,7 +1225,7 @@ public class RegulatoryReportingPage extends CommonPage {
         for (String portfolio : BrowserUtils.getElementsText(rrStatusPage_PortfoliosList)) {
             String excelName = portfolio.replaceAll("ready", "").trim();
             System.out.println("Verifying reports content for " + excelName);
-            ExcelUtil excelData = getExcelData(excelName, 1);
+            ExcelUtil excelData = getExcelData(excelName, 2);
             System.out.println("excelData = " + excelData.getColumnsNames());
 
             RegulatoryReportingQueries queries = new RegulatoryReportingQueries();
@@ -1266,7 +1265,7 @@ public class RegulatoryReportingPage extends CommonPage {
 
 
                     String excelValue = excelData.getCellData(rowNumber, excelData.getColumnNum(colName));
-                    if(excelValue == null) continue;
+                    if (excelValue == null) continue;
                     if (BrowserUtils.isNumeric(excelValue) && !colName.equals("BVD9 ID")
                             && !colName.equals("TURNOVER REPORTING YEAR") && !colName.equals("CAPEX REPORTING YEAR")
                     ) {
@@ -1392,10 +1391,10 @@ public class RegulatoryReportingPage extends CommonPage {
             // if annual report selected, then one Excel file will be downloaded and sheet index will be index of selected portfolios
             if (rrStatusPage_PortfoliosList.size() > 1) {
                 excelName = rrStatusPage_PortfoliosList.get(selectedPortfolios.indexOf(portfolioName)).getText().replaceAll("ready", "").trim();
-                excelData = getExcelData(excelName, 1);
+                excelData = getExcelData(excelName, 2);
             } else {
                 excelName = rrStatusPage_PortfoliosList.get(0).getText().replaceAll("ready", "").trim();
-                excelData = getExcelData(excelName, selectedPortfolios.indexOf(portfolioName) + 1);//we skip index 0 because it is for Portfolio Level Output
+                excelData = getExcelData(excelName, selectedPortfolios.indexOf(portfolioName) + 2);//we skip index 0 because it is for Portfolio Level Output
             }
             System.out.println("Sheet Name = " + excelData.getSheetName());
             if (!excelData.getColumnsNames().contains("Scope 3 Emissions")) {
