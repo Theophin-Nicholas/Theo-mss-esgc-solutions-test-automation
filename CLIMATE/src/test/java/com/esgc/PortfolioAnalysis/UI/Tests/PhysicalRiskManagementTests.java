@@ -12,7 +12,7 @@ import static com.esgc.Utilities.Groups.UI;
 public class PhysicalRiskManagementTests extends UITestBase {
 
     @Test(groups = {REGRESSION, UI})
-    @Xray(test = {7994})
+    @Xray(test = {5082})
     public void validatePhysicalRiskManagementPage() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
@@ -35,7 +35,7 @@ public class PhysicalRiskManagementTests extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI})
-    @Xray(test = {8029})
+    @Xray(test = {4904})
     public void validateNoDataMessage() {
         //TODO we need to handle no data messages in one place, should not be separate tests for each section/research line
         ResearchLinePage researchLinePage = new ResearchLinePage();

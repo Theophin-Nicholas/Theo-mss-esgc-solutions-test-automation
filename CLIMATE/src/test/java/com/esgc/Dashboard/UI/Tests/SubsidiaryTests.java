@@ -20,7 +20,7 @@ import static com.esgc.Utilities.Groups.*;
 public class SubsidiaryTests extends UITestBase {
 
     @Test(groups = {REGRESSION, UI, SEARCH_ENTITY, ESG})
-    @Xray(test = {11042})
+    @Xray(test = {3524})
     public void VerifyFileUploadSubsidiaryCompany() {
         DashboardPage dashboardPage = new DashboardPage();
 
@@ -45,7 +45,7 @@ public class SubsidiaryTests extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI, SEARCH_ENTITY, ESG}, dataProviderClass = DataProviderClass.class, dataProvider = "InactiveSubsidiaryCompanyISIN")
-    @Xray(test = {11058, 11242})
+    @Xray(test = {3468, 3681})
     public void VerifyFileUploadWithInactiveSubsidiaryCompany(String inactiveSubsidiaryCompany) {
         DashboardPage dashboardPage = new DashboardPage();
 
@@ -70,7 +70,7 @@ public class SubsidiaryTests extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI, SEARCH_ENTITY, ESG}, dataProviderClass = DataProviderClass.class, dataProvider = "InactiveSubsidiaryCompanies")
-    @Xray(test = {11059, 11242})
+    @Xray(test = {3405, 3681})
     public void searchWithInactiveSubsidiaryCompanyName(String subsidiaryCompanyName) {
 
         DashboardPage dashboardPage = new DashboardPage();
@@ -111,7 +111,7 @@ public class SubsidiaryTests extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI, SEARCH_ENTITY, ESG}, dataProviderClass = DataProviderClass.class, dataProvider = "CompaniesWithNoSubsidiaryCompanies")
-    @Xray(test = {11575})
+    @Xray(test = {3402})
     public void verifySubsidiaryLinkIsNotDisplayedWhenNoSubsidiaryCompanies(String companyName) {
         DashboardPage dashboardPage = new DashboardPage();
 

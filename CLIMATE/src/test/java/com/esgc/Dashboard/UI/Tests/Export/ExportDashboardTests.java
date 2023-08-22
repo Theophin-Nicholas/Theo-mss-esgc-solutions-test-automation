@@ -11,7 +11,7 @@ public class ExportDashboardTests extends DashboardUITestBase {
 
 
     @Test(groups = {DASHBOARD, REGRESSION, UI})
-    @Xray(test = {6080})
+    @Xray(test = {1867})
     public void exportCompaniesInPortfolioBySectorTest() {
         DashboardPage dashboardPage = new DashboardPage();
 
@@ -27,13 +27,13 @@ public class ExportDashboardTests extends DashboardUITestBase {
         dashboardPage.clickExportCompaniesButton();
         test.info("Exported All Companies and Investments Details in excel format");
 
-        assertTestCase.assertTrue(dashboardPage.isCompaniesAndInvestmentsExcelDownloaded(), "Verify Download of Excel file with Companies and Investments details", 6080);
+        assertTestCase.assertTrue(dashboardPage.isCompaniesAndInvestmentsExcelDownloaded(), "Verify Download of Excel file with Companies and Investments details", 1867);
 
         dashboardPage.deleteDownloadFolder();
     }
 
     @Test(groups = {DASHBOARD, REGRESSION, UI})
-    @Xray(test = {6080})
+    @Xray(test = {1867})
     public void exportCompaniesInPortfolioByRegionTest() {
         DashboardPage dashboardPage = new DashboardPage();
 
@@ -49,13 +49,13 @@ public class ExportDashboardTests extends DashboardUITestBase {
         dashboardPage.clickExportCompaniesButton();
         test.info("Exported All Companies and Investments Details in excel format");
 
-        assertTestCase.assertTrue(dashboardPage.isCompaniesAndInvestmentsExcelDownloaded(), "Verify Download of Excel file with Companies and Investments details", 248);
+        assertTestCase.assertTrue(dashboardPage.isCompaniesAndInvestmentsExcelDownloaded(), "Verify Download of Excel file with Companies and Investments details", 4631);
 
         dashboardPage.deleteDownloadFolder();
     }
 
     @Test(groups = {DASHBOARD, REGRESSION, UI})
-    @Xray(test = {7167,7238})
+    @Xray(test = {4260,3568})
     public void temperatureAlignmentFieldsInExportedFile() {
         DashboardPage dashboardPage = new DashboardPage();
 

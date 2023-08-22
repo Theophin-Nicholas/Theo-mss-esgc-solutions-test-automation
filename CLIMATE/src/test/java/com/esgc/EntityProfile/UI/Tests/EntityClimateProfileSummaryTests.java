@@ -26,7 +26,7 @@ import static com.esgc.Utilities.Groups.*;
 public class EntityClimateProfileSummaryTests extends UITestBase {
 
     @Test(groups = {REGRESSION, UI}, dataProviderClass = DataProviderClass.class, dataProvider = "Entity")
-    @Xray(test = {5993, 5994})
+    @Xray(test = {3548, 3559})
     public void physicalClimateHazards(String Entity) {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         EntityClimateProfilePage entityClimateProfilePage = new EntityClimateProfilePage();
@@ -38,7 +38,7 @@ public class EntityClimateProfileSummaryTests extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI}, dataProviderClass = DataProviderClass.class, dataProvider = "Entity")
-    @Xray(test = {6248})
+    @Xray(test = {3706})
     public void verifyGreenShareRange(String Entity) {
 
         ResearchLinePage researchLinePage = new ResearchLinePage();
@@ -55,7 +55,7 @@ public class EntityClimateProfileSummaryTests extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI}, dataProviderClass = DataProviderClass.class, dataProvider = "Entity")
-    @Xray(test = {6840})
+    @Xray(test = {4359})
     public void verifyEntityPageSummaryWidgetTest(String Entity) {
         LoginPage loginPage = new LoginPage();
         List<WebElement> check = Driver.getDriver().findElements(By.xpath("//div[@id='RegSector-test-id-1']"));
@@ -76,7 +76,7 @@ public class EntityClimateProfileSummaryTests extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI}, dataProviderClass = DataProviderClass.class, dataProvider = "noInfoOrbisID")
-    @Xray(test = {6867, 6722})
+    @Xray(test = {4946, 4690})
     public void nonTransitionRiskSubscriberTest(String orbisID) {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         EntityClimateProfilePage entityClimateProfilePage = new EntityClimateProfilePage();
@@ -99,8 +99,8 @@ public class EntityClimateProfileSummaryTests extends UITestBase {
 
     }
 
-    @Test(groups = {REGRESSION, UI, "SF"}, dataProviderClass = DataProviderClass.class, dataProvider = "orbisID")
-    @Xray(test = {6722, 6807})
+    @Test(groups = {REGRESSION, UI, DATA_VALIDATION}, dataProviderClass = DataProviderClass.class, dataProvider = "orbisID")
+    @Xray(test = {4690, 4736})
     public void verifyTemperatureAlignmentGraphTest(String orbisID) {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio Analysis page");
@@ -166,7 +166,7 @@ public class EntityClimateProfileSummaryTests extends UITestBase {
 
 
     @Test(groups = {REGRESSION, UI}, dataProviderClass = DataProviderClass.class, dataProvider = "Entity")
-    @Xray(test = {6858, 7119, 7328})
+    @Xray(test = {4968, 4308, 4998})
     public void verifyXYAxisTest(String Entity) {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         EntityClimateProfilePage entityClimateProfilePage = new EntityClimateProfilePage();
@@ -211,7 +211,7 @@ public class EntityClimateProfileSummaryTests extends UITestBase {
 
     //JULY
     @Test(groups = {REGRESSION, UI}, dataProviderClass = DataProviderClass.class, dataProvider = "Entity")
-    @Xray(test = {7808})
+    @Xray(test = {5046})
     public void verifyPhysicalRiskManagementCardTest(String Entity) {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio Analysis page");
@@ -236,7 +236,7 @@ public class EntityClimateProfileSummaryTests extends UITestBase {
 
     //JULY
     @Test(groups = {REGRESSION, UI}, dataProviderClass = DataProviderClass.class, dataProvider = "orbisID")
-    @Xray(test = {7809})
+    @Xray(test = {4649})
     public void verifyPhysicalRiskManagementScoreCategory(String Entity) {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio Analysis page");
@@ -266,7 +266,7 @@ public class EntityClimateProfileSummaryTests extends UITestBase {
 
     //JULY
     @Test(groups = {REGRESSION, UI})
-    @Xray(test = {7809})
+    @Xray(test = {4649})
     public void VerifyCategoryScoreWhenNoDataForCurrentMonth() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         String Entity = "017721867";
@@ -291,7 +291,7 @@ public class EntityClimateProfileSummaryTests extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI}, dataProviderClass = DataProviderClass.class, dataProvider = "orbisID")
-    @Xray(test = {7535, 7536, 7537, 7539})
+    @Xray(test = {4909, 4916, 4924, 4653})
     public void verifyTemperatureAlignmentGraphTitleTest(String Entity) {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio Analysis page");
@@ -317,7 +317,7 @@ public class EntityClimateProfileSummaryTests extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI}, dataProviderClass = DataProviderClass.class, dataProvider = "orbisID")
-    @Xray(test = {7538})
+    @Xray(test = {4592})
     public void verifyLegendsForTemperatureAlignmentGraphTest(String Entity) {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio Analysis page");
@@ -335,7 +335,7 @@ public class EntityClimateProfileSummaryTests extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI}, dataProviderClass = DataProviderClass.class, dataProvider = "orbisID")
-    @Xray(test = {7774, 7776, 7777, 7778, 6346})
+    @Xray(test = {4792, 4411, 4563, 5047, 4321})
     public void verifyUnderlyingDataPresentForCarbonFootprintSummaryWidget(String Entity) {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         researchLinePage.navigateToFirstEntity(Entity);
@@ -349,7 +349,7 @@ public class EntityClimateProfileSummaryTests extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI}, dataProviderClass = DataProviderClass.class, dataProvider = "noInfoOrbisID")
-    @Xray(test = {6292})
+    @Xray(test = {4394})
     public void verifyNoInfoDisplayedTemperatureAlignmentWidgetTest(String Entity) {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio Analysis page");
@@ -368,7 +368,7 @@ public class EntityClimateProfileSummaryTests extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI}, dataProviderClass = DataProviderClass.class, dataProvider = "orbisID")
-    @Xray(test = {8091})
+    @Xray(test = {4435})
     public void verifyDisplaySectorComparisonChartForMarketRisk(String Entity) {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio Analysis page");
@@ -387,7 +387,7 @@ public class EntityClimateProfileSummaryTests extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI}, dataProviderClass = DataProviderClass.class, dataProvider = "orbisID")
-    @Xray(test = {8092})
+    @Xray(test = {4901})
     public void verifySectorComparisonChartContentMarketRisk(String Entity) {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio Analysis page");
@@ -405,7 +405,7 @@ public class EntityClimateProfileSummaryTests extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI}, dataProviderClass = DataProviderClass.class, dataProvider = "orbisID")
-    @Xray(test = {8096})
+    @Xray(test = {4532})
     public void verifySectorComparisonChartUnderlyingDataForMarketRiskTest(String Entity) {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio Analysis page");
@@ -432,7 +432,7 @@ public class EntityClimateProfileSummaryTests extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI}, dataProviderClass = DataProviderClass.class, dataProvider = "orbisID")
-    @Xray(test = {8118})
+    @Xray(test = {3614})
     public void verifyDisplaySectorComparisonChartForSupplyChainRisk(String Entity) {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio Analysis page");
@@ -450,7 +450,7 @@ public class EntityClimateProfileSummaryTests extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI}, dataProviderClass = DataProviderClass.class, dataProvider = "orbisID")
-    @Xray(test = {8119})
+    @Xray(test = {3478})
     public void verifySectorComparisonChartContentSupplyChainRisk(String Entity) {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio Analysis page");
@@ -468,7 +468,7 @@ public class EntityClimateProfileSummaryTests extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI}, dataProviderClass = DataProviderClass.class, dataProvider = "orbisID")
-    @Xray(test = {8096})
+    @Xray(test = {4532})
     public void verifySectorComparisonChartUnderlyingDataForSupplyChainRiskTest(String Entity) {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio Analysis page");
@@ -487,7 +487,7 @@ public class EntityClimateProfileSummaryTests extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI}, dataProviderClass = DataProviderClass.class, dataProvider = "orbisID")
-    @Xray(test = {8124})
+    @Xray(test = {3486})
     public void verifySectorComparisonChartUnderlyingDataAverageForSupplyChainRiskTest(String Entity) {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio Analysis page");
@@ -504,7 +504,7 @@ public class EntityClimateProfileSummaryTests extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI}, dataProviderClass = DataProviderClass.class, dataProvider = "orbisID")
-    @Xray(test = {6181})
+    @Xray(test = {4332})
     public void verifyDataForOperationRiskUnderPhysicalRiskTabTest(String Entity) {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio Analysis page");
@@ -522,7 +522,7 @@ public class EntityClimateProfileSummaryTests extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI}, dataProviderClass = DataProviderClass.class, dataProvider = "orbisID")
-    @Xray(test = {6182})
+    @Xray(test = {4930})
     public void verifyDataForMarketRiskUnderPhysicalRiskTabTest(String Entity) {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio Analysis page");
@@ -537,7 +537,7 @@ public class EntityClimateProfileSummaryTests extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI}, dataProviderClass = DataProviderClass.class, dataProvider = "orbisID")
-    @Xray(test = {6183})
+    @Xray(test = {4717})
     public void verifyDataForSupplyChainRiskUnderPhysicalRiskTabTest(String Entity) {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio Analysis page");
@@ -552,7 +552,7 @@ public class EntityClimateProfileSummaryTests extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI}, dataProviderClass = DataProviderClass.class, dataProvider = "orbisID")
-    @Xray(test = {6151})
+    @Xray(test = {4739})
     public void verifyPhysicalClimateRiskSubscriberAbleToSeeThreeResearchLinesTest(String Entity) {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio Analysis page");
@@ -568,7 +568,7 @@ public class EntityClimateProfileSummaryTests extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI}, dataProviderClass = DataProviderClass.class, dataProvider = "orbisID")
-    @Xray(test = {6152})
+    @Xray(test = {4911})
     public void verifyUIOfOperationsRiskTableTest(String Entity) {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio Analysis page");
@@ -587,7 +587,7 @@ public class EntityClimateProfileSummaryTests extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI}, dataProviderClass = DataProviderClass.class, dataProvider = "orbisID")
-    @Xray(test = {6154})
+    @Xray(test = {4726})
     public void verifyUIOfMarketRiskTableTest(String Entity) {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio Analysis page");
@@ -606,7 +606,7 @@ public class EntityClimateProfileSummaryTests extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI}, dataProviderClass = DataProviderClass.class, dataProvider = "orbisID")
-    @Xray(test = {6155})
+    @Xray(test = {4457})
     public void verifyUIOfSupplyChainRiskTableTest(String Entity) {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio Analysis page");
@@ -625,7 +625,7 @@ public class EntityClimateProfileSummaryTests extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI})
-    @Xray(test = {6261})
+    @Xray(test = {3707})
     public void verifyBrownShareforNAScores() {
 
         ResearchLinePage researchLinePage = new ResearchLinePage();
@@ -641,7 +641,7 @@ public class EntityClimateProfileSummaryTests extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI})
-    @Xray(test = {8439})
+    @Xray(test = {4431})
     public void verifyCarbonFootprintTooltip() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio Analysis page");
@@ -659,7 +659,7 @@ public class EntityClimateProfileSummaryTests extends UITestBase {
 
     @Test(groups = {REGRESSION, UI},
             dataProviderClass = DataProviderClass.class, dataProvider = "orbisIDWithBrownShareScore")
-    @Xray(test = {6352, 9171, 8803, 8260, 8209, 6353})
+    @Xray(test = {4380, 4980, 4382, 4486, 4316, 4325})
     public void verifyBrownShareUnderTransitionRisk(String orbisID) {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         researchLinePage.navigateToFirstEntity(orbisID);
@@ -672,7 +672,7 @@ public class EntityClimateProfileSummaryTests extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI})
-    @Xray(test = {7090, 8000})
+    @Xray(test = {4318, 4590})
     public void verifyGreenShareUnderTransitionRisk() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio Analysis page");
@@ -687,7 +687,7 @@ public class EntityClimateProfileSummaryTests extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI})
-    @Xray(test = {7079})
+    @Xray(test = {4344})
     public void verifyPhysicalRiskSection() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio Analysis page");
@@ -714,7 +714,7 @@ public class EntityClimateProfileSummaryTests extends UITestBase {
 
     @Test(groups = {REGRESSION, UI, SMOKE},
             dataProviderClass = DataProviderClass.class, dataProvider = "orbisIDWithoutTempAlignment")
-    @Xray(test = {7724, 7725, 7904, 10772})
+    @Xray(test = {4940, 4627, 4977, 4154})
     public void verifyNoDisplayMessageForNoData(String Entity) {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio Analysis page");
@@ -762,7 +762,7 @@ public class EntityClimateProfileSummaryTests extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI}, dataProviderClass = DataProviderClass.class, dataProvider = "noInfoCarbonFootprintOrbisID")
-    @Xray(test = {6246, 7008, 7024, 7030})
+    @Xray(test = {3676, 4729, 4819, 4309})
     public void verifyNoInfoDisplayedCarbonFootPrint(String Entity) {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio Analysis page");
@@ -805,7 +805,7 @@ public class EntityClimateProfileSummaryTests extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI, SMOKE}, dataProviderClass = DataProviderClass.class, dataProvider = "noInfoCarbonFootprintOrbisID")
-    @Xray(test = {6345, 7008})
+    @Xray(test = {5187, 4729})
     public void verifyNoInfoDisplayedCarbonFootPrint1(String Entity) {
         LoginPage loginPage = new LoginPage();
         if(loginPage.loginButtons.size()>0) {
@@ -840,7 +840,7 @@ public class EntityClimateProfileSummaryTests extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI}, dataProviderClass = DataProviderClass.class, dataProvider = "orbisID")
-    @Xray(test = {7037, 7118})
+    @Xray(test = {4965, 4345})
     public void verifyAPIValuesVsUIValues(String Entity) {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         researchLinePage.navigateToFirstEntity(Entity);
@@ -909,7 +909,7 @@ public class EntityClimateProfileSummaryTests extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI}, dataProviderClass = DataProviderClass.class, dataProvider = "entitlementCheckPrd")
-    @Xray(test = {8448, 8449, 8875, 8878, 8879, 8880, 8881, 8884, 8224, 8225, 8226})
+    @Xray(test = {3886, 3884, 4825, 4934, 4857, 4834, 4875, 4396, 4426, 4432, 4474})
     public void verifyEntitlementBaseWidgets(String username, String password, String entitlement) {
         //Trying to log in with only Entitlement User
         LoginPage loginPage = new LoginPage();
@@ -990,7 +990,7 @@ public class EntityClimateProfileSummaryTests extends UITestBase {
 
 
     @Test(groups = {REGRESSION, UI}, dataProviderClass = DataProviderClass.class, dataProvider = "Entity")
-    @Xray(test = {7089, 7091, 7092, 7093, 7095})
+    @Xray(test = {4386, 4444, 4360, 4387, 4797})
     public void verifyPhysicalRiskDropDownMenusTest(String Entity) {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio Analysis page");
@@ -1066,7 +1066,7 @@ public class EntityClimateProfileSummaryTests extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI})
-    @Xray(test = {7094})
+    @Xray(test = {4720})
     public void verifyPhysicalRiskDropDownMenusForNoDataTest() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         //    test.info("Navigate to Portfolio Analysis page");

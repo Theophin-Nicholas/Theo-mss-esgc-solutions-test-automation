@@ -22,7 +22,7 @@ public class UnderLyingDataMetrics extends UITestBase {
     @Test(groups = {REGRESSION, UI, SMOKE},
             description = "Verify if underlying data metrics is available",
             dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
-    @Xray(test = {416, 417, 1323, 1324, 3413, 2934, 2939,8943,8950,5662})
+    @Xray(test = {5064, 4597, 4572, 3534, 2031,4504,4742,4300})
     public void verifyIfUnderlyingDataMetricsIsAvailable(String page) {
         if (page.equals("Physical Risk Management") || page.equals("Temperature Alignment")) {
             throw new SkipException(page+" doesn't have Underlying Data Metrics");
@@ -42,25 +42,25 @@ public class UnderLyingDataMetrics extends UITestBase {
 
     @Test(groups = {REGRESSION, UI},
             description = "Verify if underlying data metrics is available for Physical Risk Hazards")
-    @Xray(test = {5954})
+    @Xray(test = {4498})
     public void verifyTooltipIsDisplayedOnHoverForUnderlyingDataMetrics_PhysicalRiskHazard() {
         DashboardPage dashboardPage = new DashboardPage();
         dashboardPage.selectSamplePortfolioFromPortfolioSelectionModal();
         ResearchLinePage researchLinePage = new ResearchLinePage();
         researchLinePage.navigateToResearchLine("Physical Risk Hazards");
         researchLinePage.waitForDataLoadCompletion();
-        assertTestCase.assertTrue(researchLinePage.checkIfUnderLyingDataMetricsIsAvailable("Physical Risk Hazards"), "Underlying Data Metrics Verified", 5954);
+        assertTestCase.assertTrue(researchLinePage.checkIfUnderLyingDataMetricsIsAvailable("Physical Risk Hazards"), "Underlying Data Metrics Verified", 4498);
 
         List<String> underlyingDataList = Arrays.asList("Country of Sales", "Weather Sensitivity", "Country of Origin", "Resource Demand");
         for (String underlyingDataIndicator : underlyingDataList) {
-            assertTestCase.assertTrue(researchLinePage.checkIfTooltipSIsDisplayedOnHover(underlyingDataIndicator), "Tool tip was displayed on hovering", 5954);
+            assertTestCase.assertTrue(researchLinePage.checkIfTooltipSIsDisplayedOnHover(underlyingDataIndicator), "Tool tip was displayed on hovering", 4498);
         }
         test.pass("User is on Physical Risk Hazards Page");
     }
 
     @Test(groups = {REGRESSION, UI},
             description = "Verify if underlying data metrics is available for Green Share Assessment")
-    @Xray(test = {2761,5689})
+    @Xray(test = {1722,4306})
     public void verifyTooltipIsDisplayedOnHoverForUnderlyingDataMetrics_GreenShare() {
         DashboardPage dashboardPage = new DashboardPage();
         dashboardPage.selectSamplePortfolioFromPortfolioSelectionModal();
@@ -75,7 +75,7 @@ public class UnderLyingDataMetrics extends UITestBase {
 
     @Test(groups = {REGRESSION, UI},
             description = "Verify if underlying data metrics is available for Brown Share Assessment")
-    @Xray(test = {2761,5688,2939})
+    @Xray(test = {1722,4276,2031})
     public void verifyTooltipIsDisplayedOnHoverForUnderlyingDataMetrics_BrownShare() {
         DashboardPage dashboardPage = new DashboardPage();
         dashboardPage.selectSamplePortfolioFromPortfolioSelectionModal();

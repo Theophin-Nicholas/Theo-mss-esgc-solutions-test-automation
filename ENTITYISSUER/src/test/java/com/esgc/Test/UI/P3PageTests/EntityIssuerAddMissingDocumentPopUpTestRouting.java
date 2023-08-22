@@ -15,7 +15,7 @@ import static com.esgc.Utilities.Groups.*;
 public class EntityIssuerAddMissingDocumentPopUpTestRouting extends EntityPageTestBase {
 
 
-    @Xray(test = {7350, 8795, 9821,10809})
+    @Xray(test = {4184, 4192, 3993,4799})
     @Test(groups = {REGRESSION, UI, SMOKE, ISSUER},
             dataProvider = "loginP3", dataProviderClass = IssuerDataProviderClass.class,
             description = "Verify Add missing document functionlity")
@@ -43,7 +43,7 @@ public class EntityIssuerAddMissingDocumentPopUpTestRouting extends EntityPageTe
         }
     }
 
-    @Xray(test = {11522})
+    @Xray(test = {4676})
     @Test(groups = {REGRESSION, UI, SMOKE, ISSUER},
             dataProvider = "loginP3", dataProviderClass = IssuerDataProviderClass.class,
             description = "Verify Add missing document functionlity with wrong URL")

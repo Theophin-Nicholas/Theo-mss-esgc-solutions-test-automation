@@ -17,8 +17,8 @@ public class FilterSelectionTests extends UITestBase {
 
 
     @Test(groups = {REGRESSION, UI, SMOKE},
-            description = "ESGCA-1293 - Verify the Filters Selection When a User Refreshes  the Page", priority = 10000)
-    @Xray(test = {1293, 1300})
+            description = "ESGT-4693 - Verify the Filters Selection When a User Refreshes  the Page", priority = 10000)
+    @Xray(test = {4693, 5066})
     public void verifyFiltersDefaultSelectionWithRefresh() {
 
         ResearchLinePage researchLinePage = new ResearchLinePage();
@@ -55,7 +55,7 @@ public class FilterSelectionTests extends UITestBase {
         String portfolioNameAfterRefresh = researchLinePage.getSelectedPortfolioNameFromDropdown();
         String filterDataAfterRefresh = researchLinePage.getRegionsSectionAndAsOfDateDropdownSelectedValue();
         //TODO this might fail in parallel run due to same account. we might use different login test account to over come this issue
-        assertTestCase.assertEquals(portfolioNameBeforeRefresh, portfolioNameAfterRefresh, "Default portfolio verified", 1293);
+        assertTestCase.assertEquals(portfolioNameBeforeRefresh, portfolioNameAfterRefresh, "Default portfolio verified", 4693);
         assertTestCase.assertTrue(filterDataAfterRefresh.startsWith("Viewing data in All Regions, All Sectors, at the end of"), "Default filter verification");
         assertTestCase.assertNotEquals(filterDataBeforeRefresh, filterDataAfterRefresh, "After refreshing the Page , Filters are getting reset to default.");
 
@@ -64,8 +64,8 @@ public class FilterSelectionTests extends UITestBase {
 
 
     @Test(groups = {REGRESSION, UI},
-            description = "ESGCA-1292 - UI | Filters | Verify the filters selection for returning user")
-    @Xray(test = 1292)
+            description = "ESGT-2096 - UI | Filters | Verify the filters selection for returning user")
+    @Xray(test = 2096)
     public void verifyFiltersDefaultSelectionByNavigatingResearchLines() {
 
         ResearchLinePage researchLinePage = new ResearchLinePage();
@@ -101,15 +101,15 @@ public class FilterSelectionTests extends UITestBase {
         String portfolioNameAfterRefresh = researchLinePage.getSelectedPortfolioNameFromDropdown();
         String filterDataAfterRefresh = researchLinePage.getRegionsSectionAndAsOfDateDropdownSelectedValue();
         System.out.println(filterDataAfterRefresh);
-        assertTestCase.assertEquals(portfolioNameBeforeRefresh, portfolioNameAfterRefresh, "Default portfolio verified", 1292);
+        assertTestCase.assertEquals(portfolioNameBeforeRefresh, portfolioNameAfterRefresh, "Default portfolio verified", 2096);
         assertTestCase.assertEquals(filterDataBeforeRefresh, filterDataAfterRefresh, "After navigating back to the Page , Filters are still same.");
 
 
     }
 
     @Test(groups = {REGRESSION, UI},
-            description = "ESGCA-1294 - UI | Filters | Verify the Filters Selection once User Refresh the Page in case of Default Portfolio")
-    @Xray(test = 1294)
+            description = "ESGT-2083 - UI | Filters | Verify the Filters Selection once User Refresh the Page in case of Default Portfolio")
+    @Xray(test = 2083)
     public void verifyFiltersDefaultSelectionWithBenchmarkByRefreshingPage() {
 
         ResearchLinePage researchLinePage = new ResearchLinePage();
@@ -146,20 +146,20 @@ public class FilterSelectionTests extends UITestBase {
         String filterDataAfterRefresh = researchLinePage.getRegionsSectionAndAsOfDateDropdownSelectedValue();
         String benchmarkAfterRefresh = researchLinePage.getBenchmarkPortfolioName();
 
-        assertTestCase.assertEquals(portfolioNameBeforeRefresh, portfolioNameAfterRefresh, "Default portfolio verified", 1294);
+        assertTestCase.assertEquals(portfolioNameBeforeRefresh, portfolioNameAfterRefresh, "Default portfolio verified", 2083);
         assertTestCase.assertTrue(filterDataAfterRefresh.startsWith("Viewing data in All Regions, All Sectors, at the end of"), "Default filter verification");
         System.out.println("filterDataBeforeRefresh = " + filterDataBeforeRefresh);
         System.out.println("filterDataAfterRefresh = " + filterDataAfterRefresh);
         assertTestCase.assertNotEquals(filterDataBeforeRefresh, filterDataAfterRefresh, "After refreshing the Page , Filters are getting reset to default.");
         assertTestCase.assertNotEquals(benchmarkBeforeRefresh, benchmarkAfterRefresh, "Benchmark dropdown verified");
         assertTestCase.assertEquals(benchmarkAfterRefresh, "Select Benchmark", "Benchmark dropdown verified");
-        assertTestCase.assertTrue(researchLinePage.isNoBenchmarkMessageDisplayed(), " No Benchmark message is displayed", 1294);
+        assertTestCase.assertTrue(researchLinePage.isNoBenchmarkMessageDisplayed(), " No Benchmark message is displayed", 2083);
 
     }
 
     @Test(groups = {REGRESSION, UI},
-            description = "ESGCA-1308 - Verify the filter selection for 'As of date' in case of new updates when user refresh the page")
-    @Xray(test = {1307, 1308})
+            description = "ESGT-1543 - Verify the filter selection for 'As of date' in case of new updates when user refresh the page")
+    @Xray(test = {2202, 1543})
     public void verifyFilterSelectionAsOfDateTest() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio Analysis page");
@@ -181,8 +181,8 @@ public class FilterSelectionTests extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI},
-            description = "ESGCA-1313 Verify the different sections are responding to the filter selections")
-    @Xray(test = 1313)
+            description = "ESGT-1621 Verify the different sections are responding to the filter selections")
+    @Xray(test = 1621)
     public void verifyDifferentSectionsRespondingSelectionsTest() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio Analysis page");
@@ -215,8 +215,8 @@ public class FilterSelectionTests extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI},
-            description = " ESGCA-1319 UI Verify User Changes Pages and Goes Back to Prior Page Without Updating the Portfolio Filter")
-    @Xray(test = 1319)
+            description = " ESGT-4696 UI Verify User Changes Pages and Goes Back to Prior Page Without Updating the Portfolio Filter")
+    @Xray(test = 4696)
     public void verifyUserChangesPagesPortfolioSelectionTest() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Navigate to Portfolio Analysis page");

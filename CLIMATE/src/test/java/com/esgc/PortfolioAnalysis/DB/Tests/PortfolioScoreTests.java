@@ -29,12 +29,11 @@ public class PortfolioScoreTests extends DataValidationTestBase {
 
 
     @Test(groups = {REGRESSION, DATA_VALIDATION}, dataProvider = "researchLines")
-    @Xray(test = {2259, 2256, 2255, 2692, 2691, 3019, 2257, 2511, 2510, 2693, 2512, 3024, 2258, 2694,
-            2513, 2695, 2514, 2192, 4430, 6593, 6596,
-            6725,
-            11235,//Subs
-            10898, 11400,//ESG predicted
-            12616
+    @Xray(test = {4883, 4419, 2094, 4284, 4808, 4918, 4503, 4970, 4465, 4348, 5079, 4609,
+            4552, 4703, 4675, 1987, 1302, 3550, 3693,
+            3984,
+            4497,//ESG predicted
+            3689
     })
     //TCFD 1992
     //Energy Transition 3027, 3029, 3020, 3019, 3024
@@ -134,7 +133,7 @@ public class PortfolioScoreTests extends DataValidationTestBase {
 
     //TODO needs to be updated
     @Test(groups = {REGRESSION, DATA_VALIDATION})
-    @Xray(test = {6370, 6371})
+    @Xray(test = {3715, 3523})
     public void verifyPhysicalHazardPortfolioScore(
             //@Optional String sector, @Optional String region,
             @Optional String researchLine,
@@ -174,7 +173,7 @@ public class PortfolioScoreTests extends DataValidationTestBase {
     }
 
     @Test(groups = {REGRESSION, DATA_VALIDATION, ESG})
-    @Xray(test = {8178})
+    @Xray(test = {4833})
     public void verifyESGAssessmentPortfolioScore(
             //@Optional String sector, @Optional String region,
             @Optional String researchLine,

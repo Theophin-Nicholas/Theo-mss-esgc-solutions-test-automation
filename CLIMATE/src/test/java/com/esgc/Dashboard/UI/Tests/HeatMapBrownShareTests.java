@@ -26,7 +26,7 @@ import static com.esgc.Utilities.Groups.*;
 public class HeatMapBrownShareTests extends DashboardUITestBase {
 
     @Test(groups = {REGRESSION, UI})
-    @Xray(test = {12278, 12279, 12320, 12321})
+    @Xray(test = {4644, 4945, 4553, 4867})
     public void VerifyBrownShareAssessmentCategories() {
 
         DashboardPage dashboardPage = new DashboardPage();
@@ -60,7 +60,7 @@ public class HeatMapBrownShareTests extends DashboardUITestBase {
     }
 
     @Test(groups = {UI, DASHBOARD, REGRESSION})
-    @Xray(test = {12264})
+    @Xray(test = {4607})
     public void verifyBrownShareCategoryPercentages() {
         DashboardPage dashboardPage = new DashboardPage();
         dashboardPage.navigateToPageFromMenu("Climate Dashboard");
@@ -86,7 +86,7 @@ public class HeatMapBrownShareTests extends DashboardUITestBase {
     }
 
     @Test(groups = {REGRESSION, UI, DASHBOARD})
-    @Xray(test = {12323, 12324})
+    @Xray(test = {4606, 4629})
     public void compareUIandDBHeatMapBrownShareData() {
         DashboardPage dashboardPage = new DashboardPage();
         dashboardPage.navigateToPageFromMenu("Climate Dashboard");
@@ -141,7 +141,7 @@ public class HeatMapBrownShareTests extends DashboardUITestBase {
     }
 
     @Test(groups = {REGRESSION, UI, DASHBOARD})
-    @Xray(test = {12322})
+    @Xray(test = {4612})
     public void compareUIandApiHeatMapBrownShareData() {
         DashboardPage dashboardPage = new DashboardPage();
         dashboardPage.navigateToPageFromMenu("Climate Dashboard");

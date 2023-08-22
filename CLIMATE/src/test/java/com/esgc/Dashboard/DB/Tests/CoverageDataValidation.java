@@ -24,7 +24,7 @@ public class CoverageDataValidation extends DataValidationTestBase {
     DashboardQueries queries = new DashboardQueries();
 
     @Test(groups = {REGRESSION, DATA_VALIDATION, DASHBOARD})
-    @Xray(test = {3643, 3645, 3646, 3647})
+    @Xray(test = {4810, 4723, 4753, 4361})
     // Coverage link text  should be Climate Coverage
     public void verifyCoverage() {
         Response portfoliosResponse = APIUtilities.getAvailablePortfoliosForUser();
@@ -50,7 +50,7 @@ public class CoverageDataValidation extends DataValidationTestBase {
 
     @Test(groups = {REGRESSION, DATA_VALIDATION, DASHBOARD},
             description = "Data Validation | Dashboard Page | Coverage Drawer | Verify the sector for the entities in the coverage drawer widget are matching with SF data")
-    @Xray(test = {14310, 14313, 14328})
+    @Xray(test = {2883, 3051, 3104})
     public void verifyCoverageDrawer() {
         DashboardPage dashboardPage = new DashboardPage();
         if(!dashboardPage.selectPortfolioButton.getText().equals("Sample Portfolio")) {
@@ -185,7 +185,7 @@ public class CoverageDataValidation extends DataValidationTestBase {
 
     @Test(groups = {REGRESSION, DATA_VALIDATION, DASHBOARD},
             description = "Data Validation | Dashboard Page | Portfolio Monitoring Widget | verify the Sector for entity in portfolio-controversies details.")
-    @Xray(test = {14311})
+    @Xray(test = {2867})
     public void verifySectorForPortfolioMonitoringWidget() {
         DashboardPage dashboardPage = new DashboardPage();
         if(!dashboardPage.selectPortfolioButton.getText().equals("Sample Portfolio")) {

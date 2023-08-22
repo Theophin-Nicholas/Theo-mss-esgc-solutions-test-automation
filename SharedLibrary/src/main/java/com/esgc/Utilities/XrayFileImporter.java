@@ -1,6 +1,7 @@
 package com.esgc.Utilities;
 
 import com.esgc.APIModels.JiraTestCase;
+import com.esgc.APIModels.JiraTestCasePayload;
 import com.esgc.APIModels.TestCase;
 import com.esgc.APIModels.TestEvidence;
 import com.esgc.TestBase.TestBase;
@@ -129,23 +130,18 @@ public class XrayFileImporter {
         savePayloadToFramework(payload);
 
         //STEP 4 get token to get access to import tests in JIRA
-        String body = "{ \"client_id\": \"64095568AFB44A98A04471DE45FCBAE6\",\"client_secret\": \"934a0ffc7ed4fdc7d7ffee0dcce4a72161ccfaf3518bbf299b28f2278f16df14\" }\n";
+        String token = getXrayToken();
 
-        String token = given()
-                .body(body)
-                .contentType("application/json")
-                .relaxedHTTPSValidation().accept(ContentType.JSON).log().all().when()
-                .post("https://xray.cloud.getxray.app/api/v2/authenticate").prettyPrint().replace("\"", "");
+        //Since test cases are a lot, we send them partially (100 test case) in each iteration
+        int chunkSize = 100;
+        for (int startIndex = 0; startIndex < tclist.size(); startIndex += chunkSize) {
 
+            int endIndex = Math.min(startIndex + chunkSize, tclist.size());
+            List<JiraTestCase> tcSubList = tclist.subList(startIndex, endIndex);
+            System.out.println("tcSubList = " + tcSubList);
+            //STEP 5 Import tests to test execution ticket and map Test Cases with PASS and/or FAIL status in JIRA
+            Response response = linkTestCasesToTestExecutionTicket(testExecutionKey, token, tcSubList);
 
-        //STEP 5 Import tests to test execution ticket and map Test Cases with PASS and/or FAIL status in JIRA
-        Response response = given()
-                .header("Authorization", "Bearer " + token)
-                .relaxedHTTPSValidation().accept(ContentType.JSON)
-                .contentType("application/json")
-                .body(payload)
-                .when()
-                .post("https://xray.cloud.getxray.app/api/v2/import/execution");
         /*
         STEP 6 - If there is any unrelated ticket mapped, remove it from list to complete mapping on Jira test execution ticket
         (once there is unrelated ticket number in the list, test execution is not mapping test cases)
@@ -153,66 +149,41 @@ public class XrayFileImporter {
             "error": "Issue with key ESGCA-111 is not of type Test."
         }
         */
-        while (response.statusCode() == 400) {
-            String errorMessage = response.jsonPath().getString("error");
-            System.out.println("Error Message:" + errorMessage);
-            List<String> removeTestCaseList = Arrays.stream(errorMessage.split(" "))
-                    .filter(word -> word.contains("ESGT-")).collect(Collectors.toList());
+            while (response.statusCode() == 400) {
+                String errorMessage = response.jsonPath().getString("error");
+                System.out.println("Error Message:" + errorMessage);
 
-            for (int i = 0; i < removeTestCaseList.size(); i++) {
-                String ticketNum = removeTestCaseList.get(i);
-                if (ticketNum.contains("\"")) {
-                    removeTestCaseList.set(i, ticketNum.substring(1, ticketNum.length() - 1));
+                if(!errorMessage.contains("ESGT-"))
+                    break;
+
+                List<String> removeTestCaseList = Arrays.stream(errorMessage.split(" "))
+                        .filter(word -> word.contains("ESGT-")).collect(Collectors.toList());
+
+                for (int i = 0; i < removeTestCaseList.size(); i++) {
+                    String ticketNum = removeTestCaseList.get(i);
+                    if (ticketNum.contains("\"")) {
+                        removeTestCaseList.set(i, ticketNum.substring(1, ticketNum.length() - 1));
+                    }
                 }
+
+                System.out.println("###################");
+                System.out.println("THIS TICKET NUMBER TYPE IS NOT A TEST CASE:");
+                removeTestCaseList.forEach(System.out::println);
+                System.out.println("###################");
+
+                for (String testCaseTicketNumber : removeTestCaseList) {
+                    tclist.removeIf(e -> e.getTestKey().equals(testCaseTicketNumber));
+                }
+
+                // tclist.stream().filter(e -> !removeTestCaseList.contains(e.getTestKey())).collect(Collectors.toList());
+
+                //(without unrelated ticket numbers) Create test execution ticket and map Test Cases with PASS and/or FAIL status
+                response = linkTestCasesToTestExecutionTicket(testExecutionKey, token, tcSubList);
             }
-
-//            System.out.println("###################");
-//            System.out.println("SOME TICKET NUMBERS TYPE IS NOT TEST CASE");
-//            System.out.println("THOSE TICKET NUMBERS ARE REMOVED FROM THE LIST");
-//            System.out.println("REMOVED TICKET NUMBERS WHICH ARE NOT TEST CASES:");
-            removeTestCaseList.forEach(System.out::println);
-//            System.out.println("###################");
-
-            for (String testCaseTicketNumber : removeTestCaseList) {
-                tclist.removeIf(e -> e.getTestKey().equals(testCaseTicketNumber));
-            }
-
-            // tclist.stream().filter(e -> !removeTestCaseList.contains(e.getTestKey())).collect(Collectors.toList());
-
-            String tcs2 = new Gson().toJson(tclist);
-            String payload2 = "{" +
-                    "    \"testExecutionKey\": \"" + testExecutionKey + "\",\n" +
-                    " \"tests\" : " + tcs2 + "\n" +
-                    "}";
-
-            //(without unrelated ticket numbers) Create test execution ticket and map Test Cases with PASS and/or FAIL status
-            response = given()
-                    .header("Authorization", "Bearer " + token)
-                    .relaxedHTTPSValidation().accept(ContentType.JSON)
-                    .contentType("application/json")
-                    .body(payload2)
-                    .when()
-                    .post("https://xray.cloud.getxray.app/api/v2/import/execution");
         }
 
-
         //STEP 7 - Update Test Execution Ticket Status from TO-DO to DONE
-        String payloadToChangeTicketStatus = "{" +
-                "    \"transition\" : {\n" +
-                "     \"id\" : \"41\"" +
-                "    }" +
-                "}";
-
-        configSpec()
-                .contentType("application/json")
-                .pathParam("id", testExecutionKey)
-                .body(payloadToChangeTicketStatus)
-                .when()
-                .post("rest/api/3/issue/{id}/transitions?expand=expand.fields")
-                .then()
-                .log()
-                .ifError();
-
+        moveTestExecutionTicketToDoneStatus(testExecutionKey);
 
         //STEP 8
         attachHTMLReportToTestExecutionTicket(testExecutionKey, reportName);
@@ -313,7 +284,46 @@ public class XrayFileImporter {
         return null;
     }
 
-    public static void sendTestExecutionStatusToSlack(String message) throws Exception {
+    private static String getXrayToken() {
+        String body = "{ \"client_id\": \"64095568AFB44A98A04471DE45FCBAE6\",\"client_secret\": \"934a0ffc7ed4fdc7d7ffee0dcce4a72161ccfaf3518bbf299b28f2278f16df14\" }\n";
+
+        return given()
+                .body(body)
+                .contentType("application/json")
+                .relaxedHTTPSValidation().accept(ContentType.JSON).when()
+                .post("https://xray.cloud.getxray.app/api/v2/authenticate").prettyPrint().replace("\"", "");
+    }
+
+    private static Response linkTestCasesToTestExecutionTicket(String testExecutionKey, String token, List<JiraTestCase> testCaseList) {
+        System.out.println("Linking test cases");
+        return given()
+                .header("Authorization", "Bearer " + token)
+                .relaxedHTTPSValidation().accept(ContentType.JSON)
+                .contentType("application/json")
+                .body(new JiraTestCasePayload(testExecutionKey, testCaseList))
+                .when()
+                .post("https://xray.cloud.getxray.app/api/v2/import/execution");
+    }
+
+    private static void moveTestExecutionTicketToDoneStatus(String testExecutionKey) {
+        String payloadToChangeTicketStatus = "{" +
+                "    \"transition\" : {\n" +
+                "     \"id\" : \"41\"" +
+                "    }" +
+                "}";
+
+        configSpec()
+                .contentType("application/json")
+                .pathParam("id", testExecutionKey)
+                .body(payloadToChangeTicketStatus)
+                .when()
+                .post("rest/api/3/issue/{id}/transitions?expand=expand.fields")
+                .then()
+                .log()
+                .ifError();
+    }
+
+    private static void sendTestExecutionStatusToSlack(String message) throws Exception {
         try {
             Payload payload = Payload.builder().channel(channelName).text(message).build();
 
@@ -340,24 +350,14 @@ public class XrayFileImporter {
 
     public static void attachHTMLReportToTestExecutionTicket(String tickedNumber, String reportName) {
         System.out.println("File Attachment Started");
-   //     try {
-            String filepath = TestBase.reportPath + File.separator + reportName + ".html";
-            System.out.println("Report Path=" + filepath);
-            configSpec()
-
-                    .header("Accept", "application/json")
-                    .header("X-Atlassian-Token", "no-check")
-                    .multiPart("file", new File(filepath))
-//                    .field("file", new File("myfile.txt"))
-//
-//                    .header("Content-Type", "multipart/form-data")
-//                    .multiPart("file", "Execution Report", FileUtils.readFileToByteArray(new File(filepath)), "text/csv")
-                    .when().log().all()
-                    .post("rest/api/3/issue/" + tickedNumber + "/attachments").prettyPeek();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-
+        String filepath = TestBase.reportPath + File.separator + reportName + ".html";
+        System.out.println("Report Path=" + filepath);
+        configSpec()
+                .header("Accept", "application/json")
+                .header("X-Atlassian-Token", "no-check")
+                .multiPart("file", new File(filepath))
+                .when()
+                .post("rest/api/3/issue/" + tickedNumber + "/attachments");
     }
 
     public static List<String> getSmokeTestCases() {
@@ -374,7 +374,7 @@ public class XrayFileImporter {
     public static void savePayloadToFramework(String payload) {
         String filePath = System.getProperty("user.dir") + File.separator + "SEND RESULTS TO JIRA PAYLOAD.txt";
         System.out.println("filePath = " + filePath);
-        try (FileWriter fileWriter = new FileWriter(filePath)) {
+        try (FileWriter fileWriter = new FileWriter(filePath, false)) {
             fileWriter.write(payload);
             System.out.println("Payload saved to file successfully.");
         } catch (IOException e) {
@@ -383,14 +383,10 @@ public class XrayFileImporter {
         }
     }
 
-    public static void main(String[] args) {
-        attachHTMLReportToTestExecutionTicket("ESGT-2584", "Execution Report");
-    }
-
     private static Response createTestExecution(String reportName) {
         System.out.println("creating test execution");
         return configSpec()
-                .contentType(ContentType.JSON).log().all()
+                .contentType(ContentType.JSON)
                 .body("{\n" +
                         "  \"fields\": {\n" +
                         "    \"project\": {\n" +

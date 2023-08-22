@@ -1,30 +1,22 @@
 package com.esgc.EntityProfile.UI.Tests;
 
 import com.esgc.Base.TestBases.UITestBase;
-import com.esgc.EntityProfile.API.APIModels.EntityHeader;
-import com.esgc.EntityProfile.API.Controllers.EntityProfileClimatePageAPIController;
 import com.esgc.EntityProfile.UI.Pages.EntityClimateProfilePage;
 import com.esgc.PortfolioAnalysis.UI.Pages.ResearchLinePage;
 import com.esgc.TestBase.DataProviderClass;
 import com.esgc.Utilities.BrowserUtils;
-import com.esgc.Utilities.Driver;
 import com.esgc.Utilities.Xray;
-import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
-import org.openqa.selenium.WebElement;
 import org.testng.Assert;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Test;
-
-import java.util.Arrays;
-import java.util.List;
 
 import static com.esgc.Utilities.Groups.*;
 
 public class EntityClimateProfile extends UITestBase {
 
 
-    @Xray(test = {5875, 5879, 11725, 12413})
+    @Xray(test = {3347, 3352, 4274})
     @Test(enabled = true, groups = {REGRESSION, UI, SMOKE, ENTITY_PROFILE},
             description = "Verify if Company headers are Displayed as Expected",
             dataProviderClass = DataProviderClass.class, dataProvider = "CompanyNames")
@@ -42,7 +34,7 @@ public class EntityClimateProfile extends UITestBase {
         entityProfilePage.validateCompanyHeader(companyName);
     }
 
-    @Xray(test = 6019)
+    @Xray(test = 3366)
     @Test(groups = {REGRESSION, UI, SMOKE, ENTITY_PROFILE},
             description = "Verify if Company headers are Displayed as Expected",
             dataProviderClass = DataProviderClass.class, dataProvider = "CompanyNames")
@@ -63,7 +55,7 @@ public class EntityClimateProfile extends UITestBase {
         //entityProfilePage.validateColorOfValueBoxAndPieChart("Green Share", greenShareValue);
     }
 
-    @Xray(test = 6019)
+    @Xray(test = 3366)
     @Test(groups = {REGRESSION, UI, SMOKE, ENTITY_PROFILE},
             description = "Verify if Company headers are Displayed as Expected",
             dataProviderClass = DataProviderClass.class, dataProvider = "CompanyNames")
@@ -82,7 +74,7 @@ public class EntityClimateProfile extends UITestBase {
         //entityProfilePage.validateColorOfValueBoxAndPieChart("Brown Share", brownShareValue);
     }
 
-    @Xray(test = 6066)
+    @Xray(test = 4366)
     @Test(groups = {REGRESSION, UI, SMOKE, ENTITY_PROFILE},
             description = "Verify if Company headers are Displayed as Expected")
     public void testTemperatureAlignmentWidget() {
@@ -100,7 +92,7 @@ public class EntityClimateProfile extends UITestBase {
         entityProfilePage.validateTemperatureAlignmentUpdatedOn();
     }
 
-    @Xray(test = {6111, 6113})
+    @Xray(test = {4885, 4365})
     @Test(groups = {REGRESSION, UI, ENTITY_PROFILE},
             description = "Entity Climate Profile Page Carbon Footprint Sector Comparison Chart  for Transition Risk",
             dataProviderClass = DataProviderClass.class, dataProvider = "CompanyNames")
@@ -119,7 +111,7 @@ public class EntityClimateProfile extends UITestBase {
 
     }
 
-    @Xray(test = {6189, 6190})
+    @Xray(test = {4952, 4816})
     @Test(groups = {REGRESSION, UI, ENTITY_PROFILE},
             description = "Entity Climate Profile Page-Sector Comparison Chart for Physical risk",
             dataProviderClass = DataProviderClass.class, dataProvider = "CompanyNames")
@@ -137,7 +129,7 @@ public class EntityClimateProfile extends UITestBase {
     }
 
     //TODO needs to be handled
-    @Xray(test = {8981, 8983})
+    @Xray(test = {4483, 4795})
     @Test(groups = {REGRESSION, UI, ENTITY_PROFILE},
             description = "Entity Climate Profile Page-Physical risk management",
             dataProviderClass = DataProviderClass.class, dataProvider = "CompanyNames")
@@ -153,41 +145,7 @@ public class EntityClimateProfile extends UITestBase {
 
     }
 
-    //todo: Check if functionality is available
-    @Xray(test = {11207, 11209})
-    @Test(enabled = false, groups = {REGRESSION, SMOKE, UI, ENTITY_PROFILE},
-            description = "Entity Climate Profile Page-Physical risk management",
-            dataProviderClass = DataProviderClass.class, dataProvider = "orbisIdWithCompanyName")
-    public void verifyL3SectorInEntityHeader(String companyName, String orbisId) {
-        //Get the api response for L3 field mesg_sector
-        EntityClimateProfilePage entityProfilePage = new EntityClimateProfilePage();
-        entityProfilePage.searchAndLoadClimateProfilePage(orbisId);
-        getExistingUsersAccessTokenFromUI();
-        BrowserUtils.wait(2);
-        EntityProfileClimatePageAPIController apiController = new EntityProfileClimatePageAPIController();
-        List<EntityHeader> list = Arrays.asList(apiController.geCompanyHeaderAPIResponse(orbisId).as(EntityHeader[].class));
-        String l3ApiValue = list.get(0).getMesg_sector();
-        l3ApiValue = "Sector: " + l3ApiValue;
-        System.out.println("l3ApiValue = " + l3ApiValue);
-        // Get the header Sector details
-        //String sectorHeaderUI = entityProfilePage.sectorInHeader.getText();
-        //System.out.println("sectorHeaderUI = " + sectorHeaderUI);
-
-        // Get the Company drawer Sector detail.
-        WebElement companyDrawerButton = Driver.getDriver().findElement(By.xpath("//span[contains(text(),'" + companyName + "')]"));
-        companyDrawerButton.click();
-        BrowserUtils.wait(1);
-        //String sectorDrawerUI = entityProfilePage.sectorInHeader.getText();
-        //System.out.println("sectorDrawerUI = " + sectorDrawerUI);
-
-        //Compare all 3 fields against each other
-        //assertTestCase.assertEquals(sectorHeaderUI,l3ApiValue);
-        //assertTestCase.assertEquals(sectorDrawerUI,l3ApiValue);
-        //assertTestCase.assertEquals(sectorDrawerUI,sectorHeaderUI);
-
-    }
-
-    @Xray(test = {10044})
+    @Xray(test = {3970})
     @Test(groups = {REGRESSION, UI, ENTITY_PROFILE},
             description = "Verify Entity page header of the Company Name' About Drawer",
             dataProviderClass = DataProviderClass.class, dataProvider = "CompanyNames")
@@ -212,7 +170,7 @@ public class EntityClimateProfile extends UITestBase {
 
     }
 
-    @Xray(test = {10275})
+    @Xray(test = {4841})
     @Test(groups = {REGRESSION, UI, ENTITY_PROFILE},
             dataProviderClass = DataProviderClass.class, dataProvider = "Company With Orbis ID")
     public void validatePhysicalClimateHazardDate(String... Company) {
@@ -221,7 +179,7 @@ public class EntityClimateProfile extends UITestBase {
         entityProfilePage.validatePhysicalClimateHazardUpdatedDate(Company[1]);
     }
 
-    @Xray(test = {10282})
+    @Xray(test = {4858})
     @Test(groups = {REGRESSION, UI, ENTITY_PROFILE},
             dataProviderClass = DataProviderClass.class, dataProvider = "Company With Orbis ID")
     public void validatePhysicalRiskManagementUpdatedDate(String... Company) {

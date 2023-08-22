@@ -15,7 +15,7 @@ import static com.esgc.Utilities.Groups.*;
 public class EntityClimateProfileMethodologyLinks extends UITestBase {
 
    /* @Test(groups = {ENTITY_PROFILE, REGRESSION, UI, SMOKE, ENTITLEMENTS})
-    @Xray(test = {6159})
+    @Xray(test = {4734})
     public void validatePhysicalRiskMethodologyLink() {
         //Trying to log in with only Physical Risk Entitilment User
      *//*   Driver.getDriver().manage().deleteAllCookies();
@@ -46,7 +46,7 @@ public class EntityClimateProfileMethodologyLinks extends UITestBase {
     }*/
 
     @Test(groups = {ENTITY_PROFILE, REGRESSION, UI, SMOKE, ENTITLEMENTS})
-    @Xray(test = {6326, 7872, 6159})
+    @Xray(test = {4681, 4933, 4734})
     public void validateTransitionRiskMethodologyLink() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
 

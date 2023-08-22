@@ -37,7 +37,7 @@ public class PortfolioCoverage extends UITestBase {
     @Test(groups = {REGRESSION, UI, SMOKE},
             description = "Verify if Portfolio Coverage Table is Displayed as Expected",
             dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
-    @Xray(test = {2420, 6729, 1690})
+    @Xray(test = {4337, 4033, 4831})
     public void verifyPortfolioCoverage(String page) {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         String title = "Coverage";
@@ -52,7 +52,7 @@ public class PortfolioCoverage extends UITestBase {
 
 
        // assertTestCase.assertTrue(researchLinePage.checkIfWidgetTitleIsDisplayed(title), "Portfolio Coverage is Displayed");
-        assertTestCase.assertTrue(researchLinePage.checkIfPortfolioTableIsDisplayed(title), "Portfolio Coverage is displayed", 553);
+        assertTestCase.assertTrue(researchLinePage.checkIfPortfolioTableIsDisplayed(title), "Portfolio Coverage is displayed", 4557);
 
         test.pass(title + " Table/Chart displayed");
 

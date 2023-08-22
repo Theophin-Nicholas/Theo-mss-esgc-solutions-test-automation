@@ -53,7 +53,7 @@ public class ApplicationPageTests extends EMCUITestBase {
     }
 
     @Test(groups = {EMC, UI, SMOKE, REGRESSION, PROD})
-    @Xray(test = {2330, 5101, 5103, 2153, 2154, 2155})
+    @Xray(test = {2195, 1876, 1720, 1549, 2084, 2150})
     public void applicationDetailsVerificationTests() {
         EMCMainPage emcMainPage = new EMCMainPage();
         //Navigate to EMC Application Panel
@@ -97,7 +97,7 @@ public class ApplicationPageTests extends EMCUITestBase {
     }
 
     @Test(groups = {EMC, UI, REGRESSION, SMOKE})
-    @Xray(test = {2346, 2322, 2323})
+    @Xray(test = {2008, 1637, 1408})
     public void verifyUserEnterApplicationNameTest() {
         navigateToApplicationsPage(testApplicationName, "details");
         EMCApplicationDetailsPage detailsPage = new EMCApplicationDetailsPage();
@@ -117,7 +117,7 @@ public class ApplicationPageTests extends EMCUITestBase {
     }
 
     @Test(groups = {EMC, UI, REGRESSION, SMOKE})
-    @Xray(test = {5173, 5174, 7657, 13413})
+    @Xray(test = {1927, 1929, 3878, 3014})
     public void verifyUserCreateNewRoleForApplicationTest() {
         List<String> applicationNames = Arrays.asList(applicationName, externalApplicationName, webApplicationName);
         for (String appType:applicationNames){
@@ -140,7 +140,7 @@ public class ApplicationPageTests extends EMCUITestBase {
     }
 
     @Test(groups = {EMC, UI, REGRESSION, SMOKE, PROD})
-    @Xray(test = {3720, 13449})
+    @Xray(test = {1310, 2726})
     public void verifyUserCancelCreateNewRoleForApplicationTest() {
         List<String> applicationNames = Arrays.asList(applicationName, externalApplicationName, webApplicationName);
         if(ConfigurationReader.getProperty("environment").equals("prod")){
@@ -166,7 +166,7 @@ public class ApplicationPageTests extends EMCUITestBase {
     }
 
     @Test(groups = {EMC, UI, REGRESSION, SMOKE, PROD})
-    @Xray(test = {2312})
+    @Xray(test = {1418})
     public void verifyEMCApplicationsSortedAlphabeticallyByNameTest() {
         navigateToApplicationsPage("", "roles");
 
@@ -177,7 +177,7 @@ public class ApplicationPageTests extends EMCUITestBase {
     }
 
     @Test(groups = {EMC, UI, REGRESSION})
-    @Xray(test = {2332})
+    @Xray(test = {1487})
     public void verifyApplicationURLClickableTest() {
         navigateToApplicationsPage("", "roles");
 
@@ -196,7 +196,7 @@ public class ApplicationPageTests extends EMCUITestBase {
     }
 
     @Test(groups = {EMC, UI, REGRESSION})
-    @Xray(test = {2333})
+    @Xray(test = {1910})
     public void verifyApplicationCreatedAndModifiedDetails() {
         navigateToApplicationsPage(applicationName, "details");
         EMCApplicationDetailsPage detailsPage = new EMCApplicationDetailsPage();
@@ -219,7 +219,7 @@ public class ApplicationPageTests extends EMCUITestBase {
     }
 
     @Test(groups = {EMC, UI, REGRESSION, SMOKE})
-    @Xray(test = {2324, 2347, 2348, 2349, 5782, 5783, 7649, 12716, 12717, 13181, 13185})
+    @Xray(test = {1651, 1514, 2234, 1948, 1559, 2113, 3880, 3206, 2743, 2781, 3026})
     public void verifyInformationRequiredForCreatingApplicationFulfilledTest() {
         navigateToApplicationsPage("", "details");
 
@@ -295,7 +295,7 @@ public class ApplicationPageTests extends EMCUITestBase {
     }
 
     @Test(groups = {EMC, UI, REGRESSION, SMOKE, PROD})
-    @Xray(test = {2624, 7655, 12505, 12506})
+    @Xray(test = {2127, 4199, 3877, 4037})
     public void verifyUserSaveNewProductTest() {
         navigateToApplicationsPage(applicationName, "products");
         EMCApplicationDetailsPage detailsPage = new EMCApplicationDetailsPage();
@@ -324,7 +324,7 @@ public class ApplicationPageTests extends EMCUITestBase {
     }
 
     @Test(groups = {EMC, UI, REGRESSION, SMOKE, PROD})
-    @Xray(test = {3537, 3539})
+    @Xray(test = {2097, 1920})
     public void verifyProductDetailsTest() {
         navigateToApplicationsPage(applicationName, "products");
         EMCApplicationDetailsPage detailsPage = new EMCApplicationDetailsPage();
@@ -340,7 +340,7 @@ public class ApplicationPageTests extends EMCUITestBase {
     }
 
     @Test(groups = {EMC, UI, REGRESSION})
-    @Xray(test = {7656})
+    @Xray(test = {3942})
     public void editProductDetailsTest() {
         navigateToApplicationsPage(applicationName, "products");
         EMCApplicationDetailsPage detailsPage = new EMCApplicationDetailsPage();
@@ -389,7 +389,7 @@ public class ApplicationPageTests extends EMCUITestBase {
     }
 
     @Test(groups = {EMC, UI, REGRESSION, SMOKE})
-    @Xray(test = {7654, 2151, 2156, 13123, 13139, 13141})
+    @Xray(test = {4188, 1466, 1564, 3263, 2752, 3212})
     public void verifyAdminUserEditApplicationTest() {
         navigateToApplicationsPage(testWebAppName, "details");
         EMCApplicationDetailsPage detailsPage = new EMCApplicationDetailsPage();
@@ -433,7 +433,7 @@ public class ApplicationPageTests extends EMCUITestBase {
     }
 
     @Test(groups = {EMC, UI, REGRESSION, SMOKE, PROD})
-    @Xray(test = {2152})
+    @Xray(test = {1474})
     public void verifyAllApplicationsVisibleInListViewOnApplicationPanelTest() {
         navigateToApplicationsPage("", "details");
 
@@ -444,7 +444,7 @@ public class ApplicationPageTests extends EMCUITestBase {
     }
 
     @Test(groups = {EMC, UI, REGRESSION}, description = "UI | EMC | OKTA | Application Role | Verify App Role Key is unique in EMC and OKTA")
-    @Xray(test = {5691})
+    @Xray(test = {1888})
     public void verifyAppRoleKeyUniqueForEMCAndOKTA() {
         navigateToApplicationsPage(applicationName, "roles");
         EMCApplicationDetailsPage detailsPage = new EMCApplicationDetailsPage();
@@ -479,7 +479,7 @@ public class ApplicationPageTests extends EMCUITestBase {
     }
 
     @Test(groups = {EMC, UI, REGRESSION, SMOKE, PROD}, description = "UI | EMC | Products | Validate User can View the Product Details View Sorting")
-    @Xray(test = {3538})
+    @Xray(test = {2085})
     public void verifyUserViewProductDetailsSortedTest() {
         navigateToApplicationsPage(applicationName, "products");
         EMCApplicationDetailsPage detailsPage = new EMCApplicationDetailsPage();
@@ -491,7 +491,7 @@ public class ApplicationPageTests extends EMCUITestBase {
     }
 
     @Test(groups = {EMC, UI, REGRESSION, SMOKE}, description = "UI | EMC | API | Application | Verify user can not Create an existing External/Internal Application")
-    @Xray(test = {12719, 13187, 13189})
+    @Xray(test = {3003, 3265, 3246})
     public void verifyUserCantCreateExistingExternalInternalApplicationTest() {
         navigateToApplicationsPage("", "details");
 
@@ -542,7 +542,7 @@ public class ApplicationPageTests extends EMCUITestBase {
 
     @Test(groups = {EMC, UI, REGRESSION, SMOKE, PROD},
             description = "UI | EMC | API | Application | Verify user can not Create a new External Application if required fields are missing")
-    @Xray(test = {12721})
+    @Xray(test = {2687})
     public void verifyUserCantCreateAApplicationWithoutRequiredFields() {
         navigateToApplicationsPage("", "details");
 
@@ -577,7 +577,7 @@ public class ApplicationPageTests extends EMCUITestBase {
     }
 
     @Test(groups = {EMC, UI, REGRESSION, SMOKE}, description = "UI | EMC | Applications | An EMC administrator can create a new web applications")
-    @Xray(test = {13184})
+    @Xray(test = {2702})
     public void verifyAdminCreateWebApplicationTest() {
         navigateToApplicationsPage("", "details");
 
@@ -598,7 +598,7 @@ public class ApplicationPageTests extends EMCUITestBase {
     }
 
     @Test(groups = {EMC, UI, REGRESSION, API, SMOKE}, description = "UI | EMC | Application | Verify user with VIEW role is not able to create a Web application.")
-    @Xray(test = {13196, 13239})
+    @Xray(test = {2780, 2664})
     public void verifyUserDetailsAccountInformationTest() {
         navigateToApplicationsPage("", "details");
 
@@ -639,7 +639,7 @@ public class ApplicationPageTests extends EMCUITestBase {
     }
 
     @Test(groups = {EMC, UI, REGRESSION, SMOKE, PROD}, description = "UI | EMC | The ability to view all accounts | Verify that User is able to Click Account tab on Accounts Screen s")
-    @Xray(test = {2353, 2313, 2311})
+    @Xray(test = {1821, 1638, 2212})
     public void verifyUserClickAccountMenuOnApplicationsPageTest() {
         navigateToApplicationsPage("", "details");
         wait(applicationsPage.createApplicationButton, 20);
@@ -652,7 +652,7 @@ public class ApplicationPageTests extends EMCUITestBase {
     }
 
     @Test(groups = {EMC, UI, REGRESSION, SMOKE, PROD}, description = "UI | EMC | Verify Applications Page")
-    @Xray(test = {2314})
+    @Xray(test = {1635})
     public void verifyApplicationsPageTest() {
         navigateToApplicationsPage("", "details");
         wait(applicationsPage.applications, 20);
@@ -670,7 +670,7 @@ public class ApplicationPageTests extends EMCUITestBase {
     }
 
     @Test(groups = {EMC, UI, REGRESSION, SMOKE, PROD}, description = "UI | EMC | Applications | Verify the ability to search for an application")
-    @Xray(test = {4519})
+    @Xray(test = {1435})
     public void verifyApplicationSearchTest() {
         navigateToApplicationsPage("", "details");
         wait(applicationsPage.applications, 20);
@@ -695,7 +695,7 @@ public class ApplicationPageTests extends EMCUITestBase {
     }
 
     @Test(groups = {EMC, UI, REGRESSION, SMOKE})
-    @Xray(test = {12736, 12738, 12792})
+    @Xray(test = {2680, 3280, 3266})
     public void verifyAdminUserEditExternalApplicationTest() {
         navigateToApplicationsPage(externalApplicationName, "details");
         EMCApplicationDetailsPage detailsPage = new EMCApplicationDetailsPage();
@@ -740,7 +740,7 @@ public class ApplicationPageTests extends EMCUITestBase {
     }
 
     @Test(groups = {EMC, UI, REGRESSION}, description = "UI | EMC | API | Verify user with EMC permissions is able to see Role details in Applications Role Tab", priority = 10)
-    @Xray(test = {6538, 12501, 12739, 13122})
+    @Xray(test = {3949, 4116, 2860, 3315})
     public void verifyApplicationRoleDetailsForDifferentPermissionLevel() {
         loginAsAdmin();
         navigateToApplicationsPage(externalApplicationName, "roles");
@@ -792,7 +792,7 @@ public class ApplicationPageTests extends EMCUITestBase {
     }
 
     @Test(groups = {EMC, UI, REGRESSION}, description = "UI | EMC | API | Application Delete Tests")
-    @Xray(test = {13925, 13928, 13934})
+    @Xray(test = {2715, 3173, 2861})
     public void verifyApplicationDeleteTests() {
         navigateToApplicationsPage("", "roles");
         wait(applicationsPage.applications, 10);

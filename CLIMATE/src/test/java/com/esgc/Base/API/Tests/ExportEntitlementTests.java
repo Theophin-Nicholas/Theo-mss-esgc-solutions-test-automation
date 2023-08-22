@@ -11,7 +11,7 @@ import static com.esgc.Utilities.Groups.REGRESSION;
 public class ExportEntitlementTests extends APITestBase {
 
     @Test(groups = {API, REGRESSION})
-    @Xray(test= {7817, 7843, 9805})
+    @Xray(test= {4103, 3983, 4094})
     public void VerifyExportIsAvailable() {
         String portfolioId = "00000000-0000-0000-0000-000000000000";
         DashboardAPIController dashboardAPIController = new DashboardAPIController();
@@ -21,7 +21,7 @@ public class ExportEntitlementTests extends APITestBase {
     }
 
     @Test(groups = {API, REGRESSION})
-    @Xray(test={7817, 7843})
+    @Xray(test={4103, 3983})
     public void VerifyExportIsNotAvailableBundle() {
         String portfolioId = "00000000-0000-0000-0000-000000000000";
         getNoExportBundleAccessTokenDataValidation();

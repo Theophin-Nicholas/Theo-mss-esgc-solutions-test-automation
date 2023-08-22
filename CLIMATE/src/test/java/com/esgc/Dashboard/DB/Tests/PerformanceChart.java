@@ -27,7 +27,7 @@ import static com.esgc.Utilities.Groups.*;
 public class PerformanceChart extends DataValidationTestBase {
 
     @Test(groups = {REGRESSION, DATA_VALIDATION, DASHBOARD}, dataProvider = "researchLines")
-    @Xray(test = {4988, 7989, 6416, 6415})
+    @Xray(test = {1319, 3943, 3490, 3475})
     public void verifyPerformanceChartWithMixedIdentifiers(
             @Optional String sector, @Optional String region,
             @Optional String researchLine, @Optional String month, @Optional String year) {
@@ -407,8 +407,8 @@ public class PerformanceChart extends DataValidationTestBase {
 
 
     }
-        @Test(groups = {"regression", "data_validation", "dashboard"})
-        @Xray(test = {12267})
+        @Test(groups = {REGRESSION, DATA_VALIDATION, DASHBOARD})
+        @Xray(test = {4336})
         public void validateBrownshare(){
             String portfolioId = "00000000-0000-0000-0000-000000000000" ;
             APIFilterPayload apiFilterPayload = new APIFilterPayload();

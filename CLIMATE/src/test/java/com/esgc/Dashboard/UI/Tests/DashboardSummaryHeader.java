@@ -15,7 +15,7 @@ import static com.esgc.Utilities.Groups.*;
 public class DashboardSummaryHeader extends DashboardUITestBase {
 
     @Test(groups = {DASHBOARD, REGRESSION, UI}, dataProvider = "filters")
-    @Xray(test = {3632, 5067, 6313, 6277, 6278, 4267})
+    @Xray(test = {4492, 1451, 4173, 4077, 3924, 1275})
     public void validateDashboardSummaryHeader(@Optional String sector, @Optional String region, @Optional String month, @Optional String year) {
         DashboardPage dashboardPage = new DashboardPage();
         dashboardPage.navigateToPageFromMenu("Climate Dashboard");
@@ -29,22 +29,22 @@ public class DashboardSummaryHeader extends DashboardUITestBase {
         BrowserUtils.wait(5);
 
 
-        // ESGCA-5067: Verify the selected Portfolio widget details on the Climate Tile
+        // ESGT-1451: Verify the selected Portfolio widget details on the Climate Tile
         assertTestCase.assertTrue(dashboardPage.validateSelectedPortfolio(), "Verify selected portfolio name in summary");
 
-        // ESGCA-3632: Verify Coverage is Displayed on Dashboard
+        // ESGT-4492: Verify Coverage is Displayed on Dashboard
         assertTestCase.assertTrue(dashboardPage.verifyCoverage(), "Verify coverage information in summary");
 
-        //ESGCA-7707: UI Checks on Physical Risk Management card
+        //ESGT-4978: UI Checks on Physical Risk Management card
         assertTestCase.assertTrue(dashboardPage.verifyPhysicalRiskWidget(), "Verify Physical Risk Widget in summary");
 
-        // ESGCA-6313: Verify Facilities Exposed widget
+        // ESGT-6313: Verify Facilities Exposed widget
         assertTestCase.assertTrue(dashboardPage.verifyFacilitiesExposedWidget(), "Verify Facilities Exposed Widget in summary");
 
     }
 
     @Test(groups = {DASHBOARD, REGRESSION, UI, SMOKE})
-    @Xray(test = {6082, 4324, 7391})
+    @Xray(test = {1479, 1796, 4975})
     public void verifyStickyHeader() {
         DashboardPage dashboardPage = new DashboardPage();
 
@@ -58,7 +58,7 @@ public class DashboardSummaryHeader extends DashboardUITestBase {
 
 
     @Test(groups = {DASHBOARD, REGRESSION, UI, SMOKE})
-    @Xray(test = {4260, 5074, 5076, 7892})
+    @Xray(test = {1280, 1444, 1578, 4908})
     public void validateClimateTiles() {
         DashboardPage dashboardPage = new DashboardPage();
         test.info("Navigate to Dashboard Page");

@@ -13,8 +13,8 @@ import static com.esgc.Utilities.Groups.REGRESSION;
 public class InvalidAuthorizationTests extends APITestBase {
 
     @Test(groups = {API, REGRESSION}, dataProvider = "API Research Lines")
-    @Xray(test = {3324, 3325, 3326, 3327, 3328, 3329, 3330,  3332})
-    //3331 TCFD
+    @Xray(test = {1541, 3705, 2198, 1883, 3624,  1936})
+    //3425 TCFD
     public void invalidTokenAuthorizationTest(String researchLine) {
         APIController apiController = new APIController();
         APIFilterPayload apiFilterPayload = new APIFilterPayload("all", "all", "03", "2021", "");
@@ -42,8 +42,8 @@ public class InvalidAuthorizationTests extends APITestBase {
     }
 
     @Test(groups = {API, REGRESSION}, dataProvider = "API Research Lines")
-    @Xray(test = {3308, 3309, 3310, 3311, 3312, 3313, 3314,  3316})
-    //3315 TCFD
+    @Xray(test = {1982, 3691, 1292, 1655, 3679,  1567})
+    //3586 TCFD
     public void noTokenAuthorizationTest(String researchLine) {
         APIController apiController = new APIController();
         apiController.setInvalid();

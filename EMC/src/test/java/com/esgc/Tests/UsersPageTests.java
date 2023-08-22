@@ -38,7 +38,7 @@ public class UsersPageTests extends EMCUITestBase {
     }
 
     @Test(groups = {EMC, UI, SMOKE, REGRESSION, PROD})
-    @Xray(test = {3033, 6153, 6156, 6254, 6255})
+    @Xray(test = {1926, 1496, 1512, 4138, 4147})
     public void verifyUsersPageTest() {
         navigateToUser("");
         usersPage.searchUser(userName);
@@ -53,7 +53,7 @@ public class UsersPageTests extends EMCUITestBase {
     }
 
     @Test(groups = {EMC, UI, REGRESSION})
-    @Xray(test = {7625, 7626})
+    @Xray(test = {3937, 4170})
     public void verifyAdminUserSuspendUnsuspectedUserTest() {
         navigateToUser(activeUser);
         EMCUserDetailsPage userDetailsPage = new EMCUserDetailsPage();
@@ -91,7 +91,7 @@ public class UsersPageTests extends EMCUITestBase {
     }
 
     @Test(groups = {EMC, UI, REGRESSION})
-    @Xray(test = {7627, 7642})
+    @Xray(test = {4044, 3904})
     public void verifyAdminUserActivateStagedUserTest() {
         AccountsPageTests accountsPageTests = new AccountsPageTests();
         accountsPageTests.navigateToAccountsPage(accountsPageTests.accountName, "users");
@@ -142,7 +142,7 @@ public class UsersPageTests extends EMCUITestBase {
     }
 
     @Test(groups = {EMC, UI, REGRESSION}, description = "UI | EMC | Roles | Verify Role/Group user Information is Available for Investor User")
-    @Xray(test = {5211})
+    @Xray(test = {1660})
     public void verifyRoleGroupUserInformationAvailableForInvestorUserTest() {
         navigateToUser(activeUser);
         EMCUserDetailsPage detailsPage = new EMCUserDetailsPage();
@@ -179,7 +179,7 @@ public class UsersPageTests extends EMCUITestBase {
     }
 
     @Test(groups = {EMC, UI, REGRESSION}, description = "UI | EMC | Roles | Verify Role/Group user Information is Available for Issuer User")
-    @Xray(test = {5212})
+    @Xray(test = {1808})
     public void verifyRoleGroupUserInformationAvailableForIssuerUserTest() {
         navigateToUser(activeUser);
         EMCUserDetailsPage detailsPage = new EMCUserDetailsPage();
@@ -209,7 +209,7 @@ public class UsersPageTests extends EMCUITestBase {
     }
 
     @Test(groups = {EMC, UI, REGRESSION}, description = "UI | EMC | Users | Validate Users Page Options Menu - Export Users, Sync Users")
-    @Xray(test = {10541, 10542, 10543})
+    @Xray(test = {3941, 4159, 3917})
     public void verifyAccountsPageOptionsMenuTest() {
         navigateToUser("");
         usersPage.searchUser("test");
@@ -226,7 +226,7 @@ public class UsersPageTests extends EMCUITestBase {
     }
 
     @Test(groups = {EMC, UI, REGRESSION, API}, description = "UI | EMC | User details | Verify User details have the Account information")
-    @Xray(test = {6157, 12229, 12280})
+    @Xray(test = {2216, 3919, 4227})
     public void verifyUserDetailsAccountInformationTest() {
         navigateToUser(activeUser);
         EMCUserDetailsPage detailsPage = new EMCUserDetailsPage();
@@ -256,7 +256,7 @@ public class UsersPageTests extends EMCUITestBase {
     }
 
     @Test(groups = {EMC, UI, REGRESSION, SMOKE, PROD}, description = "EMC | UI | Users | Verify the search bar behavior")
-    @Xray(test = {6166})
+    @Xray(test = {3867})
     public void verifySearchFunctionalityTest() {
         navigateToUser("");
         usersPage.searchUser(userName);
@@ -308,7 +308,7 @@ public class UsersPageTests extends EMCUITestBase {
     }
 
     @Test(groups = {EMC, UI, REGRESSION, SMOKE}, description = "UI | EMC | Users | Verify the Sorting in User section")
-    @Xray(test = {6256})
+    @Xray(test = {3971})
     public void verifyUserListSortedTest() {
         navigateToUser("");
         usersPage.searchUser("test");

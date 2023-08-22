@@ -24,7 +24,7 @@ import static com.esgc.Utilities.Groups.REGRESSION;
 public class EntityIssuerP3PageValidation extends EntityIssuerPageDataValidationTestBase {
 
 
-    @Xray(test = {7352})
+    @Xray(test = {4005})
     @Test(groups = {REGRESSION, ISSUER})
     public void ValidateP3PageHeaderIdentifiers() {
         String orbisID = OrbisID;
@@ -42,7 +42,7 @@ public class EntityIssuerP3PageValidation extends EntityIssuerPageDataValidation
 
     }
 
-    @Xray(test = 7775)
+    @Xray(test = 3340)
     @Test(groups = {REGRESSION, ISSUER})
     public void p3sourceDocumentTest() {
         String orbisID = OrbisID;
@@ -60,7 +60,7 @@ public class EntityIssuerP3PageValidation extends EntityIssuerPageDataValidation
 
     }
 
-    @Xray(test = 7407)
+    @Xray(test = 3346)
     @Test(groups = {REGRESSION, ISSUER})
     public void p3ControversiesTest() {
         String orbisID = OrbisID;

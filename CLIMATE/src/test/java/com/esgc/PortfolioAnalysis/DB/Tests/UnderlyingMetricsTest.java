@@ -31,7 +31,7 @@ import static org.hamcrest.Matchers.*;
 public class UnderlyingMetricsTest extends DataValidationTestBase {
 //TODO fails should be handled
     @Test(groups = {REGRESSION, DATA_VALIDATION}, dataProvider = "researchLines")
-    @Xray(test = {1404, 2410, 2411, 2413, 2414, 2953, 3677, 3842, 3843})
+    @Xray(test = {3508, 3397, 4438, 4481, 4559, 3461, 4743})
     public void verifyUnderlyingDataMetricsWithMixedIdentifiers(@Optional String sector, @Optional String region,
                                                                 @Optional String researchLine, @Optional String month, @Optional String year) {
 

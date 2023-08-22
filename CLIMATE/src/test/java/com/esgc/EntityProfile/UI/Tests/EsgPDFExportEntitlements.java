@@ -16,7 +16,7 @@ public class EsgPDFExportEntitlements extends UITestBase {
 
 
     @Test(groups = {REGRESSION, UI, ENTITLEMENTS})
-    @Xray(test = {9207})
+    @Xray(test = {4992})
     public void validateExportWithoutEsgScoreEntitlement(){
         LoginPage login = new LoginPage();
 
@@ -34,7 +34,7 @@ public class EsgPDFExportEntitlements extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI, ENTITLEMENTS},dataProviderClass= DataProviderClass.class, dataProvider = "PDFExportButtonEntitlements")
-    @Xray(test = {10941})
+    @Xray(test = {4020})
     public void validatePDFExportButtonEntitlements(EntitlementsBundles entitlements){
         LoginPage login = new LoginPage();
 
@@ -79,7 +79,7 @@ public class EsgPDFExportEntitlements extends UITestBase {
 
 
     @Test(groups = {REGRESSION, UI, ENTITLEMENTS, ESG},dataProviderClass= DataProviderClass.class, dataProvider = "PDFEntitlements")
-    @Xray(test = {11765})
+    @Xray(test = {5067})
     public void validateBrownShareExportEntitlement(String... data){
         LoginPage login = new LoginPage();
         login.loginWithParams(data[0].toString(),data[1].toString());

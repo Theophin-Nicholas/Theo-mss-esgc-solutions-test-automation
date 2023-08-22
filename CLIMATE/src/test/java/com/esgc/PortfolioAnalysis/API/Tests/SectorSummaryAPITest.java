@@ -20,9 +20,9 @@ import static org.hamcrest.Matchers.*;
 /**
  * Created by ChaudhS2 on 11/9/2021.
  */
-public class SectorSummaryAPITest extends APITestBase {//870
+public class SectorSummaryAPITest extends APITestBase {//2210
     @Test(groups = {API, REGRESSION}, dataProvider = "No ESG API Research Lines")
-    @Xray(test = {870,   2215, 1184, 2571, 2666})
+    @Xray(test = {2210, 1966, 2187, 1299, 2082})
     //1751 Energy transition
     //1923 TCFD
     public void SectorSummaryAPI_Success(@Optional String researchLine) {
@@ -46,7 +46,7 @@ public class SectorSummaryAPITest extends APITestBase {//870
     }
 
     @Test(groups = {API, REGRESSION}, dataProvider = "API Research Lines")
-    @Xray(test = {875, 1231, })
+    @Xray(test = {2209, 1274, })
     public void SectorSummary_InvalidPayload(@Optional String researchLine) {
         APIController apiController = new APIController();
 

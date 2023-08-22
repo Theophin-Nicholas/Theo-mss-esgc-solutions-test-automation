@@ -1007,7 +1007,7 @@ public abstract class PageBase {
      *
      * @param rowNum
      * @param columnNum
-     * @return data from csv file - String -e.g. ESGCA-2092
+     * @return data from csv file - String -e.g. ESGT-4638
      */
     public String getDataFromExportedFile(int rowNum, int columnNum, String researchLine) {
         String excelData = "";

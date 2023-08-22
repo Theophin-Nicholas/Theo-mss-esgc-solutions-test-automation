@@ -295,7 +295,7 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
 
     @Test(groups = {REGRESSION, DATA_VALIDATION, REGULATORY_REPORTING, UI},
             description = "Data Validation | Regulatory Reporting | Verify the data downloaded in the generated annual report excel is for the latest data available for the portfolios irrespective of reporting year when use latest data filter is selected")
-    @Xray(test = {4156, 3961, 4237})
+    @Xray(test = {4156,3961, 4237,3791})
     public void verifyAnnualReportWithoutLatestDataTest() {
         RegulatoryReportingPage reportingPage = new RegulatoryReportingPage();
         reportingPage.navigateToReportingService("SFDR");
@@ -353,7 +353,7 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
 
     @Test(groups = {REGRESSION, DATA_VALIDATION, REGULATORY_REPORTING, UI},
             description = "Data Validation | Regulatory Reporting | Verify the data downloaded in the generated Interim report excel when the portfolios has data for the selected year")
-    @Xray(test = {4073, 4218, 3791})
+    @Xray(test = {4073, 4218,4237,3791})
     public void verifyInterimReportForSelectedYearTest() {
         RegulatoryReportingPage reportingPage = new RegulatoryReportingPage();
         reportingPage.navigateToReportingService("SFDR");
@@ -522,7 +522,7 @@ public class RegulatoryReportingPageExcelValidation extends UITestBase {
 
     @Test(groups = {REGRESSION, DATA_VALIDATION, REGULATORY_REPORTING, UI},
             description = "Data Validation | UI | Regulatory Reporting | SFDR | Company Level Outputs | Verify Scope 3 GHG Emissions Column is Reflected to report")
-    @Xray(test = {3202, 3244, 3146, 3808})
+    @Xray(test = {3202, 3244, 3146,3808})
     public void verifyScope3GHGEmissionsColumnTest() {
         RegulatoryReportingPage reportingPage = new RegulatoryReportingPage();
         reportingPage.navigateToReportingService("SFDR");

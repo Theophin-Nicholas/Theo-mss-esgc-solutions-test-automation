@@ -13,7 +13,7 @@ import static com.esgc.Utilities.Groups.*;
 public class ClimateProfileEntityHeaderAPITest extends EntityClimateProfileTestBase {
 
     @Test(groups = {API, REGRESSION, ENTITY_PROFILE},dataProvider = "Company With Orbis ID")
-    @Xray(test = {10047})
+    @Xray(test = {4460})
     public void validateTransitionRiskSectorComparisonChartContentResponse(String... dataprovider) {
         EntityProfileClimatePageAPIController entityClimateProfileApiController = new EntityProfileClimatePageAPIController();
 

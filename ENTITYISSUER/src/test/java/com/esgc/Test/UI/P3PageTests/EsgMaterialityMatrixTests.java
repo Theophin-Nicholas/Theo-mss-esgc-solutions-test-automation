@@ -23,7 +23,7 @@ public class EsgMaterialityMatrixTests extends EntityPageTestBase {
 
 
     @Test(groups = {"entity_Issuer_profile", SMOKE, REGRESSION, UI}, dataProvider = "ESGMaterialitycredentials", dataProviderClass = IssuerDataProviderClass.class)
-    @Xray(test = {9884, 9921})
+    @Xray(test = {4418, 3888})
     public void validateESGMaterialityMatrixHeader(String... dataProvider) {
         EntityIssuerPage entityIssuerPage = new EntityIssuerPage();
         try {
@@ -47,7 +47,7 @@ public class EsgMaterialityMatrixTests extends EntityPageTestBase {
     }
 
     @Test(groups = {ENTITY_PROFILE, SMOKE, REGRESSION, UI}, dataProvider = "ESGMaterialitycredentials",  dataProviderClass = IssuerDataProviderClass.class)
-    @Xray(test = {9924})
+    @Xray(test = {4018})
     public void validateEsgMaterialityMatrixColumns(String... dataProvider) {
         EntityIssuerPage entityIssuerpage = new EntityIssuerPage();
         try {
@@ -83,7 +83,7 @@ public class EsgMaterialityMatrixTests extends EntityPageTestBase {
 
 
     @Test(groups = {"esg_materiality", SMOKE, REGRESSION, UI}, dataProvider = "ESGMaterialitycredentials",  dataProviderClass = IssuerDataProviderClass.class)
-    @Xray(test = {9925})
+    @Xray(test = {4211})
     public void validateEsgMaterialityFooter(String... dataProvider) {
         EntityIssuerPage entityIssuerpage = new EntityIssuerPage();
         try {
@@ -130,7 +130,7 @@ public class EsgMaterialityMatrixTests extends EntityPageTestBase {
 
     @Test(groups = {"esg_materiality", REGRESSION, UI,"Test"}, dataProvider = "ESGMaterialitycredentials", dataProviderClass = IssuerDataProviderClass.class)
 
-    @Xray(test = {9926})
+    @Xray(test = {4135})
     public void validateEsgMaterialitySubCategoryModel(String... dataProvider) {
         EntityIssuerPage entityIssuerpage = new EntityIssuerPage();
         try {

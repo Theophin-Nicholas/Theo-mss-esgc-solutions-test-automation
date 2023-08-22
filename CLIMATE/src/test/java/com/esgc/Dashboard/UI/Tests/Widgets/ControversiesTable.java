@@ -10,7 +10,7 @@ import static com.esgc.Utilities.Groups.*;
 public class ControversiesTable extends DashboardUITestBase {
 
     @Test(groups = {UI, DASHBOARD, SMOKE, REGRESSION})
-    @Xray(test = 3931)
+    @Xray(test = 1346)
     public void verifyPortfolioMonitoringIsDisplayed() {
         DashboardPage dashboardPage = new DashboardPage();
 
@@ -30,7 +30,7 @@ public class ControversiesTable extends DashboardUITestBase {
         String expectedTitle = "Portfolio Monitoring";
         String actualTitle = dashboardPage.getPortfolioMonitoringTableTitle();
 
-        assertTestCase.assertEquals(actualTitle, expectedTitle, "Portfolio Monitoring Check", 4063);
+        assertTestCase.assertEquals(actualTitle, expectedTitle, "Portfolio Monitoring Check", 1391);
         assertTestCase.assertTrue(dashboardPage.isControversiesTableDisplayed(), "Controversies table is Displayed");
 
 

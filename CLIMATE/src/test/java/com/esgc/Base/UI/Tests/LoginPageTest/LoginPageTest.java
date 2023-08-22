@@ -3,12 +3,11 @@ package com.esgc.Base.UI.Tests.LoginPageTest;
 import com.esgc.Base.TestBases.DashboardUITestBase;
 import com.esgc.Base.UI.Pages.LoginPage;
 import com.esgc.Utilities.BrowserUtils;
-import com.esgc.Utilities.Driver;
-import com.esgc.Utilities.Environment;
 import com.esgc.Utilities.Xray;
 import org.testng.annotations.Test;
 
-import static com.esgc.Utilities.Groups.*;
+import static com.esgc.Utilities.Groups.REGRESSION;
+import static com.esgc.Utilities.Groups.UI;
 
 /**
  * Created by ChaudhS2 on 10/14/2021.
@@ -17,7 +16,7 @@ public class LoginPageTest extends DashboardUITestBase {
 
 
     @Test(groups = {REGRESSION, UI})
-    @Xray(test = {182})
+    @Xray(test = {4388, 1547})
     public void verifyValidCredentialsLoginPampa() {
         LoginPage login = new LoginPage();
 
@@ -27,8 +26,8 @@ public class LoginPageTest extends DashboardUITestBase {
     }
 
     @Test(groups = {REGRESSION, UI},
-            description = "ESGCA -1778 : Verify User is able to Click Forgot Password on Pampa Login page")
-    @Xray(test = 1778)
+            description = "ESGT -2070 : Verify User is able to Click Forgot Password on Pampa Login page")
+    @Xray(test = 2070)
     public void verifyForgotPasswordLinkIsClickablePampa() {
         test.info("Clicking on the need help sigining in link.");
         LoginPage login = new LoginPage();
@@ -44,8 +43,8 @@ public class LoginPageTest extends DashboardUITestBase {
     }
 
     @Test(groups = {REGRESSION, UI},
-            description = "ESGCA-2240 : Verify that MESG Users able to Click On Help Page From the MESG Log in Screen")
-    @Xray(test = {2239, 2240})
+            description = "ESGT-4938 : Verify that MESG Users able to Click On Help Page From the MESG Log in Screen")
+    @Xray(test = {4415, 4938})
     public void verifyHelpLinkIsClickablePampa() {
         test.info("Clicking on the need help sigining in link.");
         LoginPage login = new LoginPage();
@@ -61,8 +60,8 @@ public class LoginPageTest extends DashboardUITestBase {
     }
 
     @Test(groups = {REGRESSION, UI},
-            description = "ESGCA -1427 : Verify Remember Me checkbox is Unselected by Default")
-    @Xray(test = 1427)
+            description = "ESGT -4932 : Verify Remember Me checkbox is Unselected by Default")
+    @Xray(test = 4932)
     public void verifyRememberMeCheckboxDefaultStatusPampa() {
         test = report.createTest("Verify Remember Me checkbox is unchecked by default on Pampa Login Page.");
         LoginPage login = new LoginPage();
@@ -75,8 +74,8 @@ public class LoginPageTest extends DashboardUITestBase {
     }
 
     @Test(groups = {REGRESSION, UI},
-            description = "ESGCA -1606/1508 : Verify Unauthorised user gets 'Unable to Sign in' Message.")
-    @Xray(test = {1508, 1603})
+            description = "ESGT -1528/1486 : Verify Unauthorised user gets 'Unable to Sign in' Message.")
+    @Xray(test = {1486, 1528})
     public void verifyTheValidationForInvalidUserPampa() {
         test = report.createTest("Verify the validation for the unauthorised User.");
         LoginPage login = new LoginPage();
@@ -87,8 +86,8 @@ public class LoginPageTest extends DashboardUITestBase {
     }
 
     @Test(groups = {REGRESSION, UI},
-            description = "ESGCA -1506 : Verify the Next button functionality.")
-    @Xray(test = {1506})
+            description = "ESGT -1646 : Verify the Next button functionality.")
+    @Xray(test = {1646})
     public void verifyTheNextButtonFunctionalityPampa() {
 
         test.info("Verify Next button is present and clickable on Login page.");
@@ -109,7 +108,8 @@ public class LoginPageTest extends DashboardUITestBase {
     }
 
     @Test(groups = {REGRESSION, UI},
-            description = "ESGCA -1428 : Verify all the fields on Login page has Placeholder.")
+            description = "ESGT -1786 : Verify all the fields on Login page has Placeholder.")
+    @Xray(test = {1786})
     public void verifyThePlaceholderForLoginPageFieldsPampa() {
 
         test.info("Verify the Place folder for different fields on Login page.");
@@ -135,8 +135,8 @@ public class LoginPageTest extends DashboardUITestBase {
     }
 
     @Test(groups = {REGRESSION, UI},
-            description = "ESGCA -1483 : User is not Able to Login with a Blank Username and Password")
-    @Xray(test = 1483)
+            description = "ESGT -4642 : User is not Able to Login with a Blank Username and Password")
+    @Xray(test = 4642)
     public void verifyUserIsNotableToLoginWithBlankUserNamePampa() {
 
         test = report.createTest("Verify Next button is present and clickable on Login page.");
@@ -162,46 +162,6 @@ public class LoginPageTest extends DashboardUITestBase {
 
         //  test.info("Checking Next button click redirects user to Okta Login page");
         //  assertTestCase.assertTrue(login.passwordBox.isDisplayed(), "Next button is not working as expected.");
-    }
-
-    @Test(enabled = false, groups = {REGRESSION, UI, SMOKE},
-            description = "ESGCA -1648 : User is able to access the MESGC application without providing credentials if already logged in other moodys application.")
-    @Xray(test = 1648)
-    public void verifyUserCanUseLoginCredentialsFromOtherMoodysToMESGCPampa() {
-
-        test.info("Verify Next button is present and clickable on Login page.");
-        test.info("Checking if Next button is present on Login page.");
-        LoginPage login = new LoginPage();
-
-        String OKTAURL = Driver.getDriver().getCurrentUrl();
-
-        assertTestCase.assertTrue(login.checkIfNextButtonIsPresent(), "Next Button was not present.");
-
-        test.info("Checking if Next button is clickable.");
-        assertTestCase.assertTrue(login.checkIfNextButtonIsClickable(), "User was not able to click on the Next button.");
-
-        test.info("Providing valid username at Login page and then click Next button.");
-        login.loginWithParamsToOktaPage(Environment.DATA_USERNAME, Environment.DATA_PASSWORD);
-
-        assertTestCase.assertTrue(login.checkIfUserLoggedInOKTASuccessfully(), "User is on Okta Page");
-
-        login.navigateToESGPlatform();
-        BrowserUtils.wait(5);
-
-        assertTestCase.assertFalse(login.checkIfUserLoggedInSuccessfully(), "User was able to access the MESGC application with already provided credentials.");
-
-        //Since Terms & Conditions checkbox is not marked, user should be re-login
-        test.info("Providing valid username at Login page and then click Next button.");
-        login.loginWithParams(Environment.DATA_USERNAME, Environment.DATA_PASSWORD);
-        BrowserUtils.wait(5);
-        assertTestCase.assertTrue(login.checkIfUserLoggedInSuccessfully(), "User was able to access the MESGC application with already provided credentials.");
-        BrowserUtils.wait(5);
-        Driver.getDriver().navigate().to(OKTAURL);
-        BrowserUtils.wait(5);
-        login.navigateToESGPlatform();
-        BrowserUtils.wait(5);
-
-        assertTestCase.assertTrue(login.checkIfUserLoggedInSuccessfully(), "User was able to access the MESGC application with already provided credentials.");
     }
 
 }

@@ -183,7 +183,8 @@ public class Driver {
                 case "edge":
                     WebDriverManager.edgedriver().setup();
                     EdgeOptions edgeOptions = new EdgeOptions();
-
+                   // (Mac users might need to add their path)
+                    // edgeOptions.addArguments("--user-data-dir=/Users/zinis/Library/Application Support/Microsoft Edge/Default");
                     Map<String, Object> prefsEdge = new HashMap<String, Object>();
 
                     prefsEdge.put("download.default_directory", BrowserUtils.downloadPath()); //path to dir

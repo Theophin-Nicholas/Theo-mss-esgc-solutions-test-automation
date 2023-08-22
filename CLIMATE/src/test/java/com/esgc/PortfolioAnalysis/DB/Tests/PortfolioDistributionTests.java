@@ -27,18 +27,18 @@ import static com.esgc.Utilities.Groups.*;
 public class PortfolioDistributionTests extends DataValidationTestBase {
 
     @Test(groups = {REGRESSION, DATA_VALIDATION}, dataProvider = "researchLines")
-    @Xray(test = {2704, 2703, 2558, 2557, 2188, 2189, 2559,
-            2705, 2190, 2192, 2315, 2308, 2309, 2560, 2706, 2191, 2310, 2561, 2707,
-            4217, 4216, 4218, 4221,
-            6744,
-            11060,11061, //ESG Predicted
-            12617
+    @Xray(test = {2058, 1401, 1429, 1431, 1506, 1237,
+            2162, 2004, 1987, 1493, 1551, 2013, 1745, 1985,
+            3654, 3651, 3476, 3414,
+            4353,
+            4954,4950, //ESG Predicted
+            3530
     })
-    //Operations risk 4212, 2306, 2310, 2308, 2309, 2315
-    //Market risk 4214, 4211
-    //supply chain risk 4215
-    //TCFD 4220
-    //Energy Transition 4219
+    //Operations risk 3605, 2306, 2310, 2308, 2309, 2315
+    //Market risk 3542, 4211
+    //supply chain risk 3610
+    //TCFD 3398
+    //Energy Transition 3404
     public void verifyPortfolioDistributionWithMixedIdentifiers(@Optional String sector, @Optional String region,
                                                                 @Optional String researchLine, @Optional String month, @Optional String year) {
 
@@ -146,7 +146,7 @@ public class PortfolioDistributionTests extends DataValidationTestBase {
     }
 
     @Test(groups = {REGRESSION, DATA_VALIDATION, ESG})
-    @Xray(test = {8727})
+    @Xray(test = {4605})
     public void verifyESGDistribution() {
         String sector = "all";
         String region = "all";

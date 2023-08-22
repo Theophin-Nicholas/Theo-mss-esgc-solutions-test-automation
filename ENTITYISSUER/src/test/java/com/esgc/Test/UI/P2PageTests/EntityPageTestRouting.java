@@ -15,7 +15,7 @@ public class EntityPageTestRouting extends EntityPageTestBase {
     //6270
 
 
-    //@Xray(test = {3438, 3490, 3491})
+    //@Xray(test = {1544, 1437, 1864})
     @Test(enabled = false,priority = 6, groups = {REGRESSION, UI, SMOKE, ISSUER},
 
             dataProvider = "credentialsP2", dataProviderClass = IssuerDataProviderClass.class,
@@ -38,7 +38,7 @@ public class EntityPageTestRouting extends EntityPageTestBase {
 
     }
 
-    @Xray(test = {3438, 3490, 3491, 3493})
+    @Xray(test = {1544, 1437, 1864, 1364})
     @Test(groups = {REGRESSION, UI, SMOKE, ISSUER},
             dataProvider = "credentialsP2", dataProviderClass = IssuerDataProviderClass.class,
             description = "Verify if Leaders and Laggards Table is Displayed as Expected")
@@ -84,8 +84,8 @@ public class EntityPageTestRouting extends EntityPageTestBase {
 
     @Test(groups = {UI, SMOKE, REGRESSION, ISSUER},
             dataProvider = "credentialsP2", dataProviderClass = IssuerDataProviderClass.class,
-            description = "ESGCA-5842-UI | ESG Issuer - Entity Page | Verify Landing Page and Banner")
-    @Xray(test = {5842})
+            description = "ESGT-1661-UI | ESG Issuer - Entity Page | Verify Landing Page and Banner")
+    @Xray(test = {1661})
     public void testLandingPageAndBanner(String... data) {
         EntityIssuerPage entitypage = new EntityIssuerPage();
         LoginPageIssuer loginPage = new LoginPageIssuer();
@@ -111,8 +111,8 @@ public class EntityPageTestRouting extends EntityPageTestBase {
 
     @Test(groups = {UI, SMOKE, REGRESSION, ISSUER},
             dataProvider = "credentialsP2", dataProviderClass = IssuerDataProviderClass.class,
-            description = "ESGCA-5854-UI | ESG Issuer - Entity Page | Verify Footer is Displayed")
-    @Xray(test = {5854})
+            description = "ESGT-1741-UI | ESG Issuer - Entity Page | Verify Footer is Displayed")
+    @Xray(test = {1741})
     public void testFooter(String... data) {
         EntityIssuerPage entitypage = new EntityIssuerPage();
         LoginPageIssuer loginPage = new LoginPageIssuer();
@@ -131,8 +131,8 @@ public class EntityPageTestRouting extends EntityPageTestBase {
 
     @Test(groups = {UI, SMOKE, REGRESSION, ISSUER},
             dataProvider = "credentialsP2", dataProviderClass = IssuerDataProviderClass.class,
-            description = "ESGCA-5861-UI | ESG Issuer - Entity Page | Verify Methodology Details (Titles, Text)")
-    @Xray(test = {5861,9694})
+            description = "ESGT-2167-UI | ESG Issuer - Entity Page | Verify Methodology Details (Titles, Text)")
+    @Xray(test = {2167,9694})
     public void testMethodologyDetails(String... data) {
         EntityIssuerPage entitypage = new EntityIssuerPage();
         LoginPageIssuer loginPage = new LoginPageIssuer();
@@ -156,7 +156,7 @@ public class EntityPageTestRouting extends EntityPageTestBase {
     @Test(groups = {UI, SMOKE, REGRESSION, ISSUER},
             dataProvider = "loginP2", dataProviderClass = IssuerDataProviderClass.class,
             description = "ESGCA-6288-UI | ESG Issuer - Verify if Sector Modal is Displayed with a Click on Sub-Sectors")
-    @Xray(test = {6288})
+    @Xray(test = {3939})
     public void verifySectorModalPopupIsDisplayedOnClickSubcategories(String UserID, String Password) {
         EntityIssuerPage entitypage = new EntityIssuerPage();
         LoginPageIssuer loginPage = new LoginPageIssuer();

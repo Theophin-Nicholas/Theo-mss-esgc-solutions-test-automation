@@ -177,7 +177,7 @@ public class OnDemandAssessmentUITests extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI, SMOKE})
-    @Xray(test = {2686, 2961})
+    @Xray(test = {2686,2961})
     public void verifyFilterCriteriaWithAndORLogic() {
         String portfolioName = "500 predicted portfolio";
         OnDemandAssessmentPage onDemandAssessmentPage = new OnDemandAssessmentPage();
@@ -332,10 +332,10 @@ public class OnDemandAssessmentUITests extends UITestBase {
         OnDemandAssessmentPage onDemandAssessmentPage = new OnDemandAssessmentPage();
         onDemandAssessmentPage.navigateToReportingService("On-Demand Assessment");
         onDemandAssessmentPage.waitForPortfolioTableToLoad();
-        // ESGCA - 13987 Verify that for a portfolio having 0% On Demand Assessment eligible coverage , request assessment button is disabled
+        // ESGT - 2824 Verify that for a portfolio having 0% On Demand Assessment eligible coverage , request assessment button is disabled
         onDemandAssessmentPage.SelectPortfolioWithZeroOnDemandAssessmentEligibility();
         assertTestCase.assertTrue(onDemandAssessmentPage.isViewAssessmentRequestButtonDisabled(), "Validating that View Assessment Request button is disabled");
-        // ESGCA - 14002 - Verify the sorting of the Portfolios in the portfolio table
+        // ESGT - 3009 - Verify the sorting of the Portfolios in the portfolio table
         onDemandAssessmentPage.ValidateSortingOnLastUpdateColumn();
 
     }
@@ -346,7 +346,7 @@ public class OnDemandAssessmentUITests extends UITestBase {
         OnDemandAssessmentPage onDemandAssessmentPage = new OnDemandAssessmentPage();
         onDemandAssessmentPage.navigateToPageFromMenu("reportingservice","ESG Reporting Portal");
         onDemandAssessmentPage.waitForPortfolioTableToLoad();
-        // ESGCA - 13987 Verify that for a portfolio having 0% On Demand Assessment eligible coverage , request assessment button is disabled
+        // ESGT - 2824 Verify that for a portfolio having 0% On Demand Assessment eligible coverage , request assessment button is disabled
         System.out.println(BrowserUtils.getElementsText(onDemandAssessmentPage.portfolioNamesList));
         if(!onDemandAssessmentPage.verifyPortfolio("500 predicted portfolio")){
             onDemandAssessmentPage.uploadPortfolio("500predictedportfolio");
@@ -360,7 +360,7 @@ public class OnDemandAssessmentUITests extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI})
-    @Xray(test = {3277, 3139, 2962, 3044})
+    @Xray(test = {3277,3139,2962, 3044})
     public void verifyRequestFailedWithPreviouslyUsedEmailIds() {
 
         String portfolioName = "500 predicted portfolio";

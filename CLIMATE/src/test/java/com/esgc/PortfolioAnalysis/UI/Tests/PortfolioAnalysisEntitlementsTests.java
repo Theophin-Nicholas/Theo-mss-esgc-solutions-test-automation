@@ -17,7 +17,7 @@ import static com.esgc.Utilities.Groups.*;
 public class PortfolioAnalysisEntitlementsTests extends UITestBase {
 
     @Test(groups = {REGRESSION, UI, SMOKE, ENTITLEMENTS})
-    @Xray(test = {4286, 4296})
+    @Xray(test = {4691, 4328})
     public void validatePhysicalRiskBundleAccess() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         LoginPage login = new LoginPage();
@@ -39,7 +39,7 @@ public class PortfolioAnalysisEntitlementsTests extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI, SMOKE, ENTITLEMENTS})
-    @Xray(test = {4287, 4297})
+    @Xray(test = {4782, 4962})
     public void validateTransitionRiskBundleAccess() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         LoginPage login = new LoginPage();
@@ -59,30 +59,8 @@ public class PortfolioAnalysisEntitlementsTests extends UITestBase {
         Assert.assertEquals(currentUrl, "portfolioanalysis/temperaturealignment");
     }
 
-    @Test(enabled = false, groups = {REGRESSION, UI, SMOKE, ENTITLEMENTS})
-    @Xray(test = {4291, 4298}) //TODO No climate governance, de-scopped  MAP this ESGCA-11327 with this test case
-    public void validateClimateGovernanceBundleAccess() {
-        ResearchLinePage researchLinePage = new ResearchLinePage();
-        LoginPage login = new LoginPage();
-
-        login.entitlementsLogin(EntitlementsBundles.CLIMATE_GOVERNANCE);
-        researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
-
-        List<String> actualAvailableResearchLines = researchLinePage.getAvailableResearchLines();
-        test.info("Available research lines" + actualAvailableResearchLines);
-
-       /* Assert.assertEquals(actualAvailableResearchLines, researchLinePage.getExpectedListOfResearchLines(EntitlementsBundles.CLIMATE_GOVERNANCE),
-                "Validating list of accessible research lines");
-*/
-        String currentUrl = Driver.getDriver().getCurrentUrl();
-        currentUrl = currentUrl.substring(currentUrl.indexOf("portfolioanalysis"));
-
-        Assert.assertEquals(currentUrl, "portfolioanalysis/esgassessments");
-
-    }
-
     @Test(groups = {REGRESSION, UI, SMOKE, ENTITLEMENTS})
-    @Xray(test = {4293, 4320})
+    @Xray(test = {4381, 4383})
     public void validatePhysicalAndTransitionRiskBundleAccess() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         LoginPage login = new LoginPage();
@@ -102,50 +80,8 @@ public class PortfolioAnalysisEntitlementsTests extends UITestBase {
         Assert.assertEquals(currentUrl, "portfolioanalysis/physicalriskhazards");
     }
 
-    @Test(enabled = false, groups = {REGRESSION, UI, SMOKE, ENTITLEMENTS})
-    @Xray(test = {4295, 4322})
-    public void validateTransitionRiskAndClimateGovernanceBundleAccess() {
-        ResearchLinePage researchLinePage = new ResearchLinePage();
-        LoginPage login = new LoginPage();
-
-        login.entitlementsLogin(EntitlementsBundles.TRANSITION_RISK_CLIMATE_GOVERNANCE);
-        researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
-
-        List<String> actualAvailableResearchLines = researchLinePage.getAvailableResearchLines();
-        test.info("Available research lines" + actualAvailableResearchLines);
-
-       /* Assert.assertEquals(actualAvailableResearchLines, researchLinePage.getExpectedListOfResearchLines(EntitlementsBundles.TRANSITION_RISK_CLIMATE_GOVERNANCE),
-                "Validating list of accessible research lines");
-*/
-        String currentUrl = Driver.getDriver().getCurrentUrl();
-        currentUrl = currentUrl.substring(currentUrl.indexOf("portfolioanalysis"));
-
-        Assert.assertEquals(currentUrl, "portfolioanalysis/physicalriskhazards");
-    }
-
-    @Test(enabled = false, groups = {REGRESSION, UI, SMOKE, ENTITLEMENTS})
-    @Xray(test = {4294, 4321})
-    public void validatePhysicalRiskClimateGovernanceBundleAccess() {
-        ResearchLinePage researchLinePage = new ResearchLinePage();
-        LoginPage login = new LoginPage();
-
-        login.entitlementsLogin(EntitlementsBundles.PHYSICAL_RISK_CLIMATE_GOVERNANCE);
-        researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
-
-        List<String> actualAvailableResearchLines = researchLinePage.getAvailableResearchLines();
-        test.info("Available research lines " + actualAvailableResearchLines);
-
-        /*Assert.assertEquals(actualAvailableResearchLines, researchLinePage.getExpectedListOfResearchLines(EntitlementsBundles.PHYSICAL_RISK_CLIMATE_GOVERNANCE),
-                "Validating list of accessible research lines");
-*/
-        String currentUrl = Driver.getDriver().getCurrentUrl();
-        currentUrl = currentUrl.substring(currentUrl.indexOf("portfolioanalysis"));
-
-        Assert.assertEquals(currentUrl, "portfolioanalysis/physicalriskhazards");
-    }
-
     @Test(groups = {REGRESSION, UI, SMOKE, ENTITLEMENTS})
-    @Xray(test = {1936, 1937, 6083, 6084})
+    @Xray(test = {4618, 4574, 4392, 4996})
     public void validateExternalUserHasAllResearchLinesBundleAccess() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         LoginPage login = new LoginPage();
@@ -164,7 +100,7 @@ public class PortfolioAnalysisEntitlementsTests extends UITestBase {
 
 
 
-    @Xray(test = {8219})
+    @Xray(test = {5039})
     @Test(groups = {REGRESSION, UI, SMOKE, ESG, ENTITLEMENTS},
             description = "Verify research line navigation")
     public void verifyESGAssessmentRLIsNotVailable() {

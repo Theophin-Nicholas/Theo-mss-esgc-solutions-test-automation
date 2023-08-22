@@ -13,7 +13,7 @@ import static com.esgc.Utilities.Groups.*;
 
 public class MainPageTests extends EMCUITestBase {
     @Test(groups = {EMC, UI, SMOKE,REGRESSION,PROD})
-    @Xray(test = {2292})
+    @Xray(test = {1562})
     public void EMCLandingPageTest() {
 
         EMCMainPage mainPage = new EMCMainPage();
@@ -32,7 +32,7 @@ public class MainPageTests extends EMCUITestBase {
     }
 
     @Test(groups = {EMC, UI, SMOKE,REGRESSION, PROD})
-    @Xray(test = {3520})
+    @Xray(test = {1710})
     public void wrongUsernameLoginTest() {
         Driver.closeDriver();
         Driver.getDriver().get(Environment.EMC_URL);
@@ -46,7 +46,7 @@ public class MainPageTests extends EMCUITestBase {
     }
 
     @Test(groups = {EMC, UI, SMOKE,REGRESSION})
-    @Xray(test = {3521})
+    @Xray(test = {1800})
     public void wrongPasswordLoginTest() {
         Driver.closeDriver();
         Driver.getDriver().get(Environment.EMC_URL);
@@ -60,7 +60,7 @@ public class MainPageTests extends EMCUITestBase {
     }
 
     @Test(groups = {EMC, UI,REGRESSION}, description = "Login | EMC | Verify that Users can't Access Using Empty Username or Password")
-    @Xray(test = {3530, 3531})
+    @Xray(test = {1367, 1917})
     public void verifyUserCantAccessUsingEmptyCredentialsTest() {
         Driver.closeDriver();
         Driver.getDriver().get(Environment.EMC_URL);
@@ -92,7 +92,7 @@ public class MainPageTests extends EMCUITestBase {
     }
 
     @Test(groups = {EMC, UI,REGRESSION}, description = "Login | EMC | Verify that Users can't Access Using External Credentials")
-    @Xray(test = {3525})
+    @Xray(test = {1801})
     public void verifyUserCantAccessUsingExternalCredentialsTest() {
         Driver.closeDriver();
         Driver.getDriver().get(Environment.EMC_URL);
@@ -113,7 +113,7 @@ public class MainPageTests extends EMCUITestBase {
     }
 
     @Test(groups = {EMC, UI, REGRESSION, API}, description = "UI | EMC Role | Verify people with Fulfillment EMC role can not See EMC role users")
-    @Xray(test = {12556, 12557})
+    @Xray(test = {4196, 4166})
     public void verifyUserWithFulfillmentEMCRoleTest() {
         EMCMainPage mainPage = new EMCMainPage();
         mainPage.verifyAdminRoleUsersMenuOptions();

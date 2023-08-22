@@ -46,6 +46,7 @@ public class OnDemandAssessmentDBTests extends DataValidationTestBase {
 
     }
 
+    // TODO : There is an error in UI values and bug has been created
     @Xray(test = {4291})
     @Test(enabled = false, groups = {REGRESSION, DATA_VALIDATION})
     public void verifyCompaniesInvestmentInfo() {

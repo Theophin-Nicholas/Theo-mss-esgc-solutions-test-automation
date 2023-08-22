@@ -12,7 +12,7 @@ import static com.esgc.Utilities.Groups.UI;
 public class EntitySearchTests extends DataValidationTestBase {
 
     @Test(groups = {REGRESSION, UI})
-    @Xray(test = {9976})
+    @Xray(test = {3499})
     public void testSearchBoxIsGivingCorrectLastUpdateDate_DashboardPage() {
         String entityName = "Apple, Inc.";
         DashboardPage dashboardPage = new DashboardPage();
@@ -24,7 +24,7 @@ public class EntitySearchTests extends DataValidationTestBase {
     }
 
     @Test(groups = {REGRESSION, UI})
-    @Xray(test = {9977})
+    @Xray(test = {3648})
     public void testSearchBoxIsGivingCorrectLastUpdateDate_PortfolioAnalysis() {
         String entityName = "Apple, Inc.";
         ResearchLinePage researchLinePage = new ResearchLinePage();

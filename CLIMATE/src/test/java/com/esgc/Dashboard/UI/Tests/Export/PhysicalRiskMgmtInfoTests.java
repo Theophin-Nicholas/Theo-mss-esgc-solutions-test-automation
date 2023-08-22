@@ -17,7 +17,7 @@ public class PhysicalRiskMgmtInfoTests extends DataValidationTestBase {
     ExportUtils utils = new ExportUtils();
 
     @Test(groups = {DASHBOARD, REGRESSION, UI})
-    @Xray(test = {6417, 6418, 7104, 9190})
+    @Xray(test = {3836, 4076, 4342, 4576})
     public void comparePhysicalRiskDataFromExcelToDB() {
         DashboardPage dashboardPage = new DashboardPage();
 
@@ -35,7 +35,7 @@ public class PhysicalRiskMgmtInfoTests extends DataValidationTestBase {
         test.info("Exported All Companies and Investments Details in excel format");
         dashboardPage.closePortfolioExportDrawer();
 //TODO date validation needs to be updated
-        assertTestCase.assertTrue(dashboardPage.isCompaniesAndInvestmentsExcelDownloaded(), "Verify Download of Excel file with Companies and Investments details", 6080);
+        assertTestCase.assertTrue(dashboardPage.isCompaniesAndInvestmentsExcelDownloaded(), "Verify Download of Excel file with Companies and Investments details", 1867);
 
         // Read the data from Excel File
         String filePath = dashboardPage.getDownloadedCompaniesExcelFilePath();
@@ -56,7 +56,7 @@ public class PhysicalRiskMgmtInfoTests extends DataValidationTestBase {
     }
 
     @Test(groups = {DASHBOARD, REGRESSION, UI})
-    @Xray(test = {9190})
+    @Xray(test = {4576})
     public void comparePhysicalRiskManagementFromExcelToDB() {
         DashboardPage dashboardPage = new DashboardPage();
 
@@ -74,7 +74,7 @@ public class PhysicalRiskMgmtInfoTests extends DataValidationTestBase {
         test.info("Exported All Companies and Investments Details in excel format");
         dashboardPage.closePortfolioExportDrawer();
 
-        assertTestCase.assertTrue(dashboardPage.isCompaniesAndInvestmentsExcelDownloaded(), "Verify Download of Excel file with Companies and Investments details", 6080);
+        assertTestCase.assertTrue(dashboardPage.isCompaniesAndInvestmentsExcelDownloaded(), "Verify Download of Excel file with Companies and Investments details", 1867);
 
         // Read the data from Excel File
         String filePath = dashboardPage.getDownloadedCompaniesExcelFilePath();

@@ -9,7 +9,6 @@ import com.esgc.PortfolioAnalysis.API.APIModels.InvestmentAndScore;
 import com.esgc.PortfolioAnalysis.API.APIModels.RangeAndScoreCategory;
 import com.esgc.PortfolioAnalysis.UI.Pages.ResearchLinePage;
 import com.esgc.Utilities.APIUtilities;
-import com.esgc.Utilities.BrowserUtils;
 import com.esgc.Utilities.PortfolioUtilities;
 import com.esgc.Utilities.Xray;
 import io.restassured.response.Response;
@@ -33,7 +32,7 @@ public class ImpactDistributionDataValidation extends DataValidationTestBase {
     // private Object APIFilterPayloadWithImpactFilter;
 
     @Test(groups = {REGRESSION, DATA_VALIDATION}, dataProvider = "researchLines")
-    @Xray(test = {5005, 4969, 4968, 4964, 5012, 5013, 6779})
+    @Xray(test = {3372, 3603, 3717, 3527, 3373, 3334, 3503})
     public void ImpactDistributionDataValidation(@Optional String sector, @Optional String region,
                                                  @Optional String researchLine, @Optional String month, @Optional String year, @Optional String filter) {
 
@@ -229,7 +228,7 @@ public class ImpactDistributionDataValidation extends DataValidationTestBase {
     }
 
     @Test(groups = {REGRESSION, DATA_VALIDATION}, dataProvider = "researchLines")
-    @Xray(test = {6781})
+    @Xray(test = {3661})
     public void ImpactDistributionDataTableSum(@Optional String sector, @Optional String region,
                                                @Optional String researchLine, @Optional String month, @Optional String year, @Optional String filter) {
         String portfolioId = "00000000-0000-0000-0000-000000000000";
@@ -256,9 +255,10 @@ public class ImpactDistributionDataValidation extends DataValidationTestBase {
         researchLinePage.navigateToResearchLine(researchLine);
         researchLinePage.clickFiltersDropdown();
         researchLinePage.selectOptionFromFiltersDropdown("regions", Regions);
+        researchLinePage.waitForDataLoadCompletion();
         researchLinePage.clickFiltersDropdown();
         researchLinePage.selectOptionFromFiltersDropdown("as_of_date", dateFilter);
-        BrowserUtils.wait(5);
+        researchLinePage.waitForDataLoadCompletion();
 
         String UifilterOptions = "";
 
@@ -317,7 +317,7 @@ public class ImpactDistributionDataValidation extends DataValidationTestBase {
     }
 
     @Test(groups = {REGRESSION, DATA_VALIDATION}, dataProvider = "researchLines")
-    @Xray(test = {6782})
+    @Xray(test = {3637})
     public void VerifyXAxisImpactDistribution(@Optional String sector, @Optional String region,
                                                  @Optional String researchLine, @Optional String month, @Optional String year, @Optional String filter) {
 

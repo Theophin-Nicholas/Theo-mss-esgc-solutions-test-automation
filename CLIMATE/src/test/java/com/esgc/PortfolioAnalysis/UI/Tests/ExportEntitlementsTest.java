@@ -16,7 +16,7 @@ public class ExportEntitlementsTest extends UITestBase {
     //TODO PDF export is not working in QA and not available in UAT
     @Test(groups = {REGRESSION, UI, ENTITLEMENTS},
             dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
-    @Xray(test = {7841})
+    @Xray(test = {4871})
     public void verifyExportIsAvailableInPortfolioAnalysis_Bundle(String researchLine) {
 
         if (!(researchLine.equals("Carbon Footprint")
@@ -36,14 +36,14 @@ public class ExportEntitlementsTest extends UITestBase {
         dashboardPage.clickExportCompaniesButtonInPortfolioAnalysis();
         test.info("Exported All Companies and Investments Details in pdf format");
 
-        assertTestCase.assertTrue(dashboardPage.isCompaniesAndInvestmentsPdfDownloaded(), "Verify Download of Excel file with Companies and Investments details", 248);
+        assertTestCase.assertTrue(dashboardPage.isCompaniesAndInvestmentsPdfDownloaded(), "Verify Download of Excel file with Companies and Investments details", 4631);
         dashboardPage.deleteDownloadFolder();
 
     }
 
     @Test(groups = {REGRESSION, UI, ENTITLEMENTS},
             dataProviderClass = DataProviderClass.class, dataProvider = "Research Lines")
-    @Xray(test = {7842})
+    @Xray(test = {4838})
     public void verifyExportIsNotAvailableInPortfolioAnalysis_Bundle(String researchLine) {
 
         if (!(researchLine.equals("Carbon Footprint")

@@ -32,8 +32,8 @@ public class DownloadTemplate extends UITestBase {
         test.info("Clicked on \"Download Template\" link");
         BrowserUtils.waitForVisibility(researchLinePage.downloadTemplateLink, 2);
 
-        assertTestCase.assertEquals(researchLinePage.downloadTemplateLink.getText(), "Download Template", "Download Template is accessible", 188, 287);
-        assertTestCase.assertTrue(researchLinePage.downloadTemplateLink.isEnabled(), "Template is visible", 192);
+        assertTestCase.assertEquals(researchLinePage.downloadTemplateLink.getText(), "Download Template", "Download Template is accessible", 4371, 4489);
+        assertTestCase.assertTrue(researchLinePage.downloadTemplateLink.isEnabled(), "Template is visible", 4313);
         test.pass("\"Download Template\" button's visibility verified.");
         test.pass("Verified: \"Download Template\" link is clickable.");
 
@@ -59,10 +59,10 @@ public class DownloadTemplate extends UITestBase {
         test.info("Clicked on \"Download Template\" link");
         researchLinePage.clickDownloadTemplate();
         BrowserUtils.wait(4);
-        assertTestCase.assertTrue(researchLinePage.isTemplateDownloaded(), "Template is saved to user machine", 248);
+        assertTestCase.assertTrue(researchLinePage.isTemplateDownloaded(), "Template is saved to user machine", 4631);
 
         assertTestCase.assertTrue(ExcelUtil.checkIf2CSVFilesAreSame(BrowserUtils.templatePath(), BrowserUtils.expectedPortfolioTemplateDocumentPath()),
-                "Download template content check", 299, 317, 11079);
+                "Download template content check", 4493, 5024, 3442);
 
         Assert.assertEquals(researchLinePage.getDataFromCSV(0, 0), "Currency: Please only enter in values of USD or GBP or EUR. Platform values will be converted into USD. Only one currency is allowed per portfolio");
         test.pass("Excel was launched and this action was verified by reading a data from excel");

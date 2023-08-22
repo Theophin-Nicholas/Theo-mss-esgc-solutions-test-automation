@@ -2,7 +2,6 @@ package com.esgc.Dashboard.UI.Tests;
 
 import com.esgc.Base.TestBases.DashboardUITestBase;
 import com.esgc.Base.UI.Pages.LoginPage;
-import com.esgc.Dashboard.TestDataProviders.EntityWithEsgDataOnlyDataProviders;
 import com.esgc.Dashboard.UI.Pages.DashboardPage;
 import com.esgc.TestBase.DataProviderClass;
 import com.esgc.Utilities.BrowserUtils;
@@ -20,7 +19,7 @@ public class DashboardEntitlementsTests extends DashboardUITestBase {
 
     @Test(groups = {DASHBOARD, REGRESSION, UI, SMOKE, ENTITLEMENTS},
             dataProviderClass = DataProviderClass.class, dataProvider = "bundles")
-    @Xray(test = {4479, 7957})
+    @Xray(test = {4773, 3998})
     public void validateEntitlementsBundleInDashboard(@Optional EntitlementsBundles bundleName, @Optional Integer... testCase) {
 
         DashboardPage dashboardPage = new DashboardPage();
@@ -75,7 +74,7 @@ public class DashboardEntitlementsTests extends DashboardUITestBase {
 //        System.out.println("expectedGeoMapResearchLines = " + expectedGeoMapResearchLines);
 //        System.out.println("ActualResearchLinesFromMap = " + getAvailableResearchLinesFromMap);
 //        assertTestCase.assertEquals(getAvailableResearchLinesFromMap,
-//                expectedGeoMapResearchLines, "Validating Geographic Map Research Lines", 4549);
+//                expectedGeoMapResearchLines, "Validating Geographic Map Research Lines", 1331);
 
         List<String> actualHeatMapResearchLines = dashboardPage.getAvailableResearchLinesFromHeatMapResearchLineSelection();
         System.out.println("actualHeatMapResearchLines = " + actualHeatMapResearchLines);

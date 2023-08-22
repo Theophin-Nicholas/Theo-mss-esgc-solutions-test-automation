@@ -1,12 +1,8 @@
 package com.esgc.ONDEMAND.UI.Tests;
 
-import com.esgc.Common.UI.Pages.LoginPage;
 import com.esgc.Common.UI.TestBases.UITestBase;
-import com.esgc.ONDEMAND.API.Controllers.OnDemandFilterAPIController;
 import com.esgc.ONDEMAND.UI.Pages.OnDemandAssessmentPage;
 import com.esgc.ONDEMAND.UI.Pages.ViewDetailPage;
-import com.esgc.Utilities.BrowserUtils;
-import com.esgc.Utilities.EntitlementsBundles;
 import com.esgc.Utilities.Xray;
 import org.testng.annotations.Test;
 
@@ -63,12 +59,10 @@ public class OnDemandViewDetailUITests extends UITestBase {
         detail.isEntitiesListSorted();
         detail.verifyEntitiesAreNotClickable();
         detail.verifyEntitiesNotClickableInViewDetailPage(detail);
-
-
     }
 
     @Test(groups = {UI, REGRESSION, SMOKE})
-    @Xray(test = {3033, 3113, 3124, 2865, 2845, 2837})
+    @Xray(test = { 3033, 3113, 3124, 2865, 2845, 2837})
     public void verifyViewDetailPageBySector() {
         ViewDetailPage detail = new ViewDetailPage();
         String portfolioName = "500 predicted portfolio";
@@ -102,7 +96,7 @@ public class OnDemandViewDetailUITests extends UITestBase {
     }
 
     @Test(groups = {UI, REGRESSION, SMOKE})
-    @Xray(test = {2855, 2823, 2829, 2933, 2814})
+    @Xray(test = {2855,2823,2829,2933,2814})
     public void verifyViewDetailPageByRegion() {
 
         ViewDetailPage detail = new ViewDetailPage();

@@ -6,7 +6,6 @@ import com.esgc.Common.UI.TestBases.UITestBase;
 import com.esgc.ONDEMAND.TestDataProviders.EntityWithEsgDataOnlyDataProviders;
 import com.esgc.ONDEMAND.UI.Pages.OnDemandAssessmentPage;
 import com.esgc.ONDEMAND.UI.Pages.PopUpPage;
-import com.esgc.ONDEMAND.UI.Pages.ViewDetailPage;
 import com.esgc.Utilities.*;
 import com.github.javafaker.Faker;
 import io.restassured.path.json.JsonPath;
@@ -448,7 +447,7 @@ public class OnDemandEntitlementBundleTests extends UITestBase {
     }
 
     @Test(groups = {UI, REGRESSION, ENTITLEMENTS})
-    @Xray(test = {2819, 2766, 2870})
+    @Xray(test = {2819, 2766,2879, 2870})
     public void verifyZeroAssessmentRemaining() {
         LoginPage login = new LoginPage();
         try {

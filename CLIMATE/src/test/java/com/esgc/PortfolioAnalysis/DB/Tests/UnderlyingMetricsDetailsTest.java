@@ -21,7 +21,7 @@ public class UnderlyingMetricsDetailsTest extends DataValidationTestBase {
     public static String portfolioId = "00000000-0000-0000-0000-000000000000";
 
     @Test(groups = {REGRESSION, DATA_VALIDATION})
-    @Xray(test = 8073)
+    @Xray(test = 5049)
     public void verifyMarketRiskUnderlyingDataMetricsDetails() {
         UnderlyingDataMetricsQueries underlyingDataMetricsQueries = new UnderlyingDataMetricsQueries();
         List<Map<String, Object>> dbResults = underlyingDataMetricsQueries.getMarketRiskUnderlyingDataMetricsDetails(portfolioId, "12","2021");
@@ -36,7 +36,7 @@ public class UnderlyingMetricsDetailsTest extends DataValidationTestBase {
     }
 
     @Test(groups = {REGRESSION, DATA_VALIDATION})
-    @Xray(test = 8073)
+    @Xray(test = 5049)
     public void verifySupplyRiskUnderlyingDataMetricsDetails() {
 
         UnderlyingDataMetricsQueries underlyingDataMetricsQueries = new UnderlyingDataMetricsQueries();

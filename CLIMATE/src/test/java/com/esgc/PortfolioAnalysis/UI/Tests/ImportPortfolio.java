@@ -29,7 +29,7 @@ public class ImportPortfolio extends UITestBase {
  */
 
     @Test(groups = {REGRESSION, UI, SMOKE, ROBOT_DEPENDENCY})
-    @Xray(test = {330})
+    @Xray(test = {4521})
     public void VerifyFileUploadErrorPopup() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
 
@@ -65,10 +65,10 @@ public class ImportPortfolio extends UITestBase {
   Acceptance Criteria:
   Successful message popup should be displayed when file is uploaded successfully
 */
-//1027
+//4679
     @Test(groups = {REGRESSION, UI, SMOKE, ROBOT_DEPENDENCY},dataProviderClass = DataProviderClass.class,
             dataProvider = "Valid Portfolios")
-    @Xray(test = {493, 497, 500, 1027, 1297, 3044, 11069})
+    @Xray(test = {4974, 5001, 4872, 4679, 2152, 4480, 3711})
     public void VerifyFileUploadSuccessPopup(String portfolio) {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
@@ -93,11 +93,11 @@ public class ImportPortfolio extends UITestBase {
         String expectedFileName = "\"" + inputFile.substring(inputFile.lastIndexOf(File.separator) + 1) + "\"";
         String actualFileName = researchLinePage.selectedFileName.getText().substring(0, researchLinePage.selectedFileName.getText().indexOf("Remove") - 1);
 
-        assertTestCase.assertEquals(actualFileName, expectedFileName, "File selected from dialog", 304, 305, 306);
+        assertTestCase.assertEquals(actualFileName, expectedFileName, "File selected from dialog", 4573, 4351, 4350);
 
-        assertTestCase.assertTrue(researchLinePage.isRemoveButtonPresent(), "Remove hyperlink is displayed", 307);
+        assertTestCase.assertTrue(researchLinePage.isRemoveButtonPresent(), "Remove hyperlink is displayed", 4863);
         test.info("Import portfolio file was selected");
-        assertTestCase.assertFalse(researchLinePage.isBrowseButtonPresent(), "Browse button is disabled", 308);
+        assertTestCase.assertFalse(researchLinePage.isBrowseButtonPresent(), "Browse button is disabled", 4555);
 
         researchLinePage.clickUploadButton();
         test.info("Clicked on the Upload button");
@@ -105,10 +105,10 @@ public class ImportPortfolio extends UITestBase {
         assertTestCase.assertTrue(researchLinePage.checkIfUploadingMaskIsDisplayed(), "Load Mask");
 
 
-        assertTestCase.assertTrue(researchLinePage.checkifSuccessPopUpIsDisplyed(), "Success pop up is displayed", 335);
+        assertTestCase.assertTrue(researchLinePage.checkifSuccessPopUpIsDisplyed(), "Success pop up is displayed", 5021);
         test.pass("Verified:After a successful file upload,Success popup was displayed successfully");
 
-        assertTestCase.assertEquals(researchLinePage.AlertMessage.getText(), "Portfolio Upload Successfully Saved", "Success message verified", 335);
+        assertTestCase.assertEquals(researchLinePage.AlertMessage.getText(), "Portfolio Upload Successfully Saved", "Success message verified", 5021);
         test.pass("Verified:Message for successfull portfolio upload was as expected");
 
         assertTestCase.assertTrue(researchLinePage.CheckifClosebuttonIsDisplayed(), "Close button verified");
@@ -118,21 +118,21 @@ public class ImportPortfolio extends UITestBase {
                 ConfigurationReader.getProperty(portfolio).lastIndexOf("\\")+1,
                 ConfigurationReader.getProperty(portfolio).lastIndexOf(".")
         );//"Portfolio Upload updated_good";
-        assertTestCase.assertEquals(researchLinePage.getPlaceholderInSuccessPopUp(), expectedPortfolioName, "Portfolio name in pop up", 494);
+        assertTestCase.assertEquals(researchLinePage.getPlaceholderInSuccessPopUp(), expectedPortfolioName, "Portfolio name in pop up", 4635);
 
         researchLinePage.waitForDataLoadCompletion();
 
-        assertTestCase.assertEquals(researchLinePage.getSelectedPortfolioNameFromDropdown(), expectedPortfolioName, "Portfolio name verification", 1298);
+        assertTestCase.assertEquals(researchLinePage.getSelectedPortfolioNameFromDropdown(), expectedPortfolioName, "Portfolio name verification", 5063);
         assertTestCase.assertEquals(researchLinePage.getPortfolioNameFromSubtitle(), expectedPortfolioName, "Portfolio name in subtitle");
-        assertTestCase.assertEquals(researchLinePage.getPortfolioNames().get(0).trim(), expectedPortfolioName, "Portfolio name is in Portfolio Selection", 663);
+        assertTestCase.assertEquals(researchLinePage.getPortfolioNames().get(0).trim(), expectedPortfolioName, "Portfolio name is in Portfolio Selection", 4582);
         String benchmarkPortfolioName = researchLinePage.getOptionsAsStringListFromFiltersDropdown("benchmark").stream().filter(e -> e.equals(expectedPortfolioName)).findFirst().get();
-        assertTestCase.assertEquals(benchmarkPortfolioName, expectedPortfolioName, "Portfolio name is in Benchmark", 663, 705);
-        assertTestCase.assertFalse(researchLinePage.checkifSuccessPopUpIsDisplyed(), "Success pop up disappeared", 337);
+        assertTestCase.assertEquals(benchmarkPortfolioName, expectedPortfolioName, "Portfolio name is in Benchmark", 4582, 5086);
+        assertTestCase.assertFalse(researchLinePage.checkifSuccessPopUpIsDisplyed(), "Success pop up disappeared", 4800);
     }
 
-    //test case:ESGCA-985
+    //test case:ESGT-4735
     @Test(groups = {REGRESSION, UI, SMOKE})
-    @Xray(test = {985})
+    @Xray(test = {4735})
     public void VerifyUploadModal() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
@@ -147,10 +147,10 @@ public class ImportPortfolio extends UITestBase {
         assertTestCase.assertTrue(researchLinePage.checkIfPortfolioUploadModalIsDisplayed(), "Portfolio Upload Modal Displayed");
         assertTestCase.assertTrue(researchLinePage.checkIfPortfolioUploadModalSubTitleIsDisplayedAsExpected(), "Subtitle Displayed");
         assertTestCase.assertTrue(researchLinePage.checkIfPortfolioUploadModalDescriptionIsDisplayedAsExpected(), "Description verification");
-        assertTestCase.assertTrue(researchLinePage.downloadTemplateLink.isDisplayed(), "Download Template Link displayed", 188);
-        assertTestCase.assertTrue(researchLinePage.browseFileButton.isEnabled(), "Browse File button is available", 303);
+        assertTestCase.assertTrue(researchLinePage.downloadTemplateLink.isDisplayed(), "Download Template Link displayed", 4371);
+        assertTestCase.assertTrue(researchLinePage.browseFileButton.isEnabled(), "Browse File button is available", 4570);
         assertTestCase.assertTrue(researchLinePage.checkIfCloseUploadModalButtonIsDisabled(), "Close button displayed");
-        assertTestCase.assertTrue(researchLinePage.checkIfUploadButtonIsDisabled(), "Upload button disabled", 250);
+        assertTestCase.assertTrue(researchLinePage.checkIfUploadButtonIsDisabled(), "Upload button disabled", 4496);
 
         researchLinePage.closeUploadModal();
         BrowserUtils.wait(3);
@@ -165,7 +165,7 @@ public class ImportPortfolio extends UITestBase {
     */
 
     @Test(groups = {REGRESSION, UI, SMOKE, ROBOT_DEPENDENCY})
-    @Xray(test = {336, 3045})
+    @Xray(test = {4641, 4796})
     public void VerifyPortfolioCanBeRenamed() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
@@ -195,7 +195,7 @@ public class ImportPortfolio extends UITestBase {
         BrowserUtils.waitForVisibility(researchLinePage.successMessagePopUP, 2);
         test.info("Waited for the Successful popup's visibility");
 
-        assertTestCase.assertTrue(researchLinePage.CheckifNameInputFielIsPresent(), "File can be renamed from pop up", 336);
+        assertTestCase.assertTrue(researchLinePage.CheckifNameInputFielIsPresent(), "File can be renamed from pop up", 4641);
         test.pass("Verified:After a successful file upload,A name input field was displayed on successful popup message");
 
         String newPortfolioName = ConfigurationReader.getProperty("NewPortfolioName");
@@ -207,8 +207,8 @@ public class ImportPortfolio extends UITestBase {
 
         researchLinePage.waitForDataLoadCompletion();
 
-        assertTestCase.assertEquals(researchLinePage.getSelectedPortfolioNameFromDropdown(), newPortfolioName, "File is renamed", 336);
-        assertTestCase.assertEquals(researchLinePage.getPortfolioNameFromSubtitle(), newPortfolioName, "File is renamed", 336);
+        assertTestCase.assertEquals(researchLinePage.getSelectedPortfolioNameFromDropdown(), newPortfolioName, "File is renamed", 4641);
+        assertTestCase.assertEquals(researchLinePage.getPortfolioNameFromSubtitle(), newPortfolioName, "File is renamed", 4641);
         assertTestCase.assertEquals(researchLinePage.getPortfolioNames().get(0).trim(), newPortfolioName, "File is renamed in Portfolio Selection", 642);
         String benchmarkPortfolioName = researchLinePage.getOptionsAsStringListFromFiltersDropdown("benchmark").stream().filter(e -> e.equals(newPortfolioName)).findFirst().get();
         assertTestCase.assertEquals(benchmarkPortfolioName, newPortfolioName, "File name is renamed in Benchmark", 642);
@@ -220,7 +220,7 @@ public class ImportPortfolio extends UITestBase {
      Observe Save button is not appearing unless user has not click to rename portfolio.
     */
     @Test(groups = {REGRESSION, UI, SMOKE, ROBOT_DEPENDENCY})
-    @Xray(test = {3046})
+    @Xray(test = {4802})
     public void VerifySaveButtonVisibility() {
 
         ResearchLinePage researchLinePage = new ResearchLinePage();
@@ -246,10 +246,10 @@ public class ImportPortfolio extends UITestBase {
         researchLinePage.clickUploadButton();
         test.info("Clicked on the Upload button");
 
-        assertTestCase.assertTrue(researchLinePage.checkifSuccessPopUpIsDisplyed(), "Success Pop Up presented", 338);
+        assertTestCase.assertTrue(researchLinePage.checkifSuccessPopUpIsDisplyed(), "Success Pop Up presented", 4637);
         test.info("Waited for the Successful popup's visibility");
 
-        assertTestCase.assertFalse(researchLinePage.isSaveButtonPresent(), "Save button is not displayed", 338);
+        assertTestCase.assertFalse(researchLinePage.isSaveButtonPresent(), "Save button is not displayed", 4637);
         test.pass("Verified:After a successful file upload,Save button was not present by default on Successful message popup.");
 
         //researchLinePage.clickCloseButton();
@@ -257,7 +257,7 @@ public class ImportPortfolio extends UITestBase {
         Assert.assertFalse(researchLinePage.checkifSuccessPopUpIsDisplyed());
     }
 
-    //test case:316
+    //test case:5037
     @Test(groups = {REGRESSION, UI, SMOKE, ROBOT_DEPENDENCY})
     public void VerifyFileRemovedFromUploadModal() {
 
@@ -287,7 +287,7 @@ public class ImportPortfolio extends UITestBase {
         researchLinePage.clickRemoveButton();
         BrowserUtils.wait(3);
 
-        assertTestCase.assertTrue(researchLinePage.isFileRemovedFromModal(), "File removed", 316);
+        assertTestCase.assertTrue(researchLinePage.isFileRemovedFromModal(), "File removed", 5037);
         test.pass("Remove button verified");
     }
 
@@ -338,7 +338,7 @@ public class ImportPortfolio extends UITestBase {
  */
 
     @Test(groups = {REGRESSION, UI, SMOKE, ROBOT_DEPENDENCY}, singleThreaded = true)
-    @Xray(test = 984)
+    @Xray(test = 1732)
     public void importPortfolio_verifyUnknownIdentifierMessage() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
 
@@ -420,29 +420,29 @@ public class ImportPortfolio extends UITestBase {
     public Object[][] dpMethod() {
 
         return new Object[][]{
-                {"PredictedScoredEntityWithISIN.csv",PREDICTED_SCORED_ENTITY_WITH_ISIN,11071},
-               {"InvalidCurrencyInPortfolio.csv", INVALID_CURRENCY_ERROR_MESSAGE, 498},//498
-                {"InvalidCurrencyCodeInPortfolio.csv", INVALID_CURRENCY_ERROR_MESSAGE, 498},//498
-                 {"InvalidCurrencyCodeInPortfolio2.csv", INVALID_CURRENCY_ERROR_MESSAGE, 3047},
-                 {"NoIdentifierInPortfolio.csv", NO_IDENTIFIER_ERROR_MESSAGE, 504, 839},//504//839
-                 {"EmptyIdentifier.csv", EMPTY_IDENTIFIER_ERROR_MESSAGE, 504, 839},//504//839
-                 {"InvalidIdentifierValue.csv", INVALID_IDENTIFIER_VALUE_ERROR_MESSAGE, 506, 837},//506//837
-                 {"MissingIdentifier.csv", MISSING_IDENTIFIER_ERROR_MESSAGE, 504, 839, 824},//504//839
+                {"PredictedScoredEntityWithISIN.csv",PREDICTED_SCORED_ENTITY_WITH_ISIN,3663},
+               {"InvalidCurrencyInPortfolio.csv", INVALID_CURRENCY_ERROR_MESSAGE, 4956},//4956
+                {"InvalidCurrencyCodeInPortfolio.csv", INVALID_CURRENCY_ERROR_MESSAGE, 4956},//4956
+                 {"InvalidCurrencyCodeInPortfolio2.csv", INVALID_CURRENCY_ERROR_MESSAGE, 4843},
+                 {"NoIdentifierInPortfolio.csv", NO_IDENTIFIER_ERROR_MESSAGE, 4628, 4856},//4628//4856
+                 {"EmptyIdentifier.csv", EMPTY_IDENTIFIER_ERROR_MESSAGE, 4628, 4856},//4628//4856
+                 {"InvalidIdentifierValue.csv", INVALID_IDENTIFIER_VALUE_ERROR_MESSAGE, 4467, 5070},//4467//5070
+                 {"MissingIdentifier.csv", MISSING_IDENTIFIER_ERROR_MESSAGE, 4628, 4856, 4567},//4628//4856
  //                {"InvalidDate.csv", INVALID_DATE_ERROR_MESSAGE, 512, 836},//512/836
  //                {"InvalidDate2.csv", INVALID_DATE_ERROR_MESSAGE, 512, 836},//512/836
  //                {"InvalidDate3.csv", INVALID_DATE_ERROR_MESSAGE, 512, 836},//512/836
-                 {"NoHeader.csv", INVALID_COLUMN_ERROR_MESSAGE, 520, 831},//520//831
-                 {"InvalidHeader.csv", INVALID_HEADER_ERROR_MESSAGE, 520},//520
-                 {"ValueMissingHeader.csv", INVALID_COLUMN_ERROR_MESSAGE, 520},//520
-                 {"ValueMissingHeader2.csv", CHECK_DOCUMENT_ERROR_MESSAGE, 520},//520
-                 {"InvalidColumn.csv", INVALID_COLUMN_ERROR_MESSAGE, 520},//520
-                 {"InvalidFile.json", INVALID_FILE_ERROR_MESSAGE, 507, 815, 4154},//507,815, 4154
-                 {"InvalidFile.txt", INVALID_FILE_ERROR_MESSAGE, 507, 815, 4154},//507,815, 4154
-                 {"EmptyFile.csv", EMPTY_FILE_ERROR_MESSAGE, 524},//524
-                 {"SeveralMissingFields.csv", SEVERAL_MISSING_ERROR_MESSAGE, 819},//819 several missing fields
-                 {"MissingValue.csv", MISSING_VALUE_ERROR_MESSAGE, 840},//840 value missing
-                 {"AllUnmatchedIdentifiers.csv", All_UNMATCHED_IDENTIFIERS_ERROR_MESSAGE, 984},//all value unmatched
-                {"MISSING_ISIN_OR_BBG_TICKER_IDENTIFIER.csv",MISSING_ISIN_OR_BBG_TICKER_IDENTIFIER,10102}
+                 {"NoHeader.csv", INVALID_COLUMN_ERROR_MESSAGE, 5055, 4859},//5055//4859
+                 {"InvalidHeader.csv", INVALID_HEADER_ERROR_MESSAGE, 5055},//5055
+                 {"ValueMissingHeader.csv", INVALID_COLUMN_ERROR_MESSAGE, 5055},//5055
+                 {"ValueMissingHeader2.csv", CHECK_DOCUMENT_ERROR_MESSAGE, 5055},//5055
+                 {"InvalidColumn.csv", INVALID_COLUMN_ERROR_MESSAGE, 5055},//5055
+                 {"InvalidFile.json", INVALID_FILE_ERROR_MESSAGE, 5023, 3522, 4876},//5023,3522, 4876
+                 {"InvalidFile.txt", INVALID_FILE_ERROR_MESSAGE, 5023, 3522, 4876},//5023,3522, 4876
+                 {"EmptyFile.csv", EMPTY_FILE_ERROR_MESSAGE, 5052},//5052
+                 {"SeveralMissingFields.csv", SEVERAL_MISSING_ERROR_MESSAGE, 5025},//5025 several missing fields
+                 {"MissingValue.csv", MISSING_VALUE_ERROR_MESSAGE, 4551},//4551 value missing
+                 {"AllUnmatchedIdentifiers.csv", All_UNMATCHED_IDENTIFIERS_ERROR_MESSAGE, 1732},//all value unmatched
+                {"MISSING_ISIN_OR_BBG_TICKER_IDENTIFIER.csv",MISSING_ISIN_OR_BBG_TICKER_IDENTIFIER,4358}
 
 
         };
@@ -472,11 +472,11 @@ public class ImportPortfolio extends UITestBase {
             String expectedFileName = "\""+fileName + ".csv\"";
             String actualFileName = researchLinePage.selectedFileName.getText().substring(0, researchLinePage.selectedFileName.getText().indexOf("Remove") - 1);
 
-            assertTestCase.assertEquals(actualFileName, expectedFileName, "File selected from dialog", 304, 305, 306);
+            assertTestCase.assertEquals(actualFileName, expectedFileName, "File selected from dialog", 4573, 4351, 4350);
 
-            assertTestCase.assertTrue(researchLinePage.isRemoveButtonPresent(), "Remove hyperlink is displayed", 307);
+            assertTestCase.assertTrue(researchLinePage.isRemoveButtonPresent(), "Remove hyperlink is displayed", 4863);
             test.info("Import portfolio file was selected");
-            assertTestCase.assertFalse(researchLinePage.isBrowseButtonPresent(), "Browse button is disabled", 308);
+            assertTestCase.assertFalse(researchLinePage.isBrowseButtonPresent(), "Browse button is disabled", 4555);
 
             researchLinePage.clickUploadButton();
             test.info("Clicked on the Upload button");
@@ -489,7 +489,7 @@ public class ImportPortfolio extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI, ROBOT_DEPENDENCY}, description = "Upload BBG portfolio file with valid data")
-    @Xray(test = {4300, 7000, 9778, 9911, 9912})
+    @Xray(test = {1981, 3506, 4881, 4536, 4517})
     public void VerifyBBGPortfolioUploadTest() {
         String portfolioName = "BBGPortfolioWithValidData";
         uploadPortfolio(portfolioName);
@@ -526,7 +526,7 @@ public class ImportPortfolio extends UITestBase {
 
     @Test(groups = {REGRESSION, UI, ROBOT_DEPENDENCY}
             , description = "UI | Upload | Verify the notification when User Uploads a portfolio having multiple BBG tickers( basic/Full ) belonging to multiple BVD9s as identifiers")
-    @Xray(test = {4302})
+    @Xray(test = {4326})
     public void VerifyMultipleBBGPortfolioUploadTest() {
         uploadPortfolio("PortfolioWithMultipleBBGTickers");
         assertTestCase.assertTrue(researchLinePage.checkifSuccessPopUpIsDisplyed(), "Success pop up is displayed");
@@ -539,7 +539,7 @@ public class ImportPortfolio extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI, ROBOT_DEPENDENCY}, description = "Upload portfolio with same identifiers")
-    @Xray(test = {4303, 9913})
+    @Xray(test = {4446, 4520})
     public void VerifyUploadPortfolioWithSameIdentifiersTest() {
         String portfolioName = "PortfolioWithSameIdentifiers";
         uploadPortfolio(portfolioName);
@@ -568,7 +568,7 @@ public class ImportPortfolio extends UITestBase {
 
     @Test(groups = {REGRESSION, UI, ROBOT_DEPENDENCY}
             , description = "UI | Portfolio Upload | Verify currency values in imported portfolio when user enters an incorrect/uncovered currency value ")
-    @Xray(test = {9914})
+    @Xray(test = {4772})
     public void VerifyIncorrectCurrencyPortfolioUploadTest() {
         String portfolioName = "PortfolioWithIncorrectCurrency";
         uploadPortfolio(portfolioName);
@@ -582,7 +582,7 @@ public class ImportPortfolio extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI, ROBOT_DEPENDENCY}, description = "Upload portfolio with EUR Currency")
-    @Xray(test = {9913})
+    @Xray(test = {4520})
     public void VerifyUploadPortfolioWithEURCurrencyTest() {
         String portfolioName = "SamplePortfolioToDelete";
         uploadPortfolio(portfolioName);
@@ -609,7 +609,7 @@ public class ImportPortfolio extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI, ROBOT_DEPENDENCY}, description = "UI | Portfolio Upload | Verify the error message for non numeric number in Value field for less than 5 rows")
-    @Xray(test = {9931})
+    @Xray(test = {4780})
     public void VerifyPortfolioWithLessThan5NonNumericValuesUploadTest() {
         String portfolioName = "PortfolioWithLessThan5NonNumericValues";
         uploadPortfolio(portfolioName);
@@ -623,7 +623,7 @@ public class ImportPortfolio extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI, ROBOT_DEPENDENCY}, description = "UI | Portfolio Upload | Verify the error message for non numeric number in Value field for more than 5 rows")
-    @Xray(test = {9933})
+    @Xray(test = {4561})
     public void VerifyPortfolioWithMoreThan5NonNumericValuesUploadTest() {
         String portfolioName = "PortfolioWithMoreThan5NonNumericValues";
         uploadPortfolio(portfolioName);
@@ -637,7 +637,7 @@ public class ImportPortfolio extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI, ROBOT_DEPENDENCY}, description = "UI | Portfolio Upload | Verify error messages for missing less/more than 5 fields")
-    @Xray(test = {10028})
+    @Xray(test = {4944})
     public void VerifyPortfolioWithLessThan5MissingFieldsUploadTest() {
         String portfolioName = "PortfolioWithLessThan5MissingFields";
         uploadPortfolio(portfolioName);
@@ -661,7 +661,7 @@ public class ImportPortfolio extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI, ROBOT_DEPENDENCY}, description = "UI | Portfolio Upload | Verify UI changes on Portfolio modal")
-    @Xray(test = {10358})
+    @Xray(test = {4430})
     public void verifyUIChangesOnPortfolioUploadModal() {
         researchLinePage.navigateToPageFromMenu("Climate Portfolio Analysis");
         test.info("Navigated to Portfolio Analysis Page");
@@ -676,7 +676,7 @@ public class ImportPortfolio extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI, ERROR_MESSAGES, ROBOT_DEPENDENCY})
-    @Xray(test = {11081})
+    @Xray(test = {3392})
     public void importEntityWithPredictedScoreWithoutEntitlements() {
 
         LoginPage login = new LoginPage();
@@ -711,7 +711,7 @@ public class ImportPortfolio extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI, ERROR_MESSAGES, ROBOT_DEPENDENCY})
-    @Xray(test = {11075})
+    @Xray(test = {3466})
     public void importPortfolioWithUnmatchedOrbisId() {
 
         ResearchLinePage researchLinePage = new ResearchLinePage();

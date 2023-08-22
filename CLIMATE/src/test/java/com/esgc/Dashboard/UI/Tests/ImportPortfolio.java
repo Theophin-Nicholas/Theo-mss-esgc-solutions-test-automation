@@ -16,10 +16,10 @@ import static com.esgc.Utilities.Groups.*;
 public class ImportPortfolio extends DashboardUITestBase {
 
 
-    //Test Cases: 303, 304, 305, 306, 307,985, 1298,
-//main test case 3218
+    //Test Cases: 4570, 4573, 4351, 4350, 4863,4735, 5063,
+//main test case 5048
     @Test(groups = {REGRESSION, UI, SMOKE, ROBOT_DEPENDENCY, DASHBOARD})
-    @Xray(test = 3218)
+    @Xray(test = 5048)
     public void VerifyFileUploadSuccessPopup() {
         DashboardPage dashboardPage = new DashboardPage();
         dashboardPage.navigateToPageFromMenu("Climate Dashboard");
@@ -44,12 +44,12 @@ public class ImportPortfolio extends DashboardUITestBase {
         String expectedFileName = "\"" + inputFile.substring(inputFile.lastIndexOf(File.separator) + 1) + "\"";
         String actualFileName = dashboardPage.selectedFileName.getText().substring(0, dashboardPage.selectedFileName.getText().indexOf("Remove") - 1);
 
-        assertTestCase.assertEquals(actualFileName, expectedFileName, "File selected from dialog", 304, 305, 306);
+        assertTestCase.assertEquals(actualFileName, expectedFileName, "File selected from dialog", 4573, 4351, 4350);
 
-        assertTestCase.assertTrue(dashboardPage.isRemoveButtonPresent(), "Remove hyperlink is displayed", 307);
+        assertTestCase.assertTrue(dashboardPage.isRemoveButtonPresent(), "Remove hyperlink is displayed", 4863);
         test.info("Import portfolio file was selected");
 
-        assertTestCase.assertFalse(dashboardPage.isBrowseButtonPresent(), "Browse button is disabled", 308);
+        assertTestCase.assertFalse(dashboardPage.isBrowseButtonPresent(), "Browse button is disabled", 4555);
         dashboardPage.clickUploadButton();
         test.info("Clicked on the Upload button");
         BrowserUtils.wait(3);
@@ -59,10 +59,10 @@ public class ImportPortfolio extends DashboardUITestBase {
         BrowserUtils.waitForVisibility(dashboardPage.successMessagePopUP, 10);
         test.info("Waited for the Successful popup's visibility");
 
-        assertTestCase.assertTrue(dashboardPage.checkifSuccessPopUpIsDisplyed(), "Success pop up is displayed", 335);
+        assertTestCase.assertTrue(dashboardPage.checkifSuccessPopUpIsDisplyed(), "Success pop up is displayed", 5021);
         test.pass("Verified:After a successful file upload,Success popup was displayed successfully");
 
-        assertTestCase.assertEquals(dashboardPage.AlertMessage.getText(), "Portfolio Upload Successfully Saved", "Success message verified", 335);
+        assertTestCase.assertEquals(dashboardPage.AlertMessage.getText(), "Portfolio Upload Successfully Saved", "Success message verified", 5021);
         test.pass("Verified:Message for successful portfolio upload was as expected");
 
         assertTestCase.assertTrue(dashboardPage.CheckifClosebuttonIsDisplayed(), "Close button displayed");
@@ -73,9 +73,9 @@ public class ImportPortfolio extends DashboardUITestBase {
 
         dashboardPage.waitForDataLoadCompletion();
         BrowserUtils.wait(20);
-        assertTestCase.assertFalse(dashboardPage.checkifSuccessPopUpDisappearedAfterACertainTime(), "Success pop up disappeared", 337);
+        assertTestCase.assertFalse(dashboardPage.checkifSuccessPopUpDisappearedAfterACertainTime(), "Success pop up disappeared", 4800);
 
-        assertTestCase.assertEquals(dashboardPage.getSelectedPortfolioNameFromDropdown(), expectedPortfolioName, "Portfolio name verification", 1298);
+        assertTestCase.assertEquals(dashboardPage.getSelectedPortfolioNameFromDropdown(), expectedPortfolioName, "Portfolio name verification", 5063);
         assertTestCase.assertEquals(dashboardPage.getPortfolioNameInSummaryHeaders(), expectedPortfolioName, "Portfolio name in subtitle");
 
     }
@@ -110,7 +110,7 @@ public class ImportPortfolio extends DashboardUITestBase {
 
     }
 
-    //test case: 336
+    //test case: 4641
     @Test(groups = {REGRESSION, UI, SMOKE, ROBOT_DEPENDENCY, DASHBOARD})
     public void VerifyPortfolioCanBeRenamed() {
         DashboardPage dashboardPage = new DashboardPage();
@@ -141,7 +141,7 @@ public class ImportPortfolio extends DashboardUITestBase {
         BrowserUtils.waitForVisibility(dashboardPage.successMessagePopUP, 2);
         test.info("Waited for the Successful popup's visibility");
 
-        assertTestCase.assertTrue(dashboardPage.CheckifNameInputFielIsPresent(), "File can be renamed from pop up", 336);
+        assertTestCase.assertTrue(dashboardPage.CheckifNameInputFielIsPresent(), "File can be renamed from pop up", 4641);
         test.pass("Verified:After a successful file upload,A name input field was displayed on successful popup message");
 
         String newPortfolioName = ConfigurationReader.getProperty("NewPortfolioName");
@@ -153,12 +153,12 @@ public class ImportPortfolio extends DashboardUITestBase {
 
         dashboardPage.waitForDataLoadCompletion();
 
-        assertTestCase.assertEquals(dashboardPage.getSelectedPortfolioNameFromDropdown(), newPortfolioName, "File is renamed", 336);
-        assertTestCase.assertEquals(dashboardPage.getPortfolioNameInSummaryHeaders(), newPortfolioName, "File is renamed", 336);
+        assertTestCase.assertEquals(dashboardPage.getSelectedPortfolioNameFromDropdown(), newPortfolioName, "File is renamed", 4641);
+        assertTestCase.assertEquals(dashboardPage.getPortfolioNameInSummaryHeaders(), newPortfolioName, "File is renamed", 4641);
 
     }
 
-    //test case:ESGCA-985
+    //test case:ESGT-4735
     @Test(groups = {REGRESSION, UI, SMOKE, DASHBOARD})
     public void VerifyUploadModal() {
         DashboardPage dashboardPage = new DashboardPage();
@@ -171,13 +171,13 @@ public class ImportPortfolio extends DashboardUITestBase {
 
         BrowserUtils.waitForVisibility(dashboardPage.uploadButton, 2);
         BrowserUtils.wait(5);
-        assertTestCase.assertTrue(dashboardPage.checkIfPortfolioUploadModalIsDisplayed(), "Portfolio Upload Modal Displayed", 985);
+        assertTestCase.assertTrue(dashboardPage.checkIfPortfolioUploadModalIsDisplayed(), "Portfolio Upload Modal Displayed", 4735);
         assertTestCase.assertTrue(dashboardPage.checkIfPortfolioUploadModalSubTitleIsDisplayedAsExpected(), "Sub Title Displayed");
         assertTestCase.assertTrue(dashboardPage.checkIfPortfolioUploadModalDescriptionIsDisplayedAsExpected(), "Modal Description Verification");
-        assertTestCase.assertTrue(dashboardPage.downloadTemplateLink.isDisplayed(), "Download Template Link displayed", 188);
-        assertTestCase.assertTrue(dashboardPage.browseFileButton.isEnabled(), "Browse File button is available", 303);
+        assertTestCase.assertTrue(dashboardPage.downloadTemplateLink.isDisplayed(), "Download Template Link displayed", 4371);
+        assertTestCase.assertTrue(dashboardPage.browseFileButton.isEnabled(), "Browse File button is available", 4570);
         assertTestCase.assertTrue(dashboardPage.checkIfCloseUploadModalButtonIsDisabled(), "Close button verification");
-        assertTestCase.assertTrue(dashboardPage.checkIfUploadButtonIsDisabled(), "Upload button disabled", 250);
+        assertTestCase.assertTrue(dashboardPage.checkIfUploadButtonIsDisabled(), "Upload button disabled", 4496);
 
         dashboardPage.closeUploadModal();
         BrowserUtils.wait(3);
@@ -185,7 +185,7 @@ public class ImportPortfolio extends DashboardUITestBase {
         test.pass("Upload modal verified");
     }
 
-    //test case:338
+    //test case:4637
     @Test(groups = {REGRESSION, UI, ROBOT_DEPENDENCY, DASHBOARD})
     public void VerifySaveButtonVisibility() {
 
@@ -213,10 +213,10 @@ public class ImportPortfolio extends DashboardUITestBase {
         dashboardPage.clickUploadButton();
         test.info("Clicked on the Upload button");
 
-        assertTestCase.assertTrue(dashboardPage.checkifSuccessPopUpIsDisplyed(), "Success Pop Up presented", 338);
+        assertTestCase.assertTrue(dashboardPage.checkifSuccessPopUpIsDisplyed(), "Success Pop Up presented", 4637);
         test.info("Waited for the Successful popup's visibility");
 
-        assertTestCase.assertFalse(dashboardPage.isSaveButtonPresent(), "Save button is not displayed", 338);
+        assertTestCase.assertFalse(dashboardPage.isSaveButtonPresent(), "Save button is not displayed", 4637);
         test.pass("Verified:After a successful file upload,Save button was not present by default on Successful message popup.");
 
         dashboardPage.clickCloseButton();
@@ -225,7 +225,7 @@ public class ImportPortfolio extends DashboardUITestBase {
     }
 
 
-    //test case:316
+    //test case:5037
     @Test(groups = {REGRESSION, UI, SMOKE, ROBOT_DEPENDENCY, DASHBOARD})
     public void VerifyFileRemovedFromUploadModal() {
 
@@ -255,7 +255,7 @@ public class ImportPortfolio extends DashboardUITestBase {
         dashboardPage.clickRemoveButton();
         BrowserUtils.wait(3);
 
-        assertTestCase.assertTrue(dashboardPage.isFileRemovedFromModal(), "File removed", 316);
+        assertTestCase.assertTrue(dashboardPage.isFileRemovedFromModal(), "File removed", 5037);
         test.pass("Remove button verified");
     }
 
@@ -295,7 +295,7 @@ public class ImportPortfolio extends DashboardUITestBase {
     }
 
     @Test(groups = {REGRESSION, UI, SMOKE, ROBOT_DEPENDENCY, DASHBOARD}, singleThreaded = true)
-    @Xray(test = 984)
+    @Xray(test = 1732)
     public void importPortfolio_verifyUnknownIdentifierMessage() {
         DashboardPage dashboardPage = new DashboardPage();
 

@@ -3,7 +3,6 @@ package com.esgc.EntityProfile.DB.Tests;
 import com.esgc.Base.TestBases.DataValidationTestBase;
 import com.esgc.Dashboard.DB.DBQueries.DashboardQueries;
 import com.esgc.EntityProfile.UI.Pages.PDFTestMethods;
-import com.esgc.TestBase.DataProviderClass;
 import com.esgc.Utilities.Xray;
 import org.testng.annotations.Test;
 
@@ -15,7 +14,7 @@ import static com.esgc.Utilities.Groups.*;
 public class EntityClimatePDFExportDBTest extends DataValidationTestBase {
 
     @Test(groups = {"PDF Export", REGRESSION, UI, DATA_VALIDATION}, description = "Data Validation | Entity Page | Export Button | Verify the Sector for entity in downloaded PDF")
-    @Xray(test = {14322})
+    @Xray(test = {3118})
     public void verifySectorForEntityTest() {
         DashboardQueries queries = new DashboardQueries();
         String portfolioId = "00000000-0000-0000-0000-000000000000";

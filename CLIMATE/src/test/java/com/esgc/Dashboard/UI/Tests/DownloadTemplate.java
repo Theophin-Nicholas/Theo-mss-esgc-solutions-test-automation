@@ -16,7 +16,7 @@ public class DownloadTemplate extends DashboardUITestBase {
 
     @Test(description = "Verify that the downloaded template, when clicked will launch Excel",
             groups = {DASHBOARD, REGRESSION, UI, SMOKE})
-    @Xray(test = {192, 188, 287})
+    @Xray(test = {4313, 4371, 4489})
     public void downloadTemplateLinkTest() {
         DashboardPage dashboardPage = new DashboardPage();
 
@@ -33,18 +33,18 @@ public class DownloadTemplate extends DashboardUITestBase {
         Assert.assertEquals(dashboardPage.downloadTemplateLink.getText(), "Download Template");
         Assert.assertTrue(dashboardPage.downloadTemplateLink.isEnabled());
 
-        assertTestCase.assertEquals(dashboardPage.downloadTemplateLink.getText(), "Download Template", "Download Template is accessible", 188, 287);
-        assertTestCase.assertTrue(dashboardPage.downloadTemplateLink.isEnabled(), "Template is visible", 192);
+        assertTestCase.assertEquals(dashboardPage.downloadTemplateLink.getText(), "Download Template", "Download Template is accessible", 4371, 4489);
+        assertTestCase.assertTrue(dashboardPage.downloadTemplateLink.isEnabled(), "Template is visible", 4313);
         test.pass("\"Download Template\" button's visibility verified.");
         test.pass("Verified: \"Download Template\" link is clickable.");
 
         dashboardPage.clickDownloadTemplate();
         test.info("Clicked on \"Download Template\" link");
         BrowserUtils.wait(4);
-        assertTestCase.assertTrue(dashboardPage.isTemplateDownloaded(), "Template is saved to user machine", 248);
+        assertTestCase.assertTrue(dashboardPage.isTemplateDownloaded(), "Template is saved to user machine", 4631);
 
         assertTestCase.assertTrue(ExcelUtil.checkIf2CSVFilesAreSame(BrowserUtils.templatePath(), BrowserUtils.expectedPortfolioTemplateDocumentPath())
-                , "Download Template content check", 299, 317, 11079);
+                , "Download Template content check", 4493, 5024, 3442);
 
         Assert.assertEquals(dashboardPage.getDataFromCSV(0, 0), "Currency: Please only enter in values of USD or GBP or EUR. Platform values will be converted into USD. Only one currency is allowed per portfolio");
         test.pass("Excel was launched and this action was verified by reading a data from excel");
@@ -65,10 +65,10 @@ public class DownloadTemplate extends DashboardUITestBase {
         test.info("Clicked on \"Download Template\" link");
         dashboardPage.clickDownloadTemplate();
         BrowserUtils.wait(4);
-        assertTestCase.assertTrue(dashboardPage.isTemplateDownloaded(), "Template is saved to user machine", 248);
+        assertTestCase.assertTrue(dashboardPage.isTemplateDownloaded(), "Template is saved to user machine", 4631);
 
         assertTestCase.assertTrue(ExcelUtil.checkIf2CSVFilesAreSame(BrowserUtils.templatePath(), BrowserUtils.expectedPortfolioTemplateDocumentPath())
-                , "Download Template content check", 11079);
+                , "Download Template content check", 3442);
 
         Assert.assertEquals(dashboardPage.getDataFromCSV(0, 0), "Currency: Please only enter in values of USD or GBP or EUR. Platform values will be converted into USD. Only one currency is allowed per portfolio");
         test.pass("Excel was launched and this action was verified by reading a data from excel");

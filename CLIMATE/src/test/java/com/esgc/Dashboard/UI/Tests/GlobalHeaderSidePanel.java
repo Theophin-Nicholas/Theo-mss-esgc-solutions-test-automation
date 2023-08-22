@@ -20,7 +20,7 @@ import static com.esgc.Utilities.Groups.*;
 public class GlobalHeaderSidePanel extends UITestBase {
 
     @Test(groups = {REGRESSION, UI, SMOKE})
-    @Xray(test = {1899, 5939, 8967})
+    @Xray(test = {4499, 4764, 4948})
     public void validateGlobalHeader() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         test.info("Check Global Header Side Panel");
@@ -31,7 +31,7 @@ public class GlobalHeaderSidePanel extends UITestBase {
     //TODO orders are different and this method should be moved to a separate class for Portfolio Settings
     //Expected order should be incase sensitive and numbers should come last
     @Test(groups = {REGRESSION, UI, SMOKE})
-    @Xray(test = 8968)
+    @Xray(test = 4893)
     public void validatePortfolioSettings() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
         BrowserUtils.wait(10);
@@ -63,7 +63,7 @@ public class GlobalHeaderSidePanel extends UITestBase {
     }
 
     @Test(groups = {REGRESSION, UI})
-    @Xray(test = {1905, 11828})
+    @Xray(test = {4577, 3377})
     public void validateGlobalHeaderActions() {
 
         ResearchLinePage researchLinePage = new ResearchLinePage();
@@ -92,7 +92,7 @@ public class GlobalHeaderSidePanel extends UITestBase {
 
         currentURL = Driver.getDriver().getCurrentUrl();
 
-        assertTestCase.assertEquals(currentURL, Environment.URL + "terms", "Terms & Conditions page verified", 11833);
+        assertTestCase.assertEquals(currentURL, Environment.URL + "terms", "Terms & Conditions page verified", 3350);
         assertTestCase.assertEquals(Driver.getDriver().findElement(By.xpath("(//header)[3]//../following-sibling::div")).getText(),
                 TermsConditionsUtilities.termsAndConditionText());
 
@@ -108,14 +108,14 @@ public class GlobalHeaderSidePanel extends UITestBase {
     }
 
     @Test(groups = {UI, REGRESSION})
-    @Xray(test = {12840, 12841, 12916, 12850, 12855, 12852})
+    @Xray(test = {3211, 3201, 3285, 3268, 3298, 3235})
     public void ValidateCalculationsOptionsFromGlobalMenu() {
         DashboardPage dashboardPage = new DashboardPage();
         if(!ConfigurationReader.getProperty("environment").equalsIgnoreCase("qa"))
             new SkipException("Calculations option is only available for QA environment");
         dashboardPage.clickOnMenuButton();
-        assertTestCase.assertTrue(dashboardPage.menuItems.stream().filter(e -> e.getText().equals("Calculations")).count() > 0, "Verify \"Calculation\" option is shown under global settings menu", 12840);
-        assertTestCase.assertTrue(dashboardPage.menuItems.stream().filter(e -> e.getText().equals("Portfolio Selection/Upload")).count() > 0, "Verify option of \"Portfolio selection\" is shown under global settings menu", 12841);
+        assertTestCase.assertTrue(dashboardPage.menuItems.stream().filter(e -> e.getText().equals("Calculations")).count() > 0, "Verify \"Calculation\" option is shown under global settings menu", 3211);
+        assertTestCase.assertTrue(dashboardPage.menuItems.stream().filter(e -> e.getText().equals("Portfolio Selection/Upload")).count() > 0, "Verify option of \"Portfolio selection\" is shown under global settings menu", 3201);
         dashboardPage.navigateToPageFromMenu("Calculations");
         dashboardPage.verifyCalculationDrawer();
         dashboardPage.selectOtherOptionAndValidateSaveMessage(dashboardPage.getSelectedOption());
@@ -126,14 +126,14 @@ public class GlobalHeaderSidePanel extends UITestBase {
 
         dashboardPage.clickOnMenuButton();
         dashboardPage.navigateToPageFromMenu("Calculations");
-        assertTestCase.assertEquals(before_SelectedOption, dashboardPage.getSelectedOption(), "Verify changed made on \"Calculation\" drawer are retained on switching portfolios", 12855);
+        assertTestCase.assertEquals(before_SelectedOption, dashboardPage.getSelectedOption(), "Verify changed made on \"Calculation\" drawer are retained on switching portfolios", 3298);
         BrowserUtils.ActionKeyPress(Keys.ESCAPE);
         LoginPage login = new LoginPage();
         login.clickOnLogout();
         login.login();
         dashboardPage.clickOnMenuButton();
         dashboardPage.navigateToPageFromMenu("Calculations");
-        assertTestCase.assertEquals(before_SelectedOption, dashboardPage.getSelectedOption(), "Verify changed made on \"Calculation\" drawer are retained on switching portfolios", 12852);
+        assertTestCase.assertEquals(before_SelectedOption, dashboardPage.getSelectedOption(), "Verify changed made on \"Calculation\" drawer are retained on switching portfolios", 3235);
 
 
     }

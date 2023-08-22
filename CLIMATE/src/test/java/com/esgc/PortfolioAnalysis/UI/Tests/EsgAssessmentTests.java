@@ -12,7 +12,6 @@ import com.esgc.Utilities.ESGUtilities;
 import com.esgc.Utilities.Xray;
 import io.restassured.response.Response;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.Color;
 import org.testng.annotations.Test;
 
 import java.math.RoundingMode;
@@ -30,7 +29,7 @@ public class EsgAssessmentTests extends UITestBase {
 
     @Test(groups = {REGRESSION, UI, ESG},
             description = "Verify displayed data for ESG is matching with SF data")
-    @Xray(test = {8178})
+    @Xray(test = {4833})
     public void verifyESGDisplayedDataIsMatchingWithSFDataTest() {
         DashboardPage dashboardPage = new DashboardPage();
         dashboardPage.selectSamplePortfolioFromPortfolioSelectionModal();
@@ -120,7 +119,7 @@ public class EsgAssessmentTests extends UITestBase {
 
     @Test(groups = {REGRESSION, UI, ESG},
             description = "Verify ESG Weighted Average Score Data Validation")
-    @Xray(test = {9084,9086,9083})
+    @Xray(test = {3560,3567,3428})
     public void verifyGeographicAndSectorDistributionSectionComponentsTest() {
         ResearchLinePage researchLinePage = new ResearchLinePage();
 
@@ -165,15 +164,5 @@ public class EsgAssessmentTests extends UITestBase {
 
 
         }
-    }
-
-
-    @Test(enabled = false,groups = {REGRESSION, UI, SMOKE, ESG})
-    @Xray(test = {9133})
-    public void verifyESGGRegionMapAndCountryTableDrawer() {
-        ResearchLinePage researchLinePage = new ResearchLinePage();
-        researchLinePage.navigateToResearchLine("ESG Assessments");
-        test.info("Navigated to ESG Assessments Page");
-        researchLinePage.validateCountry();
     }
 }
