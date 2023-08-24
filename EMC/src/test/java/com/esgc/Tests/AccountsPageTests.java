@@ -1712,6 +1712,7 @@ public class AccountsPageTests extends EMCUITestBase {
 
         navigateToMenu("Users");
         EMCUsersPage usersPage = new EMCUsersPage();
+        usersPage.searchUser("test");
         wait(usersPage.userNames, 20);
         for(WebElement header : usersPage.tableHeaders){
             assertTestCase.assertTrue(header.getCssValue("text-align").equals("left"), "Table headers are left aligned");
