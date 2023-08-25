@@ -13,7 +13,7 @@
         </groups>
         <packages>
 <!--            <package name="com.esgc.ONDEMAND.*"/>-->
-            <package name="com.esgc.RegulatoryReporting.UI.Tests.*"/>
+            <package name="com.esgc.RegulatoryReporting.*"/>
         </packages>
     </test>
 </suite>

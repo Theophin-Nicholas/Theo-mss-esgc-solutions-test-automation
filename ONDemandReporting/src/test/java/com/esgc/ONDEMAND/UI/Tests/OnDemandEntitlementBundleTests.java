@@ -370,10 +370,7 @@ public class OnDemandEntitlementBundleTests extends UITestBase {
             System.out.println("Logged in with On-Demand Assessment, ESG Predictor and Data entitlements");
 
             OnDemandAssessmentPage ODAPage = new OnDemandAssessmentPage();
-            //onDemandAssessmentPage.selectPortfolioByNameFromPortfolioSelectionModal(portfolioName);
-            //ODAPage.navigateToPageFromMenu("reportingservice","On-Demand Reporting");
-            //ODAPage.navigateToReportingService("On-Demand Assessment");
-            BrowserUtils.waitForVisibility(ODAPage.portfolioNamesList, 30);
+            ODAPage.waitForPortfolioTableToLoad();
 
             String portfolioName = "500 predicted portfolio";
             if (!ODAPage.verifyPortfolio(portfolioName)) {
